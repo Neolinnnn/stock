@@ -16,26 +16,62 @@ import streamlit as st
 
 @st.cache_data(ttl=3600)
 def _calc_target(sid: str, price: float):
-    """即時計算短/中/長期技術目標價（當 JSON 沒有時 fallback 用）"""
+    """即時計算短/中/長期目標價（JSON 無值時 fallback）
+
+    短期：布林上軌（技術壓力位）
+    中期：P/E 均值回歸（免費 FinMind；不可用時改 P/B）
+    長期：40% P/E + 40% PEG + 20% 技術 加權（依估值指南結論）
+    """
     try:
         import statistics as _stat
         from twstock import Stock as _S
-        from datetime import datetime as _dt2, timedelta as _td2
+        from datetime import datetime as _dt2, timedelta as _td2, date as _date
         _s = _S(sid)
-        _start = _dt2.now() - _td2(days=90)
+        _start = _dt2.now() - _td2(days=120)
         _s.fetch_from(_start.year, _start.month)
         _p = list(_s.price)
         if len(_p) < 20:
             return "—", "—", "—"
+        _price = _p[-1]
         _p20 = _p[-20:]
         _ma20 = sum(_p20) / 20
         _sig = _stat.stdev(_p20)
         _t_short = round(_ma20 + 2 * _sig, 1)
-        _hi60 = max(_p[-60:]) if len(_p) >= 60 else max(_p)
-        _t_mid = round(_hi60 * 1.03, 1)
-        _dr = [(_p[i] - _p[i-1]) / _p[i-1] for i in range(1, len(_p))]
-        _vol = _stat.stdev(_dr[-20:]) if len(_dr) >= 20 else 0.02
-        _t_long = round(price * (1 + _vol * 15), 1)
+
+        # 中期 + 長期：P/E 均值回歸 + PEG
+        try:
+            from FinMind.data import DataLoader as _DL
+            _dl = _DL()
+            _one_yr = (_date.today() - _td2(days=365)).strftime("%Y-%m-%d")
+            _per = _dl.taiwan_stock_per_pbr(stock_id=sid, start_date=_one_yr)
+            if _per.empty:
+                raise ValueError
+            _vpe = _per[_per["PER"] > 0]["PER"]
+            _vpb = _per[_per["PBR"] > 0]["PBR"]
+            _cpe = float(_per.iloc[-1]["PER"])
+            _cpb = float(_per.iloc[-1]["PBR"])
+            _mpe = float(_vpe.median()) if not _vpe.empty else 0
+            _mpb = float(_vpb.median()) if not _vpb.empty else 0
+
+            if _cpe > 0 and _mpe > 0:
+                _t_mid = round(_price * max(0.85, min(_mpe / _cpe, 1.5)), 1)
+            elif _cpb > 0 and _mpb > 0:
+                _t_mid = round(_price * max(0.85, min(_mpb / _cpb, 1.5)), 1)
+            else:
+                _hi60 = max(_p[-60:]) if len(_p) >= 60 else max(_p)
+                _t_mid = round(_hi60 * 1.03, 1)
+
+            _pe_tgt = _price * max(0.85, min(_mpe / _cpe, 1.5)) if _cpe > 0 and _mpe > 0 else _price * 1.10
+            _peg_g = min(_cpe, 30) / 100 if _cpe > 0 else 0.10
+            _peg_tgt = _price * (1 + _peg_g)
+            _t_long = round(0.4 * _pe_tgt + 0.4 * _peg_tgt + 0.2 * _t_short, 1)
+        except Exception:
+            _hi60 = max(_p[-60:]) if len(_p) >= 60 else max(_p)
+            _t_mid = round(_hi60 * 1.03, 1)
+            _dr = [(_p[i] - _p[i-1]) / _p[i-1] for i in range(1, len(_p))]
+            _vol = _stat.stdev(_dr[-20:]) if len(_dr) >= 20 else 0.02
+            _t_long = round(price * (1 + _vol * 15), 1)
+
         return _t_short, _t_mid, _t_long
     except Exception:
         return "—", "—", "—"
@@ -301,9 +337,9 @@ def tab_daily():
                         "代碼": s["id"],
                         "名稱": s["name"],
                         "現價": s["price"],
-                        "短期目標(布林上軌)": s.get("target_short") or _calc_target(s["id"], s["price"])[0],
-                        "中期目標(60日高×1.03)": s.get("target_mid") or _calc_target(s["id"], s["price"])[1],
-                        "長期目標(1σ×15日)": s.get("target_long") or _calc_target(s["id"], s["price"])[2],
+                        "短期目標(技術壓力)": s.get("target_short") or _calc_target(s["id"], s["price"])[0],
+                        "中期目標(P/E回歸)": s.get("target_mid") or _calc_target(s["id"], s["price"])[1],
+                        "長期目標(P/E+PEG加權)": s.get("target_long") or _calc_target(s["id"], s["price"])[2],
                     })
             df = pd.DataFrame(rows)
             st.dataframe(df.set_index("代碼"), use_container_width=True)
@@ -917,15 +953,39 @@ def _scan_one(sid: str):
         ma5 = sum(_p[-5:]) / 5
         ma20 = sum(_p[-20:]) / 20
         signal = "BUY" if (ma5 > ma20 and rsi < 70) else ("SELL" if (ma5 < ma20 and rsi > 60) else "HOLD")
-        # 目標價
+        # 短期目標：布林上軌
         _p20 = _p[-20:]
         _sig = _stat.stdev(_p20)
         t_short = round(ma20 + 2*_sig, 1)
-        _hi60 = max(_p[-60:]) if len(_p) >= 60 else max(_p)
-        t_mid = round(_hi60 * 1.03, 1)
-        _dr = [(_p[i]-_p[i-1])/_p[i-1] for i in range(1, len(_p))]
-        _vol = _stat.stdev(_dr[-20:]) if len(_dr) >= 20 else 0.02
-        t_long = round(price*(1 + _vol*15), 1)
+
+        # 中期 + 長期：P/E 均值回歸 + PEG 加權（40%P/E + 40%PEG + 20%技術）
+        try:
+            from datetime import date as _date2
+            _one_yr = (_date2.today() - _td(days=365)).strftime("%Y-%m-%d")
+            _per = _DL().taiwan_stock_per_pbr(stock_id=sid, start_date=_one_yr)
+            if _per.empty:
+                raise ValueError
+            _vpe = _per[_per["PER"] > 0]["PER"]
+            _vpb = _per[_per["PBR"] > 0]["PBR"]
+            _cpe = float(_per.iloc[-1]["PER"]); _cpb = float(_per.iloc[-1]["PBR"])
+            _mpe = float(_vpe.median()) if not _vpe.empty else 0
+            _mpb = float(_vpb.median()) if not _vpb.empty else 0
+            if _cpe > 0 and _mpe > 0:
+                t_mid = round(price * max(0.85, min(_mpe / _cpe, 1.5)), 1)
+            elif _cpb > 0 and _mpb > 0:
+                t_mid = round(price * max(0.85, min(_mpb / _cpb, 1.5)), 1)
+            else:
+                t_mid = round((max(_p[-60:]) if len(_p) >= 60 else max(_p)) * 1.03, 1)
+            _pe_tgt = price * max(0.85, min(_mpe/_cpe, 1.5)) if _cpe > 0 and _mpe > 0 else price * 1.10
+            _peg_g = min(_cpe, 30) / 100 if _cpe > 0 else 0.10
+            t_long = round(0.4 * _pe_tgt + 0.4 * price * (1 + _peg_g) + 0.2 * t_short, 1)
+        except Exception:
+            _hi60 = max(_p[-60:]) if len(_p) >= 60 else max(_p)
+            t_mid = round(_hi60 * 1.03, 1)
+            _dr = [(_p[i]-_p[i-1])/_p[i-1] for i in range(1, len(_p))]
+            _vol = _stat.stdev(_dr[-20:]) if len(_dr) >= 20 else 0.02
+            t_long = round(price*(1 + _vol*15), 1)
+
         result.update({"現價": price, "RSI": rsi, "20日%": f"{ret20:+.1f}%" if ret20 else "—",
                         "訊號": signal, "短期目標": t_short, "中期目標": t_mid, "長期目標": t_long})
     except Exception:
@@ -979,7 +1039,7 @@ def _scan_one(sid: str):
 
 def tab_watchlist():
     st.subheader("📋 自選清單掃描")
-    st.caption("貼入自己的股票代碼，即時掃描技術面 + 籌碼 + 新聞 + 目標價")
+    st.caption("貼入自己的股票代碼，即時掃描技術面 + 籌碼 + 新聞 + 估值目標價")
 
     default_stocks = "2330 2317 2382 2609 3711 2454 3008 2412"
     col1, col2 = st.columns([2, 1])
@@ -1036,7 +1096,7 @@ def tab_watchlist():
     buy_df = df[df["訊號"] == "BUY"]
     if not buy_df.empty:
         st.success(f"✅ **BUY 訊號** {len(buy_df)} 檔：{', '.join(buy_df['名稱'].tolist())}")
-        st.markdown("##### 📍 BUY 目標價（技術推估，非投資建議）")
+        st.markdown("##### 📍 BUY 目標價（基本面估值加權，非投資建議）")
         st.dataframe(
             buy_df[["名稱", "現價", "短期目標", "中期目標", "長期目標"]],
             use_container_width=True,
