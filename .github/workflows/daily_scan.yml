@@ -31,7 +31,7 @@ jobs:
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: python strategy_templates/07_daily_scan.py
+        run: python scripts/daily_scan.py
 
       - name: Run weekly summary (Fridays only)
         if: github.event.schedule == '47 6 * * 5'
@@ -41,7 +41,7 @@ jobs:
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: python strategy_templates/08_weekly_summary.py
+        run: python scripts/weekly_summary.py
 
       - name: Commit reports
         env:

@@ -17,7 +17,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 
 # 載入主引擎
-_main = os.path.join(os.path.dirname(__file__), '03_batch_scan_with_cv.py')
+_main = os.path.join(os.path.dirname(__file__), 'batch_scan.py')
 with open(_main, encoding='utf-8') as f:
     code = f.read()
 code = code.split("if __name__ == '__main__':")[0]
@@ -274,12 +274,17 @@ def run_daily_scan():
     except Exception as e:
         print(f"   Google Sheets 上傳失敗：{e}")
 
-    # 寫入 GitHub Pages 靜態資料
-    docs_dir = Path(__file__).parent.parent / 'docs'
-    docs_dir.mkdir(exist_ok=True)
-    with open(docs_dir / 'daily.json', 'w', encoding='utf-8') as f:
-        json.dump(build_daily_payload(summary), f, ensure_ascii=False, indent=2, default=str)
-    print('  docs/daily.json 已更新')
+    # 寫入 GitHub Pages 靜態資料（含歷史每日 JSON）
+    try:
+        from build_docs import build_all as _build_docs
+        _build_docs()
+        print('  docs/ 歷史資料已更新')
+    except Exception as e:
+        docs_dir = Path(__file__).parent.parent / 'docs'
+        docs_dir.mkdir(exist_ok=True)
+        with open(docs_dir / 'daily.json', 'w', encoding='utf-8') as f:
+            json.dump(build_daily_payload(summary), f, ensure_ascii=False, indent=2, default=str)
+        print(f'  docs/daily.json 已更新（build_docs 失敗：{e}）')
 
     print(f"\n{'='*78}\n")
     return summary
