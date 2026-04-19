@@ -4,107 +4,227 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>台股族群掃描</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0e1117; --card: #1a1d24; --border: #2d3139;
-    --text: #e0e0e0; --sub: #888; --green: #27ae60;
-    --red: #e74c3c; --yellow: #f39c12; --blue: #3498db;
-    --accent: #1f77b4;
+    --bg:#0e1117; --card:#1a1d24; --border:#2d3139;
+    --text:#e0e0e0; --sub:#888; --green:#27ae60;
+    --red:#e74c3c; --yellow:#f39c12; --blue:#3498db;
+    --accent:#1f77b4;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; font-size: 14px; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;font-size:14px;}
 
-  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
-  header h1 { font-size: 18px; font-weight: 700; }
-  nav a { color: var(--sub); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: .2s; }
-  nav a.active, nav a:hover { background: var(--accent); color: #fff; }
+  header{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  header h1{font-size:17px;font-weight:700;}
+  nav{display:flex;gap:4px;}
+  nav a{color:var(--sub);text-decoration:none;padding:5px 13px;border-radius:6px;font-size:13px;cursor:pointer;transition:.15s;}
+  nav a.active,nav a:hover{background:var(--accent);color:#fff;}
 
-  main { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+  .date-picker{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .date-picker label{font-size:12px;color:var(--sub);}
+  .date-picker select{background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer;}
+  .date-nav{background:#1e2330;border:1px solid var(--border);color:var(--text);border-radius:5px;padding:4px 9px;cursor:pointer;font-size:12px;}
+  .date-nav:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
 
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  @media(max-width:768px){ .grid-4{grid-template-columns:1fr 1fr;} .grid-2{grid-template-columns:1fr;} }
+  main{padding:20px 24px;max-width:1400px;margin:0 auto;}
 
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-  .card-title { font-size: 11px; color: var(--sub); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
-  .card-value { font-size: 22px; font-weight: 700; }
-  .card-sub { font-size: 12px; color: var(--sub); margin-top: 4px; }
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  @media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
+  @media(max-width:480px){.grid-4{grid-template-columns:1fr;}}
 
-  .section-title { font-size: 15px; font-weight: 600; margin: 20px 0 10px; border-left: 3px solid var(--accent); padding-left: 10px; }
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .card-title{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .card-value{font-size:22px;font-weight:700;}
+  .card-sub{font-size:12px;color:var(--sub);margin-top:4px;}
 
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { background: #13161d; color: var(--sub); font-weight: 500; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
-  td { padding: 7px 10px; border-bottom: 1px solid #1e2128; }
-  tr:hover td { background: #1e2330; }
+  .section-title{font-size:15px;font-weight:600;margin:20px 0 10px;border-left:3px solid var(--accent);padding-left:10px;}
 
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .buy  { background: rgba(39,174,96,.2);  color: var(--green); }
-  .sell { background: rgba(231,76,60,.2);  color: var(--red);   }
-  .hold { background: rgba(243,156,18,.15);color: var(--yellow); }
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{background:#13161d;color:var(--sub);font-weight:500;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;}
+  td{padding:7px 10px;border-bottom:1px solid #1e2128;}
+  tr:hover td{background:#1e2330;}
 
-  .bar-wrap { height: 16px; background: #13161d; border-radius: 4px; overflow: hidden; }
-  .bar { height: 100%; border-radius: 4px; transition: width .4s; }
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;}
+  .buy{background:rgba(39,174,96,.2);color:var(--green);}
+  .sell{background:rgba(231,76,60,.2);color:var(--red);}
+  .hold{background:rgba(243,156,18,.15);color:var(--yellow);}
 
-  .chip-pos { color: var(--green); } .chip-neg { color: var(--red); }
+  .bar-wrap{height:16px;background:#13161d;border-radius:4px;overflow:hidden;}
+  .bar{height:100%;border-radius:4px;transition:width .4s;}
 
-  .sector-block { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; }
-  .sector-header { padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-  .sector-header:hover { background: #1e2330; border-radius: 8px; }
-  .sector-body { display: none; padding: 0 8px 8px; overflow-x: auto; }
-  .sector-body.open { display: block; }
+  .chip-pos{color:var(--green);}.chip-neg{color:var(--red);}
 
-  .tag { background: #1e2330; border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--sub); margin-left: 6px; }
+  .sector-block{background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;}
+  .sector-header{padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .sector-header:hover{background:#1e2330;border-radius:8px;}
+  .sector-body{display:none;padding:0 8px 8px;overflow-x:auto;}
+  .sector-body.open{display:block;}
 
-  .rsi-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
-  .rsi-hot { background: var(--red); } .rsi-warm { background: var(--yellow); } .rsi-ok { background: var(--green); }
+  .tag{background:#1e2330;border-radius:4px;padding:2px 7px;font-size:11px;color:var(--sub);margin-left:6px;}
+  .rsi-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;}
+  .rsi-hot{background:var(--red);}.rsi-warm{background:var(--yellow);}.rsi-ok{background:var(--green);}
+  .up{color:var(--green);}.dn{color:var(--red);}
 
-  .up { color: var(--green); } .dn { color: var(--red); }
+  .error-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:40px;text-align:center;color:var(--sub);font-size:15px;margin-top:40px;}
+  .error-box span{display:block;font-size:36px;margin-bottom:16px;}
 
-  .error-box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--sub); font-size: 15px; margin-top: 40px; }
-  .error-box span { display: block; font-size: 36px; margin-bottom: 16px; }
+  /* 趨勢頁 */
+  .trend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px;}
+  @media(max-width:700px){.trend-grid{grid-template-columns:1fr;}}
+  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
+  .chart-card h3{font-size:13px;color:var(--sub);margin-bottom:12px;}
+  .chart-card canvas{max-height:260px;}
 
-  footer { text-align: center; color: var(--sub); font-size: 11px; padding: 24px; border-top: 1px solid var(--border); margin-top: 40px; }
+  .stock-search{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .stock-search input{background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:13px;flex:1;min-width:160px;}
+  .stock-search input:focus{outline:none;border-color:var(--accent);}
+
+  footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top:1px solid var(--border);margin-top:40px;}
+  .page-section{display:none;}.page-section.active{display:block;}
+
+  #loading{text-align:center;padding:60px;color:var(--sub);}
 </style>
 </head>
 <body>
 <header>
   <h1>📊 台股族群掃描</h1>
   <nav>
-    <a href="?page=daily"  id="nav-daily">今日掃描</a>
-    <a href="?page=weekly" id="nav-weekly">週報</a>
+    <a id="nav-daily"  onclick="setPage('daily')">今日掃描</a>
+    <a id="nav-trend"  onclick="setPage('trend')">歷史趨勢</a>
+    <a id="nav-weekly" onclick="setPage('weekly')">週報</a>
   </nav>
+  <div class="date-picker" id="date-picker-wrap">
+    <button class="date-nav" id="btn-prev" onclick="stepDate(-1)">◀</button>
+    <label>日期</label>
+    <select id="date-select" onchange="loadDate(this.value)"></select>
+    <button class="date-nav" id="btn-next" onclick="stepDate(1)">▶</button>
+  </div>
 </header>
 
-<main id="app">載入中...</main>
-<footer>資料來源：twstock / FinMind　｜　每日 14:32 自動更新</footer>
+<main>
+  <div id="loading">載入中…</div>
+  <div id="page-daily"  class="page-section"></div>
+  <div id="page-trend"  class="page-section"></div>
+  <div id="page-weekly" class="page-section"></div>
+</main>
+
+<footer>資料來源：twstock / FinMind　｜　每個工作日 14:32 自動更新</footer>
 
 <script>
-const PAGE = new URLSearchParams(location.search).get('page') || 'daily';
-const jsonFile = PAGE === 'weekly' ? './weekly.json' : './daily.json';
+// ── 全域狀態 ──────────────────────────────────────────────────────────────────
+let DATES   = [];      // 可用日期清單（降冪）
+let CACHE   = {};      // date -> payload
+let HISTORY = {};      // date -> payload（趨勢用）
+let CUR_DATE = '';
+let CUR_PAGE = 'daily';
+let WEEKLY_DATA = null;
 
-// 設定 nav active class
-document.getElementById('nav-daily').classList.toggle('active', PAGE === 'daily');
-document.getElementById('nav-weekly').classList.toggle('active', PAGE === 'weekly');
+// ── 輔助函式 ──────────────────────────────────────────────────────────────────
+function fmt(v,d=1){return v===''||v===null||v===undefined?'—':(typeof v==='number'?v.toFixed(d):v);}
+function sign(v){return v>0?'+':'';}
+function signColor(v){return v>0?'up':'dn';}
+function rsiDot(r){return r>70?'rsi-hot':r>60?'rsi-warm':'rsi-ok';}
+function badge(s){const m={BUY:'buy',SELL:'sell',HOLD:'hold'};return `<span class="badge ${m[s]||'hold'}">${s}</span>`;}
+function chip(v){if(v===''||v===null||v===undefined)return '—';const n=Number(v);return `<span class="${n>=0?'chip-pos':'chip-neg'}">${sign(n)}${n.toLocaleString()}</span>`;}
+function fmtDate(d){return d?`${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`:d;}
 
-function fmt(v, digit=1){ return v===''||v===null||v===undefined ? '—' : (typeof v==='number'?v.toFixed(digit):v); }
-function sign(v){ return v>0?'+':'' }
-function signColor(v){ return v>0?'up':'dn' }
-function rsiDot(r){ return r>70?'rsi-hot':r>60?'rsi-warm':'rsi-ok' }
-function badge(s){ const m={'BUY':'buy','SELL':'sell','HOLD':'hold'}; return `<span class="badge ${m[s]||'hold'}">${s}</span>` }
-function chip(v){ if(v===''||v===null||v===undefined) return '—'; const n=Number(v); return `<span class="${n>=0?'chip-pos':'chip-neg'}">${sign(n)}${n.toLocaleString()}</span>` }
+async function fetchJSON(url){
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
 
-// ── 今日掃描 ──
-function renderDaily(){
-  const {meta, sectors, chips, stocks} = window.DATA;
-  const date = meta['掃描日期']||'—';
-  const idx  = meta['加權指數'];
-  const chg  = meta['漲跌幅%'];
+// ── 初始化 ───────────────────────────────────────────────────────────────────
+async function init(){
+  try{
+    DATES = await fetchJSON('./dates.json');
+  }catch{
+    // 降級：只有 daily.json
+    try{
+      const d = await fetchJSON('./daily.json');
+      const ds = d.meta?.['掃描日期']||'';
+      DATES = ds?[ds]:[];
+      if(ds) CACHE[ds] = d;
+    }catch{
+      showError('無法載入資料，請確認 GitHub Pages 部署完成');
+      return;
+    }
+  }
+
+  if(!DATES.length){showError('目前尚無歷史資料');return;}
+
+  buildDateSelect();
+  CUR_DATE = DATES[0];
+
+  // 嘗試預載週報
+  fetchJSON('./weekly.json').then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
+
+  await loadDate(CUR_DATE);
+  setPage('daily');
+}
+
+function buildDateSelect(){
+  const sel = document.getElementById('date-select');
+  sel.innerHTML = DATES.map(d=>`<option value="${d}">${fmtDate(d)}</option>`).join('');
+}
+
+// ── 切換頁面 ──────────────────────────────────────────────────────────────────
+function setPage(page){
+  CUR_PAGE = page;
+  ['daily','trend','weekly'].forEach(p=>{
+    document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
+    document.getElementById(`page-${p}`).classList.toggle('active', p===page);
+  });
+  // 日期選擇器只在 daily 頁顯示
+  document.getElementById('date-picker-wrap').style.display = page==='daily'?'':'none';
+
+  if(page==='trend') renderTrend();
+  if(page==='weekly') renderWeekly();
+}
+
+// ── 日期導航 ──────────────────────────────────────────────────────────────────
+async function loadDate(dateStr){
+  CUR_DATE = dateStr;
+  document.getElementById('date-select').value = dateStr;
+  document.getElementById('btn-prev').disabled = DATES.indexOf(dateStr) >= DATES.length-1;
+  document.getElementById('btn-next').disabled = DATES.indexOf(dateStr) <= 0;
+
+  if(!CACHE[dateStr]){
+    try{
+      CACHE[dateStr] = await fetchJSON(`./${dateStr}.json`);
+    }catch{
+      try{
+        CACHE[dateStr] = await fetchJSON('./daily.json');
+      }catch{
+        showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
+        return;
+      }
+    }
+  }
+  renderDaily(CACHE[dateStr]);
+  document.getElementById('loading').style.display='none';
+}
+
+function stepDate(dir){
+  const idx = DATES.indexOf(CUR_DATE);
+  const next = idx - dir;  // DATES 降冪，-1=往前=更小 index
+  if(next>=0 && next<DATES.length) loadDate(DATES[next]);
+}
+
+// ── 今日掃描 ──────────────────────────────────────────────────────────────────
+function renderDaily(data){
+  const {meta,sectors,chips,stocks} = data;
+  const date   = meta['掃描日期']||'—';
+  const idx    = meta['加權指數'];
+  const chg    = meta['漲跌幅%'];
   const strong = meta['強勢族群']||'無';
   const weak   = meta['弱勢族群']||'無';
 
-  let html = `
+  let html=`
   <div class="grid-4">
-    <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${date}</div></div>
+    <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
     <div class="card"><div class="card-title">加權指數</div>
       <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'—'}</div>
       <div class="card-sub">${chg!==''&&chg!==null&&chg!==undefined?sign(Number(chg))+Number(chg).toFixed(2)+'%':''}</div></div>
@@ -112,54 +232,51 @@ function renderDaily(){
     <div class="card"><div class="card-title">弱勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${weak||'無'}</div></div>
   </div>`;
 
-  // 族群強弱
-  html += `<div class="section-title">族群強弱</div><div class="card" style="overflow-x:auto"><table>
+  // 族群強弱表
+  html+=`<div class="section-title">族群強弱</div><div class="card" style="overflow-x:auto"><table>
     <tr><th>族群</th><th>20日報酬%</th><th></th><th>RSI</th><th>BUY訊號</th><th>RSI>70</th></tr>`;
-  const maxRet = Math.max(...sectors.map(s=>Math.abs(Number(s.ret20)||0)), 1);
-  sectors.sort((a,b)=>Number(b.ret20)-Number(a.ret20)).forEach(s=>{
-    const r = Number(s.ret20)||0;
-    const barW = Math.min(Math.abs(r)/maxRet*100, 100);
-    const barC = r>=0?'var(--green)':'var(--red)';
-    html += `<tr>
+  const maxRet=Math.max(...sectors.map(s=>Math.abs(Number(s.ret20)||0)),1);
+  [...sectors].sort((a,b)=>Number(b.ret20)-Number(a.ret20)).forEach(s=>{
+    const r=Number(s.ret20)||0;
+    const bw=Math.min(Math.abs(r)/maxRet*100,100);
+    const bc=r>=0?'var(--green)':'var(--red)';
+    html+=`<tr>
       <td><b>${s.sector}</b></td>
       <td class="${signColor(r)}">${sign(r)}${fmt(r)}%</td>
-      <td style="width:120px"><div class="bar-wrap"><div class="bar" style="width:${barW}%;background:${barC}"></div></div></td>
+      <td style="width:120px"><div class="bar-wrap"><div class="bar" style="width:${bw}%;background:${bc}"></div></div></td>
       <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}</td>
       <td>${s.buy}</td><td>${s.hot}</td></tr>`;
   });
-  html += `</table></div>`;
+  html+=`</table></div>`;
 
   // 籌碼
-  if(chips && chips.length){
-    const buys = chips.filter(c=>Number(c.total)>0).slice(0,5);
-    const sells = chips.filter(c=>Number(c.total)<0).slice(-5).reverse();
-    html += `<div class="section-title">籌碼面：三大法人</div><div class="grid-2">`;
-    const chipTable = rows => `<div class="card"><table>
+  if(chips&&chips.length){
+    const buys=chips.filter(c=>Number(c.total)>0).slice(0,5);
+    const sells=chips.filter(c=>Number(c.total)<0).slice(-5).reverse();
+    html+=`<div class="section-title">籌碼面：三大法人</div><div class="grid-2">`;
+    const ct=rows=>`<div class="card" style="overflow-x:auto"><table>
       <tr><th>代碼</th><th>名稱</th><th>族群</th><th>外資</th><th>投信</th><th>自營</th><th>合計</th></tr>
       ${rows.map(c=>`<tr><td>${c.id}</td><td>${c.name}</td><td>${c.sector}</td>
         <td>${chip(c.foreign)}</td><td>${chip(c.trust)}</td><td>${chip(c.dealer)}</td>
         <td><b>${chip(c.total)}</b></td></tr>`).join('')}
       </table></div>`;
-    html += `<div><div style="color:var(--green);font-size:12px;margin-bottom:6px">▲ 買超</div>${chipTable(buys)}</div>`;
-    html += `<div><div style="color:var(--red);font-size:12px;margin-bottom:6px">▼ 賣超</div>${chipTable(sells)}</div>`;
-    html += `</div>`;
+    html+=`<div><div style="color:var(--green);font-size:12px;margin-bottom:6px">▲ 買超前 5</div>${ct(buys)}</div>`;
+    html+=`<div><div style="color:var(--red);font-size:12px;margin-bottom:6px">▼ 賣超前 5</div>${ct(sells)}</div>`;
+    html+=`</div>`;
   }
 
-  // 各族群個股明細（可收合）
-  html += `<div class="section-title">各族群個股明細</div>`;
-  const grouped = {};
-  stocks.forEach(s=>{ (grouped[s.sector]=grouped[s.sector]||[]).push(s); });
-  Object.entries(grouped).forEach(([sec, stks])=>{
-    const buyCnt = stks.filter(s=>s.signal==='BUY').length;
-    html += `<div class="sector-block">
+  // 各族群個股明細
+  html+=`<div class="section-title">各族群個股明細</div>`;
+  const grouped={};
+  stocks.forEach(s=>{(grouped[s.sector]=grouped[s.sector]||[]).push(s);});
+  Object.entries(grouped).forEach(([sec,stks])=>{
+    const bc=stks.filter(s=>s.signal==='BUY').length;
+    html+=`<div class="sector-block">
       <div class="sector-header" onclick="toggle(this)">
-        <span><b>${sec}</b>
-          ${buyCnt?`<span class="tag" style="color:var(--green)">BUY ${buyCnt}</span>`:''}
-        </span>
+        <span><b>${sec}</b>${bc?`<span class="tag" style="color:var(--green)">BUY ${bc}</span>`:''}</span>
         <span style="color:var(--sub);font-size:12px">▼</span>
       </div>
-      <div class="sector-body">
-      <table>
+      <div class="sector-body"><table>
         <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>近期新聞</th></tr>
         ${stks.map(s=>`<tr>
           <td>${s.id}</td><td><b>${s.name}</b></td>
@@ -171,77 +288,242 @@ function renderDaily(){
           <td>${chip(s.chipTotal)}</td>
           <td style="max-width:240px;white-space:normal;font-size:11px;color:var(--sub)">${s.news||'—'}</td>
         </tr>`).join('')}
-      </table>
-      </div></div>`;
+      </table></div></div>`;
   });
-  document.getElementById('app').innerHTML = html;
+
+  document.getElementById('page-daily').innerHTML=html;
 }
 
-// ── 週報 ──
+// ── 歷史趨勢 ──────────────────────────────────────────────────────────────────
+let trendCharts=[];
+
+async function renderTrend(){
+  const el=document.getElementById('page-trend');
+  el.innerHTML='<div style="text-align:center;padding:40px;color:var(--sub)">載入歷史資料中…</div>';
+
+  // 載入所有日期資料
+  await Promise.all(DATES.map(async d=>{
+    if(!CACHE[d]){
+      try{CACHE[d]=await fetchJSON(`./${d}.json`);}catch{}
+    }
+  }));
+
+  const days=[...DATES].reverse(); // 升冪
+  const allSectors=[...new Set(days.flatMap(d=>
+    (CACHE[d]?.sectors||[]).map(s=>s.sector)
+  ))];
+
+  // 各族群 20日報酬折線圖
+  const PALETTE=['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
+                 '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf'];
+
+  // 銷毀舊 chart
+  trendCharts.forEach(c=>c.destroy());
+  trendCharts=[];
+
+  // === 圖 1：所有族群 ret_20d 折線 ===
+  const labels = days.map(d=>fmtDate(d));
+  const datasets1 = allSectors.map((sec,i)=>({
+    label: sec,
+    data: days.map(d=>{
+      const s=(CACHE[d]?.sectors||[]).find(x=>x.sector===sec);
+      return s?Number(s.ret20)||0:null;
+    }),
+    borderColor: PALETTE[i%PALETTE.length],
+    backgroundColor: 'transparent',
+    tension:.3, pointRadius:3, borderWidth:2,
+  }));
+
+  // === 圖 2：RSI 熱度 ===
+  const datasets2 = allSectors.map((sec,i)=>({
+    label: sec,
+    data: days.map(d=>{
+      const s=(CACHE[d]?.sectors||[]).find(x=>x.sector===sec);
+      return s?Number(s.rsi)||0:null;
+    }),
+    borderColor: PALETTE[i%PALETTE.length],
+    backgroundColor: 'transparent',
+    tension:.3, pointRadius:3, borderWidth:2,
+  }));
+
+  // === 圖 3：個股 RSI 搜尋（預設空）===
+  // === 圖 4：BUY 訊號累計 ===
+  const buyCount = allSectors.map(sec=>({
+    sector: sec,
+    count: days.reduce((acc,d)=>{
+      const s=(CACHE[d]?.sectors||[]).find(x=>x.sector===sec);
+      return acc + (s?Number(s.buy)||0:0);
+    },0),
+  })).sort((a,b)=>b.count-a.count);
+
+  const chartCfg = (type,data,opts={})=>({type,data,options:{
+    responsive:true, maintainAspectRatio:true,
+    plugins:{legend:{labels:{color:'#aaa',font:{size:11}}}},
+    scales:{
+      x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
+      y:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
+    },
+    ...opts,
+  }});
+
+  el.innerHTML=`
+    <div class="section-title">族群 20 日報酬趨勢</div>
+    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch1"></canvas></div>
+
+    <div class="section-title">族群 RSI 趨勢</div>
+    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch2"></canvas></div>
+
+    <div class="section-title">個股歷史走勢查詢</div>
+    <div class="stock-search">
+      <input id="stock-input" placeholder="輸入代碼或名稱（如 4979 或 華星光）" oninput="renderStockChart()">
+    </div>
+    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch3"></canvas></div>
+
+    <div class="section-title">期間 BUY 訊號累計（共 ${days.length} 個交易日）</div>
+    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch4"></canvas></div>
+  `;
+
+  const c1=new Chart(document.getElementById('ch1'),chartCfg('line',{labels,datasets:datasets1},{
+    plugins:{
+      legend:{labels:{color:'#aaa',font:{size:11}}},
+      annotation:{},
+    },
+    scales:{
+      x:{ticks:{color:'#888',font:{size:10},maxRotation:45},grid:{color:'#1e2128'}},
+      y:{ticks:{color:'#888',font:{size:10},callback:v=>v+'%'},grid:{color:'#1e2128'}},
+    },
+  }));
+  trendCharts.push(c1);
+
+  const c2=new Chart(document.getElementById('ch2'),chartCfg('line',{labels,datasets:datasets2},{
+    scales:{
+      x:{ticks:{color:'#888',font:{size:10},maxRotation:45},grid:{color:'#1e2128'}},
+      y:{min:0,max:100,ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
+    },
+  }));
+  trendCharts.push(c2);
+
+  // ch3 空白佔位
+  const c3=new Chart(document.getElementById('ch3'),{type:'line',data:{labels:[],datasets:[]},options:{
+    responsive:true, maintainAspectRatio:true,
+    plugins:{legend:{labels:{color:'#aaa',font:{size:11}}}},
+    scales:{
+      x:{ticks:{color:'#888',font:{size:10},maxRotation:45},grid:{color:'#1e2128'}},
+      y:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
+    },
+  }});
+  trendCharts.push(c3);  // idx=2
+
+  const c4=new Chart(document.getElementById('ch4'),{
+    type:'bar',
+    data:{
+      labels: buyCount.map(x=>x.sector),
+      datasets:[{
+        label:'BUY 累計次數',
+        data: buyCount.map(x=>x.count),
+        backgroundColor: PALETTE,
+      }],
+    },
+    options:{
+      indexAxis:'y', responsive:true, maintainAspectRatio:true,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
+        y:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
+      },
+    },
+  });
+  trendCharts.push(c4);
+}
+
+function renderStockChart(){
+  const q=(document.getElementById('stock-input')?.value||'').trim().toLowerCase();
+  const c3=trendCharts[2];
+  if(!c3) return;
+  if(!q){c3.data.labels=[];c3.data.datasets=[];c3.update();return;}
+
+  const days=[...DATES].reverse();
+  const labels=days.map(d=>fmtDate(d));
+
+  // 找符合的個股
+  const matched=new Map();
+  days.forEach(d=>{
+    (CACHE[d]?.stocks||[]).forEach(s=>{
+      if(s.id.includes(q)||s.name.toLowerCase().includes(q)){
+        if(!matched.has(s.id)) matched.set(s.id,{id:s.id,name:s.name,prices:[]});
+      }
+    });
+  });
+
+  const PALETTE=['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd'];
+  const datasets=[...matched.values()].slice(0,5).map((st,i)=>({
+    label:`${st.id} ${st.name}`,
+    data: days.map(d=>{
+      const s=(CACHE[d]?.stocks||[]).find(x=>x.id===st.id);
+      return s&&s.price!==''?Number(s.price):null;
+    }),
+    borderColor: PALETTE[i%PALETTE.length],
+    backgroundColor:'transparent',
+    tension:.3, pointRadius:3, borderWidth:2,
+  }));
+
+  c3.data.labels=labels;
+  c3.data.datasets=datasets;
+  c3.update();
+}
+
+// ── 週報 ──────────────────────────────────────────────────────────────────────
 function renderWeekly(){
-  const {meta, changes, buys} = window.DATA;
-  let html = `
+  const el=document.getElementById('page-weekly');
+  if(!WEEKLY_DATA){
+    el.innerHTML=`<div class="error-box"><span>📭</span>尚無週報資料</div>`;
+    return;
+  }
+  const {meta,changes,buys}=WEEKLY_DATA;
+  let html=`
   <div class="grid-4" style="grid-template-columns:repeat(2,1fr)">
     <div class="card"><div class="card-title">週報日期</div><div class="card-value" style="font-size:18px">${meta.date||'—'}</div></div>
     <div class="card"><div class="card-title">涵蓋交易日</div><div class="card-value">${meta.days||'—'} 日</div></div>
   </div>
   <div class="grid-2">`;
-
-  // 族群變化
-  html += `<div><div class="section-title">族群動能變化</div><div class="card"><table>
+  html+=`<div><div class="section-title">族群動能變化</div><div class="card"><table>
     <tr><th>族群</th><th>動能變化 (pp)</th><th></th></tr>`;
-  const maxC = Math.max(...changes.map(c=>Math.abs(Number(c.change)||0)), 1);
+  const maxC=Math.max(...changes.map(c=>Math.abs(Number(c.change)||0)),1);
   changes.forEach(c=>{
-    const v = Number(c.change)||0;
-    const w = Math.min(Math.abs(v)/maxC*100, 100);
-    const col = v>=0?'var(--green)':'var(--red)';
-    html += `<tr><td>${c.sector}</td>
+    const v=Number(c.change)||0;
+    const w=Math.min(Math.abs(v)/maxC*100,100);
+    const col=v>=0?'var(--green)':'var(--red)';
+    html+=`<tr><td>${c.sector}</td>
       <td class="${signColor(v)}">${sign(v)}${fmt(v,2)} pp</td>
       <td style="width:100px"><div class="bar-wrap"><div class="bar" style="width:${w}%;background:${col}"></div></div></td></tr>`;
   });
-  html += `</table></div></div>`;
-
-  // Top BUY
-  html += `<div><div class="section-title">本週累計 BUY Top 10</div><div class="card"><table>
+  html+=`</table></div></div>`;
+  html+=`<div><div class="section-title">本週累計 BUY Top 10</div><div class="card"><table>
     <tr><th>排名</th><th>個股</th><th>BUY 次數</th></tr>`;
   buys.forEach((b,i)=>{
-    html += `<tr><td style="color:var(--sub)">${i+1}</td><td>${b.stock}</td>
+    html+=`<tr><td style="color:var(--sub)">${i+1}</td><td>${b.stock}</td>
       <td><span class="badge buy">${b.days} 次</span></td></tr>`;
   });
-  html += `</table></div></div></div>`;
-  document.getElementById('app').innerHTML = html;
+  html+=`</table></div></div></div>`;
+  el.innerHTML=html;
 }
 
+// ── 工具 ─────────────────────────────────────────────────────────────────────
 function toggle(el){
-  const body = el.nextElementSibling;
+  const body=el.nextElementSibling;
   body.classList.toggle('open');
-  el.querySelector('span:last-child').textContent = body.classList.contains('open')?'▲':'▼';
+  el.querySelector('span:last-child').textContent=body.classList.contains('open')?'▲':'▼';
 }
 
-function renderPage(){
-  PAGE === 'weekly' ? renderWeekly() : renderDaily();
+function showError(msg){
+  document.getElementById('loading').style.display='none';
+  document.getElementById('page-daily').innerHTML=
+    `<div class="error-box"><span>📭</span>${msg}</div>`;
+  document.getElementById('page-daily').classList.add('active');
 }
 
-function showError(){
-  document.getElementById('app').innerHTML = `
-    <div class="error-box">
-      <span>📭</span>
-      尚無資料，請等待今日 14:32 自動更新
-    </div>`;
-}
-
-fetch(jsonFile)
-  .then(r => {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(data => {
-    window.DATA = data;
-    renderPage();
-  })
-  .catch(() => {
-    showError();
-  });
+// ── 啟動 ──────────────────────────────────────────────────────────────────────
+init();
 </script>
 </body>
 </html>

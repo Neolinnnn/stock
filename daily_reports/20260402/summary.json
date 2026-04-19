@@ -1,0 +1,687 @@
+{
+  "date": "20260402",
+  "timestamp": "2026-04-19T15:52:52.316811",
+  "market": {
+    "加權指數": null,
+    "漲跌幅": null
+  },
+  "sectors": {
+    "光通訊": {
+      "avg_ret_20d": 11.91,
+      "avg_rsi": 55.4,
+      "avg_sharpe": -2.33,
+      "hot_count": 1,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "4979",
+          "name": "華星光",
+          "price": 384.0,
+          "rsi": 47.0,
+          "ret_20d": -4.0,
+          "signal": "SELL",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3450",
+          "name": "聯鈞",
+          "price": 241.0,
+          "rsi": 34.1,
+          "ret_20d": -16.0,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3665",
+          "name": "貿聯-KY",
+          "price": 1915.0,
+          "rsi": 68.2,
+          "ret_20d": 11.0,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3105",
+          "name": "穩懋",
+          "price": 376.0,
+          "rsi": 62.0,
+          "ret_20d": 25.3,
+          "signal": "HOLD",
+          "cv_sharpe": -4.88,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "8086",
+          "name": "宏捷科",
+          "price": 125.5,
+          "rsi": 40.5,
+          "ret_20d": 0.4,
+          "signal": "HOLD",
+          "cv_sharpe": -2.3,
+          "cv_win_rate": 0.11,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2455",
+          "name": "全新",
+          "price": 259.0,
+          "rsi": 57.2,
+          "ret_20d": 18.8,
+          "signal": "HOLD",
+          "cv_sharpe": -5.29,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "4906",
+          "name": "正文",
+          "price": 39.3,
+          "rsi": 74.4,
+          "ret_20d": 47.7,
+          "signal": "HOLD",
+          "cv_sharpe": -6.19,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2345",
+          "name": "智邦",
+          "price": 1590.0,
+          "rsi": 59.6,
+          "ret_20d": 12.0,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "記憶體": {
+      "avg_ret_20d": 4.66,
+      "avg_rsi": 50.8,
+      "avg_sharpe": -0.6,
+      "hot_count": 1,
+      "buy_count": 0,
+      "qualified_count": 3,
+      "stocks": [
+        {
+          "id": "2408",
+          "name": "南亞科",
+          "price": 200.5,
+          "rsi": 38.3,
+          "ret_20d": -22.1,
+          "signal": "HOLD",
+          "cv_sharpe": -3.9,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2337",
+          "name": "旺宏",
+          "price": 129.0,
+          "rsi": 58.1,
+          "ret_20d": 20.0,
+          "signal": "HOLD",
+          "cv_sharpe": 1.77,
+          "cv_win_rate": 0.44,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2344",
+          "name": "華邦電",
+          "price": 91.8,
+          "rsi": 36.2,
+          "ret_20d": -18.0,
+          "signal": "HOLD",
+          "cv_sharpe": -2.36,
+          "cv_win_rate": 0.28,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3006",
+          "name": "晶豪科",
+          "price": 150.5,
+          "rsi": 47.0,
+          "ret_20d": 1.7,
+          "signal": "SELL",
+          "cv_sharpe": 1.77,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2451",
+          "name": "創見",
+          "price": 233.0,
+          "rsi": 49.3,
+          "ret_20d": 9.1,
+          "signal": "SELL",
+          "cv_sharpe": 5.68,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "5289",
+          "name": "宜鼎",
+          "price": 957.0,
+          "rsi": 47.3,
+          "ret_20d": 23.0,
+          "signal": "SELL",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3205",
+          "name": "十銓",
+          "price": 60.9,
+          "rsi": 79.1,
+          "ret_20d": 18.9,
+          "signal": "HOLD",
+          "cv_sharpe": -7.15,
+          "cv_win_rate": 0.11,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "AI伺服器": {
+      "avg_ret_20d": 0.97,
+      "avg_rsi": 41.8,
+      "avg_sharpe": -0.56,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "2317",
+          "name": "鴻海",
+          "price": 193.0,
+          "rsi": 30.6,
+          "ret_20d": -13.8,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2382",
+          "name": "廣達",
+          "price": 284.5,
+          "rsi": 45.9,
+          "ret_20d": -1.7,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3231",
+          "name": "緯創",
+          "price": 125.0,
+          "rsi": 35.9,
+          "ret_20d": -2.7,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2376",
+          "name": "技嘉",
+          "price": 228.0,
+          "rsi": 46.3,
+          "ret_20d": 4.6,
+          "signal": "SELL",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "4938",
+          "name": "和碩",
+          "price": 78.0,
+          "rsi": 56.5,
+          "ret_20d": 12.4,
+          "signal": "HOLD",
+          "cv_sharpe": -3.36,
+          "cv_win_rate": 0.28,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2357",
+          "name": "華碩",
+          "price": 555.0,
+          "rsi": 35.3,
+          "ret_20d": 7.1,
+          "signal": "SELL",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "封測": {
+      "avg_ret_20d": -3.72,
+      "avg_rsi": 49.4,
+      "avg_sharpe": 0.56,
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 2,
+      "stocks": [
+        {
+          "id": "3711",
+          "name": "日月光投控",
+          "price": 361.0,
+          "rsi": 56.7,
+          "ret_20d": 2.1,
+          "signal": "BUY",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2449",
+          "name": "京元電子",
+          "price": 259.0,
+          "rsi": 39.0,
+          "ret_20d": -12.2,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "6510",
+          "name": "精測",
+          "price": 3165.0,
+          "rsi": 31.9,
+          "ret_20d": -12.2,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2441",
+          "name": "超豐",
+          "price": 85.0,
+          "rsi": 50.0,
+          "ret_20d": -3.5,
+          "signal": "HOLD",
+          "cv_sharpe": 1.98,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "6257",
+          "name": "矽格",
+          "price": 151.0,
+          "rsi": 68.5,
+          "ret_20d": 13.5,
+          "signal": "HOLD",
+          "cv_sharpe": 1.36,
+          "cv_win_rate": 0.53,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "6239",
+          "name": "力成",
+          "price": 202.0,
+          "rsi": 50.6,
+          "ret_20d": -10.0,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "光學": {
+      "avg_ret_20d": -1.23,
+      "avg_rsi": 45.6,
+      "avg_sharpe": 0.0,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "3008",
+          "name": "大立光",
+          "price": 2140.0,
+          "rsi": 34.1,
+          "ret_20d": -9.3,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3406",
+          "name": "玉晶光",
+          "price": 444.0,
+          "rsi": 57.0,
+          "ret_20d": 6.9,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "IC設計": {
+      "avg_ret_20d": 2.48,
+      "avg_rsi": 39.6,
+      "avg_sharpe": -3.44,
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "2454",
+          "name": "聯發科",
+          "price": 1465.0,
+          "rsi": 11.9,
+          "ret_20d": -17.5,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "3034",
+          "name": "聯詠",
+          "price": 382.0,
+          "rsi": 47.5,
+          "ret_20d": 2.0,
+          "signal": "BUY",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "4966",
+          "name": "譜瑞-KY",
+          "price": 463.5,
+          "rsi": 25.9,
+          "ret_20d": -10.7,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "4919",
+          "name": "新唐",
+          "price": 92.4,
+          "rsi": 55.5,
+          "ret_20d": 26.6,
+          "signal": "HOLD",
+          "cv_sharpe": -8.79,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2388",
+          "name": "威盛",
+          "price": 51.4,
+          "rsi": 57.3,
+          "ret_20d": 12.0,
+          "signal": "HOLD",
+          "cv_sharpe": -8.39,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "車用電子": {
+      "avg_ret_20d": 26.19,
+      "avg_rsi": 55.7,
+      "avg_sharpe": -12.34,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "3552",
+          "name": "同致",
+          "price": 55.4,
+          "rsi": 65.0,
+          "ret_20d": 13.9,
+          "signal": "HOLD",
+          "cv_sharpe": -13.05,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "1533",
+          "name": "車王電",
+          "price": 29.3,
+          "rsi": 36.6,
+          "ret_20d": -1.8,
+          "signal": "HOLD",
+          "cv_sharpe": -14.63,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        },
+        {
+          "id": "2243",
+          "name": "怡利電",
+          "price": 19.9,
+          "rsi": 65.4,
+          "ret_20d": 66.5,
+          "signal": "HOLD",
+          "cv_sharpe": -9.35,
+          "cv_win_rate": 0.11,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    },
+    "綠能環保": {
+      "avg_ret_20d": 17.17,
+      "avg_rsi": 62.6,
+      "avg_sharpe": 0.0,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "5292",
+          "name": "華懋",
+          "price": 211.5,
+          "rsi": 62.6,
+          "ret_20d": 17.2,
+          "signal": "HOLD",
+          "cv_sharpe": 0.0,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-04-02",
+            "合計": 0
+          }
+        }
+      ]
+    }
+  },
+  "strong_sectors": [
+    "光通訊",
+    "記憶體",
+    "車用電子",
+    "綠能環保"
+  ],
+  "weak_sectors": [
+    "封測"
+  ],
+  "qualified": [],
+  "alerts": [
+    {
+      "sector": "光通訊",
+      "id": "4906",
+      "name": "正文",
+      "type": "RSI過熱",
+      "detail": "RSI=74.4"
+    },
+    {
+      "sector": "記憶體",
+      "id": "3205",
+      "name": "十銓",
+      "type": "RSI過熱",
+      "detail": "RSI=79.1"
+    }
+  ],
+  "chart_path": "daily_reports\\20260402\\01_sector_strength.png"
+}
