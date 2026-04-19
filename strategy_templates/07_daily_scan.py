@@ -261,11 +261,18 @@ def run_daily_scan():
 
     # Notion 上傳
     try:
-        from notion_upload import upload_daily_report
-        page_id = upload_daily_report(summary)
+        from notion_upload import upload_daily_report as notion_upload
+        page_id = notion_upload(summary)
         print(f"   Notion：{page_id}")
     except Exception as e:
         print(f"   Notion 上傳失敗：{e}")
+
+    # Google Sheets 上傳
+    try:
+        from gsheets_upload import upload_daily_report as sheets_upload
+        sheets_upload(summary)
+    except Exception as e:
+        print(f"   Google Sheets 上傳失敗：{e}")
 
     print(f"\n{'='*78}\n")
     return summary

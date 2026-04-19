@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台股族群掃描</title>
+<style>
+  :root {
+    --bg: #0e1117; --card: #1a1d24; --border: #2d3139;
+    --text: #e0e0e0; --sub: #888; --green: #27ae60;
+    --red: #e74c3c; --yellow: #f39c12; --blue: #3498db;
+    --accent: #1f77b4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; font-size: 14px; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 700; }
+  nav a { color: var(--sub); text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; transition: .2s; }
+  nav a.active, nav a:hover { background: var(--accent); color: #fff; }
+
+  main { padding: 20px 24px; max-width: 1400px; margin: 0 auto; }
+
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  @media(max-width:768px){ .grid-4{grid-template-columns:1fr 1fr;} .grid-2{grid-template-columns:1fr;} }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .card-title { font-size: 11px; color: var(--sub); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .card-value { font-size: 22px; font-weight: 700; }
+  .card-sub { font-size: 12px; color: var(--sub); margin-top: 4px; }
+
+  .section-title { font-size: 15px; font-weight: 600; margin: 20px 0 10px; border-left: 3px solid var(--accent); padding-left: 10px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #13161d; color: var(--sub); font-weight: 500; padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); position: sticky; top: 0; }
+  td { padding: 7px 10px; border-bottom: 1px solid #1e2128; }
+  tr:hover td { background: #1e2330; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .buy  { background: rgba(39,174,96,.2);  color: var(--green); }
+  .sell { background: rgba(231,76,60,.2);  color: var(--red);   }
+  .hold { background: rgba(243,156,18,.15);color: var(--yellow); }
+
+  .bar-wrap { height: 16px; background: #13161d; border-radius: 4px; overflow: hidden; }
+  .bar { height: 100%; border-radius: 4px; transition: width .4s; }
+
+  .chip-pos { color: var(--green); } .chip-neg { color: var(--red); }
+
+  .sector-block { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; }
+  .sector-header { padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .sector-header:hover { background: #1e2330; border-radius: 8px; }
+  .sector-body { display: none; padding: 0 8px 8px; overflow-x: auto; }
+  .sector-body.open { display: block; }
+
+  .tag { background: #1e2330; border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--sub); margin-left: 6px; }
+
+  .rsi-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .rsi-hot { background: var(--red); } .rsi-warm { background: var(--yellow); } .rsi-ok { background: var(--green); }
+
+  .up { color: var(--green); } .dn { color: var(--red); }
+  footer { text-align: center; color: var(--sub); font-size: 11px; padding: 24px; border-top: 1px solid var(--border); margin-top: 40px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 台股族群掃描</h1>
+  <nav>
+    <a href="?page=daily"  class="<?= page==='daily'  ? 'active':'' ?>">今日掃描</a>
+    <a href="?page=weekly" class="<?= page==='weekly' ? 'active':'' ?>">週報</a>
+  </nav>
+</header>
+
+<main id="app">載入中...</main>
+<footer>資料來源：twstock / FinMind　｜　每日 14:32 自動更新</footer>
+
+<script>
+const DATA = <?= data ?>;
+const PAGE = '<?= page ?>';
+
+function fmt(v, digit=1){ return v===''||v===null||v===undefined ? '—' : (typeof v==='number'?v.toFixed(digit):v); }
+function sign(v){ return v>0?'+':'' }
+function signColor(v){ return v>0?'up':'dn' }
+function rsiDot(r){ return r>70?'rsi-hot':r>60?'rsi-warm':'rsi-ok' }
+function badge(s){ const m={'BUY':'buy','SELL':'sell','HOLD':'hold'}; return `<span class="badge ${m[s]||'hold'}">${s}</span>` }
+function chip(v){ if(v===''||v===null) return '—'; const n=Number(v); return `<span class="${n>=0?'chip-pos':'chip-neg'}">${sign(n)}${n.toLocaleString()}</span>` }
+
+// ── 今日掃描 ──
+function renderDaily(){
+  const {meta, sectors, chips, stocks} = DATA;
+  const date = meta['掃描日期']||'—';
+  const idx  = meta['加權指數'];
+  const chg  = meta['漲跌幅%'];
+  const strong = meta['強勢族群']||'無';
+  const weak   = meta['弱勢族群']||'無';
+
+  let html = `
+  <div class="grid-4">
+    <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${date}</div></div>
+    <div class="card"><div class="card-title">加權指數</div>
+      <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'—'}</div>
+      <div class="card-sub">${chg!==''?sign(Number(chg))+Number(chg).toFixed(2)+'%':''}</div></div>
+    <div class="card"><div class="card-title">強勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${strong}</div></div>
+    <div class="card"><div class="card-title">弱勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${weak||'無'}</div></div>
+  </div>`;
+
+  // 族群強弱
+  html += `<div class="section-title">族群強弱</div><div class="card" style="overflow-x:auto"><table>
+    <tr><th>族群</th><th>20日報酬%</th><th></th><th>RSI</th><th>BUY訊號</th><th>RSI>70</th></tr>`;
+  const maxRet = Math.max(...sectors.map(s=>Math.abs(Number(s.ret20)||0)), 1);
+  sectors.sort((a,b)=>Number(b.ret20)-Number(a.ret20)).forEach(s=>{
+    const r = Number(s.ret20)||0;
+    const barW = Math.min(Math.abs(r)/maxRet*100, 100);
+    const barC = r>=0?'var(--green)':'var(--red)';
+    html += `<tr>
+      <td><b>${s.sector}</b></td>
+      <td class="${signColor(r)}">${sign(r)}${fmt(r)}%</td>
+      <td style="width:120px"><div class="bar-wrap"><div class="bar" style="width:${barW}%;background:${barC}"></div></div></td>
+      <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}</td>
+      <td>${s.buy}</td><td>${s.hot}</td></tr>`;
+  });
+  html += `</table></div>`;
+
+  // 籌碼
+  if(chips.length){
+    const buys = chips.filter(c=>Number(c.total)>0).slice(0,5);
+    const sells = chips.filter(c=>Number(c.total)<0).slice(-5).reverse();
+    html += `<div class="section-title">籌碼面：三大法人</div><div class="grid-2">`;
+    const chipTable = rows => `<div class="card"><table>
+      <tr><th>代碼</th><th>名稱</th><th>族群</th><th>外資</th><th>投信</th><th>自營</th><th>合計</th></tr>
+      ${rows.map(c=>`<tr><td>${c.id}</td><td>${c.name}</td><td>${c.sector}</td>
+        <td>${chip(c.foreign)}</td><td>${chip(c.trust)}</td><td>${chip(c.dealer)}</td>
+        <td><b>${chip(c.total)}</b></td></tr>`).join('')}
+      </table></div>`;
+    html += `<div><div style="color:var(--green);font-size:12px;margin-bottom:6px">▲ 買超</div>${chipTable(buys)}</div>`;
+    html += `<div><div style="color:var(--red);font-size:12px;margin-bottom:6px">▼ 賣超</div>${chipTable(sells)}</div>`;
+    html += `</div>`;
+  }
+
+  // 各族群個股明細（可收合）
+  html += `<div class="section-title">各族群個股明細</div>`;
+  const grouped = {};
+  stocks.forEach(s=>{ (grouped[s.sector]=grouped[s.sector]||[]).push(s); });
+  Object.entries(grouped).forEach(([sec, stks])=>{
+    const buyCnt = stks.filter(s=>s.signal==='BUY').length;
+    html += `<div class="sector-block">
+      <div class="sector-header" onclick="toggle(this)">
+        <span><b>${sec}</b>
+          ${buyCnt?`<span class="tag" style="color:var(--green)">BUY ${buyCnt}</span>`:''}
+        </span>
+        <span style="color:var(--sub);font-size:12px">▼</span>
+      </div>
+      <div class="sector-body">
+      <table>
+        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>近期新聞</th></tr>
+        ${stks.map(s=>`<tr>
+          <td>${s.id}</td><td><b>${s.name}</b></td>
+          <td>${fmt(s.price,1)}</td>
+          <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}</td>
+          <td class="${signColor(Number(s.ret20))}">${s.ret20!==''?sign(Number(s.ret20))+fmt(s.ret20)+'%':'—'}</td>
+          <td>${badge(s.signal)}</td>
+          <td>${fmt(s.sharpe,2)}</td>
+          <td>${chip(s.chipTotal)}</td>
+          <td style="max-width:240px;white-space:normal;font-size:11px;color:var(--sub)">${s.news||'—'}</td>
+        </tr>`).join('')}
+      </table>
+      </div></div>`;
+  });
+  document.getElementById('app').innerHTML = html;
+}
+
+// ── 週報 ──
+function renderWeekly(){
+  const {meta, changes, buys} = DATA;
+  let html = `
+  <div class="grid-4" style="grid-template-columns:repeat(2,1fr)">
+    <div class="card"><div class="card-title">週報日期</div><div class="card-value" style="font-size:18px">${meta.date||'—'}</div></div>
+    <div class="card"><div class="card-title">涵蓋交易日</div><div class="card-value">${meta.days||'—'} 日</div></div>
+  </div>
+  <div class="grid-2">`;
+
+  // 族群變化
+  html += `<div><div class="section-title">族群動能變化</div><div class="card"><table>
+    <tr><th>族群</th><th>動能變化 (pp)</th><th></th></tr>`;
+  const maxC = Math.max(...changes.map(c=>Math.abs(Number(c.change)||0)), 1);
+  changes.forEach(c=>{
+    const v = Number(c.change)||0;
+    const w = Math.min(Math.abs(v)/maxC*100, 100);
+    const col = v>=0?'var(--green)':'var(--red)';
+    html += `<tr><td>${c.sector}</td>
+      <td class="${signColor(v)}">${sign(v)}${fmt(v,2)} pp</td>
+      <td style="width:100px"><div class="bar-wrap"><div class="bar" style="width:${w}%;background:${col}"></div></div></td></tr>`;
+  });
+  html += `</table></div></div>`;
+
+  // Top BUY
+  html += `<div><div class="section-title">本週累計 BUY Top 10</div><div class="card"><table>
+    <tr><th>排名</th><th>個股</th><th>BUY 次數</th></tr>`;
+  buys.forEach((b,i)=>{
+    html += `<tr><td style="color:var(--sub)">${i+1}</td><td>${b.stock}</td>
+      <td><span class="badge buy">${b.days} 次</span></td></tr>`;
+  });
+  html += `</table></div></div></div>`;
+  document.getElementById('app').innerHTML = html;
+}
+
+function toggle(el){
+  const body = el.nextElementSibling;
+  body.classList.toggle('open');
+  el.querySelector('span:last-child').textContent = body.classList.contains('open')?'▲':'▼';
+}
+
+PAGE==='weekly' ? renderWeekly() : renderDaily();
+</script>
+</body>
+</html>
