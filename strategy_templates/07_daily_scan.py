@@ -274,8 +274,68 @@ def run_daily_scan():
     except Exception as e:
         print(f"   Google Sheets 上傳失敗：{e}")
 
+    # 寫入 GitHub Pages 靜態資料
+    docs_dir = Path(__file__).parent.parent / 'docs'
+    docs_dir.mkdir(exist_ok=True)
+    with open(docs_dir / 'daily.json', 'w', encoding='utf-8') as f:
+        json.dump(build_daily_payload(summary), f, ensure_ascii=False, indent=2, default=str)
+    print('  docs/daily.json 已更新')
+
     print(f"\n{'='*78}\n")
     return summary
+
+
+def build_daily_payload(summary):
+    sectors = []
+    chips = []
+    stocks = []
+    for sector, data in summary.get('sectors', {}).items():
+        sectors.append({
+            'sector': sector,
+            'ret20': data.get('avg_ret_20d', ''),
+            'rsi': data.get('avg_rsi', ''),
+            'buy': data.get('buy_count', 0),
+            'hot': data.get('hot_count', 0),
+        })
+        for st in data.get('stocks', []):
+            chip = st.get('chip', {})
+            stocks.append({
+                'date': summary['date'],
+                'sector': sector,
+                'id': st['id'],
+                'name': st['name'],
+                'price': st.get('price', ''),
+                'rsi': st.get('rsi', ''),
+                'ret20': st.get('ret_20d', ''),
+                'signal': st.get('signal', ''),
+                'sharpe': st.get('cv_sharpe', ''),
+                'foreign': chip.get('外資', ''),
+                'trust': chip.get('投信', ''),
+                'dealer': chip.get('自營', ''),
+                'chipTotal': chip.get('合計', ''),
+                'news': ' / '.join(n['title'] for n in st.get('news', [])[:2]),
+            })
+            if chip.get('合計', 0):
+                chips.append({
+                    'id': st['id'], 'name': st['name'], 'sector': sector,
+                    'total': chip.get('合計', 0),
+                    'foreign': chip.get('外資', 0),
+                    'trust': chip.get('投信', 0),
+                    'dealer': chip.get('自營', 0),
+                })
+    mkt = summary.get('market', {})
+    return {
+        'meta': {
+            '掃描日期': summary.get('date', ''),
+            '加權指數': mkt.get('加權指數', ''),
+            '漲跌幅%': mkt.get('漲跌幅', ''),
+            '強勢族群': ', '.join(summary.get('strong_sectors', [])),
+            '弱勢族群': ', '.join(summary.get('weak_sectors', [])),
+        },
+        'sectors': sectors,
+        'chips': sorted(chips, key=lambda x: x['total'], reverse=True),
+        'stocks': stocks,
+    }
 
 
 def build_summary(date, market, all_results, chart_path):

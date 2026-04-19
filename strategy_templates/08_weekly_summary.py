@@ -120,6 +120,13 @@ def run_weekly_summary():
     print(f"   {md_path}")
     print(f"   {chart_path}")
 
+    # 寫入 GitHub Pages 靜態資料
+    docs_dir = Path(__file__).parent.parent / 'docs'
+    docs_dir.mkdir(exist_ok=True)
+    with open(docs_dir / 'weekly.json', 'w', encoding='utf-8') as f:
+        json.dump(build_weekly_payload(summary), f, ensure_ascii=False, indent=2, default=str)
+    print('  docs/weekly.json 已更新')
+
     # Notion 上傳
     try:
         import sys, os
@@ -131,6 +138,14 @@ def run_weekly_summary():
         print(f"   Notion 上傳失敗：{e}")
 
     return summary
+
+
+def build_weekly_payload(summary):
+    return {
+        'meta': {'date': summary.get('week_ending', ''), 'days': summary.get('days_covered', 0)},
+        'changes': [{'sector': c['sector'], 'change': c['change']} for c in summary.get('sector_changes', [])],
+        'buys': [{'stock': b['stock'], 'days': b['buy_days']} for b in summary.get('top_buys', [])],
+    }
 
 
 if __name__ == '__main__':
