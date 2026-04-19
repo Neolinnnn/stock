@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip list *)",
+      "Bash(pip install *)",
+      "Bash(python strategy_templates/03_batch_scan_with_cv.py)",
+      "Bash(python -c ' *)",
+      "Bash(python strategy_templates/04_optical_comm_scan.py)",
+      "Bash(python strategy_templates/05_single_stock_deep_dive.py 4906)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 4906)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 6271)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 6515)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 3363)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 3665)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 4979)",
+      "Bash(python strategy_templates/06_finmind_fundamentals.py 3450)",
+      "mcp__dbd10f7e-e843-464a-a2be-7f10baabd9c1__notion-get-teams",
+      "mcp__dbd10f7e-e843-464a-a2be-7f10baabd9c1__notion-search",
+      "mcp__dbd10f7e-e843-464a-a2be-7f10baabd9c1__notion-create-pages",
+      "mcp__dbd10f7e-e843-464a-a2be-7f10baabd9c1__notion-create-database",
+      "Bash(python strategy_templates/07_daily_scan.py)",
+      "Bash(schtasks /create /tn \"台股每日掃描\" /tr \"\\\\\"C:\\\\Users\\\\Neo\\\\Documents\\\\Claude\\\\Projects\\\\台股研究\\\\run_daily_scan.bat\\\\\"\" /sc WEEKLY /d MON,TUE,WED,THU,FRI /st 14:32 /f)",
+      "Bash(cmd.exe /c \"schtasks /create /tn \\\\\"台股每日掃描\\\\\" /tr \\\\\"C:\\\\\\\\Users\\\\\\\\Neo\\\\\\\\Documents\\\\\\\\Claude\\\\\\\\Projects\\\\\\\\台股研究\\\\\\\\run_daily_scan.bat\\\\\" /sc WEEKLY /d MON,TUE,WED,THU,FRI /st 14:32 /f\")",
+      "Bash(powershell.exe -Command \"schtasks /create /tn '台股每日掃描' /tr 'C:\\\\\\\\Users\\\\\\\\Neo\\\\\\\\Documents\\\\\\\\Claude\\\\\\\\Projects\\\\\\\\台股研究\\\\\\\\run_daily_scan.bat' /sc WEEKLY /d MON,TUE,WED,THU,FRI /st 14:32 /f\")",
+      "Bash(powershell.exe -Command \"schtasks /create /tn '台股週報' /tr 'C:\\\\\\\\Users\\\\\\\\Neo\\\\\\\\Documents\\\\\\\\Claude\\\\\\\\Projects\\\\\\\\台股研究\\\\\\\\run_weekly_summary.bat' /sc WEEKLY /d FRI /st 14:47 /f\")",
+      "Bash(powershell.exe -Command \"schtasks /query /tn '台股每日掃描' /fo LIST; schtasks /query /tn '台股週報' /fo LIST\")",
+      "Bash(python strategy_templates/08_weekly_summary.py)",
+      "Bash(cp -r /c/Users/Neo/Documents/Claude/Projects/台股研究/daily_reports/20260418 /c/Users/Neo/Documents/Claude/Projects/台股研究/daily_reports/20260417)",
+      "Bash(pip show *)",
+      "Bash(python -c \"import os; print\\(os.environ.get\\('NOTION_TOKEN', 'NOT_SET'\\)\\)\")",
+      "Bash(python -m streamlit run app.py --server.headless true --server.port 8501)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501)"
+    ]
+  }
+}
