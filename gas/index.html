@@ -75,8 +75,8 @@
 <footer>資料來源：twstock / FinMind　｜　每日 14:32 自動更新</footer>
 
 <script>
-const DATA = <?= data ?>;
-const PAGE = '<?= page ?>';
+const DATA = <?!= data ?>;
+const PAGE = '<?!= page ?>';
 
 function fmt(v, digit=1){ return v===''||v===null||v===undefined ? '—' : (typeof v==='number'?v.toFixed(digit):v); }
 function sign(v){ return v>0?'+':'' }
