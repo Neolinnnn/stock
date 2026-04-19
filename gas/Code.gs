@@ -4,7 +4,7 @@
 //           執行身份：我 / 存取權限：所有人
 // ============================================================
 
-const SHEET_ID = ''; // ← 貼上你的 Google Sheet ID
+const SHEET_ID = '1NzrQlsW8vQLPPius47Enc-4Kit55PYjuQ8IOiyLLl8c';
 
 function doGet(e) {
   const page = e.parameter.page || 'daily';
