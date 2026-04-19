@@ -70,17 +70,39 @@ SECTORS = {
 }
 
 
-def fetch_20d_return(sid):
-    """取得近 20 日報酬率"""
+def fetch_price_stats(sid):
+    """取近期價格資料，回傳 ret_20d + 技術目標價"""
     try:
         from twstock import Stock
+        import statistics
         s = Stock(sid)
-        st = datetime.now() - timedelta(days=60)
+        st = datetime.now() - timedelta(days=90)
         s.fetch_from(st.year, st.month)
         p = list(s.price)
-        return (p[-1] - p[-21]) / p[-21] if len(p) >= 21 else None
+        if len(p) < 21:
+            return None, None, None, None
+        ret_20d = (p[-1] - p[-21]) / p[-21]
+        # 短期目標：布林上軌（MA20 + 2σ）
+        p20 = p[-20:]
+        ma20 = sum(p20) / 20
+        sigma = statistics.stdev(p20)
+        t_short = round(ma20 + 2 * sigma, 1)
+        # 中期目標：近 60 日最高價 × 1.03（突破壓力後溢價）
+        hi60 = max(p[-60:]) if len(p) >= 60 else max(p)
+        t_mid = round(hi60 * 1.03, 1)
+        # 長期目標：以近 20 日平均波動率年化推估 3 個月潛在漲幅
+        daily_rets = [(p[i] - p[i-1]) / p[i-1] for i in range(1, len(p))]
+        vol = statistics.stdev(daily_rets[-20:]) if len(daily_rets) >= 20 else 0.02
+        t_long = round(p[-1] * (1 + vol * 15), 1)  # 15 交易日 1σ 上行
+        return ret_20d, t_short, t_mid, t_long
     except Exception:
-        return None
+        return None, None, None, None
+
+
+def fetch_20d_return(sid):
+    """向後相容的薄包裝"""
+    ret, *_ = fetch_price_stats(sid)
+    return ret
 
 
 def fetch_market_overview():
@@ -106,21 +128,43 @@ def fetch_market_overview():
         return {'error': str(e)}
 
 
-def fetch_news(stock_id, stock_name, days=2):
-    """抓取個股最新新聞（FinMind）"""
+def fetch_news(stock_id, stock_name, days=3):
+    """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
+    import urllib.request, json as _json
     try:
-        from FinMind.data import DataLoader
-        dl = DataLoader()
-        end = datetime.now().strftime('%Y-%m-%d')
-        start = (datetime.now() - timedelta(days=days)).strftime('%Y-%m-%d')
-        news = dl.taiwan_stock_news(stock_id=stock_id, start_date=start, end_date=end)
-        if news.empty:
-            return []
-        news = news.sort_values('date', ascending=False).head(3)
-        return [{'date': str(r['date']), 'title': r.get('title', ''),
-                 'source': r.get('source', '')} for _, r in news.iterrows()]
+        url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock'
+               f'?limit=5&stock_code={stock_id}')
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = _json.loads(r.read())
+        items = data.get('items', {}).get('data', [])
+        cutoff = datetime.now() - timedelta(days=days)
+        result = []
+        for it in items:
+            import datetime as _dt
+            pub_dt = _dt.datetime.fromtimestamp(it.get('publishAt', 0))
+            if pub_dt < cutoff:
+                continue
+            result.append({
+                'date': pub_dt.strftime('%Y-%m-%d'),
+                'title': it.get('title', ''),
+                'source': it.get('media', {}).get('name', '鉅亨網'),
+            })
+            if len(result) >= 3:
+                break
+        return result
     except Exception:
         return []
+
+
+# FinMind 三大法人欄位名（英文）→ 中文分類
+_CHIP_MAP = {
+    'Foreign_Investor':    '外資',
+    'Foreign_Dealer_Self': '外資',   # 外資自營合入外資
+    'Investment_Trust':    '投信',
+    'Dealer_self':         '自營',
+    'Dealer_Hedging':      '自營',   # 避險合入自營
+}
 
 
 def fetch_chip_data(stock_id, days=5):
@@ -138,17 +182,13 @@ def fetch_chip_data(stock_id, days=5):
         df = df.sort_values('date', ascending=False)
         latest_date = df['date'].iloc[0]
         day_df = df[df['date'] == latest_date]
-        result = {'date': str(latest_date)}
+        result = {'date': str(latest_date), '外資': 0, '投信': 0, '自營': 0}
         for _, row in day_df.iterrows():
-            name = row.get('name', '')
-            net = row.get('buy', 0) - row.get('sell', 0)
-            if '外資' in name:
-                result['外資'] = int(net)
-            elif '投信' in name:
-                result['投信'] = int(net)
-            elif '自營' in name:
-                result['自營'] = int(net)
-        result['合計'] = result.get('外資', 0) + result.get('投信', 0) + result.get('自營', 0)
+            eng_name = row.get('name', '')
+            zh = _CHIP_MAP.get(eng_name)
+            if zh:
+                result[zh] = result.get(zh, 0) + int(row.get('buy', 0) - row.get('sell', 0))
+        result['合計'] = result['外資'] + result['投信'] + result['自營']
         return result
     except Exception:
         return {}
@@ -160,8 +200,12 @@ def scan_sector(sector_name, stocks):
     for sid, name in stocks.items():
         try:
             r = analyze_stock(sid, name)
-            r['ret_20d'] = fetch_20d_return(sid)
-            r['news'] = fetch_news(sid, name, days=2)
+            ret_20d, t_short, t_mid, t_long = fetch_price_stats(sid)
+            r['ret_20d'] = ret_20d
+            r['target_short'] = t_short
+            r['target_mid']   = t_mid
+            r['target_long']  = t_long
+            r['news'] = fetch_news(sid, name, days=3)
             r['chip'] = fetch_chip_data(sid, days=5)
             results.append(r)
         except Exception as e:

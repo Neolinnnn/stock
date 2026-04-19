@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "Streamlit UI",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "streamlit", "run", "app.py", "--server.port", "8765", "--server.headless", "true", "--browser.gatherUsageStats", "false"],
+      "port": 8765
+    },
+    {
       "name": "批次掃描 + Walk-Forward CV",
       "runtimeExecutable": "python",
       "runtimeArgs": ["strategy_templates/03_batch_scan_with_cv.py"],
