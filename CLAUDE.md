@@ -60,9 +60,9 @@ result = writer.generate(task="daily_summary", context={...})
 ## 環境變數
 
 ```
-GEMINI_API_KEY=REDACTED_KEY  # KEY2，支援最多模型
-GEMINI_API_KEY_1=REDACTED_KEY
-GEMINI_API_KEY_2=REDACTED_KEY
+GEMINI_API_KEY=AIzaSyBAcn5OqRZW5NkoNEzUswz1W_YsPIcLMRY  # KEY2，支援最多模型
+GEMINI_API_KEY_1=AIzaSyD9RF-7zMssPzCsrvyt_ydsgVcKtK-8cQY
+GEMINI_API_KEY_2=AIzaSyBAcn5OqRZW5NkoNEzUswz1W_YsPIcLMRY
 ```
 
 ---
