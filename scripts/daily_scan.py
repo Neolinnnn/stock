@@ -123,6 +123,15 @@ def fetch_news(stock_id, stock_name, days=2):
         return []
 
 
+_CHIP_MAP = {
+    'Foreign_Investor':    '外資',
+    'Foreign_Dealer_Self': '外資',
+    'Investment_Trust':    '投信',
+    'Dealer_self':         '自營',
+    'Dealer_Hedging':      '自營',
+}
+
+
 def fetch_chip_data(stock_id, days=5):
     """抓取三大法人近 N 日買賣超（FinMind）"""
     try:
@@ -138,17 +147,12 @@ def fetch_chip_data(stock_id, days=5):
         df = df.sort_values('date', ascending=False)
         latest_date = df['date'].iloc[0]
         day_df = df[df['date'] == latest_date]
-        result = {'date': str(latest_date)}
+        result = {'date': str(latest_date), '外資': 0, '投信': 0, '自營': 0}
         for _, row in day_df.iterrows():
-            name = row.get('name', '')
-            net = row.get('buy', 0) - row.get('sell', 0)
-            if '外資' in name:
-                result['外資'] = int(net)
-            elif '投信' in name:
-                result['投信'] = int(net)
-            elif '自營' in name:
-                result['自營'] = int(net)
-        result['合計'] = result.get('外資', 0) + result.get('投信', 0) + result.get('自營', 0)
+            zh = _CHIP_MAP.get(str(row.get('name', '')))
+            if zh:
+                result[zh] += int(row.get('buy', 0) - row.get('sell', 0))
+        result['合計'] = result['外資'] + result['投信'] + result['自營']
         return result
     except Exception:
         return {}
@@ -381,6 +385,9 @@ def build_summary(date, market, all_results, chart_path):
                     'cv_win_rate': round(r['cv_win_rate'], 2),
                     'news': r.get('news', []),
                     'chip': r.get('chip', {}),
+                    'target_short': r.get('target_short'),
+                    'target_mid':   r.get('target_mid'),
+                    'target_long':  r.get('target_long'),
                 }
                 for _, r in df.iterrows()
             ],
