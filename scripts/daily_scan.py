@@ -70,17 +70,81 @@ SECTORS = {
 }
 
 
-def fetch_20d_return(sid):
-    """取得近 20 日報酬率"""
+def fetch_price_stats(sid):
+    """取近期價格資料，回傳 ret_20d + 估值目標價
+
+    短期：布林上軌（技術壓力位）
+    中期：P/E 均值回歸（相對估值；PE 不可用時改用 P/B）
+    長期：40% P/E + 40% PEG + 20% 技術 加權合成（依指南結論）
+    """
     try:
         from twstock import Stock
+        import statistics
+        from datetime import date
         s = Stock(sid)
-        st = datetime.now() - timedelta(days=60)
+        st = datetime.now() - timedelta(days=120)
         s.fetch_from(st.year, st.month)
         p = list(s.price)
-        return (p[-1] - p[-21]) / p[-21] if len(p) >= 21 else None
+        if len(p) < 21:
+            return None, None, None, None
+        price = p[-1]
+        ret_20d = (p[-1] - p[-21]) / p[-21]
+
+        # 短期：布林上軌（技術壓力位）
+        p20 = p[-20:]
+        ma20 = sum(p20) / 20
+        sigma = statistics.stdev(p20)
+        t_short = round(ma20 + 2 * sigma, 1)
+
+        # 中期 + 長期：基本面估值（P/E + PEG），FinMind 免費 api
+        try:
+            import pandas as _pd
+            from FinMind.data import DataLoader as _DL
+            _dl = _DL()
+            one_yr_ago = (date.today() - timedelta(days=365)).strftime("%Y-%m-%d")
+            per_df = _dl.taiwan_stock_per_pbr(stock_id=sid, start_date=one_yr_ago)
+
+            if per_df.empty:
+                raise ValueError("no per data")
+            valid_pe = per_df[per_df["PER"] > 0]["PER"]
+            valid_pb = per_df[per_df["PBR"] > 0]["PBR"]
+            cur_pe = float(per_df.iloc[-1]["PER"])
+            cur_pb = float(per_df.iloc[-1]["PBR"])
+            med_pe = float(valid_pe.median()) if not valid_pe.empty else 0
+            med_pb = float(valid_pb.median()) if not valid_pb.empty else 0
+
+            # 中期：P/E 均值回歸（上下限 ±50%）
+            if cur_pe > 0 and med_pe > 0:
+                t_mid = round(price * max(0.85, min(med_pe / cur_pe, 1.5)), 1)
+            elif cur_pb > 0 and med_pb > 0:
+                t_mid = round(price * max(0.85, min(med_pb / cur_pb, 1.5)), 1)
+            else:
+                hi60 = max(p[-60:]) if len(p) >= 60 else max(p)
+                t_mid = round(hi60 * 1.03, 1)
+
+            # 長期：40% P/E + 40% PEG + 20% 技術
+            pe_target = price * max(0.85, min(med_pe / cur_pe, 1.5)) if cur_pe > 0 and med_pe > 0 else price * 1.10
+            peg_g = min(cur_pe, 30) / 100 if cur_pe > 0 else 0.10  # PEG=1 隱含成長率
+            peg_target = price * (1 + peg_g)
+            t_long = round(0.4 * pe_target + 0.4 * peg_target + 0.2 * t_short, 1)
+
+        except Exception:
+            # Fallback：純技術
+            hi60 = max(p[-60:]) if len(p) >= 60 else max(p)
+            t_mid = round(hi60 * 1.03, 1)
+            daily_rets = [(p[i] - p[i-1]) / p[i-1] for i in range(1, len(p))]
+            vol = statistics.stdev(daily_rets[-20:]) if len(daily_rets) >= 20 else 0.02
+            t_long = round(price * (1 + vol * 15), 1)
+
+        return ret_20d, t_short, t_mid, t_long
     except Exception:
-        return None
+        return None, None, None, None
+
+
+def fetch_20d_return(sid):
+    """向後相容的薄包裝"""
+    ret, *_ = fetch_price_stats(sid)
+    return ret
 
 
 def fetch_market_overview():
@@ -106,19 +170,31 @@ def fetch_market_overview():
         return {'error': str(e)}
 
 
-def fetch_news(stock_id, stock_name, days=2):
-    """抓取個股最新新聞（FinMind）"""
+def fetch_news(stock_id, stock_name, days=3):
+    """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
+    import urllib.request, json as _json
     try:
-        from FinMind.data import DataLoader
-        dl = DataLoader()
-        end = datetime.now().strftime('%Y-%m-%d')
-        start = (datetime.now() - timedelta(days=days)).strftime('%Y-%m-%d')
-        news = dl.taiwan_stock_news(stock_id=stock_id, start_date=start, end_date=end)
-        if news.empty:
-            return []
-        news = news.sort_values('date', ascending=False).head(3)
-        return [{'date': str(r['date']), 'title': r.get('title', ''),
-                 'source': r.get('source', '')} for _, r in news.iterrows()]
+        url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock'
+               f'?limit=5&stock_code={stock_id}')
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = _json.loads(r.read())
+        items = data.get('items', {}).get('data', [])
+        cutoff = datetime.now() - timedelta(days=days)
+        result = []
+        for it in items:
+            import datetime as _dt
+            pub_dt = _dt.datetime.fromtimestamp(it.get('publishAt', 0))
+            if pub_dt < cutoff:
+                continue
+            result.append({
+                'date': pub_dt.strftime('%Y-%m-%d'),
+                'title': it.get('title', ''),
+                'source': it.get('media', {}).get('name', '鉅亨網'),
+            })
+            if len(result) >= 3:
+                break
+        return result
     except Exception:
         return []
 
@@ -164,8 +240,12 @@ def scan_sector(sector_name, stocks):
     for sid, name in stocks.items():
         try:
             r = analyze_stock(sid, name)
-            r['ret_20d'] = fetch_20d_return(sid)
-            r['news'] = fetch_news(sid, name, days=2)
+            ret_20d, t_short, t_mid, t_long = fetch_price_stats(sid)
+            r['ret_20d'] = ret_20d
+            r['target_short'] = t_short
+            r['target_mid']   = t_mid
+            r['target_long']  = t_long
+            r['news'] = fetch_news(sid, name, days=3)
             r['chip'] = fetch_chip_data(sid, days=5)
             results.append(r)
         except Exception as e:
