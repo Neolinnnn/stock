@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>台股族群掃描</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
     --bg:#0e1117; --card:#1a1d24; --border:#2d3139;
@@ -70,19 +69,17 @@
   .error-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:40px;text-align:center;color:var(--sub);font-size:15px;margin-top:40px;}
   .error-box span{display:block;font-size:36px;margin-bottom:16px;}
 
-  /* 趨勢頁 */
-  .trend-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px;}
-  @media(max-width:700px){.trend-grid{grid-template-columns:1fr;}}
-  .chart-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
-  .chart-card h3{font-size:13px;color:var(--sub);margin-bottom:12px;}
-  .chart-card canvas{max-height:260px;}
-
-  .stock-search{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-  .stock-search input{background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:13px;flex:1;min-width:160px;}
-  .stock-search input:focus{outline:none;border-color:var(--accent);}
-
   footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top:1px solid var(--border);margin-top:40px;}
   .page-section{display:none;}.page-section.active{display:block;}
+
+  /* 說明欄 */
+  .info-box{background:#13161d;border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px;font-size:12px;color:var(--sub);line-height:1.8;}
+  .info-box summary{cursor:pointer;color:var(--blue);font-size:13px;font-weight:600;list-style:none;user-select:none;}
+  .info-box summary::before{content:'ℹ️ ';}
+  .info-box table{margin-top:10px;border-collapse:collapse;width:100%;}
+  .info-box th{color:var(--text);font-weight:600;padding:4px 10px;text-align:left;border-bottom:1px solid var(--border);}
+  .info-box td{padding:4px 10px;border-bottom:1px solid #1e2128;}
+  .tp{color:#f1c40f;font-weight:600;}
 
   #loading{text-align:center;padding:60px;color:var(--sub);}
 </style>
@@ -92,7 +89,6 @@
   <h1>📊 台股族群掃描</h1>
   <nav>
     <a id="nav-daily"  onclick="setPage('daily')">今日掃描</a>
-    <a id="nav-trend"  onclick="setPage('trend')">歷史趨勢</a>
     <a id="nav-weekly" onclick="setPage('weekly')">週報</a>
   </nav>
   <div class="date-picker" id="date-picker-wrap">
@@ -106,7 +102,6 @@
 <main>
   <div id="loading">載入中…</div>
   <div id="page-daily"  class="page-section"></div>
-  <div id="page-trend"  class="page-section"></div>
   <div id="page-weekly" class="page-section"></div>
 </main>
 
@@ -173,14 +168,11 @@ function buildDateSelect(){
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','trend','weekly'].forEach(p=>{
+  ['daily','weekly'].forEach(p=>{
     document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
     document.getElementById(`page-${p}`).classList.toggle('active', p===page);
   });
-  // 日期選擇器只在 daily 頁顯示
   document.getElementById('date-picker-wrap').style.display = page==='daily'?'':'none';
-
-  if(page==='trend') renderTrend();
   if(page==='weekly') renderWeekly();
 }
 
@@ -265,6 +257,25 @@ function renderDaily(data){
     html+=`</div>`;
   }
 
+  // 說明欄
+  html+=`
+  <details class="info-box">
+    <summary>訊號與目標價說明</summary>
+    <table>
+      <tr><th>訊號</th><th>判斷條件</th><th>操作建議</th></tr>
+      <tr><td><span class="badge buy">BUY</span></td><td>RSI 40–65 且 20日漲幅 > 3%，CV夏普 > 0.5</td><td>可考慮建倉或加碼</td></tr>
+      <tr><td><span class="badge hold">HOLD</span></td><td>技術面中性或整理，無明顯買賣訊號</td><td>持有觀望，等待方向確認</td></tr>
+      <tr><td><span class="badge sell">SELL</span></td><td>RSI > 70 或 20日漲幅 < −5%，CV夏普 < −0.3</td><td>考慮減碼或停損</td></tr>
+    </table>
+    <div style="margin-top:10px">
+      <b>目標價計算方式：</b><br>
+      <span class="tp">短期</span> — 近 20 日高點 × 1.03（3% 延伸）<br>
+      <span class="tp">中期</span> — 近 60 日高點 × 1.06（6% 延伸）<br>
+      <span class="tp">長期</span> — 近 120 日高點 × 1.12（12% 延伸）<br>
+      目標價僅供參考，不構成買賣建議。
+    </div>
+  </details>`;
+
   // 各族群個股明細
   html+=`<div class="section-title">各族群個股明細</div>`;
   const grouped={};
@@ -277,7 +288,7 @@ function renderDaily(data){
         <span style="color:var(--sub);font-size:12px">▼</span>
       </div>
       <div class="sector-body"><table>
-        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>近期新聞</th></tr>
+        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th></tr>
         ${stks.map(s=>`<tr>
           <td>${s.id}</td><td><b>${s.name}</b></td>
           <td>${fmt(s.price,1)}</td>
@@ -286,190 +297,14 @@ function renderDaily(data){
           <td>${badge(s.signal)}</td>
           <td>${fmt(s.sharpe,2)}</td>
           <td>${chip(s.chipTotal)}</td>
-          <td style="max-width:240px;white-space:normal;font-size:11px;color:var(--sub)">${s.news||'—'}</td>
+          <td class="tp">${s.target_short!=null&&s.target_short!==''?fmt(s.target_short,1):'—'}</td>
+          <td class="tp">${s.target_mid!=null&&s.target_mid!==''?fmt(s.target_mid,1):'—'}</td>
+          <td class="tp">${s.target_long!=null&&s.target_long!==''?fmt(s.target_long,1):'—'}</td>
         </tr>`).join('')}
       </table></div></div>`;
   });
 
   document.getElementById('page-daily').innerHTML=html;
-}
-
-// ── 歷史趨勢 ──────────────────────────────────────────────────────────────────
-let trendCharts=[];
-
-async function renderTrend(){
-  const el=document.getElementById('page-trend');
-  el.innerHTML='<div style="text-align:center;padding:40px;color:var(--sub)">載入歷史資料中…</div>';
-
-  // 載入所有日期資料
-  await Promise.all(DATES.map(async d=>{
-    if(!CACHE[d]){
-      try{CACHE[d]=await fetchJSON(`./${d}.json`);}catch{}
-    }
-  }));
-
-  const days=[...DATES].reverse(); // 升冪
-  const allSectors=[...new Set(days.flatMap(d=>
-    (CACHE[d]?.sectors||[]).map(s=>s.sector)
-  ))];
-
-  // 各族群 20日報酬折線圖
-  const PALETTE=['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
-                 '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf'];
-
-  // 銷毀舊 chart
-  trendCharts.forEach(c=>c.destroy());
-  trendCharts=[];
-
-  // === 圖 1：所有族群 ret_20d 折線 ===
-  const labels = days.map(d=>fmtDate(d));
-  const datasets1 = allSectors.map((sec,i)=>({
-    label: sec,
-    data: days.map(d=>{
-      const s=(CACHE[d]?.sectors||[]).find(x=>x.sector===sec);
-      return s?Number(s.ret20)||0:null;
-    }),
-    borderColor: PALETTE[i%PALETTE.length],
-    backgroundColor: 'transparent',
-    tension:.3, pointRadius:3, borderWidth:2,
-  }));
-
-  // === 圖 2：RSI 熱度 ===
-  const datasets2 = allSectors.map((sec,i)=>({
-    label: sec,
-    data: days.map(d=>{
-      const s=(CACHE[d]?.sectors||[]).find(x=>x.sector===sec);
-      return s?Number(s.rsi)||0:null;
-    }),
-    borderColor: PALETTE[i%PALETTE.length],
-    backgroundColor: 'transparent',
-    tension:.3, pointRadius:3, borderWidth:2,
-  }));
-
-  // === 圖 3：個股 RSI 搜尋（預設空）===
-  // === 圖 4：BUY 訊號累計 ===
-  const buyCount = allSectors.map(sec=>({
-    sector: sec,
-    count: days.reduce((acc,d)=>{
-      const s=(CACHE[d]?.sectors||[]).find(x=>x.sector===sec);
-      return acc + (s?Number(s.buy)||0:0);
-    },0),
-  })).sort((a,b)=>b.count-a.count);
-
-  const chartCfg = (type,data,opts={})=>({type,data,options:{
-    responsive:true, maintainAspectRatio:true,
-    plugins:{legend:{labels:{color:'#aaa',font:{size:11}}}},
-    scales:{
-      x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
-      y:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
-    },
-    ...opts,
-  }});
-
-  el.innerHTML=`
-    <div class="section-title">族群 20 日報酬趨勢</div>
-    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch1"></canvas></div>
-
-    <div class="section-title">族群 RSI 趨勢</div>
-    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch2"></canvas></div>
-
-    <div class="section-title">個股歷史走勢查詢</div>
-    <div class="stock-search">
-      <input id="stock-input" placeholder="輸入代碼或名稱（如 4979 或 華星光）" oninput="renderStockChart()">
-    </div>
-    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch3"></canvas></div>
-
-    <div class="section-title">期間 BUY 訊號累計（共 ${days.length} 個交易日）</div>
-    <div class="chart-card" style="margin-bottom:16px"><canvas id="ch4"></canvas></div>
-  `;
-
-  const c1=new Chart(document.getElementById('ch1'),chartCfg('line',{labels,datasets:datasets1},{
-    plugins:{
-      legend:{labels:{color:'#aaa',font:{size:11}}},
-      annotation:{},
-    },
-    scales:{
-      x:{ticks:{color:'#888',font:{size:10},maxRotation:45},grid:{color:'#1e2128'}},
-      y:{ticks:{color:'#888',font:{size:10},callback:v=>v+'%'},grid:{color:'#1e2128'}},
-    },
-  }));
-  trendCharts.push(c1);
-
-  const c2=new Chart(document.getElementById('ch2'),chartCfg('line',{labels,datasets:datasets2},{
-    scales:{
-      x:{ticks:{color:'#888',font:{size:10},maxRotation:45},grid:{color:'#1e2128'}},
-      y:{min:0,max:100,ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
-    },
-  }));
-  trendCharts.push(c2);
-
-  // ch3 空白佔位
-  const c3=new Chart(document.getElementById('ch3'),{type:'line',data:{labels:[],datasets:[]},options:{
-    responsive:true, maintainAspectRatio:true,
-    plugins:{legend:{labels:{color:'#aaa',font:{size:11}}}},
-    scales:{
-      x:{ticks:{color:'#888',font:{size:10},maxRotation:45},grid:{color:'#1e2128'}},
-      y:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
-    },
-  }});
-  trendCharts.push(c3);  // idx=2
-
-  const c4=new Chart(document.getElementById('ch4'),{
-    type:'bar',
-    data:{
-      labels: buyCount.map(x=>x.sector),
-      datasets:[{
-        label:'BUY 累計次數',
-        data: buyCount.map(x=>x.count),
-        backgroundColor: PALETTE,
-      }],
-    },
-    options:{
-      indexAxis:'y', responsive:true, maintainAspectRatio:true,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
-        y:{ticks:{color:'#888',font:{size:10}},grid:{color:'#1e2128'}},
-      },
-    },
-  });
-  trendCharts.push(c4);
-}
-
-function renderStockChart(){
-  const q=(document.getElementById('stock-input')?.value||'').trim().toLowerCase();
-  const c3=trendCharts[2];
-  if(!c3) return;
-  if(!q){c3.data.labels=[];c3.data.datasets=[];c3.update();return;}
-
-  const days=[...DATES].reverse();
-  const labels=days.map(d=>fmtDate(d));
-
-  // 找符合的個股
-  const matched=new Map();
-  days.forEach(d=>{
-    (CACHE[d]?.stocks||[]).forEach(s=>{
-      if(s.id.includes(q)||s.name.toLowerCase().includes(q)){
-        if(!matched.has(s.id)) matched.set(s.id,{id:s.id,name:s.name,prices:[]});
-      }
-    });
-  });
-
-  const PALETTE=['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd'];
-  const datasets=[...matched.values()].slice(0,5).map((st,i)=>({
-    label:`${st.id} ${st.name}`,
-    data: days.map(d=>{
-      const s=(CACHE[d]?.stocks||[]).find(x=>x.id===st.id);
-      return s&&s.price!==''?Number(s.price):null;
-    }),
-    borderColor: PALETTE[i%PALETTE.length],
-    backgroundColor:'transparent',
-    tension:.3, pointRadius:3, borderWidth:2,
-  }));
-
-  c3.data.labels=labels;
-  c3.data.datasets=datasets;
-  c3.update();
 }
 
 // ── 週報 ──────────────────────────────────────────────────────────────────────
