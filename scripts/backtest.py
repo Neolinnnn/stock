@@ -2,7 +2,8 @@
 回測系統：9 種停利/停損組合勝率分析
 用法：python scripts/backtest.py [--no-backfill] [--no-notion]
 """
-import sys, os, json, subprocess, argparse
+import sys, os, json, subprocess, argparse, math
+import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
@@ -187,7 +188,6 @@ def fetch_price_data(dl, stock_ids: list[str],
     {stock_id: {date_str: {'open': float, 'close': float}}}
     start/end 格式：'YYYY-MM-DD'
     """
-    import pandas as pd
     print(f"  📥 下載開盤/收盤價：{start} ~ {end}（{len(stock_ids)} 檔）")
     price_data: dict[str, dict] = {}
     for sid in stock_ids:
@@ -246,12 +246,12 @@ def run_backtest_combo(
             print(f"    ⚠️  {sid} {entry_date} 開盤價缺失，跳過")
             continue
         entry_price = entry_info['open']
-        if entry_price <= 0:
+        if entry_price <= 0 or math.isnan(entry_price):
             continue
 
         # 收集進場日之後的收盤價序列
         close_prices = {
-            d: v['close'] for d, v in stock_prices.items() if d >= entry_date
+            d: v['close'] for d, v in stock_prices.items() if d > entry_date
         }
 
         trade = simulate_position(
