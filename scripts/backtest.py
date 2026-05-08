@@ -289,3 +289,101 @@ def run_all_backtests(
             print(f"      勝率 {s['win_rate']:.1%}  交易數 {s['total']}  "
                   f"未實現 {s['open_count']}  avg報酬 {s['avg_return']:+.1f}%")
     return combinations
+
+
+# ── 資料補齊 ──────────────────────────────────────────────────────────────────
+
+def ensure_backfill(start_date: str = BACKTEST_START):
+    """
+    呼叫 backfill_history.py 補充 start_date 至今缺失的掃描資料。
+    """
+    from datetime import date as dt_date
+    today = dt_date.today()
+    start = datetime.strptime(start_date, '%Y%m%d').date()
+    days_back = (today - start).days + 10   # 多抓幾天保險
+
+    backfill_script = Path(__file__).parent / 'backfill_history.py'
+    print(f"  🔄 執行資料補齊（--days {days_back}）...")
+    subprocess.run(
+        [sys.executable, str(backfill_script), '--days', str(days_back)],
+        check=True
+    )
+
+
+# ── 主程式 ────────────────────────────────────────────────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(description='台股族群掃描回測')
+    parser.add_argument('--no-backfill', action='store_true', help='跳過資料補齊步驟')
+    parser.add_argument('--no-notion',   action='store_true', help='跳過 Notion 上傳')
+    parser.add_argument('--start', default=BACKTEST_START, help='回測起始日 YYYYMMDD')
+    args = parser.parse_args()
+
+    print(f"\n{'='*60}")
+    print(f"  台股回測系統  起始日：{args.start}")
+    print(f"{'='*60}\n")
+
+    # Step 1: 補資料
+    if not args.no_backfill:
+        print("【Step 1】資料補齊")
+        ensure_backfill(args.start)
+    else:
+        print("【Step 1】跳過資料補齊")
+
+    # Step 2: 收集 BUY 訊號
+    print("\n【Step 2】收集 BUY 訊號")
+    signals = load_buy_signals(start_date=args.start)
+    signals_with_amount = apply_position_limits(signals)
+    print(f"  投資上限過濾後：{len(signals_with_amount)} 筆")
+
+    if not signals_with_amount:
+        print("  ❌ 無 BUY 訊號，終止")
+        return
+
+    # Step 3: 抓開盤價
+    print("\n【Step 3】抓取開盤/收盤價")
+    from finmind_client import get_dataloader
+    dl = get_dataloader()
+    start_fmt = f"{args.start[:4]}-{args.start[4:6]}-{args.start[6:]}"
+    from datetime import date as dt_date
+    end_fmt = dt_date.today().strftime('%Y-%m-%d')
+    price_data = fetch_price_data(dl, SECTORS_ALL_IDS, start_fmt, end_fmt)
+    trading_days = get_sorted_trading_days(price_data)
+    print(f"  共 {len(trading_days)} 個交易日")
+
+    # Step 4: 執行回測
+    print("\n【Step 4】執行 9 組回測")
+    combinations = run_all_backtests(signals_with_amount, price_data, trading_days)
+
+    # Step 5: 存檔
+    out_path = Path('backtest_results.json')
+    results = {
+        'generated_at': datetime.now().isoformat(),
+        'date_range': {'start': args.start, 'end': dt_date.today().strftime('%Y%m%d')},
+        'total_signals': len(signals),
+        'signals_after_limit': len(signals_with_amount),
+        'combinations': {
+            k: {'stats': v['stats'], 'trades': v['trades']}
+            for k, v in combinations.items()
+        }
+    }
+    out_path.write_text(json.dumps(results, ensure_ascii=False, indent=2, default=str),
+                        encoding='utf-8')
+    print(f"\n  ✅ 結果已存至 {out_path}")
+
+    # Step 6: 上傳 Notion
+    if not args.no_notion:
+        print("\n【Step 6】上傳 Notion")
+        from notion_upload import upload_backtest_results
+        page_id = upload_backtest_results(results)
+        print(f"  ✅ Notion 頁面：{page_id}")
+    else:
+        print("\n【Step 6】跳過 Notion 上傳")
+
+    print(f"\n{'='*60}")
+    print("  回測完成！")
+    print(f"{'='*60}\n")
+
+
+if __name__ == '__main__':
+    main()
