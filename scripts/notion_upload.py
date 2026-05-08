@@ -194,3 +194,115 @@ def upload_weekly_report(summary: dict) -> str:
         children=blocks,
     )
     return page['id']
+
+
+# ── 回測結果 ──────────────────────────────────────────────────────────────────
+
+def _table_row(cells: list):
+    """建立 Notion table_row block。"""
+    return {
+        "object": "block",
+        "type": "table_row",
+        "table_row": {
+            "cells": [
+                [{"type": "text", "text": {"content": c}}]
+                for c in cells
+            ]
+        }
+    }
+
+
+def _table(rows: list, has_col_header=True, has_row_header=True):
+    """建立 Notion table block（含 children）。"""
+    width = max(len(r) for r in rows)
+    return {
+        "object": "block",
+        "type": "table",
+        "table": {
+            "table_width": width,
+            "has_column_header": has_col_header,
+            "has_row_header": has_row_header,
+            "children": [_table_row(r) for r in rows]
+        }
+    }
+
+
+def upload_backtest_results(results: dict) -> str:
+    """
+    上傳回測結果到 Notion。
+    建立一頁：3×3 勝率矩陣 + 平均報酬矩陣 + 各組詳細指標。
+    回傳 page_id。
+    """
+    notion = get_notion_client()
+    dr = results.get('date_range', {})
+    start = dr.get('start', '')
+    end   = dr.get('end', '')
+    title = f"📈 回測結果 TP×SL 勝率矩陣 {start}~{end}"
+
+    combos = results.get('combinations', {})
+    tp_list = [10, 12, 15]
+    sl_list = [5, 10, 12]
+
+    blocks = []
+    blocks.append(_p(f"資料範圍：{start} ~ {end}"))
+    blocks.append(_p(f"總 BUY 訊號：{results.get('total_signals', 0)} 筆　"
+                     f"投資上限過濾後：{results.get('signals_after_limit', 0)} 筆"))
+    blocks.append(_p("* 未實現倉位（資料末端尚未觸發 TP/SL）不計入勝率統計"))
+
+    # ── 3×3 勝率矩陣 ──
+    blocks.append(_div())
+    blocks.append(_h2("勝率矩陣（WIN/(WIN+LOSS)）"))
+
+    header = ["停利 ↓ / 停損 →"] + [f"SL {sl}%" for sl in sl_list]
+    matrix_rows = [header]
+    for tp in tp_list:
+        row = [f"TP {tp}%"]
+        for sl in sl_list:
+            key = f"TP{tp}_SL{sl}"
+            stats = combos.get(key, {}).get('stats', {})
+            wr = stats.get('win_rate', 0)
+            total = stats.get('total', 0)
+            row.append(f"{wr:.1%} ({total}筆)")
+        matrix_rows.append(row)
+    blocks.append(_table(matrix_rows))
+
+    # ── 平均報酬矩陣 ──
+    blocks.append(_div())
+    blocks.append(_h2("平均報酬矩陣（已出場）"))
+
+    ret_rows = [header]
+    for tp in tp_list:
+        row = [f"TP {tp}%"]
+        for sl in sl_list:
+            key = f"TP{tp}_SL{sl}"
+            stats = combos.get(key, {}).get('stats', {})
+            avg_ret = stats.get('avg_return', 0)
+            avg_hold = stats.get('avg_holding_days', 0)
+            row.append(f"{avg_ret:+.1f}% / {avg_hold:.0f}天")
+        ret_rows.append(row)
+    blocks.append(_table(ret_rows))
+
+    # ── 各組詳細明細 ──
+    blocks.append(_div())
+    blocks.append(_h2("各組詳細統計"))
+    for tp in tp_list:
+        for sl in sl_list:
+            key = f"TP{tp}_SL{sl}"
+            stats = combos.get(key, {}).get('stats', {})
+            blocks.append(_h3(f"TP {tp}% / SL {sl}%"))
+            blocks.append(_li(f"勝率：{stats.get('win_rate', 0):.1%}　"
+                               f"勝/敗/未實現：{stats.get('wins',0)} / "
+                               f"{stats.get('losses',0)} / {stats.get('open_count',0)}"))
+            blocks.append(_li(f"平均報酬：{stats.get('avg_return', 0):+.2f}%　"
+                               f"平均持有：{stats.get('avg_holding_days', 0):.1f} 天"))
+
+    # 上傳（Notion 單次上限 100 blocks，分批）
+    page = notion.pages.create(
+        parent={"page_id": PARENT_PAGE_ID},
+        properties={"title": {"title": [{"text": {"content": title}}]}},
+        children=blocks[:100],
+    )
+    page_id = page['id']
+    for i in range(100, len(blocks), 100):
+        notion.blocks.children.append(page_id, children=blocks[i:i+100])
+    return page_id
