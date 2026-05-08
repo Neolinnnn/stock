@@ -140,3 +140,43 @@ def test_apply_position_limits_basic():
     assert result[1]['amount'] == 3000
     assert result[2]['amount'] == 3000
     assert result[3]['amount'] == 1000   # 只剩 1000 可投
+
+from backtest import run_backtest_combo, run_all_backtests
+
+def test_run_backtest_combo_integration():
+    signals = [
+        {'date': '20260301', 'stock_id': '2330', 'stock_name': '台積電', 'amount': 3000},
+        {'date': '20260302', 'stock_id': '2317', 'stock_name': '鴻海',   'amount': 3000},
+    ]
+    price_data = {
+        '2330': {
+            '20260302': {'open': 100.0, 'close': 100.0},
+            '20260303': {'open': 100.0, 'close': 105.0},
+            '20260304': {'open': 100.0, 'close': 111.0},  # TP10% hit (>=110)
+        },
+        '2317': {
+            '20260303': {'open': 200.0, 'close': 200.0},
+            '20260304': {'open': 200.0, 'close': 188.0},  # SL5% hit (<=190)
+        },
+    }
+    trading_days = ['20260301','20260302','20260303','20260304']
+    result = run_backtest_combo(signals, price_data, trading_days, tp=0.10, sl=0.05)
+    assert result['stats']['total'] == 2
+    assert result['stats']['wins'] == 1
+    assert result['stats']['losses'] == 1
+    assert result['stats']['win_rate'] == 0.5
+
+def test_run_all_backtests_keys():
+    signals = [
+        {'date': '20260301', 'stock_id': '2330', 'stock_name': '台積電', 'amount': 3000},
+    ]
+    price_data = {
+        '2330': {'20260302': {'open': 100.0, 'close': 115.0}},  # TP hit for all TP configs
+    }
+    trading_days = ['20260301', '20260302']
+    result = run_all_backtests(signals, price_data, trading_days)
+    assert set(result.keys()) == {
+        'TP10_SL5','TP10_SL10','TP10_SL12',
+        'TP12_SL5','TP12_SL10','TP12_SL12',
+        'TP15_SL5','TP15_SL10','TP15_SL12',
+    }

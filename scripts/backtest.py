@@ -164,3 +164,128 @@ def apply_position_limits(
         stock_invested[sid] = invested + amount
         result.append({**sig, 'amount': amount})
     return result
+
+
+# ── 價格抓取 ──────────────────────────────────────────────────────────────────
+
+SECTORS_ALL_IDS = [
+    '4979','3450','3665','3105','8086','2455','4906','2345',  # 光通訊
+    '2408','2337','2344','3006','2451','5289','3205',          # 記憶體
+    '2317','2382','3231','2376','4938','2357',                 # AI伺服器
+    '3711','2449','6510','2441','6257','6239',                 # 封測
+    '3008','3406',                                            # 光學
+    '2454','3034','4966','4919','2388',                       # IC設計
+    '3552','1533','2243',                                     # 車用電子
+    '5292',                                                   # 綠能環保
+]
+
+
+def fetch_price_data(dl, stock_ids: list[str],
+                     start: str, end: str) -> dict:
+    """
+    從 FinMind 批次下載 OHLC，回傳：
+    {stock_id: {date_str: {'open': float, 'close': float}}}
+    start/end 格式：'YYYY-MM-DD'
+    """
+    import pandas as pd
+    print(f"  📥 下載開盤/收盤價：{start} ~ {end}（{len(stock_ids)} 檔）")
+    price_data: dict[str, dict] = {}
+    for sid in stock_ids:
+        try:
+            df = dl.taiwan_stock_daily(stock_id=sid, start_date=start, end_date=end)
+            if df is None or df.empty:
+                price_data[sid] = {}
+                continue
+            df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
+            price_data[sid] = {
+                row['date']: {'open': float(row['open']), 'close': float(row['close'])}
+                for _, row in df.iterrows()
+            }
+        except Exception as e:
+            print(f"    ⚠️  {sid} 下載失敗：{e}")
+            price_data[sid] = {}
+    return price_data
+
+
+def get_sorted_trading_days(price_data: dict) -> list[str]:
+    """從價格資料中萃取所有交易日（排序）。"""
+    days = set()
+    for stock_prices in price_data.values():
+        days.update(stock_prices.keys())
+    return sorted(days)
+
+
+# ── 完整回測 ──────────────────────────────────────────────────────────────────
+
+def run_backtest_combo(
+    signals_with_amount: list[dict],
+    price_data: dict,
+    trading_days: list[str],
+    tp: float,
+    sl: float,
+) -> dict:
+    """
+    執行單一 (TP, SL) 組合的完整回測。
+    回傳 {'stats': {...}, 'trades': [...]}
+    """
+    trades = []
+    for sig in signals_with_amount:
+        sid = sig['stock_id']
+        signal_date = sig['date']
+        amount = sig['amount']
+
+        # 找進場日（訊號日的下一交易日）
+        entry_date = calc_next_trading_day(signal_date, trading_days)
+        if entry_date is None:
+            continue
+
+        # 進場價（開盤價）
+        stock_prices = price_data.get(sid, {})
+        entry_info = stock_prices.get(entry_date)
+        if not entry_info:
+            print(f"    ⚠️  {sid} {entry_date} 開盤價缺失，跳過")
+            continue
+        entry_price = entry_info['open']
+        if entry_price <= 0:
+            continue
+
+        # 收集進場日之後的收盤價序列
+        close_prices = {
+            d: v['close'] for d, v in stock_prices.items() if d >= entry_date
+        }
+
+        trade = simulate_position(
+            entry_date=entry_date,
+            entry_price=entry_price,
+            amount=amount,
+            prices=close_prices,
+            trading_days=[d for d in trading_days if d >= entry_date],
+            tp=tp, sl=sl,
+        )
+        trade['stock_id'] = sid
+        trade['stock_name'] = sig['stock_name']
+        trade['signal_date'] = signal_date
+        trade['tp'] = tp
+        trade['sl'] = sl
+        trades.append(trade)
+
+    return {'stats': calc_stats(trades), 'trades': trades}
+
+
+def run_all_backtests(
+    signals_with_amount: list[dict],
+    price_data: dict,
+    trading_days: list[str],
+) -> dict:
+    """執行全部 9 組 TP×SL 組合，回傳結果字典。"""
+    combinations = {}
+    for tp in TP_LIST:
+        for sl in SL_LIST:
+            key = f"TP{int(tp*100)}_SL{int(sl*100)}"
+            print(f"  🔄 回測 {key} ...")
+            result = run_backtest_combo(signals_with_amount, price_data, trading_days, tp, sl)
+            combinations[key] = result
+            s = result['stats']
+            print(f"      勝率 {s['win_rate']:.1%}  交易數 {s['total']}  "
+                  f"未實現 {s['open_count']}  avg報酬 {s['avg_return']:+.1f}%")
+    return combinations
