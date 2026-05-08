@@ -97,6 +97,10 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
     seen = set()   # (date, stock_id)
 
     p = Path(reports_dir)
+    if not p.is_dir():
+        print(f"  ⚠️  找不到報告目錄：{reports_dir}")
+        return []
+
     for date_dir in sorted(p.iterdir()):
         if not date_dir.is_dir():
             continue
@@ -119,15 +123,20 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
             for stock in sector_data.get('stocks', []):
                 if stock.get('signal') != 'BUY':
                     continue
-                key = (date_str, stock['id'])
+                stock_id = stock.get('id')
+                stock_name = stock.get('name', '')
+                signal_close = stock.get('price')
+                if not stock_id or signal_close is None:
+                    continue
+                key = (date_str, stock_id)
                 if key in seen:
                     continue
                 seen.add(key)
                 signals.append({
                     'date': date_str,
-                    'stock_id': stock['id'],
-                    'stock_name': stock['name'],
-                    'signal_close': stock['price'],
+                    'stock_id': stock_id,
+                    'stock_name': stock_name,
+                    'signal_close': signal_close,
                 })
 
     print(f"  📋 共收集 {len(signals)} 筆 BUY 訊號（{start_date} 起）")
