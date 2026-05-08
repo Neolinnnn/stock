@@ -14,8 +14,9 @@ BACKTEST_START = '20260301'
 
 # ── 工具函式 ──────────────────────────────────────────────────────────────────
 
-def calc_next_trading_day(date_str: str, trading_days: list) -> str | None:
+def calc_next_trading_day(date_str: str, trading_days: list[str]) -> str | None:
     """取 date_str 之後的第一個交易日；若 date_str 不在清單也從清單找第一個比它大的。"""
+    trading_days = sorted(trading_days)
     for d in trading_days:
         if d > date_str:
             return d
@@ -27,7 +28,7 @@ def simulate_position(
     entry_price: float,
     amount: float,
     prices: dict,          # {date_str: close_price}
-    trading_days: list,
+    trading_days: list[str],
     tp: float,
     sl: float,
 ) -> dict:
