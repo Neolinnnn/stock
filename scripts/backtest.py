@@ -83,3 +83,75 @@ def calc_stats(trades: list) -> dict:
         'avg_return': round(avg_return, 4),
         'avg_holding_days': round(avg_hold, 1),
     }
+
+
+# ── 信號收集 ──────────────────────────────────────────────────────────────────
+
+def load_buy_signals(reports_dir: str = 'daily_reports',
+                     start_date: str = BACKTEST_START) -> list[dict]:
+    """
+    讀所有 daily_reports/*/summary.json，回傳 BUY 訊號清單（已去重）。
+    回傳格式：[{'date', 'stock_id', 'stock_name', 'signal_close'}, ...]
+    """
+    signals = []
+    seen = set()   # (date, stock_id)
+
+    p = Path(reports_dir)
+    for date_dir in sorted(p.iterdir()):
+        if not date_dir.is_dir():
+            continue
+        date_str = date_dir.name
+        if len(date_str) != 8 or not date_str.isdigit():
+            continue
+        if date_str < start_date:
+            continue
+        summary_file = date_dir / 'summary.json'
+        if not summary_file.exists():
+            continue
+
+        try:
+            summary = json.loads(summary_file.read_text(encoding='utf-8'))
+        except Exception as e:
+            print(f"  ⚠️  {date_str} 讀取失敗：{e}")
+            continue
+
+        for sector_data in summary.get('sectors', {}).values():
+            for stock in sector_data.get('stocks', []):
+                if stock.get('signal') != 'BUY':
+                    continue
+                key = (date_str, stock['id'])
+                if key in seen:
+                    continue
+                seen.add(key)
+                signals.append({
+                    'date': date_str,
+                    'stock_id': stock['id'],
+                    'stock_name': stock['name'],
+                    'signal_close': stock['price'],
+                })
+
+    print(f"  📋 共收集 {len(signals)} 筆 BUY 訊號（{start_date} 起）")
+    return signals
+
+
+def apply_position_limits(
+    signals: list[dict],
+    per_trade: float = 3000,
+    max_per_stock: float = 10000,
+) -> list[dict]:
+    """
+    為每筆訊號計算實際投入金額（考慮累計上限）。
+    回傳含 'amount' 欄位的訊號清單；累積已達上限的個股跳過。
+    """
+    stock_invested: dict[str, float] = {}
+    result = []
+    for sig in signals:
+        sid = sig['stock_id']
+        invested = stock_invested.get(sid, 0.0)
+        remaining = max_per_stock - invested
+        if remaining <= 0:
+            continue
+        amount = min(per_trade, remaining)
+        stock_invested[sid] = invested + amount
+        result.append({**sig, 'amount': amount})
+    return result
