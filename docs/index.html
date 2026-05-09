@@ -126,7 +126,7 @@ function chip(v){if(v===''||v===null||v===undefined)return '—';const n=Number(
 function fmtDate(d){return d?`${d.slice(0,4)}-${d.slice(4,6)}-${d.slice(6,8)}`:d;}
 
 async function fetchJSON(url){
-  const r = await fetch(url);
+  const r = await fetch(url, {cache:'no-cache'});
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
