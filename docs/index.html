@@ -82,6 +82,17 @@
   .tp{color:#f1c40f;font-weight:600;}
 
   #loading{text-align:center;padding:60px;color:var(--sub);}
+  .wl-add-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;}
+  .wl-add-bar input{background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px;width:140px;}
+  .wl-add-bar input::placeholder{color:var(--sub);}
+  .btn-primary{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;}
+  .btn-primary:hover{opacity:.85;}
+  .btn-remove{background:transparent;border:1px solid var(--border);color:var(--sub);border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;}
+  .btn-remove:hover{border-color:var(--red);color:var(--red);}
+  .toast{position:fixed;bottom:24px;right:24px;background:#2d3139;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 18px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;}
+  .toast.show{opacity:1;}
+  .btn-add-inline{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;margin-left:4px;}
+  .btn-add-inline:hover{background:var(--accent);color:#fff;}
 </style>
 </head>
 <body>
@@ -89,7 +100,8 @@
   <h1>📊 台股族群掃描</h1>
   <nav>
     <a id="nav-daily"  onclick="setPage('daily')">今日掃描</a>
-    <a id="nav-weekly" onclick="setPage('weekly')">週報</a>
+    <a id="nav-weekly"   onclick="setPage('weekly')">週報</a>
+    <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
   </nav>
   <div class="date-picker" id="date-picker-wrap">
     <button class="date-nav" id="btn-prev" onclick="stepDate(-1)">◀</button>
@@ -101,8 +113,9 @@
 
 <main>
   <div id="loading">載入中…</div>
-  <div id="page-daily"  class="page-section"></div>
-  <div id="page-weekly" class="page-section"></div>
+  <div id="page-daily"     class="page-section"></div>
+  <div id="page-weekly"    class="page-section"></div>
+  <div id="page-watchlist" class="page-section"></div>
 </main>
 
 <footer>資料來源：twstock / FinMind　｜　每個工作日 14:32 自動更新</footer>
@@ -115,6 +128,16 @@ let HISTORY = {};      // date -> payload（趨勢用）
 let CUR_DATE = '';
 let CUR_PAGE = 'daily';
 let WEEKLY_DATA = null;
+const APPS_SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+let WL_DATA = null;
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 
 // ── 輔助函式 ──────────────────────────────────────────────────────────────────
 function fmt(v,d=1){return v===''||v===null||v===undefined?'—':(typeof v==='number'?v.toFixed(d):v);}
@@ -169,12 +192,13 @@ function buildDateSelect(){
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly'].forEach(p=>{
+  ['daily','weekly','watchlist'].forEach(p=>{
     document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
     document.getElementById(`page-${p}`).classList.toggle('active', p===page);
   });
   document.getElementById('date-picker-wrap').style.display = page==='daily'?'':'none';
-  if(page==='weekly') renderWeekly();
+  if(page==='weekly')    renderWeekly();
+  if(page==='watchlist') loadWatchlist();
 }
 
 // ── 日期導航 ──────────────────────────────────────────────────────────────────
