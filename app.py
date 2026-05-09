@@ -142,39 +142,6 @@ def all_daily_dates():
 
 # ── Sparkline SVG 輔助 ──────────────────────────────────────────────────────
 
-def _sparkline_svg(values: list, width: int = 80, height: int = 28) -> str:
-    """彩色 bar sparkline：正值紅（買超）、負值綠（賣超），零軸白虛線。
-    每根 bar 高度按佔最大絕對值的比例繪製，保留波動細節。"""
-    if not values:
-        return f'<svg width="{width}" height="{height}"></svg>'
-    abs_max = max(abs(v) for v in values) or 1
-    n = len(values)
-    gap = 1
-    bar_w = max(2.0, (width - gap * (n - 1)) / n)
-    mid_y = height / 2
-    bars = []
-    for i, v in enumerate(values):
-        x = i * (bar_w + gap)
-        bar_h = max(1.5, abs(v) / abs_max * (mid_y - 1))
-        if v >= 0:
-            bars.append(
-                f'<rect x="{x:.1f}" y="{mid_y - bar_h:.1f}" '
-                f'width="{bar_w:.1f}" height="{bar_h:.1f}" fill="#e74c3c" rx="0.5"/>'
-            )
-        else:
-            bars.append(
-                f'<rect x="{x:.1f}" y="{mid_y:.1f}" '
-                f'width="{bar_w:.1f}" height="{bar_h:.1f}" fill="#27ae60" rx="0.5"/>'
-            )
-    return (
-        f'<svg width="{width}" height="{height}">'
-        f'<line x1="0" y1="{mid_y:.1f}" x2="{width}" y2="{mid_y:.1f}" '
-        f'stroke="rgba(255,255,255,0.25)" stroke-width="0.6" stroke-dasharray="2,2"/>'
-        + "".join(bars)
-        + f'</svg>'
-    )
-
-
 # ── 色彩輔助 ────────────────────────────────────────────────────────────────
 
 def signal_badge(signal):
@@ -339,7 +306,14 @@ def tab_daily():
     c1.metric("加權指數", f"{idx:,.0f}" if idx else "—", f"{chg:+.2f}%" if chg else None)
     c2.metric("強勢族群", "、".join(summary.get("strong_sectors", [])) or "無")
     c3.metric("弱勢族群", "、".join(summary.get("weak_sectors", [])) or "無")
-    c4.metric("雙條件推薦", f"{len(summary.get('qualified', []))} 檔")
+    qualified = summary.get("qualified", [])
+    c4.metric("雙條件推薦", f"{len(qualified)} 檔")
+
+    if qualified:
+        st.markdown("#### ⭐ 雙條件推薦個股")
+        df_q = pd.DataFrame(qualified)[["sector", "id", "name", "price", "rsi", "cv_sharpe"]]
+        df_q.columns = ["族群", "代碼", "名稱", "現價", "RSI", "CV夏普"]
+        st.dataframe(df_q.set_index("代碼"), use_container_width=True)
 
     st.divider()
 
@@ -449,39 +423,6 @@ def tab_daily():
 
             st.caption("目標價僅供技術參考，非投資建議")
             st.dataframe(pd.DataFrame(rows).set_index("代碼"), use_container_width=True)
-
-            # ── 籌碼趨勢 sparklines ──────────────────────────────────────
-            _TD = 'style="padding:4px 10px;vertical-align:middle;border-bottom:1px solid #1e2430"'
-            _TH = 'style="padding:4px 10px;color:#888;font-size:11px;font-weight:normal;text-align:center;border-bottom:1px solid #30363d"'
-            _spark_rows = []
-            for s in data.get("stocks", []):
-                _h = _chip_hist.get(s["id"], {"外資": [], "投信": [], "自營": []})
-                _spark_rows.append(
-                    f'<tr>'
-                    f'<td {_TD} style="color:#ccc;font-size:12px;white-space:nowrap">'
-                    f'{s["id"]} {s["name"]}</td>'
-                    f'<td {_TD} style="text-align:center">'
-                    f'{_sparkline_svg(_h["外資"])}</td>'
-                    f'<td {_TD} style="text-align:center">'
-                    f'{_sparkline_svg(_h["投信"])}</td>'
-                    f'<td {_TD} style="text-align:center">'
-                    f'{_sparkline_svg(_h["自營"])}</td>'
-                    f'</tr>'
-                )
-            st.markdown(
-                f'<div style="margin-top:10px">'
-                f'<p style="color:#888;font-size:12px;margin-bottom:4px">籌碼趨勢（近10日）</p>'
-                f'<table style="border-collapse:collapse;width:100%">'
-                f'<thead><tr>'
-                f'<th {_TH} style="text-align:left">個股</th>'
-                f'<th {_TH}>🔵 外資</th>'
-                f'<th {_TH}>🟠 投信</th>'
-                f'<th {_TH}>🟣 自營商</th>'
-                f'</tr></thead>'
-                f'<tbody>{"".join(_spark_rows)}</tbody>'
-                f'</table></div>',
-                unsafe_allow_html=True,
-            )
 
 
 # ── Tab 2：週報 ─────────────────────────────────────────────────────────────
