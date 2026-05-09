@@ -207,22 +207,40 @@ function stepDate(dir){
 
 // ── 今日掃描 ──────────────────────────────────────────────────────────────────
 function renderDaily(data){
-  const {meta,sectors,chips,stocks} = data;
+  const {meta,qualified,sectors,chips,stocks} = data;
   const date   = meta['掃描日期']||'—';
   const idx    = meta['加權指數'];
   const chg    = meta['漲跌幅%'];
   const strong = meta['強勢族群']||'無';
   const weak   = meta['弱勢族群']||'無';
+  const qCount = meta['雙條件推薦']||0;
 
   let html=`
-  <div class="grid-4">
+  <div class="grid-4" style="grid-template-columns:repeat(4,1fr)">
     <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
     <div class="card"><div class="card-title">加權指數</div>
       <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'—'}</div>
       <div class="card-sub">${chg!==''&&chg!==null&&chg!==undefined?sign(Number(chg))+Number(chg).toFixed(2)+'%':''}</div></div>
     <div class="card"><div class="card-title">強勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${strong}</div></div>
     <div class="card"><div class="card-title">弱勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${weak||'無'}</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px">
+    <div class="card-title" style="margin:0;min-width:80px">雙條件推薦</div>
+    <div class="card-value" style="font-size:20px;color:var(--yellow)">${qCount} 檔</div>
   </div>`;
+
+  if(qualified&&qualified.length){
+    html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
+    <div class="card" style="overflow-x:auto;margin-bottom:20px"><table>
+      <tr><th>代碼</th><th>族群</th><th>名稱</th><th>現價</th><th>RSI</th><th>CV夏普</th></tr>
+      ${qualified.map(q=>`<tr>
+        <td><b>${q.id}</b></td><td>${q.sector}</td><td>${q.name}</td>
+        <td>${fmt(q.price,1)}</td>
+        <td><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
+        <td>${fmt(q.cv_sharpe,2)}</td>
+      </tr>`).join('')}
+    </table></div>`;
+  }
 
   // 族群強弱表
   html+=`<div class="section-title">族群強弱</div><div class="card" style="overflow-x:auto"><table>

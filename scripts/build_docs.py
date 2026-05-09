@@ -56,6 +56,17 @@ def build_daily_payload(summary):
                     'dealer':  chip.get('自營', 0),
                 })
     mkt = summary.get('market', {})
+    qualified = [
+        {
+            'sector':    q.get('sector', ''),
+            'id':        q.get('id', ''),
+            'name':      q.get('name', ''),
+            'price':     q.get('price', ''),
+            'rsi':       q.get('rsi', ''),
+            'cv_sharpe': q.get('cv_sharpe', ''),
+        }
+        for q in summary.get('qualified', [])
+    ]
     return {
         'meta': {
             '掃描日期':  summary.get('date', ''),
@@ -63,7 +74,9 @@ def build_daily_payload(summary):
             '漲跌幅%':   mkt.get('漲跌幅', ''),
             '強勢族群':  ', '.join(summary.get('strong_sectors', [])),
             '弱勢族群':  ', '.join(summary.get('weak_sectors', [])),
+            '雙條件推薦': len(qualified),
         },
+        'qualified': qualified,
         'sectors': sectors,
         'chips':   sorted(chips, key=lambda x: x['total'], reverse=True),
         'stocks':  stocks,
