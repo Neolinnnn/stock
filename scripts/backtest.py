@@ -1,5 +1,5 @@
 """
-回測系統：9 種停利/停損組合勝率分析
+回測系統：9 種停利/停損組合勝率分析（進階出場邏輯）
 用法：python scripts/backtest.py [--no-backfill] [--no-notion]
 """
 import sys, os, json, subprocess, argparse, math
@@ -8,8 +8,8 @@ from pathlib import Path
 from datetime import datetime
 
 # TP / SL 組合
-TP_LIST = [0.10, 0.12, 0.15]
-SL_LIST = [0.05, 0.10, 0.12]
+TP_LIST = [0.15, 0.18, 0.20]
+SL_LIST = [0.10, 0.12, 0.15]
 BACKTEST_START = '20260301'
 
 
@@ -64,6 +64,97 @@ def simulate_position(
             'entry_date': entry_date, 'entry_price': entry_price, 'amount': amount}
 
 
+def simulate_position_v2(
+    entry_date: str,
+    entry_price: float,
+    amount: float,
+    ohlc_prices: dict,       # {date_str: {'open','high','low','close'}}
+    trading_days: list[str],
+    tp: float,
+    sl: float,
+) -> dict:
+    """
+    追蹤止損出場邏輯（v2，已移除 20 天強制出場）：
+    - 追蹤止損：每日更新最高收盤（high_watermark），
+      trailing_sl = high_watermark × (1 − sl)，只升不降。
+      收盤 <= trailing_sl → 出場（高於進場價=WIN，否則=LOSS）
+    - TP：收盤觸及停利
+        • 若當日 high > prev_close×1.05（盤中漲逾5%）且收盤仍強
+          → PULLBACK 模式（等回吐 open×0.97 再出）
+        • 否則 → 隔日開盤出場
+    - PULLBACK 模式中追蹤止損同步更新，兩者皆可觸發出場
+    """
+    tp_price      = entry_price * (1 + tp)
+    high_watermark = entry_price
+    trailing_sl   = entry_price * (1 - sl)
+
+    state      = 'HOLDING'   # 'HOLDING' | 'SELL_OPEN' | 'PULLBACK'
+    prev_close = None
+    holding    = 0
+
+    active_days = [d for d in trading_days if d > entry_date]
+
+    for d in active_days:
+        px = ohlc_prices.get(d)
+        if not px:
+            continue
+        o = px.get('open', 0)
+        h = px.get('high', 0)
+        l = px.get('low',  0)
+        c = px.get('close', 0)
+        if not o or not c or math.isnan(o) or math.isnan(c):
+            if c:
+                prev_close = c
+            continue
+
+        holding += 1
+
+        def _ret(price):
+            return round((price - entry_price) / entry_price * 100, 2)
+
+        def _rec(result, price, hdays=holding):
+            return {'result': result, 'exit_date': d, 'exit_price': round(price, 2),
+                    'return_pct': _ret(price), 'holding_days': hdays,
+                    'entry_date': entry_date, 'entry_price': entry_price, 'amount': amount}
+
+        # ── 待售：隔日開盤賣 ──
+        if state == 'SELL_OPEN':
+            return _rec('WIN', o)
+
+        # ── 更新追蹤止損 ──
+        if c > high_watermark:
+            high_watermark = c
+            trailing_sl    = high_watermark * (1 - sl)
+
+        # ── 回吐等待（TP 後追蹤模式） ──
+        if state == 'PULLBACK':
+            target = o * 0.97
+            if l <= target:
+                return _rec('WIN', target)
+            if c <= trailing_sl:
+                return _rec('WIN' if c > entry_price else 'LOSS', c)
+            prev_close = c
+            continue
+
+        # ── HOLDING：追蹤止損 → TP ──
+        if c <= trailing_sl:
+            return _rec('WIN' if c > entry_price else 'LOSS', c)
+
+        if c >= tp_price:
+            intraday_strong = (prev_close is not None and h > 0
+                               and (h - prev_close) / prev_close > 0.05)
+            close_still_strong = (prev_close is not None
+                                  and (c - prev_close) / prev_close >= 0.05)
+            state = 'PULLBACK' if (intraday_strong and close_still_strong) else 'SELL_OPEN'
+
+        prev_close = c
+
+    return {'result': 'OPEN', 'exit_date': None, 'exit_price': None,
+            'return_pct': None, 'holding_days': holding,
+            'exit_state': state,
+            'entry_date': entry_date, 'entry_price': entry_price, 'amount': amount}
+
+
 def calc_stats(trades: list) -> dict:
     """計算已出場交易的勝率、平均報酬、平均持有天數。OPEN 不計入。"""
     closed = [t for t in trades if t['result'] != 'OPEN']
@@ -89,10 +180,12 @@ def calc_stats(trades: list) -> dict:
 # ── 信號收集 ──────────────────────────────────────────────────────────────────
 
 def load_buy_signals(reports_dir: str = 'daily_reports',
-                     start_date: str = BACKTEST_START) -> list[dict]:
+                     start_date: str = BACKTEST_START,
+                     qualified_only: bool = False) -> list[dict]:
     """
     讀所有 daily_reports/*/summary.json，回傳 BUY 訊號清單（已去重）。
-    回傳格式：[{'date', 'stock_id', 'stock_name', 'signal_close'}, ...]
+    qualified_only=True 時額外要求 cv_sharpe>=0.3 & cv_win_rate>=0.4。
+    回傳格式：[{'date', 'stock_id', 'stock_name', 'signal_close', 'cv_sharpe', 'cv_win_rate'}, ...]
     """
     signals = []
     seen = set()   # (date, stock_id)
@@ -127,7 +220,11 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
                 stock_id = stock.get('id')
                 stock_name = stock.get('name', '')
                 signal_close = stock.get('price')
+                cv_sharpe = stock.get('cv_sharpe', 0) or 0
+                cv_win_rate = stock.get('cv_win_rate', 0) or 0
                 if not stock_id or signal_close is None:
+                    continue
+                if qualified_only and (cv_sharpe < 0.3 or cv_win_rate < 0.4):
                     continue
                 key = (date_str, stock_id)
                 if key in seen:
@@ -138,9 +235,12 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
                     'stock_id': stock_id,
                     'stock_name': stock_name,
                     'signal_close': signal_close,
+                    'cv_sharpe': cv_sharpe,
+                    'cv_win_rate': cv_win_rate,
                 })
 
-    print(f"  📋 共收集 {len(signals)} 筆 BUY 訊號（{start_date} 起）")
+    label = '雙條件達標' if qualified_only else '全 BUY'
+    print(f"  📋 {label}：共 {len(signals)} 筆訊號（{start_date} 起）")
     return signals
 
 
@@ -185,10 +285,11 @@ def fetch_price_data(dl, stock_ids: list[str],
                      start: str, end: str) -> dict:
     """
     從 FinMind 批次下載 OHLC，回傳：
-    {stock_id: {date_str: {'open': float, 'close': float}}}
+    {stock_id: {date_str: {'open','high','low','close': float}}}
     start/end 格式：'YYYY-MM-DD'
+    FinMind 欄名：max=high, min=low
     """
-    print(f"  📥 下載開盤/收盤價：{start} ~ {end}（{len(stock_ids)} 檔）")
+    print(f"  📥 下載 OHLC：{start} ~ {end}（{len(stock_ids)} 檔）")
     price_data: dict[str, dict] = {}
     for sid in stock_ids:
         try:
@@ -198,7 +299,12 @@ def fetch_price_data(dl, stock_ids: list[str],
                 continue
             df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
             price_data[sid] = {
-                row['date']: {'open': float(row['open']), 'close': float(row['close'])}
+                row['date']: {
+                    'open' : float(row['open']),
+                    'high' : float(row.get('max', row['open'])),
+                    'low'  : float(row.get('min', row['close'])),
+                    'close': float(row['close']),
+                }
                 for _, row in df.iterrows()
             }
         except Exception as e:
@@ -249,16 +355,14 @@ def run_backtest_combo(
         if entry_price <= 0 or math.isnan(entry_price):
             continue
 
-        # 收集進場日之後的收盤價序列
-        close_prices = {
-            d: v['close'] for d, v in stock_prices.items() if d > entry_date
-        }
+        # 收集進場日之後的 OHLC 序列
+        ohlc_prices = {d: v for d, v in stock_prices.items() if d > entry_date}
 
-        trade = simulate_position(
+        trade = simulate_position_v2(
             entry_date=entry_date,
             entry_price=entry_price,
             amount=amount,
-            prices=close_prices,
+            ohlc_prices=ohlc_prices,
             trading_days=[d for d in trading_days if d >= entry_date],
             tp=tp, sl=sl,
         )
@@ -314,8 +418,10 @@ def ensure_backfill(start_date: str = BACKTEST_START):
 
 def main():
     parser = argparse.ArgumentParser(description='台股族群掃描回測')
-    parser.add_argument('--no-backfill', action='store_true', help='跳過資料補齊步驟')
-    parser.add_argument('--no-notion',   action='store_true', help='跳過 Notion 上傳')
+    parser.add_argument('--no-backfill',     action='store_true', help='跳過資料補齊步驟')
+    parser.add_argument('--no-notion',       action='store_true', help='跳過 Notion 上傳')
+    parser.add_argument('--qualified-only',  action='store_true', help='只回測雙條件達標個股')
+    parser.add_argument('--compare',         action='store_true', help='同時回測全BUY與雙條件，對比輸出')
     parser.add_argument('--start', default=BACKTEST_START, help='回測起始日 YYYYMMDD')
     args = parser.parse_args()
 
@@ -330,42 +436,66 @@ def main():
     else:
         print("【Step 1】跳過資料補齊")
 
-    # Step 2: 收集 BUY 訊號
+    # Step 2: 收集訊號
     print("\n【Step 2】收集 BUY 訊號")
-    signals = load_buy_signals(start_date=args.start)
-    signals_with_amount = apply_position_limits(signals)
-    print(f"  投資上限過濾後：{len(signals_with_amount)} 筆")
+    from datetime import date as dt_date
 
-    if not signals_with_amount:
+    signals_all  = load_buy_signals(start_date=args.start, qualified_only=False)
+    signals_qual = load_buy_signals(start_date=args.start, qualified_only=True)
+
+    swa_all  = apply_position_limits(signals_all)
+    swa_qual = apply_position_limits(signals_qual)
+    print(f"  全 BUY 投資上限後：{len(swa_all)} 筆　雙條件達標：{len(swa_qual)} 筆")
+
+    if not swa_all:
         print("  ❌ 無 BUY 訊號，終止")
         return
 
-    # Step 3: 抓開盤價
+    # Step 3: 抓開盤價（兩組共用同一份價格資料）
     print("\n【Step 3】抓取開盤/收盤價")
     from finmind_client import get_dataloader
     dl = get_dataloader()
     start_fmt = f"{args.start[:4]}-{args.start[4:6]}-{args.start[6:]}"
-    from datetime import date as dt_date
     end_fmt = dt_date.today().strftime('%Y-%m-%d')
     price_data = fetch_price_data(dl, SECTORS_ALL_IDS, start_fmt, end_fmt)
     trading_days = get_sorted_trading_days(price_data)
     print(f"  共 {len(trading_days)} 個交易日")
 
     # Step 4: 執行回測
-    print("\n【Step 4】執行 9 組回測")
-    combinations = run_all_backtests(signals_with_amount, price_data, trading_days)
+    if args.qualified_only:
+        # 只跑雙條件
+        print("\n【Step 4】執行 9 組回測（雙條件達標）")
+        combos_qual = run_all_backtests(swa_qual, price_data, trading_days)
+        combos_all  = None
+    elif args.compare:
+        # 兩組都跑
+        print("\n【Step 4a】執行 9 組回測（全 BUY）")
+        combos_all  = run_all_backtests(swa_all,  price_data, trading_days)
+        print("\n【Step 4b】執行 9 組回測（雙條件達標）")
+        combos_qual = run_all_backtests(swa_qual, price_data, trading_days)
+    else:
+        # 預設只跑全 BUY
+        print("\n【Step 4】執行 9 組回測（全 BUY）")
+        combos_all  = run_all_backtests(swa_all,  price_data, trading_days)
+        combos_qual = None
 
     # Step 5: 存檔
     out_path = Path('backtest_results.json')
     results = {
         'generated_at': datetime.now().isoformat(),
         'date_range': {'start': args.start, 'end': dt_date.today().strftime('%Y%m%d')},
-        'total_signals': len(signals),
-        'signals_after_limit': len(signals_with_amount),
+        'total_signals':         len(signals_all),
+        'signals_after_limit':   len(swa_all),
+        'qualified_signals':     len(signals_qual),
+        'qualified_after_limit': len(swa_qual),
         'combinations': {
             k: {'stats': v['stats'], 'trades': v['trades']}
-            for k, v in combinations.items()
-        }
+            for k, v in (combos_all or {}).items()
+        },
+        'combinations_qualified': {
+            k: {'stats': v['stats'], 'trades': v['trades']}
+            for k, v in (combos_qual or {}).items()
+        } if combos_qual else {},
     }
     out_path.write_text(json.dumps(results, ensure_ascii=False, indent=2, default=str),
                         encoding='utf-8')

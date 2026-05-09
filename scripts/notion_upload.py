@@ -227,40 +227,98 @@ def _table(rows: list, has_col_header=True, has_row_header=True):
     }
 
 
+def _open_positions_blocks(combos: dict, latest_prices: dict | None = None,
+                           price_date: str = '') -> list:
+    """
+    建立「未實現倉位明細」區塊。
+    latest_prices: {stock_id: close_price}，用於計算當下損益。
+    每個 TP/SL 組合各一個小表，列出所有 result==OPEN 的交易。
+    """
+    tp_list = [15, 18, 20]
+    sl_list = [10, 12, 15]
+    latest_prices = latest_prices or {}
+    price_label   = f"（{price_date} 收盤）" if price_date else ''
+
+    blocks = []
+    blocks.append(_h2(f"📂 未實現倉位明細{price_label}（尚未觸發 TP/SL）"))
+    blocks.append(_p("資料末端仍在持倉中，尚未出場；不計入勝率統計。"))
+
+    for tp in tp_list:
+        for sl in sl_list:
+            key    = f"TP{tp}_SL{sl}"
+            trades = combos.get(key, {}).get('trades', [])
+            opens  = [t for t in trades if t.get('result') == 'OPEN']
+            blocks.append(_h3(f"TP {tp}% / SL {sl}%　（{len(opens)} 筆未實現）"))
+            if not opens:
+                blocks.append(_p("無未實現倉位"))
+                continue
+
+            has_price = bool(latest_prices)
+            header = ["訊號日", "進場日", "代號", "名稱", "進場價", "持有天數", "狀態"]
+            if has_price:
+                header += ["現價", "損益%"]
+            rows = [header]
+            for t in sorted(opens, key=lambda x: x.get('signal_date', '')):
+                sid         = t.get('stock_id', '')
+                entry_price = t.get('entry_price') or 0
+                row = [
+                    t.get('signal_date', ''),
+                    t.get('entry_date',  ''),
+                    sid,
+                    t.get('stock_name',  ''),
+                    str(entry_price),
+                    str(t.get('holding_days', '')),
+                    t.get('exit_state', 'HOLDING'),
+                ]
+                if has_price:
+                    cur = latest_prices.get(sid)
+                    if cur and entry_price:
+                        pnl = (cur - entry_price) / entry_price * 100
+                        sign = '+' if pnl >= 0 else ''
+                        row += [str(cur), f"{sign}{pnl:.1f}%"]
+                    else:
+                        row += ['N/A', 'N/A']
+                rows.append(row)
+            blocks.append(_table(rows))
+
+    return blocks
+
+
 def upload_backtest_results(results: dict) -> str:
     """
     上傳回測結果到 Notion。
-    建立一頁：3×3 勝率矩陣 + 平均報酬矩陣 + 各組詳細指標。
+    輸出：勝率矩陣 + 平均報酬矩陣 + 各組詳細統計 + 未實現倉位明細表。
     回傳 page_id。
     """
     notion = get_notion_client()
-    dr = results.get('date_range', {})
+    dr    = results.get('date_range', {})
     start = dr.get('start', '')
     end   = dr.get('end', '')
     title = f"📈 回測結果 TP×SL 勝率矩陣 {start}~{end}"
 
-    combos = results.get('combinations', {})
-    tp_list = [10, 12, 15]
-    sl_list = [5, 10, 12]
+    combos  = results.get('combinations', {})
+    tp_list = [15, 18, 20]
+    sl_list = [10, 12, 15]
+    header  = ["停利 ↓ / 停損 →"] + [f"SL {sl}%" for sl in sl_list]
 
     blocks = []
     blocks.append(_p(f"資料範圍：{start} ~ {end}"))
-    blocks.append(_p(f"總 BUY 訊號：{results.get('total_signals', 0)} 筆　"
-                     f"投資上限過濾後：{results.get('signals_after_limit', 0)} 筆"))
+    blocks.append(_p(
+        f"總 BUY 訊號：{results.get('total_signals', 0)} 筆　"
+        f"投資上限過濾後：{results.get('signals_after_limit', 0)} 筆"
+    ))
     blocks.append(_p("* 未實現倉位（資料末端尚未觸發 TP/SL）不計入勝率統計"))
 
-    # ── 3×3 勝率矩陣 ──
+    # ── 勝率矩陣 ──
     blocks.append(_div())
     blocks.append(_h2("勝率矩陣（WIN/(WIN+LOSS)）"))
-
-    header = ["停利 ↓ / 停損 →"] + [f"SL {sl}%" for sl in sl_list]
     matrix_rows = [header]
     for tp in tp_list:
         row = [f"TP {tp}%"]
         for sl in sl_list:
-            key = f"TP{tp}_SL{sl}"
+            key   = f"TP{tp}_SL{sl}"
             stats = combos.get(key, {}).get('stats', {})
-            wr = stats.get('win_rate', 0)
+            wr    = stats.get('win_rate', 0)
             total = stats.get('total', 0)
             row.append(f"{wr:.1%} ({total}筆)")
         matrix_rows.append(row)
@@ -269,32 +327,71 @@ def upload_backtest_results(results: dict) -> str:
     # ── 平均報酬矩陣 ──
     blocks.append(_div())
     blocks.append(_h2("平均報酬矩陣（已出場）"))
-
     ret_rows = [header]
     for tp in tp_list:
         row = [f"TP {tp}%"]
         for sl in sl_list:
-            key = f"TP{tp}_SL{sl}"
-            stats = combos.get(key, {}).get('stats', {})
-            avg_ret = stats.get('avg_return', 0)
+            key      = f"TP{tp}_SL{sl}"
+            stats    = combos.get(key, {}).get('stats', {})
+            avg_ret  = stats.get('avg_return', 0)
             avg_hold = stats.get('avg_holding_days', 0)
             row.append(f"{avg_ret:+.1f}% / {avg_hold:.0f}天")
         ret_rows.append(row)
     blocks.append(_table(ret_rows))
 
-    # ── 各組詳細明細 ──
+    # ── 各組詳細統計 ──
     blocks.append(_div())
     blocks.append(_h2("各組詳細統計"))
     for tp in tp_list:
         for sl in sl_list:
-            key = f"TP{tp}_SL{sl}"
+            key   = f"TP{tp}_SL{sl}"
             stats = combos.get(key, {}).get('stats', {})
             blocks.append(_h3(f"TP {tp}% / SL {sl}%"))
-            blocks.append(_li(f"勝率：{stats.get('win_rate', 0):.1%}　"
-                               f"勝/敗/未實現：{stats.get('wins',0)} / "
-                               f"{stats.get('losses',0)} / {stats.get('open_count',0)}"))
-            blocks.append(_li(f"平均報酬：{stats.get('avg_return', 0):+.2f}%　"
-                               f"平均持有：{stats.get('avg_holding_days', 0):.1f} 天"))
+            blocks.append(_li(
+                f"勝率：{stats.get('win_rate', 0):.1%}　"
+                f"勝/敗/未實現：{stats.get('wins',0)} / "
+                f"{stats.get('losses',0)} / {stats.get('open_count',0)}"
+            ))
+            blocks.append(_li(
+                f"平均報酬：{stats.get('avg_return', 0):+.2f}%　"
+                f"平均持有：{stats.get('avg_holding_days', 0):.1f} 天"
+            ))
+
+    # ── 未實現倉位明細（抓最新收盤價計算損益） ──
+    if combos:
+        blocks.append(_div())
+        # 收集所有 OPEN 倉位的 stock_id
+        open_ids: set = set()
+        for v in combos.values():
+            for t in v.get('trades', []):
+                if t.get('result') == 'OPEN':
+                    open_ids.add(t['stock_id'])
+
+        latest_prices: dict = {}
+        price_date = ''
+        if open_ids:
+            try:
+                from finmind_client import get_dataloader
+                from datetime import date as _date
+                dl  = get_dataloader()
+                today_str = _date.today().strftime('%Y-%m-%d')
+                # 往回找最近 5 個交易日
+                from datetime import timedelta
+                for delta in range(5):
+                    d = (_date.today() - timedelta(days=delta)).strftime('%Y-%m-%d')
+                    for sid in list(open_ids):
+                        if sid in latest_prices:
+                            continue
+                        df = dl.taiwan_stock_daily(stock_id=sid, start_date=d, end_date=d)
+                        if df is not None and not df.empty:
+                            latest_prices[sid] = float(df.iloc[0]['close'])
+                            price_date = d.replace('-', '/')
+                    if len(latest_prices) == len(open_ids):
+                        break
+            except Exception as e:
+                print(f"  ⚠️  抓最新收盤價失敗：{e}")
+
+        blocks += _open_positions_blocks(combos, latest_prices, price_date)
 
     # 上傳（Notion 單次上限 100 blocks，分批）
     page = notion.pages.create(
