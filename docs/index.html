@@ -128,16 +128,20 @@ let HISTORY = {};      // date -> payload（趨勢用）
 let CUR_DATE = '';
 let CUR_PAGE = 'daily';
 let WEEKLY_DATA = null;
-const APPS_SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+const APPS_SCRIPT_URL = '';  // set to your deployed Apps Script URL
 let WL_DATA = null;
 
+let _toastTimer = null;
 function showToast(msg) {
   let t = document.getElementById('toast');
   if (!t) { t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { t.classList.remove('show'); _toastTimer = null; }, 3000);
 }
+
+function loadWatchlist() {}  // stub — replaced in next task
 
 // ── 輔助函式 ──────────────────────────────────────────────────────────────────
 function fmt(v,d=1){return v===''||v===null||v===undefined?'—':(typeof v==='number'?v.toFixed(d):v);}
