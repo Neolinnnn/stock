@@ -153,26 +153,27 @@ function sendAlertEmail() {
   if (!rows.length) return;
 
   const scan = fetchLatestScan();
+
+  const alertIds = rows.filter(({ id }) => {
+    const s = scan[id] || {};
+    return s.signal && s.signal !== '' && s.signal !== '—';
+  });
+
+  if (!alertIds.length) return;
+
   const twse = fetchTWSE();
 
-  const alerts = rows
-    .filter(({ id }) => {
-      const s = scan[id] || {};
-      return s.signal && s.signal !== '' && s.signal !== '—';
-    })
-    .map(({ id }) => {
-      const s = scan[id] || {};
-      const t = twse[id] || {};
-      return { id, name: t.name || s.name || id, signal: s.signal, rsi: s.rsi, ret20: s.ret20, chipTotal: s.chipTotal };
-    });
+  const alerts = alertIds.map(({ id }) => {
+    const s = scan[id] || {};
+    const t = twse[id] || {};
+    return { id, name: t.name || s.name || id, signal: s.signal, rsi: s.rsi, ret20: s.ret20, chipTotal: s.chipTotal };
+  });
 
-  if (!alerts.length) return;
-
-  const today   = new Date().toISOString().slice(0, 10);
+  const today   = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd');
   const subject = `[台股自選] ${alerts.length} 檔出現訊號 ${today}`;
   const body    = '自選清單中以下股票今日出現訊號：\n\n' +
     alerts.map(a =>
-      `• ${a.id} ${a.name} — 訊號 ${a.signal}，RSI ${a.rsi || '—'}，20日 ${a.ret20 !== '' ? a.ret20 + '%' : '—'}，法人合計 ${a.chipTotal || '—'} 張`
+      `• ${a.id} ${a.name} — 訊號 ${a.signal}，RSI ${a.rsi || '—'}，20日 ${a.ret20 != null && a.ret20 !== '' ? Number(a.ret20).toFixed(1) + '%' : '—'}，法人合計 ${a.chipTotal || '—'} 張`
     ).join('\n');
 
   GmailApp.sendEmail(ALERT_EMAIL, subject, body);
