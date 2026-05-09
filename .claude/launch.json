@@ -4,50 +4,24 @@
     {
       "name": "Streamlit UI",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "streamlit", "run", "app.py", "--server.port", "8765", "--server.headless", "true", "--browser.gatherUsageStats", "false"],
+      "runtimeArgs": [
+        "-m", "streamlit", "run",
+        "C:\\Users\\Neo\\Documents\\Claude\\Projects\\台股研究\\app.py",
+        "--server.port", "8765",
+        "--server.headless", "true",
+        "--browser.gatherUsageStats", "false"
+      ],
       "port": 8765
     },
     {
-      "name": "批次掃描 + Walk-Forward CV",
+      "name": "GitHub Pages 本地預覽",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["strategy_templates/03_batch_scan_with_cv.py"],
-      "port": null
-    },
-    {
-      "name": "光通訊族群掃描",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["strategy_templates/04_optical_comm_scan.py"],
-      "port": null
-    },
-    {
-      "name": "單股深度分析（預設 4906 正文）",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["strategy_templates/05_single_stock_deep_dive.py", "4906"],
-      "port": null
-    },
-    {
-      "name": "FinMind 基本面抓取（預設 4906 正文）",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["strategy_templates/06_finmind_fundamentals.py", "4906"],
-      "port": null
-    },
-    {
-      "name": "MA 均線交叉策略",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["strategy_templates/01_moving_average_crossover.py"],
-      "port": null
-    },
-    {
-      "name": "RSI 超賣反彈策略",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["strategy_templates/02_rsi_reversal.py"],
-      "port": null
-    },
-    {
-      "name": "基礎資料取得測試",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["test_examples/01_basic_data_fetch.py"],
-      "port": null
+      "runtimeArgs": [
+        "-m", "http.server", "8766",
+        "--directory",
+        "C:\\Users\\Neo\\Documents\\Claude\\Projects\\台股研究\\docs"
+      ],
+      "port": 8766
     }
   ]
 }

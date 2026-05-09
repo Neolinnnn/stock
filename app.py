@@ -94,9 +94,10 @@ st.set_page_config(
 )
 
 # ── 資料讀取 ────────────────────────────────────────────────────────────────
+_APP_DIR = Path(__file__).parent
 
 def load_latest_daily():
-    base = Path("daily_reports")
+    base = _APP_DIR / "daily_reports"
     if not base.exists():
         return None, None
     dates = sorted(
@@ -111,12 +112,12 @@ def load_latest_daily():
 
 
 def load_daily(date_str):
-    p = Path(f"daily_reports/{date_str}/summary.json")
+    p = _APP_DIR / "daily_reports" / date_str / "summary.json"
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
 
 def load_latest_weekly():
-    base = Path("daily_reports")
+    base = _APP_DIR / "daily_reports"
     if not base.exists():
         return None, None
     weeklies = sorted(
@@ -131,7 +132,7 @@ def load_latest_weekly():
 
 
 def all_daily_dates():
-    base = Path("daily_reports")
+    base = _APP_DIR / "daily_reports"
     if not base.exists():
         return []
     return sorted(
@@ -282,9 +283,34 @@ def tab_daily():
 **籌碼趨勢 bar 圖**　🔴 紅色 = 買超（正值）、🟢 綠色 = 賣超（負值）；高度按當日佔10日最大值比例繪製。
 """)
 
-    date_str, summary = load_latest_daily()
+    dates = sorted(all_daily_dates(), reverse=True)
+    if not dates:
+        st.warning("尚無掃描資料，請先執行 daily_scan.py")
+        return
+
+    if "daily_idx" not in st.session_state:
+        st.session_state["daily_idx"] = 0
+
+    c_prev, c_sel, c_next = st.columns([1, 8, 1])
+    if c_prev.button("◀", use_container_width=True, key="btn_prev"):
+        st.session_state["daily_idx"] = min(st.session_state["daily_idx"] + 1, len(dates) - 1)
+        st.rerun()
+    if c_next.button("▶", use_container_width=True, key="btn_next"):
+        st.session_state["daily_idx"] = max(st.session_state["daily_idx"] - 1, 0)
+        st.rerun()
+    date_str = c_sel.selectbox(
+        "日期",
+        dates,
+        index=st.session_state["daily_idx"],
+        format_func=lambda d: f"{d[:4]}-{d[4:6]}-{d[6:]}",
+        label_visibility="collapsed",
+        key="daily_date_select",
+    )
+    st.session_state["daily_idx"] = dates.index(date_str)
+
+    summary = load_daily(date_str)
     if not summary:
-        st.warning("尚無掃描資料，請先執行 07_daily_scan.py")
+        st.warning(f"無法載入 {date_str} 的資料")
         return
 
     d = date_str
@@ -376,7 +402,9 @@ def tab_daily():
             rows = []
             # 近 10 日籌碼歷史：外資 / 投信 / 自營
             _chip_hist: dict = {}
-            for _d in all_daily_dates()[-10:]:
+            _all_asc = all_daily_dates()
+            _sel_i = _all_asc.index(date_str) if date_str in _all_asc else len(_all_asc) - 1
+            for _d in _all_asc[max(0, _sel_i - 9):_sel_i + 1]:
                 _hist = load_daily(_d)
                 if not _hist:
                     continue
