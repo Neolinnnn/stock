@@ -1,20 +1,35 @@
+/**
+ * 台股自選清單 — Google Apps Script Web App backend
+ * Setup: replace SPREADSHEET_ID below with your Google Sheets ID.
+ * Deploy: Extensions → Apps Script → Deploy → New deployment
+ *         Type: Web app | Execute as: Me | Who has access: Anyone
+ */
+
 const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
 const SHEET_NAME     = 'watchlist';
 const PAGES_BASE     = 'https://neolinnnn.github.io/stock/docs';
 const MAX_STOCKS     = 50;
 
 function doGet(e) {
-  const action = (e && e.parameter && e.parameter.action) || 'list';
-  if (action === 'list') return handleList();
-  return jsonResp({ error: 'unknown_action' });
+  try {
+    const action = (e && e.parameter && e.parameter.action) || 'list';
+    if (action === 'list') return handleList();
+    return jsonResp({ error: 'unknown_action' });
+  } catch (err) {
+    return jsonResp({ error: err.message || 'server_error' });
+  }
 }
 
 function doPost(e) {
-  let body;
-  try { body = JSON.parse(e.postData.contents); } catch { return jsonResp({ error: 'invalid_json' }); }
-  if (body.action === 'add')    return handleAdd(body.id);
-  if (body.action === 'remove') return handleRemove(body.id);
-  return jsonResp({ error: 'unknown_action' });
+  try {
+    let body;
+    try { body = JSON.parse(e.postData.contents); } catch { return jsonResp({ error: 'invalid_json' }); }
+    if (body.action === 'add')    return handleAdd(body.id);
+    if (body.action === 'remove') return handleRemove(body.id);
+    return jsonResp({ error: 'unknown_action' });
+  } catch (err) {
+    return jsonResp({ error: err.message || 'server_error' });
+  }
 }
 
 function handleList() {
@@ -74,7 +89,9 @@ function handleRemove(id) {
 // ── Helpers ────────────────────────────────────────────────────────────────
 
 function getSheet() {
-  return SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  if (!sheet) throw new Error('sheet_not_found');
+  return sheet;
 }
 
 function getRows() {
@@ -94,9 +111,10 @@ function fetchTWSE() {
     arr.forEach(item => {
       const id      = item.Code;
       const closing = parseFloat((item.ClosingPrice || '').replace(/,/g, '')) || null;
-      const change  = parseFloat((item.Change || '').replace(/[^0-9.\-]/g, '')) || 0;
-      const prev    = closing !== null ? closing - change : null;
-      const pct     = (prev && prev !== 0) ? +((change / prev) * 100).toFixed(2) : '';
+      const changeStr = (item.Change || '').trim();
+      const change    = parseFloat(changeStr);
+      const prev      = (closing !== null && !isNaN(change)) ? closing - change : null;
+      const pct       = (prev !== null && prev !== 0) ? +((change / prev) * 100).toFixed(2) : '';
       map[id] = { name: item.Name || id, price: closing, change_pct: pct };
     });
     return map;
@@ -108,7 +126,7 @@ function fetchLatestScan() {
     const dRes = UrlFetchApp.fetch(`${PAGES_BASE}/dates.json`, { muteHttpExceptions: true });
     if (dRes.getResponseCode() !== 200) return {};
     const dates = JSON.parse(dRes.getContentText());
-    if (!dates || !dates.length) return {};
+    if (!dates || !dates.length || typeof dates[0] !== 'string') return {};
 
     const sRes = UrlFetchApp.fetch(`${PAGES_BASE}/${dates[0]}.json`, { muteHttpExceptions: true });
     if (sRes.getResponseCode() !== 200) return {};
