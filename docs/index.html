@@ -440,7 +440,7 @@ function renderDaily(data){
         <span style="color:var(--sub);font-size:12px">▼</span>
       </div>
       <div class="sector-body"><table>
-        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th></tr>
+        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th><th></th></tr>
         ${stks.map(s=>`<tr>
           <td>${s.id}</td><td><b>${s.name}</b></td>
           <td>${fmt(s.price,1)}</td>
@@ -452,6 +452,7 @@ function renderDaily(data){
           <td class="tp">${s.target_short!=null&&s.target_short!==''?fmt(s.target_short,1):'—'}</td>
           <td class="tp">${s.target_mid!=null&&s.target_mid!==''?fmt(s.target_mid,1):'—'}</td>
           <td class="tp">${s.target_long!=null&&s.target_long!==''?fmt(s.target_long,1):'—'}</td>
+          <td><button class="btn-add-inline" onclick="wlAdd('${escHtml(s.id)}')" title="加入自選清單">＋</button></td>
         </tr>`).join('')}
       </table></div></div>`;
   });
