@@ -211,6 +211,7 @@ function renderWatchlist(data) {
 }
 
 async function wlAdd(idOverride) {
+  if (!APPS_SCRIPT_URL) { showToast('請先設定 APPS_SCRIPT_URL'); return; }
   const id = (idOverride || document.getElementById('wl-input')?.value || '').trim().toUpperCase();
   if (!id) return;
   const msg = document.getElementById('wl-msg');
