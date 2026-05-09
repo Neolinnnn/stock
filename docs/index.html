@@ -219,7 +219,7 @@ async function wlAdd(idOverride) {
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
       body: JSON.stringify({ action: 'add', id }),
     });
     const data = await res.json();
@@ -239,7 +239,7 @@ async function wlRemove(id) {
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+
       body: JSON.stringify({ action: 'remove', id }),
     });
     const data = await res.json();
