@@ -8,6 +8,11 @@ on:
     - cron: '47 6 * * 5'
   workflow_dispatch:   # 允許手動觸發
 
+# 防止同日多次 run 並發衝突：同一 group 的舊 run 會被取消
+concurrency:
+  group: daily-scan-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   scan:
     runs-on: ubuntu-latest
@@ -50,5 +55,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add daily_reports/ docs/
-          git diff --cached --quiet || git commit -m "auto: 每日掃描 $(date '+%Y-%m-%d')"
+          git diff --cached --quiet || git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          # pull --rebase 防止其他 push 在掃描期間搶先導致 reject
+          git pull --rebase origin main
           git push
