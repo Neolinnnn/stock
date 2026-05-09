@@ -133,8 +133,9 @@ async function fetchJSON(url){
 
 // ── 初始化 ───────────────────────────────────────────────────────────────────
 async function init(){
+  const bust = Math.floor(Date.now()/86400000);
   try{
-    DATES = await fetchJSON('./dates.json');
+    DATES = await fetchJSON(`./dates.json?v=${bust}`);
   }catch{
     // 降級：只有 daily.json
     try{
@@ -154,7 +155,7 @@ async function init(){
   CUR_DATE = DATES[0];
 
   // 嘗試預載週報
-  fetchJSON('./weekly.json').then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
+  fetchJSON(`./weekly.json?v=${bust}`).then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
 
   await loadDate(CUR_DATE);
   setPage('daily');
@@ -184,11 +185,12 @@ async function loadDate(dateStr){
   document.getElementById('btn-next').disabled = DATES.indexOf(dateStr) <= 0;
 
   if(!CACHE[dateStr]){
+    const bust = Math.floor(Date.now()/86400000); // 每天換一次
     try{
-      CACHE[dateStr] = await fetchJSON(`./${dateStr}.json`);
+      CACHE[dateStr] = await fetchJSON(`./${dateStr}.json?v=${bust}`);
     }catch{
       try{
-        CACHE[dateStr] = await fetchJSON('./daily.json');
+        CACHE[dateStr] = await fetchJSON(`./daily.json?v=${bust}`);
       }catch{
         showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
         return;
