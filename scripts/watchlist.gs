@@ -5,7 +5,7 @@
  *         Type: Web app | Execute as: Me | Who has access: Anyone
  */
 
-const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
+const SPREADSHEET_ID = '1Nkcun6gcxMZk-6gqYGJJVSRuT_Q_hJvR-7WX6AE8cxM';
 const SHEET_NAME     = 'watchlist';
 const PAGES_BASE     = 'https://neolinnnn.github.io/stock/docs';
 const MAX_STOCKS     = 50;
