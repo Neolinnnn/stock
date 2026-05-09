@@ -141,7 +141,105 @@ function showToast(msg) {
   _toastTimer = setTimeout(() => { t.classList.remove('show'); _toastTimer = null; }, 3000);
 }
 
-function loadWatchlist() {}  // stub — replaced in next task
+async function loadWatchlist(silent=false) {
+  if (!APPS_SCRIPT_URL) {
+    document.getElementById('page-watchlist').innerHTML =
+      '<div class="error-box"><span>⚙️</span>請先設定 APPS_SCRIPT_URL</div>';
+    return;
+  }
+  if (!silent) document.getElementById('page-watchlist').innerHTML = '<div id="loading">載入中…</div>';
+  try {
+    const data = await fetchJSON(`${APPS_SCRIPT_URL}?action=list`);
+    WL_DATA = data;
+    renderWatchlist(data);
+  } catch(e) {
+    document.getElementById('page-watchlist').innerHTML =
+      '<div class="error-box"><span>❌</span>載入失敗，請重試</div>';
+  }
+}
+
+function renderWatchlist(data) {
+  const stocks = (data && data.stocks) || [];
+  const updated = data && data.updated_at
+    ? new Date(data.updated_at).toLocaleString('zh-TW', {timeZone:'Asia/Taipei'})
+    : '';
+
+  let html = `
+  <div class="wl-add-bar">
+    <input id="wl-input" type="text" placeholder="輸入代碼 例：2330" maxlength="6"
+      onkeydown="if(event.key==='Enter')wlAdd()">
+    <button class="btn-primary" onclick="wlAdd()">＋ 新增</button>
+    <span id="wl-msg" style="font-size:12px;color:var(--sub)"></span>
+  </div>`;
+
+  if (!stocks.length) {
+    html += `<div class="error-box" style="margin-top:0"><span>📋</span>尚無自選股票，請輸入代碼新增</div>`;
+  } else {
+    html += `<div class="card" style="overflow-x:auto"><table>
+      <tr>
+        <th>代碼</th><th>名稱</th><th>現價</th><th>漲跌幅</th>
+        <th>RSI</th><th>20日%</th><th>訊號</th><th>法人合計</th><th>操作</th>
+      </tr>
+      ${stocks.sort((a,b)=>{
+        const sa = a.signal && a.signal!=='' ? 0 : 1;
+        const sb = b.signal && b.signal!=='' ? 0 : 1;
+        return sa - sb || a.id.localeCompare(b.id);
+      }).map(s => `<tr>
+        <td><b>${s.id}</b></td>
+        <td>${s.name}</td>
+        <td>${s.price!==''&&s.price!==null ? fmt(s.price,1) : '—'}</td>
+        <td class="${Number(s.change_pct)>=0?'up':'dn'}">${s.change_pct!==''&&s.change_pct!==null ? sign(Number(s.change_pct))+fmt(s.change_pct,2)+'%' : '—'}</td>
+        <td>${s.rsi!==''&&s.rsi!==null ? `<span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}` : '—'}</td>
+        <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null ? sign(Number(s.ret20))+fmt(s.ret20)+'%' : '—'}</td>
+        <td>${s.signal ? badge(s.signal) : '—'}</td>
+        <td>${chip(s.chip_total)}</td>
+        <td><button class="btn-remove" onclick="wlRemove('${s.id}')">✕</button></td>
+      </tr>`).join('')}
+    </table></div>`;
+  }
+
+  html += `<div style="margin-top:10px;font-size:11px;color:var(--sub)">
+    最後更新：${updated}&nbsp;&nbsp;
+    <button class="date-nav" onclick="loadWatchlist()">↻ 重新整理</button>
+  </div>`;
+
+  document.getElementById('page-watchlist').innerHTML = html;
+}
+
+async function wlAdd(idOverride) {
+  const id = (idOverride || document.getElementById('wl-input')?.value || '').trim().toUpperCase();
+  if (!id) return;
+  const msg = document.getElementById('wl-msg');
+  if (msg) msg.textContent = '新增中…';
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'add', id }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast(`✓ ${id} ${data.name} 已加入自選清單`);
+      if (document.getElementById('wl-input')) document.getElementById('wl-input').value = '';
+      loadWatchlist(true);
+    } else {
+      const msgs = { duplicate:'已在清單中', limit_reached:'自選清單已達 50 檔上限', not_found:'代碼無效，請確認股票代碼' };
+      showToast(msgs[data.error] || `新增失敗：${data.error}`);
+    }
+  } catch { showToast('新增失敗，請重試'); }
+  if (msg) msg.textContent = '';
+}
+
+async function wlRemove(id) {
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'remove', id }),
+    });
+    const data = await res.json();
+    if (data.ok) { showToast(`${id} 已從自選清單移除`); loadWatchlist(true); }
+    else showToast(`移除失敗：${data.error}`);
+  } catch { showToast('移除失敗，請重試'); }
+}
 
 // ── 輔助函式 ──────────────────────────────────────────────────────────────────
 function fmt(v,d=1){return v===''||v===null||v===undefined?'—':(typeof v==='number'?v.toFixed(d):v);}
