@@ -141,6 +141,10 @@ function showToast(msg) {
   _toastTimer = setTimeout(() => { t.classList.remove('show'); _toastTimer = null; }, 3000);
 }
 
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
 async function loadWatchlist(silent=false) {
   if (!APPS_SCRIPT_URL) {
     document.getElementById('page-watchlist').innerHTML =
@@ -181,19 +185,19 @@ function renderWatchlist(data) {
         <th>RSI</th><th>20日%</th><th>訊號</th><th>法人合計</th><th>操作</th>
       </tr>
       ${stocks.sort((a,b)=>{
-        const sa = a.signal && a.signal!=='' ? 0 : 1;
-        const sb = b.signal && b.signal!=='' ? 0 : 1;
+        const sa = a.signal && a.signal!=='' && a.signal!=='—' ? 0 : 1;
+        const sb = b.signal && b.signal!=='' && b.signal!=='—' ? 0 : 1;
         return sa - sb || a.id.localeCompare(b.id);
       }).map(s => `<tr>
-        <td><b>${s.id}</b></td>
-        <td>${s.name}</td>
+        <td><b>${escHtml(s.id)}</b></td>
+        <td>${escHtml(s.name)}</td>
         <td>${s.price!==''&&s.price!==null ? fmt(s.price,1) : '—'}</td>
         <td class="${Number(s.change_pct)>=0?'up':'dn'}">${s.change_pct!==''&&s.change_pct!==null ? sign(Number(s.change_pct))+fmt(s.change_pct,2)+'%' : '—'}</td>
         <td>${s.rsi!==''&&s.rsi!==null ? `<span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}` : '—'}</td>
         <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null ? sign(Number(s.ret20))+fmt(s.ret20)+'%' : '—'}</td>
         <td>${s.signal ? badge(s.signal) : '—'}</td>
         <td>${chip(s.chip_total)}</td>
-        <td><button class="btn-remove" onclick="wlRemove('${s.id}')">✕</button></td>
+        <td><button class="btn-remove" onclick="wlRemove('${escHtml(s.id)}')">✕</button></td>
       </tr>`).join('')}
     </table></div>`;
   }
@@ -214,6 +218,7 @@ async function wlAdd(idOverride) {
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'add', id }),
     });
     const data = await res.json();
@@ -233,6 +238,7 @@ async function wlRemove(id) {
   try {
     const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'remove', id }),
     });
     const data = await res.json();
