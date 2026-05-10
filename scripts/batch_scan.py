@@ -63,7 +63,7 @@ RSI_OVERSOLD   = 35   # 放寬到35，台股較少跌到30
 RSI_OVERBOUGHT = 65
 CV_FOLDS    = 3      # 折數減少，每折測試期更長（更多訊號機會）
 DATA_DAYS   = 500    # 取 ~2年資料
-INITIAL_CAPITAL = 100_000
+INITIAL_CAPITAL = 3_000_000  # 300萬，確保高價股 (2000+元) 也能買到至少1張
 TRANSACTION_COST = 0.001425  # 台股手續費+證交稅
 
 
