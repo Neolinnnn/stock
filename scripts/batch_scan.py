@@ -63,8 +63,9 @@ RSI_OVERSOLD   = 35   # 放寬到35，台股較少跌到30
 RSI_OVERBOUGHT = 65
 CV_FOLDS    = 3      # 折數減少，每折測試期更長（更多訊號機會）
 DATA_DAYS   = 500    # 取 ~2年資料
-INITIAL_CAPITAL = 3_000_000  # 300萬，確保高價股 (2000+元) 也能買到至少1張
-TRANSACTION_COST = 0.001425  # 台股手續費+證交稅
+INITIAL_CAPITAL = 1_000_000   # 100萬，搭配 5% position sizing 即可交易所有價位
+MAX_POSITION_PCT = 0.05       # 單次買入不超過總資產 5%（零股交易）
+TRANSACTION_COST = 0.001425   # 台股手續費+證交稅
 
 
 # ── 計算工具函式 ──────────────────────────────────────────────────────────────
@@ -128,49 +129,59 @@ def generate_signals(prices, dates, short_ma, long_ma, rsi,
 
 
 def backtest(signals, initial_capital=INITIAL_CAPITAL, cost=TRANSACTION_COST):
-    """簡單多空回測，回傳績效指標"""
-    capital = initial_capital
-    shares  = 0
-    equity  = [initial_capital]
-    wins    = 0
-    trades  = 0
-    buy_price = 0
+    """零股回測：每次買入 ≤ 總資產 5%，SELL 時全部賣出"""
+    capital  = initial_capital
+    shares   = 0
+    avg_cost = 0.0   # 加權平均持倉成本
+    equity   = [initial_capital]
+    wins     = 0
+    round_trips = 0  # 完整買賣次數（以 SELL 為準）
 
     for sig in signals:
-        price = sig['price']
+        price    = sig['price']
+        total_eq = capital + shares * price
+
         if sig['signal'] == 'BUY' and capital > 0:
-            num = int(capital / price / 1000) * 1000
+            # 5% position sizing，零股（最小 1 股）
+            num = int(total_eq * MAX_POSITION_PCT / price)
             if num == 0:
                 continue
-            capital -= num * price * (1 + cost)
-            shares   = num
-            buy_price = price
-            trades  += 1
+            outflow = num * price * (1 + cost)
+            if outflow > capital:          # 資金不足時盡量買
+                num = int(capital / (price * (1 + cost)))
+                if num == 0:
+                    continue
+                outflow = num * price * (1 + cost)
+            # 更新加權平均成本
+            avg_cost = (avg_cost * shares + price * num) / (shares + num)
+            capital -= outflow
+            shares  += num
+
         elif sig['signal'] == 'SELL' and shares > 0:
             capital += shares * price * (1 - cost)
-            if price > buy_price:
+            if price > avg_cost:
                 wins += 1
-            shares = 0
-            trades += 1
+            round_trips += 1
+            shares   = 0
+            avg_cost = 0.0
 
         equity.append(capital + shares * price)
 
-    final   = equity[-1]   # 已含 capital + 持股市值
-    ret     = (final - initial_capital) / initial_capital
-    eq_arr  = np.array(equity)
-    peak    = np.maximum.accumulate(eq_arr)
+    final    = equity[-1]
+    ret      = (final - initial_capital) / initial_capital
+    eq_arr   = np.array(equity)
+    peak     = np.maximum.accumulate(eq_arr)
     drawdown = np.max((peak - eq_arr) / np.where(peak == 0, 1, peak))
-
-    rets    = np.diff(eq_arr) / eq_arr[:-1]
-    sharpe  = (rets.mean() / rets.std() * np.sqrt(252)) if rets.std() > 0 else 0
-    win_rate = wins / (trades // 2) if trades >= 2 else 0
+    rets     = np.diff(eq_arr) / eq_arr[:-1]
+    sharpe   = (rets.mean() / rets.std() * np.sqrt(252)) if rets.std() > 0 else 0
+    win_rate = wins / round_trips if round_trips > 0 else 0
 
     return {
-        'return':    ret,
-        'sharpe':    sharpe,
-        'max_dd':    drawdown,
-        'win_rate':  win_rate,
-        'trades':    trades // 2,
+        'return':   ret,
+        'sharpe':   sharpe,
+        'max_dd':   drawdown,
+        'win_rate': win_rate,
+        'trades':   round_trips,
     }
 
 
