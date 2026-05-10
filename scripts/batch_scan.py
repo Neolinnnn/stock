@@ -194,11 +194,12 @@ def walk_forward_cv(prices, dates, n_folds=CV_FOLDS):
 
         sigs = generate_signals(test_prices, test_dates, s_ma, l_ma, rsi_v)
         if not sigs:
-            results.append({'return': 0, 'sharpe': 0, 'max_dd': 0,
-                            'win_rate': 0, 'trades': 0, 'fold': fold})
-            continue
+            continue  # 無訊號的 fold 不納入統計，避免 sharpe 被 0 拉低
 
         perf = backtest(sigs)
+        if perf['trades'] == 0:
+            continue  # 有訊號但沒成交（如只有 SELL 卻無持倉），同樣跳過
+
         perf['fold'] = fold
         results.append(perf)
 
