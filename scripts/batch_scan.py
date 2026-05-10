@@ -246,8 +246,12 @@ def analyze_stock(stock_id, name, days=DATA_DAYS):
         # 回抓 ~14 個月資料，保證 CV 有足夠樣本
         start = datetime.now() - timedelta(days=int(days * 1.6))
         stock.fetch_from(start.year, start.month)
-        prices = list(stock.price[-days:])
-        dates  = list(stock.date[-days:])
+        raw_prices = list(stock.price[-days:])
+        raw_dates  = list(stock.date[-days:])
+        # twstock 偶爾回傳 None，過濾掉避免 sma/rsi 計算出錯
+        pairs  = [(p, d) for p, d in zip(raw_prices, raw_dates) if p is not None]
+        prices = [p for p, _ in pairs]
+        dates  = [d for _, d in pairs]
     except Exception as e:
         return {'id': stock_id, 'name': name, 'error': str(e)}
 
