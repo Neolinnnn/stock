@@ -210,11 +210,14 @@ def walk_forward_cv(prices, dates, n_folds=CV_FOLDS):
         sigs = generate_signals(test_prices, test_dates, s_ma, l_ma, rsi_v,
                                initial_entry=True)
         if not sigs:
-            continue  # 無訊號的 fold 不納入統計，避免 sharpe 被 0 拉低
+            continue  # 無訊號的 fold 不納入統計
+
+        # 強制在 fold 結束時平倉，確保每個有開倉的 fold 都能完整計算報酬
+        sigs.append({'date': test_dates[-1], 'price': test_prices[-1], 'signal': 'SELL'})
 
         perf = backtest(sigs)
         if perf['trades'] == 0:
-            continue  # 有訊號但沒成交（如只有 SELL 卻無持倉），同樣跳過
+            continue  # 有訊號但完全沒成交（如只有 SELL 卻無持倉）
 
         perf['fold'] = fold
         results.append(perf)
