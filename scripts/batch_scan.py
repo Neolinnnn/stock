@@ -90,9 +90,24 @@ def calc_rsi(prices: list, period: int = 14) -> list:
 
 
 def generate_signals(prices, dates, short_ma, long_ma, rsi,
-                     rsi_low=RSI_OVERSOLD, rsi_high=RSI_OVERBOUGHT):
-    """MA 黃金交叉 + RSI 雙重確認信號"""
+                     rsi_low=RSI_OVERSOLD, rsi_high=RSI_OVERBOUGHT,
+                     initial_entry=False):
+    """MA 黃金交叉 + RSI 雙重確認信號
+
+    initial_entry=True: 測試期開頭若已在多頭排列 (MA5>MA20 且未超買)，
+    視為策略已持倉，直接從第一個有效點進場，避免漏計強趨勢股。
+    """
     signals = []
+
+    if initial_entry:
+        # 找第一個 MA/RSI 都有效的點，判斷是否直接進場
+        for i in range(len(prices)):
+            if any(v is None for v in [short_ma[i], long_ma[i], rsi[i]]):
+                continue
+            if short_ma[i] > long_ma[i] and rsi[i] < rsi_high:
+                signals.append({'date': dates[i], 'price': prices[i], 'signal': 'BUY'})
+            break  # 只在第一個有效點判斷一次
+
     for i in range(1, len(prices)):
         if any(v is None for v in [short_ma[i], short_ma[i-1],
                                     long_ma[i],  long_ma[i-1],
@@ -101,8 +116,8 @@ def generate_signals(prices, dates, short_ma, long_ma, rsi,
 
         ma_cross_up   = short_ma[i-1] <= long_ma[i-1] and short_ma[i] > long_ma[i]
         ma_cross_down = short_ma[i-1] >= long_ma[i-1] and short_ma[i] < long_ma[i]
-        rsi_ok_buy    = rsi[i] < rsi_high          # 未超買才買
-        rsi_ok_sell   = rsi[i] > rsi_low           # 未超賣才賣
+        rsi_ok_buy    = rsi[i] < rsi_high
+        rsi_ok_sell   = rsi[i] > rsi_low
 
         if ma_cross_up and rsi_ok_buy:
             signals.append({'date': dates[i], 'price': prices[i], 'signal': 'BUY'})
@@ -192,7 +207,8 @@ def walk_forward_cv(prices, dates, n_folds=CV_FOLDS):
         l_ma  = sma(test_prices, MA_LONG)
         rsi_v = calc_rsi(test_prices, RSI_PERIOD)
 
-        sigs = generate_signals(test_prices, test_dates, s_ma, l_ma, rsi_v)
+        sigs = generate_signals(test_prices, test_dates, s_ma, l_ma, rsi_v,
+                               initial_entry=True)
         if not sigs:
             continue  # 無訊號的 fold 不納入統計，避免 sharpe 被 0 拉低
 
