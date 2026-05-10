@@ -100,11 +100,12 @@ def generate_signals(prices, dates, short_ma, long_ma, rsi,
     signals = []
 
     if initial_entry:
-        # 找第一個 MA/RSI 都有效的點，判斷是否直接進場
+        # 訓練期已按規則進場，測試期開頭若仍在多頭排列 (MA5>MA20) 視為持倉繼承
+        # 不再重複過 RSI，因為 RSI 是新進場的過濾條件，不適用於已持有部位
         for i in range(len(prices)):
-            if any(v is None for v in [short_ma[i], long_ma[i], rsi[i]]):
+            if any(v is None for v in [short_ma[i], long_ma[i]]):
                 continue
-            if short_ma[i] > long_ma[i] and rsi[i] < rsi_high:
+            if short_ma[i] > long_ma[i]:
                 signals.append({'date': dates[i], 'price': prices[i], 'signal': 'BUY'})
             break  # 只在第一個有效點判斷一次
 
