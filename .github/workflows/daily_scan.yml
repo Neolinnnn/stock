@@ -58,8 +58,19 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          TODAY=$(TZ='Asia/Taipei' date '+%Y%m%d')
+          # 若今天的報告已在 remote，直接跳過（避免重複 run 造成衝突）
+          git fetch origin main
+          if git ls-tree -d origin/main -- "daily_reports/${TODAY}" | grep -q "${TODAY}"; then
+            echo "今日報告已在 remote，略過 commit/push"
+            exit 0
+          fi
           git add daily_reports/ docs/
-          git diff --cached --quiet || git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
-          # pull --rebase 防止其他 push 在掃描期間搶先導致 reject
-          git pull --rebase origin main
-          git push
+          git diff --cached --quiet && echo "無新增內容" && exit 0
+          git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          # 最多重試 3 次 push（防止並發 reject）
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            echo "Push 失敗，第 ${i} 次重試..."
+            sleep $((i * 5))
+          done
