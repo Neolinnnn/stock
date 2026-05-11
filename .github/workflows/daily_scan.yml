@@ -29,7 +29,10 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt
 
       - name: Run daily scan
         env:
@@ -42,6 +45,7 @@ jobs:
 
       - name: Run weekly summary (Fridays only)
         if: github.event.schedule == '47 6 * * 5'
+        continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
