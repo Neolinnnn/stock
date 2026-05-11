@@ -301,6 +301,10 @@ def analyze_stock(stock_id, name, days=DATA_DAYS):
     else:
         avg_ret = avg_sharpe = avg_dd = avg_wr = std_ret = 0
 
+    # CV 夏普 < 0 時降為 HOLD：技術訊號需歷史績效支撐才算有效 BUY
+    if current_signal == 'BUY' and avg_sharpe < 0:
+        current_signal = 'HOLD'
+
     return {
         'id':           stock_id,
         'name':         name,
