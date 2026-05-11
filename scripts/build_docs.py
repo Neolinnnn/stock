@@ -44,6 +44,7 @@ def build_daily_payload(summary):
                 'name':      st['name'],
                 'price':     _nan_to_none(st.get('price', '')),
                 'rsi':       _nan_to_none(st.get('rsi', '')),
+                'rsi10':     _nan_to_none(st.get('rsi10', '')),
                 'ret20':     _nan_to_none(st.get('ret_20d', '')),
                 'signal':    st.get('signal', ''),
                 'sharpe':    _nan_to_none(st.get('cv_sharpe', '')),

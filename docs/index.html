@@ -182,7 +182,7 @@ function renderWatchlist(data) {
     html += `<div class="card" style="overflow-x:auto"><table>
       <tr>
         <th>代碼</th><th>名稱</th><th>現價</th><th>漲跌幅</th>
-        <th>RSI</th><th>20日%</th><th>訊號</th><th>法人合計</th><th>操作</th>
+        <th>RSI5/10</th><th>20日%</th><th>訊號</th><th>法人合計</th><th>操作</th>
       </tr>
       ${stocks.sort((a,b)=>{
         const sa = a.signal && a.signal!=='' && a.signal!=='—' ? 0 : 1;
@@ -193,7 +193,7 @@ function renderWatchlist(data) {
         <td>${escHtml(s.name)}</td>
         <td>${s.price!==''&&s.price!==null ? fmt(s.price,1) : '—'}</td>
         <td class="${Number(s.change_pct)>=0?'up':'dn'}">${s.change_pct!==''&&s.change_pct!==null ? sign(Number(s.change_pct))+fmt(s.change_pct,2)+'%' : '—'}</td>
-        <td>${s.rsi!==''&&s.rsi!==null ? `<span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}` : '—'}</td>
+        <td>${s.rsi!==''&&s.rsi!==null ? `<span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span>` : '—'}</td>
         <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null ? sign(Number(s.ret20))+fmt(s.ret20)+'%' : '—'}</td>
         <td>${s.signal ? badge(s.signal) : '—'}</td>
         <td>${chip(s.chip_total)}</td>
@@ -367,11 +367,11 @@ function renderDaily(data){
   if(qualified&&qualified.length){
     html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
     <div class="card" style="overflow-x:auto;margin-bottom:20px"><table>
-      <tr><th>代碼</th><th>族群</th><th>名稱</th><th>現價</th><th>RSI</th><th>CV夏普</th></tr>
+      <tr><th>代碼</th><th>族群</th><th>名稱</th><th>現價</th><th>RSI5/10</th><th>CV夏普</th></tr>
       ${qualified.map(q=>`<tr>
         <td><b>${q.id}</b></td><td>${q.sector}</td><td>${q.name}</td>
         <td>${fmt(q.price,1)}</td>
-        <td><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
+        <td><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}<span style="color:var(--sub);font-size:11px">/${q.rsi10!=null&&q.rsi10!==''?fmt(q.rsi10,1):'—'}</span></td>
         <td>${fmt(q.cv_sharpe,2)}</td>
       </tr>`).join('')}
     </table></div>`;
@@ -379,7 +379,7 @@ function renderDaily(data){
 
   // 族群強弱表
   html+=`<div class="section-title">族群強弱</div><div class="card" style="overflow-x:auto"><table>
-    <tr><th>族群</th><th>20日報酬%</th><th></th><th>RSI</th><th>BUY訊號</th><th>RSI>70</th></tr>`;
+    <tr><th>族群</th><th>20日報酬%</th><th></th><th>RSI5/10</th><th>BUY訊號</th><th>RSI5>70</th></tr>`;
   const maxRet=Math.max(...sectors.map(s=>Math.abs(Number(s.ret20)||0)),1);
   [...sectors].sort((a,b)=>Number(b.ret20)-Number(a.ret20)).forEach(s=>{
     const r=Number(s.ret20)||0;
@@ -389,7 +389,7 @@ function renderDaily(data){
       <td><b>${s.sector}</b></td>
       <td class="${signColor(r)}">${sign(r)}${fmt(r)}%</td>
       <td style="width:120px"><div class="bar-wrap"><div class="bar" style="width:${bw}%;background:${bc}"></div></div></td>
-      <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}</td>
+      <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span></td>
       <td>${s.buy}</td><td>${s.hot}</td></tr>`;
   });
   html+=`</table></div>`;
@@ -416,9 +416,9 @@ function renderDaily(data){
     <summary>訊號與目標價說明</summary>
     <table>
       <tr><th>訊號</th><th>判斷條件</th><th>操作建議</th></tr>
-      <tr><td><span class="badge buy">BUY</span></td><td>RSI 40–65 且 20日漲幅 > 3%，CV夏普 > 0.5</td><td>可考慮建倉或加碼</td></tr>
+      <tr><td><span class="badge buy">BUY</span></td><td>RSI5 40–65 且 20日漲幅 > 3%，CV夏普 > 0.5</td><td>可考慮建倉或加碼</td></tr>
       <tr><td><span class="badge hold">HOLD</span></td><td>技術面中性或整理，無明顯買賣訊號</td><td>持有觀望，等待方向確認</td></tr>
-      <tr><td><span class="badge sell">SELL</span></td><td>RSI > 70 或 20日漲幅 < −5%，CV夏普 < −0.3</td><td>考慮減碼或停損</td></tr>
+      <tr><td><span class="badge sell">SELL</span></td><td>RSI5 > 70 或 20日漲幅 < −5%，CV夏普 < −0.3</td><td>考慮減碼或停損</td></tr>
     </table>
     <div style="margin-top:10px">
       <b>目標價計算方式：</b><br>
@@ -441,11 +441,11 @@ function renderDaily(data){
         <span style="color:var(--sub);font-size:12px">▼</span>
       </div>
       <div class="sector-body"><table>
-        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th><th></th></tr>
+        <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI5/10</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th><th></th></tr>
         ${stks.map(s=>`<tr>
           <td>${s.id}</td><td><b>${s.name}</b></td>
           <td>${fmt(s.price,1)}</td>
-          <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}</td>
+          <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span></td>
           <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null&&s.ret20!==undefined?sign(Number(s.ret20))+fmt(s.ret20)+'%':'—'}</td>
           <td>${badge(s.signal)}</td>
           <td>${fmt(s.sharpe,2)}</td>

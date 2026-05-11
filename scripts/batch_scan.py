@@ -58,8 +58,9 @@ WATCH_LIST = {
 # ── 策略參數 ─────────────────────────────────────────────────────────────────
 MA_SHORT    = 5
 MA_LONG     = 20
-RSI_PERIOD  = 14
-RSI_OVERSOLD   = 35   # 放寬到35，台股較少跌到30
+RSI_PERIOD  = 5        # 短線 RSI（與主流 5T 一致）
+RSI_PERIOD2 = 10       # 中線 RSI
+RSI_OVERSOLD   = 35
 RSI_OVERBOUGHT = 65
 CV_FOLDS    = 3      # 折數減少，每折測試期更長（更多訊號機會）
 DATA_DAYS   = 500    # 取 ~2年資料
@@ -78,15 +79,29 @@ def sma(prices: list, window: int) -> list:
 
 
 def calc_rsi(prices: list, period: int = 14) -> list:
-    rsi = [None] * period
-    for i in range(period, len(prices)):
-        changes = [prices[j] - prices[j-1] for j in range(i - period + 1, i + 1)]
-        gains = [c for c in changes if c > 0]
-        losses = [abs(c) for c in changes if c < 0]
-        avg_gain = sum(gains) / period
-        avg_loss = sum(losses) / period if losses else 0
+    """Wilder's smoothed RSI（與主流股票軟體一致）。"""
+    if len(prices) < period + 1:
+        return [None] * len(prices)
+
+    changes = [prices[i] - prices[i - 1] for i in range(1, len(prices))]
+    gains = [max(c, 0) for c in changes]
+    losses = [abs(min(c, 0)) for c in changes]
+
+    # 第一個值用簡單平均初始化
+    avg_gain = sum(gains[:period]) / period
+    avg_loss = sum(losses[:period]) / period
+
+    rsi = [None] * (period + 1)
+    rs = avg_gain / avg_loss if avg_loss else (100 if avg_gain else 0)
+    rsi.append(100 - 100 / (1 + rs))
+
+    # 之後用 Wilder's 平滑法（alpha = 1/period）
+    for i in range(period, len(changes)):
+        avg_gain = (avg_gain * (period - 1) + gains[i]) / period
+        avg_loss = (avg_loss * (period - 1) + losses[i]) / period
         rs = avg_gain / avg_loss if avg_loss else (100 if avg_gain else 0)
         rsi.append(100 - 100 / (1 + rs))
+
     return rsi
 
 
@@ -212,7 +227,7 @@ def walk_forward_cv(prices, dates, n_folds=CV_FOLDS):
         test_prices = prices[train_end:test_end]
         test_dates  = dates[train_end:test_end]
 
-        if len(test_prices) < MA_LONG + RSI_PERIOD:
+        if len(test_prices) < MA_LONG + RSI_PERIOD2:
             continue
 
         s_ma  = sma(test_prices, MA_SHORT)
@@ -255,22 +270,24 @@ def analyze_stock(stock_id, name, days=DATA_DAYS):
     except Exception as e:
         return {'id': stock_id, 'name': name, 'error': str(e)}
 
-    if len(prices) < MA_LONG + RSI_PERIOD + 10:
+    if len(prices) < MA_LONG + RSI_PERIOD2 + 10:
         return {'id': stock_id, 'name': name, 'error': '資料不足'}
 
-    s_ma  = sma(prices, MA_SHORT)
-    l_ma  = sma(prices, MA_LONG)
-    rsi_v = calc_rsi(prices, RSI_PERIOD)
+    s_ma   = sma(prices, MA_SHORT)
+    l_ma   = sma(prices, MA_LONG)
+    rsi5_v = calc_rsi(prices, RSI_PERIOD)
+    rsi10_v = calc_rsi(prices, RSI_PERIOD2)
 
     # 當前狀態
     latest_price   = prices[-1]
     latest_short   = s_ma[-1]
     latest_long    = l_ma[-1]
-    latest_rsi     = rsi_v[-1]
+    latest_rsi5    = rsi5_v[-1]
+    latest_rsi10   = rsi10_v[-1]
 
-    # 當前信號（最後 5 根）
+    # 當前信號（最後 5 根，用 RSI-5 確認）
     recent_sigs = generate_signals(prices[-6:], dates[-6:],
-                                   s_ma[-6:], l_ma[-6:], rsi_v[-6:])
+                                   s_ma[-6:], l_ma[-6:], rsi5_v[-6:])
     current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
 
     # Walk-Forward CV
@@ -290,7 +307,8 @@ def analyze_stock(stock_id, name, days=DATA_DAYS):
         'price':        latest_price,
         'ma5':          round(latest_short, 2) if latest_short else None,
         'ma20':         round(latest_long,  2) if latest_long  else None,
-        'rsi':          round(latest_rsi,   1) if latest_rsi   else None,
+        'rsi':          round(latest_rsi5,  1) if latest_rsi5  else None,
+        'rsi10':        round(latest_rsi10, 1) if latest_rsi10 else None,
         'signal':       current_signal,
         'cv_return':    avg_ret,
         'cv_sharpe':    avg_sharpe,

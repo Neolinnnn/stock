@@ -296,7 +296,7 @@ def generate_sector_chart(all_results, out_dir):
     rsi_colors = ['#e74c3c' if r > 70 else '#f39c12' if r > 60 else '#27ae60' if 40 <= r <= 60 else '#3498db'
                   for r in df['rsi']]
     axes[1].barh(df['sector'], df['rsi'], color=rsi_colors)
-    axes[1].set_xlabel('RSI (14)')
+    axes[1].set_xlabel('RSI (5)')
     axes[1].set_title('族群 RSI 熱度')
     axes[1].axvline(70, color='red', linestyle='--', linewidth=0.7, alpha=0.5)
     axes[1].axvline(30, color='green', linestyle='--', linewidth=0.7, alpha=0.5)
@@ -408,6 +408,7 @@ def build_daily_payload(summary):
                 'name': st['name'],
                 'price': _nan_to_none(st.get('price', '')),
                 'rsi': _nan_to_none(st.get('rsi', '')),
+                'rsi10': _nan_to_none(st.get('rsi10', '')),
                 'ret20': _nan_to_none(st.get('ret_20d', '')),
                 'signal': st.get('signal', ''),
                 'sharpe': _nan_to_none(st.get('cv_sharpe', '')),
@@ -472,6 +473,7 @@ def build_summary(date, market, all_results, chart_path):
                 {
                     'id': r['id'], 'name': r['name'], 'price': r['price'],
                     'rsi': round(r['rsi'], 1),
+                    'rsi10': round(r['rsi10'], 1) if r.get('rsi10') else None,
                     'ret_20d': round(r['ret_20d'] * 100, 1) if r.get('ret_20d') else None,
                     'signal': r['signal'],
                     'cv_sharpe': round(r['cv_sharpe'], 2),
