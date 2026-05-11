@@ -1290,6 +1290,8 @@ def tab_watchlist():
             st.session_state["watchlist_preset"] = "4979 3450 2455 4906 3105 8086 3665"
         if st.button("重電 / 電網"):
             st.session_state["watchlist_preset"] = "1503 1513 1514 1519 1526"
+        if st.button("CoPoS 封裝"):
+            st.session_state["watchlist_preset"] = "6789 3535 3680 6664 2467 7734 5443 6640 6187 3131 3583 3711 2449 6239"
 
     preset = st.session_state.pop("watchlist_preset", None)
     if preset:
