@@ -93,14 +93,36 @@
   .toast.show{opacity:1;}
   .btn-add-inline{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;margin-left:4px;}
   .btn-add-inline:hover{background:var(--accent);color:#fff;}
+
+  /* 個股分析 */
+  .stock-search-bar{display:flex;gap:8px;margin-bottom:20px;align-items:center;flex-wrap:wrap;}
+  .stock-search-bar input{background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;width:160px;}
+  .stock-search-bar input::placeholder{color:var(--sub);}
+  .stock-autocomplete{position:relative;}
+  .stock-dropdown{position:absolute;top:100%;left:0;background:var(--card);border:1px solid var(--border);border-radius:6px;z-index:100;min-width:220px;max-height:200px;overflow-y:auto;display:none;}
+  .stock-dropdown.show{display:block;}
+  .stock-dropdown div{padding:7px 12px;cursor:pointer;font-size:13px;}
+  .stock-dropdown div:hover{background:#1e2330;}
+  .stock-dropdown .dd-sub{font-size:11px;color:var(--sub);}
+  .stock-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
+  @media(max-width:700px){.stock-metrics{grid-template-columns:repeat(2,1fr);}}
+  .metric-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
+  .metric-label{font-size:11px;color:var(--sub);margin-bottom:4px;}
+  .metric-value{font-size:20px;font-weight:700;}
+  .metric-sub{font-size:11px;color:var(--sub);margin-top:3px;}
+  .chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;}
+  .chart-title{font-size:13px;font-weight:600;color:var(--sub);margin-bottom:10px;}
+  .signal-history-row td:first-child{font-size:12px;color:var(--sub);}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <header>
   <h1>📊 台股族群掃描</h1>
   <nav>
-    <a id="nav-daily"  onclick="setPage('daily')">今日掃描</a>
-    <a id="nav-weekly"   onclick="setPage('weekly')">週報</a>
+    <a id="nav-daily"     onclick="setPage('daily')">今日掃描</a>
+    <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
+    <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
     <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
   </nav>
   <div class="date-picker" id="date-picker-wrap">
@@ -115,6 +137,7 @@
   <div id="loading">載入中…</div>
   <div id="page-daily"     class="page-section"></div>
   <div id="page-weekly"    class="page-section"></div>
+  <div id="page-stock"     class="page-section"></div>
   <div id="page-watchlist" class="page-section"></div>
 </main>
 
@@ -263,6 +286,182 @@ async function fetchJSON(url){
   return r.json();
 }
 
+// ── 個股分析 ──────────────────────────────────────────────────────────────────
+let STOCKS_INDEX = [];
+let STOCK_CHARTS = {};   // chart instances to destroy on re-render
+
+async function initStockPage(){
+  const el = document.getElementById('page-stock');
+  if(el.dataset.init) return;
+  el.dataset.init = '1';
+
+  const bust = Math.floor(Date.now()/86400000);
+  try{ STOCKS_INDEX = await fetchJSON(`./stocks_index.json?v=${bust}`); }catch{}
+
+  el.innerHTML = `
+    <div class="stock-search-bar">
+      <div class="stock-autocomplete">
+        <input id="stock-input" placeholder="輸入代碼或名稱" autocomplete="off"
+               oninput="stockSuggest(this.value)" onkeydown="if(event.key==='Enter')loadStock(document.getElementById('stock-input').value.trim())">
+        <div class="stock-dropdown" id="stock-dd"></div>
+      </div>
+      <button class="btn-primary" onclick="loadStock(document.getElementById('stock-input').value.trim())">分析</button>
+    </div>
+    <div id="stock-result"></div>`;
+
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('.stock-autocomplete'))
+      document.getElementById('stock-dd').classList.remove('show');
+  });
+}
+
+function stockSuggest(q){
+  const dd = document.getElementById('stock-dd');
+  if(!q || q.length < 1){ dd.classList.remove('show'); return; }
+  const hits = STOCKS_INDEX.filter(s=>s.id.startsWith(q)||s.name.includes(q)).slice(0,8);
+  if(!hits.length){ dd.classList.remove('show'); return; }
+  dd.innerHTML = hits.map(s=>`
+    <div onclick="document.getElementById('stock-input').value='${s.id}';document.getElementById('stock-dd').classList.remove('show');loadStock('${s.id}')">
+      <b>${s.id}</b> ${s.name} <span class="dd-sub">${s.sector}</span>
+    </div>`).join('');
+  dd.classList.add('show');
+}
+
+async function loadStock(sid){
+  if(!sid){ return; }
+  document.getElementById('stock-dd').classList.remove('show');
+  const el = document.getElementById('stock-result');
+  el.innerHTML = '<div id="loading">載入中…</div>';
+
+  // 銷毀舊圖表
+  Object.values(STOCK_CHARTS).forEach(c=>c.destroy());
+  STOCK_CHARTS = {};
+
+  const bust = Math.floor(Date.now()/86400000);
+  let data;
+  try{ data = await fetchJSON(`./stocks/${sid}.json?v=${bust}`); }
+  catch{
+    el.innerHTML = `<div class="error-box"><span>🔍</span>找不到 ${sid} 的資料，請確認代碼正確且在掃描名單內</div>`;
+    return;
+  }
+
+  renderStock(data, el);
+}
+
+function renderStock(data, el){
+  const h = data.history;
+  if(!h || !h.length){ el.innerHTML = '<div class="error-box"><span>📭</span>無歷史資料</div>'; return; }
+
+  const latest = h[h.length-1];
+  const prev   = h.length>1 ? h[h.length-2] : latest;
+  const priceDelta = latest.price && prev.price ? ((latest.price - prev.price)/prev.price*100) : null;
+
+  // ── Header metrics ──────────────────────────────────────────────────────────
+  const sigBuy  = h.filter(r=>r.signal==='BUY').length;
+  const sigSell = h.filter(r=>r.signal==='SELL').length;
+
+  el.innerHTML = `
+    <div class="section-title">${data.name}（${data.id}）<span class="tag">${data.sector}</span></div>
+    <div class="stock-metrics">
+      <div class="metric-card">
+        <div class="metric-label">現價</div>
+        <div class="metric-value">${latest.price!=null?latest.price.toLocaleString():'—'}</div>
+        <div class="metric-sub ${priceDelta!=null?(priceDelta>=0?'up':'dn'):''}">${priceDelta!=null?(priceDelta>=0?'▲':'▼')+Math.abs(priceDelta).toFixed(2)+'%':''}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">RSI5 / RSI10</div>
+        <div class="metric-value"><span class="rsi-dot ${rsiDot(latest.rsi)}"></span>${latest.rsi!=null?latest.rsi:'—'}</div>
+        <div class="metric-sub">${latest.rsi10!=null?'RSI10: '+latest.rsi10:''}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">20日報酬</div>
+        <div class="metric-value ${latest.ret20!=null?(latest.ret20>=0?'up':'dn'):''}">${latest.ret20!=null?(latest.ret20>=0?'+':'')+latest.ret20+'%':'—'}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">訊號</div>
+        <div class="metric-value">${badge(latest.signal||'HOLD')}</div>
+        <div class="metric-sub">CV夏普 ${latest.sharpe!=null?latest.sharpe:'—'}</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">近期訊號（${h.length}日）</div>
+        <div class="metric-value" style="font-size:15px"><span style="color:var(--green)">BUY×${sigBuy}</span> <span style="color:var(--red)">SELL×${sigSell}</span></div>
+        <div class="metric-sub">法人合計 ${latest.chipTotal!=null?latest.chipTotal.toLocaleString():'—'}</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="chart-wrap"><div class="chart-title">收盤價走勢</div><canvas id="chart-price" height="160"></canvas></div>
+      <div class="chart-wrap"><div class="chart-title">RSI5 / RSI10</div><canvas id="chart-rsi" height="160"></canvas></div>
+    </div>
+    <div class="chart-wrap"><div class="chart-title">三大法人合計買賣超</div><canvas id="chart-chip" height="100"></canvas></div>
+    <div class="section-title">訊號歷史</div>
+    <div class="card" style="overflow-x:auto"><table>
+      <tr><th>日期</th><th>收盤</th><th>RSI5</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th></tr>
+      ${[...h].reverse().map(r=>`<tr class="signal-history-row">
+        <td>${fmtDate(r.date)}</td>
+        <td>${r.price!=null?r.price:'—'}</td>
+        <td><span class="rsi-dot ${rsiDot(r.rsi)}"></span>${r.rsi!=null?r.rsi:'—'}</td>
+        <td class="${r.ret20!=null?(r.ret20>=0?'up':'dn'):''}">${r.ret20!=null?(r.ret20>=0?'+':'')+r.ret20+'%':'—'}</td>
+        <td>${badge(r.signal||'HOLD')}</td>
+        <td>${r.sharpe!=null?r.sharpe:'—'}</td>
+        <td>${chip(r.chipTotal)}</td>
+      </tr>`).join('')}
+    </table></div>`;
+
+  const labels = h.map(r=>fmtDate(r.date));
+  const prices = h.map(r=>r.price);
+  const rsi5   = h.map(r=>r.rsi);
+  const rsi10  = h.map(r=>r.rsi10);
+  const chips  = h.map(r=>r.chipTotal);
+
+  const chartOpts = {
+    responsive:true,
+    plugins:{legend:{labels:{color:'#888',boxWidth:12}},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{color:'#666',maxTicksLimit:10},grid:{color:'#1e2128'}},
+            y:{ticks:{color:'#666'},grid:{color:'#1e2128'}}},
+    animation:{duration:300},
+  };
+
+  // 價格圖
+  STOCK_CHARTS.price = new Chart(document.getElementById('chart-price'), {
+    type:'line',
+    data:{labels, datasets:[{
+      label:'收盤價', data:prices,
+      borderColor:'#1f77b4', backgroundColor:'rgba(31,119,180,.08)',
+      borderWidth:2, pointRadius:2, fill:true, tension:0.3,
+    }]},
+    options:{...chartOpts,
+      plugins:{...chartOpts.plugins,
+        annotation:{annotations:{}}}},
+  });
+
+  // RSI 圖
+  STOCK_CHARTS.rsi = new Chart(document.getElementById('chart-rsi'), {
+    type:'line',
+    data:{labels, datasets:[
+      {label:'RSI5',  data:rsi5,  borderColor:'#e74c3c', borderWidth:2, pointRadius:1, tension:0.3},
+      {label:'RSI10', data:rsi10, borderColor:'#f39c12', borderWidth:2, pointRadius:1, tension:0.3},
+    ]},
+    options:{...chartOpts,
+      scales:{...chartOpts.scales,
+        y:{...chartOpts.scales.y, min:0, max:100,
+           ticks:{...chartOpts.scales.y.ticks,
+             callback:v=>[30,50,70].includes(v)?v:null}}}},
+  });
+
+  // 籌碼圖
+  STOCK_CHARTS.chip = new Chart(document.getElementById('chart-chip'), {
+    type:'bar',
+    data:{labels, datasets:[{
+      label:'法人合計', data:chips,
+      backgroundColor: chips.map(v=>v>=0?'rgba(39,174,96,.6)':'rgba(231,76,60,.6)'),
+      borderWidth:0,
+    }]},
+    options:{...chartOpts,
+      plugins:{...chartOpts.plugins,
+        legend:{display:false}}},
+  });
+}
+
 // ── 初始化 ───────────────────────────────────────────────────────────────────
 async function init(){
   const bust = Math.floor(Date.now()/86400000);
@@ -301,13 +500,14 @@ function buildDateSelect(){
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','watchlist'].forEach(p=>{
+  ['daily','weekly','stock','watchlist'].forEach(p=>{
     document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
     document.getElementById(`page-${p}`).classList.toggle('active', p===page);
   });
   document.getElementById('date-picker-wrap').style.display = page==='daily'?'':'none';
   if(page==='weekly')    renderWeekly();
   if(page==='watchlist') loadWatchlist();
+  if(page==='stock')     initStockPage();
 }
 
 // ── 日期導航 ──────────────────────────────────────────────────────────────────
