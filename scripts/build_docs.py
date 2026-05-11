@@ -10,10 +10,18 @@
   python strategy_templates/build_docs.py
 """
 import json
+import math
 from pathlib import Path
 import sys, os
 
 sys.path.insert(0, os.path.dirname(__file__))
+
+
+def _nan_to_none(v):
+    """將 float NaN 轉為 None，避免輸出非標準 JSON 的 NaN。"""
+    if isinstance(v, float) and math.isnan(v):
+        return None
+    return v
 
 
 def build_daily_payload(summary):
@@ -22,8 +30,8 @@ def build_daily_payload(summary):
     for sector, data in summary.get('sectors', {}).items():
         sectors.append({
             'sector': sector,
-            'ret20':  data.get('avg_ret_20d', ''),
-            'rsi':    data.get('avg_rsi', ''),
+            'ret20':  _nan_to_none(data.get('avg_ret_20d', '')),
+            'rsi':    _nan_to_none(data.get('avg_rsi', '')),
             'buy':    data.get('buy_count', 0),
             'hot':    data.get('hot_count', 0),
         })
@@ -34,11 +42,11 @@ def build_daily_payload(summary):
                 'sector':    sector,
                 'id':        st['id'],
                 'name':      st['name'],
-                'price':     st.get('price', ''),
-                'rsi':       st.get('rsi', ''),
-                'ret20':     st.get('ret_20d', ''),
+                'price':     _nan_to_none(st.get('price', '')),
+                'rsi':       _nan_to_none(st.get('rsi', '')),
+                'ret20':     _nan_to_none(st.get('ret_20d', '')),
                 'signal':    st.get('signal', ''),
-                'sharpe':    st.get('cv_sharpe', ''),
+                'sharpe':    _nan_to_none(st.get('cv_sharpe', '')),
                 'foreign':   chip.get('外資', ''),
                 'trust':     chip.get('投信', ''),
                 'dealer':    chip.get('自營', ''),

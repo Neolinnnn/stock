@@ -10,7 +10,7 @@ Daily Post-Market Sector Scan
 用法：
   python strategy_templates/07_daily_scan.py
 """
-import sys, os, json, time
+import sys, os, json, math, time
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -381,6 +381,12 @@ def run_daily_scan():
     return summary
 
 
+def _nan_to_none(v):
+    if isinstance(v, float) and math.isnan(v):
+        return None
+    return v
+
+
 def build_daily_payload(summary):
     sectors = []
     chips = []
@@ -388,8 +394,8 @@ def build_daily_payload(summary):
     for sector, data in summary.get('sectors', {}).items():
         sectors.append({
             'sector': sector,
-            'ret20': data.get('avg_ret_20d', ''),
-            'rsi': data.get('avg_rsi', ''),
+            'ret20': _nan_to_none(data.get('avg_ret_20d', '')),
+            'rsi': _nan_to_none(data.get('avg_rsi', '')),
             'buy': data.get('buy_count', 0),
             'hot': data.get('hot_count', 0),
         })
@@ -400,11 +406,11 @@ def build_daily_payload(summary):
                 'sector': sector,
                 'id': st['id'],
                 'name': st['name'],
-                'price': st.get('price', ''),
-                'rsi': st.get('rsi', ''),
-                'ret20': st.get('ret_20d', ''),
+                'price': _nan_to_none(st.get('price', '')),
+                'rsi': _nan_to_none(st.get('rsi', '')),
+                'ret20': _nan_to_none(st.get('ret_20d', '')),
                 'signal': st.get('signal', ''),
-                'sharpe': st.get('cv_sharpe', ''),
+                'sharpe': _nan_to_none(st.get('cv_sharpe', '')),
                 'foreign': chip.get('外資', ''),
                 'trust': chip.get('投信', ''),
                 'dealer': chip.get('自營', ''),
