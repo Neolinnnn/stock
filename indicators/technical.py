@@ -211,3 +211,41 @@ def detect_patterns(df: pd.DataFrame) -> dict:
                 m = {"formed": False, "reason": "右峰已形成，尚未跌破頸線"}
 
     return {"w_bottom": w, "m_top": m}
+
+
+# ── MJ 強化版入場訊號偵測 ────────────────────────────────────────────────────
+
+def detect_mj_signals(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    依 MJ 強化版規則偵測做多 / 做空入場訊號。
+
+    進場條件（兩者必須同時發生在同一根 K 棒）：
+    - 做多（LONG）：J 線從零軸下方穿越至上方，且當根 MACD OSC > 0
+    - 做空（SHORT）：J 線從零軸上方穿越至下方，且當根 MACD OSC < 0
+
+    回傳含 [date, signal, close, kd_j, macd_osc] 的 DataFrame。
+    """
+    rows = []
+    j   = df["kd_j"].values
+    osc = df["macd_osc"].values
+
+    for i in range(1, len(df)):
+        prev_j, curr_j = j[i - 1], j[i]
+        curr_osc = osc[i]
+
+        if prev_j < 0 and curr_j >= 0 and curr_osc > 0:
+            signal = "LONG"
+        elif prev_j > 0 and curr_j <= 0 and curr_osc < 0:
+            signal = "SHORT"
+        else:
+            continue
+
+        rows.append({
+            "date":     df["date"].iloc[i],
+            "signal":   signal,
+            "close":    df["close"].iloc[i],
+            "kd_j":     round(curr_j, 2),
+            "macd_osc": round(curr_osc, 4),
+        })
+
+    return pd.DataFrame(rows, columns=["date", "signal", "close", "kd_j", "macd_osc"])
