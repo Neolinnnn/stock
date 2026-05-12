@@ -480,7 +480,7 @@ _DIR_COLOR = {"up": "#e74c3c", "down": "#27ae60", "neutral": "#f39c12"}
 
 def tab_stock():
     from plotly.subplots import make_subplots
-    from indicators.technical import compute_indicators, technical_summary, key_levels, detect_patterns
+    from indicators.technical import compute_indicators, technical_summary, key_levels, detect_patterns, detect_mj_signals
     from indicators.chip import aggregate_chip, main_force_signal
 
     st.subheader("🔍 個股深度分析")
@@ -546,6 +546,7 @@ def tab_stock():
         summary_items = technical_summary(df)
         levels        = key_levels(df)
         patterns      = detect_patterns(df)
+        mj_signals    = detect_mj_signals(df)
 
         # ── AI 預測 ──────────────────────────────────────────────────
         try:
@@ -672,8 +673,11 @@ def tab_stock():
                              line=dict(color="#3498db", width=1.5)), row=3, col=1)
     fig.add_trace(go.Scatter(x=df["date"], y=df["kd_d"], name="D",
                              line=dict(color="#e67e22", width=1.5)), row=3, col=1)
+    fig.add_trace(go.Scatter(x=df["date"], y=df["kd_j"], name="J",
+                             line=dict(color="#ff6b6b", width=1.2)), row=3, col=1)
     fig.add_hline(y=80, line_dash="dash", line_color="rgba(220,50,50,0.4)", row=3, col=1)
     fig.add_hline(y=20, line_dash="dash", line_color="rgba(50,200,50,0.4)",  row=3, col=1)
+    fig.add_hline(y=0,  line_dash="dot",  line_color="rgba(200,200,200,0.5)", row=3, col=1)
 
     _osc_colors = ["#e74c3c" if v >= 0 else "#27ae60" for v in df["macd_osc"]]
     fig.add_trace(go.Bar(x=df["date"], y=df["macd_osc"], name="OSC",
@@ -682,6 +686,39 @@ def tab_stock():
                              line=dict(color="#e74c3c", width=1.5)), row=4, col=1)
     fig.add_trace(go.Scatter(x=df["date"], y=df["macd_signal"], name="MACD",
                              line=dict(color="#3498db", width=1.5)), row=4, col=1)
+
+    # ── MJ 入場訊號三角標記 ─────────────────────────────────────────────────────
+    if not mj_signals.empty:
+        _long_sig  = mj_signals[mj_signals["signal"] == "LONG"]
+        _short_sig = mj_signals[mj_signals["signal"] == "SHORT"]
+
+        # 做多訊號：綠色上三角，標在 K 棒 low 下方
+        if not _long_sig.empty:
+            _long_dates = _long_sig["date"].tolist()
+            _long_lows  = df[df["date"].isin(_long_dates)]["low"] * 0.994
+            fig.add_trace(go.Scatter(
+                x=_long_dates, y=_long_lows.tolist(),
+                mode="markers",
+                marker=dict(symbol="triangle-up", color="#27ae60", size=12,
+                            line=dict(color="white", width=1)),
+                name="MJ做多",
+                hovertemplate="做多入場<br>%{x}<br>收盤：%{customdata:.1f}",
+                customdata=_long_sig["close"].tolist(),
+            ), row=1, col=1)
+
+        # 做空訊號：紅色下三角，標在 K 棒 high 上方
+        if not _short_sig.empty:
+            _short_dates = _short_sig["date"].tolist()
+            _short_highs = df[df["date"].isin(_short_dates)]["high"] * 1.006
+            fig.add_trace(go.Scatter(
+                x=_short_dates, y=_short_highs.tolist(),
+                mode="markers",
+                marker=dict(symbol="triangle-down", color="#e74c3c", size=12,
+                            line=dict(color="white", width=1)),
+                name="MJ做空",
+                hovertemplate="做空入場<br>%{x}<br>收盤：%{customdata:.1f}",
+                customdata=_short_sig["close"].tolist(),
+            ), row=1, col=1)
 
     fig.update_layout(
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
@@ -694,6 +731,30 @@ def tab_stock():
     for _i in range(1, 5):
         fig.update_yaxes(gridcolor="rgba(255,255,255,0.05)", row=_i, col=1)
     st.plotly_chart(fig, use_container_width=True)
+
+    # ── MJ 訊號摘要 ──────────────────────────────────────────────────────────────
+    if not mj_signals.empty:
+        st.markdown("#### 📍 MJ 強化版入場訊號（近期）")
+        _mj_display = mj_signals.copy()
+        _mj_display["方向"] = _mj_display["signal"].map({"LONG": "▲ 做多", "SHORT": "▽ 做空"})
+        _mj_display = _mj_display.rename(columns={
+            "date": "日期", "close": "收盤價", "kd_j": "J值", "macd_osc": "OSC值"
+        })[["日期", "方向", "收盤價", "J值", "OSC值"]]
+
+        def _color_signal_mj(val):
+            if "做多" in str(val):
+                return "color: #27ae60; font-weight: bold"
+            if "做空" in str(val):
+                return "color: #e74c3c; font-weight: bold"
+            return ""
+
+        st.dataframe(
+            _mj_display.set_index("日期").style.map(_color_signal_mj, subset=["方向"]),
+            use_container_width=True,
+        )
+        st.caption("MJ訊號：J線穿越零軸且 MACD OSC 同步確認。僅供技術參考，非投資建議。")
+    else:
+        st.info("近期無 MJ 入場訊號觸發")
 
     st.divider()
 
