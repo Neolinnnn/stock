@@ -69,8 +69,9 @@ jobs:
           git diff --cached --quiet && echo "無新增內容" && exit 0
           git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
+          # -X ours：rebase 衝突時優先保留本次掃描產出的資料
           for i in 1 2 3; do
-            git pull --rebase origin main && git push && break
+            git pull --rebase -X ours origin main && git push && break
             echo "Push 失敗，第 ${i} 次重試..."
             sleep $((i * 5))
           done
