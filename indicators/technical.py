@@ -27,6 +27,7 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
     _rsv   = (df["close"] - _low9) / (_high9 - _low9 + 1e-9) * 100
     df["kd_k"] = _rsv.ewm(com=2, adjust=False).mean()   # 1/3 smoothing = com=2
     df["kd_d"] = df["kd_k"].ewm(com=2, adjust=False).mean()
+    df["kd_j"] = 3 * df["kd_k"] - 2 * df["kd_d"]
 
     # MACD (12, 26, 9)
     _ema12            = _ema(df["close"], 12)
