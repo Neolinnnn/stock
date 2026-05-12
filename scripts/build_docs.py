@@ -68,6 +68,7 @@ def _compute_indicators(df: 'pd.DataFrame') -> 'pd.DataFrame':
     rsv           = (df['close'] - low9) / (high9 - low9 + 1e-9) * 100
     df['kd_k']    = rsv.ewm(com=2, adjust=False).mean()
     df['kd_d']    = df['kd_k'].ewm(com=2, adjust=False).mean()
+    df['kd_j']    = 3 * df['kd_k'] - 2 * df['kd_d']
     ema12         = df['close'].ewm(span=12, adjust=False).mean()
     ema26         = df['close'].ewm(span=26, adjust=False).mean()
     df['macd']         = ema12 - ema26
@@ -193,6 +194,32 @@ def _key_levels(df: 'pd.DataFrame') -> dict:
         'breakdown':  round(float(row['ma20']), 0),
         'breakout':   round(float(high60), 0),
     }
+
+
+def _detect_mj_signals(df: 'pd.DataFrame') -> list:
+    """MJ強化版：J線零軸穿越 + MACD OSC 同向"""
+    rows = []
+    j   = df['kd_j'].values
+    osc = df['macd_hist'].values
+    dates = df['date'].values
+    closes = df['close'].values
+    for i in range(1, len(df)):
+        prev_j, curr_j = j[i - 1], j[i]
+        curr_osc = osc[i]
+        if prev_j < 0 and curr_j >= 0 and curr_osc > 0:
+            signal = 'LONG'
+        elif prev_j > 0 and curr_j <= 0 and curr_osc < 0:
+            signal = 'SHORT'
+        else:
+            continue
+        rows.append({
+            'date':     str(dates[i])[:10],
+            'signal':   signal,
+            'close':    round(float(closes[i]), 2),
+            'kd_j':     round(float(curr_j), 2),
+            'macd_osc': round(float(curr_osc), 4),
+        })
+    return rows
 
 
 def _detect_patterns(df: 'pd.DataFrame') -> list:
@@ -465,6 +492,7 @@ def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_st
     summary_items = _technical_summary(df_valid)
     levels        = _key_levels(df_valid)
     patterns      = _detect_patterns(df_valid)
+    mj_signals    = _detect_mj_signals(df_valid)
     signal        = _main_force_signal(chip_data, df_valid)
     prediction    = _simple_prediction(summary_items)
 
@@ -508,9 +536,11 @@ def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_st
             'macd_hist':   _round_list(df_ind['macd_hist']),
             'kd_k':        _round_list(df_ind['kd_k']),
             'kd_d':        _round_list(df_ind['kd_d']),
+            'kd_j':        _round_list(df_ind['kd_j']),
         },
-        'chip':     chip_data,
-        'signal':   signal,
+        'chip':       chip_data,
+        'mj_signals': mj_signals,
+        'signal':     signal,
         'summary':  summary_items,
         'prediction': prediction,
         'patterns': patterns,

@@ -362,7 +362,8 @@ async function initStockPage(){
       <div class="sp-card" style="flex:1;min-width:200px;"><h3>型態分析</h3><div id="sp-pattern-list"></div></div>
       <div class="sp-card" style="flex:1;min-width:200px;"><h3>關鍵價位</h3><div id="sp-levels-rows"></div></div>
       <div class="sp-card" style="flex:1;min-width:200px;"><h3>操作建議</h3><div id="sp-suggest" style="font-size:13px;line-height:1.7;color:var(--sub);"></div></div>
-    </div>`;
+    </div>
+    <div id="sp-mj-signals" style="display:none;"></div>`;
 
   document.addEventListener('click', e=>{
     if(!e.target.closest('.stock-autocomplete'))
@@ -433,6 +434,7 @@ function spRender(d){
   spRenderPatterns(d.patterns);
   spRenderLevels(d.levels);
   spRenderSuggestion(d);
+  spRenderMJSignals(d.mj_signals);
 }
 
 const _PLY = {
@@ -446,7 +448,7 @@ const _pLine=(name,x,y,color,dash,xax,yax)=>({
 
 function spRenderMainChart(d){
   const dates=d.ohlcv.date, I=d.indicators;
-  Plotly.react('sp-main-chart',[
+  const traces=[
     {type:'candlestick',name:'K線',x:dates,
      open:d.ohlcv.open,high:d.ohlcv.high,low:d.ohlcv.low,close:d.ohlcv.close,
      increasing:{line:{color:_PLY.up},fillcolor:_PLY.up},
@@ -465,7 +467,29 @@ function spRenderMainChart(d){
     _pLine('MA60',dates,I.ma60,'#bc8cff'),
     _pLine('DIF',dates,I.macd,_PLY.neu,null,'x3','y3'),
     _pLine('Signal',dates,I.macd_signal,_PLY.dn,null,'x3','y3'),
-  ],{
+  ];
+  // MJ 訊號三角標記
+  if(d.mj_signals && d.mj_signals.length){
+    const lowMap={}, highMap={};
+    dates.forEach((dt,i)=>{ lowMap[dt]=d.ohlcv.low[i]; highMap[dt]=d.ohlcv.high[i]; });
+    const longs  = d.mj_signals.filter(s=>s.signal==='LONG');
+    const shorts = d.mj_signals.filter(s=>s.signal==='SHORT');
+    if(longs.length) traces.push({
+      type:'scatter',mode:'markers',name:'MJ做多',
+      x:longs.map(s=>s.date),
+      y:longs.map(s=>(lowMap[s.date]??s.close)*0.994),
+      marker:{symbol:'triangle-up',size:10,color:'#27ae60'},
+      xaxis:'x',yaxis:'y',hovertext:longs.map(s=>`做多 J=${s.kd_j} OSC=${s.macd_osc}`),
+    });
+    if(shorts.length) traces.push({
+      type:'scatter',mode:'markers',name:'MJ做空',
+      x:shorts.map(s=>s.date),
+      y:shorts.map(s=>(highMap[s.date]??s.close)*1.006),
+      marker:{symbol:'triangle-down',size:10,color:'#e74c3c'},
+      xaxis:'x',yaxis:'y',hovertext:shorts.map(s=>`做空 J=${s.kd_j} OSC=${s.macd_osc}`),
+    });
+  }
+  Plotly.react('sp-main-chart',traces,{
     paper_bgcolor:_PLY.bg,plot_bgcolor:_PLY.bg,font:_PLY.font,
     margin:{l:50,r:10,t:30,b:20},height:520,showlegend:false,
     grid:{rows:3,columns:1,pattern:'independent'},
@@ -480,19 +504,26 @@ function spRenderMainChart(d){
 
 function spRenderKDChart(d){
   const dates=d.ohlcv.date, I=d.indicators;
-  Plotly.react('sp-kd-chart',[
+  const traces=[
     {type:'scatter',mode:'lines',name:'K',x:dates,y:I.kd_k,line:{color:'#f0b429',width:1.5}},
     {type:'scatter',mode:'lines',name:'D',x:dates,y:I.kd_d,line:{color:_PLY.neu,width:1.5}},
     {type:'scatter',mode:'lines',x:dates,y:dates.map(()=>80),showlegend:false,
      line:{color:_PLY.dn,width:1,dash:'dot'}},
     {type:'scatter',mode:'lines',x:dates,y:dates.map(()=>20),showlegend:false,
      line:{color:_PLY.up,width:1,dash:'dot'}},
-  ],{
+  ];
+  if(I.kd_j){
+    traces.push({type:'scatter',mode:'lines',name:'J',x:dates,y:I.kd_j,
+      line:{color:'#ff6b6b',width:1.2}});
+    traces.push({type:'scatter',mode:'lines',x:dates,y:dates.map(()=>0),showlegend:false,
+      line:{color:'rgba(255,255,255,0.25)',width:1,dash:'dot'}});
+  }
+  Plotly.react('sp-kd-chart',traces,{
     paper_bgcolor:_PLY.bg,plot_bgcolor:_PLY.bg,font:_PLY.font,
     margin:{l:40,r:10,t:24,b:30},height:180,
-    title:{text:'KD 指標',font:{size:12},x:0.04},
+    title:{text:'KD(9,3,3) + J 線',font:{size:12},x:0.04},
     xaxis:{type:'category',showgrid:false,tickfont:{size:9},rangeslider:{visible:false}},
-    yaxis:{gridcolor:_PLY.grid,range:[0,100]},
+    yaxis:{gridcolor:_PLY.grid},
     legend:{orientation:'h',x:0.5,xanchor:'center',y:1.15,font:{size:10}},
   },{responsive:true,displayModeBar:false});
 }
@@ -603,6 +634,41 @@ function spRenderSuggestion(d){
     text+=`<br>AI 預測明日最可能：${maxDir}。`;
   }
   el.innerHTML=text;
+}
+
+function spRenderMJSignals(signals){
+  const el=document.getElementById('sp-mj-signals');
+  if(!el) return;
+  if(!signals||!signals.length){ el.style.display='none'; return; }
+  const recent=signals.slice(-10).reverse();
+  el.style.display='block';
+  el.innerHTML=`
+    <div class="sp-card" style="margin-top:10px;">
+      <h3>📍 MJ 強化版入場訊號（近期）</h3>
+      <div style="overflow-x:auto;">
+        <table class="chip-table" style="font-size:12px;">
+          <tr>
+            <th style="text-align:left;">日期</th>
+            <th>方向</th>
+            <th>收盤</th>
+            <th>J值</th>
+            <th>OSC</th>
+          </tr>
+          ${recent.map(s=>{
+            const isLong=s.signal==='LONG';
+            const cls=isLong?'up':'dn';
+            const label=isLong?'▲ 做多':'▽ 做空';
+            return `<tr>
+              <td style="text-align:left;">${s.date}</td>
+              <td class="${cls}" style="font-weight:600;">${label}</td>
+              <td>${s.close}</td>
+              <td class="${cls}">${s.kd_j}</td>
+              <td class="${cls}">${s.macd_osc}</td>
+            </tr>`;
+          }).join('')}
+        </table>
+      </div>
+    </div>`;
 }
 
 // ── 初始化 ───────────────────────────────────────────────────────────────────
