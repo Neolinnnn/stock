@@ -320,6 +320,7 @@ def _simple_prediction(summary: list) -> dict:
 
 def build_daily_payload(summary):
     sectors, chips, stocks = [], [], []
+    main_force = []
     for sector, data in summary.get('sectors', {}).items():
         sectors.append({
             'sector': sector,
@@ -349,6 +350,35 @@ def build_daily_payload(summary):
                     n['title'] for n in st.get('news', [])[:2]
                 ),
             })
+            # 主力觀察（ATR 停損 + 分點集中度 + 主力強度分）— 給新分頁專用
+            mf = st.get('main_force') or {}
+            br = st.get('broker') or {}
+            if (
+                st.get('atr14') is not None
+                or st.get('stop_loss') is not None
+                or mf.get('score') is not None
+                or br.get('source')
+            ):
+                main_force.append({
+                    'id': st['id'],
+                    'name': st['name'],
+                    'sector': sector,
+                    'price': _nan_to_none(st.get('price', '')),
+                    'signal': st.get('signal', ''),
+                    'atr14': st.get('atr14'),
+                    'stopLoss': st.get('stop_loss'),
+                    'mainForceScore': mf.get('score'),
+                    'mainForceLabel': mf.get('label'),
+                    'top1Broker': mf.get('top1_broker'),
+                    'top1Lots': mf.get('top1_lots'),
+                    'top5BuyLots': mf.get('top5_buy_lots'),
+                    'concentration': mf.get('concentration'),
+                    'brokerNet': br.get('net_concentration'),
+                    'topBuyers': br.get('top_buyers') or [],
+                    'topSellers': br.get('top_sellers') or [],
+                    'brokerSource': br.get('source'),
+                    'brokerError': br.get('error'),
+                })
             if chip.get('合計', 0):
                 chips.append({
                     'id': st['id'], 'name': st['name'], 'sector': sector,
@@ -369,6 +399,10 @@ def build_daily_payload(summary):
         }
         for q in summary.get('qualified', [])
     ]
+    main_force_sorted = sorted(
+        main_force,
+        key=lambda x: (x.get('mainForceScore') is None, -(x.get('mainForceScore') or 0)),
+    )
     return {
         'meta': {
             '掃描日期':  summary.get('date', ''),
@@ -382,6 +416,7 @@ def build_daily_payload(summary):
         'sectors': sectors,
         'chips':   sorted(chips, key=lambda x: x['total'], reverse=True),
         'stocks':  stocks,
+        'mainForce': main_force_sorted,
     }
 
 

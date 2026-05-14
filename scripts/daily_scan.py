@@ -475,6 +475,7 @@ def build_daily_payload(summary):
     sectors = []
     chips = []
     stocks = []
+    main_force = []   # 獨立陣列，給「主力觀察」分頁使用
     for sector, data in summary.get('sectors', {}).items():
         sectors.append({
             'sector': sector,
@@ -485,8 +486,6 @@ def build_daily_payload(summary):
         })
         for st in data.get('stocks', []):
             chip = st.get('chip', {})
-            mf = st.get('main_force') or {}
-            br = st.get('broker') or {}
             stocks.append({
                 'date': summary['date'],
                 'sector': sector,
@@ -502,14 +501,37 @@ def build_daily_payload(summary):
                 'trust': chip.get('投信', ''),
                 'dealer': chip.get('自營', ''),
                 'chipTotal': chip.get('合計', ''),
-                'atr14': st.get('atr14'),
-                'stopLoss': st.get('stop_loss'),
-                'mainForceScore': mf.get('score'),
-                'mainForceLabel': mf.get('label'),
-                'top1Broker': mf.get('top1_broker'),
-                'brokerNet': br.get('net_concentration'),
                 'news': ' / '.join(n['title'] for n in st.get('news', [])[:2]),
             })
+            # 主力觀察資料（含 ATR 停損、分點、主力分）— 獨立給新分頁用
+            mf = st.get('main_force') or {}
+            br = st.get('broker') or {}
+            if (
+                st.get('atr14') is not None
+                or st.get('stop_loss') is not None
+                or mf.get('score') is not None
+                or br.get('source')
+            ):
+                main_force.append({
+                    'id': st['id'],
+                    'name': st['name'],
+                    'sector': sector,
+                    'price': _nan_to_none(st.get('price', '')),
+                    'signal': st.get('signal', ''),
+                    'atr14': st.get('atr14'),
+                    'stopLoss': st.get('stop_loss'),
+                    'mainForceScore': mf.get('score'),
+                    'mainForceLabel': mf.get('label'),
+                    'top1Broker': mf.get('top1_broker'),
+                    'top1Lots': mf.get('top1_lots'),
+                    'top5BuyLots': mf.get('top5_buy_lots'),
+                    'concentration': mf.get('concentration'),
+                    'brokerNet': br.get('net_concentration'),
+                    'topBuyers': br.get('top_buyers') or [],
+                    'topSellers': br.get('top_sellers') or [],
+                    'brokerSource': br.get('source'),
+                    'brokerError': br.get('error'),
+                })
             if chip.get('合計', 0):
                 chips.append({
                     'id': st['id'], 'name': st['name'], 'sector': sector,
@@ -519,6 +541,11 @@ def build_daily_payload(summary):
                     'dealer': chip.get('自營', 0),
                 })
     mkt = summary.get('market', {})
+    # 主力觀察依分數排序（高→低），分數 None 排最後
+    main_force_sorted = sorted(
+        main_force,
+        key=lambda x: (x.get('mainForceScore') is None, -(x.get('mainForceScore') or 0)),
+    )
     return {
         'meta': {
             '掃描日期': summary.get('date', ''),
@@ -530,6 +557,7 @@ def build_daily_payload(summary):
         'sectors': sectors,
         'chips': sorted(chips, key=lambda x: x['total'], reverse=True),
         'stocks': stocks,
+        'mainForce': main_force_sorted,
     }
 
 
@@ -657,16 +685,12 @@ def summary_to_markdown(s):
         md.append(f"- 平均 20 日報酬：{data['avg_ret_20d']:+.1f}%\n")
         md.append(f"- 平均 RSI：{data['avg_rsi']:.1f}\n")
         md.append(f"- BUY 訊號：{data['buy_count']} 檔 | CV達標：{data['qualified_count']} 檔 | RSI>70：{data['hot_count']} 檔\n")
-        md.append(f"\n| 代碼 | 名稱 | 現價 | RSI | 20日% | 信號 | CV夏普 | 停損 | 主力分 |\n")
-        md.append(f"|---|---|---|---|---|---|---|---|---|\n")
+        md.append(f"\n| 代碼 | 名稱 | 現價 | RSI | 20日% | 信號 | CV夏普 |\n")
+        md.append(f"|---|---|---|---|---|---|---|\n")
         for st in data['stocks']:
             ret = f"{st['ret_20d']:+.1f}" if st['ret_20d'] is not None else 'N/A'
-            sl = st.get('stop_loss')
-            sl_s = f"{sl}" if sl is not None else '—'
-            mf = st.get('main_force') or {}
-            mf_s = f"{mf.get('score')} {mf.get('label','')}" if mf.get('score') is not None else '—'
             md.append(f"| {st['id']} | {st['name']} | {st['price']} | "
-                      f"{st['rsi']} | {ret} | {st['signal']} | {st['cv_sharpe']} | {sl_s} | {mf_s} |\n")
+                      f"{st['rsi']} | {ret} | {st['signal']} | {st['cv_sharpe']} |\n")
 
     return ''.join(md)
 
