@@ -149,6 +149,7 @@
   <nav>
     <a id="nav-daily"     onclick="setPage('daily')">今日掃描</a>
     <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
+    <a id="nav-mainforce" onclick="setPage('mainforce')">🎯 主力觀察</a>
     <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
     <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
   </nav>
@@ -164,6 +165,7 @@
   <div id="loading">載入中…</div>
   <div id="page-daily"     class="page-section"></div>
   <div id="page-weekly"    class="page-section"></div>
+  <div id="page-mainforce" class="page-section"></div>
   <div id="page-stock"     class="page-section"></div>
   <div id="page-watchlist" class="page-section"></div>
 </main>
@@ -709,14 +711,17 @@ function buildDateSelect(){
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','stock','watchlist'].forEach(p=>{
+  ['daily','weekly','mainforce','stock','watchlist'].forEach(p=>{
     document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
     document.getElementById(`page-${p}`).classList.toggle('active', p===page);
   });
-  document.getElementById('date-picker-wrap').style.display = page==='daily'?'':'none';
+  // 主力觀察與今日掃描共用同一份 daily payload，所以也需要日期選擇器
+  document.getElementById('date-picker-wrap').style.display =
+    (page==='daily' || page==='mainforce') ? '' : 'none';
   if(page==='weekly')    renderWeekly();
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
+  if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
 }
 
 // ── 日期導航 ──────────────────────────────────────────────────────────────────
@@ -740,6 +745,7 @@ async function loadDate(dateStr){
     }
   }
   renderDaily(CACHE[dateStr]);
+  if(CUR_PAGE==='mainforce') renderMainForce(CACHE[dateStr]);
   document.getElementById('loading').style.display='none';
 }
 
@@ -868,6 +874,146 @@ function renderDaily(data){
   });
 
   document.getElementById('page-daily').innerHTML=html;
+}
+
+// ── 主力觀察 ─────────────────────────────────────────────────────────────────
+function mfScoreColor(s){
+  if(s==null) return 'var(--sub)';
+  if(s>=70) return 'var(--green)';
+  if(s>=55) return '#5cb85c';
+  if(s>=45) return 'var(--yellow)';
+  if(s>=30) return '#e67e22';
+  return 'var(--red)';
+}
+
+function renderMainForce(data){
+  const el = document.getElementById('page-mainforce');
+  if(!data){
+    el.innerHTML = `<div class="error-box"><span>📭</span>尚未載入資料</div>`;
+    return;
+  }
+  const list = data.mainForce || [];
+  if(!list.length){
+    el.innerHTML = `
+    <div class="info-box" style="margin-bottom:16px;">
+      <b style="color:var(--text);">🎯 主力觀察（觀察期）</b><br>
+      本分頁顯示「ATR(14)×2 動態停損」與「分點主力強度分數」。<br>
+      <span style="color:var(--yellow)">⚠ 此日期尚無主力觀察資料 — 待 daily_scan 在啟用後重新跑一次才會出現。</span>
+    </div>`;
+    return;
+  }
+
+  const date = (data.meta && data.meta['掃描日期']) || '—';
+
+  // 統計區
+  const scored = list.filter(x=>x.mainForceScore!=null);
+  const avgScore = scored.length ? Math.round(scored.reduce((a,b)=>a+b.mainForceScore,0)/scored.length*10)/10 : null;
+  const strong = scored.filter(x=>x.mainForceScore>=70).length;
+  const weak   = scored.filter(x=>x.mainForceScore<30).length;
+  const netBuyTotal = list.reduce((a,b)=>a+(b.brokerNet||0),0);
+
+  let html = `
+  <div class="info-box" style="margin-bottom:14px;">
+    <b style="color:var(--text);">🎯 主力觀察分頁說明</b><br>
+    <b>主力分</b>：依分點 top15 計算 (40% 淨買超 + 35% 前 5 大集中度 + 25% 單一主力主導性) — ≥70 強力吸籌、≥55 偏多、≥45 中性、≥30 偏空、<30 大幅出脫<br>
+    <b>停損價</b>：當日收盤 − 2 × ATR(14)，依個股波動動態調整<br>
+    <b>主力淨</b>：分點 top15 買超合計減去 top15 賣超合計（張）— 來源：histock.tw
+  </div>
+
+  <div class="grid-4">
+    <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
+    <div class="card"><div class="card-title">主力分平均</div>
+      <div class="card-value" style="color:${mfScoreColor(avgScore)}">${avgScore!=null?avgScore.toFixed(1):'—'}</div>
+      <div class="card-sub">${scored.length} 檔有資料</div></div>
+    <div class="card"><div class="card-title">強力吸籌</div>
+      <div class="card-value" style="color:var(--green)">${strong}</div>
+      <div class="card-sub">主力分 ≥ 70</div></div>
+    <div class="card"><div class="card-title">大幅出脫</div>
+      <div class="card-value" style="color:var(--red)">${weak}</div>
+      <div class="card-sub">主力分 < 30</div></div>
+  </div>
+
+  <div class="section-title">📊 主力強度排行（${list.length} 檔）</div>
+  <div class="card" style="overflow-x:auto"><table>
+    <tr>
+      <th>代碼</th><th>名稱</th><th>族群</th><th>現價</th>
+      <th>訊號</th><th>主力分</th><th>標籤</th>
+      <th>Top1 買進</th><th>分點淨超</th><th>ATR</th><th>停損價</th><th></th>
+    </tr>
+    ${list.map((s,i)=>{
+      const score = s.mainForceScore;
+      const scoreCol = mfScoreColor(score);
+      const netClass = (s.brokerNet||0)>=0?'chip-pos':'chip-neg';
+      const top1 = s.top1Broker ? `${escHtml(s.top1Broker)} ${s.top1Lots? '+'+s.top1Lots+'張':''}` : '—';
+      return `<tr>
+        <td><b>${escHtml(s.id)}</b></td>
+        <td>${escHtml(s.name)}</td>
+        <td><span class="tag">${escHtml(s.sector||'')}</span></td>
+        <td>${fmt(s.price,1)}</td>
+        <td>${s.signal?badge(s.signal):'—'}</td>
+        <td><b style="color:${scoreCol}">${score!=null?fmt(score,1):'—'}</b></td>
+        <td style="font-size:12px;color:${scoreCol}">${escHtml(s.mainForceLabel||'—')}</td>
+        <td style="font-size:12px">${top1}</td>
+        <td class="${netClass}">${s.brokerNet!=null?sign(s.brokerNet)+(s.brokerNet).toLocaleString():'—'}</td>
+        <td>${s.atr14!=null?fmt(s.atr14,2):'—'}</td>
+        <td class="dn">${s.stopLoss!=null?fmt(s.stopLoss,1):'—'}</td>
+        <td><button class="btn-add-inline" onclick="mfToggle(${i})" id="mf-btn-${i}">▼</button></td>
+      </tr>
+      <tr id="mf-detail-${i}" style="display:none;background:#13161d">
+        <td colspan="12" style="padding:12px 16px">${renderMfDetail(s)}</td>
+      </tr>`;
+    }).join('')}
+  </table></div>`;
+
+  el.innerHTML = html;
+}
+
+function renderMfDetail(s){
+  const buyers = s.topBuyers || [];
+  const sellers = s.topSellers || [];
+  const err = s.brokerError;
+  if(err && !buyers.length && !sellers.length){
+    return `<div style="color:var(--sub);font-size:12px">⚠ 分點資料抓取失敗：${escHtml(err)}（${escHtml(s.brokerSource||'unknown')}）</div>`;
+  }
+  const tb = buyers.map(b=>`<tr>
+    <td>${escHtml(b.name)}</td><td>${b.buy}</td><td>${b.sell}</td>
+    <td class="chip-pos"><b>+${b.net}</b></td><td>${b.avg_price||'—'}</td>
+  </tr>`).join('');
+  const ts = sellers.map(s=>`<tr>
+    <td>${escHtml(s.name)}</td><td>${s.buy}</td><td>${s.sell}</td>
+    <td class="chip-neg"><b>${s.net}</b></td><td>${s.avg_price||'—'}</td>
+  </tr>`).join('');
+  return `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div>
+      <div style="color:var(--green);font-size:12px;margin-bottom:6px">▲ Top 買超分點 (近 5 日)</div>
+      <table class="chip-table" style="font-size:12px">
+        <tr><th>分點</th><th>買張</th><th>賣張</th><th>淨</th><th>均價</th></tr>
+        ${tb||'<tr><td colspan="5" style="color:var(--sub)">無資料</td></tr>'}
+      </table>
+    </div>
+    <div>
+      <div style="color:var(--red);font-size:12px;margin-bottom:6px">▼ Top 賣超分點 (近 5 日)</div>
+      <table class="chip-table" style="font-size:12px">
+        <tr><th>分點</th><th>買張</th><th>賣張</th><th>淨</th><th>均價</th></tr>
+        ${ts||'<tr><td colspan="5" style="color:var(--sub)">無資料</td></tr>'}
+      </table>
+    </div>
+  </div>
+  <div style="margin-top:8px;font-size:11px;color:var(--sub)">
+    來源：${escHtml(s.brokerSource||'—')}
+    前 5 大買超合計：${s.top5BuyLots!=null?'+'+s.top5BuyLots+' 張':'—'}
+    集中度：${s.concentration!=null?(s.concentration*100).toFixed(1)+'%':'—'}
+  </div>`;
+}
+
+function mfToggle(i){
+  const row = document.getElementById(`mf-detail-${i}`);
+  const btn = document.getElementById(`mf-btn-${i}`);
+  if(!row) return;
+  const open = row.style.display !== 'none';
+  row.style.display = open ? 'none' : '';
+  if(btn) btn.textContent = open ? '▼' : '▲';
 }
 
 // ── 週報 ──────────────────────────────────────────────────────────────────────
