@@ -92,12 +92,36 @@ SECTORS = {
 }
 
 
+def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
+    """以 ATR(14) ×2 計算動態停損價（Wilder 平均）。
+
+    Returns:
+        (atr_value, stop_price) 或 (None, None) 資料不足時
+    """
+    if len(closes) < period + 1:
+        return None, None
+    trs = []
+    for i in range(1, len(closes)):
+        tr = max(
+            highs[i] - lows[i],
+            abs(highs[i] - closes[i - 1]),
+            abs(lows[i] - closes[i - 1]),
+        )
+        trs.append(tr)
+    # Wilder smoothing: 第一個 ATR = SMA of first `period` TRs
+    atr = sum(trs[:period]) / period
+    for tr in trs[period:]:
+        atr = (atr * (period - 1) + tr) / period
+    return round(atr, 2), round(closes[-1] - multiplier * atr, 1)
+
+
 def fetch_price_stats(sid):
-    """取近期價格資料，回傳 ret_20d + 估值目標價
+    """取近期價格資料，回傳 ret_20d + 估值目標價 + ATR 停損
 
     短期：布林上軌（技術壓力位）
     中期：P/E 均值回歸（相對估值；PE 不可用時改用 P/B）
     長期：40% P/E + 40% PEG + 20% 技術 加權合成（依指南結論）
+    停損：ATR(14) × 2 動態停損
     """
     try:
         from twstock import Stock
@@ -108,9 +132,16 @@ def fetch_price_stats(sid):
         s.fetch_from(st.year, st.month)
         p = list(s.price)
         if len(p) < 21:
-            return None, None, None, None
+            return None, None, None, None, None, None
         price = p[-1]
         ret_20d = (p[-1] - p[-21]) / p[-21]
+        # ATR 停損（需要 high/low 資料）
+        try:
+            highs = list(s.high)
+            lows = list(s.low)
+            atr_val, stop_price = _atr_stop_loss(highs, lows, p)
+        except Exception:
+            atr_val, stop_price = None, None
 
         # 短期：布林上軌（技術壓力位）
         p20 = p[-20:]
@@ -158,9 +189,9 @@ def fetch_price_stats(sid):
             vol = statistics.stdev(daily_rets[-20:]) if len(daily_rets) >= 20 else 0.02
             t_long = round(price * (1 + vol * 15), 1)
 
-        return ret_20d, t_short, t_mid, t_long
+        return ret_20d, t_short, t_mid, t_long, atr_val, stop_price
     except Exception:
-        return None, None, None, None
+        return None, None, None, None, None, None
 
 
 def fetch_20d_return(sid):
@@ -258,17 +289,55 @@ def fetch_chip_data(stock_id, days=5):
 
 def scan_sector(sector_name, stocks):
     """掃描單一族群"""
+    # 分點爬蟲模組（延遲匯入避免循環依賴與測試時拖慢啟動）
+    try:
+        from indicators.broker import fetch_broker_top15, main_force_score
+    except Exception:
+        fetch_broker_top15 = None
+        main_force_score = None
+
     results = []
     for sid, name in stocks.items():
         try:
             r = analyze_stock(sid, name)
-            ret_20d, t_short, t_mid, t_long = fetch_price_stats(sid)
+            ret_20d, t_short, t_mid, t_long, atr_val, stop_price = fetch_price_stats(sid)
             r['ret_20d'] = ret_20d
             r['target_short'] = t_short
             r['target_mid']   = t_mid
             r['target_long']  = t_long
+            r['atr14']        = atr_val
+            r['stop_loss']    = stop_price   # ATR(14) × 2 動態停損價
             r['news'] = fetch_news(sid, name, days=3)
             r['chip'] = fetch_chip_data(sid, days=5)
+
+            # 分點資料：只對「值得關注」的個股抓取，避免過度頻繁請求
+            #   條件：BUY 訊號 或 RSI 落於 50~75 趨勢中段 或 三大法人淨買 > 0
+            chip_total = (r.get('chip') or {}).get('合計', 0)
+            worth_chip = (
+                r.get('signal') == 'BUY'
+                or (50 <= (r.get('rsi') or 0) <= 75)
+                or chip_total > 0
+            )
+            if worth_chip and fetch_broker_top15 is not None:
+                br = fetch_broker_top15(sid, period='5')
+                r['broker'] = {
+                    'top_buyers': [
+                        {'name': b[0], 'lots': b[1], 'pct': b[2]}
+                        for b in br.get('top_buyers', [])[:5]
+                    ],
+                    'top_sellers': [
+                        {'name': s[0], 'lots': s[1], 'pct': s[2]}
+                        for s in br.get('top_sellers', [])[:5]
+                    ],
+                    'net_concentration': br.get('net_concentration', 0),
+                    'source': br.get('source'),
+                    'error': br.get('error'),
+                }
+                r['main_force'] = main_force_score(br)
+            else:
+                r['broker'] = None
+                r['main_force'] = None
+
             results.append(r)
         except Exception as e:
             results.append({'id': sid, 'name': name, 'error': str(e)})
@@ -416,6 +485,8 @@ def build_daily_payload(summary):
         })
         for st in data.get('stocks', []):
             chip = st.get('chip', {})
+            mf = st.get('main_force') or {}
+            br = st.get('broker') or {}
             stocks.append({
                 'date': summary['date'],
                 'sector': sector,
@@ -431,6 +502,12 @@ def build_daily_payload(summary):
                 'trust': chip.get('投信', ''),
                 'dealer': chip.get('自營', ''),
                 'chipTotal': chip.get('合計', ''),
+                'atr14': st.get('atr14'),
+                'stopLoss': st.get('stop_loss'),
+                'mainForceScore': mf.get('score'),
+                'mainForceLabel': mf.get('label'),
+                'top1Broker': mf.get('top1_broker'),
+                'brokerNet': br.get('net_concentration'),
                 'news': ' / '.join(n['title'] for n in st.get('news', [])[:2]),
             })
             if chip.get('合計', 0):
@@ -498,6 +575,10 @@ def build_summary(date, market, all_results, chart_path):
                     'target_short': r.get('target_short'),
                     'target_mid':   r.get('target_mid'),
                     'target_long':  r.get('target_long'),
+                    'atr14':        r.get('atr14'),
+                    'stop_loss':    r.get('stop_loss'),
+                    'broker':       r.get('broker'),
+                    'main_force':   r.get('main_force'),
                 }
                 for _, r in df.iterrows()
             ],
@@ -576,12 +657,16 @@ def summary_to_markdown(s):
         md.append(f"- 平均 20 日報酬：{data['avg_ret_20d']:+.1f}%\n")
         md.append(f"- 平均 RSI：{data['avg_rsi']:.1f}\n")
         md.append(f"- BUY 訊號：{data['buy_count']} 檔 | CV達標：{data['qualified_count']} 檔 | RSI>70：{data['hot_count']} 檔\n")
-        md.append(f"\n| 代碼 | 名稱 | 現價 | RSI | 20日% | 信號 | CV夏普 |\n")
-        md.append(f"|---|---|---|---|---|---|---|\n")
+        md.append(f"\n| 代碼 | 名稱 | 現價 | RSI | 20日% | 信號 | CV夏普 | 停損 | 主力分 |\n")
+        md.append(f"|---|---|---|---|---|---|---|---|---|\n")
         for st in data['stocks']:
             ret = f"{st['ret_20d']:+.1f}" if st['ret_20d'] is not None else 'N/A'
+            sl = st.get('stop_loss')
+            sl_s = f"{sl}" if sl is not None else '—'
+            mf = st.get('main_force') or {}
+            mf_s = f"{mf.get('score')} {mf.get('label','')}" if mf.get('score') is not None else '—'
             md.append(f"| {st['id']} | {st['name']} | {st['price']} | "
-                      f"{st['rsi']} | {ret} | {st['signal']} | {st['cv_sharpe']} |\n")
+                      f"{st['rsi']} | {ret} | {st['signal']} | {st['cv_sharpe']} | {sl_s} | {mf_s} |\n")
 
     return ''.join(md)
 
