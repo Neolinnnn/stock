@@ -2,10 +2,11 @@ name: 台股每日掃描
 
 on:
   schedule:
-    # 14:32 台灣時間 = 06:32 UTC，週一至週五
-    - cron: '32 6 * * 1-5'
-    # 週報：週五 14:47 = 06:47 UTC
-    - cron: '47 6 * * 5'
+    # 15:30 台灣時間 = 07:30 UTC，週一至週五
+    # （15:00 後 FinMind 三大法人籌碼資料才齊全；GitHub Actions cron 常延遲 1-4 小時）
+    - cron: '30 7 * * 1-5'
+    # 週報：週五 15:45 = 07:45 UTC
+    - cron: '45 7 * * 5'
   workflow_dispatch:   # 允許手動觸發
 
 # 防止同日多次 run 並發衝突：同一 group 的舊 run 會被取消
@@ -44,7 +45,7 @@ jobs:
         run: python scripts/daily_scan.py
 
       - name: Run weekly summary (Fridays only)
-        if: github.event.schedule == '47 6 * * 5'
+        if: github.event.schedule == '45 7 * * 5'
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
@@ -58,14 +59,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          TODAY=$(TZ='Asia/Taipei' date '+%Y%m%d')
-          # 若今天的報告已在 remote，直接跳過（避免重複 run 造成衝突）
           git fetch origin main
-          if git ls-tree -d origin/main -- "daily_reports/${TODAY}" | grep -q "${TODAY}"; then
-            echo "今日報告已在 remote，略過 commit/push"
-            exit 0
-          fi
           git add daily_reports/ docs/
+          # 只有當「沒有任何檔案要 commit」時才略過；不要因為 daily_reports/TODAY
+          # 已在 remote 就跳過——這樣會漏掉 docs/dates.json 等補寫變更
           git diff --cached --quiet && echo "無新增內容" && exit 0
           git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
