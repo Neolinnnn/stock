@@ -59,14 +59,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          TODAY=$(TZ='Asia/Taipei' date '+%Y%m%d')
-          # 若今天的報告已在 remote，直接跳過（避免重複 run 造成衝突）
           git fetch origin main
-          if git ls-tree -d origin/main -- "daily_reports/${TODAY}" | grep -q "${TODAY}"; then
-            echo "今日報告已在 remote，略過 commit/push"
-            exit 0
-          fi
           git add daily_reports/ docs/
+          # 只有當「沒有任何檔案要 commit」時才略過；不要因為 daily_reports/TODAY
+          # 已在 remote 就跳過——這樣會漏掉 docs/dates.json 等補寫變更
           git diff --cached --quiet && echo "無新增內容" && exit 0
           git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
