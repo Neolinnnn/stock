@@ -68,8 +68,8 @@
   ],
   "chips": [
     {
-      "id": "2337",
-      "name": "旺宏",
+      "id": "2344",
+      "name": "華邦電",
       "sector": "記憶體",
       "total": 49986153,
       "foreign": 40228111,
@@ -431,10 +431,10 @@
       "id": "2408",
       "name": "南亞科",
       "sector": "記憶體",
-      "total": -2337200,
-      "foreign": -5669952,
-      "trust": 3025610,
-      "dealer": 307142
+      "total": 4804669,
+      "foreign": 207504,
+      "trust": 3730000,
+      "dealer": 867165
     },
     {
       "id": "3105",
@@ -455,13 +455,13 @@
       "dealer": -146288
     },
     {
-      "id": "4919",
-      "name": "新唐",
+      "id": "3034",
+      "name": "聯詠",
       "sector": "IC設計",
-      "total": -2587473,
-      "foreign": -1245976,
-      "trust": 3000,
-      "dealer": -1344497
+      "total": 3055979,
+      "foreign": 3062092,
+      "trust": -78668,
+      "dealer": 72555
     },
     {
       "id": "2449",
@@ -473,22 +473,373 @@
       "dealer": 259612
     },
     {
-      "id": "2449",
-      "name": "京元電子",
+      "id": "4906",
+      "name": "正文",
+      "sector": "光通訊",
+      "total": 2130761,
+      "foreign": 2136744,
+      "trust": 0,
+      "dealer": -5983
+    },
+    {
+      "id": "2376",
+      "name": "技嘉",
+      "sector": "AI伺服器",
+      "total": 1464068,
+      "foreign": 1099134,
+      "trust": 108000,
+      "dealer": 256934
+    },
+    {
+      "id": "8086",
+      "name": "宏捷科",
+      "sector": "光通訊",
+      "total": 1199131,
+      "foreign": 1392000,
+      "trust": 0,
+      "dealer": -192869
+    },
+    {
+      "id": "3008",
+      "name": "大立光",
+      "sector": "光學",
+      "total": 1106636,
+      "foreign": 632792,
+      "trust": 319872,
+      "dealer": 153972
+    },
+    {
+      "id": "3406",
+      "name": "玉晶光",
+      "sector": "光學",
+      "total": 887752,
+      "foreign": 786005,
+      "trust": -40000,
+      "dealer": 141747
+    },
+    {
+      "id": "2455",
+      "name": "全新",
+      "sector": "光通訊",
+      "total": 829469,
+      "foreign": 838291,
+      "trust": 0,
+      "dealer": -8822
+    },
+    {
+      "id": "4966",
+      "name": "譜瑞-KY",
+      "sector": "IC設計",
+      "total": 700026,
+      "foreign": 761819,
+      "trust": 0,
+      "dealer": -61793
+    },
+    {
+      "id": "3680",
+      "name": "家登",
       "sector": "CoPoS封裝",
-      "total": -4811312,
-      "foreign": -5041735,
-      "trust": -29189,
-      "dealer": 259612
+      "total": 592236,
+      "foreign": 669330,
+      "trust": 0,
+      "dealer": -77094
+    },
+    {
+      "id": "6187",
+      "name": "萬潤",
+      "sector": "CoPoS封裝",
+      "total": 287027,
+      "foreign": 725136,
+      "trust": -436000,
+      "dealer": -2109
+    },
+    {
+      "id": "1533",
+      "name": "車王電",
+      "sector": "車用電子",
+      "total": 210010,
+      "foreign": 203010,
+      "trust": 0,
+      "dealer": 7000
+    },
+    {
+      "id": "5289",
+      "name": "宜鼎",
+      "sector": "記憶體",
+      "total": 127663,
+      "foreign": 256833,
+      "trust": -93000,
+      "dealer": -36170
+    },
+    {
+      "id": "3205",
+      "name": "十銓",
+      "sector": "記憶體",
+      "total": -20495,
+      "foreign": -21000,
+      "trust": 0,
+      "dealer": 505
+    },
+    {
+      "id": "7734",
+      "name": "印能",
+      "sector": "CoPoS封裝",
+      "total": -45669,
+      "foreign": -5571,
+      "trust": -40000,
+      "dealer": -98
+    },
+    {
+      "id": "5292",
+      "name": "華懋",
+      "sector": "綠能環保",
+      "total": -47881,
+      "foreign": -47800,
+      "trust": 0,
+      "dealer": -81
+    },
+    {
+      "id": "3552",
+      "name": "同致",
+      "sector": "車用電子",
+      "total": -59488,
+      "foreign": -56000,
+      "trust": 0,
+      "dealer": -3488
+    },
+    {
+      "id": "2243",
+      "name": "怡利電",
+      "sector": "車用電子",
+      "total": -115000,
+      "foreign": -110000,
+      "trust": 0,
+      "dealer": -5000
+    },
+    {
+      "id": "3131",
+      "name": "弘塑",
+      "sector": "CoPoS封裝",
+      "total": -119073,
+      "foreign": -67978,
+      "trust": -47000,
+      "dealer": -4095
+    },
+    {
+      "id": "6640",
+      "name": "均華",
+      "sector": "CoPoS封裝",
+      "total": -169115,
+      "foreign": -168000,
+      "trust": 7000,
+      "dealer": -8115
+    },
+    {
+      "id": "6510",
+      "name": "精測",
+      "sector": "封測",
+      "total": -175190,
+      "foreign": -181840,
+      "trust": 53000,
+      "dealer": -46350
+    },
+    {
+      "id": "3450",
+      "name": "聯鈞",
+      "sector": "光通訊",
+      "total": -175911,
+      "foreign": 44216,
+      "trust": -189000,
+      "dealer": -31127
+    },
+    {
+      "id": "3665",
+      "name": "貿聯-KY",
+      "sector": "光通訊",
+      "total": -254099,
+      "foreign": 838427,
+      "trust": -1097506,
+      "dealer": 4980
+    },
+    {
+      "id": "3535",
+      "name": "晶彩科",
+      "sector": "CoPoS封裝",
+      "total": -264031,
+      "foreign": -262900,
+      "trust": 0,
+      "dealer": -1131
+    },
+    {
+      "id": "2467",
+      "name": "志聖",
+      "sector": "CoPoS封裝",
+      "total": -292019,
+      "foreign": -290414,
+      "trust": 17000,
+      "dealer": -18605
+    },
+    {
+      "id": "2454",
+      "name": "聯發科",
+      "sector": "IC設計",
+      "total": -475316,
+      "foreign": -263281,
+      "trust": -159312,
+      "dealer": -52723
+    },
+    {
+      "id": "3583",
+      "name": "辛耘",
+      "sector": "CoPoS封裝",
+      "total": -601510,
+      "foreign": -801596,
+      "trust": 255000,
+      "dealer": -54914
+    },
+    {
+      "id": "4919",
+      "name": "新唐",
+      "sector": "IC設計",
+      "total": -623923,
+      "foreign": -433426,
+      "trust": 0,
+      "dealer": -190497
+    },
+    {
+      "id": "6789",
+      "name": "采鈺",
+      "sector": "CoPoS封裝",
+      "total": -710543,
+      "foreign": -698090,
+      "trust": 1000,
+      "dealer": -13453
+    },
+    {
+      "id": "6239",
+      "name": "力成",
+      "sector": "CoPoS封裝",
+      "total": -785651,
+      "foreign": -750766,
+      "trust": -23000,
+      "dealer": -11885
+    },
+    {
+      "id": "6664",
+      "name": "群翊",
+      "sector": "CoPoS封裝",
+      "total": -790020,
+      "foreign": -702950,
+      "trust": 0,
+      "dealer": -87070
+    },
+    {
+      "id": "5443",
+      "name": "均豪",
+      "sector": "CoPoS封裝",
+      "total": -823316,
+      "foreign": -1215900,
+      "trust": 0,
+      "dealer": 392584
+    },
+    {
+      "id": "6257",
+      "name": "矽格",
+      "sector": "封測",
+      "total": -998058,
+      "foreign": -955990,
+      "trust": -1000,
+      "dealer": -41068
+    },
+    {
+      "id": "2388",
+      "name": "威盛",
+      "sector": "IC設計",
+      "total": -1536138,
+      "foreign": -1369800,
+      "trust": 0,
+      "dealer": -166338
+    },
+    {
+      "id": "3711",
+      "name": "日月光投控",
+      "sector": "封測",
+      "total": -1549823,
+      "foreign": -880706,
+      "trust": -355000,
+      "dealer": -314117
+    },
+    {
+      "id": "3711",
+      "name": "日月光投控",
+      "sector": "CoPoS封裝",
+      "total": -1549823,
+      "foreign": -880706,
+      "trust": -355000,
+      "dealer": -314117
     },
     {
       "id": "2441",
       "name": "超豐",
       "sector": "封測",
-      "total": -6658851,
-      "foreign": -6168003,
-      "trust": -269000,
-      "dealer": -221848
+      "total": -1669590,
+      "foreign": -1654333,
+      "trust": -362000,
+      "dealer": 346743
+    },
+    {
+      "id": "2337",
+      "name": "旺宏",
+      "sector": "記憶體",
+      "total": -1748795,
+      "foreign": -1827927,
+      "trust": 542000,
+      "dealer": -462868
+    },
+    {
+      "id": "2382",
+      "name": "廣達",
+      "sector": "AI伺服器",
+      "total": -3371047,
+      "foreign": -3000577,
+      "trust": -77252,
+      "dealer": -293218
+    },
+    {
+      "id": "3231",
+      "name": "緯創",
+      "sector": "AI伺服器",
+      "total": -14458294,
+      "foreign": -13913041,
+      "trust": -311000,
+      "dealer": -234253
+    },
+    {
+      "id": "2449",
+      "name": "京元電子",
+      "sector": "封測",
+      "total": -19055068,
+      "foreign": -17065026,
+      "trust": -1398000,
+      "dealer": -592042
+    },
+    {
+      "id": "2449",
+      "name": "京元電子",
+      "sector": "CoPoS封裝",
+      "total": -19055068,
+      "foreign": -17065026,
+      "trust": -1398000,
+      "dealer": -592042
+    },
+    {
+      "id": "2317",
+      "name": "鴻海",
+      "sector": "AI伺服器",
+      "total": -23464195,
+      "foreign": -21537012,
+      "trust": -784809,
+      "dealer": -1142374
     }
   ],
   "stocks": [
@@ -1064,7 +1415,7 @@
       "ret20": -8.9,
       "signal": "HOLD",
       "sharpe": 1.75,
-      "foreign": -223979,
+      "foreign": -110000,
       "trust": 0,
       "dealer": -3000,
       "chipTotal": -226979,
