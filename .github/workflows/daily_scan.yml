@@ -61,12 +61,18 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git add daily_reports/ docs/
-          # 只有當「沒有任何檔案要 commit」時才略過；不要因為 daily_reports/TODAY
-          # 已在 remote 就跳過——這樣會漏掉 docs/dates.json 等補寫變更
+          # 強制重新產生 dates.json（從 docs/ 現有 JSON 掃描），確保即使 build_docs
+          # 中途失敗也不會漏掉新日期
+          python3 -c "
+          from pathlib import Path; import json
+          dates = sorted([f.stem for f in Path('docs').glob('[0-9]*.json') if len(f.stem)==8], reverse=True)
+          Path('docs/dates.json').write_text(json.dumps(dates, ensure_ascii=False))
+          print(f'dates.json 已更新：{len(dates)} 個日期，最新={dates[0] if dates else \"無\"}')
+          "
+          git add docs/dates.json
           git diff --cached --quiet && echo "無新增內容" && exit 0
           git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
-          # -X ours：rebase 衝突時優先保留本次掃描產出的資料
           for i in 1 2 3; do
             git pull --rebase -X ours origin main && git push && break
             echo "Push 失敗，第 ${i} 次重試..."
