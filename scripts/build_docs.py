@@ -41,6 +41,16 @@ def _nan_to_none(v):
     return v
 
 
+def _sanitize(obj):
+    if isinstance(obj, float) and (math.isnan(obj) or math.isinf(obj)):
+        return None
+    if isinstance(obj, dict):
+        return {k: _sanitize(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize(v) for v in obj]
+    return obj
+
+
 # ── FinMind helpers ─────────────────────────────────────────────────────────
 
 def _get_dl():
@@ -365,15 +375,15 @@ def build_daily_payload(summary):
                     'sector': sector,
                     'price': _nan_to_none(st.get('price', '')),
                     'signal': st.get('signal', ''),
-                    'atr14': st.get('atr14'),
-                    'stopLoss': st.get('stop_loss'),
-                    'mainForceScore': mf.get('score'),
+                    'atr14': _nan_to_none(st.get('atr14')),
+                    'stopLoss': _nan_to_none(st.get('stop_loss')),
+                    'mainForceScore': _nan_to_none(mf.get('score')),
                     'mainForceLabel': mf.get('label'),
                     'top1Broker': mf.get('top1_broker'),
-                    'top1Lots': mf.get('top1_lots'),
-                    'top5BuyLots': mf.get('top5_buy_lots'),
-                    'concentration': mf.get('concentration'),
-                    'brokerNet': br.get('net_concentration'),
+                    'top1Lots': _nan_to_none(mf.get('top1_lots')),
+                    'top5BuyLots': _nan_to_none(mf.get('top5_buy_lots')),
+                    'concentration': _nan_to_none(mf.get('concentration')),
+                    'brokerNet': _nan_to_none(br.get('net_concentration')),
                     'topBuyers': br.get('top_buyers') or [],
                     'topSellers': br.get('top_sellers') or [],
                     'brokerSource': br.get('source'),
@@ -613,7 +623,7 @@ def build_all():
         payload = build_daily_payload(summary)
         out = docs_dir / f'{d.name}.json'
         out.write_text(
-            json.dumps(payload, ensure_ascii=False, separators=(',', ':')),
+            json.dumps(_sanitize(payload), ensure_ascii=False, separators=(',', ':')),
             encoding='utf-8',
         )
         dates.append(d.name)
