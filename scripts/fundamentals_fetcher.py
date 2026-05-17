@@ -4,7 +4,6 @@
 """
 import json
 import math
-import os
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -197,7 +196,7 @@ def fetch_revenue_twse(stock_id: str):
             month = int(row['月份'])
             revenue = int(str(row.get('當月營收', '0')).replace(',', '') or 0)
             records.append({
-                'date': f'{year}-{month+1:02d}-01',
+                'date': f'{year}-{month:02d}-01',
                 'stock_id': stock_id,
                 'revenue': revenue,
                 'revenue_month': month,
