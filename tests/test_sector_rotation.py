@@ -299,7 +299,7 @@ def test_compute_metrics_mdd():
 
 
 def test_compute_metrics_win_rate_counts_positive_periods():
-    eq = [1.0]
+    eq = [1.0, 1.0]
     rebalances = [
         {'date': '20250415', 'holdings': [], 'period_return': 0.05},
         {'date': '20250422', 'holdings': [], 'period_return': -0.02},

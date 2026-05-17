@@ -233,17 +233,9 @@ def simulate_strategy(
 def compute_metrics(equity: list[float], rebalances: list[dict], rf: float = 0.01) -> dict:
     """從 equity curve 與 rebalances 計算 CAGR / vol / Sharpe / MDD / 勝率"""
     if not equity or len(equity) < 2:
-        period_rets_short = [rb.get('period_return') for rb in rebalances
-                             if 'period_return' in rb]
-        if period_rets_short:
-            wr = sum(1 for r in period_rets_short if r > 0) / len(period_rets_short)
-            ap = sum(period_rets_short) / len(period_rets_short)
-        else:
-            wr = 0.0
-            ap = 0.0
         return {'cagr': 0.0, 'vol': 0.0, 'sharpe': 0.0,
-                'mdd': 0.0, 'win_rate': wr,
-                'avg_period_return': ap, 'turnover': 0.0}
+                'mdd': 0.0, 'win_rate': 0.0,
+                'avg_period_return': 0.0, 'turnover': 0.0}
 
     n = len(equity)
     final = equity[-1]
