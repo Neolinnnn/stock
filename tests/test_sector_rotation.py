@@ -116,3 +116,37 @@ def test_select_stocks_handles_fewer_than_top_k():
 def test_select_stocks_empty_sector_returns_empty():
     out = select_stocks_in_sector(STOCKS, sector='NONE', rule='ret20_individual', top_k=3)
     assert out == []
+
+
+from sector_rotation_backtest import rebalance_dates
+
+
+def test_rebalance_dates_weekly_picks_first_trading_day_each_week():
+    # 2025-04-14 (Mon), 04-15 (Tue), 04-16 (Wed), 04-17 (Thu), 04-18 (Fri),
+    # 04-21 (Mon next week), 04-22 (Tue)
+    all_dates = ['20250414', '20250415', '20250416', '20250417', '20250418',
+                 '20250421', '20250422']
+    out = rebalance_dates(all_dates, frequency='weekly')
+    # 第一個交易日 + 每週首個交易日
+    assert out == ['20250414', '20250421']
+
+
+def test_rebalance_dates_monthly_picks_first_trading_day_each_month():
+    all_dates = ['20250415', '20250416', '20250430',
+                 '20250501', '20250502', '20250531',
+                 '20250602']
+    out = rebalance_dates(all_dates, frequency='monthly')
+    assert out == ['20250415', '20250501', '20250602']
+
+
+def test_rebalance_dates_handles_holiday_gap():
+    # 跳過 04-19 (Sat), 04-20 (Sun)
+    all_dates = ['20250418', '20250421']  # Fri then Mon
+    out = rebalance_dates(all_dates, frequency='weekly')
+    assert out == ['20250418', '20250421']
+
+
+def test_rebalance_dates_invalid_frequency_raises():
+    import pytest
+    with pytest.raises(ValueError, match='unknown frequency'):
+        rebalance_dates(['20250415'], frequency='daily')

@@ -61,3 +61,33 @@ def select_stocks_in_sector(
     pool = [s for s in stocks if s.get('sector') == sector]
     pool.sort(key=lambda s: s.get(key, 0), reverse=True)
     return pool[:top_k]
+
+
+from datetime import date
+
+
+def _parse_yyyymmdd(s: str) -> date:
+    return date(int(s[:4]), int(s[4:6]), int(s[6:8]))
+
+
+def rebalance_dates(all_dates: list[str], frequency: str) -> list[str]:
+    """從交易日清單篩出 rebalance 日，每週/月的第一個交易日"""
+    if frequency not in ('weekly', 'monthly'):
+        raise ValueError(f'unknown frequency: {frequency}')
+
+    if not all_dates:
+        return []
+
+    out: list[str] = []
+    prev_key: tuple | None = None
+    for d in sorted(all_dates):
+        dt = _parse_yyyymmdd(d)
+        if frequency == 'weekly':
+            iso = dt.isocalendar()
+            key: tuple = (iso[0], iso[1])  # (year, ISO week)
+        else:
+            key = (dt.year, dt.month)
+        if key != prev_key:
+            out.append(d)
+            prev_key = key
+    return out
