@@ -489,9 +489,16 @@ function switchFundTab(tab, btn) {
 function loadFundamentals(stockId) {
   _fundData = null;
   _fundLoaded = false;
-  ['revenue','eps','margins'].forEach(t => {
+  // Reset tabs back to 月營收
+  document.querySelectorAll('.fund-tab').forEach((b, i) => {
+    b.classList.toggle('active', i === 0);
+  });
+  ['revenue', 'eps', 'margins'].forEach((t, i) => {
     const el = document.getElementById('fund-' + t);
-    if (el) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
+    if (el) {
+      el.style.display = i === 0 ? '' : 'none';
+      el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
+    }
   });
   fetchJSON(`./fundamentals/${stockId}.json`)
     .then(d => { _fundData = d; _fundLoaded = true; renderFundRevenue(d); })
