@@ -73,3 +73,66 @@ def parse_revenue(df):
         'yoy':      yoy,
         'cum_yoy':  cum_yoy,
     }
+
+
+# ── 財務報表解析 ──────────────────────────────────────────────────────────────
+
+def _date_to_quarter(date_str):
+    """'2023-03-31' → '2023Q1'"""
+    d = datetime.strptime(date_str[:10], '%Y-%m-%d')
+    q = (d.month - 1) // 3 + 1
+    return f"{d.year}Q{q}"
+
+
+def parse_financials(df):
+    """
+    輸入：FinMind taiwan_stock_financial_statement DataFrame
+    輸出：(eps_dict, margins_dict) 平行陣列 dict 的 tuple
+          任一資料缺失時回傳 (None, None)
+    """
+    if df is None or df.empty:
+        return None, None
+
+    needed = {'EPS', 'GrossProfit', 'OperatingIncome', 'Revenue',
+              'EquityAttributableToOwnersOfParent'}
+    available = set(df['type'].unique())
+    if not needed.issubset(available):
+        return None, None
+
+    df = df[df['type'].isin(needed)].copy()
+    pivot = df.pivot_table(index='date', columns='type', values='value', aggfunc='first')
+    pivot = pivot.sort_index()
+
+    quarters = [_date_to_quarter(d) for d in pivot.index]
+    n = len(quarters)
+
+    eps_vals  = [_round2(pivot.loc[d, 'EPS']) for d in pivot.index]
+    rev_vals  = [float(pivot.loc[d, 'Revenue']) for d in pivot.index]
+    gp_vals   = [float(pivot.loc[d, 'GrossProfit']) for d in pivot.index]
+    oi_vals   = [float(pivot.loc[d, 'OperatingIncome']) for d in pivot.index]
+    ni_vals   = [float(pivot.loc[d, 'EquityAttributableToOwnersOfParent']) for d in pivot.index]
+
+    # QoQ / YoY for EPS
+    eps_qoq = [None] + [_pct_change(eps_vals[i], eps_vals[i-1]) for i in range(1, n)]
+    eps_yoy = [None] * n
+    for i in range(4, n):
+        eps_yoy[i] = _pct_change(eps_vals[i], eps_vals[i-4])
+
+    # 三率 = 各項 / Revenue * 100
+    def to_margin(vals):
+        return [_round2(v / r * 100) if r and r != 0 else None
+                for v, r in zip(vals, rev_vals)]
+
+    eps_dict = {
+        'quarter': quarters,
+        'eps':     eps_vals,
+        'qoq':     eps_qoq,
+        'yoy':     eps_yoy,
+    }
+    margins_dict = {
+        'quarter':           quarters,
+        'gross_margin':      to_margin(gp_vals),
+        'operating_margin':  to_margin(oi_vals),
+        'net_margin':        to_margin(ni_vals),
+    }
+    return eps_dict, margins_dict
