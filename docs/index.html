@@ -418,6 +418,10 @@ async function loadStock(sid){
   st.textContent = '載入中…';
   ['sp-main','sp-bottom'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('sp-header').innerHTML='';
+  ['fund-revenue','fund-eps','fund-margins'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML='<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
+  });
 
   const bust = Math.floor(Date.now()/86400000);
   let data;
@@ -499,6 +503,16 @@ function loadFundamentals(stockId) {
     });
 }
 
+function renderFundEps(d) {
+  const el = document.getElementById('fund-eps');
+  if (el) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">EPS 資料載入中…</div>';
+}
+
+function renderFundMargins(d) {
+  const el = document.getElementById('fund-margins');
+  if (el) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">三率資料載入中…</div>';
+}
+
 function renderFundRevenue(d) {
   const el = document.getElementById('fund-revenue');
   if (!d || !d.revenue) {
@@ -551,24 +565,23 @@ function renderFundRevenue(d) {
   el.innerHTML = html;
 
   const revB = r.revenue.map(v => +(v / 1e8).toFixed(2));
-  const yoyLine = r.yoy.map(v => v);
   Plotly.newPlot('fund-rev-chart', [
     {
       x: r.month, y: revB, type: 'bar', name: '月營收（億）',
-      marker: { color: 'var(--accent)' },
+      marker: { color: _PLY.acc },
     },
     {
-      x: r.month, y: yoyLine, type: 'scatter', mode: 'lines+markers',
+      x: r.month, y: r.yoy, type: 'scatter', mode: 'lines+markers',
       name: 'YoY %', yaxis: 'y2',
-      line: { color: 'var(--green)', width: 1.5 },
+      line: { color: _PLY.up, width: 1.5 },
       marker: { size: 4 },
     },
   ], {
     margin: { t: 10, b: 40, l: 45, r: 45 },
     paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-    font: { size: 11, color: 'var(--text)' },
+    font: _PLY.font,
     legend: { orientation: 'h', y: -0.2 },
-    yaxis:  { gridcolor: 'var(--border)' },
+    yaxis:  { gridcolor: _PLY.grid },
     yaxis2: { overlaying: 'y', side: 'right', showgrid: false, ticksuffix: '%' },
     xaxis:  { tickangle: -45 },
   }, { responsive: true, displayModeBar: false });
