@@ -55,6 +55,13 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: python scripts/weekly_summary.py
 
+      - name: Run sector rotation backtest (Fridays only)
+        if: github.event.schedule == '45 7 * * 5'
+        continue-on-error: true
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: python scripts/sector_rotation_backtest.py
+
       - name: Fetch fundamentals
         continue-on-error: true
         env:
