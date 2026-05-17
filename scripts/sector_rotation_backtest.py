@@ -230,3 +230,63 @@ def simulate_strategy(
         'dates':  out_dates,
         'rebalances': rebalances,
     }
+
+
+import math
+
+
+def compute_metrics(equity: list[float], rebalances: list[dict], rf: float = 0.01) -> dict:
+    """從 equity curve 與 rebalances 計算 CAGR / vol / Sharpe / MDD / 勝率"""
+    if not equity or len(equity) < 2:
+        period_rets_short = [rb.get('period_return') for rb in rebalances
+                             if 'period_return' in rb]
+        if period_rets_short:
+            wr = sum(1 for r in period_rets_short if r > 0) / len(period_rets_short)
+            ap = sum(period_rets_short) / len(period_rets_short)
+        else:
+            wr = 0.0
+            ap = 0.0
+        return {'cagr': 0.0, 'vol': 0.0, 'sharpe': 0.0,
+                'mdd': 0.0, 'win_rate': wr,
+                'avg_period_return': ap, 'turnover': 0.0}
+
+    n = len(equity)
+    final = equity[-1]
+    initial = equity[0]
+    cagr = (final / initial) ** (252 / max(n - 1, 1)) - 1 if initial > 0 else 0.0
+
+    rets = [equity[i] / equity[i - 1] - 1
+            for i in range(1, n) if equity[i - 1] > 0]
+    mean = sum(rets) / len(rets) if rets else 0.0
+    var = sum((r - mean) ** 2 for r in rets) / len(rets) if rets else 0.0
+    daily_vol = math.sqrt(var)
+    vol = daily_vol * math.sqrt(252)
+    sharpe = (cagr - rf) / vol if vol > 0 else 0.0
+
+    peak = equity[0]
+    mdd = 0.0
+    for v in equity:
+        if v > peak:
+            peak = v
+        dd = v / peak - 1 if peak > 0 else 0.0
+        if dd < mdd:
+            mdd = dd
+
+    period_rets = [rb.get('period_return') for rb in rebalances
+                   if 'period_return' in rb]
+    if period_rets:
+        win_rate = sum(1 for r in period_rets if r > 0) / len(period_rets)
+        avg_pr  = sum(period_rets) / len(period_rets)
+    else:
+        win_rate = 0.0
+        avg_pr  = 0.0
+
+    return {
+        'cagr':     round(cagr, 4),
+        'vol':      round(vol, 4),
+        'sharpe':   round(sharpe, 4),
+        'mdd':      round(mdd, 4),
+        'win_rate': win_rate,
+        'avg_period_return': avg_pr,
+        'turnover': 0.0,
+    }

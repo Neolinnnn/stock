@@ -269,3 +269,47 @@ def test_simulate_strategy_skips_missing_signal_days():
         cost_per_turn=0.0,
     )
     assert len(result['rebalances']) == 1
+
+
+import math
+from sector_rotation_backtest import compute_metrics
+
+
+def test_compute_metrics_flat_curve():
+    eq = [1.0, 1.0, 1.0, 1.0]
+    rebalances = [{'date': '20250415', 'holdings': []}]
+    m = compute_metrics(eq, rebalances, rf=0.0)
+    assert m['cagr'] == 0.0
+    assert m['mdd'] == 0.0
+    assert m['vol'] == 0.0
+
+
+def test_compute_metrics_doubling_one_year():
+    # 252 trading days, ends at 2.0 → CAGR ≈ 100%
+    eq = [1.0 + i / 251 for i in range(252)]
+    m = compute_metrics(eq, [], rf=0.0)
+    assert 0.99 < m['cagr'] < 1.01
+    assert m['mdd'] == 0.0
+
+
+def test_compute_metrics_mdd():
+    eq = [1.0, 1.2, 0.9, 1.1]
+    m = compute_metrics(eq, [], rf=0.0)
+    assert abs(m['mdd'] - (-0.25)) < 1e-6
+
+
+def test_compute_metrics_win_rate_counts_positive_periods():
+    eq = [1.0]
+    rebalances = [
+        {'date': '20250415', 'holdings': [], 'period_return': 0.05},
+        {'date': '20250422', 'holdings': [], 'period_return': -0.02},
+        {'date': '20250429', 'holdings': [], 'period_return': 0.03},
+    ]
+    m = compute_metrics(eq, rebalances, rf=0.0)
+    assert abs(m['win_rate'] - (2 / 3)) < 1e-6
+
+
+def test_compute_metrics_handles_empty_curve():
+    m = compute_metrics([], [], rf=0.0)
+    assert m['cagr'] == 0.0
+    assert m['sharpe'] == 0.0
