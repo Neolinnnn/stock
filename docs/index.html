@@ -505,12 +505,117 @@ function loadFundamentals(stockId) {
 
 function renderFundEps(d) {
   const el = document.getElementById('fund-eps');
-  if (el) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">EPS 資料載入中…</div>';
+  if (!d || !d.eps) {
+    el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">— 無 EPS 資料</div>';
+    return;
+  }
+  const e = d.eps;
+  const signColor = v => v == null ? 'var(--sub)' : v >= 0 ? 'var(--green)' : 'var(--red)';
+  const fmtPct = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+  const latestEps = e.eps[e.eps.length - 1];
+  const latestYoy = e.yoy[e.yoy.length - 1];
+
+  let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+    <div class="card" style="min-width:100px;text-align:center">
+      <div class="card-title">最新季 EPS</div>
+      <div class="card-value" style="font-size:16px">${latestEps != null ? latestEps.toFixed(2) + ' 元' : '—'}</div>
+    </div>
+    <div class="card" style="min-width:80px;text-align:center">
+      <div class="card-title">YoY</div>
+      <div class="card-value" style="font-size:16px;color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div>
+    </div>
+  </div>`;
+
+  html += `<div id="fund-eps-chart" style="height:200px;"></div>`;
+
+  html += `<table style="width:100%;font-size:12px;margin-top:8px"><tr>
+    <th>季度</th><th>EPS（元）</th><th>QoQ</th><th>YoY</th></tr>`;
+  for (let i = e.quarter.length - 1; i >= 0; i--) {
+    html += `<tr>
+      <td>${e.quarter[i]}</td>
+      <td>${e.eps[i] != null ? e.eps[i].toFixed(2) : '—'}</td>
+      <td style="color:${signColor(e.qoq[i])}">${fmtPct(e.qoq[i])}</td>
+      <td style="color:${signColor(e.yoy[i])}">${fmtPct(e.yoy[i])}</td>
+    </tr>`;
+  }
+  html += '</table>';
+  el.innerHTML = html;
+
+  Plotly.newPlot('fund-eps-chart', [{
+    x: e.quarter, y: e.eps, type: 'scatter', mode: 'lines+markers',
+    name: 'EPS', line: { color: _PLY.acc, width: 2 },
+    marker: { size: 6, color: _PLY.acc },
+    fill: 'tozeroy', fillcolor: 'rgba(188,140,255,0.1)',
+  }], {
+    margin: { t: 10, b: 40, l: 40, r: 10 },
+    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+    font: _PLY.font,
+    yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 元' },
+    xaxis:  { tickangle: -30 },
+    showlegend: false,
+  }, { responsive: true, displayModeBar: false });
 }
 
 function renderFundMargins(d) {
   const el = document.getElementById('fund-margins');
-  if (el) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">三率資料載入中…</div>';
+  if (!d || !d.margins) {
+    el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">— 無三率資料</div>';
+    return;
+  }
+  const m = d.margins;
+  const fmtPct = v => v == null ? '—' : v.toFixed(1) + '%';
+  const latestGross = m.gross_margin[m.gross_margin.length - 1];
+  const latestOp    = m.operating_margin[m.operating_margin.length - 1];
+  const latestNet   = m.net_margin[m.net_margin.length - 1];
+
+  let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+    <div class="card" style="min-width:90px;text-align:center">
+      <div class="card-title">毛利率</div>
+      <div class="card-value" style="font-size:16px">${fmtPct(latestGross)}</div>
+    </div>
+    <div class="card" style="min-width:90px;text-align:center">
+      <div class="card-title">營益率</div>
+      <div class="card-value" style="font-size:16px">${fmtPct(latestOp)}</div>
+    </div>
+    <div class="card" style="min-width:90px;text-align:center">
+      <div class="card-title">淨利率</div>
+      <div class="card-value" style="font-size:16px">${fmtPct(latestNet)}</div>
+    </div>
+  </div>`;
+
+  html += `<div id="fund-margins-chart" style="height:200px;"></div>`;
+
+  html += `<table style="width:100%;font-size:12px;margin-top:8px"><tr>
+    <th>季度</th><th>毛利率</th><th>營益率</th><th>淨利率</th></tr>`;
+  for (let i = m.quarter.length - 1; i >= 0; i--) {
+    html += `<tr>
+      <td>${m.quarter[i]}</td>
+      <td>${fmtPct(m.gross_margin[i])}</td>
+      <td>${fmtPct(m.operating_margin[i])}</td>
+      <td>${fmtPct(m.net_margin[i])}</td>
+    </tr>`;
+  }
+  html += '</table>';
+  el.innerHTML = html;
+
+  Plotly.newPlot('fund-margins-chart', [
+    { x: m.quarter, y: m.gross_margin,     name: '毛利率',
+      type: 'scatter', mode: 'lines+markers',
+      line: { color: _PLY.up,  width: 2 }, marker: { size: 5, color: _PLY.up } },
+    { x: m.quarter, y: m.operating_margin, name: '營益率',
+      type: 'scatter', mode: 'lines+markers',
+      line: { color: _PLY.acc, width: 2 }, marker: { size: 5, color: _PLY.acc } },
+    { x: m.quarter, y: m.net_margin,       name: '淨利率',
+      type: 'scatter', mode: 'lines+markers',
+      line: { color: _PLY.neu, width: 2, dash: 'dot' }, marker: { size: 5, color: _PLY.neu } },
+  ], {
+    margin: { t: 10, b: 40, l: 40, r: 10 },
+    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+    font: _PLY.font,
+    legend: { orientation: 'h', y: -0.25, font: { size: 11 } },
+    yaxis:  { gridcolor: _PLY.grid, ticksuffix: '%' },
+    xaxis:  { tickangle: -30 },
+  }, { responsive: true, displayModeBar: false });
 }
 
 function renderFundRevenue(d) {
