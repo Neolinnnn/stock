@@ -1,7 +1,11 @@
 """族群輪動回測：讀 docs/{date}.json，跑 16 個策略 variant，輸出 results.json"""
 from __future__ import annotations
 import json
+import math
+from datetime import date, datetime
 from pathlib import Path
+
+import pandas as pd
 
 
 def load_daily_signals(docs_dir: Path) -> dict[str, dict]:
@@ -63,9 +67,6 @@ def select_stocks_in_sector(
     return pool[:top_k]
 
 
-from datetime import date
-
-
 def _parse_yyyymmdd(s: str) -> date:
     return date(int(s[:4]), int(s[4:6]), int(s[6:8]))
 
@@ -91,9 +92,6 @@ def rebalance_dates(all_dates: list[str], frequency: str) -> list[str]:
             out.append(d)
             prev_key = key
     return out
-
-
-import pandas as pd
 
 
 def _cache_path_for(cache_dir: Path, stock_id: str) -> Path:
@@ -230,9 +228,6 @@ def simulate_strategy(
         'dates':  out_dates,
         'rebalances': rebalances,
     }
-
-
-import math
 
 
 def compute_metrics(equity: list[float], rebalances: list[dict], rf: float = 0.01) -> dict:
@@ -400,7 +395,6 @@ def build_results(
     rf: float = 0.01,
 ) -> dict:
     """跑 16 variants + 2 benchmarks，組合 results.json"""
-    from datetime import datetime
     all_dates = sorted(signals.keys())
 
     variants_out = []
