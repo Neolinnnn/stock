@@ -43,3 +43,21 @@ def score_sectors(sectors: list[dict], rule: str, top_n: int) -> list[str]:
         return [name for name, _ in scored[:top_n]]
 
     raise ValueError(f'unknown rule: {rule}')
+
+
+_STOCK_RULE_KEY = {
+    'ret20_individual':   'ret20',
+    'chip_concentration': 'chipTotal',
+}
+
+
+def select_stocks_in_sector(
+    stocks: list[dict], sector: str, rule: str, top_k: int
+) -> list[dict]:
+    """從 stocks 中過濾 sector，依 rule 排序，回傳前 top_k 個 dict"""
+    if rule not in _STOCK_RULE_KEY:
+        raise ValueError(f'unknown stock rule: {rule}')
+    key = _STOCK_RULE_KEY[rule]
+    pool = [s for s in stocks if s.get('sector') == sector]
+    pool.sort(key=lambda s: s.get(key, 0), reverse=True)
+    return pool[:top_k]

@@ -79,3 +79,40 @@ def test_load_daily_signals_skips_non_date_files(tmp_path):
 
     result = load_daily_signals(docs)
     assert list(result.keys()) == ['20250415']
+
+
+from sector_rotation_backtest import select_stocks_in_sector
+
+
+STOCKS = [
+    {'id': '2330', 'sector': 'IC', 'ret20':  5.0, 'chipTotal': 1000},
+    {'id': '2454', 'sector': 'IC', 'ret20': 10.0, 'chipTotal':  500},
+    {'id': '3008', 'sector': 'IC', 'ret20':  2.0, 'chipTotal': 2000},
+    {'id': '2308', 'sector': 'IC', 'ret20':  8.0, 'chipTotal':  100},
+    {'id': '1234', 'sector': 'OTHER', 'ret20': 99.0, 'chipTotal': 9999},
+]
+
+
+def test_select_stocks_ret20_top_k():
+    out = select_stocks_in_sector(STOCKS, sector='IC', rule='ret20_individual', top_k=2)
+    assert [s['id'] for s in out] == ['2454', '2308']  # 10.0, 8.0
+
+
+def test_select_stocks_chip_top_k():
+    out = select_stocks_in_sector(STOCKS, sector='IC', rule='chip_concentration', top_k=2)
+    assert [s['id'] for s in out] == ['3008', '2330']  # 2000, 1000
+
+
+def test_select_stocks_ignores_other_sectors():
+    out = select_stocks_in_sector(STOCKS, sector='IC', rule='ret20_individual', top_k=10)
+    assert '1234' not in [s['id'] for s in out]
+
+
+def test_select_stocks_handles_fewer_than_top_k():
+    out = select_stocks_in_sector(STOCKS, sector='IC', rule='ret20_individual', top_k=10)
+    assert len(out) == 4  # IC only has 4 stocks
+
+
+def test_select_stocks_empty_sector_returns_empty():
+    out = select_stocks_in_sector(STOCKS, sector='NONE', rule='ret20_individual', top_k=3)
+    assert out == []
