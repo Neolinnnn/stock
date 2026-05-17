@@ -289,7 +289,7 @@ def build_fundamentals(stock_list: list, skip_days: int = 7):
         dl = None
         finmind_ok = False
 
-    ok, skipped, failed = 0, 0, 0
+    ok, skipped = 0, 0
 
     for info in stock_list:
         sid, name = info['id'], info['name']
@@ -346,7 +346,7 @@ def build_fundamentals(stock_list: list, skip_days: int = 7):
         ok += 1
         time.sleep(0.5)
 
-    print(f'[fundamentals] 完成 {ok} 檔，跳過 {skipped} 檔，失敗 {failed} 檔')
+    print(f'[fundamentals] 完成 {ok} 檔，跳過 {skipped} 檔')
 
 
 # ── Entry point ───────────────────────────────────────────────────────────────
