@@ -55,6 +55,12 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: python scripts/weekly_summary.py
 
+      - name: Fetch fundamentals
+        continue-on-error: true
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: python scripts/fundamentals_fetcher.py
+
       - name: Commit reports
         run: |
           git config user.name "github-actions[bot]"
