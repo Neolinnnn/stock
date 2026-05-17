@@ -136,3 +136,97 @@ def fetch_prices_finmind(stock_id: str, start: str, end: str) -> pd.DataFrame:
     if df is None or df.empty:
         return pd.DataFrame(columns=['date', 'close'])
     return df[['date', 'close']].copy()
+
+
+def _price_on(prices: dict[str, pd.DataFrame], stock_id: str, date_str: str) -> float | None:
+    df = prices.get(stock_id)
+    if df is None or df.empty:
+        return None
+    iso = f'{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}'
+    row = df.loc[df['date'] == iso]
+    if row.empty:
+        return None
+    return float(row['close'].iloc[0])
+
+
+def simulate_strategy(
+    signals: dict[str, dict],
+    prices: dict[str, pd.DataFrame],
+    sector_rule: str,
+    stock_rule: str,
+    frequency: str,
+    sectors_picked: int,
+    stocks_per_sector: int,
+    cost_per_turn: float,
+) -> dict:
+    """跑單一 variant；回傳 {equity, dates, rebalances}"""
+    all_dates = sorted(signals.keys())
+    rb_dates = set(rebalance_dates(all_dates, frequency))
+
+    equity_curve: list[float] = []
+    out_dates: list[str] = []
+    rebalances: list[dict] = []
+
+    current_holdings: list[dict] = []  # [{id, name, sector, weight, entry_price}]
+    nav = 1.0
+
+    for i, d in enumerate(all_dates):
+        # Mark-to-market: update nav from previous day's holdings using today's prices
+        if i > 0 and current_holdings:
+            prev_d = all_dates[i - 1]
+            day_return = 0.0
+            for h in current_holdings:
+                p_prev = _price_on(prices, h['id'], prev_d)
+                p_now  = _price_on(prices, h['id'], d)
+                if p_prev and p_now:
+                    day_return += h['weight'] * (p_now / p_prev - 1)
+            nav *= (1 + day_return)
+
+        # Rebalance check
+        sigs = signals[d]
+        if d in rb_dates and sigs.get('sectors') and sigs.get('stocks'):
+            top_sectors = score_sectors(sigs['sectors'], sector_rule, sectors_picked)
+            new_holdings: list[dict] = []
+            for sec in top_sectors:
+                picks = select_stocks_in_sector(
+                    sigs['stocks'], sec, stock_rule, stocks_per_sector
+                )
+                for p in picks:
+                    new_holdings.append({
+                        'id': p['id'],
+                        'name': p.get('name', p['id']),
+                        'sector': sec,
+                    })
+
+            if new_holdings:
+                w = 1.0 / len(new_holdings)
+                for h in new_holdings:
+                    h['weight'] = w
+
+                old_ids = {h['id'] for h in current_holdings}
+                new_ids = {h['id'] for h in new_holdings}
+                # Turnover = fraction of portfolio changed (each side counted half)
+                changed = len(old_ids.symmetric_difference(new_ids)) / max(
+                    2 * len(new_holdings), 1
+                )
+                nav *= (1 - cost_per_turn * changed)
+
+                rebalances.append({
+                    'date': d,
+                    'sectors': top_sectors,
+                    'holdings': [
+                        {'stock_id': h['id'], 'name': h['name'],
+                         'sector': h['sector'], 'weight': round(h['weight'], 4)}
+                        for h in new_holdings
+                    ],
+                })
+                current_holdings = new_holdings
+
+        equity_curve.append(round(nav, 6))
+        out_dates.append(d)
+
+    return {
+        'equity': equity_curve,
+        'dates':  out_dates,
+        'rebalances': rebalances,
+    }

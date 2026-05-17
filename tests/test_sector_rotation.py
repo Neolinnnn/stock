@@ -195,3 +195,77 @@ def test_load_prices_cached_returns_empty_on_fetch_failure(tmp_path):
                              start='20250415', end='20250415',
                              fetch_fn=fake_fetch)
     assert out.empty
+
+
+from sector_rotation_backtest import simulate_strategy
+
+
+def test_simulate_strategy_buy_and_hold_equal_weight():
+    # 2 stocks, both rise 10%, equal weight → portfolio +10%
+    signals = {
+        '20250415': {
+            'sectors': [{'sector': 'A', 'ret20': 5, 'rsi': 50, 'hot': 1, 'buy': 0}],
+            'stocks':  [
+                {'id': '111', 'sector': 'A', 'ret20': 5, 'chipTotal': 100},
+                {'id': '222', 'sector': 'A', 'ret20': 4, 'chipTotal':  50},
+            ],
+        },
+        '20250416': {'sectors': [], 'stocks': []},
+    }
+    prices = {
+        '111': pd.DataFrame({'date': ['2025-04-15', '2025-04-16'],
+                             'close': [100.0, 110.0]}),
+        '222': pd.DataFrame({'date': ['2025-04-15', '2025-04-16'],
+                             'close': [50.0, 55.0]}),
+    }
+    result = simulate_strategy(
+        signals=signals, prices=prices,
+        sector_rule='ret20', stock_rule='ret20_individual',
+        frequency='weekly', sectors_picked=1, stocks_per_sector=2,
+        cost_per_turn=0.0,
+    )
+    assert result['equity'][0] == 1.0
+    assert abs(result['equity'][-1] - 1.10) < 1e-6
+    assert len(result['rebalances']) == 1
+
+
+def test_simulate_strategy_applies_transaction_cost_on_rebalance():
+    # First rebalance: full position change (initial buy) → cost charged
+    signals = {
+        '20250415': {
+            'sectors': [{'sector': 'A', 'ret20': 5, 'rsi': 50, 'hot': 1, 'buy': 0}],
+            'stocks':  [{'id': '111', 'sector': 'A', 'ret20': 5, 'chipTotal': 100}],
+        },
+    }
+    prices = {
+        '111': pd.DataFrame({'date': ['2025-04-15'], 'close': [100.0]}),
+    }
+    result = simulate_strategy(
+        signals=signals, prices=prices,
+        sector_rule='ret20', stock_rule='ret20_individual',
+        frequency='weekly', sectors_picked=1, stocks_per_sector=1,
+        cost_per_turn=0.01,  # 1% per turn
+    )
+    # Initial buy = 0.5 turn (only one side) = 0.5%
+    assert abs(result['equity'][0] - (1.0 - 0.005)) < 1e-6
+
+
+def test_simulate_strategy_skips_missing_signal_days():
+    signals = {
+        '20250415': {
+            'sectors': [{'sector': 'A', 'ret20': 5, 'rsi': 50, 'hot': 1, 'buy': 0}],
+            'stocks':  [{'id': '111', 'sector': 'A', 'ret20': 5, 'chipTotal': 100}],
+        },
+        '20250416': {'sectors': [], 'stocks': []},
+    }
+    prices = {
+        '111': pd.DataFrame({'date': ['2025-04-15', '2025-04-16'],
+                             'close': [100.0, 110.0]}),
+    }
+    result = simulate_strategy(
+        signals=signals, prices=prices,
+        sector_rule='ret20', stock_rule='ret20_individual',
+        frequency='weekly', sectors_picked=1, stocks_per_sector=1,
+        cost_per_turn=0.0,
+    )
+    assert len(result['rebalances']) == 1
