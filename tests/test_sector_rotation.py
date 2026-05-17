@@ -150,3 +150,48 @@ def test_rebalance_dates_invalid_frequency_raises():
     import pytest
     with pytest.raises(ValueError, match='unknown frequency'):
         rebalance_dates(['20250415'], frequency='daily')
+
+
+import pandas as pd
+from sector_rotation_backtest import load_prices_cached, _cache_path_for
+
+
+def test_cache_path_for_stock_id(tmp_path):
+    assert _cache_path_for(tmp_path, '2330') == tmp_path / '2330.csv'
+    assert _cache_path_for(tmp_path, 'TAIEX') == tmp_path / 'TAIEX.csv'
+
+
+def test_load_prices_cached_reads_existing_csv(tmp_path):
+    df = pd.DataFrame({
+        'date':  ['2025-04-15', '2025-04-16'],
+        'close': [100.0, 102.0],
+    })
+    df.to_csv(tmp_path / '2330.csv', index=False)
+
+    out = load_prices_cached(cache_dir=tmp_path, stock_id='2330',
+                             start='20250415', end='20250416', fetch_fn=None)
+    assert list(out['close']) == [100.0, 102.0]
+
+
+def test_load_prices_cached_calls_fetch_when_missing(tmp_path):
+    fake_df = pd.DataFrame({'date': ['2025-04-15'], 'close': [100.0]})
+
+    def fake_fetch(stock_id, start, end):
+        assert stock_id == '2330'
+        return fake_df
+
+    out = load_prices_cached(cache_dir=tmp_path, stock_id='2330',
+                             start='20250415', end='20250415',
+                             fetch_fn=fake_fetch)
+    assert (tmp_path / '2330.csv').exists()
+    assert list(out['close']) == [100.0]
+
+
+def test_load_prices_cached_returns_empty_on_fetch_failure(tmp_path):
+    def fake_fetch(stock_id, start, end):
+        raise RuntimeError('API down')
+
+    out = load_prices_cached(cache_dir=tmp_path, stock_id='2330',
+                             start='20250415', end='20250415',
+                             fetch_fn=fake_fetch)
+    assert out.empty

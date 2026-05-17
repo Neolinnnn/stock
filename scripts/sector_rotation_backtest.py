@@ -91,3 +91,48 @@ def rebalance_dates(all_dates: list[str], frequency: str) -> list[str]:
             out.append(d)
             prev_key = key
     return out
+
+
+import pandas as pd
+
+
+def _cache_path_for(cache_dir: Path, stock_id: str) -> Path:
+    return cache_dir / f'{stock_id}.csv'
+
+
+def load_prices_cached(
+    cache_dir: Path,
+    stock_id: str,
+    start: str,
+    end: str,
+    fetch_fn,
+) -> pd.DataFrame:
+    """讀本地 cache CSV；若無則呼叫 fetch_fn 抓取並寫入。失敗回空 DataFrame。"""
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    path = _cache_path_for(cache_dir, stock_id)
+    if path.exists():
+        return pd.read_csv(path)
+    if fetch_fn is None:
+        return pd.DataFrame(columns=['date', 'close'])
+    try:
+        df = fetch_fn(stock_id, start, end)
+        if df is None or df.empty:
+            return pd.DataFrame(columns=['date', 'close'])
+        df.to_csv(path, index=False)
+        return df
+    except Exception as e:
+        print(f'[warn] fetch failed for {stock_id}: {e}')
+        return pd.DataFrame(columns=['date', 'close'])
+
+
+def fetch_prices_finmind(stock_id: str, start: str, end: str) -> pd.DataFrame:
+    """從 FinMind 抓 TaiwanStockPrice（含 TAIEX），回傳 date/close 欄位"""
+    from finmind_client import get_dataloader
+    dl = get_dataloader()
+    start_iso = f'{start[:4]}-{start[4:6]}-{start[6:8]}'
+    end_iso   = f'{end[:4]}-{end[4:6]}-{end[6:8]}'
+    df = dl.taiwan_stock_daily(stock_id=stock_id,
+                               start_date=start_iso, end_date=end_iso)
+    if df is None or df.empty:
+        return pd.DataFrame(columns=['date', 'close'])
+    return df[['date', 'close']].copy()
