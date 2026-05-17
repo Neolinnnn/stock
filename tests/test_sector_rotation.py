@@ -313,3 +313,21 @@ def test_compute_metrics_handles_empty_curve():
     m = compute_metrics([], [], rf=0.0)
     assert m['cagr'] == 0.0
     assert m['sharpe'] == 0.0
+
+
+from sector_rotation_backtest import simulate_benchmark_buyhold
+
+
+def test_benchmark_buyhold_missing_price_treated_as_flat():
+    dates = ['20250415', '20250416']
+    prices = {
+        # Stock A has full data, rises 10%
+        'A': pd.DataFrame({'date': ['2025-04-15', '2025-04-16'],
+                           'close': [100.0, 110.0]}),
+        # Stock B has no data on day 2 → contributes 0 to return that day
+        'B': pd.DataFrame({'date': ['2025-04-15'], 'close': [50.0]}),
+    }
+    out = simulate_benchmark_buyhold(dates, prices, ['A', 'B'])
+    # Equal weight 0.5 each. A rises 10%, B contributes 0.
+    # day_return = 0.5 * 0.10 + 0 = 0.05 → equity[-1] = 1.05
+    assert abs(out['equity'][-1] - 1.05) < 1e-6

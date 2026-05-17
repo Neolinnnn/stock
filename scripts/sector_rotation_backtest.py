@@ -343,8 +343,9 @@ def simulate_benchmark_buyhold(
     dates: list[str], prices_by_id: dict[str, pd.DataFrame],
     stock_ids: list[str],
 ) -> dict:
-    """等權持有清單；遺失資料的股以剩餘股權重平均代位"""
-    weight = 1.0 / max(len(stock_ids), 1)
+    """等權持有清單；缺資料的股當日視為 0% 報酬（避免倖存者偏差）"""
+    n = max(len(stock_ids), 1)
+    weight = 1.0 / n
     equity: list[float] = []
     nav = 1.0
     for i, d in enumerate(dates):
@@ -353,15 +354,12 @@ def simulate_benchmark_buyhold(
             continue
         prev_d = dates[i - 1]
         day_return = 0.0
-        active = 0
         for sid in stock_ids:
             p_prev = _price_on(prices_by_id, sid, prev_d)
             p_now  = _price_on(prices_by_id, sid, d)
             if p_prev and p_now:
-                day_return += (p_now / p_prev - 1)
-                active += 1
-        if active > 0:
-            nav *= (1 + day_return / active)
+                day_return += weight * (p_now / p_prev - 1)
+        nav *= (1 + day_return)
         equity.append(round(nav, 6))
     return {'equity': equity, 'dates': dates, 'rebalances': []}
 
