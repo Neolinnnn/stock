@@ -16,3 +16,30 @@ def load_daily_signals(docs_dir: Path) -> dict[str, dict]:
             'stocks':  data.get('stocks',  []),
         }
     return result
+
+
+def _normalize(values: list[float]) -> list[float]:
+    lo, hi = min(values), max(values)
+    if hi == lo:
+        return [0.5] * len(values)
+    return [(v - lo) / (hi - lo) for v in values]
+
+
+def score_sectors(sectors: list[dict], rule: str, top_n: int) -> list[str]:
+    """回傳前 top_n 個族群名稱，依 rule 排序由高至低"""
+    if rule in ('ret20', 'rsi', 'hot'):
+        ranked = sorted(sectors, key=lambda s: s.get(rule, 0), reverse=True)
+        return [s['sector'] for s in ranked[:top_n]]
+
+    if rule == 'composite':
+        rets = _normalize([s.get('ret20', 0) for s in sectors])
+        hots = _normalize([s.get('hot',   0) for s in sectors])
+        buys = _normalize([s.get('buy',   0) for s in sectors])
+        scored = [
+            (s['sector'], 0.5 * r + 0.3 * h + 0.2 * b)
+            for s, r, h, b in zip(sectors, rets, hots, buys)
+        ]
+        scored.sort(key=lambda x: x[1], reverse=True)
+        return [name for name, _ in scored[:top_n]]
+
+    raise ValueError(f'unknown rule: {rule}')
