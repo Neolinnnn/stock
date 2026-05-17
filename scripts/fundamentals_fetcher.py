@@ -106,11 +106,11 @@ def parse_financials(df):
     quarters = [_date_to_quarter(d) for d in pivot.index]
     n = len(quarters)
 
-    eps_vals  = [_round2(pivot.loc[d, 'EPS']) for d in pivot.index]
-    rev_vals  = [float(pivot.loc[d, 'Revenue']) for d in pivot.index]
-    gp_vals   = [float(pivot.loc[d, 'GrossProfit']) for d in pivot.index]
-    oi_vals   = [float(pivot.loc[d, 'OperatingIncome']) for d in pivot.index]
-    ni_vals   = [float(pivot.loc[d, 'EquityAttributableToOwnersOfParent']) for d in pivot.index]
+    eps_vals  = [_round2(v) for v in pivot['EPS'].tolist()]
+    rev_vals  = [float(v) for v in pivot['Revenue'].tolist()]
+    gp_vals   = [float(v) for v in pivot['GrossProfit'].tolist()]
+    oi_vals   = [float(v) for v in pivot['OperatingIncome'].tolist()]
+    ni_vals   = [float(v) for v in pivot['EquityAttributableToOwnersOfParent'].tolist()]
 
     # QoQ / YoY for EPS
     eps_qoq = [None] + [_pct_change(eps_vals[i], eps_vals[i-1]) for i in range(1, n)]

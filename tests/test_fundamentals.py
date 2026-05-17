@@ -3,7 +3,7 @@ import pytest
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 
-from fundamentals_fetcher import parse_revenue
+from fundamentals_fetcher import parse_revenue, parse_financials
 
 
 def _make_revenue_df():
@@ -67,8 +67,6 @@ def test_parse_revenue_cum_yoy_with_cross_year_data():
 
 
 # ── 財務報表解析測試 ─────────────────────────────────────────────────────────
-
-from fundamentals_fetcher import parse_financials
 
 
 def _make_financial_df():
