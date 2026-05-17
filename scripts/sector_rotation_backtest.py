@@ -290,3 +290,231 @@ def compute_metrics(equity: list[float], rebalances: list[dict], rf: float = 0.0
         'avg_period_return': avg_pr,
         'turnover': 0.0,
     }
+
+
+SECTOR_RULES = ['ret20', 'rsi', 'hot', 'composite']
+STOCK_RULES  = ['ret20_individual', 'chip_concentration']
+FREQUENCIES  = ['weekly', 'monthly']
+
+_RULE_LABEL_SECTOR = {
+    'ret20': 'ret20', 'rsi': 'RSI', 'hot': '熱度', 'composite': '複合分數',
+}
+_RULE_LABEL_STOCK = {
+    'ret20_individual': 'ret20選股', 'chip_concentration': '籌碼選股',
+}
+_RULE_LABEL_FREQ = {'weekly': '週調', 'monthly': '月調'}
+
+
+def variant_id(sector_rule: str, frequency: str, stock_rule: str) -> str:
+    freq_short = 'W' if frequency == 'weekly' else 'M'
+    stock_short = 'ret20' if stock_rule == 'ret20_individual' else 'chip'
+    return f'{sector_rule}_{freq_short}_{stock_short}'
+
+
+def variant_label(sector_rule: str, frequency: str, stock_rule: str) -> str:
+    return (f'{_RULE_LABEL_SECTOR[sector_rule]} / '
+            f'{_RULE_LABEL_FREQ[frequency]} / '
+            f'{_RULE_LABEL_STOCK[stock_rule]}')
+
+
+def _compute_period_returns(equity: list[float], dates: list[str],
+                            rebalances: list[dict]) -> None:
+    """In-place: 在每個 rebalance 上加 period_return 欄位"""
+    rb_idx = [dates.index(rb['date']) for rb in rebalances if rb['date'] in dates]
+    for i, rb in enumerate(rebalances):
+        if rb['date'] not in dates:
+            continue
+        start_i = dates.index(rb['date'])
+        end_i = rb_idx[i + 1] if i + 1 < len(rb_idx) else len(equity) - 1
+        if equity[start_i] > 0 and end_i > start_i:
+            rb['period_return'] = round(equity[end_i] / equity[start_i] - 1, 6)
+        else:
+            rb['period_return'] = 0.0
+
+
+def _avg_turnover(rebalances: list[dict]) -> float:
+    if len(rebalances) < 2:
+        return 0.0
+    turnovers = []
+    for i in range(1, len(rebalances)):
+        prev_ids = {h['stock_id'] for h in rebalances[i - 1]['holdings']}
+        curr_ids = {h['stock_id'] for h in rebalances[i]['holdings']}
+        n = max(len(curr_ids), 1)
+        turnovers.append(len(prev_ids.symmetric_difference(curr_ids)) / (2 * n))
+    return sum(turnovers) / len(turnovers) if turnovers else 0.0
+
+
+def simulate_benchmark_buyhold(
+    dates: list[str], prices_by_id: dict[str, pd.DataFrame],
+    stock_ids: list[str],
+) -> dict:
+    """等權持有清單；遺失資料的股以剩餘股權重平均代位"""
+    weight = 1.0 / max(len(stock_ids), 1)
+    equity: list[float] = []
+    nav = 1.0
+    for i, d in enumerate(dates):
+        if i == 0:
+            equity.append(1.0)
+            continue
+        prev_d = dates[i - 1]
+        day_return = 0.0
+        active = 0
+        for sid in stock_ids:
+            p_prev = _price_on(prices_by_id, sid, prev_d)
+            p_now  = _price_on(prices_by_id, sid, d)
+            if p_prev and p_now:
+                day_return += (p_now / p_prev - 1)
+                active += 1
+        if active > 0:
+            nav *= (1 + day_return / active)
+        equity.append(round(nav, 6))
+    return {'equity': equity, 'dates': dates, 'rebalances': []}
+
+
+def simulate_benchmark_taiex(dates: list[str], taiex: pd.DataFrame) -> dict:
+    """加權指數 buy & hold"""
+    if taiex.empty:
+        return {'equity': [1.0] * len(dates), 'dates': dates, 'rebalances': []}
+    iso_dates = [f'{d[:4]}-{d[4:6]}-{d[6:8]}' for d in dates]
+    closes = []
+    last_close = None
+    for iso in iso_dates:
+        row = taiex.loc[taiex['date'] == iso]
+        if not row.empty:
+            last_close = float(row['close'].iloc[0])
+        closes.append(last_close)
+    base = next((c for c in closes if c is not None), 1.0)
+    equity = [(c / base) if c else 1.0 for c in closes]
+    return {'equity': [round(e, 6) for e in equity],
+            'dates': dates, 'rebalances': []}
+
+
+def build_results(
+    signals: dict[str, dict],
+    prices_by_id: dict[str, pd.DataFrame],
+    taiex: pd.DataFrame,
+    benchmark_stock_ids: list[str],
+    cost_per_turn: float = 0.00585,
+    sectors_picked: int = 3,
+    stocks_per_sector: int = 3,
+    rf: float = 0.01,
+) -> dict:
+    """跑 16 variants + 2 benchmarks，組合 results.json"""
+    from datetime import datetime
+    all_dates = sorted(signals.keys())
+
+    variants_out = []
+    for sr in SECTOR_RULES:
+        for freq in FREQUENCIES:
+            for stk in STOCK_RULES:
+                sim = simulate_strategy(
+                    signals=signals, prices=prices_by_id,
+                    sector_rule=sr, stock_rule=stk, frequency=freq,
+                    sectors_picked=sectors_picked,
+                    stocks_per_sector=stocks_per_sector,
+                    cost_per_turn=cost_per_turn,
+                )
+                _compute_period_returns(sim['equity'], sim['dates'],
+                                        sim['rebalances'])
+                metrics = compute_metrics(sim['equity'], sim['rebalances'], rf=rf)
+                metrics['turnover'] = round(_avg_turnover(sim['rebalances']), 4)
+                variants_out.append({
+                    'id':           variant_id(sr, freq, stk),
+                    'label':        variant_label(sr, freq, stk),
+                    'sector_rule':  sr,
+                    'frequency':    freq,
+                    'stock_rule':   stk,
+                    'metrics':      metrics,
+                    'equity':       sim['equity'],
+                    'dates':        sim['dates'],
+                    'rebalances':   sim['rebalances'],
+                })
+
+    bench_taiex = simulate_benchmark_taiex(all_dates, taiex)
+    bench_ew = simulate_benchmark_buyhold(all_dates, prices_by_id,
+                                          benchmark_stock_ids)
+    bench_taiex_m = compute_metrics(bench_taiex['equity'], [], rf=rf)
+    bench_ew_m    = compute_metrics(bench_ew['equity'],    [], rf=rf)
+
+    ranking = sorted(
+        [{'id': v['id'], 'sharpe': v['metrics']['sharpe']} for v in variants_out],
+        key=lambda x: x['sharpe'], reverse=True,
+    )
+
+    return {
+        'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
+        'period': {
+            'start': all_dates[0] if all_dates else '',
+            'end':   all_dates[-1] if all_dates else '',
+            'trading_days': len(all_dates),
+        },
+        'config': {
+            'portfolio_size': sectors_picked * stocks_per_sector,
+            'sectors_picked': sectors_picked,
+            'stocks_per_sector': stocks_per_sector,
+            'cost_per_turn': cost_per_turn,
+            'rf_rate': rf,
+        },
+        'benchmarks': {
+            'TAIEX': {**bench_taiex_m, **bench_taiex},
+            'EqualWeight67': {**bench_ew_m, **bench_ew},
+        },
+        'variants': variants_out,
+        'ranking':  ranking,
+    }
+
+
+def main():
+    repo = Path(__file__).parent.parent
+    docs = repo / 'docs'
+    cache = repo / 'data' / 'cache' / 'prices'
+
+    print('[1/4] 載入 daily signals...')
+    signals = load_daily_signals(docs)
+    if not signals:
+        print('  沒有任何 daily JSON，結束')
+        return
+    all_dates = sorted(signals.keys())
+    start, end = all_dates[0], all_dates[-1]
+    print(f'  {len(signals)} 個交易日 ({start} ~ {end})')
+
+    print('[2/4] 蒐集需要的個股 ID...')
+    stock_ids = set()
+    for d in signals.values():
+        for s in d['stocks']:
+            stock_ids.add(s['id'])
+    print(f'  {len(stock_ids)} 檔股票')
+
+    print('[3/4] 抓取價格（個股 + TAIEX）...')
+    prices: dict[str, pd.DataFrame] = {}
+    for i, sid in enumerate(sorted(stock_ids), 1):
+        prices[sid] = load_prices_cached(
+            cache_dir=cache, stock_id=sid, start=start, end=end,
+            fetch_fn=fetch_prices_finmind,
+        )
+        if i % 10 == 0:
+            print(f'    {i}/{len(stock_ids)}')
+    taiex = load_prices_cached(
+        cache_dir=cache, stock_id='TAIEX', start=start, end=end,
+        fetch_fn=fetch_prices_finmind,
+    )
+
+    print('[4/4] 跑 16 variants + benchmarks...')
+    results = build_results(
+        signals=signals, prices_by_id=prices, taiex=taiex,
+        benchmark_stock_ids=sorted(stock_ids),
+    )
+
+    out_dir = docs / 'backtest'
+    out_dir.mkdir(exist_ok=True)
+    out_path = out_dir / 'results.json'
+    out_path.write_text(json.dumps(results, ensure_ascii=False, separators=(',', ':')),
+                        encoding='utf-8')
+    size_kb = out_path.stat().st_size / 1024
+    print(f'  寫出 {out_path} ({size_kb:.1f} KB)')
+    print(f'  Top variant: {results["ranking"][0]["id"]} '
+          f'(Sharpe={results["ranking"][0]["sharpe"]})')
+
+
+if __name__ == '__main__':
+    main()
