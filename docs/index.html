@@ -249,6 +249,8 @@ let CUR_PAGE = 'daily';
 let WEEKLY_DATA = null;
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw14G5uB-Aic9KAtcH_aNhgRJKpOhC9LQWYN9vuNwSQePbFto2oFJ71oWrsugtuvSnSzw/exec';
 let WL_DATA = null;
+let BT_RESULTS = null;
+let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
 
 let _toastTimer = null;
 function showToast(msg) {
@@ -380,6 +382,36 @@ async function fetchJSON(url){
   const r = await fetch(url, {cache:'no-cache'});
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
+}
+
+async function loadBtResults(){
+  try{
+    BT_RESULTS = await fetchJSON('./backtest/results.json?v=' + Math.floor(Date.now()/86400000));
+    BT_MAP = buildBtMap(BT_RESULTS);
+  }catch(e){
+    console.warn('backtest/results.json 載入失敗：', e.message);
+  }
+}
+
+function buildBtMap(results){
+  const map = new Map();
+  if(!results || !results.ranking || !results.variants) return map;
+  const top5ids = results.ranking.slice(0,5).map(r=>r.id);
+  top5ids.forEach(id=>{
+    const variant = results.variants.find(v=>v.id===id);
+    if(!variant || !variant.rebalances || !variant.rebalances.length) return;
+    const lastRb = variant.rebalances[variant.rebalances.length-1];
+    if(!lastRb.holdings) return;
+    lastRb.holdings.forEach(h=>{
+      if(!map.has(h.stock_id)){
+        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector});
+      }
+      const entry = map.get(h.stock_id);
+      entry.count++;
+      entry.strategies.push({id:variant.id, label:variant.label, sharpe:results.ranking.find(r=>r.id===id)?.sharpe||0});
+    });
+  });
+  return map;
 }
 
 // ── 個股分析 ──────────────────────────────────────────────────────────────────
@@ -1011,6 +1043,7 @@ async function init(){
 
   // 嘗試預載週報
   fetchJSON(`./weekly.json?v=${bust}`).then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
+  loadBtResults();  // 非同步載入，不阻塞主流程
 
   await loadDate(CUR_DATE);
   setPage('daily');
