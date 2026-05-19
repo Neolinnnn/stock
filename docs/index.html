@@ -428,6 +428,40 @@ function buildDailyMap(){
   return m;
 }
 
+function computeTodayPicks(variantId, data){
+  if(!data || !data.sectors || !data.stocks) return [];
+  const parts = variantId.split('_');
+  const sectorRule = parts[0];
+  const stockRule  = parts[parts.length - 1];
+  const SECTORS_N = 3, STOCKS_N = 3;
+
+  let ranked;
+  if(sectorRule === 'composite'){
+    const get = f => data.sectors.map(s => s[f] || 0);
+    const norm = arr => {
+      const mn = Math.min(...arr), mx = Math.max(...arr);
+      return arr.map(v => mx > mn ? (v - mn) / (mx - mn) : 0);
+    };
+    const nR = norm(get('ret20')), nH = norm(get('hot')), nB = norm(get('buy'));
+    ranked = data.sectors.map((s, i) => ({
+      ...s, _score: 0.5 * nR[i] + 0.3 * nH[i] + 0.2 * nB[i]
+    })).sort((a, b) => b._score - a._score);
+  } else {
+    ranked = [...data.sectors].sort((a, b) => (b.ret20 || 0) - (a.ret20 || 0));
+  }
+
+  const topSectors = ranked.slice(0, SECTORS_N).map(s => s.sector);
+  const picks = [];
+  topSectors.forEach(sector => {
+    const inSec = data.stocks.filter(s => s.sector === sector);
+    const sorted = stockRule === 'chip'
+      ? [...inSec].sort((a, b) => (b.chipTotal || 0) - (a.chipTotal || 0))
+      : [...inSec].sort((a, b) => (b.ret20    || 0) - (a.ret20    || 0));
+    sorted.slice(0, STOCKS_N).forEach(s => picks.push(s));
+  });
+  return picks;
+}
+
 function showBtTooltip(sid, event){
   const bt = BT_MAP.get(sid) || TODAY_BT_MAP.get(sid);
   if(!bt) return;
@@ -473,38 +507,43 @@ function renderBtPage(){
     return;
   }
 
-  const top5ids = BT_RESULTS.ranking.slice(0,5).map(r=>r.id);
-  const top5variants = top5ids.map(id=>BT_RESULTS.variants.find(v=>v.id===id)).filter(Boolean);
-  const dailyMap = buildDailyMap();
+  const data = CACHE[CUR_DATE];
+  if(!data || !data.sectors || !data.stocks){
+    el.innerHTML = '<div class="error-box"><span>⚠️</span>今日掃描資料不足，無法計算選股</div>';
+    return;
+  }
 
-  // ── 建立 TODAY_BT_MAP（今日持倉，供 tooltip fallback 用）───────────
+  const top5ids = BT_RESULTS.ranking.slice(0, 5).map(r => r.id);
+  const top5variants = top5ids.map(id => BT_RESULTS.variants.find(v => v.id === id)).filter(Boolean);
+
   TODAY_BT_MAP = new Map();
-  top5variants.forEach(v => {
-    const holdings = v.rebalances?.[v.rebalances.length-1]?.holdings || [];
-    holdings.forEach(h => {
-      if(!TODAY_BT_MAP.has(h.stock_id))
-        TODAY_BT_MAP.set(h.stock_id, {count: 0, strategies: [], name: h.name, sector: h.sector});
-      const e = TODAY_BT_MAP.get(h.stock_id);
+  const allPicks = top5variants.map(v => {
+    const picks = computeTodayPicks(v.id, data);
+    picks.forEach(s => {
+      if(!TODAY_BT_MAP.has(s.id))
+        TODAY_BT_MAP.set(s.id, {count: 0, strategies: [], name: s.name, sector: s.sector});
+      const e = TODAY_BT_MAP.get(s.id);
       e.count++;
       e.strategies.push({id: v.id, label: v.label});
     });
+    return picks;
   });
 
   // ── 上層：交集精選 ────────────────────────────────────────────────
-  const intersect = [...BT_MAP.entries()]
-    .filter(([,v])=>v.count>=2)
-    .sort((a,b)=>b[1].count-a[1].count)
-    .slice(0,10);
+  const intersect = [...TODAY_BT_MAP.entries()]
+    .filter(([, v]) => v.count >= 2)
+    .sort((a, b) => b[1].count - a[1].count)
+    .slice(0, 10);
 
-  let html = `<div class="section-title">⭐ 交集精選（出現在 2+ 策略的個股）</div>`;
+  let html = `<div class="section-title">⭐ 交集精選（今日 2+ 策略同時選中）</div>`;
 
   if(!intersect.length){
-    html += `<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;padding:16px;">目前五個策略持股無重疊，請查看下方各策略持倉</div>`;
+    html += `<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;padding:16px;">今日五個策略選股無重疊，請查看下方各策略今日選股</div>`;
   } else {
     html += `<div class="bt-chip-grid">`;
-    intersect.forEach(([sid,bt])=>{
-      const daily = dailyMap.get(sid);
-      const sig = daily?.signal || '';
+    intersect.forEach(([sid, bt]) => {
+      const s = data.stocks.find(x => x.id === sid) || {};
+      const sig = s.signal || '';
       html += `<div class="bt-chip" onclick="showBtTooltip('${escHtml(sid)}',event)">
         <div class="bc-id">${escHtml(sid)}</div>
         <div class="bc-name">${escHtml(bt.name)}</div>
@@ -516,35 +555,35 @@ function renderBtPage(){
     html += `</div>`;
   }
 
-  // ── 下層：各策略持倉子 Tab ─────────────────────────────────────────
-  html += `<div class="section-title">各策略持倉明細</div>`;
+  // ── 下層：各策略今日選股子 Tab ─────────────────────────────────────
+  html += `<div class="section-title">各策略今日選股</div>`;
   html += `<div class="bt-sub-tab-bar">`;
-  top5variants.forEach((v,i)=>{
-    const sharpe = BT_RESULTS.ranking.find(r=>r.id===v.id)?.sharpe?.toFixed(2) || '—';
-    html += `<button class="bt-sub-tab${i===0?' active':''}" onclick="btSwitchTab(this,${i})">#${i+1} ${escHtml(v.label)}（${sharpe}）</button>`;
+  top5variants.forEach((v, i) => {
+    const sharpe = BT_RESULTS.ranking.find(r => r.id === v.id)?.sharpe?.toFixed(2) || '—';
+    html += `<button class="bt-sub-tab${i === 0 ? ' active' : ''}" onclick="btSwitchTab(this,${i})">#${i + 1} ${escHtml(v.label)}（${sharpe}）</button>`;
   });
   html += `</div>`;
 
-  top5variants.forEach((v,i)=>{
-    const lastRb = v.rebalances?.[v.rebalances.length-1];
-    const rbDate = lastRb?.date ? fmtDate(lastRb.date) : '—';
-    const holdings = lastRb?.holdings || [];
-    html += `<div class="bt-sub-panel card" id="bt-panel-${i}" style="${i===0?'':'display:none'}">`;
-    html += `<div style="font-size:11px;color:var(--sub);margin-bottom:8px;">持倉截至 ${rbDate}</div>`;
-    if(!holdings.length){
-      html += `<div style="color:var(--sub);font-size:13px;">無持倉資料</div>`;
+  top5variants.forEach((v, i) => {
+    const picks = allPicks[i];
+    html += `<div class="bt-sub-panel card" id="bt-panel-${i}" style="${i === 0 ? '' : 'display:none'}">`;
+    html += `<div style="font-size:11px;color:var(--sub);margin-bottom:8px;">今日選股（${fmtDate(CUR_DATE)}）｜族群排名：${v.id.split('_')[0] === 'composite' ? '綜合分數' : '20日漲幅'}｜個股排名：${v.id.split('_').pop() === 'chip' ? '法人籌碼' : '20日漲幅'}</div>`;
+    if(!picks.length){
+      html += `<div style="color:var(--sub);font-size:13px;">今日無選股結果</div>`;
     } else {
       html += `<div style="overflow-x:auto"><table>
-        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>權重</th><th>今日 RSI5</th><th>今日訊號</th></tr>
-        ${holdings.map(h=>{
-          const daily = dailyMap.get(h.stock_id);
-          return `<tr onclick="showBtTooltip('${escHtml(h.stock_id)}',event)" style="cursor:pointer">
-            <td>${escHtml(h.stock_id)}</td>
-            <td><b>${escHtml(h.name)}</b>${BT_MAP.get(h.stock_id)?.count>=2?`<span class="bt-badge">★交集</span>`:''}</td>
-            <td>${escHtml(h.sector)}</td>
-            <td>${h.weight!=null?(h.weight*100).toFixed(1)+'%':'—'}</td>
-            <td>${daily ? fmt(daily.rsi,1) : '—'}</td>
-            <td>${daily && daily.signal ? badge(daily.signal) : '—'}</td>
+        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日漲幅</th><th>法人籌碼</th><th>RSI5</th><th>今日訊號</th></tr>
+        ${picks.map(s => {
+          const ret20Color = (s.ret20 || 0) >= 0 ? 'var(--green)' : 'var(--red)';
+          const inMulti = (TODAY_BT_MAP.get(s.id)?.count || 0) >= 2;
+          return `<tr onclick="showBtTooltip('${escHtml(s.id)}',event)" style="cursor:pointer">
+            <td>${escHtml(s.id)}</td>
+            <td><b>${escHtml(s.name)}</b>${inMulti ? `<span class="bt-badge">★交集</span>` : ''}</td>
+            <td>${escHtml(s.sector)}</td>
+            <td style="color:${ret20Color}">${s.ret20 != null ? fmt(s.ret20, 1) + '%' : '—'}</td>
+            <td>${s.chipTotal != null ? s.chipTotal : '—'}</td>
+            <td>${s.rsi != null ? fmt(s.rsi, 1) : '—'}</td>
+            <td>${s.signal ? badge(s.signal) : '—'}</td>
           </tr>`;
         }).join('')}
       </table></div>`;
