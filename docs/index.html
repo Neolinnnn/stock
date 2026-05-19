@@ -1258,7 +1258,7 @@ function renderDaily(data){
       <div class="sector-body"><table>
         <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI5/10</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th><th></th></tr>
         ${stks.map(s=>`<tr>
-          <td>${s.id}</td><td><b>${s.name}</b></td>
+          <td>${s.id}</td><td><b>${escHtml(s.name)}</b>${BT_MAP.has(s.id)?`<span class="bt-badge" onclick="showBtTooltip('${escHtml(s.id)}',event);event.stopPropagation()">★回測</span>`:''}</td>
           <td>${fmt(s.price,1)}</td>
           <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span></td>
           <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null&&s.ret20!==undefined?sign(Number(s.ret20))+fmt(s.ret20)+'%':'—'}</td>
