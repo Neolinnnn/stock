@@ -1024,9 +1024,11 @@ function buildDateSelect(){
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','mainforce','stock','watchlist'].forEach(p=>{
-    document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
-    document.getElementById(`page-${p}`).classList.toggle('active', p===page);
+  ['daily','weekly','mainforce','stock','watchlist','bt'].forEach(p=>{
+    const navEl = document.getElementById(`nav-${p}`);
+    if(navEl) navEl.classList.toggle('active', p===page);
+    const pageEl = document.getElementById(`page-${p}`);
+    if(pageEl) pageEl.classList.toggle('active', p===page);
   });
   // 主力觀察與今日掃描共用同一份 daily payload，所以也需要日期選擇器
   document.getElementById('date-picker-wrap').style.display =
@@ -1035,6 +1037,8 @@ function setPage(page){
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
   if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
+  if(page==='bt')        renderBtPage();
+  hideBtTooltip();
 }
 
 // ── 日期導航 ──────────────────────────────────────────────────────────────────
