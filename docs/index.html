@@ -1288,6 +1288,7 @@ async function loadDate(dateStr){
   }
   renderDaily(CACHE[dateStr]);
   if(CUR_PAGE==='mainforce') renderMainForce(CACHE[dateStr]);
+  if(CUR_PAGE==='bt') renderBtPage();
   document.getElementById('loading').style.display='none';
 }
 
