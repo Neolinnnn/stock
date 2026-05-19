@@ -414,12 +414,15 @@ function buildBtMap(results){
   return map;
 }
 
+let _dmDate = null, _dmCache = null;
 function buildDailyMap(){
+  if(_dmDate === CUR_DATE && _dmCache) return _dmCache;
   const d = CACHE[CUR_DATE];
   const m = new Map();
   if(!d || !d.stocks) return m;
   d.stocks.forEach(s=> m.set(s.id, s));
   if(d.mainForce) d.mainForce.forEach(s=>{ if(m.has(s.id)) m.get(s.id).stopLoss = s.stopLoss; });
+  _dmDate = CUR_DATE; _dmCache = m;
   return m;
 }
 
