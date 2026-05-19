@@ -253,6 +253,7 @@ let WL_DATA = null;
 let BT_RESULTS = null;
 let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
 let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector} — rebuilt by renderBtPage
+let DAILY_DATA = null; // daily.json 完整選股清單（最新掃描，64 支），供回測選股 Tab 使用
 
 let _toastTimer = null;
 function showToast(msg) {
@@ -507,7 +508,7 @@ function renderBtPage(){
     return;
   }
 
-  const data = CACHE[CUR_DATE];
+  const data = DAILY_DATA || CACHE[CUR_DATE];
   if(!data || !data.sectors || !data.stocks){
     el.innerHTML = '<div class="error-box"><span>⚠️</span>今日掃描資料不足，無法計算選股</div>';
     return;
@@ -1231,6 +1232,7 @@ async function init(){
 
   // 嘗試預載週報
   fetchJSON(`./weekly.json?v=${bust}`).then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
+  fetchJSON(`./daily.json?v=${bust}`).then(d=>{DAILY_DATA=d;}).catch(()=>{});
   await loadBtResults();
 
   await loadDate(CUR_DATE);
