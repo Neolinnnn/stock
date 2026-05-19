@@ -154,6 +154,43 @@
     color: #fff;
     border-color: var(--accent);
   }
+
+  /* ── 回測選股 Tab ────────────────────────────────────────────────── */
+  .bt-badge{display:inline-block;background:rgba(241,196,15,.15);color:#f1c40f;
+    border:1px solid rgba(241,196,15,.4);border-radius:3px;padding:1px 5px;
+    font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;cursor:pointer;}
+  .bt-badge:hover{background:rgba(241,196,15,.3);}
+
+  .bt-chip-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+  .bt-chip{background:var(--card);border:1px solid #3a3d55;border-radius:8px;
+    padding:10px 14px;cursor:pointer;transition:.15s;min-width:100px;}
+  .bt-chip:hover{border-color:#f1c40f;background:#1c1e2f;}
+  .bt-chip .bc-id{font-size:11px;color:var(--sub);}
+  .bt-chip .bc-name{font-size:14px;font-weight:700;margin:2px 0;}
+  .bt-chip .bc-sector{font-size:11px;color:var(--blue);}
+  .bt-chip .bc-count{font-size:10px;color:#f1c40f;margin-top:4px;}
+
+  .bt-sub-tab-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;
+    border-bottom:1px solid var(--border);padding-bottom:8px;}
+  .bt-sub-tab{background:transparent;border:1px solid var(--border);color:var(--sub);
+    border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;}
+  .bt-sub-tab:hover{background:#1e2330;color:var(--text);}
+  .bt-sub-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  #bt-tooltip{position:fixed;z-index:500;background:var(--card);
+    border:1px solid #3a3d55;border-radius:10px;padding:14px 16px;
+    min-width:220px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.5);
+    display:none;font-size:13px;}
+  #bt-tooltip.show{display:block;}
+  #bt-tooltip .bt-tt-header{font-size:15px;font-weight:700;margin-bottom:2px;}
+  #bt-tooltip .bt-tt-sub{font-size:11px;color:var(--sub);margin-bottom:10px;}
+  #bt-tooltip .bt-tt-row{display:flex;justify-content:space-between;
+    padding:4px 0;border-bottom:1px solid #1e2128;font-size:12px;}
+  #bt-tooltip .bt-tt-row:last-child{border-bottom:none;}
+  #bt-tooltip .bt-tt-lbl{color:var(--sub);}
+  #bt-tooltip .bt-tt-strats{margin-top:8px;padding-top:8px;
+    border-top:1px solid #1e2128;font-size:11px;color:var(--sub);line-height:1.7;}
+  #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 </head>
