@@ -414,6 +414,49 @@ function buildBtMap(results){
   return map;
 }
 
+function buildDailyMap(){
+  const d = CACHE[CUR_DATE];
+  const m = new Map();
+  if(!d || !d.stocks) return m;
+  d.stocks.forEach(s=> m.set(s.id, s));
+  if(d.mainForce) d.mainForce.forEach(s=>{ if(m.has(s.id)) m.get(s.id).stopLoss = s.stopLoss; });
+  return m;
+}
+
+function showBtTooltip(sid, event){
+  const bt = BT_MAP.get(sid);
+  if(!bt) return;
+  const daily = buildDailyMap().get(sid);
+
+  document.getElementById('bt-tt-name').textContent = `${bt.name}（${sid}）`;
+  document.getElementById('bt-tt-sub').textContent  = bt.sector || '';
+  document.getElementById('bt-tt-price').textContent   = daily ? fmt(daily.price,1)   : '—';
+  document.getElementById('bt-tt-rsi').textContent     = daily ? fmt(daily.rsi,1)     : '—';
+  document.getElementById('bt-tt-signal').innerHTML    = daily && daily.signal ? badge(daily.signal) : '—';
+  document.getElementById('bt-tt-sharpe').textContent  = daily ? fmt(daily.sharpe,2)  : '—';
+  document.getElementById('bt-tt-stop').textContent    = daily && daily.stopLoss!=null ? fmt(daily.stopLoss,1) : '—';
+  document.getElementById('bt-tt-count').textContent   = `⭐ 出現 ${bt.count}/5 策略`;
+  document.getElementById('bt-tt-strat-names').textContent = bt.strategies.map(s=>s.label).join('、');
+
+  const tt = document.getElementById('bt-tooltip');
+  tt.classList.add('show');
+
+  const margin = 12;
+  let x = event.clientX + margin;
+  let y = event.clientY + margin;
+  tt.style.left = '0'; tt.style.top = '0';
+  const w = tt.offsetWidth, h = tt.offsetHeight;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  if(x + w > vw - margin) x = event.clientX - w - margin;
+  if(y + h > vh - margin) y = event.clientY - h - margin;
+  tt.style.left = Math.max(margin, x) + 'px';
+  tt.style.top  = Math.max(margin, y) + 'px';
+}
+
+function hideBtTooltip(){
+  document.getElementById('bt-tooltip').classList.remove('show');
+}
+
 // ── 個股分析 ──────────────────────────────────────────────────────────────────
 let STOCKS_INDEX = [];
 
@@ -1047,6 +1090,10 @@ async function init(){
 
   await loadDate(CUR_DATE);
   setPage('daily');
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
+      hideBtTooltip();
+  });
 }
 
 function buildDateSelect(){
