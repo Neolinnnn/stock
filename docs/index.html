@@ -154,6 +154,44 @@
     color: #fff;
     border-color: var(--accent);
   }
+
+  /* ── 回測選股 Tab ────────────────────────────────────────────────── */
+  #nav-bt:not(.active){color:#f1c40f;}
+  .bt-badge{display:inline-block;background:rgba(241,196,15,.15);color:#f1c40f;
+    border:1px solid rgba(241,196,15,.4);border-radius:3px;padding:1px 5px;
+    font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;cursor:pointer;}
+  .bt-badge:hover{background:rgba(241,196,15,.3);}
+
+  .bt-chip-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;}
+  .bt-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;cursor:pointer;transition:.15s;min-width:100px;}
+  .bt-chip:hover{border-color:#f1c40f;background:#1e2330;}
+  .bt-chip .bc-id{font-size:11px;color:var(--sub);}
+  .bt-chip .bc-name{font-size:14px;font-weight:700;margin:2px 0;}
+  .bt-chip .bc-sector{font-size:11px;color:var(--blue);}
+  .bt-chip .bc-count{font-size:10px;color:#f1c40f;margin-top:4px;}
+
+  .bt-sub-tab-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;
+    border-bottom:1px solid var(--border);padding-bottom:8px;}
+  .bt-sub-tab{background:transparent;border:1px solid var(--border);color:var(--sub);
+    border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;}
+  .bt-sub-tab:hover{background:#1e2330;color:var(--text);}
+  .bt-sub-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+  #bt-tooltip{position:fixed;z-index:500;background:var(--card);
+    border:1px solid var(--border);border-radius:10px;padding:14px 16px;
+    min-width:220px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,.5);
+    display:none;font-size:13px;}
+  #bt-tooltip.show{display:block;}
+  #bt-tooltip .bt-tt-header{font-size:15px;font-weight:700;margin-bottom:2px;}
+  #bt-tooltip .bt-tt-sub{font-size:11px;color:var(--sub);margin-bottom:10px;}
+  #bt-tooltip .bt-tt-row{display:flex;justify-content:space-between;
+    padding:4px 0;border-bottom:1px solid #1e2128;font-size:12px;}
+  #bt-tooltip .bt-tt-row:last-child{border-bottom:none;}
+  #bt-tooltip .bt-tt-lbl{color:var(--sub);}
+  #bt-tooltip .bt-tt-strats{margin-top:8px;padding-top:8px;
+    border-top:1px solid #1e2128;font-size:11px;color:var(--sub);line-height:1.7;}
+  #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 </head>
@@ -166,6 +204,7 @@
     <a id="nav-mainforce" onclick="setPage('mainforce')">🎯 主力觀察</a>
     <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
     <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
+    <a id="nav-bt" onclick="setPage('bt')">⭐ 回測選股</a>
     <a id="nav-backtest" href="./backtest.html">📊 策略回測</a>
   </nav>
   <div class="date-picker" id="date-picker-wrap">
@@ -183,6 +222,20 @@
   <div id="page-mainforce" class="page-section"></div>
   <div id="page-stock"     class="page-section"></div>
   <div id="page-watchlist" class="page-section"></div>
+
+  <div id="page-bt" class="page-section"></div>
+
+  <!-- 回測浮動提示卡（單例） -->
+  <div id="bt-tooltip">
+    <div class="bt-tt-header" id="bt-tt-name"></div>
+    <div class="bt-tt-sub" id="bt-tt-sub"></div>
+    <div class="bt-tt-row"><span class="bt-tt-lbl">現價</span><span id="bt-tt-price"></span></div>
+    <div class="bt-tt-row"><span class="bt-tt-lbl">RSI5</span><span id="bt-tt-rsi"></span></div>
+    <div class="bt-tt-row"><span class="bt-tt-lbl">訊號</span><span id="bt-tt-signal"></span></div>
+    <div class="bt-tt-row"><span class="bt-tt-lbl">CV夏普</span><span id="bt-tt-sharpe"></span></div>
+    <div class="bt-tt-row"><span class="bt-tt-lbl">ATR停損</span><span id="bt-tt-stop"></span></div>
+    <div class="bt-tt-strats"><strong id="bt-tt-count"></strong><br><span id="bt-tt-strat-names"></span></div>
+  </div>
 </main>
 
 <footer>資料來源：twstock / FinMind　｜　每個工作日 14:32 自動更新</footer>
@@ -197,6 +250,8 @@ let CUR_PAGE = 'daily';
 let WEEKLY_DATA = null;
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw14G5uB-Aic9KAtcH_aNhgRJKpOhC9LQWYN9vuNwSQePbFto2oFJ71oWrsugtuvSnSzw/exec';
 let WL_DATA = null;
+let BT_RESULTS = null;
+let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
 
 let _toastTimer = null;
 function showToast(msg) {
@@ -328,6 +383,170 @@ async function fetchJSON(url){
   const r = await fetch(url, {cache:'no-cache'});
   if(!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
+}
+
+async function loadBtResults(){
+  try{
+    BT_RESULTS = await fetchJSON('./backtest/results.json?v=' + Math.floor(Date.now()/86400000));
+    BT_MAP = buildBtMap(BT_RESULTS);
+  }catch(e){
+    console.warn('backtest/results.json 載入失敗：', e.message);
+  }
+}
+
+function buildBtMap(results){
+  const map = new Map();
+  if(!results || !results.ranking || !results.variants) return map;
+  const top5ids = results.ranking.slice(0,5).map(r=>r.id);
+  top5ids.forEach(id=>{
+    const variant = results.variants.find(v=>v.id===id);
+    if(!variant || !variant.rebalances || !variant.rebalances.length) return;
+    const lastRb = variant.rebalances[variant.rebalances.length-1];
+    if(!lastRb.holdings) return;
+    lastRb.holdings.forEach(h=>{
+      if(!map.has(h.stock_id)){
+        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector});
+      }
+      const entry = map.get(h.stock_id);
+      entry.count++;
+      entry.strategies.push({id:variant.id, label:variant.label, sharpe:results.ranking.find(r=>r.id===id)?.sharpe||0});
+    });
+  });
+  return map;
+}
+
+let _dmDate = null, _dmCache = null;
+function buildDailyMap(){
+  if(_dmDate === CUR_DATE && _dmCache) return _dmCache;
+  const d = CACHE[CUR_DATE];
+  const m = new Map();
+  if(!d || !d.stocks) return m;
+  d.stocks.forEach(s=> m.set(s.id, s));
+  if(d.mainForce) d.mainForce.forEach(s=>{ if(m.has(s.id)) m.get(s.id).stopLoss = s.stopLoss; });
+  _dmDate = CUR_DATE; _dmCache = m;
+  return m;
+}
+
+function showBtTooltip(sid, event){
+  const bt = BT_MAP.get(sid);
+  if(!bt) return;
+  const daily = buildDailyMap().get(sid);
+
+  document.getElementById('bt-tt-name').textContent = `${bt.name}（${sid}）`;
+  document.getElementById('bt-tt-sub').textContent  = bt.sector || '';
+  document.getElementById('bt-tt-price').textContent   = daily ? fmt(daily.price,1)   : '—';
+  document.getElementById('bt-tt-rsi').textContent     = daily ? fmt(daily.rsi,1)     : '—';
+  document.getElementById('bt-tt-signal').innerHTML    = daily && daily.signal ? badge(daily.signal) : '—';
+  document.getElementById('bt-tt-sharpe').textContent  = daily ? fmt(daily.sharpe,2)  : '—';
+  document.getElementById('bt-tt-stop').textContent    = daily && daily.stopLoss!=null ? fmt(daily.stopLoss,1) : '—';
+  document.getElementById('bt-tt-count').textContent   = `⭐ 出現 ${bt.count}/5 策略`;
+  document.getElementById('bt-tt-strat-names').textContent = bt.strategies.map(s=>s.label).join('、');
+
+  const tt = document.getElementById('bt-tooltip');
+  tt.classList.add('show');
+
+  const margin = 12;
+  let x = event.clientX + margin;
+  let y = event.clientY + margin;
+  tt.style.left = '0'; tt.style.top = '0';
+  const w = tt.offsetWidth, h = tt.offsetHeight;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  if(x + w > vw - margin) x = event.clientX - w - margin;
+  if(y + h > vh - margin) y = event.clientY - h - margin;
+  tt.style.left = Math.max(margin, x) + 'px';
+  tt.style.top  = Math.max(margin, y) + 'px';
+}
+
+function hideBtTooltip(){
+  document.getElementById('bt-tooltip').classList.remove('show');
+}
+
+function renderBtPage(){
+  const el = document.getElementById('page-bt');
+  if(!BT_RESULTS){
+    el.innerHTML = '<div class="error-box"><span>⏳</span>回測資料載入中，請稍後再切換此 Tab</div>';
+    return;
+  }
+  if(!BT_RESULTS.ranking || !BT_RESULTS.variants){
+    el.innerHTML = '<div class="error-box"><span>❌</span>回測資料格式異常</div>';
+    return;
+  }
+
+  const top5ids = BT_RESULTS.ranking.slice(0,5).map(r=>r.id);
+  const top5variants = top5ids.map(id=>BT_RESULTS.variants.find(v=>v.id===id)).filter(Boolean);
+  const dailyMap = buildDailyMap();
+
+  // ── 上層：交集精選 ────────────────────────────────────────────────
+  const intersect = [...BT_MAP.entries()]
+    .filter(([,v])=>v.count>=2)
+    .sort((a,b)=>b[1].count-a[1].count)
+    .slice(0,10);
+
+  let html = `<div class="section-title">⭐ 交集精選（出現在 2+ 策略的個股）</div>`;
+
+  if(!intersect.length){
+    html += `<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;padding:16px;">目前五個策略持股無重疊，請查看下方各策略持倉</div>`;
+  } else {
+    html += `<div class="bt-chip-grid">`;
+    intersect.forEach(([sid,bt])=>{
+      const daily = dailyMap.get(sid);
+      const sig = daily?.signal || '';
+      html += `<div class="bt-chip" onclick="showBtTooltip('${escHtml(sid)}',event)">
+        <div class="bc-id">${escHtml(sid)}</div>
+        <div class="bc-name">${escHtml(bt.name)}</div>
+        <div class="bc-sector">${escHtml(bt.sector)}</div>
+        <div class="bc-count">★ 出現 ${bt.count}/5 策略</div>
+        ${sig ? `<div style="margin-top:4px">${badge(sig)}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── 下層：各策略持倉子 Tab ─────────────────────────────────────────
+  html += `<div class="section-title">各策略持倉明細</div>`;
+  html += `<div class="bt-sub-tab-bar">`;
+  top5variants.forEach((v,i)=>{
+    const sharpe = BT_RESULTS.ranking.find(r=>r.id===v.id)?.sharpe?.toFixed(2) || '—';
+    html += `<button class="bt-sub-tab${i===0?' active':''}" onclick="btSwitchTab(this,${i})">#${i+1} ${escHtml(v.label)}（${sharpe}）</button>`;
+  });
+  html += `</div>`;
+
+  top5variants.forEach((v,i)=>{
+    const lastRb = v.rebalances?.[v.rebalances.length-1];
+    const rbDate = lastRb?.date ? fmtDate(lastRb.date) : '—';
+    const holdings = lastRb?.holdings || [];
+    html += `<div class="bt-sub-panel card" id="bt-panel-${i}" style="${i===0?'':'display:none'}">`;
+    html += `<div style="font-size:11px;color:var(--sub);margin-bottom:8px;">持倉截至 ${rbDate}</div>`;
+    if(!holdings.length){
+      html += `<div style="color:var(--sub);font-size:13px;">無持倉資料</div>`;
+    } else {
+      html += `<div style="overflow-x:auto"><table>
+        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>權重</th><th>今日 RSI5</th><th>今日訊號</th></tr>
+        ${holdings.map(h=>{
+          const daily = dailyMap.get(h.stock_id);
+          return `<tr onclick="showBtTooltip('${escHtml(h.stock_id)}',event)" style="cursor:pointer">
+            <td>${escHtml(h.stock_id)}</td>
+            <td><b>${escHtml(h.name)}</b>${BT_MAP.get(h.stock_id)?.count>=2?`<span class="bt-badge">★交集</span>`:''}</td>
+            <td>${escHtml(h.sector)}</td>
+            <td>${h.weight!=null?(h.weight*100).toFixed(1)+'%':'—'}</td>
+            <td>${daily ? fmt(daily.rsi,1) : '—'}</td>
+            <td>${daily && daily.signal ? badge(daily.signal) : '—'}</td>
+          </tr>`;
+        }).join('')}
+      </table></div>`;
+    }
+    html += `</div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function btSwitchTab(btn, idx){
+  document.querySelectorAll('.bt-sub-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.bt-sub-panel').forEach((p,i)=>{
+    p.style.display = i===idx ? '' : 'none';
+  });
 }
 
 // ── 個股分析 ──────────────────────────────────────────────────────────────────
@@ -959,9 +1178,14 @@ async function init(){
 
   // 嘗試預載週報
   fetchJSON(`./weekly.json?v=${bust}`).then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
+  await loadBtResults();
 
   await loadDate(CUR_DATE);
   setPage('daily');
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
+      hideBtTooltip();
+  });
 }
 
 function buildDateSelect(){
@@ -972,9 +1196,11 @@ function buildDateSelect(){
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','mainforce','stock','watchlist'].forEach(p=>{
-    document.getElementById(`nav-${p}`).classList.toggle('active', p===page);
-    document.getElementById(`page-${p}`).classList.toggle('active', p===page);
+  ['daily','weekly','mainforce','stock','watchlist','bt'].forEach(p=>{
+    const navEl = document.getElementById(`nav-${p}`);
+    if(navEl) navEl.classList.toggle('active', p===page);
+    const pageEl = document.getElementById(`page-${p}`);
+    if(pageEl) pageEl.classList.toggle('active', p===page);
   });
   // 主力觀察與今日掃描共用同一份 daily payload，所以也需要日期選擇器
   document.getElementById('date-picker-wrap').style.display =
@@ -983,6 +1209,8 @@ function setPage(page){
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
   if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
+  if(page==='bt')        renderBtPage();
+  hideBtTooltip();
 }
 
 // ── 日期導航 ──────────────────────────────────────────────────────────────────
@@ -1119,7 +1347,7 @@ function renderDaily(data){
       <div class="sector-body"><table>
         <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI5/10</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th><th></th></tr>
         ${stks.map(s=>`<tr>
-          <td>${s.id}</td><td><b>${s.name}</b></td>
+          <td>${s.id}</td><td><b>${escHtml(s.name)}</b>${BT_MAP.has(s.id)?`<span class="bt-badge" onclick="showBtTooltip('${escHtml(s.id)}',event);event.stopPropagation()">★回測</span>`:''}</td>
           <td>${fmt(s.price,1)}</td>
           <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span></td>
           <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null&&s.ret20!==undefined?sign(Number(s.ret20))+fmt(s.ret20)+'%':'—'}</td>
