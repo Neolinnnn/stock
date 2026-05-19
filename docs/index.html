@@ -460,6 +460,94 @@ function hideBtTooltip(){
   document.getElementById('bt-tooltip').classList.remove('show');
 }
 
+function renderBtPage(){
+  const el = document.getElementById('page-bt');
+  if(!BT_RESULTS){
+    el.innerHTML = '<div class="error-box"><span>⏳</span>回測資料載入中，請稍後再切換此 Tab</div>';
+    return;
+  }
+  if(!BT_RESULTS.ranking || !BT_RESULTS.variants){
+    el.innerHTML = '<div class="error-box"><span>❌</span>回測資料格式異常</div>';
+    return;
+  }
+
+  const top5ids = BT_RESULTS.ranking.slice(0,5).map(r=>r.id);
+  const top5variants = top5ids.map(id=>BT_RESULTS.variants.find(v=>v.id===id)).filter(Boolean);
+  const dailyMap = buildDailyMap();
+
+  // ── 上層：交集精選 ────────────────────────────────────────────────
+  const intersect = [...BT_MAP.entries()]
+    .filter(([,v])=>v.count>=2)
+    .sort((a,b)=>b[1].count-a[1].count)
+    .slice(0,10);
+
+  let html = `<div class="section-title">⭐ 交集精選（出現在 2+ 策略的個股）</div>`;
+
+  if(!intersect.length){
+    html += `<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;padding:16px;">目前五個策略持股無重疊，請查看下方各策略持倉</div>`;
+  } else {
+    html += `<div class="bt-chip-grid">`;
+    intersect.forEach(([sid,bt])=>{
+      const daily = dailyMap.get(sid);
+      const sig = daily?.signal || '';
+      html += `<div class="bt-chip" onclick="showBtTooltip('${escHtml(sid)}',event)">
+        <div class="bc-id">${escHtml(sid)}</div>
+        <div class="bc-name">${escHtml(bt.name)}</div>
+        <div class="bc-sector">${escHtml(bt.sector)}</div>
+        <div class="bc-count">★ 出現 ${bt.count}/5 策略</div>
+        ${sig ? `<div style="margin-top:4px">${badge(sig)}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── 下層：各策略持倉子 Tab ─────────────────────────────────────────
+  html += `<div class="section-title">各策略持倉明細</div>`;
+  html += `<div class="bt-sub-tab-bar">`;
+  top5variants.forEach((v,i)=>{
+    const sharpe = BT_RESULTS.ranking.find(r=>r.id===v.id)?.sharpe?.toFixed(2) || '—';
+    html += `<button class="bt-sub-tab${i===0?' active':''}" onclick="btSwitchTab(this,${i})">#${i+1} ${escHtml(v.label)}（${sharpe}）</button>`;
+  });
+  html += `</div>`;
+
+  top5variants.forEach((v,i)=>{
+    const lastRb = v.rebalances?.[v.rebalances.length-1];
+    const rbDate = lastRb?.date ? fmtDate(lastRb.date) : '—';
+    const holdings = lastRb?.holdings || [];
+    html += `<div class="bt-sub-panel card" id="bt-panel-${i}" style="${i===0?'':'display:none'}">`;
+    html += `<div style="font-size:11px;color:var(--sub);margin-bottom:8px;">持倉截至 ${rbDate}</div>`;
+    if(!holdings.length){
+      html += `<div style="color:var(--sub);font-size:13px;">無持倉資料</div>`;
+    } else {
+      html += `<div style="overflow-x:auto"><table>
+        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>權重</th><th>今日 RSI5</th><th>今日訊號</th></tr>
+        ${holdings.map(h=>{
+          const daily = dailyMap.get(h.stock_id);
+          return `<tr onclick="showBtTooltip('${escHtml(h.stock_id)}',event)" style="cursor:pointer">
+            <td>${escHtml(h.stock_id)}</td>
+            <td><b>${escHtml(h.name)}</b>${BT_MAP.get(h.stock_id)?.count>=2?`<span class="bt-badge">★交集</span>`:''}</td>
+            <td>${escHtml(h.sector)}</td>
+            <td>${(h.weight*100).toFixed(1)}%</td>
+            <td>${daily ? fmt(daily.rsi,1) : '—'}</td>
+            <td>${daily && daily.signal ? badge(daily.signal) : '—'}</td>
+          </tr>`;
+        }).join('')}
+      </table></div>`;
+    }
+    html += `</div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function btSwitchTab(btn, idx){
+  document.querySelectorAll('.bt-sub-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.bt-sub-panel').forEach((p,i)=>{
+    p.style.display = i===idx ? '' : 'none';
+  });
+}
+
 // ── 個股分析 ──────────────────────────────────────────────────────────────────
 let STOCKS_INDEX = [];
 
