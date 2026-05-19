@@ -1089,7 +1089,7 @@ async function init(){
 
   // 嘗試預載週報
   fetchJSON(`./weekly.json?v=${bust}`).then(d=>{WEEKLY_DATA=d;}).catch(()=>{});
-  loadBtResults();  // 非同步載入，不阻塞主流程
+  await loadBtResults();
 
   await loadDate(CUR_DATE);
   setPage('daily');
