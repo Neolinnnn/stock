@@ -527,7 +527,7 @@ function renderBtPage(){
             <td>${escHtml(h.stock_id)}</td>
             <td><b>${escHtml(h.name)}</b>${BT_MAP.get(h.stock_id)?.count>=2?`<span class="bt-badge">★交集</span>`:''}</td>
             <td>${escHtml(h.sector)}</td>
-            <td>${(h.weight*100).toFixed(1)}%</td>
+            <td>${h.weight!=null?(h.weight*100).toFixed(1)+'%':'—'}</td>
             <td>${daily ? fmt(daily.rsi,1) : '—'}</td>
             <td>${daily && daily.signal ? badge(daily.signal) : '—'}</td>
           </tr>`;
