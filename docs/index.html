@@ -252,6 +252,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw14G5uB-Aic9KA
 let WL_DATA = null;
 let BT_RESULTS = null;
 let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
+let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector} — rebuilt by renderBtPage
 
 let _toastTimer = null;
 function showToast(msg) {
@@ -428,7 +429,7 @@ function buildDailyMap(){
 }
 
 function showBtTooltip(sid, event){
-  const bt = BT_MAP.get(sid);
+  const bt = BT_MAP.get(sid) || TODAY_BT_MAP.get(sid);
   if(!bt) return;
   const daily = buildDailyMap().get(sid);
 
@@ -475,6 +476,19 @@ function renderBtPage(){
   const top5ids = BT_RESULTS.ranking.slice(0,5).map(r=>r.id);
   const top5variants = top5ids.map(id=>BT_RESULTS.variants.find(v=>v.id===id)).filter(Boolean);
   const dailyMap = buildDailyMap();
+
+  // ── 建立 TODAY_BT_MAP（今日持倉，供 tooltip fallback 用）───────────
+  TODAY_BT_MAP = new Map();
+  top5variants.forEach(v => {
+    const holdings = v.rebalances?.[v.rebalances.length-1]?.holdings || [];
+    holdings.forEach(h => {
+      if(!TODAY_BT_MAP.has(h.stock_id))
+        TODAY_BT_MAP.set(h.stock_id, {count: 0, strategies: [], name: h.name, sector: h.sector});
+      const e = TODAY_BT_MAP.get(h.stock_id);
+      e.count++;
+      e.strategies.push({id: v.id, label: v.label});
+    });
+  });
 
   // ── 上層：交集精選 ────────────────────────────────────────────────
   const intersect = [...BT_MAP.entries()]
