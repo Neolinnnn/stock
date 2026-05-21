@@ -282,3 +282,129 @@ def run_all_combos(
                 trades.append(trade)
             combos[key] = {'stats': calc_stats(trades), 'trades': trades}
     return combos
+
+
+# ── 輸出 ──────────────────────────────────────────────────────────────────────
+
+def print_combos(label: str, combos: dict) -> None:
+    print(f'\n【{label}】')
+    print(f'  {"組合":<12} {"勝率":>7}  {"交易數":>5}  {"未結":>4}  {"avg報酬":>8}  {"avg持有":>7}')
+    for key, res in sorted(combos.items()):
+        s = res['stats']
+        print(
+            f'  {key:<12} {s["win_rate"]:>7.1%}  {s["total"]:>5}  '
+            f'{s["open_count"]:>4}  {s["avg_return"]:>+8.2f}%  '
+            f'{s["avg_holding_days"]:>6.1f}天'
+        )
+
+
+def print_comparison(
+    signals_a: list[dict],
+    signals_b: list[dict],
+    combos_a: dict,
+    combos_b: dict,
+) -> None:
+    def best(combos: dict) -> tuple[str, dict]:
+        return max(combos.items(), key=lambda kv: kv[1]['stats']['win_rate'])
+
+    key_a, res_a = best(combos_a)
+    key_b, res_b = best(combos_b)
+    sa, sb = res_a['stats'], res_b['stats']
+
+    na, nb = len(signals_a), len(signals_b)
+    reduction = (na - nb) / na if na else 0.0
+    wr_diff   = sb['win_rate'] - sa['win_rate']
+    ret_diff  = sb['avg_return'] - sa['avg_return']
+
+    print('\n【對比摘要】')
+    print(f'  規則A 訊號數：{na}  規則B 訊號數：{nb}  '
+          f'法人過濾減少 {reduction:.0%}')
+    print(f'  最佳組合(A)：{key_a}  '
+          f'勝率 {sa["win_rate"]:.1%}  avg報酬 {sa["avg_return"]:+.2f}%')
+    print(f'  最佳組合(B)：{key_b}  '
+          f'勝率 {sb["win_rate"]:.1%}  avg報酬 {sb["avg_return"]:+.2f}%')
+    print(f'  法人過濾效果：勝率 {wr_diff:+.1%}，avg報酬 {ret_diff:+.2f}%')
+
+
+# ── 主程式 ────────────────────────────────────────────────────────────────────
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description='Analyzer Framework 回測')
+    parser.add_argument('--days', type=int, default=365,
+                        help='回測天數（預設 365，額外 +60 天預熱 MA）')
+    parser.add_argument('--no-institutional', action='store_true',
+                        help='跳過三大法人資料（只跑規則A）')
+    args = parser.parse_args()
+
+    end_date    = dt_date.today()
+    fetch_start = end_date - timedelta(days=args.days + 60)
+    bt_cutoff   = end_date - timedelta(days=args.days)
+    start_str   = fetch_start.strftime('%Y-%m-%d')
+    end_str     = end_date.strftime('%Y-%m-%d')
+    cutoff_ym   = bt_cutoff.strftime('%Y%m%d')
+    end_ym      = end_date.strftime('%Y%m%d')
+
+    print(f'\n{"="*60}')
+    print(f'  Analyzer Framework 回測  {cutoff_ym} ~ {end_ym}')
+    print(f'  規則A：MA多頭排列 + 偏離度<5% + 縮量回踩±3%')
+    print(f'  規則B：規則A + 三大法人買超')
+    print(f'{"="*60}')
+
+    dl = get_dataloader()
+
+    print(f'\n【Step 1】抓取 OHLCV（{len(ALL_STOCK_IDS)} 檔，{start_str} ~ {end_str}）')
+    price_data   = fetch_ohlc(dl, ALL_STOCK_IDS, start_str, end_str)
+    trading_days = get_sorted_trading_days(price_data)
+    trading_days_bt = [d for d in trading_days if d >= cutoff_ym]
+    print(f'  回測交易日：{len(trading_days_bt)} 天')
+
+    inst_data = None
+    if not args.no_institutional:
+        print(f'\n【Step 2】抓取三大法人買賣超')
+        inst_data = fetch_institutional(dl, ALL_STOCK_IDS, start_str, end_str)
+
+    print(f'\n【Step 3】產生訊號')
+    signals_a, signals_b = collect_all_signals(price_data, inst_data, cutoff=cutoff_ym)
+    print(f'  規則A：{len(signals_a)} 筆  規則B：{len(signals_b)} 筆')
+
+    if not signals_a:
+        print('  ❌ 無訊號，終止')
+        return
+
+    print(f'\n【Step 4】執行 9 組 TP×SL 回測')
+    combos_a = run_all_combos(signals_a, price_data, trading_days_bt)
+    combos_b = run_all_combos(signals_b, price_data, trading_days_bt)
+
+    print_combos('規則 A：純技術（MA排列 + 偏離度 + 縮量回踩）', combos_a)
+    print_combos('規則 B：加三大法人過濾', combos_b)
+    print_comparison(signals_a, signals_b, combos_a, combos_b)
+
+    out = {
+        'generated_at': datetime.now().isoformat(),
+        'date_range':   {'start': cutoff_ym, 'end': end_ym},
+        'rule_a': {
+            'total_signals': len(signals_a),
+            'combinations': {
+                k: {'stats': v['stats'], 'trades': v['trades']}
+                for k, v in combos_a.items()
+            },
+        },
+        'rule_b': {
+            'total_signals': len(signals_b),
+            'combinations': {
+                k: {'stats': v['stats'], 'trades': v['trades']}
+                for k, v in combos_b.items()
+            },
+        },
+    }
+    out_path = Path('backtest_analyzer_results.json')
+    out_path.write_text(
+        json.dumps(out, ensure_ascii=False, indent=2, default=str),
+        encoding='utf-8',
+    )
+    print(f'\n  ✅ 結果已存至 {out_path}')
+    print(f'\n{"="*60}\n')
+
+
+if __name__ == '__main__':
+    main()
