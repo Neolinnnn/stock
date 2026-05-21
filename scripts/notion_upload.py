@@ -403,3 +403,71 @@ def upload_backtest_results(results: dict) -> str:
     for i in range(100, len(blocks), 100):
         notion.blocks.children.append(page_id, children=blocks[i:i+100])
     return page_id
+
+
+# ── Analyzer Framework 每日掃描 ───────────────────────────────────────────────
+
+def upload_analyzer_daily(
+    signals_a: list,
+    signals_b: list,
+    date_str: str,
+) -> str:
+    """
+    上傳 Analyzer Framework 每日選股結果到 Notion。
+    標題格式：analyzer framework MMDD（e.g. analyzer framework 0522）
+    signals: list of {stock_id, stock_name, signal_close, sector, ...}
+    date_str: YYYYMMDD
+    """
+    notion = get_notion_client()
+    mmdd  = date_str[4:8]
+    title = f"analyzer framework {mmdd}"
+
+    date_disp = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}"
+
+    # 規則B 是規則A 的子集，找出「B 有、A 有」和「只在A」
+    b_ids = {s['stock_id'] for s in signals_b}
+
+    blocks = []
+
+    # ── 摘要 ──
+    blocks.append(_h2(f"掃描日期：{date_disp}"))
+    blocks.append(_p(f"規則A（純技術）觸發：{len(signals_a)} 檔"))
+    blocks.append(_p(f"規則B（+法人買超）觸發：{len(signals_b)} 檔"))
+    blocks.append(_p("條件：MA5>MA20 | 偏離度<5% | 縮量<vol_ma20×0.8 | 收盤回踩 MA5±3%"))
+    blocks.append(_div())
+
+    # ── 規則B（法人過濾後，優先顯示） ──
+    blocks.append(_h2(f"規則B — 加三大法人過濾（{len(signals_b)} 檔）"))
+    if signals_b:
+        for sig in sorted(signals_b, key=lambda s: s.get('sector', '')):
+            blocks.append(_li(
+                f"{sig['stock_id']} {sig['stock_name']}"
+                f"（{sig.get('sector', '')}）　收盤 {sig['signal_close']:.1f}"
+            ))
+    else:
+        blocks.append(_p("今日無觸發"))
+
+    blocks.append(_div())
+
+    # ── 規則A（純技術，包含未通過法人過濾的） ──
+    blocks.append(_h2(f"規則A — 純技術（{len(signals_a)} 檔）"))
+    if signals_a:
+        for sig in sorted(signals_a, key=lambda s: s.get('sector', '')):
+            tag = '✅' if sig['stock_id'] in b_ids else '○'
+            blocks.append(_li(
+                f"{tag} {sig['stock_id']} {sig['stock_name']}"
+                f"（{sig.get('sector', '')}）　收盤 {sig['signal_close']:.1f}"
+            ))
+        blocks.append(_p("✅ = 同時通過法人過濾（規則B）　○ = 僅技術面觸發"))
+    else:
+        blocks.append(_p("今日無觸發"))
+
+    page = notion.pages.create(
+        parent={"page_id": PARENT_PAGE_ID},
+        properties={"title": {"title": [{"text": {"content": title}}]}},
+        children=blocks[:100],
+    )
+    page_id = page['id']
+    for i in range(100, len(blocks), 100):
+        notion.blocks.children.append(page_id, children=blocks[i:i+100])
+    return page_id

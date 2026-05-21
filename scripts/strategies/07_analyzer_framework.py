@@ -326,6 +326,44 @@ def print_comparison(
     print(f'  法人過濾效果：勝率 {wr_diff:+.1%}，avg報酬 {ret_diff:+.2f}%')
 
 
+# ── 每日掃描 ──────────────────────────────────────────────────────────────────
+
+def scan_daily(no_institutional: bool = False) -> tuple[list[dict], list[dict], str]:
+    """
+    掃描最新交易日觸發的訊號，供每日自動化呼叫。
+    回傳 (signals_a, signals_b, date_str)，date_str 為 YYYYMMDD；
+    無資料時回傳 ([], [], '')。
+    """
+    today     = dt_date.today()
+    start_str = (today - timedelta(days=70)).strftime('%Y-%m-%d')  # MA20 預熱 buffer
+    end_str   = today.strftime('%Y-%m-%d')
+
+    dl         = get_dataloader()
+    price_data = fetch_ohlc(dl, ALL_STOCK_IDS, start_str, end_str)
+
+    trading_days = get_sorted_trading_days(price_data)
+    if not trading_days:
+        return [], [], ''
+    latest = trading_days[-1]  # YYYYMMDD
+
+    inst_data = None
+    if not no_institutional:
+        inst_data = fetch_institutional(dl, ALL_STOCK_IDS, start_str, end_str)
+
+    signals_a, signals_b = collect_all_signals(price_data, inst_data, cutoff=latest)
+    signals_a = [s for s in signals_a if s['date'] == latest]
+    signals_b = [s for s in signals_b if s['date'] == latest]
+
+    # 加入族群欄位
+    sector_of = {sid: sec for sec, stocks in SECTORS.items() for sid in stocks}
+    for sig in signals_a:
+        sig['sector'] = sector_of.get(sig['stock_id'], '')
+    for sig in signals_b:
+        sig['sector'] = sector_of.get(sig['stock_id'], '')
+
+    return signals_a, signals_b, latest
+
+
 # ── 主程式 ────────────────────────────────────────────────────────────────────
 
 def main() -> None:
