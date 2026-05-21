@@ -1,11 +1,17 @@
 # tests/test_analyzer_framework.py
 import sys, os
+import importlib.util
 import pandas as pd
 import pytest
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts', 'strategies'))
+_mod_path = os.path.join(os.path.dirname(__file__), '..', 'scripts', 'strategies', '07_analyzer_framework.py')
+_spec = importlib.util.spec_from_file_location('analyzer_framework', _mod_path)
+_mod  = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_mod)
 
-from analyzer_framework import compute_ma_indicators, generate_signals_a, generate_signals_b
+compute_ma_indicators = _mod.compute_ma_indicators
+generate_signals_a    = _mod.generate_signals_a
+generate_signals_b    = _mod.generate_signals_b
 
 
 def _make_uptrend_df(n: int = 60) -> pd.DataFrame:
