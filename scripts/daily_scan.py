@@ -576,6 +576,7 @@ def build_summary(date, market, all_results, chart_path):
     all_strong = []  # 強勢股
     all_weak = []    # 弱勢股
     all_qualified = []  # 雙條件達標
+    _qualified_seen = set()  # 去重：同一個股只列一次
     all_alerts = []  # 風險警示
 
     for sector, results in all_results.items():
@@ -635,6 +636,9 @@ def build_summary(date, market, all_results, chart_path):
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
                    (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2)]
         for _, r in final.iterrows():
+            if r['id'] in _qualified_seen:
+                continue
+            _qualified_seen.add(r['id'])
             all_qualified.append({
                 'sector': sector, 'id': r['id'], 'name': r['name'],
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
