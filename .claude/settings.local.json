@@ -29,7 +29,8 @@
       "Bash(pip show *)",
       "Bash(python -c \"import os; print\\(os.environ.get\\('NOTION_TOKEN', 'NOT_SET'\\)\\)\")",
       "Bash(python -m streamlit run app.py --server.headless true --server.port 8501)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501)",
+      "mcp__dbd10f7e-e843-464a-a2be-7f10baabd9c1__notion-update-page"
     ]
   }
 }
