@@ -580,8 +580,9 @@ def tab_stock():
 
         rev_list = []
         try:
+            _rev_start = (datetime.now() - timedelta(days=730)).strftime("%Y-%m-%d")
             rev_df = dl.taiwan_stock_month_revenue(
-                stock_id=sid, start_date="2025-01-01", end_date=end
+                stock_id=sid, start_date=_rev_start, end_date=end
             )
             if not rev_df.empty:
                 rev_df = rev_df.sort_values("date", ascending=False)
@@ -720,6 +721,22 @@ def tab_stock():
                 customdata=_short_sig["close"].tolist(),
             ), row=1, col=1)
 
+    # ── 型態頸線標記（疊加在 K 線主圖）──────────────────────────────────────────
+    if patterns["w_bottom"].get("neckline"):
+        _neck = patterns["w_bottom"]["neckline"]
+        fig.add_hline(y=_neck, line_dash="dash", line_color="rgba(39,174,96,0.7)",
+                      annotation_text=f"W底頸線 {_neck:.1f}",
+                      annotation_font_color="#27ae60",
+                      annotation_position="top right", row=1, col=1)
+    if patterns["m_top"].get("neckline"):
+        _neck = patterns["m_top"]["neckline"]
+        fig.add_hline(y=_neck, line_dash="dash", line_color="rgba(231,76,60,0.7)",
+                      annotation_text=f"M頭頸線 {_neck:.1f}",
+                      annotation_font_color="#e74c3c",
+                      annotation_position="bottom right", row=1, col=1)
+
+    # ── 明確連結所有子圖 X 軸（確保縮放雙向同步）────────────────────────────────
+    fig.update_xaxes(matches='x')
     fig.update_layout(
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
         font_color="#fafafa", height=620,
@@ -752,9 +769,121 @@ def tab_stock():
             _mj_display.set_index("日期").style.map(_color_signal_mj, subset=["方向"]),
             use_container_width=True,
         )
-        st.caption("MJ訊號：J線穿越零軸且 MACD OSC 同步確認。僅供技術參考，非投資建議。")
+        st.caption(
+            "📌 MJ訊號原理：J 值穿越零軸（0）觸發，同時需 MACD OSC 同向確認。"
+            "　J 值參考：> 80 超買（易反轉向下）、< 20 超賣（易反轉向上）、穿越 0 軸為進場訊號。"
+            "　OSC 參考：> 0 多頭動能（做多有利）、< 0 空頭動能（做空有利）。"
+            "　僅供技術參考，非投資建議。"
+        )
     else:
         st.info("近期無 MJ 入場訊號觸發")
+
+    st.divider()
+
+    # ── KDJ 深度分析圖 ────────────────────────────────────────────────────────
+    st.markdown("#### 📈 KDJ(9,3,3) 深度分析")
+    _kdj_chart_col, _kdj_info_col = st.columns([3, 1])
+
+    with _kdj_chart_col:
+        _fig_kdj = go.Figure()
+        # 超買/超賣底色
+        _fig_kdj.add_hrect(y0=80, y1=130, fillcolor="rgba(231,76,60,0.08)", line_width=0)
+        _fig_kdj.add_hrect(y0=-30, y1=20, fillcolor="rgba(39,174,96,0.08)", line_width=0)
+        # K / D / J 曲線
+        _fig_kdj.add_trace(go.Scatter(x=df["date"], y=df["kd_k"], name="K",
+                                      line=dict(color="#f39c12", width=2)))
+        _fig_kdj.add_trace(go.Scatter(x=df["date"], y=df["kd_d"], name="D",
+                                      line=dict(color="#3498db", width=2)))
+        _fig_kdj.add_trace(go.Scatter(x=df["date"], y=df["kd_j"], name="J",
+                                      line=dict(color="#e74c3c", width=1.5, dash="dot")))
+        # 水平參考線
+        _fig_kdj.add_hline(y=80, line_dash="dash", line_color="rgba(231,76,60,0.5)",
+                           annotation_text="超買 80", annotation_position="top left",
+                           annotation_font=dict(color="#e74c3c", size=10))
+        _fig_kdj.add_hline(y=20, line_dash="dash", line_color="rgba(39,174,96,0.5)",
+                           annotation_text="超賣 20", annotation_position="bottom left",
+                           annotation_font=dict(color="#27ae60", size=10))
+        _fig_kdj.add_hline(y=0, line_dash="dot", line_color="rgba(255,255,255,0.2)",
+                           annotation_text="J零軸", annotation_position="top left",
+                           annotation_font=dict(color="#aaaaaa", size=10))
+        # 偵測 K/D 金叉 / 死叉
+        _gold_d, _gold_v, _dead_d, _dead_v = [], [], [], []
+        for _ci in range(1, len(df)):
+            _kp, _kc = df["kd_k"].iloc[_ci-1], df["kd_k"].iloc[_ci]
+            _dp, _dc = df["kd_d"].iloc[_ci-1], df["kd_d"].iloc[_ci]
+            if _kp <= _dp and _kc > _dc:
+                _gold_d.append(df["date"].iloc[_ci]); _gold_v.append((_kc + _dc) / 2)
+            elif _kp >= _dp and _kc < _dc:
+                _dead_d.append(df["date"].iloc[_ci]); _dead_v.append((_kc + _dc) / 2)
+        if _gold_d:
+            _fig_kdj.add_trace(go.Scatter(
+                x=_gold_d, y=_gold_v, mode="markers", name="金叉",
+                marker=dict(symbol="triangle-up", color="#27ae60", size=13,
+                            line=dict(color="white", width=1)),
+            ))
+        if _dead_d:
+            _fig_kdj.add_trace(go.Scatter(
+                x=_dead_d, y=_dead_v, mode="markers", name="死叉",
+                marker=dict(symbol="triangle-down", color="#e74c3c", size=13,
+                            line=dict(color="white", width=1)),
+            ))
+        # MJ 入場訊號也標在 KDJ 圖
+        if not mj_signals.empty:
+            _mj_long  = mj_signals[mj_signals["signal"] == "LONG"]
+            _mj_short = mj_signals[mj_signals["signal"] == "SHORT"]
+            if not _mj_long.empty:
+                _mj_j_vals = df[df["date"].isin(_mj_long["date"].tolist())]["kd_j"].tolist()
+                _fig_kdj.add_trace(go.Scatter(
+                    x=_mj_long["date"].tolist(), y=_mj_j_vals, mode="markers", name="MJ做多",
+                    marker=dict(symbol="star", color="#27ae60", size=14,
+                                line=dict(color="white", width=1)),
+                ))
+            if not _mj_short.empty:
+                _mj_j_vals = df[df["date"].isin(_mj_short["date"].tolist())]["kd_j"].tolist()
+                _fig_kdj.add_trace(go.Scatter(
+                    x=_mj_short["date"].tolist(), y=_mj_j_vals, mode="markers", name="MJ做空",
+                    marker=dict(symbol="star", color="#e74c3c", size=14,
+                                line=dict(color="white", width=1)),
+                ))
+        _fig_kdj.update_layout(
+            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+            font_color="#fafafa", height=280,
+            margin=dict(l=0, r=80, t=20, b=0),
+            yaxis=dict(range=[-30, 130], gridcolor="rgba(255,255,255,0.05)"),
+            legend=dict(orientation="h", y=1.15, font=dict(size=10)),
+            hovermode="x unified",
+        )
+        st.plotly_chart(_fig_kdj, use_container_width=True)
+
+    with _kdj_info_col:
+        _k_val = last["kd_k"]
+        _d_val = last["kd_d"]
+        _j_val = last["kd_j"]
+        _kd_txt = "金叉（K>D）" if _k_val > _d_val else "死叉（K<D）"
+        _kd_clr = "#27ae60" if _k_val > _d_val else "#e74c3c"
+        if _j_val > 80:
+            _j_txt, _j_clr = "超買區 ⚠️", "#e74c3c"
+        elif _j_val < 20:
+            _j_txt, _j_clr = "超賣區 ✅", "#27ae60"
+        elif _j_val > 50:
+            _j_txt, _j_clr = "中性偏多", "#f39c12"
+        else:
+            _j_txt, _j_clr = "中性偏空", "#95a5a6"
+        st.markdown(f"""
+<div style='font-size:14px;line-height:2'>
+<b>K</b>　<span style='color:#f39c12'>{_k_val:.1f}</span><br>
+<b>D</b>　<span style='color:#3498db'>{_d_val:.1f}</span><br>
+<b>J</b>　<span style='color:#e74c3c'>{_j_val:.1f}</span>
+</div>
+<hr style='border-color:rgba(255,255,255,0.1);margin:6px 0'>
+<div style='font-size:13px;line-height:1.8'>
+KD狀態<br>
+<span style='color:{_kd_clr};font-weight:bold'>{_kd_txt}</span><br><br>
+J 值位置<br>
+<span style='color:{_j_clr};font-weight:bold'>{_j_txt}</span>
+</div>
+""", unsafe_allow_html=True)
+        st.caption("金叉=K由下穿D↑\n死叉=K由上穿D↓\nJ>80超買\nJ<20超賣\nJ穿0=MJ訊號")
 
     st.divider()
 
@@ -795,16 +924,30 @@ def tab_stock():
 
     with col1:
         st.markdown("#### 🔍 型態分析")
-        for _pname, _pdata in [("W底分析", patterns["w_bottom"]), ("M頭分析", patterns["m_top"])]:
+        for _pname, _pdata, _is_bull in [
+            ("W底（雙底）", patterns["w_bottom"], True),
+            ("M頭（雙頂）", patterns["m_top"], False),
+        ]:
             _formed = _pdata["formed"]
-            _color  = "#27ae60" if _formed else "#95a5a6"
-            _mark   = "✓" if _formed else "✗"
+            _active = _pdata.get("neckline") is not None
+            _color  = "#27ae60" if _formed else ("#f39c12" if _active else "#95a5a6")
+            _mark   = "✓" if _formed else ("◎" if _active else "✗")
+            _state  = "確認成立" if _formed else ("候選型態" if _active else "未偵測")
             st.markdown(
                 f"**{_pname}**　"
-                f"<span style='color:{_color}'>{_mark} {'形成標準型態' if _formed else '未形成標準型態'}</span>",
+                f"<span style='color:{_color};font-weight:bold'>{_mark} {_state}</span>",
                 unsafe_allow_html=True,
             )
             st.caption(_pdata["reason"])
+            if _active:
+                _neck = _pdata["neckline"]
+                _nc = "#27ae60" if _is_bull else "#e74c3c"
+                _desc = "突破頸線確認多頭" if _is_bull else "跌破頸線確認空頭"
+                st.markdown(
+                    f"　頸線：<span style='color:{_nc};font-weight:bold'>"
+                    f"{_neck:.1f}</span>　<small style='color:#aaa'>（{_desc}）</small>",
+                    unsafe_allow_html=True,
+                )
 
     with col2:
         st.markdown("#### 💡 操作建議")
@@ -1409,6 +1552,27 @@ def tab_watchlist():
 # ── 主程式 ───────────────────────────────────────────────────────────────────
 
 def main():
+    # ── 手機 RWD：columns 在窄螢幕自動換行堆疊 ──────────────────────────────────
+    st.markdown("""
+<style>
+@media (max-width: 768px) {
+    /* 讓 st.columns 的 row 容器可換行 */
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+    }
+    /* 每個 column 在手機上佔滿整行 */
+    [data-testid="column"] {
+        min-width: calc(100% - 1rem) !important;
+        flex: 1 1 100% !important;
+    }
+    /* 縮小 metric 字型，避免 6 格擠在一起 */
+    [data-testid="stMetricValue"] { font-size: 1rem !important; }
+    [data-testid="stMetricLabel"] { font-size: 0.7rem !important; }
+    /* 圖表不超出畫面 */
+    .stPlotlyChart { overflow-x: auto; }
+}
+</style>
+""", unsafe_allow_html=True)
     st.title("📊 台股族群掃描系統")
 
     tabs = st.tabs(["今日掃描", "週報", "個股分析", "自選清單"])

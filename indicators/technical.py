@@ -181,34 +181,48 @@ def key_levels(df: pd.DataFrame) -> dict:
 def detect_patterns(df: pd.DataFrame) -> dict:
     """
     偵測近 60 根 K 棒的 W 底（雙底）與 M 頭（雙頂）型態。
-    回傳 {'w_bottom': {'formed': bool, 'reason': str}, 'm_top': {...}}
+    額外回傳 neckline（頸線價位）與 key_dates 供圖形標記使用。
     """
-    closes = df["close"].tail(60).values
+    tail60 = df.tail(60)
+    closes = tail60["close"].values
+    dates  = tail60["date"].values
     std    = closes.std()
 
     lows_idx,  _ = find_peaks(-closes, distance=5, prominence=std * 0.3)
     highs_idx, _ = find_peaks( closes, distance=5, prominence=std * 0.3)
 
-    w = {"formed": False, "reason": "右肩未完成，且頸線未突破"}
-    m = {"formed": False, "reason": "右峰未確認，且尚未跌破頸線"}
+    w = {"formed": False, "reason": "右肩未完成，且頸線未突破",
+         "neckline": None, "key_dates": [], "low_prices": []}
+    m = {"formed": False, "reason": "右峰未確認，且尚未跌破頸線",
+         "neckline": None, "key_dates": [], "high_prices": []}
 
     if len(lows_idx) >= 2:
         l1, l2 = lows_idx[-2], lows_idx[-1]
         if closes[l2] > closes[l1] * 0.97:
-            neckline = closes[l1:l2].max()
+            neckline = float(closes[l1:l2].max())
+            _w_dates = [str(dates[l1]), str(dates[l2])]
+            _w_prices = [float(closes[l1]), float(closes[l2])]
             if closes[-1] > neckline:
-                w = {"formed": True,  "reason": "雙底確認，已突破頸線"}
+                w = {"formed": True,  "reason": "雙底確認，已突破頸線",
+                     "neckline": neckline, "key_dates": _w_dates, "low_prices": _w_prices}
             else:
-                w = {"formed": False, "reason": "右低已形成，等待突破頸線"}
+                w = {"formed": False,
+                     "reason": f"右低已形成（{dates[l2]!s}），等待突破頸線 {neckline:.1f}",
+                     "neckline": neckline, "key_dates": _w_dates, "low_prices": _w_prices}
 
     if len(highs_idx) >= 2:
         h1, h2 = highs_idx[-2], highs_idx[-1]
         if closes[h2] < closes[h1] * 1.03:
-            neckline = closes[h1:h2].min()
+            neckline = float(closes[h1:h2].min())
+            _m_dates = [str(dates[h1]), str(dates[h2])]
+            _m_prices = [float(closes[h1]), float(closes[h2])]
             if closes[-1] < neckline:
-                m = {"formed": True,  "reason": "雙頂確認，已跌破頸線"}
+                m = {"formed": True,  "reason": "雙頂確認，已跌破頸線",
+                     "neckline": neckline, "key_dates": _m_dates, "high_prices": _m_prices}
             else:
-                m = {"formed": False, "reason": "右峰已形成，尚未跌破頸線"}
+                m = {"formed": False,
+                     "reason": f"右峰已形成（{dates[h2]!s}），尚未跌破頸線 {neckline:.1f}",
+                     "neckline": neckline, "key_dates": _m_dates, "high_prices": _m_prices}
 
     return {"w_bottom": w, "m_top": m}
 
