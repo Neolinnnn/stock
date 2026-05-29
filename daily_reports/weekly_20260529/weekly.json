@@ -1,9 +1,7 @@
 {
-  "meta": {
-    "date": "2026-05-29",
-    "days": 5
-  },
-  "changes": [
+  "week_ending": "2026-05-29",
+  "days_covered": 5,
+  "sector_changes": [
     {
       "sector": "被動元件",
       "change": 26.23
@@ -61,34 +59,35 @@
       "change": -31.24
     }
   ],
-  "buys": [
+  "top_buys": [
     {
       "stock": "2449 京元電子",
-      "days": 6
+      "buy_days": 6
     },
     {
       "stock": "2330 台積電",
-      "days": 3
+      "buy_days": 3
     },
     {
       "stock": "3264 欣銓",
-      "days": 3
+      "buy_days": 3
     },
     {
       "stock": "2368 金像電",
-      "days": 3
+      "buy_days": 3
     },
     {
       "stock": "8046 南電",
-      "days": 2
+      "buy_days": 2
     },
     {
       "stock": "6664 群翊",
-      "days": 1
+      "buy_days": 1
     },
     {
       "stock": "6640 均華",
-      "days": 1
+      "buy_days": 1
     }
-  ]
+  ],
+  "chart_path": "daily_reports/weekly_20260529/01_weekly_sector_trend.png"
 }
