@@ -654,6 +654,11 @@ async function initStockPage(){
       <div class="sp-card" style="flex:1;min-width:200px;"><h3>操作建議</h3><div id="sp-suggest" style="font-size:13px;line-height:1.7;color:var(--sub);"></div></div>
     </div>
     <div id="sp-mj-signals" style="display:none;"></div>
+    <!-- 公司基本資訊 -->
+    <div id="sp-basic-info-card" class="sp-card" style="width:100%;margin-top:8px;display:none;">
+      <h3>公司基本資訊</h3>
+      <div id="sp-basic-info"></div>
+    </div>
     <!-- 基本面 -->
     <div class="sp-card" style="width:100%;margin-top:8px;">
       <h3>基本面</h3>
@@ -741,7 +746,49 @@ function spRender(d){
   spRenderLevels(d.levels);
   spRenderSuggestion(d);
   spRenderMJSignals(d.mj_signals);
+  spRenderBasicInfo(d.basic_info);
   loadFundamentals(d.stock_id);
+}
+
+// ── 公司基本資訊 ─────────────────────────────────────────────────────────────
+function spRenderBasicInfo(info) {
+  const card = document.getElementById('sp-basic-info-card');
+  const el   = document.getElementById('sp-basic-info');
+  if (!card || !el) return;
+  if (!info) { card.style.display = 'none'; return; }
+  card.style.display = '';
+
+  const rocToAD = s => {
+    if (!s) return null;
+    s = String(s).replace(/\D/g, '');
+    if (s.length === 7) return `${parseInt(s.slice(0, 3)) + 1911}-${s.slice(3, 5)}-${s.slice(5, 7)}`;
+    return s || null;
+  };
+  const fmtCap = v => {
+    const n = parseInt(String(v || '').replace(/,/g, ''));
+    return isNaN(n) || n === 0 ? null : (n / 1e8).toFixed(2) + ' 億元';
+  };
+  const fields = [
+    ['上市／上櫃', info.listing],
+    ['產業別',     info.industry],
+    ['成立日期',   rocToAD(info.founded)],
+    ['掛牌日期',   rocToAD(info.listed_date)],
+    ['實收資本額', fmtCap(info.capital)],
+    ['董事長',     info.chairman],
+    ['電話',       info.phone],
+    ['地址',       info.address],
+  ];
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px 20px;">';
+  for (const [label, val] of fields) {
+    if (!val) continue;
+    html += `<div><div style="font-size:11px;color:var(--sub);">${label}</div><div style="font-size:13px;margin-top:2px;">${val}</div></div>`;
+  }
+  if (info.website) {
+    const href = /^https?:\/\//.test(info.website) ? info.website : 'https://' + info.website;
+    html += `<div><div style="font-size:11px;color:var(--sub);">官方網站</div><div style="font-size:13px;margin-top:2px;"><a href="${href}" target="_blank" rel="noopener" style="color:var(--acc);">${info.website}</a></div></div>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
 }
 
 // ── 基本面 ──────────────────────────────────────────────────────────────────

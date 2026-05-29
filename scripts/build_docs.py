@@ -430,6 +430,48 @@ def build_daily_payload(summary):
     }
 
 
+# ── 公司基本資訊（TWSE / TPEX OpenAPI） ──────────────────────────────────────
+
+def _load_basic_info_map() -> dict:
+    """一次抓取所有上市、上櫃公司基本資訊，回傳 {stock_id: info_dict}。"""
+    import urllib.request
+    import json as _json
+
+    def _get(url):
+        req = urllib.request.Request(
+            url, headers={'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0'}
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            return _json.loads(resp.read().decode('utf-8'))
+
+    result = {}
+    endpoints = [
+        ('https://openapi.twse.com.tw/v1/opendata/t187ap03_L', '上市', '上市日期'),
+        ('https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O', '上櫃', '上櫃日期'),
+    ]
+    for url, listing_label, date_key in endpoints:
+        try:
+            data = _get(url)
+            for r in data:
+                sid = str(r.get('公司代號', '')).strip()
+                if sid and sid not in result:
+                    result[sid] = {
+                        'listing':     listing_label,
+                        'industry':    r.get('產業別', ''),
+                        'founded':     r.get('成立日期', ''),
+                        'listed_date': r.get(date_key, '') or r.get('上市日期', ''),
+                        'capital':     r.get('實收資本額(元)', ''),
+                        'chairman':    r.get('董事長', ''),
+                        'phone':       r.get('電話', ''),
+                        'website':     (r.get('公司網址', '') or '').strip(),
+                        'address':     r.get('住址', ''),
+                    }
+        except Exception as e:
+            print(f'[WARN] 基本資訊 {url}: {e}')
+    print(f'[basic_info] 載入 {len(result)} 家公司基本資訊')
+    return result
+
+
 # ── Rich stock pages ─────────────────────────────────────────────────────────
 
 def build_stock_pages(date_dirs, docs_dir, keep_days=90):
@@ -464,6 +506,8 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
         print(f'[WARN] FinMind 初始化失敗：{e}  → 跳過 OHLCV 抓取')
         finmind_ok = False
 
+    basic_info_map = _load_basic_info_map()
+
     from datetime import datetime, timedelta
     end_date   = datetime.now().strftime('%Y-%m-%d')
     start_date = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
@@ -475,6 +519,7 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
             _build_single_stock(
                 sid, info, dl if finmind_ok else None,
                 stocks_dir, start_date, end_date, chip_start,
+                basic_info_map,
             )
             ok_count += 1
             time.sleep(0.3)   # 避免 API 頻率限制
@@ -491,7 +536,8 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
     print(f'stocks/ 已更新：{ok_count}/{len(stock_info_map)} 檔個股（豐富格式）')
 
 
-def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_start):
+def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_start,
+                        basic_info_map=None):
     from datetime import datetime
 
     # ── 抓 OHLCV ──────────────────────────────────────────────────────────────
@@ -590,6 +636,7 @@ def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_st
         'prediction': prediction,
         'patterns': patterns,
         'levels':   levels,
+        'basic_info': (basic_info_map or {}).get(sid),
     }
 
     (stocks_dir / f'{sid}.json').write_text(
