@@ -1319,10 +1319,31 @@ function renderDaily(data){
     <div class="card"><div class="card-title">強勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${strong}</div></div>
     <div class="card"><div class="card-title">弱勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${weak||'無'}</div></div>
   </div>
-  <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px">
+  <div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:16px">
     <div class="card-title" style="margin:0;min-width:80px">雙條件推薦</div>
     <div class="card-value" style="font-size:20px;color:var(--yellow)">${qCount} 檔</div>
-  </div>`;
+  </div>
+  <details class="info-box" style="margin-bottom:16px;">
+    <summary>雙篩選邏輯說明</summary>
+    <div style="margin-top:10px;line-height:2;">兩個條件同時符合才列入推薦，減少雜訊、提高信噪比：</div>
+    <table>
+      <tr><th>篩選層</th><th>條件</th><th>用意</th></tr>
+      <tr>
+        <td><b style="color:var(--blue);">第一篩｜族群面</b></td>
+        <td>族群 20日漲幅排名前段 且 RSI5 &gt; 60（族群輪動強勢）</td>
+        <td>只選處於資金輪動期的強勢族群，避免逆勢操作</td>
+      </tr>
+      <tr>
+        <td><b style="color:var(--green);">第二篩｜個股面</b></td>
+        <td>RSI5 介於 40–65（未過熱）且 20日漲幅 &gt; 3% 且 CV 夏普 &gt; 0.5</td>
+        <td>個股技術健康、尚未超漲，風報比佳（訊號為 BUY）</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;color:var(--sub);">
+      ⚡ <b style="color:var(--text);">CV 夏普</b>：以近 20 日報酬的變異係數調整後的夏普值，衡量「穩定上漲」程度，值越高代表漲勢越平穩可靠。<br>
+      ⚠ 雙條件推薦僅為技術篩選輔助工具，不構成買賣建議，請結合基本面與大盤環境自行判斷。
+    </div>
+  </details>\`;
 
   if(qualified&&qualified.length){
     html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
