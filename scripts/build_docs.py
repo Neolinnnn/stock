@@ -34,6 +34,14 @@ try:
 except ImportError:
     pass
 
+try:
+    _INDICATORS_DIR = Path(__file__).parent.parent / 'indicators'
+    sys.path.insert(0, str(_INDICATORS_DIR.parent))
+    from indicators.stock_analyzer import analyze_stock as _analyze_stock
+    _ANALYZER_OK = True
+except Exception:
+    _ANALYZER_OK = False
+
 
 def _nan_to_none(v):
     if isinstance(v, float) and math.isnan(v):
@@ -413,6 +421,30 @@ def build_daily_payload(summary):
         main_force,
         key=lambda x: (x.get('mainForceScore') is None, -(x.get('mainForceScore') or 0)),
     )
+
+    # ── 雙篩選第二層：對 qualified 個股跑趨勢分析，加入買入建議 ──────────────
+    if _ANALYZER_OK and qualified:
+        docs_dir_path = Path(__file__).parent.parent / 'docs'
+        for q in qualified:
+            sid = q.get('id', '')
+            stock_json = docs_dir_path / 'stocks' / f'{sid}.json'
+            try:
+                with open(stock_json, encoding='utf-8') as f:
+                    st = json.load(f)
+                ohlcv = st.get('ohlcv', {})
+                df = pd.DataFrame({
+                    'date':   ohlcv.get('date', []),
+                    'open':   ohlcv.get('open', []),
+                    'high':   ohlcv.get('high', []),
+                    'low':    ohlcv.get('low', []),
+                    'close':  ohlcv.get('close', []),
+                    'volume': ohlcv.get('volume', []),
+                })
+                result = _analyze_stock(df, sid)
+                q['trend_analysis'] = result.to_dict()
+            except Exception as e:
+                q['trend_analysis'] = {'error': str(e)}
+
     return {
         'meta': {
             '掃描日期':  summary.get('date', ''),

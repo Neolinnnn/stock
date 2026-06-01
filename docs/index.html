@@ -1348,13 +1348,31 @@ function renderDaily(data){
   if(qualified&&qualified.length){
     html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
     <div class="card" style="overflow-x:auto;margin-bottom:20px"><table>
-      <tr><th>代碼</th><th>族群</th><th>名稱</th><th>現價</th><th>RSI5/10</th><th>CV夏普</th></tr>
-      ${qualified.map(q=>`<tr>
-        <td><b>${q.id}</b></td><td>${q.sector}</td><td>${q.name}</td>
-        <td>${fmt(q.price,1)}</td>
-        <td><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}<span style="color:var(--sub);font-size:11px">/${q.rsi10!=null&&q.rsi10!==''?fmt(q.rsi10,1):'—'}</span></td>
-        <td>${fmt(q.cv_sharpe,2)}</td>
-      </tr>`).join('')}
+      <tr><th>代碼</th><th>族群</th><th>名稱</th><th>現價</th><th>RSI5</th><th>CV夏普</th><th>趨勢排列</th><th>MACD</th><th>量能</th><th>雙篩買入建議</th><th>評分</th></tr>
+      ${qualified.map(q=>{
+        const ta = q.trend_analysis || {};
+        const sig = ta.buy_signal || '—';
+        const score = ta.signal_score != null ? ta.signal_score : '—';
+        const sigColor = sig==='強力買入'?'var(--green)':sig==='買入'?'#5cb85c':sig==='持有'?'var(--yellow)':sig==='觀望'?'var(--sub)':'var(--red)';
+        const scoreColor = score>=75?'var(--green)':score>=60?'#5cb85c':score>=45?'var(--yellow)':'var(--red)';
+        const reasons = (ta.signal_reasons||[]).join(' · ');
+        const risks   = (ta.risk_factors||[]).join(' · ');
+        const tooltip = [reasons, risks?('⚠ '+risks):''].filter(Boolean).join(' | ');
+        return `<tr title="${escHtml(tooltip)}">
+          <td><b>${escHtml(q.id)}</b></td>
+          <td>${escHtml(q.sector)}</td>
+          <td>${escHtml(q.name)}</td>
+          <td>${fmt(q.price,1)}</td>
+          <td><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
+          <td>${fmt(q.cv_sharpe,2)}</td>
+          <td style="font-size:12px;color:var(--sub)">${escHtml(ta.trend_status||'—')}</td>
+          <td style="font-size:11px;color:var(--sub)">${escHtml(ta.macd_signal||'—')}</td>
+          <td style="font-size:11px;color:var(--sub)">${escHtml(ta.volume_trend||'—')}</td>
+          <td><b style="color:${sigColor}">${escHtml(sig)}</b></td>
+          <td><b style="color:${scoreColor}">${score}${score!=='—'?'/100':''}</b></td>
+        </tr>
+        ${tooltip?`<tr style="background:#13161d"><td colspan="11" style="font-size:11px;color:var(--sub);padding:4px 10px 8px">${escHtml(reasons)}${risks?` <span style="color:var(--yellow)">⚠ ${escHtml(risks)}</span>`:''}</td></tr>`:''}`;
+      }).join('')}
     </table></div>`;
   }
 
