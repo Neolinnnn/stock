@@ -145,10 +145,10 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
     <!-- 交易記錄 -->
     <div class="section-title">📒 交易記錄</div>
     <div class="trade-filters">
-      <button class="filter-btn active" onclick="filterTrades('all',this)">全部</button>
-      <button class="filter-btn" onclick="filterTrades('WIN',this)">✅ 獲利</button>
-      <button class="filter-btn" onclick="filterTrades('LOSS',this)">❌ 虧損</button>
-      <button class="filter-btn" onclick="filterTrades('OPEN',this)">⏳ 持倉中</button>
+      <button class="filter-btn active" data-filter="all"  onclick="filterTrades('all',this)">全部</button>
+      <button class="filter-btn"        data-filter="WIN"  onclick="filterTrades('WIN',this)">✅ 已獲利</button>
+      <button class="filter-btn"        data-filter="LOSS" onclick="filterTrades('LOSS',this)">❌ 已虧損</button>
+      <button class="filter-btn"        data-filter="OPEN" onclick="filterTrades('OPEN',this)">⏳ 持倉中</button>
     </div>
     <div class="trades-list" id="trades-list"></div>
 
@@ -243,33 +243,47 @@ function renderHero(pd){
   const s = combo.stats;
   const dr = pd.date_range;
   const el = document.getElementById('hero');
+  const wrS = (s.win_rate_settled*100).toFixed(1);
+  const wrP = (s.win_rate_pessimistic*100).toFixed(1);
+  const wrO = (s.win_rate_optimistic*100).toFixed(1);
   el.innerHTML = `
-    <div class="hero-stat">
-      <div class="hero-signal" style="color:var(--green)">${(s.win_rate*100).toFixed(0)}%</div>
-      <div class="hero-label">勝率</div>
+    <div style="min-width:160px;text-align:center">
+      <div style="font-size:38px;font-weight:800;color:var(--green)">${wrS}%</div>
+      <div style="font-size:12px;color:var(--sub);margin-top:2px">已結算勝率</div>
+      <div style="font-size:11px;color:var(--sub);margin-top:6px;line-height:1.7">
+        含持倉中區間：<br>
+        <span style="color:var(--red)">${wrP}%</span>（悲觀）～
+        <span style="color:#5cb85c">${wrO}%</span>（樂觀）
+      </div>
     </div>
     <div class="hero-divider"></div>
     <div style="flex:1;min-width:200px">
       <div style="font-size:18px;font-weight:700;margin-bottom:4px">${combo.label}</div>
-      <div style="font-size:12px;color:var(--sub);margin-bottom:8px">
+      <div style="font-size:12px;color:var(--sub);margin-bottom:10px">
         回測期間 ${fmtDate(dr.start)} ～ ${fmtDate(dr.end)}
       </div>
-      <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
         <div class="hero-stat">
           <div class="val" style="color:var(--green)">+${s.avg_return.toFixed(1)}%</div>
-          <div class="lbl">平均獲利</div>
+          <div class="lbl">已結算平均報酬</div>
         </div>
         <div class="hero-stat">
           <div class="val">${s.avg_holding_days.toFixed(0)} 天</div>
-          <div class="lbl">平均持股</div>
+          <div class="lbl">平均持股天數</div>
         </div>
-        <div class="hero-stat">
-          <div class="val">${s.wins} / ${s.total}</div>
-          <div class="lbl">獲利筆數/已結算</div>
+      </div>
+      <div style="display:flex;gap:0;background:#13161d;border-radius:8px;overflow:hidden;font-size:13px">
+        <div style="flex:1;padding:10px 14px;border-right:1px solid var(--border)">
+          <div style="color:var(--sub);font-size:10px;margin-bottom:4px">✅ 已獲利出場</div>
+          <div style="font-size:20px;font-weight:700;color:var(--green)">${s.wins} 筆</div>
         </div>
-        <div class="hero-stat">
-          <div class="val" style="color:var(--blue)">${s.open_count}</div>
-          <div class="lbl">持倉中</div>
+        <div style="flex:1;padding:10px 14px;border-right:1px solid var(--border)">
+          <div style="color:var(--sub);font-size:10px;margin-bottom:4px">❌ 已虧損出場</div>
+          <div style="font-size:20px;font-weight:700;color:var(--red)">${s.losses} 筆</div>
+        </div>
+        <div style="flex:1;padding:10px 14px">
+          <div style="color:var(--sub);font-size:10px;margin-bottom:4px">⏳ 持倉中（未定）</div>
+          <div style="font-size:20px;font-weight:700;color:var(--blue)">${s.open_count} 筆</div>
         </div>
       </div>
     </div>
@@ -283,6 +297,8 @@ function renderComboGrid(pd){
     const s = combo.stats;
     const isBest = combo.id === pd.best_combo;
     const isActive = combo.id === CUR_COMBO;
+    const wrS = (s.win_rate_settled*100).toFixed(0);
+    const wrP = (s.win_rate_pessimistic*100).toFixed(0);
     const div = document.createElement('div');
     div.className = 'combo-card' + (isBest ? ' best' : '') + (isActive ? ' active' : '');
     div.innerHTML = `
@@ -290,23 +306,25 @@ function renderComboGrid(pd){
         ${combo.label}
         ${isBest ? '<span class="combo-badge badge-best">最佳</span>' : ''}
       </div>
-      <div class="win-bar-wrap"><div class="win-bar" style="width:${(s.win_rate*100).toFixed(0)}%"></div></div>
+      <div class="win-bar-wrap" title="已結算勝率 ${wrS}%">
+        <div class="win-bar" style="width:${wrS}%"></div>
+      </div>
       <div class="combo-stats">
         <div class="combo-stat-item">
-          <div class="n" style="color:var(--green)">${(s.win_rate*100).toFixed(0)}%</div>
-          <div class="l">勝率</div>
+          <div class="n" style="color:var(--green)">${wrS}%</div>
+          <div class="l">已結算勝率</div>
+        </div>
+        <div class="combo-stat-item">
+          <div class="n" style="color:var(--sub);font-size:12px">${wrP}%</div>
+          <div class="l">悲觀勝率</div>
         </div>
         <div class="combo-stat-item">
           <div class="n" style="color:var(--green)">+${s.avg_return.toFixed(1)}%</div>
           <div class="l">均報酬</div>
         </div>
         <div class="combo-stat-item">
-          <div class="n">${s.avg_holding_days.toFixed(0)}天</div>
-          <div class="l">均持股</div>
-        </div>
-        <div class="combo-stat-item">
-          <div class="n">${s.total}</div>
-          <div class="l">已結算</div>
+          <div class="n">${s.wins}✅ ${s.losses}❌ ${s.open_count}⏳</div>
+          <div class="l">獲利/虧損/持倉</div>
         </div>
       </div>
     `;
@@ -320,6 +338,17 @@ function renderTrades(pd){
   if(!combo){ document.getElementById('trades-list').innerHTML='<div style="color:var(--sub)">請選擇組合</div>'; return; }
 
   const trades = combo.trades.slice().reverse(); // newest first
+  const wins  = trades.filter(t=>t.result==='WIN').length;
+  const losses= trades.filter(t=>t.result==='LOSS').length;
+  const opens = trades.filter(t=>t.result==='OPEN').length;
+
+  // Update filter button labels with counts
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    const map={'all':`全部（${trades.length}）`,'WIN':`✅ 已獲利（${wins}）`,'LOSS':`❌ 已虧損（${losses}）`,'OPEN':`⏳ 持倉中（${opens}）`};
+    const key=btn.getAttribute('data-filter');
+    if(key && map[key]) btn.textContent=map[key];
+  });
+
   const filtered = CUR_FILTER === 'all' ? trades : trades.filter(t => t.result === CUR_FILTER);
   const el = document.getElementById('trades-list');
 

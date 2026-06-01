@@ -138,17 +138,37 @@ def _process_period(fname: str, label: str) -> dict | None:
             if t['result'] == 'OPEN':
                 all_open_ids.add(t['stock_id'])
 
+        wins_n  = stats['wins']
+        losses_n = stats['losses']
+        open_n  = stats['open_count']
+        settled = wins_n + losses_n
+        total_all = settled + open_n
+
+        # 已結算勝率（WIN / (WIN+LOSS)）— 不含持倉中
+        wr_settled = wins_n / settled if settled else 0
+        # 悲觀勝率（假設持倉中全部虧損）
+        wr_pessimistic = wins_n / total_all if total_all else 0
+        # 樂觀勝率（假設持倉中全部獲利）
+        wr_optimistic = (wins_n + open_n) / total_all if total_all else 0
+
         combos_out[combo_id] = {
             'id':    combo_id,
             'label': COMBO_LABELS.get(combo_id, combo_id),
             'stats': {
-                'win_rate':         round(stats['win_rate'], 4),
+                # 已結算
+                'wins':              wins_n,
+                'losses':            losses_n,
+                'settled':           settled,
+                'win_rate_settled':  round(wr_settled, 4),
+                # 持倉中
+                'open_count':        open_n,
+                'total_all':         total_all,
+                # 區間勝率（持倉中尚未知結果）
+                'win_rate_pessimistic': round(wr_pessimistic, 4),
+                'win_rate_optimistic':  round(wr_optimistic, 4),
+                # 其他
                 'avg_return':       round(stats['avg_return'], 2),
                 'avg_holding_days': round(stats['avg_holding_days'], 1),
-                'total':    stats['total'],
-                'wins':     stats['wins'],
-                'losses':   stats['losses'],
-                'open_count': stats['open_count'],
             },
             'trades': trades,
         }
@@ -163,9 +183,9 @@ def _process_period(fname: str, label: str) -> dict | None:
     # Pick best combo by win_rate * avg_return (balanced score)
     def _score(c):
         s = c['stats']
-        if s['total'] < 5:
+        if s['settled'] < 5:
             return 0
-        return s['win_rate'] * s['avg_return']
+        return s['win_rate_settled'] * s['avg_return']
 
     best_id = max(combos_out.values(), key=_score)['id'] if combos_out else None
 
