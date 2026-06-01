@@ -68,6 +68,30 @@ def _load_stock_df(sid: str) -> 'pd.DataFrame | None':
 
 _analysis_cache = {}
 
+# Load latest daily context for sector strength and CV Sharpe
+_daily_context: dict = {}
+try:
+    with open(ROOT / 'docs' / 'daily.json', encoding='utf-8') as _f:
+        _daily_raw = json.load(_f)
+    _strong = set(_daily_raw.get('meta', {}).get('強勢族群', '').split(', '))
+    _weak   = set(_daily_raw.get('meta', {}).get('弱勢族群', '').split(', '))
+    for _s in _daily_raw.get('stocks', []):
+        _daily_context[_s['id']] = {
+            'sector': _s.get('sector', ''),
+            'sector_is_strong': _s.get('sector', '') in _strong or None,
+        }
+    # Mark weak sectors
+    for _sid, _ctx in _daily_context.items():
+        if _ctx['sector'] in _weak:
+            _ctx['sector_is_strong'] = False
+        elif _ctx['sector'] in _strong:
+            _ctx['sector_is_strong'] = True
+        else:
+            _ctx['sector_is_strong'] = None
+except Exception:
+    pass
+
+
 def _get_analysis(sid: str) -> dict:
     if sid in _analysis_cache:
         return _analysis_cache[sid]
@@ -76,8 +100,10 @@ def _get_analysis(sid: str) -> dict:
     df = _load_stock_df(sid)
     if df is None:
         return {}
-    result = analyze_stock(df, sid)
+    ctx = _daily_context.get(sid, {})
+    result = analyze_stock(df, sid, sector_is_strong=ctx.get('sector_is_strong'))
     d = result.to_dict()
+    d['sector_is_strong'] = ctx.get('sector_is_strong')
     _analysis_cache[sid] = d
     return d
 

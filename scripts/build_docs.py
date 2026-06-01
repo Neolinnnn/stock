@@ -425,8 +425,19 @@ def build_daily_payload(summary):
     # ── 雙篩選第二層：對 qualified 個股跑趨勢分析，加入買入建議 ──────────────
     if _ANALYZER_OK and qualified:
         docs_dir_path = Path(__file__).parent.parent / 'docs'
+        strong_set = set(summary.get('strong_sectors', []))
+        weak_set   = set(summary.get('weak_sectors',   []))
         for q in qualified:
-            sid = q.get('id', '')
+            sid    = q.get('id', '')
+            sector = q.get('sector', '')
+            cv_sharpe = q.get('cv_sharpe')
+            # 判斷族群強弱：strong_sectors 為強，weak_sectors 為弱，其餘 None
+            if sector in strong_set:
+                sector_is_strong = True
+            elif sector in weak_set:
+                sector_is_strong = False
+            else:
+                sector_is_strong = None
             stock_json = docs_dir_path / 'stocks' / f'{sid}.json'
             try:
                 with open(stock_json, encoding='utf-8') as f:
@@ -440,8 +451,14 @@ def build_daily_payload(summary):
                     'close':  ohlcv.get('close', []),
                     'volume': ohlcv.get('volume', []),
                 })
-                result = _analyze_stock(df, sid)
-                q['trend_analysis'] = result.to_dict()
+                result = _analyze_stock(
+                    df, sid,
+                    sector_is_strong=sector_is_strong,
+                    cv_sharpe=float(cv_sharpe) if cv_sharpe is not None else None,
+                )
+                d = result.to_dict()
+                d['sector_is_strong'] = sector_is_strong
+                q['trend_analysis'] = d
             except Exception as e:
                 q['trend_analysis'] = {'error': str(e)}
 

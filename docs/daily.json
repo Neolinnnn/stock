@@ -33,12 +33,14 @@
         "volume_trend": "放量下跌，注意風險",
         "support_ma5": false,
         "support_ma10": false,
-        "buy_signal": "持有",
-        "signal_score": 47,
+        "buy_signal": "買入",
+        "signal_score": 80,
         "signal_reasons": [
           "價格回踩MA5(-4.1%)，觀察支撐",
           "多頭排列，持續上漲",
-          "RSI中性(51.4)，震盪整理中"
+          "RSI中性(51.4)，震盪整理中",
+          "強勢族群加持，資金輪動有利",
+          "CV夏普=9.04（優秀），歷史勝率極佳"
         ],
         "risk_factors": [
           "放量下跌，注意風險"
@@ -52,7 +54,8 @@
         "rsi_12": 51.4,
         "rsi_24": 55.1,
         "rsi_status": "中性",
-        "rsi_signal": "RSI中性(51.4)，震盪整理中"
+        "rsi_signal": "RSI中性(51.4)，震盪整理中",
+        "sector_is_strong": true
       }
     },
     {
@@ -80,15 +83,18 @@
         "volume_trend": "縮量回調，洗盤特徵明顯（佳）",
         "support_ma5": false,
         "support_ma10": false,
-        "buy_signal": "買入",
-        "signal_score": 62,
+        "buy_signal": "賣出",
+        "signal_score": 20,
         "signal_reasons": [
           "價格回踩MA5(-3.6%)，觀察支撐",
           "縮量回調，主力洗盤",
           "多頭排列，持續上漲",
           "RSI中性(49.3)，震盪整理中"
         ],
-        "risk_factors": [],
+        "risk_factors": [
+          "弱勢族群逆勢，板塊阻力大",
+          "CV夏普=0.95（差），歷史波動大超額報酬差"
+        ],
         "macd_dif": 8.0836,
         "macd_dea": 11.2957,
         "macd_bar": -6.4242,
@@ -98,7 +104,8 @@
         "rsi_12": 49.3,
         "rsi_24": 54.2,
         "rsi_status": "中性",
-        "rsi_signal": "RSI中性(49.3)，震盪整理中"
+        "rsi_signal": "RSI中性(49.3)，震盪整理中",
+        "sector_is_strong": false
       }
     },
     {
@@ -126,15 +133,18 @@
         "volume_trend": "縮量上漲，上攻動能不足",
         "support_ma5": true,
         "support_ma10": false,
-        "buy_signal": "買入",
-        "signal_score": 60,
+        "buy_signal": "持有",
+        "signal_score": 46,
         "signal_reasons": [
           "價格貼近MA5(0.6%)，介入好時機",
           "MA5支撐有效",
           "多頭排列，持續上漲",
-          "RSI中性(54.0)，震盪整理中"
+          "RSI中性(54.0)，震盪整理中",
+          "CV夏普=6.30（良好）"
         ],
-        "risk_factors": [],
+        "risk_factors": [
+          "弱勢族群逆勢，板塊阻力大"
+        ],
         "macd_dif": 2.2924,
         "macd_dea": 2.7541,
         "macd_bar": -0.9236,
@@ -144,7 +154,8 @@
         "rsi_12": 54.0,
         "rsi_24": 55.1,
         "rsi_status": "中性",
-        "rsi_signal": "RSI中性(54.0)，震盪整理中"
+        "rsi_signal": "RSI中性(54.0)，震盪整理中",
+        "sector_is_strong": false
       }
     }
   ],

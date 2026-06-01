@@ -455,5 +455,81 @@ class StockTrendAnalyzer:
             result.buy_signal = BuySignal.SELL
 
 
-def analyze_stock(df: pd.DataFrame, code: str) -> TrendAnalysisResult:
-    return StockTrendAnalyzer().analyze(df, code)
+def analyze_stock(
+    df: pd.DataFrame,
+    code: str,
+    sector_is_strong: bool | None = None,
+    cv_sharpe: float | None = None,
+) -> TrendAnalysisResult:
+    """
+    分析個股趨勢，可選傳入族群強弱與 CV 夏普進行加權調整。
+
+    sector_is_strong:
+        True  → 強勢族群（資金輪動有利），+15 ~ +20 分
+        False → 弱勢族群（逆勢操作），-20 ~ -25 分
+        None  → 不調整
+
+    cv_sharpe（CV 夏普比率，衡量穩定超額報酬）：
+        >= 8  → 優秀 +15 分
+        >= 5  → 良好 +8 分
+        >= 2  → 普通 +2 分
+        >= 1  → 一般 0 分
+        < 1   → 差  -20 分
+        None  → 不調整
+    """
+    result = StockTrendAnalyzer().analyze(df, code)
+
+    bonus = 0
+    sector_note = None
+    cvs_note = None
+
+    if sector_is_strong is True:
+        bonus += 18
+        sector_note = "強勢族群加持，資金輪動有利"
+    elif sector_is_strong is False:
+        bonus -= 22
+        sector_note = "弱勢族群逆勢，板塊阻力大"
+
+    if cv_sharpe is not None:
+        if cv_sharpe >= 8:
+            bonus += 15; cvs_note = f"CV夏普={cv_sharpe:.2f}（優秀），歷史勝率極佳"
+        elif cv_sharpe >= 5:
+            bonus += 8;  cvs_note = f"CV夏普={cv_sharpe:.2f}（良好）"
+        elif cv_sharpe >= 2:
+            bonus += 2;  cvs_note = f"CV夏普={cv_sharpe:.2f}（普通）"
+        elif cv_sharpe >= 1:
+            pass
+        else:
+            bonus -= 20; cvs_note = f"CV夏普={cv_sharpe:.2f}（差），歷史波動大超額報酬差"
+
+    if bonus != 0 or sector_note or cvs_note:
+        result.signal_score = max(0, min(100, result.signal_score + bonus))
+        if sector_note:
+            if sector_is_strong:
+                result.signal_reasons.append(sector_note)
+            else:
+                result.risk_factors.append(sector_note)
+        if cvs_note:
+            # CV夏普各自判斷，不受族群加減影響
+            if cv_sharpe is not None and cv_sharpe >= 1:
+                result.signal_reasons.append(cvs_note)
+            else:
+                result.risk_factors.append(cvs_note)
+
+        # 重新判斷買入訊號
+        score = result.signal_score
+        ts = result.trend_status
+        if score >= 75 and ts in (TrendStatus.STRONG_BULL, TrendStatus.BULL):
+            result.buy_signal = BuySignal.STRONG_BUY
+        elif score >= 60 and ts in (TrendStatus.STRONG_BULL, TrendStatus.BULL, TrendStatus.WEAK_BULL):
+            result.buy_signal = BuySignal.BUY
+        elif score >= 45:
+            result.buy_signal = BuySignal.HOLD
+        elif score >= 30:
+            result.buy_signal = BuySignal.WAIT
+        elif ts in (TrendStatus.BEAR, TrendStatus.STRONG_BEAR):
+            result.buy_signal = BuySignal.STRONG_SELL
+        else:
+            result.buy_signal = BuySignal.SELL
+
+    return result
