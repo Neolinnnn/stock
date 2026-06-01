@@ -1325,7 +1325,7 @@ function renderDaily(data){
   </div>
   <details class="info-box" style="margin-bottom:16px;">
     <summary>雙篩選邏輯說明</summary>
-    <div style="margin-top:10px;line-height:2;">兩個條件同時符合才列入推薦，減少雜訊、提高信噪比：</div>
+    <div style="margin-top:10px;line-height:2;">三層條件依序過濾，通過才列入推薦，並以第三層加權評分輸出買入建議：</div>
     <table>
       <tr><th>篩選層</th><th>條件</th><th>用意</th></tr>
       <tr>
@@ -1338,9 +1338,21 @@ function renderDaily(data){
         <td>RSI5 介於 40–65（未過熱）且 20日漲幅 &gt; 3% 且 CV 夏普 &gt; 0.5</td>
         <td>個股技術健康、尚未超漲，風報比佳（訊號為 BUY）</td>
       </tr>
+      <tr>
+        <td><b style="color:var(--yellow);">第三篩｜趨勢評分</b></td>
+        <td>MA/MACD/RSI/量能 100分制綜合評分，再以族群強弱與 CV 夏普加權</td>
+        <td>輸出「強力買入／買入／持有／觀望／賣出」五級建議，越高越值得進場</td>
+      </tr>
     </table>
-    <div style="margin-top:10px;color:var(--sub);">
-      ⚡ <b style="color:var(--text);">CV 夏普</b>：以近 20 日報酬的變異係數調整後的夏普值，衡量「穩定上漲」程度，值越高代表漲勢越平穩可靠。<br>
+    <div style="margin-top:12px;color:var(--sub);line-height:1.9;">
+      <b style="color:var(--text);">評分加權說明：</b><br>
+      &nbsp;&nbsp;⬆ 強勢族群（當日掃描列為強勢）：<b style="color:var(--green);">+18 分</b>，資金輪動有利<br>
+      &nbsp;&nbsp;⬇ 弱勢族群（當日掃描列為弱勢）：<b style="color:var(--red);">−22 分</b>，逆勢操作需謹慎<br>
+      &nbsp;&nbsp;⚡ CV 夏普 ≥ 8（優秀）：<b style="color:var(--green);">+15 分</b>｜≥ 5（良好）：+8 分｜&lt; 1（差）：<b style="color:var(--red);">−20 分</b><br>
+      <br>
+      <b style="color:var(--text);">訊號判斷門檻：</b><br>
+      &nbsp;&nbsp;強力買入 ≥ 75 分（需多頭排列）｜買入 ≥ 60 分｜持有 ≥ 45 分｜觀望 ≥ 30 分｜賣出 &lt; 30 分<br>
+      <br>
       ⚠ 雙條件推薦僅為技術篩選輔助工具，不構成買賣建議，請結合基本面與大盤環境自行判斷。
     </div>
   </details>`;
