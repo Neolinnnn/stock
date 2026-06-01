@@ -676,6 +676,14 @@ def build_all():
     print(f'docs/ 已更新：{len(dates)} 個交易日  最新={dates[0]}')
 
     build_stock_pages(date_dirs, docs_dir)
+
+    # 回測摘要 JSON（供 backtest.html 用）
+    try:
+        from build_backtest_docs import build as _build_backtest
+        _build_backtest()
+    except Exception as e:
+        print(f'[WARN] build_backtest_docs 失敗：{e}')
+
     return dates
 
 

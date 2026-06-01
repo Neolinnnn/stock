@@ -1,185 +1,422 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>族群輪動回測 · 台股研究</title>
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>回測結果 · 台股研究</title>
 <style>
-  :root {
-    --bg:#0d1117; --card:#161b22; --border:#30363d;
-    --text:#e6edf3; --sub:#8b949e; --accent:#58a6ff;
-    --up:#3fb950; --dn:#f85149; --neu:#d29922;
-  }
-  body { margin:0; background:var(--bg); color:var(--text);
-         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif; }
-  .wrap { max-width:1200px; margin:0 auto; padding:24px; }
-  h1 { font-size:22px; margin:0 0 4px; }
-  .meta { color:var(--sub); font-size:13px; margin-bottom:18px; }
-  a { color:var(--accent); text-decoration:none; }
-  a:hover { text-decoration:underline; }
-  .card { background:var(--card); border:1px solid var(--border);
-          border-radius:8px; padding:16px; margin-bottom:16px; }
-  h2 { font-size:16px; margin:0 0 12px; }
-  table { width:100%; border-collapse:collapse; font-size:13px; }
-  th, td { padding:8px 10px; text-align:right; border-bottom:1px solid var(--border); }
-  th:first-child, td:first-child,
-  th:nth-child(2), td:nth-child(2) { text-align:left; }
-  thead th { color:var(--sub); font-weight:normal; }
-  tbody tr { cursor:pointer; }
-  tbody tr:hover { background:rgba(88,166,255,0.08); }
-  tbody tr.active { background:rgba(88,166,255,0.16); }
-  tr.bench td { color:var(--sub); cursor:default; }
-  .pos { color:var(--up); } .neg { color:var(--dn); }
-  #chart { height:380px; }
-  #timeline { font-size:13px; max-height:400px; overflow-y:auto; }
-  .rb-block { padding:8px 0; border-bottom:1px solid var(--border); }
-  .rb-date { color:var(--accent); font-weight:bold; }
-  .rb-row { color:var(--sub); margin-left:12px; }
-  .footer { color:var(--sub); font-size:12px; text-align:center;
-            margin-top:24px; padding:12px; }
+:root {
+  --bg:#0e1117; --card:#1a1d24; --border:#2d3139;
+  --text:#e0e0e0; --sub:#888; --green:#27ae60;
+  --red:#e74c3c; --yellow:#f39c12; --blue:#3498db;
+  --accent:#1f77b4; --purple:#9b59b6;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;font-size:14px;}
+a{color:var(--accent);text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+header{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+header h1{font-size:17px;font-weight:700;}
+
+main{padding:20px 24px;max-width:1300px;margin:0 auto;}
+
+.section-title{font-size:15px;font-weight:600;margin:24px 0 12px;border-left:3px solid var(--accent);padding-left:10px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;}
+
+/* 期間切換 */
+.period-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+.period-tab{padding:6px 16px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px;color:var(--sub);transition:.15s;}
+.period-tab:hover{border-color:var(--accent);color:var(--text);}
+.period-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+
+/* 最佳策略卡 */
+.hero{background:linear-gradient(135deg,#1a2332,#1a1d24);border:1px solid var(--accent);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center;}
+.hero-signal{font-size:36px;font-weight:800;color:var(--green);}
+.hero-label{font-size:13px;color:var(--sub);margin-top:2px;}
+.hero-stat{text-align:center;min-width:90px;}
+.hero-stat .val{font-size:22px;font-weight:700;}
+.hero-stat .lbl{font-size:11px;color:var(--sub);margin-top:2px;}
+.hero-divider{width:1px;background:var(--border);align-self:stretch;}
+
+/* 策略比較格線 */
+.combo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+@media(max-width:900px){.combo-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:540px){.combo-grid{grid-template-columns:1fr;}}
+.combo-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;cursor:pointer;transition:.15s;}
+.combo-card:hover{border-color:var(--accent);}
+.combo-card.best{border-color:var(--green);background:#1a2820;}
+.combo-card.active{border-color:var(--accent);background:#161e2e;}
+.combo-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+.combo-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:3px;margin-left:6px;font-weight:700;}
+.badge-best{background:rgba(39,174,96,.2);color:var(--green);}
+.combo-stats{display:flex;justify-content:space-between;font-size:12px;}
+.combo-stat-item{text-align:center;}
+.combo-stat-item .n{font-size:16px;font-weight:700;}
+.combo-stat-item .l{color:var(--sub);font-size:10px;}
+
+/* 勝率條 */
+.win-bar-wrap{height:6px;background:#1e2128;border-radius:3px;overflow:hidden;margin:8px 0;}
+.win-bar{height:100%;border-radius:3px;background:var(--green);}
+
+/* 交易記錄 */
+.trade-filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.filter-btn{padding:4px 12px;border:1px solid var(--border);border-radius:16px;font-size:12px;cursor:pointer;color:var(--sub);}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.trades-list{display:flex;flex-direction:column;gap:8px;}
+.trade-item{background:#13161d;border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.trade-badge{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0;}
+.trade-badge.win{background:rgba(39,174,96,.2);color:var(--green);}
+.trade-badge.loss{background:rgba(231,76,60,.2);color:var(--red);}
+.trade-badge.open{background:rgba(52,152,219,.2);color:var(--blue);}
+.trade-name{font-weight:700;font-size:14px;}
+.trade-meta{font-size:11px;color:var(--sub);margin-top:2px;}
+.trade-ret{font-size:18px;font-weight:700;margin-left:auto;}
+.ret-pos{color:var(--green);}
+.ret-neg{color:var(--red);}
+.ret-open{color:var(--blue);}
+
+/* 持倉分析 */
+.open-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+.open-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.open-name{font-size:15px;font-weight:700;}
+.open-price{font-size:13px;color:var(--sub);}
+.signal-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;}
+.signal-strong-buy{background:rgba(39,174,96,.2);color:var(--green);}
+.signal-buy{background:rgba(92,184,92,.2);color:#5cb85c;}
+.signal-hold{background:rgba(243,156,18,.15);color:var(--yellow);}
+.signal-wait{background:rgba(136,136,136,.15);color:var(--sub);}
+.signal-sell{background:rgba(231,76,60,.15);color:var(--red);}
+.open-indicators{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;}
+.ind-item{display:flex;flex-direction:column;gap:2px;}
+.ind-label{color:var(--sub);font-size:10px;text-transform:uppercase;}
+.ind-val{font-weight:600;}
+.score-bar-wrap{height:4px;background:#1e2128;border-radius:2px;overflow:hidden;width:60px;display:inline-block;vertical-align:middle;margin-left:6px;}
+.score-bar{height:100%;border-radius:2px;}
+.reasons-list{margin-top:8px;font-size:11px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px;}
+.reason-chip{background:#1e2330;border-radius:4px;padding:2px 8px;}
+.risk-chip{background:rgba(231,76,60,.1);color:#e98080;border-radius:4px;padding:2px 8px;}
+
+/* 說明框 */
+.explain-box{background:#13161d;border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-size:12px;color:var(--sub);line-height:1.8;margin-bottom:20px;}
+.explain-box summary{cursor:pointer;color:var(--blue);font-size:13px;font-weight:600;list-style:none;user-select:none;}
+.explain-box summary::before{content:'ℹ️ ';}
+
+#loading{text-align:center;padding:80px;color:var(--sub);}
+footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top:1px solid var(--border);margin-top:40px;line-height:1.8;}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div style="display:flex;justify-content:space-between;align-items:baseline;">
-    <h1>📊 族群輪動回測</h1>
-    <a href="./index.html">← 回主站</a>
-  </div>
-  <div class="meta" id="meta">載入中...</div>
+<header>
+  <h1>📊 策略回測結果</h1>
+  <a href="./index.html">← 回主站</a>
+</header>
 
-  <div class="card">
-    <h2>策略排行（依 Sharpe 排序）</h2>
-    <table>
-      <thead><tr>
-        <th>排名</th><th>策略</th><th>年化</th><th>Sharpe</th>
-        <th>MDD</th><th>勝率</th><th>換手</th>
-      </tr></thead>
-      <tbody id="rank-body"></tbody>
-    </table>
-  </div>
+<main>
+  <div id="loading">載入中…</div>
+  <div id="content" style="display:none">
 
-  <div class="card">
-    <h2 id="chart-title">權益曲線</h2>
-    <div id="chart"></div>
-  </div>
+    <!-- 期間切換 -->
+    <div class="period-tabs" id="period-tabs"></div>
 
-  <div class="card">
-    <h2>持股歷史</h2>
-    <div id="timeline"></div>
-  </div>
+    <!-- 名詞說明 -->
+    <details class="explain-box">
+      <summary>名詞說明（看不懂先點這裡）</summary>
+      <table style="margin-top:10px;border-collapse:collapse;width:100%">
+        <tr><th style="text-align:left;padding:4px 10px;color:var(--text);border-bottom:1px solid var(--border)">名詞</th><th style="text-align:left;padding:4px 10px;color:var(--text);border-bottom:1px solid var(--border)">意思</th></tr>
+        <tr><td style="padding:4px 10px;color:#f1c40f;font-weight:600">停利（TP）</td><td style="padding:4px 10px">股票漲到設定幅度就賣出，例如 TP15% = 漲15%就賣</td></tr>
+        <tr><td style="padding:4px 10px;color:#e98080;font-weight:600">停損（SL）</td><td style="padding:4px 10px">股票跌到設定幅度就認賠，例如 SL10% = 跌10%就砍</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:600">勝率</td><td style="padding:4px 10px">在所有「已結算」交易中，獲利的比例（不含持倉中）</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:600">平均報酬</td><td style="padding:4px 10px">已結算交易的平均獲利/虧損幅度</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:600">持倉中</td><td style="padding:4px 10px">尚未達到停利或停損，目前還持有的部位</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:600">雙篩訊號</td><td style="padding:4px 10px">同時滿足「族群強勢」和「個股技術買點」兩個條件才進場</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:600">追蹤停損</td><td style="padding:4px 10px">停損價格隨著股價上漲而往上調，鎖住利潤</td></tr>
+      </table>
+    </details>
 
-  <div class="footer">
-    過去績效不代表未來。回測未計入滑價、流動性、停損機制；rebalance 以收盤價執行，與決策訊號同日，存在輕微 look-ahead bias。資料期間僅約 1 年，樣本不足以驗證長期 edge。僅供研究參考。
+    <!-- 最佳策略 Hero -->
+    <div class="section-title">🏆 當期最佳停利停損組合</div>
+    <div class="hero" id="hero"></div>
+
+    <!-- 所有組合比較 -->
+    <div class="section-title">📋 全部組合比較（點擊查看交易明細）</div>
+    <div class="combo-grid" id="combo-grid"></div>
+
+    <!-- 交易記錄 -->
+    <div class="section-title">📒 交易記錄</div>
+    <div class="trade-filters">
+      <button class="filter-btn active" onclick="filterTrades('all',this)">全部</button>
+      <button class="filter-btn" onclick="filterTrades('WIN',this)">✅ 獲利</button>
+      <button class="filter-btn" onclick="filterTrades('LOSS',this)">❌ 虧損</button>
+      <button class="filter-btn" onclick="filterTrades('OPEN',this)">⏳ 持倉中</button>
+    </div>
+    <div class="trades-list" id="trades-list"></div>
+
+    <!-- 持倉中分析 -->
+    <div id="open-section" style="display:none">
+      <div class="section-title">🔍 持倉中股票分析（新分析引擎）</div>
+      <div id="open-analysis-list"></div>
+    </div>
+
   </div>
-</div>
+</main>
+
+<footer>
+  ⚠️ 回測使用雙條件篩選訊號，停利停損以收盤價模擬執行。<br>
+  未計入手續費、稅金與滑價；過去績效不代表未來結果，僅供研究參考。
+</footer>
 
 <script>
-const _PLY = {
-  bg:'#161b22', plot:'#0d1117', grid:'#30363d',
-  font:{color:'#e6edf3', size:12},
-  acc:'#58a6ff', up:'#3fb950', dn:'#f85149', neu:'#d29922',
+let DATA = null;
+let CUR_PERIOD = '1m';
+let CUR_COMBO = null;
+let CUR_FILTER = 'all';
+
+const PERIOD_LABELS = {
+  '1m':'近1個月','6m':'近6個月','9m':'近9個月','12m':'近12個月',
+  '6m_tr':'近6個月\n追蹤停損','9m_tr':'近9個月\n追蹤停損','12m_tr':'近12個月\n追蹤停損',
 };
 
-let RESULTS = null;
-let SELECTED_ID = null;
+function fmtDate(d){ return d ? d.slice(0,4)+'/'+d.slice(4,6)+'/'+d.slice(6,8) : '—'; }
+function sign(v){ return v > 0 ? '+' : ''; }
 
-function pct(v, digits=1){ return (v*100).toFixed(digits) + '%'; }
-function cls(v){ return v >= 0 ? 'pos' : 'neg'; }
+function signalClass(sig){
+  if(!sig) return 'signal-wait';
+  if(sig==='強力買入') return 'signal-strong-buy';
+  if(sig==='買入')     return 'signal-buy';
+  if(sig==='持有')     return 'signal-hold';
+  if(sig==='觀望')     return 'signal-wait';
+  return 'signal-sell';
+}
+function scoreColor(s){ return s>=75?'var(--green)':s>=60?'#5cb85c':s>=45?'var(--yellow)':'var(--red)'; }
 
 async function init(){
-  try {
-    const r = await fetch('./backtest/results.json?v=' + Date.now());
-    if(!r.ok) throw new Error('HTTP ' + r.status);
-    RESULTS = await r.json();
+  try{
+    const r = await fetch('./backtest_summary.json?v='+Math.floor(Date.now()/3600000));
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    DATA = await r.json();
   } catch(e){
-    document.getElementById('meta').textContent = '無法載入 results.json：' + e.message;
+    document.getElementById('loading').textContent = '無法載入 backtest_summary.json：'+e.message;
     return;
   }
-  const p = RESULTS.period;
-  document.getElementById('meta').textContent =
-    `資料期間 ${p.start} ~ ${p.end} · 共 ${p.trading_days} 個交易日`;
-  renderRanking();
-  SELECTED_ID = RESULTS.ranking[0].id;
-  renderChart();
-  renderTimeline();
-}
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
 
-function renderRanking(){
-  const tbody = document.getElementById('rank-body');
-  tbody.innerHTML = '';
-  RESULTS.ranking.forEach((r, idx) => {
-    const v = RESULTS.variants.find(x => x.id === r.id);
-    const m = v.metrics;
-    const tr = document.createElement('tr');
-    tr.dataset.id = v.id;
-    tr.innerHTML =
-      `<td>${idx+1}</td><td>${v.label}</td>` +
-      `<td class="${cls(m.cagr)}">${pct(m.cagr)}</td>` +
-      `<td>${m.sharpe.toFixed(2)}</td>` +
-      `<td class="neg">${pct(m.mdd)}</td>` +
-      `<td>${pct(m.win_rate, 0)}</td>` +
-      `<td>${pct(m.turnover, 0)}</td>`;
-    tr.onclick = () => { SELECTED_ID = v.id; renderRanking(); renderChart(); renderTimeline(); };
-    if(v.id === SELECTED_ID) tr.classList.add('active');
-    tbody.appendChild(tr);
+  // Build period tabs
+  const tabsEl = document.getElementById('period-tabs');
+  Object.keys(DATA.periods).forEach(key => {
+    const pd = DATA.periods[key];
+    const btn = document.createElement('button');
+    btn.className = 'period-tab' + (key === CUR_PERIOD ? ' active' : '');
+    btn.textContent = pd.label;
+    btn.onclick = () => { CUR_PERIOD = key; CUR_COMBO = null; CUR_FILTER = 'all'; setPeriod(); };
+    tabsEl.appendChild(btn);
   });
-  // Benchmarks rows
-  for(const [k, b] of Object.entries(RESULTS.benchmarks)){
-    const tr = document.createElement('tr');
-    tr.className = 'bench';
-    tr.innerHTML =
-      `<td>—</td><td>${k}</td>` +
-      `<td class="${cls(b.cagr)}">${pct(b.cagr)}</td>` +
-      `<td>${b.sharpe.toFixed(2)}</td>` +
-      `<td class="neg">${pct(b.mdd)}</td>` +
-      `<td>—</td><td>—</td>`;
-    tbody.appendChild(tr);
-  }
+
+  setPeriod();
 }
 
-function renderChart(){
-  const v = RESULTS.variants.find(x => x.id === SELECTED_ID);
-  document.getElementById('chart-title').textContent = '權益曲線：' + v.label;
-  const traces = [
-    { name:v.label, x:v.dates, y:v.equity, mode:'lines',
-      line:{color:_PLY.acc, width:2} },
-    { name:'TAIEX', x:RESULTS.benchmarks.TAIEX.dates,
-      y:RESULTS.benchmarks.TAIEX.equity, mode:'lines',
-      line:{color:_PLY.neu, width:1.2, dash:'dot'} },
-    { name:'等權67', x:RESULTS.benchmarks.EqualWeight67.dates,
-      y:RESULTS.benchmarks.EqualWeight67.equity, mode:'lines',
-      line:{color:_PLY.up, width:1.2, dash:'dash'} },
-  ];
-  const layout = {
-    paper_bgcolor:_PLY.bg, plot_bgcolor:_PLY.plot, font:_PLY.font,
-    xaxis:{gridcolor:_PLY.grid}, yaxis:{gridcolor:_PLY.grid, title:'NAV (起點=1.0)'},
-    margin:{t:10,r:10,b:40,l:50}, legend:{orientation:'h', y:-0.15},
-  };
-  Plotly.newPlot('chart', traces, layout, {displayModeBar:false, responsive:true});
+function setPeriod(){
+  // Update tab styles
+  document.querySelectorAll('.period-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', btn.textContent === DATA.periods[CUR_PERIOD]?.label);
+  });
+
+  const pd = DATA.periods[CUR_PERIOD];
+  if(!pd) return;
+  if(!CUR_COMBO) CUR_COMBO = pd.best_combo;
+
+  renderHero(pd);
+  renderComboGrid(pd);
+  renderTrades(pd);
+  renderOpenAnalysis(pd);
+
+  // Reset filter buttons
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  CUR_FILTER = 'all';
 }
 
-function renderTimeline(){
-  const v = RESULTS.variants.find(x => x.id === SELECTED_ID);
-  const el = document.getElementById('timeline');
+function renderHero(pd){
+  const combo = pd.combos[pd.best_combo];
+  if(!combo){ document.getElementById('hero').innerHTML='<div style="color:var(--sub)">無資料</div>'; return; }
+  const s = combo.stats;
+  const dr = pd.date_range;
+  const el = document.getElementById('hero');
+  el.innerHTML = `
+    <div class="hero-stat">
+      <div class="hero-signal" style="color:var(--green)">${(s.win_rate*100).toFixed(0)}%</div>
+      <div class="hero-label">勝率</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px">${combo.label}</div>
+      <div style="font-size:12px;color:var(--sub);margin-bottom:8px">
+        回測期間 ${fmtDate(dr.start)} ～ ${fmtDate(dr.end)}
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap">
+        <div class="hero-stat">
+          <div class="val" style="color:var(--green)">+${s.avg_return.toFixed(1)}%</div>
+          <div class="lbl">平均獲利</div>
+        </div>
+        <div class="hero-stat">
+          <div class="val">${s.avg_holding_days.toFixed(0)} 天</div>
+          <div class="lbl">平均持股</div>
+        </div>
+        <div class="hero-stat">
+          <div class="val">${s.wins} / ${s.total}</div>
+          <div class="lbl">獲利筆數/已結算</div>
+        </div>
+        <div class="hero-stat">
+          <div class="val" style="color:var(--blue)">${s.open_count}</div>
+          <div class="lbl">持倉中</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderComboGrid(pd){
+  const el = document.getElementById('combo-grid');
   el.innerHTML = '';
-  v.rebalances.slice().reverse().forEach(rb => {
+  Object.values(pd.combos).forEach(combo => {
+    const s = combo.stats;
+    const isBest = combo.id === pd.best_combo;
+    const isActive = combo.id === CUR_COMBO;
     const div = document.createElement('div');
-    div.className = 'rb-block';
-    const ret = rb.period_return != null
-      ? `<span class="${cls(rb.period_return)}">${pct(rb.period_return)}</span>`
-      : '';
-    let html = `<div class="rb-date">${rb.date} ${ret}</div>`;
-    const bySec = {};
-    rb.holdings.forEach(h => {
-      (bySec[h.sector] = bySec[h.sector] || []).push(`${h.stock_id} ${h.name}`);
-    });
-    for(const sec in bySec){
-      html += `<div class="rb-row">${sec}：${bySec[sec].join(' / ')}</div>`;
-    }
-    div.innerHTML = html;
+    div.className = 'combo-card' + (isBest ? ' best' : '') + (isActive ? ' active' : '');
+    div.innerHTML = `
+      <div class="combo-title">
+        ${combo.label}
+        ${isBest ? '<span class="combo-badge badge-best">最佳</span>' : ''}
+      </div>
+      <div class="win-bar-wrap"><div class="win-bar" style="width:${(s.win_rate*100).toFixed(0)}%"></div></div>
+      <div class="combo-stats">
+        <div class="combo-stat-item">
+          <div class="n" style="color:var(--green)">${(s.win_rate*100).toFixed(0)}%</div>
+          <div class="l">勝率</div>
+        </div>
+        <div class="combo-stat-item">
+          <div class="n" style="color:var(--green)">+${s.avg_return.toFixed(1)}%</div>
+          <div class="l">均報酬</div>
+        </div>
+        <div class="combo-stat-item">
+          <div class="n">${s.avg_holding_days.toFixed(0)}天</div>
+          <div class="l">均持股</div>
+        </div>
+        <div class="combo-stat-item">
+          <div class="n">${s.total}</div>
+          <div class="l">已結算</div>
+        </div>
+      </div>
+    `;
+    div.onclick = () => { CUR_COMBO = combo.id; renderComboGrid(pd); renderTrades(pd); };
     el.appendChild(div);
   });
+}
+
+function renderTrades(pd){
+  const combo = pd.combos[CUR_COMBO];
+  if(!combo){ document.getElementById('trades-list').innerHTML='<div style="color:var(--sub)">請選擇組合</div>'; return; }
+
+  const trades = combo.trades.slice().reverse(); // newest first
+  const filtered = CUR_FILTER === 'all' ? trades : trades.filter(t => t.result === CUR_FILTER);
+  const el = document.getElementById('trades-list');
+
+  if(!filtered.length){
+    el.innerHTML='<div class="card" style="color:var(--sub);text-align:center;padding:24px;">此篩選條件無交易記錄</div>';
+    return;
+  }
+
+  el.innerHTML = filtered.map(t => {
+    const isWin  = t.result === 'WIN';
+    const isLoss = t.result === 'LOSS';
+    const isOpen = t.result === 'OPEN';
+    const retColor = isWin ? 'ret-pos' : isLoss ? 'ret-neg' : 'ret-open';
+    const retText  = t.return_pct != null ? (t.return_pct>=0?'+':'')+t.return_pct.toFixed(1)+'%' : '持倉中';
+    const badgeText = isWin ? '獲利' : isLoss ? '虧損' : '持有';
+    const badgeCls  = isWin ? 'win' : isLoss ? 'loss' : 'open';
+    const holdText  = t.holding_days ? `持股 ${t.holding_days} 天` : '';
+    const exitText  = t.exit_date ? `出場 ${fmtDate(t.exit_date)} @ ${t.exit_price}` : '尚未出場';
+    return `<div class="trade-item">
+      <div class="trade-badge ${badgeCls}">${badgeText}</div>
+      <div>
+        <div class="trade-name">${t.stock_id} ${t.stock_name}</div>
+        <div class="trade-meta">進場 ${fmtDate(t.entry_date)} @ ${t.entry_price} &nbsp;|&nbsp; ${exitText} &nbsp;|&nbsp; ${holdText}</div>
+      </div>
+      <div class="trade-ret ${retColor}">${retText}</div>
+    </div>`;
+  }).join('');
+}
+
+window.filterTrades = function(type, btn){
+  CUR_FILTER = type;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTrades(DATA.periods[CUR_PERIOD]);
+};
+
+function renderOpenAnalysis(pd){
+  const openSec = document.getElementById('open-section');
+  const listEl  = document.getElementById('open-analysis-list');
+  const analysis = pd.open_analysis || {};
+  const ids = Object.keys(analysis);
+
+  if(!ids.length){ openSec.style.display = 'none'; return; }
+  openSec.style.display = 'block';
+
+  // Collect open trades for current combo to cross-ref entry price
+  const combo = pd.combos[CUR_COMBO] || {};
+  const openTrades = (combo.trades || []).filter(t => t.result === 'OPEN');
+  const entryMap = {};
+  openTrades.forEach(t => {
+    if(!entryMap[t.stock_id]) entryMap[t.stock_id] = [];
+    entryMap[t.stock_id].push({ date: t.entry_date, price: t.entry_price });
+  });
+
+  listEl.innerHTML = ids.map(sid => {
+    const a = analysis[sid];
+    const entries = entryMap[sid] || [];
+    const latestEntry = entries[entries.length-1];
+    const curPrice = a.current_price || 0;
+    const entryPrice = latestEntry ? latestEntry.price : null;
+    const unrealized = entryPrice && curPrice ? ((curPrice - entryPrice) / entryPrice * 100) : null;
+    const sig   = a.buy_signal || '—';
+    const score = a.signal_score || 0;
+    const reasons = (a.signal_reasons || []);
+    const risks   = (a.risk_factors   || []);
+    const scoreW  = Math.min(score, 100);
+    const scoreC  = scoreColor(score);
+    const unrealizedHtml = unrealized != null
+      ? `<div class="ind-item"><div class="ind-label">未實現損益</div><div class="ind-val ${unrealized>=0?'':''}` +
+        `" style="color:${unrealized>=0?'var(--green)':'var(--red)'}">${unrealized>=0?'+':''}${unrealized.toFixed(1)}%</div></div>`
+      : '';
+
+    return `<div class="open-card">
+      <div class="open-header">
+        <div>
+          <span class="open-name">${sid}</span>
+          <span class="open-price" style="margin-left:8px">現價 ${curPrice.toFixed(1)}</span>
+          ${entryPrice ? `<span class="open-price"> | 成本 ${entryPrice}</span>` : ''}
+        </div>
+        <span class="signal-pill ${signalClass(sig)}" style="margin-left:auto">${sig}</span>
+        <span style="margin-left:10px;font-size:12px;color:${scoreC};font-weight:700">${score}/100</span>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:${scoreW}%;background:${scoreC}"></div></div>
+      </div>
+      <div class="open-indicators">
+        <div class="ind-item"><div class="ind-label">趨勢</div><div class="ind-val">${a.trend_status||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">均線排列</div><div class="ind-val" style="font-size:11px">${a.ma_alignment||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">MA5</div><div class="ind-val">${a.ma5?.toFixed(1)||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">乖離MA5</div><div class="ind-val" style="color:${(a.bias_ma5||0)>5?'var(--red)':'var(--text)'}">${a.bias_ma5!=null?(a.bias_ma5>=0?'+':'')+a.bias_ma5.toFixed(1)+'%':'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">MACD</div><div class="ind-val" style="font-size:11px">${a.macd_signal||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">量能</div><div class="ind-val" style="font-size:11px">${a.volume_trend||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">RSI(12)</div><div class="ind-val">${a.rsi_12?.toFixed(1)||'—'}</div></div>
+        ${unrealizedHtml}
+      </div>
+      ${reasons.length ? `<div class="reasons-list">${reasons.map(r=>`<span class="reason-chip">✓ ${r}</span>`).join('')}</div>` : ''}
+      ${risks.length   ? `<div class="reasons-list">${risks.map(r=>`<span class="risk-chip">⚠ ${r}</span>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 init();
