@@ -424,8 +424,22 @@ def build_daily_payload(summary):
     )
 
     # ── 雙篩選第二層：對 qualified 個股跑趨勢分析，加入買入建議 ──────────────
-    if _ANALYZER_OK and qualified:
-        docs_dir_path = Path(__file__).parent.parent / 'docs'
+    # 每次重試 import，避免 module-level _ANALYZER_OK 因 CI 路徑問題被快取成 False
+    _local_analyze = None
+    if _ANALYZER_OK:
+        _local_analyze = _analyze_stock
+    else:
+        try:
+            _root = Path(__file__).resolve().parent.parent
+            if str(_root) not in sys.path:
+                sys.path.insert(0, str(_root))
+            from indicators.stock_analyzer import analyze_stock as _local_analyze
+            print('[INFO] build_docs: 分析引擎延遲載入成功')
+        except Exception as _e2:
+            print(f'[WARN] build_docs: 分析引擎延遲載入失敗：{_e2}')
+
+    if _local_analyze and qualified:
+        docs_dir_path = Path(__file__).resolve().parent.parent / 'docs'
         strong_set = set(summary.get('strong_sectors', []))
         weak_set   = set(summary.get('weak_sectors',   []))
         for q in qualified:
@@ -452,7 +466,7 @@ def build_daily_payload(summary):
                     'close':  ohlcv.get('close', []),
                     'volume': ohlcv.get('volume', []),
                 })
-                result = _analyze_stock(
+                result = _local_analyze(
                     df, sid,
                     sector_is_strong=sector_is_strong,
                     cv_sharpe=float(cv_sharpe) if cv_sharpe is not None else None,
