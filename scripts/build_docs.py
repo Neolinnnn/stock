@@ -35,11 +35,12 @@ except ImportError:
     pass
 
 try:
-    _INDICATORS_DIR = Path(__file__).parent.parent / 'indicators'
+    _INDICATORS_DIR = Path(__file__).resolve().parent.parent / 'indicators'
     sys.path.insert(0, str(_INDICATORS_DIR.parent))
     from indicators.stock_analyzer import analyze_stock as _analyze_stock
     _ANALYZER_OK = True
-except Exception:
+except Exception as _e:
+    print(f'[WARN] build_docs: 分析引擎載入失敗：{_e}')
     _ANALYZER_OK = False
 
 
