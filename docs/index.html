@@ -580,110 +580,103 @@ function hideBtTooltip(){
   document.getElementById('bt-tooltip').classList.remove('show');
 }
 
+// ── 回測選股：重新設計為「族群動能 × 籌碼」雙維度選股 ────────────────────────
 function renderBtPage(){
   const el = document.getElementById('page-bt');
-  if(!BT_RESULTS){
-    el.innerHTML = '<div class="error-box"><span>⏳</span>回測資料載入中，請稍後再切換此 Tab</div>';
-    return;
-  }
-  if(!BT_RESULTS.ranking || !BT_RESULTS.variants){
-    el.innerHTML = '<div class="error-box"><span>❌</span>回測資料格式異常</div>';
-    return;
-  }
-
   const data = DAILY_DATA || CACHE[CUR_DATE];
   if(!data || !data.sectors || !data.stocks){
-    el.innerHTML = '<div class="error-box"><span>⚠️</span>今日掃描資料不足，無法計算選股</div>';
+    el.innerHTML = '<div class="error-box"><span>⚠️</span>今日掃描資料不足</div>';
     return;
   }
 
-  const top5ids = BT_RESULTS.ranking.slice(0, 5).map(r => r.id);
-  const top5variants = top5ids.map(id => BT_RESULTS.variants.find(v => v.id === id)).filter(Boolean);
+  // 取前3強勢族群（20日漲幅排名）
+  const topSectors = [...data.sectors]
+    .sort((a,b) => Number(b.ret20||0) - Number(a.ret20||0))
+    .slice(0, 3).map(s => s.sector);
 
-  TODAY_BT_MAP = new Map();
-  const allPicks = top5variants.map(v => {
-    const picks = computeTodayPicks(v.id, data);
-    picks.forEach(s => {
-      if(!TODAY_BT_MAP.has(s.id))
-        TODAY_BT_MAP.set(s.id, {count: 0, strategies: [], name: s.name, sector: s.sector});
-      const e = TODAY_BT_MAP.get(s.id);
-      e.count++;
-      e.strategies.push({id: v.id, label: v.label});
-    });
-    return picks;
+  // 動能篩選：強勢族群 × 個股20日漲幅前3
+  const momentumPicks = [];
+  topSectors.forEach(sec => {
+    const inSec = data.stocks.filter(s => s.sector === sec && s.signal !== 'SELL');
+    [...inSec].sort((a,b) => Number(b.ret20||0) - Number(a.ret20||0))
+      .slice(0, 3).forEach(s => momentumPicks.push({...s, _basis:'momentum'}));
   });
 
-  // ── 上層：交集精選 ────────────────────────────────────────────────
-  const intersect = [...TODAY_BT_MAP.entries()]
-    .filter(([, v]) => v.count >= 2)
-    .sort((a, b) => b[1].count - a[1].count)
-    .slice(0, 10);
+  // 籌碼篩選：強勢族群 × 法人合計買超前3
+  const chipPicks = [];
+  topSectors.forEach(sec => {
+    const inSec = data.stocks.filter(s => s.sector === sec && s.signal !== 'SELL' && Number(s.chipTotal||0) > 0);
+    [...inSec].sort((a,b) => Number(b.chipTotal||0) - Number(a.chipTotal||0))
+      .slice(0, 3).forEach(s => chipPicks.push({...s, _basis:'chip'}));
+  });
 
-  let html = `<div class="section-title">⭐ 交集精選（今日 2+ 策略同時選中）</div>`;
+  // 交集：同時出現在兩個清單的股票
+  const momentumIds = new Set(momentumPicks.map(s=>s.id));
+  const chipIds     = new Set(chipPicks.map(s=>s.id));
+  const intersectIds = new Set([...momentumIds].filter(id => chipIds.has(id)));
 
-  if(!intersect.length){
-    html += `<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;padding:16px;">今日五個策略選股無重疊，請查看下方各策略今日選股</div>`;
-  } else {
-    html += `<div class="bt-chip-grid">`;
-    intersect.forEach(([sid, bt]) => {
-      const s = data.stocks.find(x => x.id === sid) || {};
-      const sig = s.signal || '';
-      html += `<div class="bt-chip" onclick="showBtTooltip('${escHtml(sid)}',event)">
-        <div class="bc-id">${escHtml(sid)}</div>
-        <div class="bc-name">${escHtml(bt.name)}</div>
-        <div class="bc-sector">${escHtml(bt.sector)}</div>
-        <div class="bc-count">★ 出現 ${bt.count}/5 策略</div>
-        ${sig ? `<div style="margin-top:4px">${badge(sig)}</div>` : ''}
-      </div>`;
-    });
-    html += `</div>`;
+  const stockRow = (s, showBadge) => {
+    const ret = Number(s.ret20||0);
+    const chipN = Number(s.chipTotal||0);
+    return `<tr>
+      <td><b>${escHtml(s.id)}</b></td>
+      <td>${escHtml(s.name)}${showBadge&&intersectIds.has(s.id)?`<span class="bt-badge">★雙選</span>`:''}</td>
+      <td><span class="tag">${escHtml(s.sector)}</span></td>
+      <td class="${ret>=0?'up':'dn'}">${ret>=0?'+':''}${fmt(s.ret20,1)}%</td>
+      <td class="${chipN>=0?'chip-pos':'chip-neg'}">${chipN>=0?'+':''}${chipN.toLocaleString()}</td>
+      <td><span class="rsi-dot ${rsiDot(Number(s.rsi||0))}"></span>${fmt(s.rsi,1)}</td>
+      <td>${s.signal?badge(s.signal):'—'}</td>
+    </tr>`;
+  };
+
+  let html = `
+  <div class="info-box" style="margin-bottom:16px">
+    <b style="color:var(--text)">📌 選股邏輯說明</b><br>
+    從今日 <b style="color:var(--green)">20日漲幅前3強勢族群</b>（${topSectors.join('、')}）中，分兩個維度各取前3檔：<br>
+    <b>動能篩選</b>：個股近20日漲幅最高 — 跟上強勢族群的衝刺股<br>
+    <b>籌碼篩選</b>：三大法人合計買超最多 — 主力正在佈局的股票<br>
+    <b style="color:var(--yellow)">★雙選</b>：同時被兩種方法選中，信號最強
+  </div>`;
+
+  // 交集精選
+  if(intersectIds.size){
+    const intersectStocks = [...intersectIds].map(id => data.stocks.find(s=>s.id===id)).filter(Boolean);
+    html += `<div class="section-title">⭐ 雙選精選（動能 + 籌碼同時入選）</div>
+    <div class="card" style="overflow-x:auto;margin-bottom:20px;border-left:3px solid var(--yellow)">
+    <table>
+      <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
+      ${intersectStocks.map(s=>stockRow(s,false)).join('')}
+    </table></div>`;
   }
 
-  // ── 下層：各策略今日選股子 Tab ─────────────────────────────────────
-  html += `<div class="section-title">各策略今日選股</div>`;
-  html += `<div class="bt-sub-tab-bar">`;
-  top5variants.forEach((v, i) => {
-    const sharpe = BT_RESULTS.ranking.find(r => r.id === v.id)?.sharpe?.toFixed(2) || '—';
-    html += `<button class="bt-sub-tab${i === 0 ? ' active' : ''}" onclick="btSwitchTab(this,${i})">#${i + 1} ${escHtml(v.label)}（${sharpe}）</button>`;
-  });
-  html += `</div>`;
+  // 兩欄：動能 / 籌碼
+  html += `<div class="grid-2">
+    <div>
+      <div class="section-title">📈 動能篩選（跟上強勢族群衝刺股）</div>
+      <div class="card" style="overflow-x:auto">
+      <div style="font-size:11px;color:var(--sub);padding:4px 6px 6px">強勢族群 × 個股20日漲幅前3</div>
+      <table>
+        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
+        ${momentumPicks.map(s=>stockRow(s,true)).join('')}
+      </table></div>
+    </div>
+    <div>
+      <div class="section-title">🏦 籌碼篩選（法人正在佈局的股票）</div>
+      <div class="card" style="overflow-x:auto">
+      <div style="font-size:11px;color:var(--sub);padding:4px 6px 6px">強勢族群 × 法人合計買超前3</div>
+      <table>
+        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
+        ${chipPicks.length ? chipPicks.map(s=>stockRow(s,true)).join('') :
+          `<tr><td colspan="7" style="color:var(--sub);padding:12px">今日強勢族群中無法人買超個股</td></tr>`}
+      </table></div>
+    </div>
+  </div>
 
-  top5variants.forEach((v, i) => {
-    const picks = allPicks[i];
-    html += `<div class="bt-sub-panel card" id="bt-panel-${i}" style="${i === 0 ? '' : 'display:none'}">`;
-    html += `<div style="font-size:11px;color:var(--sub);margin-bottom:8px;">今日選股（${fmtDate(CUR_DATE)}）｜族群排名：${v.id.split('_')[0] === 'composite' ? '綜合分數' : '20日漲幅'}｜個股排名：${v.id.split('_').pop() === 'chip' ? '法人籌碼' : '20日漲幅'}</div>`;
-    if(!picks.length){
-      html += `<div style="color:var(--sub);font-size:13px;">今日無選股結果</div>`;
-    } else {
-      html += `<div style="overflow-x:auto"><table>
-        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日漲幅</th><th>法人籌碼</th><th>RSI5</th><th>今日訊號</th></tr>
-        ${picks.map(s => {
-          const ret20Color = (s.ret20 || 0) >= 0 ? 'var(--green)' : 'var(--red)';
-          const inMulti = (TODAY_BT_MAP.get(s.id)?.count || 0) >= 2;
-          return `<tr onclick="showBtTooltip('${escHtml(s.id)}',event)" style="cursor:pointer">
-            <td>${escHtml(s.id)}</td>
-            <td><b>${escHtml(s.name)}</b>${inMulti ? `<span class="bt-badge">★交集</span>` : ''}</td>
-            <td>${escHtml(s.sector)}</td>
-            <td style="color:${ret20Color}">${s.ret20 != null ? fmt(s.ret20, 1) + '%' : '—'}</td>
-            <td>${s.chipTotal != null ? s.chipTotal : '—'}</td>
-            <td>${s.rsi != null ? fmt(s.rsi, 1) : '—'}</td>
-            <td>${s.signal ? badge(s.signal) : '—'}</td>
-          </tr>`;
-        }).join('')}
-      </table></div>`;
-    }
-    html += `</div>`;
-  });
+  <div style="margin-top:8px;font-size:11px;color:var(--sub)">
+    資料日期：${fmtDate(CUR_DATE)}　｜　僅依技術/籌碼篩選，不構成買賣建議　｜　賣出訊號(SELL)已自動排除
+  </div>`;
 
   el.innerHTML = html;
-}
-
-function btSwitchTab(btn, idx){
-  document.querySelectorAll('.bt-sub-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.bt-sub-panel').forEach((p,i)=>{
-    p.style.display = i===idx ? '' : 'none';
-  });
 }
 
 // ── 個股分析 ──────────────────────────────────────────────────────────────────
@@ -831,7 +824,6 @@ function spRender(d){
   spRenderPatterns(d.patterns);
   spRenderLevels(d.levels);
   spRenderSuggestion(d);
-  spRenderMJSignals(d.mj_signals);
   loadFundamentals(d.stock_id);
 }
 
@@ -1812,6 +1804,41 @@ function renderDaily(data){
           <td><b style="color:${scoreColor}">${score}${score!=='—'?'/100':''}</b></td>
         </tr>
         ${tooltip?`<tr style="background:#13161d"><td colspan="11" style="font-size:11px;color:var(--sub);padding:4px 10px 8px">${escHtml(reasons)}${risks?` <span style="color:var(--yellow)">⚠ ${escHtml(risks)}</span>`:''}</td></tr>`:''}`;
+      }).join('')}
+    </table></div>`;
+  }
+
+  // ── 賣出訊號列表 ──────────────────────────────────────────────────────────
+  const sellStocks=(stocks||[]).filter(s=>s.signal==='SELL').sort((a,b)=>Number(a.ret20)-Number(b.ret20));
+  if(sellStocks.length){
+    html+=`<div class="section-title" style="color:var(--red)">⚠ 賣出訊號（${sellStocks.length} 檔）</div>
+    <div class="card" style="overflow-x:auto;margin-bottom:20px;border-left:3px solid var(--red)">
+    <div style="font-size:11px;color:var(--sub);padding:6px 10px 2px">RSI5<45 且 20日跌幅>5%，或 CV夏普<−0.3 — 建議減碼或停損</div>
+    <table>
+      <tr>
+        <th>代碼</th><th>名稱</th><th>族群</th>
+        <th>現價</th><th>RSI5</th><th>20日%</th><th>法人合計</th><th>賣出原因</th>
+      </tr>
+      ${sellStocks.map(s=>{
+        const rsi=Number(s.rsi||0), ret=Number(s.ret20||0), sharpe=Number(s.sharpe||0);
+        const reasons=[];
+        if(rsi<30) reasons.push('RSI超賣');
+        else if(rsi<45) reasons.push('RSI偏弱');
+        if(ret<-10) reasons.push(`20日大跌${ret.toFixed(1)}%`);
+        else if(ret<-5) reasons.push(`20日跌幅${ret.toFixed(1)}%`);
+        if(Number(s.chipTotal||0)<-500000) reasons.push('法人大賣超');
+        else if(Number(s.chipTotal||0)<0) reasons.push('法人賣超');
+        if(sharpe<0) reasons.push('CV夏普轉負');
+        return `<tr>
+          <td><b>${escHtml(s.id)}</b></td>
+          <td>${escHtml(s.name)}</td>
+          <td><span class="tag">${escHtml(s.sector)}</span></td>
+          <td>${fmt(s.price,1)}</td>
+          <td><span class="rsi-dot ${rsiDot(rsi)}"></span>${fmt(s.rsi,1)}</td>
+          <td class="dn">${sign(ret)}${fmt(s.ret20)}%</td>
+          <td class="${Number(s.chipTotal||0)>=0?'chip-pos':'chip-neg'}">${s.chipTotal!=null?sign(Number(s.chipTotal))+Number(s.chipTotal).toLocaleString():'—'}</td>
+          <td style="font-size:11px;color:var(--red)">${reasons.join(' · ')||'技術面轉弱'}</td>
+        </tr>`;
       }).join('')}
     </table></div>`;
   }
