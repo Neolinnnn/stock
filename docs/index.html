@@ -31,11 +31,60 @@
   .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
   @media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
-  @media(max-width:480px){.grid-4{grid-template-columns:1fr;}}
+  @media(max-width:480px){.grid-4{grid-template-columns:1fr 1fr;}}
 
   .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
   .card-title{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
   .card-value{font-size:22px;font-weight:700;}
+
+  /* ── iPhone Safari 直式 ──────────────────────────────── */
+  @media(max-width:640px){
+    /* Header: h1+date-picker 同排，nav 獨立可橫捲 */
+    header{padding:8px 12px;gap:4px;align-items:center;}
+    header h1{flex:1;font-size:14px;white-space:nowrap;}
+    nav{width:100%;order:3;overflow-x:auto;-webkit-overflow-scrolling:touch;
+        scrollbar-width:none;padding-bottom:2px;}
+    nav::-webkit-scrollbar{display:none;}
+    nav a{white-space:nowrap;font-size:12px;padding:5px 10px;}
+    .date-picker{margin-left:0;flex-shrink:0;gap:4px;}
+    .date-picker label{display:none;}
+    .date-nav{padding:5px 8px;}
+
+    /* 主內容 */
+    main{padding:12px 10px;}
+    .card{padding:12px 10px;}
+    .card-value{font-size:18px;}
+    .section-title{font-size:13px;margin:14px 0 8px;}
+    .info-box{padding:10px 12px;}
+
+    /* Grid inline style 覆蓋：讓 media query 生效 */
+    .grid-4{grid-template-columns:1fr 1fr!important;}
+
+    /* 表格 */
+    table{font-size:12px;}
+    th,td{padding:5px 6px;}
+
+    /* iOS 慣性橫捲 */
+    [style*="overflow-x:auto"]{-webkit-overflow-scrolling:touch;}
+
+    /* 雙條件推薦表：固定第一欄 */
+    .qualified-tbl th:first-child,
+    .qualified-tbl td:first-child{
+      position:sticky;left:0;background:var(--card);z-index:2;
+    }
+    /* 隱藏次要欄位 */
+    .qualified-tbl .col-hide{display:none;}
+
+    /* 個股分析面板：直排 */
+    #sp-main{flex-direction:column!important;}
+    #sp-right{min-width:0!important;max-width:none!important;width:100%!important;}
+    #sp-mini-row{grid-template-columns:1fr!important;}
+    #sp-header .sp-price{font-size:24px;}
+    #sp-header .sp-chg{font-size:14px;}
+
+    /* 個股搜尋 */
+    .stock-search-bar input{width:calc(100% - 80px);}
+  }
   .card-sub{font-size:12px;color:var(--sub);margin-top:4px;}
 
   .section-title{font-size:15px;font-weight:600;margin:20px 0 10px;border-left:3px solid var(--accent);padding-left:10px;}
@@ -115,6 +164,7 @@
   #sp-main{display:none;gap:10px;align-items:flex-start;}
   #sp-left{flex:7;min-width:0;}
   #sp-right{flex:3;min-width:240px;max-width:320px;display:flex;flex-direction:column;gap:8px;}
+  @media(max-width:640px){#sp-right{min-width:0;max-width:none;}}
   #sp-mini-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
   #sp-bottom{display:none;gap:10px;flex-wrap:wrap;margin-top:10px;}
   #sp-bottom .card{flex:1;min-width:200px;}
@@ -635,7 +685,7 @@ async function initStockPage(){
           <div class="chart-box" id="sp-chip-chart"></div>
         </div>
       </div>
-      <div id="sp-right" style="flex:3;min-width:240px;max-width:320px;display:flex;flex-direction:column;gap:8px;">
+      <div id="sp-right" style="flex:3;display:flex;flex-direction:column;gap:8px;">
         <div class="sp-card">
           <h3>主力燈號</h3>
           <div style="display:flex;align-items:center;gap:10px;">
@@ -1315,7 +1365,7 @@ function renderDaily(data){
   const partialSectors = meta['部分失敗族群']||{};
 
   let html=`
-  <div class="grid-4" style="grid-template-columns:repeat(4,1fr)">
+  <div class="grid-4">
     <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
     <div class="card"><div class="card-title">加權指數</div>
       <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'—'}</div>
@@ -1369,8 +1419,13 @@ function renderDaily(data){
 
   if(qualified&&qualified.length){
     html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
-    <div class="card" style="overflow-x:auto;margin-bottom:20px"><table>
-      <tr><th>代碼</th><th>族群</th><th>名稱</th><th>現價</th><th>RSI5</th><th>CV夏普</th><th>趨勢排列</th><th>MACD</th><th>量能</th><th>雙篩買入建議</th><th>評分</th></tr>
+    <div class="card" style="overflow-x:auto;margin-bottom:20px"><table class="qualified-tbl">
+      <tr>
+        <th>代碼</th><th class="col-hide">族群</th><th>名稱</th>
+        <th class="col-hide">現價</th><th class="col-hide">RSI5</th><th class="col-hide">CV夏普</th>
+        <th>趨勢</th><th class="col-hide">MACD</th><th class="col-hide">量能</th>
+        <th>建議</th><th>評分</th>
+      </tr>
       ${qualified.map(q=>{
         const ta = q.trend_analysis || {};
         const sig = ta.buy_signal || '—';
@@ -1382,14 +1437,14 @@ function renderDaily(data){
         const tooltip = [reasons, risks?('⚠ '+risks):''].filter(Boolean).join(' | ');
         return `<tr title="${escHtml(tooltip)}">
           <td><b>${escHtml(q.id)}</b></td>
-          <td>${escHtml(q.sector)}</td>
+          <td class="col-hide">${escHtml(q.sector)}</td>
           <td>${escHtml(q.name)}</td>
-          <td>${fmt(q.price,1)}</td>
-          <td><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
-          <td>${fmt(q.cv_sharpe,2)}</td>
+          <td class="col-hide">${fmt(q.price,1)}</td>
+          <td class="col-hide"><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
+          <td class="col-hide">${fmt(q.cv_sharpe,2)}</td>
           <td style="font-size:12px;color:var(--sub)">${escHtml(ta.trend_status||'—')}</td>
-          <td style="font-size:11px;color:var(--sub)">${escHtml(ta.macd_signal||'—')}</td>
-          <td style="font-size:11px;color:var(--sub)">${escHtml(ta.volume_trend||'—')}</td>
+          <td class="col-hide" style="font-size:11px;color:var(--sub)">${escHtml(ta.macd_signal||'—')}</td>
+          <td class="col-hide" style="font-size:11px;color:var(--sub)">${escHtml(ta.volume_trend||'—')}</td>
           <td><b style="color:${sigColor}">${escHtml(sig)}</b></td>
           <td><b style="color:${scoreColor}">${score}${score!=='—'?'/100':''}</b></td>
         </tr>
