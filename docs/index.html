@@ -1304,12 +1304,15 @@ function stepDate(dir){
 // ── 今日掃描 ──────────────────────────────────────────────────────────────────
 function renderDaily(data){
   const {meta,qualified,sectors,chips,stocks} = data;
-  const date   = meta['掃描日期']||'—';
-  const idx    = meta['加權指數'];
-  const chg    = meta['漲跌幅%'];
-  const strong = meta['強勢族群']||'無';
-  const weak   = meta['弱勢族群']||'無';
-  const qCount = meta['雙條件推薦']||0;
+  const date     = meta['掃描日期']||'—';
+  const idx      = meta['加權指數'];
+  const chg      = meta['漲跌幅%'];
+  const strong   = meta['強勢族群']||'無';
+  const weak     = meta['弱勢族群']||'無';
+  const qCount   = meta['雙條件推薦']||0;
+  const coverage = meta['掃描涵蓋率']??100;
+  const failedSectors  = meta['失敗族群']||[];
+  const partialSectors = meta['部分失敗族群']||{};
 
   let html=`
   <div class="grid-4" style="grid-template-columns:repeat(4,1fr)">
@@ -1320,6 +1323,12 @@ function renderDaily(data){
     <div class="card"><div class="card-title">強勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${strong}</div></div>
     <div class="card"><div class="card-title">弱勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${weak||'無'}</div></div>
   </div>
+  ${coverage<100?`<div class="card" style="margin-bottom:8px;border-left:3px solid var(--yellow);padding:8px 14px">
+    <span style="color:var(--yellow);font-weight:bold">⚠ 掃描涵蓋率 ${coverage}%</span>
+    ${failedSectors.length?`<span style="color:var(--sub);font-size:12px;margin-left:8px">完全失敗族群：${escHtml(failedSectors.join('、'))}</span>`:''}
+    ${Object.keys(partialSectors).length?`<span style="color:var(--sub);font-size:12px;margin-left:8px">部分失敗：${escHtml(Object.entries(partialSectors).map(([k,v])=>k+'('+v+'檔)').join('、'))}</span>`:''}
+    <div style="font-size:11px;color:var(--sub);margin-top:2px">以上族群當日 API 失敗，推薦結果可能不完整</div>
+  </div>`:''}
   <div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:16px">
     <div class="card-title" style="margin:0;min-width:80px">雙條件推薦</div>
     <div class="card-value" style="font-size:20px;color:var(--yellow)">${qCount} 檔</div>

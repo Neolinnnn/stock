@@ -439,7 +439,15 @@ def run_daily_scan():
     with open(md_path, 'w', encoding='utf-8') as f:
         f.write(summary_to_markdown(summary))
 
-    print(f"\n✅ 完成")
+    coverage = summary.get('scan_coverage', 100)
+    failed = summary.get('failed_sectors', [])
+    partial = summary.get('partial_sectors', {})
+    if failed:
+        print(f"\n⚠ 掃描不完整（{coverage}%）：{len(failed)} 族群完全失敗：{', '.join(failed)}")
+    if partial:
+        items = ', '.join(f"{k}({v}檔)" for k, v in partial.items())
+        print(f"⚠ 部分失敗族群：{items}")
+    print(f"\n✅ 完成（掃描涵蓋率 {coverage}%）")
     print(f"   JSON：{json_path}")
     print(f"   MD：  {md_path}")
     print(f"   圖表：{chart_path}")
@@ -578,11 +586,17 @@ def build_summary(date, market, all_results, chart_path):
     all_qualified = []  # 雙條件達標
     _qualified_seen = set()  # 去重：同一個股只列一次
     all_alerts = []  # 風險警示
+    failed_sectors = []   # 全部個股 API 失敗，整族群被跳過
+    partial_sectors = {}  # 部分個股失敗 {sector: 失敗數}
 
     for sector, results in all_results.items():
         ok = [r for r in results if 'error' not in r]
+        err_count = len(results) - len(ok)
         if not ok:
+            failed_sectors.append(sector)
             continue
+        if err_count > 0:
+            partial_sectors[sector] = err_count
         df = pd.DataFrame(ok)
 
         avg_ret = df['ret_20d'].dropna().mean() * 100 if len(df['ret_20d'].dropna()) > 0 else 0
@@ -652,6 +666,10 @@ def build_summary(date, market, all_results, chart_path):
                 'type': 'RSI過熱', 'detail': f"RSI={r['rsi']:.1f}"
             })
 
+    total = len(all_results)
+    ok_count = total - len(failed_sectors)
+    scan_coverage = round(ok_count / total * 100) if total else 100
+
     return {
         'date': date,
         'timestamp': datetime.now().isoformat(),
@@ -662,6 +680,9 @@ def build_summary(date, market, all_results, chart_path):
         'qualified': all_qualified,
         'alerts': all_alerts,
         'chart_path': chart_path,
+        'failed_sectors': failed_sectors,
+        'partial_sectors': partial_sectors,
+        'scan_coverage': scan_coverage,
     }
 
 
@@ -673,6 +694,19 @@ def summary_to_markdown(s):
         md.append(f"\n## 大盤\n")
         md.append(f"- 加權指數：{s['market']['加權指數']:.2f}  "
                   f"({s['market']['漲跌幅']:+.2f}%)\n")
+
+    coverage = s.get('scan_coverage', 100)
+    failed = s.get('failed_sectors', [])
+    partial = s.get('partial_sectors', {})
+    if failed or partial:
+        md.append(f"\n## ⚠ 掃描完整度：{coverage}%\n")
+        if failed:
+            md.append(f"- ❌ 完全失敗（整族群略過）：{', '.join(failed)}\n")
+        if partial:
+            items = ', '.join(f"{k}({v}檔失敗)" for k, v in partial.items())
+            md.append(f"- ⚠ 部分失敗：{items}\n")
+    else:
+        md.append(f"\n## 掃描完整度：100%\n")
 
     md.append(f"\n## 族群強弱\n")
     md.append(f"- 🟢 強勢：{', '.join(s['strong_sectors']) or '無'}\n")
