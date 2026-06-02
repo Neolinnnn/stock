@@ -190,6 +190,39 @@
   .chip-table td{text-align:right;padding:3px 6px;}
   .chip-table td:first-child{text-align:left;color:var(--sub);}
   .chart-box{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+
+  /* ── 指標判斷面板 ─────────────────────────────────────────── */
+  .sp-chart-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px;}
+  .sp-chart-row .chart-box{flex:3;min-width:0;}
+  .sp-judge-panel{flex:1.4;min-width:130px;max-width:195px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;display:flex;flex-direction:column;gap:3px;align-self:stretch;}
+  .sp-judge-panel h4{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+  .sp-judge-verdict{font-size:13px;font-weight:700;margin-bottom:2px;}
+  .sp-judge-detail{color:var(--sub);font-size:11px;}
+  .sp-judge-action{margin-top:auto;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:600;line-height:1.5;border:1px solid currentColor;}
+  .sp-macd-strip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;margin-top:8px;display:flex;gap:20px;font-size:12px;align-items:flex-start;flex-wrap:wrap;}
+  .sp-macd-strip .mst-block{display:flex;flex-direction:column;gap:2px;}
+  .sp-macd-strip .mst-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px;}
+  .sp-macd-strip .mst-verdict{font-size:13px;font-weight:700;}
+  .sp-macd-strip .mst-detail{font-size:11px;color:var(--sub);}
+  .sp-macd-strip .mst-action{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;border:1px solid currentColor;}
+  @media(max-width:640px){
+    .sp-chart-row{flex-direction:column;}
+    .sp-judge-panel{max-width:none;min-width:0;align-self:auto;}
+  }
+
+  /* ── 今日行動清單 ──────────────────────────────────────────── */
+  .action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:24px;}
+  .action-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+  .action-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
+  .action-card .ac-id{font-size:17px;font-weight:700;}
+  .action-card .ac-name{font-size:14px;font-weight:600;}
+  .action-card .ac-sector{font-size:11px;color:var(--sub);background:#1e2330;border-radius:4px;padding:1px 7px;}
+  .action-card .ac-sig{font-size:13px;font-weight:700;margin-left:auto;}
+  .action-card .ac-prices{display:flex;gap:12px;font-size:13px;margin-bottom:8px;flex-wrap:wrap;}
+  .action-card .ac-price-item{display:flex;flex-direction:column;gap:1px;}
+  .action-card .ac-price-lbl{font-size:10px;color:var(--sub);letter-spacing:.3px;}
+  .action-card .ac-price-val{font-size:14px;font-weight:700;}
+  .action-card .ac-reasons{font-size:11px;color:var(--sub);border-top:1px solid var(--border);padding-top:7px;line-height:1.7;}
   .fund-tab {
     padding: 4px 14px;
     border: 1px solid var(--border);
@@ -251,7 +284,6 @@
   <nav>
     <a id="nav-daily"     onclick="setPage('daily')">今日掃描</a>
     <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
-    <a id="nav-mainforce" onclick="setPage('mainforce')">🎯 主力觀察</a>
     <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
     <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
     <a id="nav-bt" onclick="setPage('bt')">⭐ 回測選股</a>
@@ -680,9 +712,16 @@ async function initStockPage(){
     <div id="sp-main" style="display:none;gap:10px;align-items:flex-start;">
       <div id="sp-left" style="flex:7;min-width:0;">
         <div class="chart-box" id="sp-main-chart"></div>
-        <div id="sp-mini-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
-          <div class="chart-box" id="sp-kd-chart"></div>
-          <div class="chart-box" id="sp-chip-chart"></div>
+        <div id="sp-macd-strip" class="sp-macd-strip" style="display:none"></div>
+        <div id="sp-mini-row" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+          <div class="sp-chart-row">
+            <div class="chart-box" id="sp-kd-chart"></div>
+            <div id="sp-kd-judge" class="sp-judge-panel"><h4>KDJ 判斷</h4><div style="color:var(--sub);font-size:11px">載入中…</div></div>
+          </div>
+          <div class="sp-chart-row">
+            <div class="chart-box" id="sp-chip-chart"></div>
+            <div id="sp-chip-judge" class="sp-judge-panel"><h4>籌碼判斷</h4><div style="color:var(--sub);font-size:11px">載入中…</div></div>
+          </div>
         </div>
       </div>
       <div id="sp-right" style="flex:3;display:flex;flex-direction:column;gap:8px;">
@@ -696,7 +735,7 @@ async function initStockPage(){
         </div>
         <div class="sp-card"><h3>技術面摘要</h3><div id="sp-summary-rows"></div></div>
         <div class="sp-card"><h3>近期法人籌碼</h3><div id="sp-chip-summary"></div></div>
-        <div class="sp-card"><h3>AI 勝率預測</h3><div id="sp-pred-content"></div></div>
+        <div class="sp-card"><h3>歷史勝率參考</h3><div id="sp-pred-content"></div></div>
       </div>
     </div>
     <div id="sp-bottom" style="display:none;gap:10px;flex-wrap:wrap;margin-top:10px;">
@@ -784,10 +823,11 @@ function spRender(d){
   spRenderMainChart(d);
   spRenderKDChart(d);
   spRenderChipChart(d);
+  spRenderIndicatorJudges(d);
   spRenderSignal(d.signal);
   spRenderSummary(d.summary);
   spRenderChipSummary(d.chip);
-  spRenderPrediction(d.prediction);
+  spRenderPrediction(d.prediction, d.summary);
   spRenderPatterns(d.patterns);
   spRenderLevels(d.levels);
   spRenderSuggestion(d);
@@ -1170,23 +1210,196 @@ function spRenderChipSummary(chip){
   });
 }
 
-function spRenderPrediction(pred){
-  const el=document.getElementById('sp-pred-content');
-  if(!pred){el.innerHTML='—';return;}
-  const up=((pred.up||0)*100).toFixed(0);
-  const sid=((pred.sideways||0)*100).toFixed(0);
-  const dn=((pred.down||0)*100).toFixed(0);
-  const acc=((pred.accuracy||0)*100).toFixed(0);
+// ── 指標判斷邏輯 ─────────────────────────────────────────────────────────────
+function _buildKDJudge(I){
+  if(!I||!I.kd_k) return null;
+  const k=I.kd_k.slice(-1)[0], d=I.kd_d?.slice(-1)[0], j=I.kd_j?.slice(-1)[0];
+  const kp=I.kd_k.slice(-2)[0], dp=I.kd_d?.slice(-2)[0];
+  const crossUp=kp!=null&&dp!=null&&kp<=dp&&k>d;
+  const crossDn=kp!=null&&dp!=null&&kp>=dp&&k<d;
+  let state,color,details=[],action;
+  if(k<20&&(j==null||j<10)){
+    state='超賣底部';color='var(--green)';
+    details=[`K ${k?.toFixed(1)} 進入超賣區`,'J 值觸底，反彈機率高'];
+    action='可小量試單，等 KD 黃金交叉確認';
+  }else if(k>80&&(j==null||j>90)){
+    state='超買頂部';color='var(--red)';
+    details=[`K ${k?.toFixed(1)} 進入超買區`,'J 值接近頂部，回調風險高'];
+    action='謹慎追高，可逢高減碼';
+  }else if(crossUp){
+    state='KD 黃金交叉';color='var(--green)';
+    details=[`K(${k?.toFixed(1)}) 上穿 D(${d?.toFixed(1)})`,'買進訊號成立'];
+    action='積極訊號，可考慮進場';
+  }else if(crossDn){
+    state='KD 死亡交叉';color='var(--red)';
+    details=[`K(${k?.toFixed(1)}) 下穿 D(${d?.toFixed(1)})`,'賣出訊號成立'];
+    action='注意風險，考慮減碼';
+  }else if(k>d&&k>50){
+    state='多頭強勢';color='var(--green)';
+    details=[`K(${k?.toFixed(1)}) > D(${d?.toFixed(1)})，多頭格局`];
+    action='趨勢偏多，可持倉或等回調加碼';
+  }else if(k<d&&k<50){
+    state='空頭弱勢';color='var(--red)';
+    details=[`K(${k?.toFixed(1)}) < D(${d?.toFixed(1)})，空頭格局`];
+    action='趨勢偏空，暫不進場';
+  }else{
+    state='震盪整理';color='var(--sub)';
+    details=[`K ${k?.toFixed(1)} / D ${d?.toFixed(1)} 方向未明`];
+    action='等待方向確認，保持觀望';
+  }
+  return{state,color,details,action};
+}
+
+function _buildMACDJudge(I){
+  if(!I||!I.macd) return null;
+  const dif=I.macd.slice(-1)[0], dea=I.macd_signal?.slice(-1)[0];
+  const hist=I.macd_hist?.slice(-1)[0], histP=I.macd_hist?.slice(-2)[0];
+  const difAboveDea=dif>dea, expanding=hist!=null&&histP!=null&&Math.abs(hist)>Math.abs(histP);
+  let state,color,details=[],action;
+  if(dif>0&&difAboveDea&&expanding){
+    state='多頭擴張';color='var(--green)';
+    details=['DIF>DEA，紅柱走寬','上漲動能持續增強'];
+    action='趨勢向上，適合持倉';
+  }else if(dif>0&&difAboveDea&&!expanding){
+    state='多頭收斂';color='var(--yellow)';
+    details=['DIF>DEA，但紅柱縮短','上漲動能減弱中'];
+    action='注意是否到頂，可逢高減倉';
+  }else if(dif>0&&!difAboveDea){
+    state='多頭死叉';color='var(--yellow)';
+    details=['DIF>0 但跌破 DEA','多頭出現疲態'];
+    action='警戒，確認 DIF 能否再翻回 DEA 以上';
+  }else if(dif<0&&!difAboveDea&&!expanding){
+    state='空頭衰退';color='var(--red)';
+    details=['DIF<0，綠柱縮短','跌勢動能減弱'];
+    action='觀察是否準備反彈，暫不進場';
+  }else if(dif<0&&!difAboveDea&&expanding){
+    state='空頭加速';color='var(--red)';
+    details=['DIF<DEA，綠柱擴大','下跌動能增強'];
+    action='空頭趨勢強，嚴禁進場';
+  }else{
+    state='整理待變';color='var(--sub)';
+    details=['DIF 與 DEA 差距微小'];
+    action='等待 MACD 方向確認';
+  }
+  return{state,color,details,action,dif,dea};
+}
+
+function _buildChipJudge(chip){
+  if(!chip||!chip.dates||!chip.dates.length) return null;
+  const sumN=(arr,n)=>arr?.slice(-n).filter(v=>v!=null).reduce((a,b)=>a+b,0)||0;
+  const f5=sumN(chip.foreign,5), t5=sumN(chip.trust,5), d5=sumN(chip.dealer,5);
+  const total10=sumN(chip.total,10);
+  const mainBuy=f5>0&&t5>0, mainSell=f5<0&&t5<0;
+  let state,color,details=[],action;
+  if(mainBuy&&total10>0){
+    state='外資投信同步買進';color='var(--green)';
+    details=[`外資 5日 +${f5.toFixed(0)}張`,`投信 5日 +${t5.toFixed(0)}張`,'主力齊買，籌碼堅實'];
+    action='籌碼面支持，持倉信心高';
+  }else if(mainSell){
+    state='外資投信同步賣出';color='var(--red)';
+    details=[`外資 5日 ${f5.toFixed(0)}張`,`投信 5日 ${t5.toFixed(0)}張`,'主力出脫，需謹慎'];
+    action='籌碼面轉空，考慮減碼';
+  }else if(total10>0){
+    state='法人合計買超';color='var(--green)';
+    details=[`10日合計 +${total10.toFixed(0)}張`,'整體偏買'];
+    action='略偏多，配合技術面操作';
+  }else if(total10<0){
+    state='法人合計賣超';color='var(--yellow)';
+    details=[`10日合計 ${total10.toFixed(0)}張`,'整體偏賣'];
+    action='籌碼略鬆，注意風險';
+  }else{
+    state='法人中性';color='var(--sub)';
+    details=['近期法人買賣相抵'];
+    action='籌碼面中性，依技術面判斷';
+  }
+  return{state,color,details,action};
+}
+
+function _renderJudge(el, judge, title){
+  if(!el) return;
+  if(!judge){ el.innerHTML=`<h4>${title}</h4><div style="color:var(--sub);font-size:11px">無資料</div>`; return; }
+  const {state,color,details,action}=judge;
+  const actionBg=color==='var(--green)'?'rgba(39,174,96,.12)':color==='var(--red)'?'rgba(231,76,60,.12)':'rgba(243,156,18,.12)';
   el.innerHTML=`
-    <div class="prob-bar">
-      <div class="prob-up" style="width:${up}%"></div>
-      <div class="prob-neu" style="width:${sid}%"></div>
-      <div class="prob-dn"  style="width:${dn}%"></div>
+    <h4>${title}</h4>
+    <div class="sp-judge-verdict" style="color:${color}">${escHtml(state)}</div>
+    ${details.map(d=>`<div class="sp-judge-detail">${escHtml(d)}</div>`).join('')}
+    <div class="sp-judge-action" style="color:${color};background:${actionBg};margin-top:8px">${escHtml(action)}</div>`;
+}
+
+function spRenderIndicatorJudges(d){
+  const I=d.indicators||{};
+  _renderJudge(document.getElementById('sp-kd-judge'), _buildKDJudge(I), 'KDJ 判斷');
+  _renderJudge(document.getElementById('sp-chip-judge'), _buildChipJudge(d.chip), '籌碼判斷');
+  // MACD strip below main chart
+  const strip=document.getElementById('sp-macd-strip');
+  if(!strip) return;
+  const mj=_buildMACDJudge(I);
+  if(!mj){ strip.style.display='none'; return; }
+  const {state,color,details,action,dif,dea}=mj;
+  const actionBg=color==='var(--green)'?'rgba(39,174,96,.12)':color==='var(--red)'?'rgba(231,76,60,.12)':'rgba(243,156,18,.12)';
+  strip.style.display='flex';
+  strip.innerHTML=`
+    <div class="mst-block">
+      <span class="mst-label">MACD 判斷</span>
+      <span class="mst-verdict" style="color:${color}">${escHtml(state)}</span>
     </div>
-    <div class="prob-labels">
-      <span class="up">↑ ${up}%</span><span class="flat">→ ${sid}%</span><span class="dn">↓ ${dn}%</span>
+    <div class="mst-block" style="flex:1">
+      ${details.map(d=>`<div class="mst-detail">${escHtml(d)}</div>`).join('')}
+      ${dif!=null?`<div class="mst-detail" style="margin-top:2px">DIF ${dif?.toFixed(2)} / DEA ${dea?.toFixed(2)}</div>`:''}
     </div>
-    <div style="font-size:11px;color:var(--sub);margin-top:6px;">參考準確率 ${acc}%</div>`;
+    <div class="mst-block">
+      <span class="mst-action" style="color:${color};background:${actionBg}">${escHtml(action)}</span>
+    </div>`;
+}
+
+// ── 歷史勝率參考（取代假 AI 預測）───────────────────────────────────────────
+// 數據來源：回測_進出場策略比較_20250601~20260601 指標準確度分析
+const _CALIB = {
+  ma: {
+    '多頭排列':   {wr:75, n:16, note:'均線完整多頭，最高信心'},
+    '強勢多頭':   {wr:60, n:5,  note:'強勢但留意乖離風險'},
+    '弱勢多頭':   {wr:54, n:35, note:'均線不完整，勝率偏低'},
+  },
+  sig: {
+    '買入':       {wr:71, n:24, note:'最佳進場評等'},
+    '強力買入':   {wr:57, n:7,  note:'注意：高分非最佳，留意追高'},
+    '持有':       {wr:61, n:23, note:'等待更明確訊號'},
+    '觀望':       {wr:50, n:8,  note:'勝率偏低，謹慎'},
+  }
+};
+function spRenderPrediction(pred, summary){
+  const el=document.getElementById('sp-pred-content');
+  if(!el) return;
+  const maItem=(summary||[]).find(s=>s.label==='均線排列');
+  const evalItem=(summary||[]).find(s=>s.label==='綜合評估');
+  const maVal=maItem?.value||'';
+  let maKey=null;
+  if(maVal.includes('強勢多頭')) maKey='強勢多頭';
+  else if(maVal.includes('多頭排列')) maKey='多頭排列';
+  else if(maVal.includes('弱勢多頭')) maKey='弱勢多頭';
+  const calib=maKey?_CALIB.ma[maKey]:null;
+  const evalVal=evalItem?.value||'—';
+  if(!calib){
+    el.innerHTML=`
+      <div style="color:var(--sub);font-size:12px">目前均線非多頭排列，無法對應歷史勝率參考資料。</div>
+      <div style="margin-top:8px;font-size:12px">綜合評估：<b>${escHtml(evalVal)}</b></div>
+      <div style="margin-top:6px;font-size:11px;color:var(--sub)">數據來源：一年回測（2025/06~2026/06）</div>`;
+    return;
+  }
+  const wrColor=calib.wr>=70?'var(--green)':calib.wr>=58?'var(--yellow)':'var(--red)';
+  el.innerHTML=`
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px">
+      <span style="font-size:26px;font-weight:700;color:${wrColor}">${calib.wr}%</span>
+      <span style="font-size:12px;color:var(--sub)">歷史同型態勝率</span>
+    </div>
+    <div style="font-size:12px;margin-bottom:4px">均線型態：<b style="color:${wrColor}">${escHtml(maKey)}</b></div>
+    <div style="font-size:11px;color:var(--sub);margin-bottom:6px">${escHtml(calib.note)}</div>
+    <div style="font-size:12px">綜合評估：<b>${escHtml(evalVal)}</b></div>
+    <div style="width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:8px;overflow:hidden">
+      <div style="height:100%;width:${calib.wr}%;background:${wrColor};border-radius:3px"></div>
+    </div>
+    <div style="margin-top:6px;font-size:10px;color:var(--sub)">樣本 ${calib.n} 筆 · 2025/06~2026/06 回測</div>`;
 }
 
 function spRenderPatterns(patterns){
@@ -1364,14 +1577,18 @@ function renderDaily(data){
   const failedSectors  = meta['失敗族群']||[];
   const partialSectors = meta['部分失敗族群']||{};
 
+  // 強勢族群只取 ret20 前 5 名，避免全市場都列成「強勢」
+  const top5Strong = [...sectors].sort((a,b)=>Number(b.ret20)-Number(a.ret20)).slice(0,5).map(s=>s.sector).join('、');
+  const top2Weak   = [...sectors].sort((a,b)=>Number(a.ret20)-Number(b.ret20)).slice(0,2).map(s=>s.sector).join('、');
+
   let html=`
   <div class="grid-4">
     <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
     <div class="card"><div class="card-title">加權指數</div>
-      <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'—'}</div>
-      <div class="card-sub">${chg!==''&&chg!==null&&chg!==undefined?sign(Number(chg))+Number(chg).toFixed(2)+'%':''}</div></div>
-    <div class="card"><div class="card-title">強勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${strong}</div></div>
-    <div class="card"><div class="card-title">弱勢族群</div><div class="card-value" style="font-size:14px;line-height:1.6">${weak||'無'}</div></div>
+      <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'<span style="color:var(--sub);font-size:15px">收盤未更新</span>'}</div>
+      <div class="card-sub">${chg!==''&&chg!==null&&chg!==undefined?sign(Number(chg))+Number(chg).toFixed(2)+'%':'（待收盤後更新）'}</div></div>
+    <div class="card"><div class="card-title">強勢族群（前5）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--green)">${top5Strong}</div></div>
+    <div class="card"><div class="card-title">弱勢族群（後2）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--red)">${top2Weak||'無'}</div></div>
   </div>
   ${coverage<100?`<div class="card" style="margin-bottom:8px;border-left:3px solid var(--yellow);padding:8px 14px">
     <span style="color:var(--yellow);font-weight:bold">⚠ 掃描涵蓋率 ${coverage}%</span>
@@ -1418,6 +1635,40 @@ function renderDaily(data){
   </details>`;
 
   if(qualified&&qualified.length){
+    // ── 今日行動清單 ──────────────────────────────────────────────
+    html+=`<div class="section-title">🎯 今日行動清單</div><div class="action-grid">`;
+    qualified.forEach(q=>{
+      const ta=q.trend_analysis||{};
+      const sig=ta.buy_signal||'—';
+      const score=ta.signal_score!=null?ta.signal_score:'—';
+      const sigColor=sig==='強力買入'?'var(--green)':sig==='買入'?'#5cb85c':sig==='持有'?'var(--yellow)':'var(--sub)';
+      // Find ATR stop loss and targets from stocks array
+      const stk=(stocks||[]).find(s=>s.id===q.id)||{};
+      const stopLoss=stk.stopLoss!=null?stk.stopLoss:null;
+      const reasons=(ta.signal_reasons||[]).slice(0,4);
+      const risks=(ta.risk_factors||[]).slice(0,2);
+      const borderColor=sig==='強力買入'||sig==='買入'?'var(--green)':sig==='持有'?'var(--yellow)':'var(--sub)';
+      html+=`<div class="action-card" style="border-left-color:${borderColor}">
+        <div class="ac-head">
+          <span class="ac-id">${escHtml(q.id)}</span>
+          <span class="ac-name">${escHtml(q.name)}</span>
+          <span class="ac-sector">${escHtml(q.sector)}</span>
+          <span class="ac-sig" style="color:${sigColor}">${escHtml(sig)} ${score!=='—'?score+'/100':''}</span>
+        </div>
+        <div class="ac-prices">
+          <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(q.price,1)}</span></div>
+          ${stopLoss!=null?`<div class="ac-price-item"><span class="ac-price-lbl">ATR停損</span><span class="ac-price-val dn">${fmt(stopLoss,1)}</span></div>`:''}
+          ${stk.target_short!=null?`<div class="ac-price-item"><span class="ac-price-lbl">短期目標</span><span class="ac-price-val tp">${fmt(stk.target_short,1)}</span></div>`:''}
+          ${stk.target_mid!=null?`<div class="ac-price-item"><span class="ac-price-lbl">中期目標</span><span class="ac-price-val tp">${fmt(stk.target_mid,1)}</span></div>`:''}
+        </div>
+        ${reasons.length?`<div class="ac-reasons">
+          ${reasons.map(r=>`✓ ${escHtml(r)}`).join('<br>')}
+          ${risks.length?'<br>'+risks.map(r=>`<span style="color:var(--yellow)">⚠ ${escHtml(r)}</span>`).join('<br>'):''}
+        </div>`:''}
+      </div>`;
+    });
+    html+=`</div>`;
+
     html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
     <div class="card" style="overflow-x:auto;margin-bottom:20px"><table class="qualified-tbl">
       <tr>
