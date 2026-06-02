@@ -69,7 +69,13 @@
         "rsi_24": 51.1,
         "rsi_status": "中性",
         "rsi_signal": "RSI中性(49.7)，震盪整理中",
-        "sector_is_strong": true
+        "sector_is_strong": true,
+        "kd_k": 52.65,
+        "kd_d": 56.32,
+        "kd_j": 45.33,
+        "kd_k_prev": 62.05,
+        "kd_d_prev": 58.15,
+        "macd_bar_prev": 1.99
       }
     },
     {
@@ -118,7 +124,13 @@
         "rsi_24": 50.4,
         "rsi_status": "中性",
         "rsi_signal": "RSI中性(43.1)，震盪整理中",
-        "sector_is_strong": null
+        "sector_is_strong": null,
+        "kd_k": 39.07,
+        "kd_d": 47.42,
+        "kd_j": 22.36,
+        "kd_k_prev": 52.6,
+        "kd_d_prev": 51.6,
+        "macd_bar_prev": -3.21
       }
     }
   ],

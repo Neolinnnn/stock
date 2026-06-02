@@ -1210,6 +1210,94 @@ function spRenderChipSummary(chip){
   });
 }
 
+// ── 行動清單：KDJ / MACD 判斷（從 trend_analysis 欄位） ─────────────────────
+function _kdFromTA(ta){
+  // Returns {state, color, detail} using kd_k/d/j and prev values in trend_analysis
+  const k=ta.kd_k, d=ta.kd_d, j=ta.kd_j, kp=ta.kd_k_prev, dp=ta.kd_d_prev;
+  if(k==null) return null;
+  const crossUp=kp!=null&&dp!=null&&kp<=dp&&k>d;
+  const crossDn=kp!=null&&dp!=null&&kp>=dp&&k<d;
+  let state,color,detail;
+  if(k<20||(j!=null&&j<5)){
+    state='超賣底部'; color='var(--green)';
+    detail=`J=${j!=null?j.toFixed(0):'—'}，可留意反彈`;
+  }else if(k>80||(j!=null&&j>100)){
+    state='超買頂部'; color='var(--red)';
+    detail=`J=${j!=null?j.toFixed(0):'—'}，謹慎追高`;
+  }else if(crossUp){
+    state='黃金交叉'; color='var(--green)';
+    detail=`K${k.toFixed(0)}上穿D${d.toFixed(0)}，買進訊號`;
+  }else if(crossDn){
+    state='死亡交叉'; color='var(--red)';
+    detail=`K${k.toFixed(0)}下穿D${d.toFixed(0)}，等訊號止穩`;
+  }else if(k>d&&k>50){
+    state='多頭區'; color='var(--green)';
+    detail=`K${k.toFixed(0)}>D${d.toFixed(0)}，趨勢偏多`;
+  }else if(k<d&&k<50){
+    state='空頭區'; color='var(--red)';
+    detail=`K${k.toFixed(0)}<D${d.toFixed(0)}，趨勢偏弱`;
+  }else{
+    state='震盪中'; color='var(--sub)';
+    detail=`K${k.toFixed(0)}/D${d.toFixed(0)}，方向待確認`;
+  }
+  return{state,color,detail};
+}
+
+function _macdFromTA(ta){
+  const dif=ta.macd_dif, dea=ta.macd_dea, bar=ta.macd_bar, barP=ta.macd_bar_prev;
+  if(dif==null) return null;
+  const difUp=dif>dea;
+  const expanding=barP!=null?Math.abs(bar)>Math.abs(barP):null;
+  let state,color,detail;
+  if(dif>0&&difUp&&expanding!==false){
+    state='多頭擴張'; color='var(--green)';
+    detail=`DIF>DEA，動能${expanding?'增強':'持穩'}`;
+  }else if(dif>0&&difUp&&expanding===false){
+    state='多頭收斂'; color='var(--yellow)';
+    detail='上漲動能在減弱';
+  }else if(dif>0&&!difUp){
+    state='多頭死叉'; color='var(--yellow)';
+    detail='DIF跌破DEA，留意';
+  }else if(dif<0&&!difUp&&expanding){
+    state='空頭加速'; color='var(--red)';
+    detail='下跌動能擴大';
+  }else if(dif<0&&!difUp){
+    state='空頭'; color='var(--red)';
+    detail='DIF<DEA，趨勢偏空';
+  }else{
+    state='整理'; color='var(--sub)';
+    detail='DIF/DEA 差距微小';
+  }
+  return{state,color,detail};
+}
+
+function _actionDecision(sig, kdj, macd){
+  // Returns {text, color}综合决策提示
+  const bullKDJ = kdj&&(kdj.state==='黃金交叉'||kdj.state==='多頭區'||kdj.state==='超賣底部');
+  const bearKDJ = kdj&&(kdj.state==='死亡交叉'||kdj.state==='空頭區');
+  const overboughtKDJ = kdj&&kdj.state==='超買頂部';
+  const bullMACD = macd&&(macd.state==='多頭擴張');
+  const weakMACD = macd&&(macd.state==='多頭收斂'||macd.state==='多頭死叉');
+  const bearMACD = macd&&(macd.state==='空頭'||macd.state==='空頭加速');
+  const buySignal = sig==='強力買入'||sig==='買入';
+
+  if(buySignal&&bullKDJ&&bullMACD)
+    return{text:'✅ 三層共振，最佳進場時機',color:'var(--green)'};
+  if(buySignal&&(kdj&&kdj.state==='超賣底部')&&!bearMACD)
+    return{text:'⏰ 超賣反彈，可試單留意停損',color:'var(--green)'};
+  if(buySignal&&bullKDJ&&weakMACD)
+    return{text:'⚡ 可進場，但 MACD 動能減弱留意',color:'var(--yellow)'};
+  if(buySignal&&bearKDJ&&bearMACD)
+    return{text:'⏳ 雙重空頭訊號，等 KDJ 止穩再進',color:'var(--red)'};
+  if(buySignal&&bearKDJ&&!bearMACD)
+    return{text:'⚠ KDJ 偏空，建議等 K 線翻多再進',color:'var(--yellow)'};
+  if(buySignal&&overboughtKDJ)
+    return{text:'⚠ 超買區，等回調再進，不追高',color:'var(--yellow)'};
+  if(buySignal)
+    return{text:'📊 行動清單推薦，確認時機再進',color:'var(--sub)'};
+  return{text:'觀望等待更明確訊號',color:'var(--sub)'};
+}
+
 // ── 指標判斷邏輯 ─────────────────────────────────────────────────────────────
 function _buildKDJudge(I){
   if(!I||!I.kd_k) return null;
@@ -1642,12 +1730,22 @@ function renderDaily(data){
       const sig=ta.buy_signal||'—';
       const score=ta.signal_score!=null?ta.signal_score:'—';
       const sigColor=sig==='強力買入'?'var(--green)':sig==='買入'?'#5cb85c':sig==='持有'?'var(--yellow)':'var(--sub)';
-      // Find ATR stop loss and targets from stocks array
       const stk=(stocks||[]).find(s=>s.id===q.id)||{};
       const stopLoss=stk.stopLoss!=null?stk.stopLoss:null;
-      const reasons=(ta.signal_reasons||[]).slice(0,4);
+      const reasons=(ta.signal_reasons||[]).slice(0,3);
       const risks=(ta.risk_factors||[]).slice(0,2);
       const borderColor=sig==='強力買入'||sig==='買入'?'var(--green)':sig==='持有'?'var(--yellow)':'var(--sub)';
+
+      // KDJ / MACD 指標判斷
+      const kdjV=_kdFromTA(ta);
+      const macdV=_macdFromTA(ta);
+      const decision=_actionDecision(sig, kdjV, macdV);
+
+      const indBadge=(v,label)=>v?
+        `<span style="background:rgba(0,0,0,.25);border:1px solid ${v.color};border-radius:4px;padding:2px 8px;font-size:11px;color:${v.color};white-space:nowrap" title="${escHtml(v.detail||'')}">
+          ${label} ${escHtml(v.state)}
+        </span>`:'';
+
       html+=`<div class="action-card" style="border-left-color:${borderColor}">
         <div class="ac-head">
           <span class="ac-id">${escHtml(q.id)}</span>
@@ -1655,12 +1753,26 @@ function renderDaily(data){
           <span class="ac-sector">${escHtml(q.sector)}</span>
           <span class="ac-sig" style="color:${sigColor}">${escHtml(sig)} ${score!=='—'?score+'/100':''}</span>
         </div>
+
+        <!-- 指標訊號列 -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
+          ${indBadge(kdjV,'KDJ')}
+          ${indBadge(macdV,'MACD')}
+        </div>
+
+        <!-- 綜合決策提示 -->
+        <div style="font-size:12px;font-weight:600;color:${decision.color};padding:5px 9px;background:rgba(0,0,0,.2);border-radius:5px;margin-bottom:9px;border-left:2px solid ${decision.color}">
+          ${escHtml(decision.text)}
+        </div>
+
+        <!-- 價格參考 -->
         <div class="ac-prices">
           <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(q.price,1)}</span></div>
           ${stopLoss!=null?`<div class="ac-price-item"><span class="ac-price-lbl">ATR停損</span><span class="ac-price-val dn">${fmt(stopLoss,1)}</span></div>`:''}
           ${stk.target_short!=null?`<div class="ac-price-item"><span class="ac-price-lbl">短期目標</span><span class="ac-price-val tp">${fmt(stk.target_short,1)}</span></div>`:''}
           ${stk.target_mid!=null?`<div class="ac-price-item"><span class="ac-price-lbl">中期目標</span><span class="ac-price-val tp">${fmt(stk.target_mid,1)}</span></div>`:''}
         </div>
+
         ${reasons.length?`<div class="ac-reasons">
           ${reasons.map(r=>`✓ ${escHtml(r)}`).join('<br>')}
           ${risks.length?'<br>'+risks.map(r=>`<span style="color:var(--yellow)">⚠ ${escHtml(r)}</span>`).join('<br>'):''}

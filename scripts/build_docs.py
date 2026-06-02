@@ -473,6 +473,20 @@ def build_daily_payload(summary):
                 )
                 d = result.to_dict()
                 d['sector_is_strong'] = sector_is_strong
+                # 補充 KDJ 與 MACD 前一根柱，供前端行動清單使用
+                ind = st.get('indicators', {})
+                kd_k = ind.get('kd_k') or []
+                kd_d = ind.get('kd_d') or []
+                kd_j = ind.get('kd_j') or []
+                hist = ind.get('macd_hist') or []
+                if len(kd_k) >= 2:
+                    d['kd_k']      = kd_k[-1]
+                    d['kd_d']      = kd_d[-1] if kd_d else None
+                    d['kd_j']      = kd_j[-1] if kd_j else None
+                    d['kd_k_prev'] = kd_k[-2]
+                    d['kd_d_prev'] = kd_d[-2] if len(kd_d) >= 2 else None
+                if len(hist) >= 2:
+                    d['macd_bar_prev'] = hist[-2]
                 q['trend_analysis'] = d
             except Exception as e:
                 q['trend_analysis'] = {'error': str(e)}
