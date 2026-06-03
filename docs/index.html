@@ -277,6 +277,7 @@
   #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
 <header>
@@ -337,6 +338,43 @@ let BT_RESULTS = null;
 let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
 let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector} — rebuilt by renderBtPage
 let DAILY_DATA = null; // daily.json 完整選股清單（最新掃描，64 支），供回測選股 Tab 使用
+
+// ── lightweight-charts 管理 ───────────────────────────────────────────────────
+let _spCh = {};
+let _spSync = false;
+
+function _destroySpCharts() {
+  Object.values(_spCh).forEach(c => { try { c.remove(); } catch {} });
+  _spCh = {};
+}
+
+function _onRange(src, r) {
+  if (_spSync || !r) return;
+  _spSync = true;
+  Object.values(_spCh).forEach(c => {
+    if (c !== src) try { c.timeScale().setVisibleLogicalRange(r); } catch {}
+  });
+  _spSync = false;
+}
+
+function _lwc(el, h, showAxis) {
+  const c = LightweightCharts.createChart(el, {
+    autoSize: true, height: h,
+    layout: { background: {type:'solid',color:'#161b22'}, textColor:'#e6edf3', fontSize:11 },
+    grid: { vertLines:{visible:false}, horzLines:{color:'#2d3139'} },
+    crosshair: { mode: 1 },
+    rightPriceScale: { borderColor:'#2d3139', scaleMargins:{top:0.08,bottom:0.08} },
+    timeScale: { borderColor:'#2d3139', visible:!!showAxis, timeVisible:false, secondsVisible:false },
+    handleScroll: { mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:false },
+    handleScale: { axisPressedMouseMove:true, mouseWheel:true, pinch:true },
+  });
+  c.timeScale().subscribeVisibleLogicalRangeChange(r => _onRange(c, r));
+  return c;
+}
+
+function _ld(dates, vals) {   // lineData: [{time, value}]
+  return dates.map((t,i) => ({time:t, value:vals[i]})).filter(p => p.value != null && isFinite(p.value));
+}
 
 let _toastTimer = null;
 function showToast(msg) {
@@ -565,13 +603,16 @@ function showBtTooltip(sid, event){
   tt.classList.add('show');
 
   const margin = 12;
-  let x = event.clientX + margin;
-  let y = event.clientY + margin;
+  const touch = event.touches?.[0] ?? event.changedTouches?.[0];
+  const cx = touch ? touch.clientX : event.clientX;
+  const cy = touch ? touch.clientY : event.clientY;
+  let x = cx + margin;
+  let y = cy + margin;
   tt.style.left = '0'; tt.style.top = '0';
   const w = tt.offsetWidth, h = tt.offsetHeight;
   const vw = window.innerWidth, vh = window.innerHeight;
-  if(x + w > vw - margin) x = event.clientX - w - margin;
-  if(y + h > vh - margin) y = event.clientY - h - margin;
+  if(x + w > vw - margin) x = cx - w - margin;
+  if(y + h > vh - margin) y = cy - h - margin;
   tt.style.left = Math.max(margin, x) + 'px';
   tt.style.top  = Math.max(margin, y) + 'px';
 }
@@ -793,6 +834,7 @@ async function loadStock(sid){
 
 // ── Render ──────────────────────────────────────────────────────────────────
 function spRender(d){
+  _destroySpCharts();
   // Header
   const hEl = document.getElementById('sp-header');
   const cp = d.quote?.change_pct ?? 0;
@@ -816,6 +858,11 @@ function spRender(d){
   spRenderMainChart(d);
   spRenderKDChart(d);
   spRenderChipChart(d);
+  // 初始同步所有子圖時間範圍
+  requestAnimationFrame(() => {
+    const r = _spCh.candle?.timeScale().getVisibleLogicalRange();
+    if (r) Object.values(_spCh).forEach(c => { if (c !== _spCh.candle) try { c.timeScale().setVisibleLogicalRange(r); } catch {} });
+  });
   spRenderIndicatorJudges(d);
   spRenderSignal(d.signal);
   spRenderSummary(d.summary);
@@ -1060,113 +1107,127 @@ const _PLY = {
   bg:'#161b22', plot:'#161b22', font:{color:'#e6edf3',size:11},
   grid:'#30363d', up:'#26a641', dn:'#f85149', neu:'#58a6ff', acc:'#bc8cff',
 };
-const _pLine=(name,x,y,color,dash,xax,yax)=>({
-  type:'scatter',mode:'lines',name,x,y,
-  line:{color,width:1.5,dash:dash||'solid'},xaxis:xax||'x',yaxis:yax||'y',
-});
+function spRenderMainChart(d) {
+  const wrap = document.getElementById('sp-main-chart');
+  wrap.innerHTML =
+    '<div id="_lwc-k"></div>' +
+    '<div id="_lwc-v" style="margin-top:1px"></div>' +
+    '<div id="_lwc-m" style="margin-top:1px"></div>';
 
-function spRenderMainChart(d){
-  const dates=d.ohlcv.date, I=d.indicators;
-  const traces=[
-    {type:'candlestick',name:'K線',x:dates,
-     open:d.ohlcv.open,high:d.ohlcv.high,low:d.ohlcv.low,close:d.ohlcv.close,
-     increasing:{line:{color:_PLY.up},fillcolor:_PLY.up},
-     decreasing:{line:{color:_PLY.dn},fillcolor:_PLY.dn},xaxis:'x',yaxis:'y'},
-    {type:'bar',name:'成交量',x:dates,y:d.ohlcv.volume,
-     marker:{color:d.ohlcv.close.map((c,i)=>i===0?_PLY.neu:c>=(d.ohlcv.open[i]??c)?_PLY.up:_PLY.dn)},
-     xaxis:'x2',yaxis:'y2'},
-    {type:'bar',name:'MACD柱',x:dates,y:I.macd_hist,
-     marker:{color:I.macd_hist.map(v=>v==null?'#555':v>=0?_PLY.up:_PLY.dn)},
-     xaxis:'x3',yaxis:'y3'},
-    _pLine('BB上軌',dates,I.bb_upper,'#555','dash'),
-    _pLine('BB下軌',dates,I.bb_lower,'#555','dash'),
-    _pLine('BB中軌',dates,I.bb_mid,'#444'),
-    _pLine('MA5',dates,I.ma5,'#f0b429'),
-    _pLine('MA20',dates,I.ma20,'#58a6ff'),
-    _pLine('MA60',dates,I.ma60,'#bc8cff'),
-    _pLine('DIF',dates,I.macd,_PLY.neu,null,'x3','y3'),
-    _pLine('Signal',dates,I.macd_signal,_PLY.dn,null,'x3','y3'),
-  ];
-  // MJ 訊號三角標記
-  if(d.mj_signals && d.mj_signals.length){
-    const lowMap={}, highMap={};
-    dates.forEach((dt,i)=>{ lowMap[dt]=d.ohlcv.low[i]; highMap[dt]=d.ohlcv.high[i]; });
-    const longs  = d.mj_signals.filter(s=>s.signal==='LONG');
-    const shorts = d.mj_signals.filter(s=>s.signal==='SHORT');
-    if(longs.length) traces.push({
-      type:'scatter',mode:'markers',name:'MJ做多',
-      x:longs.map(s=>s.date),
-      y:longs.map(s=>(lowMap[s.date]??s.close)*0.994),
-      marker:{symbol:'triangle-up',size:10,color:'#27ae60'},
-      xaxis:'x',yaxis:'y',hovertext:longs.map(s=>`做多 J=${s.kd_j} OSC=${s.macd_osc}`),
-    });
-    if(shorts.length) traces.push({
-      type:'scatter',mode:'markers',name:'MJ做空',
-      x:shorts.map(s=>s.date),
-      y:shorts.map(s=>(highMap[s.date]??s.close)*1.006),
-      marker:{symbol:'triangle-down',size:10,color:'#e74c3c'},
-      xaxis:'x',yaxis:'y',hovertext:shorts.map(s=>`做空 J=${s.kd_j} OSC=${s.macd_osc}`),
-    });
+  const dates = d.ohlcv.date, I = d.indicators;
+
+  // ── K線 + BB + MA
+  const kC = _lwc(document.getElementById('_lwc-k'), 310);
+  _spCh.candle = kC;
+  const candle = kC.addCandlestickSeries({
+    upColor:'#26a641', downColor:'#f85149',
+    borderUpColor:'#26a641', borderDownColor:'#f85149',
+    wickUpColor:'#26a641', wickDownColor:'#f85149',
+  });
+  candle.setData(dates.map((t,i) => ({
+    time:t, open:d.ohlcv.open[i], high:d.ohlcv.high[i],
+    low:d.ohlcv.low[i], close:d.ohlcv.close[i],
+  })));
+  [['ma5','#f0b429'],['ma20','#58a6ff'],['ma60','#bc8cff']].forEach(([k,clr]) => {
+    if (!I[k]) return;
+    kC.addLineSeries({color:clr,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
+      .setData(_ld(dates, I[k]));
+  });
+  if (I.bb_upper) {
+    const bbO = {color:'rgba(255,165,0,0.5)',lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false};
+    kC.addLineSeries(bbO).setData(_ld(dates, I.bb_upper));
+    kC.addLineSeries(bbO).setData(_ld(dates, I.bb_lower));
+    if (I.bb_mid) kC.addLineSeries({...bbO,color:'rgba(255,165,0,0.25)',lineStyle:0}).setData(_ld(dates, I.bb_mid));
   }
-  Plotly.react('sp-main-chart',traces,{
-    paper_bgcolor:_PLY.bg,plot_bgcolor:_PLY.bg,font:_PLY.font,
-    margin:{l:50,r:10,t:30,b:50},height:540,showlegend:false,
-    grid:{rows:3,columns:1,pattern:'independent'},
-    xaxis:{type:'category',showgrid:false,rangeslider:{visible:false},tickfont:{size:10},showticklabels:false},
-    xaxis2:{type:'category',showgrid:false,tickfont:{size:10},showticklabels:false,matches:'x'},
-    xaxis3:{type:'category',showgrid:false,tickfont:{size:10},showticklabels:true,tickangle:-45,matches:'x'},
-    yaxis:{gridcolor:_PLY.grid,domain:[0.38,1]},
-    yaxis2:{gridcolor:_PLY.grid,domain:[0.22,0.36]},
-    yaxis3:{gridcolor:_PLY.grid,domain:[0,0.20]},
-  },{responsive:true,displayModeBar:false});
+  if (d.mj_signals && d.mj_signals.length) {
+    candle.setMarkers(
+      [...d.mj_signals].sort((a,b)=>a.date<b.date?-1:1).map(s => ({
+        time: s.date,
+        position: s.signal==='LONG' ? 'belowBar' : 'aboveBar',
+        shape: s.signal==='LONG' ? 'arrowUp' : 'arrowDown',
+        color: s.signal==='LONG' ? '#26a641' : '#f85149',
+        text: s.signal==='LONG' ? '▲MJ' : '▼MJ',
+        size: 1,
+      }))
+    );
+  }
+
+  // ── 成交量
+  const vC = _lwc(document.getElementById('_lwc-v'), 75);
+  _spCh.vol = vC;
+  const vol = vC.addHistogramSeries({priceFormat:{type:'volume'}, priceLineVisible:false, lastValueVisible:false});
+  vol.priceScale().applyOptions({scaleMargins:{top:0.1,bottom:0}});
+  vol.setData(dates.map((t,i) => ({
+    time:t, value:d.ohlcv.volume[i],
+    color: d.ohlcv.close[i] >= d.ohlcv.open[i] ? '#26a641' : '#f85149',
+  })));
+
+  // ── MACD
+  const mC = _lwc(document.getElementById('_lwc-m'), 100, true);
+  _spCh.macd = mC;
+  if (I.macd_hist) {
+    mC.addHistogramSeries({priceLineVisible:false, lastValueVisible:false})
+      .setData(dates.map((t,i) => ({
+        time:t, value:I.macd_hist[i],
+        color:(I.macd_hist[i]??0)>=0 ? '#26a641' : '#f85149',
+      })).filter(p=>p.value!=null&&isFinite(p.value)));
+  }
+  if (I.macd) {
+    mC.addLineSeries({color:'#f85149',lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
+      .setData(_ld(dates, I.macd));
+  }
+  if (I.macd_signal) {
+    mC.addLineSeries({color:'#58a6ff',lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
+      .setData(_ld(dates, I.macd_signal));
+  }
 }
 
-function spRenderKDChart(d){
-  const dates=d.ohlcv.date, I=d.indicators;
-  const traces=[
-    {type:'scatter',mode:'lines',name:'K',x:dates,y:I.kd_k,line:{color:'#f0b429',width:1.5}},
-    {type:'scatter',mode:'lines',name:'D',x:dates,y:I.kd_d,line:{color:_PLY.neu,width:1.5}},
-    {type:'scatter',mode:'lines',x:dates,y:dates.map(()=>80),showlegend:false,
-     line:{color:_PLY.dn,width:1,dash:'dot'}},
-    {type:'scatter',mode:'lines',x:dates,y:dates.map(()=>20),showlegend:false,
-     line:{color:_PLY.up,width:1,dash:'dot'}},
-  ];
-  if(I.kd_j){
-    traces.push({type:'scatter',mode:'lines',name:'J',x:dates,y:I.kd_j,
-      line:{color:'#ff6b6b',width:1.2}});
-    traces.push({type:'scatter',mode:'lines',x:dates,y:dates.map(()=>0),showlegend:false,
-      line:{color:'rgba(255,255,255,0.25)',width:1,dash:'dot'}});
-  }
-  Plotly.react('sp-kd-chart',traces,{
-    paper_bgcolor:_PLY.bg,plot_bgcolor:_PLY.bg,font:_PLY.font,
-    margin:{l:40,r:10,t:24,b:30},height:180,
-    title:{text:'KD(9,3,3) + J 線',font:{size:12},x:0.04},
-    xaxis:{type:'category',showgrid:false,tickfont:{size:9},rangeslider:{visible:false}},
-    yaxis:{gridcolor:_PLY.grid},
-    legend:{orientation:'h',x:0.5,xanchor:'center',y:1.15,font:{size:10}},
-  },{responsive:true,displayModeBar:false});
+function spRenderKDChart(d) {
+  const el = document.getElementById('sp-kd-chart');
+  el.innerHTML = '';
+  const dates = d.ohlcv.date, I = d.indicators;
+
+  const kC = _lwc(el, 180, true);
+  _spCh.kd = kC;
+
+  // 參考線
+  const refL = (v, clr) => kC.addLineSeries({color:clr,lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
+    .setData(dates.map(t=>({time:t, value:v})));
+  refL(80, 'rgba(231,76,60,0.5)');
+  refL(20, 'rgba(39,174,96,0.5)');
+  if (I.kd_j) refL(0, 'rgba(255,255,255,0.2)');
+
+  if (I.kd_k) kC.addLineSeries({color:'#f0b429',lineWidth:1.5,priceLineVisible:false,lastValueVisible:true}).setData(_ld(dates,I.kd_k));
+  if (I.kd_d) kC.addLineSeries({color:'#58a6ff',lineWidth:1.5,priceLineVisible:false,lastValueVisible:true}).setData(_ld(dates,I.kd_d));
+  if (I.kd_j) kC.addLineSeries({color:'#ff6b6b',lineWidth:1,lineStyle:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false}).setData(_ld(dates,I.kd_j));
+  kC.priceScale('right').applyOptions({scaleMargins:{top:0.05,bottom:0.05}});
 }
 
-function spRenderChipChart(d){
-  const chip=d.chip;
-  if(!chip||!chip.dates||!chip.dates.length){
-    document.getElementById('sp-chip-chart').innerHTML=
-      '<div style="color:var(--sub);font-size:12px;padding:12px;">無法人籌碼資料</div>';
+function spRenderChipChart(d) {
+  const el = document.getElementById('sp-chip-chart');
+  const chip = d.chip;
+  if (!chip || !chip.dates || !chip.dates.length) {
+    el.innerHTML = '<div style="color:var(--sub);font-size:12px;padding:12px;">無法人籌碼資料</div>';
     return;
   }
-  Plotly.react('sp-chip-chart',[
-    {type:'bar',name:'外資',x:chip.dates,y:chip.foreign,marker:{color:_PLY.neu}},
-    {type:'bar',name:'投信',x:chip.dates,y:chip.trust,marker:{color:_PLY.up}},
-    {type:'bar',name:'自營',x:chip.dates,y:chip.dealer,marker:{color:_PLY.acc}},
-  ],{
-    paper_bgcolor:_PLY.bg,plot_bgcolor:_PLY.bg,font:_PLY.font,
-    margin:{l:40,r:10,t:24,b:30},height:180,
-    title:{text:'三大法人（張）',font:{size:12},x:0.04},
-    barmode:'relative',
-    xaxis:{type:'category',showgrid:false,tickfont:{size:9}},
-    yaxis:{gridcolor:_PLY.grid},
-    legend:{orientation:'h',x:0.5,xanchor:'center',y:1.15,font:{size:10}},
-  },{responsive:true,displayModeBar:false});
+  el.innerHTML = '';
+  const cC = _lwc(el, 180, true);
+  _spCh.chip = cC;
+
+  // 合計柱狀（紅/綠）
+  if (chip.total) {
+    cC.addHistogramSeries({priceLineVisible:false,lastValueVisible:false})
+      .setData(chip.dates.map((t,i)=>({
+        time:t, value:chip.total[i]??0,
+        color:(chip.total[i]??0)>=0?'#26a641':'#f85149',
+      })));
+  }
+  // 三大法人折線
+  [['foreign','#58a6ff'],['trust','#26a641'],['dealer','#bc8cff']].forEach(([k,clr])=>{
+    if (!chip[k]) return;
+    cC.addLineSeries({color:clr,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
+      .setData(chip.dates.map((t,i)=>({time:t,value:chip[k][i]})).filter(p=>p.value!=null));
+  });
 }
 
 function spRenderSignal(sig){
