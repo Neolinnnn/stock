@@ -735,14 +735,16 @@ def tab_stock():
                       annotation_font_color="#e74c3c",
                       annotation_position="bottom right", row=1, col=1)
 
-    # ── 明確連結所有子圖 X 軸（確保縮放雙向同步）────────────────────────────────
-    fig.update_xaxes(matches='x')
+    # ── 共用 X 軸：所有子圖同步縮放，只在最下方顯示一組日期刻度 ────────────────
+    fig.update_xaxes(matches='x', rangeslider_visible=False)
+    for _i in range(1, 4):
+        fig.update_xaxes(showticklabels=False, row=_i, col=1)
+    fig.update_xaxes(showticklabels=True, tickangle=-45, row=4, col=1)
     fig.update_layout(
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
         font_color="#fafafa", height=620,
-        margin=dict(l=0, r=0, t=30, b=0),
+        margin=dict(l=0, r=0, t=30, b=40),
         legend=dict(orientation="h", y=1.03, font=dict(size=10)),
-        xaxis_rangeslider_visible=False,
         hovermode="x unified",
     )
     for _i in range(1, 5):
