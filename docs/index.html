@@ -881,11 +881,7 @@ function spRender(d){
   spRenderMainChart(d);
   spRenderKDChart(d);
   spRenderChipChart(d);
-  // 僅對齊「價＋量」組（其餘各圖 fixRightEdge 自動貼齊最後一日，獨立縮放）
-  requestAnimationFrame(() => {
-    const r = _spCh.candle?.timeScale().getVisibleLogicalRange();
-    if (r && _spCh.vol) try { _spCh.vol.timeScale().setVisibleLogicalRange(r); } catch {}
-  });
+  // 初始範圍已在 spRenderMainChart 設定，此處不覆蓋
   spRenderIndicatorJudges(d);
   spRenderSignal(d.signal);
   spRenderSummary(d.summary);
@@ -1204,6 +1200,11 @@ function spRenderMainChart(d) {
 
   // 價＋量 連動
   _syncGroup = [kC, vC];
+
+  // 預設顯示最後 42 根（約 2 個月）
+  const _initRange = {from: Math.max(0, dates.length - 42), to: dates.length - 1};
+  kC.timeScale().setVisibleLogicalRange(_initRange);
+  vC.timeScale().setVisibleLogicalRange(_initRange);
 
   // ── MACD（獨立日期軸，不與價量連動）
   const mC = _lwc(document.getElementById('_lwc-m'), 110, true);
