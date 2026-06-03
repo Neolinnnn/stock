@@ -1110,11 +1110,11 @@ function spRenderMainChart(d){
   }
   Plotly.react('sp-main-chart',traces,{
     paper_bgcolor:_PLY.bg,plot_bgcolor:_PLY.bg,font:_PLY.font,
-    margin:{l:50,r:10,t:30,b:20},height:520,showlegend:false,
+    margin:{l:50,r:10,t:30,b:50},height:540,showlegend:false,
     grid:{rows:3,columns:1,pattern:'independent'},
-    xaxis:{type:'category',showgrid:false,rangeslider:{visible:false},tickfont:{size:10}},
-    xaxis2:{type:'category',showgrid:false,tickfont:{size:10}},
-    xaxis3:{type:'category',showgrid:false,tickfont:{size:10}},
+    xaxis:{type:'category',showgrid:false,rangeslider:{visible:false},tickfont:{size:10},showticklabels:false},
+    xaxis2:{type:'category',showgrid:false,tickfont:{size:10},showticklabels:false,matches:'x'},
+    xaxis3:{type:'category',showgrid:false,tickfont:{size:10},showticklabels:true,tickangle:-45,matches:'x'},
     yaxis:{gridcolor:_PLY.grid,domain:[0.38,1]},
     yaxis2:{gridcolor:_PLY.grid,domain:[0.22,0.36]},
     yaxis3:{gridcolor:_PLY.grid,domain:[0,0.20]},
