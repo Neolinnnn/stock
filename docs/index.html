@@ -206,7 +206,8 @@
   .sp-macd-strip .mst-detail{font-size:11px;color:var(--sub);}
   .sp-macd-strip .mst-action{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;border:1px solid currentColor;}
   @media(max-width:640px){
-    .sp-chart-row{flex-direction:column;}
+    .sp-chart-row{flex-direction:column;align-items:stretch;}
+    .sp-chart-row .chart-box{width:100%;}
     .sp-judge-panel{max-width:none;min-width:0;align-self:auto;}
   }
 
@@ -341,17 +342,19 @@ let DAILY_DATA = null; // daily.json 完整選股清單（最新掃描，64 支�
 
 // ── lightweight-charts 管理 ───────────────────────────────────────────────────
 let _spCh = {};
+let _syncGroup = [];   // 只有「價＋量」互相連動，其餘各圖日期獨立
 let _spSync = false;
 
 function _destroySpCharts() {
   Object.values(_spCh).forEach(c => { try { c.remove(); } catch {} });
   _spCh = {};
+  _syncGroup = [];
 }
 
 function _onRange(src, r) {
-  if (_spSync || !r) return;
+  if (_spSync || !r || !_syncGroup.includes(src)) return;
   _spSync = true;
-  Object.values(_spCh).forEach(c => {
+  _syncGroup.forEach(c => {
     if (c !== src) try { c.timeScale().setVisibleLogicalRange(r); } catch {}
   });
   _spSync = false;
@@ -363,8 +366,9 @@ function _lwc(el, h, showAxis) {
     layout: { background: {type:'solid',color:'#161b22'}, textColor:'#e6edf3', fontSize:11 },
     grid: { vertLines:{visible:false}, horzLines:{color:'#2d3139'} },
     crosshair: { mode: 1 },
-    rightPriceScale: { borderColor:'#2d3139', scaleMargins:{top:0.08,bottom:0.08} },
-    timeScale: { borderColor:'#2d3139', visible:!!showAxis, timeVisible:false, secondsVisible:false },
+    rightPriceScale: { borderColor:'#2d3139', scaleMargins:{top:0.12,bottom:0.08}, minimumWidth:62 },
+    timeScale: { borderColor:'#2d3139', visible:!!showAxis, timeVisible:false,
+                 secondsVisible:false, fixRightEdge:true, fixLeftEdge:true },
     handleScroll: { mouseWheel:true, pressedMouseMove:true, horzTouchDrag:true, vertTouchDrag:false },
     handleScale: { axisPressedMouseMove:true, mouseWheel:true, pinch:true },
   });
@@ -372,9 +376,28 @@ function _lwc(el, h, showAxis) {
   return c;
 }
 
-function _ld(dates, vals) {   // lineData: [{time, value}]
-  return dates.map((t,i) => ({time:t, value:vals[i]})).filter(p => p.value != null && isFinite(p.value));
+// 十字線移動時於左上角顯示當下數值（無 hover 時顯示最後一筆）
+function _legend(chart, el, update) {
+  el.style.position = 'relative';
+  const lg = document.createElement('div');
+  lg.style.cssText = 'position:absolute;left:8px;top:3px;z-index:3;font-size:11px;'
+    + 'line-height:1.5;pointer-events:none;white-space:nowrap;font-weight:600;';
+  el.appendChild(lg);
+  chart.subscribeCrosshairMove(p => { lg.innerHTML = update(p); });
+  lg.innerHTML = update(null);
+  return lg;
 }
+function _ld(dates, vals){   // lineData: [{time, value}]，過濾 null
+  return dates.map((t,i)=>({time:t, value:vals[i]})).filter(p=>p.value!=null && isFinite(p.value));
+}
+function _last(arr){ for(let i=arr.length-1;i>=0;i--) if(arr[i]!=null&&isFinite(arr[i])) return arr[i]; return null; }
+function _at(p, series, vals){
+  if(p && p.seriesData){ const d=p.seriesData.get(series); if(d!=null) return d.value!=null?d.value:d; }
+  return _last(vals);
+}
+const _f1 = v => v==null?'—':v.toFixed(1);
+const _f2 = v => v==null?'—':v.toFixed(2);
+const _fInt = v => v==null?'—':Math.round(v).toLocaleString();
 
 let _toastTimer = null;
 function showToast(msg) {
@@ -858,11 +881,7 @@ function spRender(d){
   spRenderMainChart(d);
   spRenderKDChart(d);
   spRenderChipChart(d);
-  // 初始同步所有子圖時間範圍
-  requestAnimationFrame(() => {
-    const r = _spCh.candle?.timeScale().getVisibleLogicalRange();
-    if (r) Object.values(_spCh).forEach(c => { if (c !== _spCh.candle) try { c.timeScale().setVisibleLogicalRange(r); } catch {} });
-  });
+  // 初始範圍已在 spRenderMainChart 設定，此處不覆蓋
   spRenderIndicatorJudges(d);
   spRenderSignal(d.signal);
   spRenderSummary(d.summary);
@@ -1112,26 +1131,29 @@ function spRenderMainChart(d) {
   wrap.innerHTML =
     '<div id="_lwc-k"></div>' +
     '<div id="_lwc-v" style="margin-top:1px"></div>' +
-    '<div id="_lwc-m" style="margin-top:1px"></div>';
+    '<div id="_lwc-m" style="margin-top:6px"></div>';
 
   const dates = d.ohlcv.date, I = d.indicators;
 
-  // ── K線 + BB + MA
-  const kC = _lwc(document.getElementById('_lwc-k'), 310);
+  // ── K線 + BB + MA（上方主圖，無日期軸；與成交量共用底部日期）
+  const kC = _lwc(document.getElementById('_lwc-k'), 300);
   _spCh.candle = kC;
   const candle = kC.addCandlestickSeries({
     upColor:'#26a641', downColor:'#f85149',
     borderUpColor:'#26a641', borderDownColor:'#f85149',
     wickUpColor:'#26a641', wickDownColor:'#f85149',
+    priceFormat:{type:'price', precision:1, minMove:0.1},
   });
   candle.setData(dates.map((t,i) => ({
     time:t, open:d.ohlcv.open[i], high:d.ohlcv.high[i],
     low:d.ohlcv.low[i], close:d.ohlcv.close[i],
   })));
-  [['ma5','#f0b429'],['ma20','#58a6ff'],['ma60','#bc8cff']].forEach(([k,clr]) => {
+  const maRefs = [];
+  [['ma5','MA5','#f0b429'],['ma20','MA20','#58a6ff'],['ma60','MA60','#bc8cff']].forEach(([k,lbl,clr]) => {
     if (!I[k]) return;
-    kC.addLineSeries({color:clr,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
-      .setData(_ld(dates, I[k]));
+    const s = kC.addLineSeries({color:clr,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
+    s.setData(_ld(dates, I[k]));
+    maRefs.push({series:s, label:lbl, color:clr, vals:I[k]});
   });
   if (I.bb_upper) {
     const bbO = {color:'rgba(255,165,0,0.5)',lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false};
@@ -1151,35 +1173,63 @@ function spRenderMainChart(d) {
       }))
     );
   }
+  _legend(kC, document.getElementById('_lwc-k'), p => {
+    const bar = p && p.seriesData ? p.seriesData.get(candle) : null;
+    let o,h,l,c;
+    if (bar && bar.open!=null){ o=bar.open; h=bar.high; l=bar.low; c=bar.close; }
+    else { o=_last(d.ohlcv.open); h=_last(d.ohlcv.high); l=_last(d.ohlcv.low); c=_last(d.ohlcv.close); }
+    const cl = (c>=o) ? '#26a641' : '#f85149';
+    const ohlc = `<span style="color:${cl}">開 ${_f1(o)}　高 ${_f1(h)}　低 ${_f1(l)}　收 ${_f1(c)}</span>`;
+    const mas = maRefs.map(m=>`<span style="color:${m.color}">${m.label} ${_f1(_at(p,m.series,m.vals))}</span>`).join('　');
+    return ohlc + (mas ? '<br>'+mas : '');
+  });
 
-  // ── 成交量
-  const vC = _lwc(document.getElementById('_lwc-v'), 75);
+  // ── 成交量（價量組共用日期軸，與 K線連動）
+  const vC = _lwc(document.getElementById('_lwc-v'), 80, true);
   _spCh.vol = vC;
   const vol = vC.addHistogramSeries({priceFormat:{type:'volume'}, priceLineVisible:false, lastValueVisible:false});
-  vol.priceScale().applyOptions({scaleMargins:{top:0.1,bottom:0}});
+  vol.priceScale().applyOptions({scaleMargins:{top:0.18,bottom:0}});
   vol.setData(dates.map((t,i) => ({
     time:t, value:d.ohlcv.volume[i],
     color: d.ohlcv.close[i] >= d.ohlcv.open[i] ? '#26a641' : '#f85149',
   })));
+  _legend(vC, document.getElementById('_lwc-v'), p => {
+    const v = _at(p, vol, d.ohlcv.volume);
+    return `<span style="color:var(--sub)">量 </span><span style="color:#e6edf3">${v==null?'—':(v/1000).toLocaleString(undefined,{maximumFractionDigits:0})} 張</span>`;
+  });
 
-  // ── MACD
-  const mC = _lwc(document.getElementById('_lwc-m'), 100, true);
+  // 價＋量 連動
+  _syncGroup = [kC, vC];
+
+  // 預設顯示最後 42 根（約 2 個月）
+  const _initRange = {from: Math.max(0, dates.length - 42), to: dates.length - 1};
+  kC.timeScale().setVisibleLogicalRange(_initRange);
+  vC.timeScale().setVisibleLogicalRange(_initRange);
+
+  // ── MACD（獨立日期軸，不與價量連動）
+  const mC = _lwc(document.getElementById('_lwc-m'), 110, true);
   _spCh.macd = mC;
+  let macdHist=null, macdDif=null, macdSig=null;
   if (I.macd_hist) {
-    mC.addHistogramSeries({priceLineVisible:false, lastValueVisible:false})
-      .setData(dates.map((t,i) => ({
-        time:t, value:I.macd_hist[i],
-        color:(I.macd_hist[i]??0)>=0 ? '#26a641' : '#f85149',
-      })).filter(p=>p.value!=null&&isFinite(p.value)));
+    macdHist = mC.addHistogramSeries({priceFormat:{type:'price',precision:2,minMove:0.01}, priceLineVisible:false, lastValueVisible:false});
+    macdHist.setData(dates.map((t,i) => ({
+      time:t, value:I.macd_hist[i],
+      color:(I.macd_hist[i]??0)>=0 ? '#26a641' : '#f85149',
+    })).filter(p=>p.value!=null&&isFinite(p.value)));
   }
   if (I.macd) {
-    mC.addLineSeries({color:'#f85149',lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
-      .setData(_ld(dates, I.macd));
+    macdDif = mC.addLineSeries({color:'#f85149',lineWidth:1,priceFormat:{type:'price',precision:2,minMove:0.01},priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
+    macdDif.setData(_ld(dates, I.macd));
   }
   if (I.macd_signal) {
-    mC.addLineSeries({color:'#58a6ff',lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
-      .setData(_ld(dates, I.macd_signal));
+    macdSig = mC.addLineSeries({color:'#58a6ff',lineWidth:1,priceFormat:{type:'price',precision:2,minMove:0.01},priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
+    macdSig.setData(_ld(dates, I.macd_signal));
   }
+  _legend(mC, document.getElementById('_lwc-m'), p => [
+    macdDif  && `<span style="color:#f85149">DIF ${_f2(_at(p,macdDif,I.macd))}</span>`,
+    macdSig  && `<span style="color:#58a6ff">DEA ${_f2(_at(p,macdSig,I.macd_signal))}</span>`,
+    macdHist && `<span style="color:var(--sub)">OSC ${_f2(_at(p,macdHist,I.macd_hist))}</span>`,
+  ].filter(Boolean).join('　'));
 }
 
 function spRenderKDChart(d) {
@@ -1187,20 +1237,27 @@ function spRenderKDChart(d) {
   el.innerHTML = '';
   const dates = d.ohlcv.date, I = d.indicators;
 
-  const kC = _lwc(el, 180, true);
+  const kC = _lwc(el, 180, true);   // 獨立日期軸
   _spCh.kd = kC;
 
-  // 參考線
+  // 參考線（80 / 20 / 0）
   const refL = (v, clr) => kC.addLineSeries({color:clr,lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
     .setData(dates.map(t=>({time:t, value:v})));
   refL(80, 'rgba(231,76,60,0.5)');
   refL(20, 'rgba(39,174,96,0.5)');
   if (I.kd_j) refL(0, 'rgba(255,255,255,0.2)');
 
-  if (I.kd_k) kC.addLineSeries({color:'#f0b429',lineWidth:1.5,priceLineVisible:false,lastValueVisible:true}).setData(_ld(dates,I.kd_k));
-  if (I.kd_d) kC.addLineSeries({color:'#58a6ff',lineWidth:1.5,priceLineVisible:false,lastValueVisible:true}).setData(_ld(dates,I.kd_d));
-  if (I.kd_j) kC.addLineSeries({color:'#ff6b6b',lineWidth:1,lineStyle:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false}).setData(_ld(dates,I.kd_j));
-  kC.priceScale('right').applyOptions({scaleMargins:{top:0.05,bottom:0.05}});
+  const pf = {type:'price',precision:1,minMove:0.1};
+  let sK,sD,sJ;
+  if (I.kd_k){ sK=kC.addLineSeries({color:'#f0b429',lineWidth:1.5,priceFormat:pf,priceLineVisible:false,lastValueVisible:false}); sK.setData(_ld(dates,I.kd_k)); }
+  if (I.kd_d){ sD=kC.addLineSeries({color:'#58a6ff',lineWidth:1.5,priceFormat:pf,priceLineVisible:false,lastValueVisible:false}); sD.setData(_ld(dates,I.kd_d)); }
+  if (I.kd_j){ sJ=kC.addLineSeries({color:'#ff6b6b',lineWidth:1,lineStyle:1,priceFormat:pf,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false}); sJ.setData(_ld(dates,I.kd_j)); }
+  kC.priceScale('right').applyOptions({scaleMargins:{top:0.12,bottom:0.05}});
+  _legend(kC, el, p => [
+    sK && `<span style="color:#f0b429">K ${_f1(_at(p,sK,I.kd_k))}</span>`,
+    sD && `<span style="color:#58a6ff">D ${_f1(_at(p,sD,I.kd_d))}</span>`,
+    sJ && `<span style="color:#ff6b6b">J ${_f1(_at(p,sJ,I.kd_j))}</span>`,
+  ].filter(Boolean).join('　'));
 }
 
 function spRenderChipChart(d) {
@@ -1211,22 +1268,31 @@ function spRenderChipChart(d) {
     return;
   }
   el.innerHTML = '';
-  const cC = _lwc(el, 180, true);
+  const cC = _lwc(el, 180, true);   // 獨立日期軸
   _spCh.chip = cC;
+  const pf = {type:'price',precision:0,minMove:1};
 
   // 合計柱狀（紅/綠）
+  let sTot;
   if (chip.total) {
-    cC.addHistogramSeries({priceLineVisible:false,lastValueVisible:false})
-      .setData(chip.dates.map((t,i)=>({
-        time:t, value:chip.total[i]??0,
-        color:(chip.total[i]??0)>=0?'#26a641':'#f85149',
-      })));
+    sTot = cC.addHistogramSeries({priceFormat:pf, priceLineVisible:false, lastValueVisible:false});
+    sTot.setData(chip.dates.map((t,i)=>({
+      time:t, value:chip.total[i]??0,
+      color:(chip.total[i]??0)>=0?'#26a641':'#f85149',
+    })));
   }
   // 三大法人折線
-  [['foreign','#58a6ff'],['trust','#26a641'],['dealer','#bc8cff']].forEach(([k,clr])=>{
+  const refs = [];
+  [['foreign','外資','#58a6ff'],['trust','投信','#26a641'],['dealer','自營','#bc8cff']].forEach(([k,lbl,clr])=>{
     if (!chip[k]) return;
-    cC.addLineSeries({color:clr,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
-      .setData(chip.dates.map((t,i)=>({time:t,value:chip[k][i]})).filter(p=>p.value!=null));
+    const s = cC.addLineSeries({color:clr,lineWidth:1,priceFormat:pf,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
+    s.setData(chip.dates.map((t,i)=>({time:t,value:chip[k][i]})).filter(p=>p.value!=null));
+    refs.push({series:s, label:lbl, color:clr, vals:chip[k]});
+  });
+  _legend(cC, el, p => {
+    const tot = sTot ? `<span style="color:var(--sub)">合計 </span><span style="color:#e6edf3">${_fInt(_at(p,sTot,chip.total))}</span>` : '';
+    const lines = refs.map(r=>`<span style="color:${r.color}">${r.label} ${_fInt(_at(p,r.series,r.vals))}</span>`).join('　');
+    return tot + (lines ? '　'+lines : '');
   });
 }
 
