@@ -1592,6 +1592,18 @@ function buildDateSelect(){
   sel.innerHTML = DATES.map(d=>`<option value="${d}">${fmtDate(d)}</option>`).join('');
 }
 
+// ── 個股導航：從任意頁跳到個股分析 ───────────────────────────────────────────
+function goToStock(sid){
+  setPage('stock');
+  const inp = document.getElementById('stock-input');
+  if(inp){ inp.value=sid; loadStock(sid); return; }
+  let n=0;
+  const t=setInterval(()=>{
+    const el=document.getElementById('stock-input');
+    if(el||++n>20){ clearInterval(t); if(el){ el.value=sid; loadStock(sid); } }
+  },80);
+}
+
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 function setPage(page){
   CUR_PAGE = page;
@@ -1740,8 +1752,8 @@ function renderDaily(data){
 
       html+=`<div class="action-card" style="border-left-color:${borderColor}">
         <div class="ac-head">
-          <span class="ac-id">${escHtml(q.id)}</span>
-          <span class="ac-name">${escHtml(q.name)}</span>
+          <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(q.id)}')" title="點擊查看個股分析">${escHtml(q.id)}</span>
+          <span class="ac-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(q.id)}')" title="點擊查看個股分析">${escHtml(q.name)}</span>
           <span class="ac-sector">${escHtml(q.sector)}</span>
           <span class="ac-sig" style="color:${sigColor}">${escHtml(sig)} ${score!=='—'?score+'/100':''}</span>
         </div>
@@ -1791,9 +1803,9 @@ function renderDaily(data){
         const risks   = (ta.risk_factors||[]).join(' · ');
         const tooltip = [reasons, risks?('⚠ '+risks):''].filter(Boolean).join(' | ');
         return `<tr title="${escHtml(tooltip)}">
-          <td><b>${escHtml(q.id)}</b></td>
+          <td><b style="cursor:pointer" onclick="goToStock('${escHtml(q.id)}')">${escHtml(q.id)}</b></td>
           <td class="col-hide">${escHtml(q.sector)}</td>
-          <td>${escHtml(q.name)}</td>
+          <td style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(q.id)}')">${escHtml(q.name)}</td>
           <td class="col-hide">${fmt(q.price,1)}</td>
           <td class="col-hide"><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
           <td class="col-hide">${fmt(q.cv_sharpe,2)}</td>
