@@ -285,7 +285,7 @@ def _chip_aggregate(df: 'pd.DataFrame') -> dict:
     if df is None or df.empty:
         return {}
     df = df.sort_values('date')
-    dates = sorted(df['date'].unique())[-20:]
+    dates = sorted(df['date'].unique())[-90:]
     rows = []
     for date in dates:
         day = df[df['date'] == date]
@@ -548,7 +548,7 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
     from datetime import datetime, timedelta
     end_date   = datetime.now().strftime('%Y-%m-%d')
     start_date = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
-    chip_start = (datetime.now() - timedelta(days=45)).strftime('%Y-%m-%d')
+    chip_start = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
 
     ok_count = 0
     for sid, info in stock_info_map.items():
