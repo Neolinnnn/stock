@@ -313,7 +313,12 @@ def tab_daily():
         st.markdown("#### ⭐ 雙條件推薦個股")
         df_q = pd.DataFrame(qualified)[["sector", "id", "name", "price", "rsi", "cv_sharpe"]]
         df_q.columns = ["族群", "代碼", "名稱", "現價", "RSI", "CV夏普"]
-        st.dataframe(df_q.set_index("代碼"), use_container_width=True)
+        df_q["→"] = df_q["代碼"].apply(lambda x: f"?stock={x}")
+        st.dataframe(
+            df_q.set_index("代碼"),
+            column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
+            use_container_width=True,
+        )
 
     st.divider()
 
@@ -326,13 +331,15 @@ def tab_daily():
 
     st.divider()
 
-    # 籌碼面摘要
+    # 籌碼面摘要（同代碼跨多族群只取第一筆，避免重複）
     chip_rows = []
+    _seen_chip = set()
     for sector, data in summary.get("sectors", {}).items():
         for st_ in data.get("stocks", []):
             chip = st_.get("chip", {})
             total = chip.get("合計", 0)
-            if total != 0:
+            if total != 0 and st_["id"] not in _seen_chip:
+                _seen_chip.add(st_["id"])
                 chip_rows.append(
                     {
                         "代碼": st_["id"],
@@ -348,14 +355,24 @@ def tab_daily():
         df_chip = pd.DataFrame(chip_rows).sort_values("合計", ascending=False)
         st.markdown("#### 籌碼面：三大法人")
         col1, col2 = st.columns(2)
-        top = df_chip[df_chip["合計"] > 0].head(5)
-        bot = df_chip[df_chip["合計"] < 0].tail(5)
+        top = df_chip[df_chip["合計"] > 0].head(5).copy()
+        bot = df_chip[df_chip["合計"] < 0].tail(5).copy()
+        top["→"] = top["代碼"].apply(lambda x: f"?stock={x}")
+        bot["→"] = bot["代碼"].apply(lambda x: f"?stock={x}")
         if not top.empty:
             col1.markdown("**▲ 買超前段**")
-            col1.dataframe(top.set_index("代碼"), use_container_width=True)
+            col1.dataframe(
+                top.set_index("代碼"),
+                column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
+                use_container_width=True,
+            )
         if not bot.empty:
             col2.markdown("**▼ 賣超前段**")
-            col2.dataframe(bot.set_index("代碼"), use_container_width=True)
+            col2.dataframe(
+                bot.set_index("代碼"),
+                column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
+                use_container_width=True,
+            )
         st.divider()
 
     # 風險警示
@@ -419,10 +436,15 @@ def tab_daily():
                     "短期目標": _ts,
                     "中期目標": _tm,
                     "長期目標": _tl,
+                    "→": f"?stock={s['id']}",
                 })
 
             st.caption("目標價僅供技術參考，非投資建議")
-            st.dataframe(pd.DataFrame(rows).set_index("代碼"), use_container_width=True)
+            st.dataframe(
+                pd.DataFrame(rows).set_index("代碼"),
+                column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
+                use_container_width=True,
+            )
 
 
 # ── Tab 2：週報 ─────────────────────────────────────────────────────────────
@@ -486,12 +508,20 @@ def tab_stock():
     st.subheader("🔍 個股深度分析")
     st.caption("技術指標（BB / KD / MACD）+ 籌碼分析 + 型態偵測 + AI 預測 + 基本面")
 
+    qp_stock = st.query_params.get("stock", "")
+
     col1, col2 = st.columns([1, 3])
     with col1:
-        stock_id = st.text_input("股票代碼", placeholder="例：5292")
+        stock_id = st.text_input("股票代碼", value=qp_stock, placeholder="例：5292")
         run = st.button("開始分析", type="primary")
 
-    if not run or not stock_id.strip():
+    # 從連結跳入時自動執行一次分析
+    _auto_key = f"_autorun_{qp_stock}"
+    auto_run = bool(qp_stock) and not st.session_state.get(_auto_key)
+    if auto_run:
+        st.session_state[_auto_key] = True
+
+    if not (run or auto_run) or not stock_id.strip():
         return
 
     sid = stock_id.strip()
@@ -1554,6 +1584,25 @@ def tab_watchlist():
 # ── 主程式 ───────────────────────────────────────────────────────────────────
 
 def main():
+    # 從個股連結跳入時，自動切換到「個股分析」頁籤（tabs[2]）
+    if st.query_params.get("stock"):
+        import streamlit.components.v1 as _cv1
+        _cv1.html("""
+        <script>
+        (function() {
+            function clickStockTab() {
+                var tabs = window.parent.document.querySelectorAll('[data-baseweb="tab"]');
+                if (tabs && tabs.length > 2) {
+                    tabs[2].click();
+                } else {
+                    setTimeout(clickStockTab, 200);
+                }
+            }
+            setTimeout(clickStockTab, 500);
+        })();
+        </script>
+        """, height=1)
+
     # ── 手機 RWD：columns 在窄螢幕自動換行堆疊 ──────────────────────────────────
     st.markdown("""
 <style>
