@@ -220,6 +220,75 @@ def sector_chart(summary):
 
 # ── Tab 1：今日掃描 ─────────────────────────────────────────────────────────
 
+def _num_cell(v, bold=False):
+    """回傳籌碼數字的彩色 HTML，正值綠、負值紅"""
+    if not isinstance(v, (int, float)):
+        return str(v)
+    color = "#4caf50" if v > 0 else ("#ef5350" if v < 0 else "#888")
+    weight = "font-weight:bold;" if bold else ""
+    return f'<span style="color:{color};{weight}">{v:+,.0f}</span>'
+
+
+def _stock_link(name, code):
+    """回傳以股票名稱為文字的超連結"""
+    return f'<a href="?stock={code}" target="_self" style="color:#5b9bd5;text-decoration:none">{name}</a>'
+
+
+def _render_chip_table(df):
+    """渲染籌碼表為 HTML，名稱欄位加超連結"""
+    th = "padding:4px 10px;border-bottom:1px solid #444;white-space:nowrap"
+    td = "padding:3px 10px;white-space:nowrap"
+    html = '<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:0.83em;width:100%">'
+    html += f'<tr><th style="{th};text-align:left">代碼</th>'
+    html += f'<th style="{th};text-align:left">名稱</th>'
+    html += f'<th style="{th};text-align:left">族群</th>'
+    for col in ("外資", "投信", "自營", "合計"):
+        html += f'<th style="{th};text-align:right">{col}</th>'
+    html += "</tr>"
+    for _, row in df.iterrows():
+        code = row["代碼"]
+        html += "<tr>"
+        html += f'<td style="{td}">{code}</td>'
+        html += f'<td style="{td}">{_stock_link(row["名稱"], code)}</td>'
+        html += f'<td style="{td}">{row["族群"]}</td>'
+        for col in ("外資", "投信", "自營"):
+            html += f'<td style="{td};text-align:right">{_num_cell(row[col])}</td>'
+        html += f'<td style="{td};text-align:right">{_num_cell(row["合計"], bold=True)}</td>'
+        html += "</tr>"
+    html += "</table></div>"
+    return html
+
+
+def _render_sector_table(rows):
+    """渲染族群明細表為 HTML，名稱欄位加超連結"""
+    if not rows:
+        return ""
+    cols = list(rows[0].keys())
+    th = "padding:4px 10px;border-bottom:1px solid #444;white-space:nowrap;text-align:right"
+    th_l = th.replace("text-align:right", "text-align:left")
+    td = "padding:3px 10px;white-space:nowrap;text-align:right"
+    td_l = td.replace("text-align:right", "text-align:left")
+    left_cols = {"代碼", "名稱", "訊號"}
+    html = '<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:0.83em;width:100%">'
+    html += "<tr>" + "".join(
+        f'<th style="{th_l if c in left_cols else th}">{c}</th>' for c in cols
+    ) + "</tr>"
+    for row in rows:
+        html += "<tr>"
+        for c in cols:
+            v = row[c]
+            if c == "名稱":
+                cell = _stock_link(v, row["代碼"])
+                html += f'<td style="{td_l}">{cell}</td>'
+            elif c in left_cols:
+                html += f'<td style="{td_l}">{v}</td>'
+            else:
+                html += f'<td style="{td}">{v if v is not None else "—"}</td>'
+        html += "</tr>"
+    html += "</table></div>"
+    return html
+
+
 def tab_daily():
     with st.expander("ℹ️ 指標說明", expanded=False):
         col_a, col_b = st.columns(2)
@@ -313,12 +382,8 @@ def tab_daily():
         st.markdown("#### ⭐ 雙條件推薦個股")
         df_q = pd.DataFrame(qualified)[["sector", "id", "name", "price", "rsi", "cv_sharpe"]]
         df_q.columns = ["族群", "代碼", "名稱", "現價", "RSI", "CV夏普"]
-        df_q["→"] = df_q["代碼"].apply(lambda x: f"?stock={x}")
-        st.dataframe(
-            df_q.set_index("代碼"),
-            column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
-            use_container_width=True,
-        )
+        q_rows = df_q[["代碼", "名稱", "族群", "現價", "RSI", "CV夏普"]].to_dict("records")
+        st.markdown(_render_sector_table(q_rows), unsafe_allow_html=True)
 
     st.divider()
 
@@ -357,22 +422,12 @@ def tab_daily():
         col1, col2 = st.columns(2)
         top = df_chip[df_chip["合計"] > 0].head(5).copy()
         bot = df_chip[df_chip["合計"] < 0].tail(5).copy()
-        top["→"] = top["代碼"].apply(lambda x: f"?stock={x}")
-        bot["→"] = bot["代碼"].apply(lambda x: f"?stock={x}")
         if not top.empty:
             col1.markdown("**▲ 買超前段**")
-            col1.dataframe(
-                top.set_index("代碼"),
-                column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
-                use_container_width=True,
-            )
+            col1.markdown(_render_chip_table(top), unsafe_allow_html=True)
         if not bot.empty:
             col2.markdown("**▼ 賣超前段**")
-            col2.dataframe(
-                bot.set_index("代碼"),
-                column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
-                use_container_width=True,
-            )
+            col2.markdown(_render_chip_table(bot), unsafe_allow_html=True)
         st.divider()
 
     # 風險警示
@@ -436,15 +491,10 @@ def tab_daily():
                     "短期目標": _ts,
                     "中期目標": _tm,
                     "長期目標": _tl,
-                    "→": f"?stock={s['id']}",
                 })
 
             st.caption("目標價僅供技術參考，非投資建議")
-            st.dataframe(
-                pd.DataFrame(rows).set_index("代碼"),
-                column_config={"→": st.column_config.LinkColumn("→", display_text="分析")},
-                use_container_width=True,
-            )
+            st.markdown(_render_sector_table(rows), unsafe_allow_html=True)
 
 
 # ── Tab 2：週報 ─────────────────────────────────────────────────────────────
