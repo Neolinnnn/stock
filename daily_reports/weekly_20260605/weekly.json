@@ -1,9 +1,7 @@
 {
-  "meta": {
-    "date": "2026-06-05",
-    "days": 5
-  },
-  "changes": [
+  "week_ending": "2026-06-05",
+  "days_covered": 5,
+  "sector_changes": [
     {
       "sector": "CoPoS封裝",
       "change": 74.71
@@ -61,26 +59,27 @@
       "change": -24.35
     }
   ],
-  "buys": [
+  "top_buys": [
     {
       "stock": "2449 京元電子",
-      "days": 4
+      "buy_days": 4
     },
     {
       "stock": "6664 群翊",
-      "days": 2
+      "buy_days": 2
     },
     {
       "stock": "3264 欣銓",
-      "days": 1
+      "buy_days": 1
     },
     {
       "stock": "5443 均豪",
-      "days": 1
+      "buy_days": 1
     },
     {
       "stock": "2330 台積電",
-      "days": 1
+      "buy_days": 1
     }
-  ]
+  ],
+  "chart_path": "daily_reports/weekly_20260605/01_weekly_sector_trend.png"
 }
