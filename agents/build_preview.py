@@ -105,6 +105,31 @@ header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px soli
 .ev-impact{font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px}
 .imp-bull{background:rgba(63,185,80,.15);color:var(--bull)}.imp-bear{background:rgba(248,81,73,.15);color:var(--bear)}.imp-neu{background:var(--chip);color:var(--dim)}
 .note{font-size:11px;color:var(--dim);padding:14px 26px;border-top:1px solid var(--border)}
+/* ── 手機 RWD：3 欄改為「族群橫向條 + 個股清單 + 全寬詳情」直向堆疊 ── */
+@media (max-width:820px){
+  header{padding:12px 16px;gap:10px}
+  .title{font-size:17px}
+  .hmeta{font-size:11px;gap:10px;width:100%;margin-left:0}
+  .layout{display:block;height:auto}
+  .col{border-right:none;border-bottom:1px solid var(--border);overflow-y:auto;padding:10px}
+  /* 族群列改成可橫向滑動的籌碼條，節省垂直空間 */
+  #col-sectors{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;padding:10px}
+  #col-sectors h4{display:none}
+  #col-sectors .row{flex:0 0 auto;margin-bottom:0;gap:8px}
+  /* 個股清單（含族群綜述卡）限高，確保下方詳情可觸及 */
+  #col-stocks{max-height:38vh}
+  .detail{overflow:visible;padding:16px 14px}
+  .debate{grid-template-columns:1fr}
+  .dhead{gap:8px}.dhead .nm{font-size:19px}.dhead .pr{margin-left:0}
+  .stocklink{margin-left:0}
+  .chart svg{height:120px}
+  .chart .lg{flex-wrap:wrap;gap:8px}
+  .kv{grid-template-columns:repeat(auto-fit,minmax(108px,1fr))}
+  .dec .rg{grid-template-columns:repeat(auto-fit,minmax(108px,1fr))}
+  .tr-table{font-size:11.5px}.tr-table td{padding:6px 6px}
+  .note{padding:12px 16px}
+}
 </style></head><body>
 <header>
   <div class="title"><span class="dot"></span>台股族群分析台</div>
