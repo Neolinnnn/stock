@@ -254,13 +254,20 @@ def walk_forward_cv(prices, dates, n_folds=CV_FOLDS):
 
 # ── 單股完整分析 ──────────────────────────────────────────────────────────────
 
-def analyze_stock(stock_id, name, days=DATA_DAYS):
-    """取得資料、產生當前信號、執行 Walk-Forward CV"""
+def analyze_stock(stock_id, name, days=DATA_DAYS, hist=None):
+    """取得資料、產生當前信號、執行 Walk-Forward CV
+
+    hist：可傳入已抓取的 twstock Stock 物件（含 .price/.date），避免重複抓取；
+          為 None 時自行抓取（維持獨立執行 batch_scan 的行為）。
+    """
     try:
-        stock = Stock(stock_id)
-        # 回抓 ~14 個月資料，保證 CV 有足夠樣本
-        start = datetime.now() - timedelta(days=int(days * 1.6))
-        stock.fetch_from(start.year, start.month)
+        if hist is not None:
+            stock = hist
+        else:
+            stock = Stock(stock_id)
+            # 回抓 ~14 個月資料，保證 CV 有足夠樣本
+            start = datetime.now() - timedelta(days=int(days * 1.6))
+            stock.fetch_from(start.year, start.month)
         raw_prices = list(stock.price[-days:])
         raw_dates  = list(stock.date[-days:])
         # twstock 偶爾回傳 None，過濾掉避免 sma/rsi 計算出錯

@@ -10,7 +10,7 @@ Daily Post-Market Sector Scan
 用法：
   python strategy_templates/07_daily_scan.py
 """
-import sys, os, json, math, time
+import sys, os, json, math
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -125,7 +125,17 @@ def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
     return round(atr, 2), round(closes[-1] - multiplier * atr, 1)
 
 
-def fetch_price_stats(sid):
+def _get_history(sid):
+    """抓一次 twstock 歷史（~26 個月，涵蓋 CV 與技術指標所需），供
+    analyze_stock 與 fetch_price_stats 共用，避免每檔重複抓取 twstock。"""
+    from twstock import Stock
+    stock = Stock(sid)
+    start = datetime.now() - timedelta(days=int(DATA_DAYS * 1.6))
+    stock.fetch_from(start.year, start.month)
+    return stock
+
+
+def fetch_price_stats(sid, hist=None):
     """取近期價格資料，回傳 ret_20d + 估值目標價 + ATR 停損
 
     短期：布林上軌（技術壓力位）
@@ -137,9 +147,12 @@ def fetch_price_stats(sid):
         from twstock import Stock
         import statistics
         from datetime import date
-        s = Stock(sid)
-        st = datetime.now() - timedelta(days=120)
-        s.fetch_from(st.year, st.month)
+        if hist is not None:
+            s = hist
+        else:
+            s = Stock(sid)
+            st = datetime.now() - timedelta(days=120)
+            s.fetch_from(st.year, st.month)
         p = list(s.price)
         if len(p) < 21:
             return None, None, None, None, None, None
@@ -334,11 +347,16 @@ def scan_sector(sector_name, stocks):
         fetch_broker_top15 = None
         main_force_score = None
 
-    results = []
-    for sid, name in stocks.items():
+    def _scan_one(sid, name):
+        """單檔完整抓取：twstock 抓一次共用，再補新聞/籌碼/分點。"""
         try:
-            r = analyze_stock(sid, name)
-            ret_20d, t_short, t_mid, t_long, atr_val, stop_price = fetch_price_stats(sid)
+            # twstock 抓一次（涵蓋 26 個月），analyze_stock 與 fetch_price_stats 共用
+            try:
+                hist = _get_history(sid)
+            except Exception:
+                hist = None
+            r = analyze_stock(sid, name, hist=hist)
+            ret_20d, t_short, t_mid, t_long, atr_val, stop_price = fetch_price_stats(sid, hist=hist)
             r['ret_20d'] = ret_20d
             r['target_short'] = t_short
             r['target_mid']   = t_mid
@@ -364,8 +382,8 @@ def scan_sector(sector_name, stocks):
                         for b in br.get('top_buyers', [])[:5]
                     ],
                     'top_sellers': [
-                        {'name': s[0], 'lots': s[1], 'pct': s[2]}
-                        for s in br.get('top_sellers', [])[:5]
+                        {'name': se[0], 'lots': se[1], 'pct': se[2]}
+                        for se in br.get('top_sellers', [])[:5]
                     ],
                     'net_concentration': br.get('net_concentration', 0),
                     'source': br.get('source'),
@@ -375,11 +393,16 @@ def scan_sector(sector_name, stocks):
             else:
                 r['broker'] = None
                 r['main_force'] = None
-
-            results.append(r)
+            return r
         except Exception as e:
-            results.append({'id': sid, 'name': name, 'error': str(e)})
-        time.sleep(0.5)
+            return {'id': sid, 'name': name, 'error': str(e)}
+
+    # 4 線程並發（網路 I/O 密集）：較直列快約 4～5 倍；
+    # executor.map 保留輸入順序，TWSE/FinMind 偶發限流由各 fetch 自行降級。
+    from concurrent.futures import ThreadPoolExecutor
+    items = list(stocks.items())
+    with ThreadPoolExecutor(max_workers=4) as ex:
+        results = list(ex.map(lambda it: _scan_one(*it), items))
     return results
 
 
