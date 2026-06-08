@@ -1708,7 +1708,9 @@ async function init(){
   await loadBtResults();
 
   await loadDate(CUR_DATE);
-  setPage('daily');
+  // 支援外部深連結 ?stock=2330（多代理分析台的「完整個股分析」連結會帶此參數）
+  const qsStock = new URLSearchParams(location.search).get('stock');
+  if(qsStock){ goToStock(qsStock); } else { setPage('daily'); }
   document.addEventListener('click', e=>{
     if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
       hideBtTooltip();

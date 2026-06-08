@@ -23,6 +23,33 @@ from agents import analysts, gemini_text, news  # noqa: E402
 
 OUT_DIR = Path(__file__).resolve().parent / "output"
 REPORTS = ROOT / "daily_reports"
+STOCKS_DIR = ROOT / "docs" / "stocks"   # analyzer_daily.py 產出的個股 OHLCV/指標
+
+_CHART_POINTS = 60   # 迷你走勢圖取最近 N 個交易日，控制 HTML 體積
+
+
+def _load_chart(stock_id: str) -> dict | None:
+    """從 docs/stocks/<id>.json 取最近 N 日收盤 + 20MA 供前端畫迷你走勢圖。"""
+    fp = STOCKS_DIR / f"{stock_id}.json"
+    if not fp.exists():
+        return None
+    try:
+        d = json.loads(fp.read_text(encoding="utf-8"))
+        o = d.get("ohlcv", {})
+        ind = d.get("indicators", {})
+        close = o.get("close") or []
+        dates = o.get("date") or []
+        ma20 = ind.get("ma20") or []
+        if len(close) < 5:
+            return None
+        n = _CHART_POINTS
+        return {
+            "dates": dates[-n:],
+            "close": close[-n:],
+            "ma20": ma20[-n:] if len(ma20) == len(close) else [],
+        }
+    except Exception:
+        return None
 
 
 def _latest_report() -> Path:
@@ -70,6 +97,7 @@ def run(date: str | None, use_gemini: bool, use_macro: bool) -> dict:
         for s in sec.get("stocks", []):
             r = analysts.analyze_stock(s, regime)
             r["news"] = news.prepare_news(s, report_dir.name)
+            r["chart"] = _load_chart(str(s.get("id", "")))
             r["summary_text"] = gemini_text.summarize(r, use_gemini=use_gemini)
             stocks_out.append(r)
         if not stocks_out:

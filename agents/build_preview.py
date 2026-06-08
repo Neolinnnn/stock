@@ -67,6 +67,14 @@ header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px soli
 .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin:4px 0}
 .kv .c{background:var(--panel2);border-radius:8px;padding:9px 11px}
 .kv .c .k{font-size:11px;color:var(--dim)}.kv .c .v{font-size:15px;font-weight:700}
+.chart{background:var(--panel2);border-radius:8px;padding:10px 10px 8px;margin-bottom:12px}
+.chart svg{display:block;width:100%;height:130px}
+.chart .lg{font-size:11px;color:var(--dim);display:flex;gap:14px;margin-top:6px;align-items:center}
+.chart .lg b{font-weight:700;color:var(--txt)}
+.glossary{font-size:11px;color:var(--dim);line-height:1.9;background:var(--panel);border:1px dashed var(--border);border-radius:8px;padding:8px 12px;margin-bottom:12px}
+.glossary b{color:var(--accent)}
+.stocklink{color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;border:1px solid var(--accent);border-radius:7px;padding:3px 10px;margin-left:6px}
+.stocklink:hover{background:rgba(88,166,255,.12)}
 .debate{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
 .side{border-radius:10px;padding:15px;border:1px solid var(--border)}
 .side.bull{background:linear-gradient(160deg,rgba(63,185,80,.08),transparent)}
@@ -112,7 +120,49 @@ header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px soli
 <div class="note">※ 評分／決策由 Claude 程式邏輯（agents/analysts.py）產生；文字敘述可選 Gemini。資料源：daily_reports + macro 模組。本檔在 preview/，不影響靜態網址。</div>
 <script>
 const DATA = __DATA__;
-let curSec=0, curStk=0;
+let curSec=0, curStk=0, CURSTK=null;
+
+// 指標簡寫 → 看得懂的中文名（解決「max_yoy_pct 是什麼」）
+const LABELS={
+  ret_20d:'20日報酬', rsi:'RSI(14)', cv_sharpe:'回測夏普值', signal:'技術訊號',
+  max_yoy_pct:'營收年增率(最高)', news_count:'新聞則數',
+  regime_score:'大盤情緒分數', regime:'大盤狀態', stock_news:'個股新聞數',
+  '外資':'外資買賣超', '投信':'投信買賣超', '合計':'三大法人合計'};
+const UNITS={ret_20d:'%', max_yoy_pct:'%', '外資':' 張', '投信':' 張', '合計':' 張'};
+const LOTS=new Set(['外資','投信','合計']);
+function fmtVal(k,v){
+  if(v===null||v===undefined||v==='') return '—';
+  if(typeof v==='number'){
+    const n=LOTS.has(k)?Math.round(v).toLocaleString():v;
+    return `${n}${UNITS[k]||''}`;
+  }
+  return v;
+}
+// 迷你走勢圖：收盤(漲綠跌紅) + 20日均線(黃)，純 SVG，client 端畫，零工作流成本
+function sparkSVG(ch){
+  if(!ch||!ch.close||ch.close.length<2) return '';
+  const c=ch.close, m=ch.ma20||[];
+  const W=560,H=130,P=8;
+  const all=c.concat(m.filter(x=>x!=null&&x>0));
+  const lo=Math.min(...all), hi=Math.max(...all), rng=(hi-lo)||1;
+  const X=i=>P+i*(W-2*P)/(c.length-1);
+  const Y=v=>P+(H-2*P)*(1-(v-lo)/rng);
+  const path=a=>a.map((v,i)=>(v==null||v<=0)?'':`${(i&&a[i-1]!=null&&a[i-1]>0)?'L':'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  const up=c[c.length-1]>=c[0], col=up?'var(--bull)':'var(--bear)';
+  let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
+  if(m.length===c.length) s+=`<path d="${path(m)}" fill="none" stroke="var(--warn)" stroke-width="1.2" opacity=".75"/>`;
+  s+=`<path d="${path(c)}" fill="none" stroke="${col}" stroke-width="1.8"/></svg>`;
+  return s;
+}
+function chartBlock(st){
+  if(!st||!st.chart) return '<div class="chart" style="color:var(--dim);font-size:12px;text-align:center;padding:30px">（無走勢圖資料）</div>';
+  const ch=st.chart, ds=ch.dates||[];
+  const span=ds.length?`${ds[0]} ~ ${ds[ds.length-1]}`:'';
+  return `<div class="chart">${sparkSVG(ch)}
+    <div class="lg"><span>收盤 <b>$${st.price}</b></span>
+    <span style="color:var(--warn)">— 20日均線</span>
+    <span style="margin-left:auto">${span}（近 ${ch.close.length} 日）</span></div></div>`;
+}
 
 function scoreClass(v){return v>10?'pos':(v<-10?'neg':'neu')}
 function regimeBadge(r){const m={risk_on:'r-on',mild_risk_on:'r-on',neutral:'r-neu',mild_risk_off:'r-off',risk_off:'r-off'};
@@ -154,13 +204,15 @@ function renderStocks(){
 function analystCard(key,label,a){
   const v=a.verdict, vc=scoreClass(a.score);
   const sig=Object.entries(a.signals).map(([k,val])=>
-    `<div class="c"><div class="k">${k}</div><div class="v">${val}</div></div>`).join('');
+    `<div class="c"><div class="k">${LABELS[k]||k}</div><div class="v">${fmtVal(k,val)}</div></div>`).join('');
+  const chart=key==='technical'?chartBlock(CURSTK):'';
   return `<div class="acard ${key==='technical'?'active':''}" id="ac-${key}">
     <div class="ah"><b>${label}</b><span class="v ${vc}" style="background:var(--chip)">${v} · ${a.score}</span></div>
-    <div class="kv">${sig}</div></div>`;
+    ${chart}<div class="kv">${sig}</div></div>`;
 }
 function renderDetail(){
   const st=DATA.sectors[curSec].stocks[curStk], d=st.decision, A=st.analysts;
+  CURSTK=st;
   const labels={technical:'📈 技術面',fundamental:'💰 基本面',macro:'🌐 新聞總經',sentiment:'🔥 情緒籌碼'};
   const tabs=Object.keys(labels).map((k,i)=>
     `<div class="tab ${i===0?'active':''}" onclick="selTab('${k}',this)">${labels[k]}</div>`).join('');
@@ -176,11 +228,16 @@ function renderDetail(){
   }).join(''):'<div style="color:var(--dim);font-size:13px">無近期新聞</div>';
   document.getElementById('detail').innerHTML=`
     <div class="dhead"><span class="nm">${st.name}</span><span class="id">${st.id}</span>
+      <a class="stocklink" href="../?stock=${st.id}" target="_blank" rel="noopener">完整個股分析 ↗</a>
       <span class="action ${actionClass(d.action)}">${d.action}</span>
       <span class="pr">$${st.price}</span></div>
     <div class="sumtxt">${st.summary_text}</div>
     ${renderEvents()}
     <div class="sec-h">① 分析師團隊</div>
+    <div class="glossary">
+      <b>指標說明</b>：20日報酬=近20交易日漲跌幅｜RSI(14)=相對強弱，&gt;70過熱、&lt;30超賣｜
+      回測夏普值=每單位風險的報酬，越高越穩｜營收年增率=最新月營收 YoY｜
+      大盤情緒分數=國際指標+外電綜合(-100~+100)｜買賣超單位為「張」</div>
     <div class="tabs">${tabs}</div>${cards}
     <div class="sec-h">② 多空研究員辯論</div>
     <div class="debate">
