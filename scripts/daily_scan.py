@@ -236,24 +236,24 @@ def fetch_market_overview():
 def fetch_news(stock_id, stock_name, days=3):
     """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
     import urllib.request, json as _json
-    try:
-        url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock'
-               f'?limit=5&stock_code={stock_id}')
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=8) as r:
-            data = _json.loads(r.read())
-        items = data.get('items', {}).get('data', [])
-        cutoff = datetime.now() - timedelta(days=days)
+    cutoff = datetime.now() - timedelta(days=days)
+
+    def _parse_items(items):
         result = []
         for it in items:
             import datetime as _dt
             pub_dt = _dt.datetime.fromtimestamp(it.get('publishAt', 0))
             if pub_dt < cutoff:
                 continue
+            title = it.get('title', '')
+            # 驗證標題確實提到目標股票（代號或名稱前2字）
+            short = stock_name[:2] if len(stock_name) >= 2 else stock_name
+            if stock_id not in title and short not in title:
+                continue
             result.append({
                 'date': pub_dt.strftime('%Y-%m-%d'),
                 'datetime': pub_dt.strftime('%Y-%m-%d %H:%M'),
-                'title': it.get('title', ''),
+                'title': title,
                 'source': it.get('media', {}).get('name', '鉅亨網'),
                 'url': (f"https://news.cnyes.com/news/id/{it.get('newsId')}"
                         if it.get('newsId') else ''),
@@ -261,6 +261,31 @@ def fetch_news(stock_id, stock_name, days=3):
             if len(result) >= 3:
                 break
         return result
+
+    # 主要：用個股專屬 tag 端點（cnyes 標準做法）
+    try:
+        url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock_id'
+               f'/{stock_id}?limit=10')
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = _json.loads(r.read())
+        items = data.get('items', {}).get('data', [])
+        result = _parse_items(items)
+        if result:
+            return result
+    except Exception:
+        pass
+
+    # 備援：關鍵字搜尋
+    try:
+        import urllib.parse
+        q = urllib.parse.quote(f'{stock_id} {stock_name}')
+        url = f'https://api.cnyes.com/media/api/v1/newslist/search?q={q}&limit=10'
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = _json.loads(r.read())
+        items = data.get('items', {}).get('data', [])
+        return _parse_items(items)
     except Exception:
         return []
 

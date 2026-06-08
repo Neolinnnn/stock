@@ -57,8 +57,8 @@ result = writer.generate(task="daily_summary", context={...})
 
 ## 使用模型
 
-- **預設模型**：`gemini-3.5-flash`（穩定 GA、免費額度、原生 Google Search grounding）
-- **備用模型**：`gemini-3.1-flash-lite`（高量低成本，免費降額）
+- **預設模型**：`gemini-2.0-flash`（穩定 GA、免費額度、原生 Google Search grounding）
+- **備用模型**：`gemini-2.0-flash-lite`（高量低成本，免費降額）
 - Pro 系列需付費，**不使用**
 
 ---

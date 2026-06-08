@@ -9,7 +9,7 @@ import urllib.error
 from typing import Any
 
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}"
-DEFAULT_MODEL = "gemini-3.5-flash"
+DEFAULT_MODEL = "gemini-2.0-flash"
 
 PROMPTS = {
     "daily_summary": """你是台股分析師，根據以下族群掃描資料，撰寫今日市場摘要（繁體中文，300字內）：
