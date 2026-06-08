@@ -222,7 +222,7 @@
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 4
+      "qualified_count": 3
     },
     "記憶體": {
       "avg_ret_20d": -0.92,
@@ -554,10 +554,10 @@
         {
           "id": "3231",
           "name": "緯創",
-          "price": 163.5,
-          "rsi": 43.8,
-          "rsi10": 53.7,
-          "ret_20d": 17.6,
+          "price": 158.5,
+          "rsi": 82.9,
+          "rsi10": 73.3,
+          "ret_20d": 15.7,
           "signal": "HOLD",
           "cv_sharpe": 0.89,
           "cv_win_rate": 0.5,
@@ -656,7 +656,7 @@
           "main_force": null
         }
       ],
-      "hot_count": 0,
+      "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 3
     },
@@ -860,16 +860,16 @@
           "news": [],
           "chip": {
             "date": "2026-06-08",
-            "外資": 4875750,
-            "投信": 37000,
-            "自營": 19504,
-            "合計": 4932254
+            "外資": 571045,
+            "投信": 0,
+            "自營": -414051,
+            "合計": 156994
           },
-          "target_short": 314.6,
-          "target_mid": 206.5,
-          "target_long": 271.9,
-          "atr14": 21.71,
-          "stop_loss": 199.6,
+          "target_short": 111.1,
+          "target_mid": 119.3,
+          "target_long": 115.3,
+          "atr14": 7.72,
+          "stop_loss": 71.8,
           "broker": null,
           "main_force": null
         },
@@ -1006,7 +1006,7 @@
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 9
+      "qualified_count": 8
     },
     "光學": {
       "avg_ret_20d": 33.57,
@@ -1465,9 +1465,9 @@
       "qualified_count": 0
     },
     "CoPoS封裝": {
-      "avg_ret_20d": -6.24,
-      "avg_rsi": 27.0,
-      "avg_sharpe": 2.37,
+      "avg_ret_20d": -1.84,
+      "avg_rsi": 28.2,
+      "avg_sharpe": 4.34,
       "stocks": [
         {
           "id": "6789",
@@ -1657,7 +1657,7 @@
           "price": 1150.0,
           "rsi": 15.2,
           "rsi10": 28.8,
-          "ret_20d": -18.1,
+          "ret_20d": NaN,
           "signal": "HOLD",
           "cv_sharpe": 2.3,
           "cv_win_rate": 0.75,
@@ -1683,7 +1683,7 @@
           "price": 1080.0,
           "rsi": 44.0,
           "rsi10": 46.0,
-          "ret_20d": -2.7,
+          "ret_20d": NaN,
           "signal": "HOLD",
           "cv_sharpe": -3.1,
           "cv_win_rate": 0.33,
@@ -1836,7 +1836,7 @@
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 11
+      "qualified_count": 9
     },
     "銅箔/CCL": {
       "avg_ret_20d": -1.02,
@@ -2410,6 +2410,7 @@
     }
   },
   "strong_sectors": [
+    "記憶體",
     "AI伺服器",
     "封測",
     "光學",
@@ -2419,7 +2420,7 @@
   "weak_sectors": [
     "光通訊",
     "綠能環保",
-    "CoPoS封裝",
+    "銅箔/CCL",
     "AI ASIC/IP"
   ],
   "qualified": [
