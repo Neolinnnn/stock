@@ -18,6 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "agents" / "output"
 PREVIEW_DIR = ROOT / "preview"
+DOCS_DIR = ROOT / "docs" / "agents"
 
 _HTML = r"""<!DOCTYPE html>
 <html lang="zh-Hant"><head><meta charset="UTF-8">
@@ -79,6 +80,19 @@ header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px soli
 .dec .rc{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:11px}
 .dec .rc .k{font-size:11px;color:var(--dim)}.dec .rc .v{font-size:16px;font-weight:700;margin-top:2px}
 .flag{display:inline-block;font-size:11px;background:var(--chip);border-radius:5px;padding:2px 8px;margin:2px 4px 0 0}
+.seccard{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px}
+.seccard .st{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.seccard .st b{font-size:14px}.seccard .vd{font-size:12px;font-weight:700;padding:1px 8px;border-radius:5px}
+.seccard .mini{font-size:11px;color:var(--dim);margin-top:4px}
+.seccard .mini .bp{color:var(--bull)}.seccard .mini .br{color:var(--bear)}
+.news-list,.ev-list{display:flex;flex-direction:column;gap:8px}
+.news-item,.ev-item{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:10px 12px;font-size:13px}
+.news-item a,.ev-item a{color:var(--txt);text-decoration:none}.news-item a:hover,.ev-item a:hover{color:var(--accent);text-decoration:underline}
+.news-meta{font-size:11px;color:var(--dim);margin-top:4px;display:flex;gap:10px;align-items:center}
+.rec{font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;background:rgba(88,166,255,.15);color:var(--accent)}
+.rec.today{background:rgba(63,185,80,.18);color:var(--bull)}
+.ev-impact{font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px}
+.imp-bull{background:rgba(63,185,80,.15);color:var(--bull)}.imp-bear{background:rgba(248,81,73,.15);color:var(--bear)}.imp-neu{background:var(--chip);color:var(--dim)}
 .note{font-size:11px;color:var(--dim);padding:14px 26px;border-top:1px solid var(--border)}
 </style></head><body>
 <header>
@@ -117,10 +131,22 @@ function renderSectors(){
     `<div class="row ${i===curSec?'active':''}" onclick="selSec(${i})">
        <span>${s.name}</span><span class="sc ${scoreClass(s.sector_score)}">${s.sector_score}</span></div>`).join('');
 }
+function sectorCard(sec){
+  const sy=sec.synthesis;
+  const acts=Object.entries(sy.actions).map(([k,v])=>`${k}×${v}`).join('、');
+  return `<div class="seccard">
+    <div class="st"><b>${sec.name} 族群綜述</b>
+      <span class="vd ${scoreClass(sec.sector_score)}" style="background:var(--chip)">${sec.verdict} · ${sec.sector_score}</span></div>
+    <div class="mini">首選：${sy.top_picks.join('、')}</div>
+    <div class="mini">行動分布：${acts}</div>
+    <div class="mini"><span class="bp">🐂 ${sy.bull.join(' ')}</span></div>
+    <div class="mini"><span class="br">🐻 ${sy.bear.join(' ')}</span></div>
+  </div>`;
+}
 function renderStocks(){
   const sec=DATA.sectors[curSec];
   const el=document.getElementById('col-stocks');
-  el.innerHTML=`<h4>${sec.name}（${sec.stocks.length} 檔）</h4>`+sec.stocks.map((st,i)=>
+  el.innerHTML=`<h4>${sec.name}（${sec.stocks.length} 檔）</h4>`+sectorCard(sec)+sec.stocks.map((st,i)=>
     `<div class="row ${i===curStk?'active':''}" onclick="selStk(${i})">
        <span>${st.name} <span style="color:var(--dim)">${st.id}</span></span>
        <span class="sc ${scoreClass(st.decision.composite)}">${st.decision.composite}</span></div>`).join('');
@@ -142,11 +168,18 @@ function renderDetail(){
   const bull=st.debate.bull.map(x=>`<li>${x}</li>`).join('');
   const bear=st.debate.bear.map(x=>`<li>${x}</li>`).join('');
   const flags=d.flags.map(f=>`<span class="flag">${f}</span>`).join('');
+  // 個股新聞
+  const newsHtml=(st.news&&st.news.length)?st.news.map(n=>{
+    const rc=n.recency?`<span class="rec ${n.recency==='今日'?'today':''}">${n.recency}</span>`:'';
+    const t=n.link?`<a href="${n.link}" target="_blank" rel="noopener">${n.title}</a>`:n.title;
+    return `<div class="news-item">${t}<div class="news-meta">${rc}<span>${n.source}</span><span>${n.datetime||''}</span></div></div>`;
+  }).join(''):'<div style="color:var(--dim);font-size:13px">無近期新聞</div>';
   document.getElementById('detail').innerHTML=`
     <div class="dhead"><span class="nm">${st.name}</span><span class="id">${st.id}</span>
       <span class="action ${actionClass(d.action)}">${d.action}</span>
       <span class="pr">$${st.price}</span></div>
     <div class="sumtxt">${st.summary_text}</div>
+    ${renderEvents()}
     <div class="sec-h">① 分析師團隊</div>
     <div class="tabs">${tabs}</div>${cards}
     <div class="sec-h">② 多空研究員辯論</div>
@@ -165,7 +198,21 @@ function renderDetail(){
         <div class="rc"><div class="k">ATR14</div><div class="v">${d.atr14??'-'}</div></div>
       </div>
       <div style="margin-top:12px">風控旗標：${flags}</div>
-    </div>`;
+    </div>
+    <div class="sec-h">⑥ 個股近期新聞</div>
+    <div class="news-list">${newsHtml}</div>`;
+}
+function renderEvents(){
+  if(!DATA.events||!DATA.events.length) return '';
+  const items=DATA.events.map(e=>{
+    const ic={bullish:'imp-bull',bearish:'imp-bear'}[e.impact]||'imp-neu';
+    const lbl={bullish:'利多',bearish:'利空'}[e.impact]||'中性';
+    const h=e.link?`<a href="${e.link}" target="_blank" rel="noopener">${e.headline}</a>`:e.headline;
+    return `<div class="ev-item">${h}
+      <div class="news-meta"><span class="ev-impact ${ic}">${lbl}·強度${e.severity}</span>
+      <span>${e.category}</span><span>${e.rationale}</span><span>${e.source||''}</span></div></div>`;
+  }).join('');
+  return `<div class="sec-h">🌐 今日外電／總經事件（影響全市場）</div><div class="ev-list">${items}</div>`;
 }
 function selTab(k,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.acard').forEach(c=>c.classList.remove('active'));
@@ -177,7 +224,7 @@ renderHeader();renderSectors();renderStocks();renderDetail();
 """
 
 
-def build(date: str | None) -> Path:
+def build(date: str | None, to_docs: bool = False) -> Path:
     if date:
         src = OUT_DIR / f"analysis_{date}.json"
     else:
@@ -190,8 +237,18 @@ def build(date: str | None) -> Path:
     embedded = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     html = _HTML.replace("__DATE__", data["date"]).replace("__DATA__", embedded)
 
-    PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
-    out = PREVIEW_DIR / f"族群分析台_{data['date']}.html"
+    if to_docs:
+        # 靜態網址版：固定檔名 docs/agents/index.html（每日覆寫為最新），加返回連結
+        html = html.replace(
+            '<div class="title"><span class="dot"></span>台股族群分析台</div>',
+            '<div class="title"><span class="dot"></span>台股族群分析台'
+            '<a href="../" style="font-size:12px;color:var(--accent);text-decoration:none;'
+            'margin-left:10px">← 返回主站</a></div>')
+        DOCS_DIR.mkdir(parents=True, exist_ok=True)
+        out = DOCS_DIR / "index.html"
+    else:
+        PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
+        out = PREVIEW_DIR / f"族群分析台_{data['date']}.html"
     out.write_text(html, encoding="utf-8")
     return out
 
@@ -199,8 +256,9 @@ def build(date: str | None) -> Path:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", help="指定 analysis 日期 (YYYYMMDD)")
+    ap.add_argument("--docs", action="store_true", help="輸出到 docs/agents/index.html（靜態網址）")
     args = ap.parse_args()
-    out = build(args.date)
+    out = build(args.date, to_docs=args.docs)
     print(f"→ 已產出介面：{out}")
 
 

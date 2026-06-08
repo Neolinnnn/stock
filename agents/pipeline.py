@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from agents import analysts, gemini_text  # noqa: E402
+from agents import analysts, gemini_text, news  # noqa: E402
 
 OUT_DIR = Path(__file__).resolve().parent / "output"
 REPORTS = ROOT / "daily_reports"
@@ -41,11 +41,21 @@ def _load_regime(use_macro: bool) -> dict:
         from macro import market_regime, macro_events, regime_score
         m = market_regime.run()
         e = macro_events.run()
-        return regime_score.combine(m, e)
-    # 離線 demo（與 macro/run_macro.py --demo 一致）
+        combined = regime_score.combine(m, e)
+        combined["_events"] = e.get("global_sentiment", {})  # 供 UI 顯示外電
+        return combined
+    # 離線 demo（與 macro/run_macro.py --demo 一致；附示範外電供介面預覽）
     return {
         "regime_score": 12.4, "regime": "mild_risk_on",
         "suggestion": {"exposure_pct": 70, "stance": "偏多"},
+        "_events": {"events": [
+            {"headline": "川普稱將對半導體加徵關稅", "category": "trump",
+             "impact": "bearish", "severity": 4,
+             "rationale": "衝擊台廠出口與評價", "source": ""},
+            {"headline": "美 5 月 CPI 低於預期，降息預期升溫", "category": "macro",
+             "impact": "bullish", "severity": 3,
+             "rationale": "利率敏感的成長股受惠", "source": ""},
+        ]},
     }
 
 
@@ -59,6 +69,7 @@ def run(date: str | None, use_gemini: bool, use_macro: bool) -> dict:
         stocks_out = []
         for s in sec.get("stocks", []):
             r = analysts.analyze_stock(s, regime)
+            r["news"] = news.prepare_news(s, report_dir.name)
             r["summary_text"] = gemini_text.summarize(r, use_gemini=use_gemini)
             stocks_out.append(r)
         if not stocks_out:
@@ -70,17 +81,50 @@ def run(date: str | None, use_gemini: bool, use_macro: bool) -> dict:
             "sector_score": sec_score,
             "verdict": analysts._verdict(sec_score),
             "top_pick": stocks_out[0]["name"] if stocks_out else None,
+            "synthesis": _sector_synthesis(stocks_out),
             "stocks": stocks_out,
         })
 
     sectors_out.sort(key=lambda x: x["sector_score"], reverse=True)
+    # 移除內部欄位，避免外洩進輸出
+    clean_regime = {k: v for k, v in regime.items() if k != "_events"}
     return {
         "date": report_dir.name,
-        "regime": regime,
+        "regime": clean_regime,
+        "events": news.prepare_events(regime),
         "weights": analysts.WEIGHTS,
         "sectors": sectors_out,
         "stock_count": sum(len(x["stocks"]) for x in sectors_out),
     }
+
+
+def _sector_synthesis(stocks: list[dict]) -> dict:
+    """族群級綜述：行動分布 + 多空重點 + 首選清單。"""
+    from collections import Counter
+    actions = Counter(x["decision"]["action"] for x in stocks)
+    picks = [f"{x['name']}({x['decision']['composite']})" for x in stocks[:3]]
+    bull, bear = [], []
+    n_tech_pos = sum(x["analysts"]["technical"]["score"] > 10 for x in stocks)
+    n_buy = sum(x["analysts"]["sentiment"]["signals"]["合計"] > 20000 for x in stocks)
+    n_yoy = sum(bool((x["analysts"]["fundamental"]["signals"].get("max_yoy_pct") or 0) > 50)
+                for x in stocks)
+    if n_tech_pos:
+        bull.append(f"{n_tech_pos}/{len(stocks)} 檔技術面偏多。")
+    if n_yoy:
+        bull.append(f"{n_yoy} 檔營收年增逾 50%。")
+    if n_buy:
+        bull.append(f"{n_buy} 檔法人明顯買超。")
+    n_overbought = sum(x["analysts"]["technical"]["signals"]["rsi"] > 70 for x in stocks)
+    n_sell = sum(x["analysts"]["sentiment"]["signals"]["合計"] < 0 for x in stocks)
+    if n_overbought:
+        bear.append(f"{n_overbought} 檔 RSI 過熱，留意追高。")
+    if n_sell:
+        bear.append(f"{n_sell} 檔法人賣超，籌碼鬆動。")
+    if not bull:
+        bull.append("族群多方訊號有限。")
+    if not bear:
+        bear.append("族群空方訊號有限。")
+    return {"actions": dict(actions), "top_picks": picks, "bull": bull, "bear": bear}
 
 
 def main() -> None:

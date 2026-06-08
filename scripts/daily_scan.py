@@ -252,8 +252,11 @@ def fetch_news(stock_id, stock_name, days=3):
                 continue
             result.append({
                 'date': pub_dt.strftime('%Y-%m-%d'),
+                'datetime': pub_dt.strftime('%Y-%m-%d %H:%M'),
                 'title': it.get('title', ''),
                 'source': it.get('media', {}).get('name', '鉅亨網'),
+                'url': (f"https://news.cnyes.com/news/id/{it.get('newsId')}"
+                        if it.get('newsId') else ''),
             })
             if len(result) >= 3:
                 break

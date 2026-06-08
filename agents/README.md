@@ -46,9 +46,21 @@ python agents/build_preview.py --date 20260605
 
 `technical 0.35 / sentiment 0.25 / fundamental 0.20 / macro 0.20`（技術面為主，補上其餘三面向），可於 `analysts.WEIGHTS` 調整。
 
-## 後續：靜態網址整合（待評估，尚未實作）
+## 靜態網址整合（已實作：方案 1＋3）
 
-可選方案，待與既有 `build_docs.py` 流程對齊後再決定：
-1. 把 `build_preview.py` 的輸出改寫進 `docs/`，成為每日靜態頁。
-2. 在既有每日報告頁加一個「多代理分析」分頁連結。
-3. 由 `daily_scan` workflow 跑完後自動觸發本 pipeline。
+- **方案 1（獨立新頁）**：`build_preview.py --docs` 輸出到 `docs/agents/index.html`（每日覆寫為最新），
+  並於主站 `docs/index.html` 導覽列加「🤖 多代理分析」連結。不影響既有頁面網址。
+- **方案 3（自動化）**：`.github/workflows/daily_scan.yml` 於每日掃描後自動執行
+  `pipeline.py --macro --gemini`（失敗自動降級）→ `build_preview.py --docs`，
+  產物由既有 commit 步驟一併推上 GitHub Pages。
+
+```bash
+python agents/build_preview.py --docs          # 手動產生靜態頁
+```
+
+## 新聞時效與連結（news.py）
+
+- 每則新聞標「今日 / 昨日 / N天前」時效 badge。
+- 連結優先用爬蟲存的 `url`（`daily_scan.fetch_news` 已增強抓 cnyes `newsId`）；
+  舊資料無 url 時退回 Google News 搜尋連結。
+- 外電／總經事件來自 macro grounding，含來源連結，於介面頂部顯示（影響全市場）。
