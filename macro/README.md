@@ -12,7 +12,7 @@
 | 二 | `macro_events.py` | TWSE 重訊 + 川普/總經即時頭條 | MOPS API + **Gemini Google Search grounding** | Gemini 蒐集/判讀 |
 | 三 | `regime_score.py` | 融合成最終 `regime_score` + 部位建議 | — | Claude 邏輯 |
 
-階段二的國際情緒用 **Gemini 2.5-flash 內建即時搜尋**抓川普社群發言與總經頭條，這是純技術面拿不到、且能避免資訊落後的關鍵。
+階段二的國際情緒用 **Gemini 3.5-flash 內建即時搜尋**抓川普社群發言與總經頭條，這是純技術面拿不到、且能避免資訊落後的關鍵。
 
 ## 安裝
 

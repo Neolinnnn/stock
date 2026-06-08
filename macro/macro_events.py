@@ -23,8 +23,8 @@ from typing import Any
 
 _UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
 
-# Gemini grounding 用 2.5-flash（支援 google_search 工具、免費）
-GEMINI_MODEL = os.environ.get("MACRO_GEMINI_MODEL", "gemini-2.5-flash")
+# Gemini grounding 用 3.5-flash（穩定 GA、原生 google_search、每月 5000 次免費）
+GEMINI_MODEL = os.environ.get("MACRO_GEMINI_MODEL", "gemini-3.5-flash")
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
     "{model}:generateContent?key={key}"
