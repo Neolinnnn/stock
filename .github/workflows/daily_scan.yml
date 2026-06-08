@@ -34,6 +34,8 @@ jobs:
           # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
           pip install "setuptools<68" -q
           pip install -r requirements.txt
+          # macro 模組額外依賴（多代理分析的國際指標／重訊解析）
+          pip install -r macro/requirements.txt
 
       - name: Run daily scan
         env:
@@ -74,6 +76,17 @@ jobs:
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
         run: python scripts/fundamentals_fetcher.py
+
+      - name: Build multi-agent analysis (agents)
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: |
+          # 即時 regime（國際指標 + 川普/總經 grounding）+ Gemini 敘述；失敗自動降級
+          python agents/pipeline.py --macro --gemini || python agents/pipeline.py
+          # 產生靜態頁 docs/agents/index.html（每日覆寫為最新）
+          python agents/build_preview.py --docs
 
       - name: Commit reports
         run: |
