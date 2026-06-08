@@ -1,0 +1,4 @@
+# macro 模組「額外」依賴（與主專案 requirements.txt 分開，避免影響既有環境）
+yfinance>=0.2.40        # 階段一：國際指標
+beautifulsoup4>=4.12.0  # 階段二：解析 MOPS 重訊表格
+# 階段二的 Gemini grounding 使用標準庫 urllib，無需額外套件
