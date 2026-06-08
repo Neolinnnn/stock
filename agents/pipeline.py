@@ -28,8 +28,12 @@ STOCKS_DIR = ROOT / "docs" / "stocks"   # analyzer_daily.py 產出的個股 OHLC
 _CHART_POINTS = 60   # 迷你走勢圖取最近 N 個交易日，控制 HTML 體積
 
 
-def _load_chart(stock_id: str) -> dict | None:
-    """從 docs/stocks/<id>.json 取最近 N 日收盤 + 20MA 供前端畫迷你走勢圖。"""
+def _load_tech(stock_id: str) -> dict | None:
+    """
+    從 docs/stocks/<id>.json 取技術資料：
+      - chart：近 N 日 收盤 + 5/20/60MA + 布林上下軌（供前端疊圖）
+      - snap ：最新一筆各指標（供 TradingAgents 風格技術分析師判讀）
+    """
     fp = STOCKS_DIR / f"{stock_id}.json"
     if not fp.exists():
         return None
@@ -39,15 +43,38 @@ def _load_chart(stock_id: str) -> dict | None:
         ind = d.get("indicators", {})
         close = o.get("close") or []
         dates = o.get("date") or []
-        ma20 = ind.get("ma20") or []
         if len(close) < 5:
             return None
         n = _CHART_POINTS
-        return {
+
+        def tail(key: str) -> list:
+            arr = ind.get(key) or []
+            return arr[-n:] if len(arr) == len(close) else []
+
+        def last(key: str):
+            arr = ind.get(key) or []
+            return arr[-1] if arr else None
+
+        chart = {
             "dates": dates[-n:],
             "close": close[-n:],
-            "ma20": ma20[-n:] if len(ma20) == len(close) else [],
+            "ma5": tail("ma5"),
+            "ma20": tail("ma20"),
+            "ma60": tail("ma60"),
+            "bb_upper": tail("bb_upper"),
+            "bb_lower": tail("bb_lower"),
         }
+        snap = {
+            "close": close[-1],
+            "ma5": last("ma5"), "ma20": last("ma20"), "ma60": last("ma60"),
+            "macd": last("macd"), "macd_signal": last("macd_signal"),
+            "macd_hist": last("macd_hist"),
+            "kd_k": last("kd_k"), "kd_d": last("kd_d"),
+            "bb_upper": last("bb_upper"), "bb_lower": last("bb_lower"),
+            "bb_mid": last("bb_mid"),
+            "atr": (d.get("levels", {}) or {}).get("atr"),
+        }
+        return {"chart": chart, "snap": snap}
     except Exception:
         return None
 
@@ -95,9 +122,10 @@ def run(date: str | None, use_gemini: bool, use_macro: bool) -> dict:
     for sec_name, sec in summary.get("sectors", {}).items():
         stocks_out = []
         for s in sec.get("stocks", []):
-            r = analysts.analyze_stock(s, regime)
+            tech = _load_tech(str(s.get("id", "")))
+            r = analysts.analyze_stock(s, regime, tech=(tech or {}).get("snap"))
             r["news"] = news.prepare_news(s, report_dir.name)
-            r["chart"] = _load_chart(str(s.get("id", "")))
+            r["chart"] = (tech or {}).get("chart")
             r["summary_text"] = gemini_text.summarize(r, use_gemini=use_gemini)
             stocks_out.append(r)
         if not stocks_out:

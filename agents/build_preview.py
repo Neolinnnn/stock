@@ -71,6 +71,9 @@ header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px soli
 .chart svg{display:block;width:100%;height:130px}
 .chart .lg{font-size:11px;color:var(--dim);display:flex;gap:14px;margin-top:6px;align-items:center}
 .chart .lg b{font-weight:700;color:var(--txt)}
+.tr-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.tr-table td{padding:7px 9px;border-top:1px solid var(--border);vertical-align:top;color:#c9d1d9}
+.tr-table tr:first-child td{border-top:none}
 .glossary{font-size:11px;color:var(--dim);line-height:1.9;background:var(--panel);border:1px dashed var(--border);border-radius:8px;padding:8px 12px;margin-bottom:12px}
 .glossary b{color:var(--accent)}
 .stocklink{color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;border:1px solid var(--accent);border-radius:7px;padding:3px 10px;margin-left:6px}
@@ -138,20 +141,32 @@ function fmtVal(k,v){
   }
   return v;
 }
-// 迷你走勢圖：收盤(漲綠跌紅) + 20日均線(黃)，純 SVG，client 端畫，零工作流成本
+// 技術線圖（TradingAgents 技術分析師對應線）：布林帶 + 5/20/60MA + 收盤，純 SVG client 端畫
 function sparkSVG(ch){
   if(!ch||!ch.close||ch.close.length<2) return '';
-  const c=ch.close, m=ch.ma20||[];
-  const W=560,H=130,P=8;
-  const all=c.concat(m.filter(x=>x!=null&&x>0));
+  const c=ch.close, n=c.length, W=560,H=150,P=8;
+  const series=[ch.bb_upper,ch.bb_lower,ch.ma5,ch.ma20,ch.ma60].filter(a=>a&&a.length===n);
+  let all=c.slice(); series.forEach(a=>all=all.concat(a.filter(x=>x!=null&&x>0)));
   const lo=Math.min(...all), hi=Math.max(...all), rng=(hi-lo)||1;
-  const X=i=>P+i*(W-2*P)/(c.length-1);
+  const X=i=>P+i*(W-2*P)/(n-1);
   const Y=v=>P+(H-2*P)*(1-(v-lo)/rng);
-  const path=a=>a.map((v,i)=>(v==null||v<=0)?'':`${(i&&a[i-1]!=null&&a[i-1]>0)?'L':'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
-  const up=c[c.length-1]>=c[0], col=up?'var(--bull)':'var(--bear)';
+  const ok=(a,i)=>a&&a[i]!=null&&a[i]>0;
+  const path=a=>a?a.map((v,i)=>!ok(a,i)?'':`${(i&&ok(a,i-1))?'L':'M'}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' '):'';
   let s=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
-  if(m.length===c.length) s+=`<path d="${path(m)}" fill="none" stroke="var(--warn)" stroke-width="1.2" opacity=".75"/>`;
-  s+=`<path d="${path(c)}" fill="none" stroke="${col}" stroke-width="1.8"/></svg>`;
+  // 布林帶：上下軌間填色
+  if(ch.bb_upper&&ch.bb_lower&&ch.bb_upper.length===n&&ch.bb_lower.length===n){
+    let up=[],dn=[];
+    for(let i=0;i<n;i++){ if(ok(ch.bb_upper,i))up.push(`${X(i).toFixed(1)},${Y(ch.bb_upper[i]).toFixed(1)}`); }
+    for(let i=n-1;i>=0;i--){ if(ok(ch.bb_lower,i))dn.push(`${X(i).toFixed(1)},${Y(ch.bb_lower[i]).toFixed(1)}`); }
+    if(up.length&&dn.length) s+=`<polygon points="${up.concat(dn).join(' ')}" fill="rgba(88,166,255,.07)" stroke="none"/>`;
+    s+=`<path d="${path(ch.bb_upper)}" fill="none" stroke="rgba(88,166,255,.45)" stroke-width="1" stroke-dasharray="3,3"/>`;
+    s+=`<path d="${path(ch.bb_lower)}" fill="none" stroke="rgba(88,166,255,.45)" stroke-width="1" stroke-dasharray="3,3"/>`;
+  }
+  if(ch.ma60&&ch.ma60.length===n) s+=`<path d="${path(ch.ma60)}" fill="none" stroke="#a371f7" stroke-width="1.2" opacity=".85"/>`;
+  if(ch.ma20&&ch.ma20.length===n) s+=`<path d="${path(ch.ma20)}" fill="none" stroke="var(--warn)" stroke-width="1.2" opacity=".9"/>`;
+  if(ch.ma5&&ch.ma5.length===n) s+=`<path d="${path(ch.ma5)}" fill="none" stroke="#39c5cf" stroke-width="1.2" opacity=".9"/>`;
+  const upTrend=c[n-1]>=c[0], col=upTrend?'var(--bull)':'var(--bear)';
+  s+=`<path d="${path(c)}" fill="none" stroke="${col}" stroke-width="2"/></svg>`;
   return s;
 }
 function chartBlock(st){
@@ -159,9 +174,28 @@ function chartBlock(st){
   const ch=st.chart, ds=ch.dates||[];
   const span=ds.length?`${ds[0]} ~ ${ds[ds.length-1]}`:'';
   return `<div class="chart">${sparkSVG(ch)}
-    <div class="lg"><span>收盤 <b>$${st.price}</b></span>
-    <span style="color:var(--warn)">— 20日均線</span>
-    <span style="margin-left:auto">${span}（近 ${ch.close.length} 日）</span></div></div>`;
+    <div class="lg">
+      <span style="color:${st.chart.close[st.chart.close.length-1]>=st.chart.close[0]?'var(--bull)':'var(--bear)'}">收盤 <b>$${st.price}</b></span>
+      <span style="color:#39c5cf">— 5MA</span>
+      <span style="color:var(--warn)">— 20MA</span>
+      <span style="color:#a371f7">— 60MA</span>
+      <span style="color:var(--accent)">┄ 布林帶</span>
+      <span style="margin-left:auto">${span}（近 ${ch.close.length} 日）</span></div></div>`;
+}
+// TradingAgents 風格技術分析師：跨類別判讀表
+function techReportTable(a){
+  const rep=a.tech_report;
+  if(!rep||!rep.length) return '';
+  const bc={bullish:'imp-bull',bearish:'imp-bear'};
+  const bl={bullish:'偏多',bearish:'偏空',neutral:'中性'};
+  const rows=rep.map(r=>`<tr>
+    <td style="color:var(--dim);white-space:nowrap">${r.category}</td>
+    <td style="white-space:nowrap"><b>${r.indicator}</b></td>
+    <td>${r.reading}</td>
+    <td style="text-align:right"><span class="ev-impact ${bc[r.bias]||'imp-neu'}">${bl[r.bias]||'中性'}</span></td></tr>`).join('');
+  return `<div style="margin-top:14px">
+    <div style="font-size:12px;color:var(--accent);margin-bottom:6px">🧠 技術分析師判讀（改寫自 TradingAgents · 跨趨勢/動能/擺盪/波動）</div>
+    <table class="tr-table">${rows}</table></div>`;
 }
 
 function scoreClass(v){return v>10?'pos':(v<-10?'neg':'neu')}
@@ -206,9 +240,10 @@ function analystCard(key,label,a){
   const sig=Object.entries(a.signals).map(([k,val])=>
     `<div class="c"><div class="k">${LABELS[k]||k}</div><div class="v">${fmtVal(k,val)}</div></div>`).join('');
   const chart=key==='technical'?chartBlock(CURSTK):'';
+  const tr=key==='technical'?techReportTable(a):'';
   return `<div class="acard ${key==='technical'?'active':''}" id="ac-${key}">
     <div class="ah"><b>${label}</b><span class="v ${vc}" style="background:var(--chip)">${v} · ${a.score}</span></div>
-    ${chart}<div class="kv">${sig}</div></div>`;
+    ${chart}<div class="kv">${sig}</div>${tr}</div>`;
 }
 function renderDetail(){
   const st=DATA.sectors[curSec].stocks[curStk], d=st.decision, A=st.analysts;

@@ -37,7 +37,97 @@ def _verdict(score: float) -> str:
 # ──────────────────────────────────────────────────────────────────────────
 # 分析師①  技術面
 # ──────────────────────────────────────────────────────────────────────────
-def technical(s: dict[str, Any]) -> dict[str, Any]:
+def technical_analyst(ind: dict[str, Any]) -> dict[str, Any]:
+    """
+    TradingAgents 風格技術分析師：跨類別挑互補指標（趨勢/動能/擺盪/波動），
+    各給一段「人話判讀」與分數貢獻，對應到走勢圖上的線。
+
+    ind: 最新指標快照
+      {close, ma5, ma20, ma60, macd, macd_signal, macd_hist,
+       kd_k, kd_d, bb_upper, bb_lower, bb_mid, atr, rsi}
+    回傳 {"parts": {...分數貢獻}, "report": [{category, indicator, reading, bias}]}
+    """
+    parts: dict[str, float] = {}
+    report: list[dict[str, Any]] = []
+
+    def add(cat: str, name: str, reading: str, bias: str, pts: float, key: str):
+        report.append({"category": cat, "indicator": name,
+                       "reading": reading, "bias": bias})
+        parts[key] = pts
+
+    def num(k: str):
+        v = ind.get(k)
+        return float(v) if isinstance(v, (int, float)) else None
+
+    close = num("close")
+    ma5, ma20, ma60 = num("ma5"), num("ma20"), num("ma60")
+
+    # 1) 趨勢 — 均線排列（對應圖上 5/20/60MA 三線）
+    if None not in (ma5, ma20, ma60):
+        if ma5 > ma20 > ma60:
+            add("趨勢", "均線排列(5/20/60MA)", "多頭排列：短中長期均線由上而下，趨勢偏多",
+                "bullish", 18, "均線排列")
+        elif ma5 < ma20 < ma60:
+            add("趨勢", "均線排列(5/20/60MA)", "空頭排列：均線由上而下翻空，趨勢偏弱",
+                "bearish", -18, "均線排列")
+        else:
+            add("趨勢", "均線排列(5/20/60MA)", "均線糾結，方向未明，宜等待表態",
+                "neutral", 0, "均線排列")
+        # 價格相對 20MA
+        if close is not None:
+            if close > ma20:
+                add("趨勢", "價格 vs 20MA", "收盤站上月線，中期趨勢轉強", "bullish", 6, "價格位階")
+            else:
+                add("趨勢", "價格 vs 20MA", "收盤跌破月線，中期趨勢轉弱", "bearish", -6, "價格位階")
+
+    # 2) 動能 — MACD（線、訊號、柱狀）
+    macd, sig, hist = num("macd"), num("macd_signal"), num("macd_hist")
+    if None not in (macd, sig):
+        if macd > sig and (hist or 0) > 0:
+            add("動能", "MACD", "黃金交叉且柱狀翻紅，多頭動能增強", "bullish", 12, "MACD")
+        elif macd > sig:
+            add("動能", "MACD", "MACD 在訊號線之上，動能偏多", "bullish", 6, "MACD")
+        elif macd < sig and (hist or 0) < 0:
+            add("動能", "MACD", "死亡交叉且柱狀翻黑，空頭動能增強", "bearish", -12, "MACD")
+        else:
+            add("動能", "MACD", "MACD 在訊號線之下，動能偏空", "bearish", -6, "MACD")
+
+    # 3) 擺盪 — KD 隨機指標
+    k, d = num("kd_k"), num("kd_d")
+    if k is not None:
+        if k > 80:
+            add("擺盪", "KD", f"K={k:.0f} 高檔鈍化(>80)，短線過熱", "bearish", -6, "KD")
+        elif k < 20:
+            add("擺盪", "KD", f"K={k:.0f} 低檔(<20)，超跌可留意反彈", "bullish", 6, "KD")
+        elif d is not None and k > d:
+            add("擺盪", "KD", "KD 黃金交叉於中性區，偏多", "bullish", 8, "KD")
+        elif d is not None and k < d:
+            add("擺盪", "KD", "KD 死亡交叉，偏空", "bearish", -6, "KD")
+        else:
+            add("擺盪", "KD", "KD 中性", "neutral", 0, "KD")
+
+    # 4) 波動 — 布林通道 %b（對應圖上上/下軌）
+    ub, lb = num("bb_upper"), num("bb_lower")
+    if None not in (close, ub, lb) and ub > lb:
+        pb = (close - lb) / (ub - lb)
+        if pb > 0.95:
+            add("波動", "布林通道 %b", "貼近上軌，強勢但短線過熱、留意壓回", "bearish", -4, "布林")
+        elif pb >= 0.5:
+            add("波動", "布林通道 %b", "位於中軌與上軌之間，量價偏強", "bullish", 5, "布林")
+        elif pb >= 0.05:
+            add("波動", "布林通道 %b", "位於中軌與下軌之間，量價偏弱", "bearish", -2, "布林")
+        else:
+            add("波動", "布林通道 %b", "貼近下軌，超跌、具均值回歸空間", "bullish", 3, "布林")
+        atr = num("atr")
+        if atr is not None:
+            report.append({"category": "波動", "indicator": "ATR(14)",
+                           "reading": f"波動幅度約 {atr:.1f}，可作為停損間距參考",
+                           "bias": "neutral"})
+
+    return {"parts": parts, "report": report}
+
+
+def technical(s: dict[str, Any], ind: dict[str, Any] | None = None) -> dict[str, Any]:
     ret = s.get("ret_20d") or 0.0
     rsi = s.get("rsi") or 50.0
     sharpe = s.get("cv_sharpe") or 0.0
@@ -57,12 +147,20 @@ def technical(s: dict[str, Any]) -> dict[str, Any]:
     else:
         parts["rsi"] = -15       # 超買，追高風險
 
+    # TradingAgents 風格：有指標快照時，疊加跨類別技術訊號
+    tech_report: list[dict[str, Any]] = []
+    if ind:
+        ta = technical_analyst({**ind, "rsi": rsi})
+        parts.update(ta["parts"])
+        tech_report = ta["report"]
+
     score = _clamp(sum(parts.values()))
     return {
         "score": round(score, 1),
         "verdict": _verdict(score),
         "signals": {"ret_20d": ret, "rsi": rsi, "cv_sharpe": sharpe, "signal": signal},
         "parts": {k: round(v, 1) for k, v in parts.items()},
+        "tech_report": tech_report,
     }
 
 
@@ -253,10 +351,15 @@ def decision(s: dict[str, Any], a: dict[str, dict], regime: dict[str, Any]) -> d
     }
 
 
-def analyze_stock(s: dict[str, Any], regime: dict[str, Any]) -> dict[str, Any]:
-    """單檔完整 pipeline：4 分析師 → 辯論 → 決策。"""
+def analyze_stock(s: dict[str, Any], regime: dict[str, Any],
+                  tech: dict[str, Any] | None = None) -> dict[str, Any]:
+    """單檔完整 pipeline：4 分析師 → 辯論 → 決策。
+
+    tech: 個股最新技術指標快照（來自 docs/stocks/<id>.json），
+          供 TradingAgents 風格技術分析師疊加跨類別訊號；缺則退回基本技術評分。
+    """
     a = {
-        "technical": technical(s),
+        "technical": technical(s, tech),
         "fundamental": fundamental(s),
         "macro": macro(s, regime),
         "sentiment": sentiment(s),
