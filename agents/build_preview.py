@@ -320,16 +320,19 @@ function renderDetail(){
     <div class="news-list">${newsHtml}</div>`;
 }
 function renderEvents(){
-  if(!DATA.events||!DATA.events.length) return '';
+  const head='<div class="sec-h">🌐 今日外電／總經事件（影響全市場）</div>';
+  if(!DATA.events||!DATA.events.length)
+    return head+'<div style="color:var(--dim);font-size:13px;padding:2px 0 6px">今日無近 48 小時重大外電（即時搜尋未抓到符合時效的事件）</div>';
   const items=DATA.events.map(e=>{
     const ic={bullish:'imp-bull',bearish:'imp-bear'}[e.impact]||'imp-neu';
     const lbl={bullish:'利多',bearish:'利空'}[e.impact]||'中性';
     const h=e.link?`<a href="${e.link}" target="_blank" rel="noopener">${e.headline}</a>`:e.headline;
+    const rc=e.recency?`<span class="rec ${e.recency==='今日'?'today':''}">${e.recency}</span>`:'';
     return `<div class="ev-item">${h}
-      <div class="news-meta"><span class="ev-impact ${ic}">${lbl}·強度${e.severity}</span>
-      <span>${e.category}</span><span>${e.rationale}</span><span>${e.source||''}</span></div></div>`;
+      <div class="news-meta">${rc}<span class="ev-impact ${ic}">${lbl}·強度${e.severity}</span>
+      <span>${e.category}</span><span>${e.rationale}</span><span>${e.source||''}</span>${e.date?`<span>${e.date}</span>`:''}</div></div>`;
   }).join('');
-  return `<div class="sec-h">🌐 今日外電／總經事件（影響全市場）</div><div class="ev-list">${items}</div>`;
+  return head+`<div class="ev-list">${items}</div>`;
 }
 function selTab(k,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.acard').forEach(c=>c.classList.remove('active'));

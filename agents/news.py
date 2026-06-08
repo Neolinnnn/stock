@@ -61,17 +61,30 @@ def prepare_news(stock: dict[str, Any], ref_date: str) -> list[dict[str, Any]]:
     return out
 
 
-def prepare_events(regime: dict[str, Any]) -> list[dict[str, Any]]:
-    """外電／總經事件（來自 macro grounding），整理成 UI 清單。"""
+def prepare_events(regime: dict[str, Any], ref_date: str | None = None,
+                   max_age_days: int = 3) -> list[dict[str, Any]]:
+    """外電／總經事件（來自 macro grounding），整理成 UI 清單。
+
+    加上日期與時效標籤；超過 max_age_days 的舊聞直接濾除（避免外電太舊）。
+    ref_date 為分析基準日（YYYYMMDD）；None 時以今日為準。
+    """
     sent = (regime or {}).get("_events", {}) or {}
+    rd = _to_date(ref_date) if ref_date else _dt.date.today()
     out = []
     for ev in sent.get("events", []) or []:
+        ev_date = ev.get("date", "")
+        nd = _to_date(ev_date)
+        # 有日期且超過時效 → 視為太舊，濾除
+        if nd and rd and (rd - nd).days > max_age_days:
+            continue
         src = ev.get("source", "")
         link = src if str(src).startswith("http") else (
             f"https://www.google.com/search?q={urllib.parse.quote(ev.get('headline',''))}&tbm=nws"
         )
         out.append({
             "headline": ev.get("headline", ""),
+            "date": ev_date,
+            "recency": recency_label(ev_date, rd.strftime("%Y%m%d")) if (nd and rd) else "",
             "category": ev.get("category", ""),
             "impact": ev.get("impact", "neutral"),
             "severity": ev.get("severity", 1),

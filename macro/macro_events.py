@@ -88,28 +88,33 @@ def _parse_mops_table(html: str, limit: int) -> list[dict[str, Any]]:
 # ──────────────────────────────────────────────────────────────────────────
 # B. Gemini Google Search grounding（川普 / 總經 / 國際股市）
 # ──────────────────────────────────────────────────────────────────────────
-_GROUNDING_PROMPT = """你是國際金融市場即時情報分析師。請用 Google 搜尋找出「過去 24 小時內」
-最可能影響台股與全球股市的重大事件，重點涵蓋：
+_GROUNDING_PROMPT = """你是國際金融市場即時情報分析師。今天是 {today}。
+請用 Google 搜尋找出「最近 48 小時內」最可能影響台股與全球股市的重大事件，重點涵蓋：
 1. 川普（Trump）的公開談話、政策表態、社群（Truth Social / X）發言
 2. 美國總經數據與 Fed 動向（CPI、非農、利率、FOMC 官員談話）
 3. 重大地緣政治 / 關稅 / 科技產業（半導體、AI、輝達等）新聞
 4. 國際股市與資金流的明顯異動
 
+嚴格要求：
+- 只收錄最近 48 小時內發生的事件；找不到夠新的就回傳空的 events 陣列，不要用舊聞充數。
+- 每則事件「必須」附上實際發生日期 date（格式 YYYY-MM-DD），不確定就不要收錄。
+
 只輸出 JSON（不要額外文字、不要 markdown 圍欄），格式：
-{
+{{
   "events": [
-    {
+    {{
       "headline": "事件標題",
+      "date": "YYYY-MM-DD",
       "category": "trump | macro | geopolitics | tech | flow",
       "impact": "bullish | bearish | neutral",
       "severity": 1到5的整數,
       "rationale": "一句話說明對台股/全球股市的影響",
       "source": "來源媒體或網址"
-    }
+    }}
   ],
   "overall_bias": "risk_on | neutral | risk_off",
   "summary": "兩句話總結今日國際情緒"
-}
+}}
 """
 
 
@@ -124,8 +129,9 @@ def fetch_global_sentiment() -> dict[str, Any]:
     if not key:
         return {"error": "GEMINI_API_KEY 未設定"}
 
+    prompt = _GROUNDING_PROMPT.format(today=_dt.date.today().isoformat())
     payload = json.dumps({
-        "contents": [{"parts": [{"text": _GROUNDING_PROMPT}]}],
+        "contents": [{"parts": [{"text": prompt}]}],
         "tools": [{"google_search": {}}],          # 開啟即時搜尋 grounding
         "generationConfig": {"temperature": 0.3},
     }).encode("utf-8")

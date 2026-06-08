@@ -98,18 +98,13 @@ def _load_regime(use_macro: bool) -> dict:
         combined = regime_score.combine(m, e)
         combined["_events"] = e.get("global_sentiment", {})  # 供 UI 顯示外電
         return combined
-    # 離線 demo（與 macro/run_macro.py --demo 一致；附示範外電供介面預覽）
+    # 離線 fallback（--macro 失敗時）：中性、且「不」帶任何示範外電，
+    # 避免在生產頁面顯示寫死的假新聞（外電一律以即時 grounding 為準）。
     return {
-        "regime_score": 12.4, "regime": "mild_risk_on",
-        "suggestion": {"exposure_pct": 70, "stance": "偏多"},
-        "_events": {"events": [
-            {"headline": "川普稱將對半導體加徵關稅", "category": "trump",
-             "impact": "bearish", "severity": 4,
-             "rationale": "衝擊台廠出口與評價", "source": ""},
-            {"headline": "美 5 月 CPI 低於預期，降息預期升溫", "category": "macro",
-             "impact": "bullish", "severity": 3,
-             "rationale": "利率敏感的成長股受惠", "source": ""},
-        ]},
+        "regime_score": 0.0, "regime": "neutral",
+        "suggestion": {"exposure_pct": 50, "stance": "中性",
+                       "note": "大盤 regime 資料暫缺，以中性計"},
+        "_events": {"events": []},
     }
 
 
@@ -147,7 +142,7 @@ def run(date: str | None, use_gemini: bool, use_macro: bool) -> dict:
     return {
         "date": report_dir.name,
         "regime": clean_regime,
-        "events": news.prepare_events(regime),
+        "events": news.prepare_events(regime, ref_date=report_dir.name),
         "weights": analysts.WEIGHTS,
         "sectors": sectors_out,
         "stock_count": sum(len(x["stocks"]) for x in sectors_out),
