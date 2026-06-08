@@ -1,15 +1,15 @@
 {
   "date": "20260608",
-  "timestamp": "2026-06-08T09:16:58.425942",
+  "timestamp": "2026-06-08T12:32:49.506356",
   "market": {
     "加權指數": null,
     "漲跌幅": null
   },
   "sectors": {
     "光通訊": {
-      "avg_ret_20d": -7.98,
-      "avg_rsi": 27.9,
-      "avg_sharpe": 1.11,
+      "avg_ret_20d": -3.42,
+      "avg_rsi": 35.0,
+      "avg_sharpe": 1.1,
       "stocks": [
         {
           "id": "4979",
@@ -21,29 +21,7 @@
           "signal": "HOLD",
           "cv_sharpe": -3.36,
           "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:25",
-              "title": "展碁攜手CyberPower推出不斷電系統 拓展電競與企業電力應用商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488770"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:20",
-              "title": "營收速報  - 矽創(8016)5月營收21.47億元年增率高達39.84％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488826"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:20",
-              "title": "營收速報  - 飛捷(6206)5月營收6.31億元年增率高達45.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488823"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 7231,
@@ -67,42 +45,20 @@
           "rsi10": 47.0,
           "ret_20d": 7.7,
           "signal": "HOLD",
-          "cv_sharpe": -2.96,
+          "cv_sharpe": -1.85,
           "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 皇龍(3512)5月營收2,741萬元年增率高達190.41％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488907"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -1678921,
-            "投信": 39000,
-            "自營": -56229,
-            "合計": -1696150
+            "date": "2026-06-08",
+            "外資": -580623,
+            "投信": 0,
+            "自營": -16071,
+            "合計": -596694
           },
           "target_short": 574.6,
           "target_mid": 391.8,
           "target_long": 511.4,
-          "atr14": 39.37,
+          "atr14": 39.35,
           "stop_loss": 382.3,
           "broker": null,
           "main_force": null
@@ -117,41 +73,19 @@
           "signal": "HOLD",
           "cv_sharpe": 6.16,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 140538,
-            "投信": 187989,
-            "自營": -17208,
-            "合計": 311319
+            "date": "2026-06-08",
+            "外資": -558222,
+            "投信": 331000,
+            "自營": -54722,
+            "合計": -281944
           },
           "target_short": 2574.5,
           "target_mid": 1780.8,
           "target_long": 2316.6,
-          "atr14": 172.1,
-          "stop_loss": 1750.8,
+          "atr14": 172.05,
+          "stop_loss": 1750.9,
           "broker": null,
           "main_force": null
         },
@@ -165,29 +99,7 @@
           "signal": "HOLD",
           "cv_sharpe": 4.05,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 1233747,
@@ -196,10 +108,10 @@
             "合計": 1131878
           },
           "target_short": 574.7,
-          "target_mid": 600.2,
-          "target_long": 589.8,
-          "atr14": 41.84,
-          "stop_loss": 367.8,
+          "target_mid": 642.8,
+          "target_long": 606.8,
+          "atr14": 41.82,
+          "stop_loss": 367.9,
           "broker": null,
           "main_force": null
         },
@@ -213,29 +125,7 @@
           "signal": "HOLD",
           "cv_sharpe": -0.92,
           "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -706375,
@@ -244,9 +134,9 @@
             "合計": -943970
           },
           "target_short": 179.0,
-          "target_mid": 203.4,
-          "target_long": 192.1,
-          "atr14": 10.22,
+          "target_mid": 216.0,
+          "target_long": 197.1,
+          "atr14": 10.21,
           "stop_loss": 123.6,
           "broker": null,
           "main_force": null
@@ -261,89 +151,45 @@
           "signal": "HOLD",
           "cv_sharpe": 3.77,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 552370,
-            "投信": -237000,
-            "自營": -184410,
-            "合計": 130960
+            "date": "2026-06-08",
+            "外資": 290199,
+            "投信": 0,
+            "自營": -127249,
+            "合計": 162950
           },
           "target_short": 445.6,
           "target_mid": 305.6,
           "target_long": 398.3,
-          "atr14": 28.03,
-          "stop_loss": 303.4,
+          "atr14": 28.02,
+          "stop_loss": 303.5,
           "broker": null,
           "main_force": null
         },
         {
           "id": "4906",
           "name": "正文",
-          "price": 43.7,
-          "rsi": 30.0,
-          "rsi10": 46.1,
-          "ret_20d": 8.4,
+          "price": 49.7,
+          "rsi": 87.4,
+          "rsi10": 79.1,
+          "ret_20d": 44.9,
           "signal": "HOLD",
-          "cv_sharpe": -0.27,
-          "cv_win_rate": 0.61,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "cv_sharpe": -1.45,
+          "cv_win_rate": 0.44,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 1963509,
+            "date": "2026-06-08",
+            "外資": -161617,
             "投信": 0,
-            "自營": -400821,
-            "合計": 1562688
+            "自營": -206339,
+            "合計": -367956
           },
-          "target_short": 54.7,
-          "target_mid": 37.1,
-          "target_long": 49.4,
-          "atr14": 3.17,
-          "stop_loss": 37.4,
+          "target_short": 48.0,
+          "target_mid": 42.2,
+          "target_long": 53.3,
+          "atr14": 2.72,
+          "stop_loss": 44.3,
           "broker": null,
           "main_force": null
         },
@@ -357,53 +203,31 @@
           "signal": "SELL",
           "cv_sharpe": 2.44,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -229766,
-            "投信": 190772,
-            "自營": -101919,
-            "合計": -140913
+            "date": "2026-06-08",
+            "外資": 216221,
+            "投信": -361080,
+            "自營": -18164,
+            "合計": -163023
           },
           "target_short": 2660.3,
           "target_mid": 2057.0,
           "target_long": 2613.3,
-          "atr14": 153.65,
-          "stop_loss": 2112.7,
+          "atr14": 153.59,
+          "stop_loss": 2112.8,
           "broker": null,
           "main_force": null
         }
       ],
-      "hot_count": 0,
+      "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 4
     },
     "記憶體": {
       "avg_ret_20d": -0.92,
       "avg_rsi": 32.7,
-      "avg_sharpe": 4.57,
+      "avg_sharpe": 4.88,
       "stocks": [
         {
           "id": "2408",
@@ -415,40 +239,18 @@
           "signal": "HOLD",
           "cv_sharpe": 8.73,
           "cv_win_rate": 0.89,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -11331309,
-            "投信": -331824,
-            "自營": -1013185,
-            "合計": -12676318
+            "date": "2026-06-08",
+            "外資": 1870522,
+            "投信": 198000,
+            "自營": -321026,
+            "合計": 1747496
           },
           "target_short": 414.4,
           "target_mid": 509.2,
           "target_long": 463.1,
-          "atr14": 26.94,
+          "atr14": 26.93,
           "stop_loss": 285.6,
           "broker": null,
           "main_force": null
@@ -463,40 +265,18 @@
           "signal": "HOLD",
           "cv_sharpe": 1.49,
           "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -1237661,
-            "投信": -89000,
-            "自營": -2826752,
-            "合計": -4153413
+            "date": "2026-06-08",
+            "外資": 1716709,
+            "投信": -217000,
+            "自營": -1516595,
+            "合計": -16886
           },
           "target_short": 176.9,
           "target_mid": 122.0,
           "target_long": 161.7,
-          "atr14": 12.71,
+          "atr14": 12.7,
           "stop_loss": 118.1,
           "broker": null,
           "main_force": null
@@ -511,35 +291,13 @@
           "signal": "HOLD",
           "cv_sharpe": 12.47,
           "cv_win_rate": 1.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -33721034,
-            "投信": -9513592,
-            "自營": -1694095,
-            "合計": -44928721
+            "date": "2026-06-08",
+            "外資": 30419002,
+            "投信": -9356000,
+            "自營": -1421111,
+            "合計": 19641891
           },
           "target_short": 188.6,
           "target_mid": 231.0,
@@ -559,40 +317,18 @@
           "signal": "HOLD",
           "cv_sharpe": 3.03,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -643549,
-            "投信": -1000,
-            "自營": -217764,
-            "合計": -862313
+            "date": "2026-06-08",
+            "外資": 1179139,
+            "投信": 0,
+            "自營": -579367,
+            "合計": 599772
           },
           "target_short": 267.9,
-          "target_mid": 247.9,
-          "target_long": 257.5,
-          "atr14": 18.8,
+          "target_mid": 266.0,
+          "target_long": 263.2,
+          "atr14": 18.79,
           "stop_loss": 169.4,
           "broker": null,
           "main_force": null
@@ -605,43 +341,21 @@
           "rsi10": 36.9,
           "ret_20d": -14.3,
           "signal": "HOLD",
-          "cv_sharpe": 7.2,
+          "cv_sharpe": 8.76,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -5063221,
-            "投信": -1152000,
-            "自營": -107591,
-            "合計": -6322812
+            "date": "2026-06-08",
+            "外資": 3328562,
+            "投信": -4135000,
+            "自營": -23733,
+            "合計": -830171
           },
           "target_short": 369.7,
           "target_mid": 441.8,
-          "target_long": 380.7,
-          "atr14": 22.32,
-          "stop_loss": 249.9,
+          "target_long": 379.7,
+          "atr14": 22.33,
+          "stop_loss": 249.8,
           "broker": null,
           "main_force": null
         },
@@ -655,29 +369,7 @@
           "signal": "HOLD",
           "cv_sharpe": 3.13,
           "cv_win_rate": 0.56,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 339186,
@@ -686,10 +378,10 @@
             "合計": 168587
           },
           "target_short": 1940.7,
-          "target_mid": 2511.8,
-          "target_long": 2287.7,
-          "atr14": 132.74,
-          "stop_loss": 1544.5,
+          "target_mid": 2435.0,
+          "target_long": 2262.4,
+          "atr14": 132.69,
+          "stop_loss": 1544.6,
           "broker": null,
           "main_force": null
         },
@@ -703,29 +395,7 @@
           "signal": "HOLD",
           "cv_sharpe": -11.23,
           "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -63000,
@@ -734,7 +404,7 @@
             "合計": -62279
           },
           "target_short": 56.3,
-          "target_mid": 47.4,
+          "target_mid": 50.6,
           "target_long": 58.3,
           "atr14": 2.06,
           "stop_loss": 49.3,
@@ -751,29 +421,7 @@
           "signal": "HOLD",
           "cv_sharpe": 10.34,
           "cv_win_rate": 0.83,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 1309096,
@@ -783,9 +431,9 @@
           },
           "target_short": 467.8,
           "target_mid": 604.5,
-          "target_long": 510.1,
-          "atr14": 27.2,
-          "stop_loss": 348.6,
+          "target_long": 509.5,
+          "atr14": NaN,
+          "stop_loss": NaN,
           "broker": null,
           "main_force": null
         },
@@ -797,42 +445,20 @@
           "rsi10": 42.3,
           "ret_20d": 8.0,
           "signal": "HOLD",
-          "cv_sharpe": 1.34,
-          "cv_win_rate": 0.39,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "cv_sharpe": 2.86,
+          "cv_win_rate": 0.56,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 13159351,
-            "投信": 18000,
-            "自營": -10039758,
-            "合計": 3137593
+            "date": "2026-06-08",
+            "外資": -1302647,
+            "投信": 31000,
+            "自營": -2759289,
+            "合計": -4030936
           },
           "target_short": 91.9,
-          "target_mid": 57.4,
-          "target_long": 76.4,
-          "atr14": 5.37,
+          "target_mid": 62.8,
+          "target_long": 78.6,
+          "atr14": 5.36,
           "stop_loss": 56.8,
           "broker": null,
           "main_force": null
@@ -847,53 +473,31 @@
           "signal": "HOLD",
           "cv_sharpe": 9.17,
           "cv_win_rate": 1.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 869441,
-            "投信": -456100,
+            "投信": -569100,
             "自營": -269184,
-            "合計": 144157
+            "合計": 31157
           },
           "target_short": 2912.8,
           "target_mid": 3375.0,
-          "target_long": 3043.5,
-          "atr14": 189.0,
-          "stop_loss": 1872.0,
+          "target_long": 3026.2,
+          "atr14": 188.9,
+          "stop_loss": 1872.2,
           "broker": null,
           "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 7
+      "qualified_count": 8
     },
     "AI伺服器": {
       "avg_ret_20d": 12.33,
       "avg_rsi": 45.2,
-      "avg_sharpe": 1.48,
+      "avg_sharpe": -0.97,
       "stocks": [
         {
           "id": "2317",
@@ -905,41 +509,19 @@
           "signal": "HOLD",
           "cv_sharpe": 6.66,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -3318613,
-            "投信": 262734,
-            "自營": -2323075,
-            "合計": -5378954
+            "date": "2026-06-08",
+            "外資": -5183049,
+            "投信": 643000,
+            "自營": -1461718,
+            "合計": -6001767
           },
           "target_short": 308.7,
-          "target_mid": 229.1,
-          "target_long": 283.0,
-          "atr14": 12.67,
-          "stop_loss": 244.2,
+          "target_mid": 229.2,
+          "target_long": 281.9,
+          "atr14": NaN,
+          "stop_loss": NaN,
           "broker": null,
           "main_force": null
         },
@@ -951,41 +533,19 @@
           "rsi10": 59.8,
           "ret_20d": 9.6,
           "signal": "HOLD",
-          "cv_sharpe": 4.72,
-          "cv_win_rate": 0.75,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "cv_sharpe": 2.01,
+          "cv_win_rate": 0.58,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -21411443,
-            "投信": 19824766,
-            "自營": 90756,
-            "合計": -1495921
+            "date": "2026-06-08",
+            "外資": -16265182,
+            "投信": 17760000,
+            "自營": 147332,
+            "合計": 1642150
           },
           "target_short": 419.5,
           "target_mid": 320.0,
-          "target_long": 392.1,
+          "target_long": 391.0,
           "atr14": 20.62,
           "stop_loss": 335.3,
           "broker": null,
@@ -1001,39 +561,17 @@
           "signal": "HOLD",
           "cv_sharpe": 0.89,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 4079787,
-            "投信": 137581,
-            "自營": -509609,
-            "合計": 3707759
+            "date": "2026-06-08",
+            "外資": -1985283,
+            "投信": 267000,
+            "自營": -1120227,
+            "合計": -2838510
           },
           "target_short": 190.9,
-          "target_mid": 168.6,
-          "target_long": 182.2,
+          "target_mid": 176.2,
+          "target_long": 184.8,
           "atr14": 9.07,
           "stop_loss": 145.4,
           "broker": null,
@@ -1049,39 +587,17 @@
           "signal": "HOLD",
           "cv_sharpe": -4.95,
           "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 5346355,
-            "投信": -768393,
-            "自營": -126144,
-            "合計": 4451818
+            "date": "2026-06-08",
+            "外資": 2112446,
+            "投信": 6000,
+            "自營": -903776,
+            "合計": 1214670
           },
           "target_short": 400.5,
-          "target_mid": 323.0,
-          "target_long": 371.1,
+          "target_mid": 345.2,
+          "target_long": 378.4,
           "atr14": 18.99,
           "stop_loss": 307.0,
           "broker": null,
@@ -1097,39 +613,17 @@
           "signal": "HOLD",
           "cv_sharpe": -1.98,
           "cv_win_rate": 0.47,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -14167978,
-            "投信": 14532004,
-            "自營": -560689,
-            "合計": -196663
+            "date": "2026-06-08",
+            "外資": -16383688,
+            "投信": 13450998,
+            "自營": -690606,
+            "合計": -3623296
           },
           "target_short": 100.6,
           "target_mid": 78.3,
-          "target_long": 96.5,
+          "target_long": 96.1,
           "atr14": 3.86,
           "stop_loss": 84.4,
           "broker": null,
@@ -1143,41 +637,19 @@
           "rsi10": 63.5,
           "ret_20d": 23.0,
           "signal": "HOLD",
-          "cv_sharpe": 3.52,
-          "cv_win_rate": 0.75,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "cv_sharpe": -8.43,
+          "cv_win_rate": 0.25,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -400487,
-            "投信": -534588,
-            "自營": -10065,
-            "合計": -945140
+            "date": "2026-06-08",
+            "外資": 1494642,
+            "投信": -1065810,
+            "自營": 87116,
+            "合計": 515948
           },
           "target_short": 950.0,
           "target_mid": 717.4,
-          "target_long": 868.8,
+          "target_long": 865.5,
           "atr14": 40.66,
           "stop_loss": 762.7,
           "broker": null,
@@ -1186,12 +658,12 @@
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 4
+      "qualified_count": 3
     },
     "封測": {
-      "avg_ret_20d": 8.7,
-      "avg_rsi": 31.5,
-      "avg_sharpe": 1.55,
+      "avg_ret_20d": 8.73,
+      "avg_rsi": 30.7,
+      "avg_sharpe": 1.81,
       "stocks": [
         {
           "id": "3711",
@@ -1201,43 +673,21 @@
           "rsi10": 43.0,
           "ret_20d": 0.6,
           "signal": "HOLD",
-          "cv_sharpe": 2.37,
+          "cv_sharpe": 3.73,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -850510,
-            "投信": -707065,
-            "自營": 178641,
-            "合計": -1378934
+            "date": "2026-06-08",
+            "外資": -4082766,
+            "投信": 162000,
+            "自營": 219181,
+            "合計": -3701585
           },
           "target_short": 666.6,
           "target_mid": 459.0,
           "target_long": 597.7,
-          "atr14": 36.24,
-          "stop_loss": 467.5,
+          "atr14": 36.21,
+          "stop_loss": 467.6,
           "broker": null,
           "main_force": null
         },
@@ -1251,41 +701,19 @@
           "signal": "HOLD",
           "cv_sharpe": 5.06,
           "cv_win_rate": 0.58,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -6618982,
-            "投信": -412405,
-            "自營": -506026,
-            "合計": -7537413
+            "date": "2026-06-08",
+            "外資": -7089088,
+            "投信": -975000,
+            "自營": -1118242,
+            "合計": -9182330
           },
           "target_short": 338.5,
           "target_mid": 245.2,
           "target_long": 315.8,
-          "atr14": 20.88,
-          "stop_loss": 246.7,
+          "atr14": NaN,
+          "stop_loss": NaN,
           "broker": null,
           "main_force": null
         },
@@ -1299,29 +727,7 @@
           "signal": "HOLD",
           "cv_sharpe": 6.17,
           "cv_win_rate": 0.72,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 13487,
@@ -1332,8 +738,8 @@
           "target_short": 3988.8,
           "target_mid": 3030.2,
           "target_long": 3863.7,
-          "atr14": 273.84,
-          "stop_loss": 3017.3,
+          "atr14": 273.49,
+          "stop_loss": 3018.0,
           "broker": null,
           "main_force": null
         },
@@ -1345,41 +751,19 @@
           "rsi10": 50.4,
           "ret_20d": 33.7,
           "signal": "HOLD",
-          "cv_sharpe": 9.5,
-          "cv_win_rate": 0.89,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "cv_sharpe": 6.44,
+          "cv_win_rate": 0.72,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 271005,
-            "投信": -363000,
-            "自營": -271795,
-            "合計": -363790
+            "date": "2026-06-08",
+            "外資": 1825121,
+            "投信": -5000,
+            "自營": -1215703,
+            "合計": 604418
           },
           "target_short": 154.5,
           "target_mid": 105.0,
-          "target_long": 136.2,
+          "target_long": 135.4,
           "atr14": 7.3,
           "stop_loss": 108.9,
           "broker": null,
@@ -1395,35 +779,13 @@
           "signal": "HOLD",
           "cv_sharpe": 2.01,
           "cv_win_rate": 0.57,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -605063,
-            "投信": -170866,
-            "自營": -118281,
-            "合計": -894210
+            "date": "2026-06-08",
+            "外資": -5299352,
+            "投信": -19000,
+            "自營": -228178,
+            "合計": -5546530
           },
           "target_short": 239.6,
           "target_mid": 170.8,
@@ -1443,35 +805,13 @@
           "signal": "HOLD",
           "cv_sharpe": 7.57,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:51",
-              "title": "全福神經營養性角膜炎新藥預計6月完成收案 力拚年底國際授權",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488190"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 穎崴(6515)5月營收10.73億元年增率高達119.79％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488909"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 07:50",
-              "title": "營收速報  - 威潤(6465)5月營收2,067萬元年增率高達169.58％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488908"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 2688350,
-            "投信": -4639797,
-            "自營": -2063835,
-            "合計": -4015282
+            "date": "2026-06-08",
+            "外資": 4029811,
+            "投信": -4585000,
+            "自營": -410679,
+            "合計": -965868
           },
           "target_short": 409.1,
           "target_mid": 262.6,
@@ -1484,48 +824,26 @@
         {
           "id": "8150",
           "name": "南茂",
-          "price": 87.2,
-          "rsi": 33.2,
-          "rsi10": 45.6,
-          "ret_20d": -4.2,
+          "price": 30.35,
+          "rsi": 22.5,
+          "rsi10": 29.7,
+          "ret_20d": -3.8,
           "signal": "HOLD",
-          "cv_sharpe": -5.33,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 百一(6152)5月營收1.85億元年增率高達78.63％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488968"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 康普(4739)5月營收11.60億元年增率高達140.95％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488967"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:20",
-              "title": "營收速報  - 台航(2617)5月營收4.50億元年增率高達33.31％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488966"
-            }
-          ],
+          "cv_sharpe": -7.9,
+          "cv_win_rate": 0.25,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 1710051,
-            "投信": -12000,
-            "自營": -1057343,
-            "合計": 640708
+            "date": "2026-06-08",
+            "外資": 571045,
+            "投信": 0,
+            "自營": -414051,
+            "合計": 156994
           },
-          "target_short": 111.1,
-          "target_mid": 107.7,
-          "target_long": 110.6,
-          "atr14": 7.72,
-          "stop_loss": 71.8,
+          "target_short": 33.3,
+          "target_mid": 41.5,
+          "target_long": 39.1,
+          "atr14": 3.06,
+          "stop_loss": 24.2,
           "broker": null,
           "main_force": null
         },
@@ -1539,29 +857,7 @@
           "signal": "HOLD",
           "cv_sharpe": -13.57,
           "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 4875750,
@@ -1587,29 +883,7 @@
           "signal": "HOLD",
           "cv_sharpe": 9.94,
           "cv_win_rate": 0.89,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -228669,
@@ -1629,47 +903,25 @@
           "id": "2369",
           "name": "菱生",
           "price": 31.45,
-          "rsi": 20.3,
-          "rsi10": 37.9,
+          "rsi": 20.4,
+          "rsi10": 38.2,
           "ret_20d": 1.5,
           "signal": "HOLD",
-          "cv_sharpe": -8.89,
-          "cv_win_rate": 0.11,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "cv_sharpe": -6.52,
+          "cv_win_rate": 0.17,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 227352,
+            "date": "2026-06-08",
+            "外資": -4603900,
             "投信": 0,
-            "自營": 84926,
-            "合計": 312278
+            "自營": -117309,
+            "合計": -4721209
           },
           "target_short": 42.1,
           "target_mid": 26.7,
           "target_long": 36.1,
-          "atr14": 2.33,
-          "stop_loss": 26.8,
+          "atr14": 2.41,
+          "stop_loss": 26.6,
           "broker": null,
           "main_force": null
         },
@@ -1683,41 +935,19 @@
           "signal": "HOLD",
           "cv_sharpe": -3.13,
           "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -1768077,
-            "投信": 0,
-            "自營": -663477,
-            "合計": -2431554
+            "date": "2026-06-08",
+            "外資": -3077671,
+            "投信": 6000,
+            "自營": -1654287,
+            "合計": -4725958
           },
           "target_short": 63.0,
-          "target_mid": 63.5,
-          "target_long": 64.1,
-          "atr14": 3.27,
-          "stop_loss": 45.6,
+          "target_mid": 68.6,
+          "target_long": 65.8,
+          "atr14": 3.28,
+          "stop_loss": 45.5,
           "broker": null,
           "main_force": null
         },
@@ -1729,43 +959,21 @@
           "rsi10": 45.0,
           "ret_20d": 17.8,
           "signal": "HOLD",
-          "cv_sharpe": 3.8,
-          "cv_win_rate": 0.83,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "cv_sharpe": 9.02,
+          "cv_win_rate": 0.72,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 341000,
+            "date": "2026-06-08",
+            "外資": 248014,
             "投信": 0,
-            "自營": -125742,
-            "合計": 215258
+            "自營": -242205,
+            "合計": 5809
           },
           "target_short": 282.1,
           "target_mid": 185.7,
           "target_long": 244.3,
-          "atr14": 12.13,
-          "stop_loss": 194.2,
+          "atr14": 12.11,
+          "stop_loss": 194.3,
           "broker": null,
           "main_force": null
         },
@@ -1779,35 +987,13 @@
           "signal": "HOLD",
           "cv_sharpe": 4.65,
           "cv_win_rate": 0.61,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 8380315,
-            "投信": -3807000,
-            "自營": 788067,
-            "合計": 5361382
+            "date": "2026-06-08",
+            "外資": -1383985,
+            "投信": 0,
+            "自營": -433249,
+            "合計": -1817234
           },
           "target_short": 172.2,
           "target_mid": 126.2,
@@ -1825,7 +1011,7 @@
     "光學": {
       "avg_ret_20d": 33.57,
       "avg_rsi": 52.4,
-      "avg_sharpe": 1.82,
+      "avg_sharpe": 1.94,
       "stocks": [
         {
           "id": "3008",
@@ -1837,40 +1023,18 @@
           "signal": "HOLD",
           "cv_sharpe": -2.07,
           "cv_win_rate": 0.58,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 29076,
-            "投信": -147585,
-            "自營": -63465,
-            "合計": -181974
+            "date": "2026-06-08",
+            "外資": 486094,
+            "投信": -26070,
+            "自營": -136016,
+            "合計": 324008
           },
           "target_short": 4131.1,
           "target_mid": 3004.8,
-          "target_long": 3766.9,
-          "atr14": 223.69,
+          "target_long": 3754.0,
+          "atr14": 223.68,
           "stop_loss": 3087.6,
           "broker": null,
           "main_force": null
@@ -1883,42 +1047,20 @@
           "rsi10": 67.8,
           "ret_20d": 28.2,
           "signal": "HOLD",
-          "cv_sharpe": 5.7,
+          "cv_sharpe": 5.94,
           "cv_win_rate": 0.83,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 擎亞(8096)5月營收39.81億元年增率高達154.5％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488972"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -585600,
-            "投信": 403000,
-            "自營": 17802,
-            "合計": -164798
+            "date": "2026-06-08",
+            "外資": 30103,
+            "投信": 0,
+            "自營": -29803,
+            "合計": 300
           },
           "target_short": 670.6,
           "target_mid": 555.9,
-          "target_long": 672.2,
-          "atr14": 35.47,
+          "target_long": 669.9,
+          "atr14": 35.46,
           "stop_loss": 583.1,
           "broker": null,
           "main_force": null
@@ -1929,9 +1071,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 1.2,
-      "avg_rsi": 31.3,
-      "avg_sharpe": -3.86,
+      "avg_ret_20d": -0.47,
+      "avg_rsi": 29.6,
+      "avg_sharpe": -3.18,
       "stocks": [
         {
           "id": "2454",
@@ -1943,41 +1085,19 @@
           "signal": "HOLD",
           "cv_sharpe": -3.33,
           "cv_win_rate": 0.12,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 414722,
-            "投信": -108257,
-            "自營": -357424,
-            "合計": -50959
+            "date": "2026-06-08",
+            "外資": -2498078,
+            "投信": 536440,
+            "自營": -271427,
+            "合計": -2233065
           },
           "target_short": 5001.6,
           "target_mid": 3459.5,
           "target_long": 4500.5,
-          "atr14": 302.22,
-          "stop_loss": 3465.6,
+          "atr14": 302.15,
+          "stop_loss": 3465.7,
           "broker": null,
           "main_force": null
         },
@@ -1991,39 +1111,17 @@
           "signal": "HOLD",
           "cv_sharpe": -7.28,
           "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 349014,
-            "投信": -74815,
-            "自營": -201128,
-            "合計": 73071
+            "date": "2026-06-08",
+            "外資": 719001,
+            "投信": -32187,
+            "自營": -222087,
+            "合計": 464727
           },
           "target_short": 507.1,
           "target_mid": 402.1,
-          "target_long": 489.6,
+          "target_long": 488.1,
           "atr14": 16.67,
           "stop_loss": 439.7,
           "broker": null,
@@ -2039,29 +1137,7 @@
           "signal": "HOLD",
           "cv_sharpe": -4.88,
           "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -201211,
@@ -2070,10 +1146,10 @@
             "合計": -314137
           },
           "target_short": 891.3,
-          "target_mid": 563.5,
-          "target_long": 729.2,
-          "atr14": 56.47,
-          "stop_loss": 550.1,
+          "target_mid": 576.9,
+          "target_long": 728.5,
+          "atr14": 56.48,
+          "stop_loss": 550.0,
           "broker": null,
           "main_force": null
         },
@@ -2085,43 +1161,47 @@
           "rsi10": 38.5,
           "ret_20d": -12.8,
           "signal": "HOLD",
-          "cv_sharpe": -3.63,
-          "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "cv_sharpe": -3.83,
+          "cv_win_rate": 0.33,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 9000,
+            "date": "2026-06-08",
+            "外資": -110829,
             "投信": 0,
-            "自營": -120985,
-            "合計": -111985
+            "自營": -88324,
+            "合計": -199153
           },
           "target_short": 229.0,
           "target_mid": 136.4,
           "target_long": 187.0,
-          "atr14": 15.57,
+          "atr14": 15.56,
           "stop_loss": 129.4,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "2388",
+          "name": "威盛",
+          "price": 64.8,
+          "rsi": 14.4,
+          "rsi10": 30.3,
+          "ret_20d": -15.5,
+          "signal": "HOLD",
+          "cv_sharpe": -0.52,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-06-08",
+            "外資": 847809,
+            "投信": 0,
+            "自營": -120471,
+            "合計": 727338
+          },
+          "target_short": 87.1,
+          "target_mid": 75.4,
+          "target_long": 81.3,
+          "atr14": 4.98,
+          "stop_loss": 54.8,
           "broker": null,
           "main_force": null
         },
@@ -2135,41 +1215,19 @@
           "signal": "HOLD",
           "cv_sharpe": -1.56,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -2833213,
-            "投信": 2817131,
-            "自營": 10566,
-            "合計": -5516
+            "date": "2026-06-08",
+            "外資": -2708337,
+            "投信": 2655000,
+            "自營": -60841,
+            "合計": -114178
           },
           "target_short": 654.7,
           "target_mid": 506.6,
-          "target_long": 627.2,
-          "atr14": 31.01,
-          "stop_loss": 534.0,
+          "target_long": 623.1,
+          "atr14": 31.03,
+          "stop_loss": 533.9,
           "broker": null,
           "main_force": null
         },
@@ -2177,47 +1235,25 @@
           "id": "6415",
           "name": "矽力-KY",
           "price": 524.0,
-          "rsi": 29.6,
-          "rsi10": 44.5,
+          "rsi": 29.8,
+          "rsi10": 45.6,
           "ret_20d": 12.0,
           "signal": "HOLD",
-          "cv_sharpe": -10.44,
-          "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:37",
-              "title": "挺進U15世界盃！新北市逆轉奪冠拿下中華隊組訓權 華南金總座親授MVP專屬球棒",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488836"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            }
-          ],
+          "cv_sharpe": -6.78,
+          "cv_win_rate": 0.17,
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 113871,
-            "投信": -56000,
-            "自營": -13304,
-            "合計": 44567
+            "date": "2026-06-08",
+            "外資": -11430,
+            "投信": 14000,
+            "自營": -48894,
+            "合計": -46324
           },
           "target_short": 676.4,
           "target_mid": 445.4,
           "target_long": 585.9,
-          "atr14": 41.01,
-          "stop_loss": 442.0,
+          "atr14": 41.57,
+          "stop_loss": 440.9,
           "broker": null,
           "main_force": null
         },
@@ -2231,40 +1267,18 @@
           "signal": "HOLD",
           "cv_sharpe": 2.16,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -184078,
-            "投信": -2285,
-            "自營": -42085,
-            "合計": -228448
+            "date": "2026-06-08",
+            "外資": 18518,
+            "投信": -1000,
+            "自營": -56370,
+            "合計": -38852
           },
           "target_short": 1613.5,
-          "target_mid": 1513.0,
-          "target_long": 1592.7,
-          "atr14": 82.56,
+          "target_mid": 1647.7,
+          "target_long": 1638.0,
+          "atr14": 82.54,
           "stop_loss": 1234.9,
           "broker": null,
           "main_force": null
@@ -2279,39 +1293,17 @@
           "signal": "HOLD",
           "cv_sharpe": 0.1,
           "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -8625,
-            "投信": -15538,
-            "自營": -36728,
-            "合計": -60891
+            "date": "2026-06-08",
+            "外資": -228323,
+            "投信": -12481,
+            "自營": -12427,
+            "合計": -253231
           },
           "target_short": 174.2,
-          "target_mid": 140.1,
-          "target_long": 164.4,
+          "target_mid": 142.1,
+          "target_long": 165.1,
           "atr14": 6.96,
           "stop_loss": 142.6,
           "broker": null,
@@ -2327,38 +1319,16 @@
           "signal": "HOLD",
           "cv_sharpe": -5.92,
           "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 台汽電(8926)5月營收72.80億元年增率高達768.17％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488973"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -868000,
+            "date": "2026-06-08",
+            "外資": 191413,
             "投信": 0,
-            "自營": -2413,
-            "合計": -870413
+            "自營": 1000,
+            "合計": 192413
           },
           "target_short": 10.4,
-          "target_mid": 9.0,
+          "target_mid": 9.4,
           "target_long": 10.4,
           "atr14": 0.5,
           "stop_loss": 8.5,
@@ -2373,7 +1343,7 @@
     "車用電子": {
       "avg_ret_20d": 9.55,
       "avg_rsi": 39.5,
-      "avg_sharpe": -4.94,
+      "avg_sharpe": -4.63,
       "stocks": [
         {
           "id": "3552",
@@ -2385,29 +1355,7 @@
           "signal": "HOLD",
           "cv_sharpe": -4.42,
           "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -110099,
@@ -2416,8 +1364,8 @@
             "合計": -128322
           },
           "target_short": 57.4,
-          "target_mid": 49.6,
-          "target_long": 56.7,
+          "target_mid": 54.8,
+          "target_long": 58.8,
           "atr14": 2.38,
           "stop_loss": 44.1,
           "broker": null,
@@ -2431,41 +1379,19 @@
           "rsi10": 51.3,
           "ret_20d": 11.7,
           "signal": "HOLD",
-          "cv_sharpe": -4.43,
+          "cv_sharpe": -3.51,
           "cv_win_rate": 0.22,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:21",
-              "title": "營收速報  - 合騏(8937)5月營收8,941萬元年增率高達1337.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488974"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 292375,
+            "date": "2026-06-08",
+            "外資": -29077,
             "投信": 0,
-            "自營": -8000,
-            "合計": 284375
+            "自營": -7000,
+            "合計": -36077
           },
           "target_short": 42.1,
           "target_mid": 56.7,
-          "target_long": 49.9,
+          "target_long": 49.7,
           "atr14": 1.83,
           "stop_loss": 34.1,
           "broker": null,
@@ -2481,35 +1407,13 @@
           "signal": "HOLD",
           "cv_sharpe": -5.97,
           "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -229000,
+            "date": "2026-06-08",
+            "外資": 101000,
             "投信": 0,
-            "自營": -8002,
-            "合計": -237002
+            "自營": 833,
+            "合計": 101833
           },
           "target_short": 30.6,
           "target_mid": 41.6,
@@ -2539,40 +1443,18 @@
           "signal": "HOLD",
           "cv_sharpe": -1.81,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": -47000,
+            "date": "2026-06-08",
+            "外資": 23074,
             "投信": 0,
-            "自營": 692,
-            "合計": -46308
+            "自營": -1534,
+            "合計": 21540
           },
           "target_short": 234.2,
           "target_mid": 178.1,
-          "target_long": 219.8,
-          "atr14": 8.96,
+          "target_long": 219.2,
+          "atr14": 8.97,
           "stop_loss": 191.6,
           "broker": null,
           "main_force": null
@@ -2597,41 +1479,19 @@
           "signal": "HOLD",
           "cv_sharpe": 8.12,
           "cv_win_rate": 0.83,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 219016,
-            "投信": -4000,
-            "自營": -22213,
-            "合計": 192803
+            "date": "2026-06-08",
+            "外資": 270313,
+            "投信": 38000,
+            "自營": -15915,
+            "合計": 292398
           },
           "target_short": 599.1,
           "target_mid": 414.4,
           "target_long": 539.1,
-          "atr14": 33.28,
-          "stop_loss": 420.9,
+          "atr14": 33.26,
+          "stop_loss": 421.0,
           "broker": null,
           "main_force": null
         },
@@ -2645,35 +1505,13 @@
           "signal": "HOLD",
           "cv_sharpe": 5.58,
           "cv_win_rate": 0.73,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
-            "date": "2026-06-05",
-            "外資": 126740,
+            "date": "2026-06-08",
+            "外資": 15400,
             "投信": 0,
-            "自營": -1531,
-            "合計": 125209
+            "自營": 525,
+            "合計": 15925
           },
           "target_short": 138.6,
           "target_mid": 104.5,
@@ -2693,29 +1531,7 @@
           "signal": "HOLD",
           "cv_sharpe": -3.25,
           "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 188724,
@@ -2724,9 +1540,9 @@
             "合計": 190329
           },
           "target_short": 609.7,
-          "target_mid": 425.8,
-          "target_long": 552.8,
-          "atr14": 34.95,
+          "target_mid": 426.5,
+          "target_long": 553.1,
+          "atr14": 34.96,
           "stop_loss": 431.1,
           "broker": null,
           "main_force": null
@@ -2741,29 +1557,7 @@
           "signal": "HOLD",
           "cv_sharpe": 0.39,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -572,
@@ -2773,9 +1567,9 @@
           },
           "target_short": 482.3,
           "target_mid": 333.2,
-          "target_long": 430.6,
-          "atr14": 25.23,
-          "stop_loss": 341.5,
+          "target_long": 428.8,
+          "atr14": 25.22,
+          "stop_loss": 341.6,
           "broker": null,
           "main_force": null
         },
@@ -2789,29 +1583,7 @@
           "signal": "SELL",
           "cv_sharpe": 2.17,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:43",
-              "title": "餐飲市況熱 王品5月營收超越年節寫新高紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488926"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:41",
-              "title": "瞄準都更危老融資！一銀首發15億元社會責任債6月26日掛牌 永續金融3面向全到位",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488925"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:31",
-              "title": "鈺祥(7909) 5月營收創歷史新高！ 先進製程需求帶動再生型濾網出貨顯著增溫，鈺祥穩坐AMC綠色供應鏈龍頭",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488914"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 485176,
@@ -2822,7 +1594,7 @@
           "target_short": 676.3,
           "target_mid": 482.8,
           "target_long": 623.7,
-          "atr14": 43.72,
+          "atr14": 43.7,
           "stop_loss": 480.6,
           "broker": null,
           "main_force": null
@@ -2837,29 +1609,7 @@
           "signal": "HOLD",
           "cv_sharpe": 5.21,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 台中銀(2812)5月營收19.63億元年增率高達28.33％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489037"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 志聖(2467)5月營收10.22億元年增率高達74.55％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489036"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "金像電5月營收87.73億元創新高年增87% PCB股中與臻鼎併肩抗跌逆漲",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488953"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 45002,
@@ -2870,8 +1620,8 @@
           "target_short": 4219.3,
           "target_mid": 2571.2,
           "target_long": 3445.4,
-          "atr14": 305.65,
-          "stop_loss": 2413.7,
+          "atr14": 305.46,
+          "stop_loss": 2414.1,
           "broker": null,
           "main_force": null
         },
@@ -2885,29 +1635,7 @@
           "signal": "SELL",
           "cv_sharpe": 4.85,
           "cv_win_rate": 0.83,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 寬魚國際(6101)5月營收2.17億元年增率高達224.28％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489039"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 玉晶光(3406)5月營收16.29億元年增率高達30.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489038"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 490100,
@@ -2916,8 +1644,8 @@
             "合計": 290354
           },
           "target_short": 134.9,
-          "target_mid": 91.4,
-          "target_long": 119.4,
+          "target_mid": 97.3,
+          "target_long": 121.8,
           "atr14": 7.96,
           "stop_loss": 91.6,
           "broker": null,
@@ -2933,29 +1661,7 @@
           "signal": "HOLD",
           "cv_sharpe": 2.3,
           "cv_win_rate": 0.75,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 寬魚國際(6101)5月營收2.17億元年增率高達224.28％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489039"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 玉晶光(3406)5月營收16.29億元年增率高達30.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489038"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 57164,
@@ -2966,8 +1672,8 @@
           "target_short": 1533.8,
           "target_mid": 977.5,
           "target_long": 1295.8,
-          "atr14": 95.21,
-          "stop_loss": 959.6,
+          "atr14": 95.23,
+          "stop_loss": 959.5,
           "broker": null,
           "main_force": null
         },
@@ -2981,41 +1687,19 @@
           "signal": "HOLD",
           "cv_sharpe": -3.1,
           "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 寬魚國際(6101)5月營收2.17億元年增率高達224.28％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489039"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 玉晶光(3406)5月營收16.29億元年增率高達30.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489038"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -145591,
-            "投信": 35998,
+            "投信": 123998,
             "自營": -5893,
-            "合計": -115486
+            "合計": -27486
           },
           "target_short": 1246.9,
           "target_mid": 918.0,
           "target_long": 1178.2,
-          "atr14": 95.69,
-          "stop_loss": 888.6,
+          "atr14": 95.67,
+          "stop_loss": 888.7,
           "broker": null,
           "main_force": null
         },
@@ -3029,29 +1713,7 @@
           "signal": "HOLD",
           "cv_sharpe": -12.55,
           "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 寬魚國際(6101)5月營收2.17億元年增率高達224.28％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489039"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 玉晶光(3406)5月營收16.29億元年增率高達30.24％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489038"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 12192,
@@ -3060,10 +1722,10 @@
             "合計": 25882
           },
           "target_short": 3633.3,
-          "target_mid": 2575.5,
-          "target_long": 3332.5,
-          "atr14": 227.79,
-          "stop_loss": 2574.4,
+          "target_mid": 2576.6,
+          "target_long": 3332.9,
+          "atr14": 227.85,
+          "stop_loss": 2574.3,
           "broker": null,
           "main_force": null
         },
@@ -3077,29 +1739,7 @@
           "signal": "HOLD",
           "cv_sharpe": 6.89,
           "cv_win_rate": 0.75,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 寬魚國際(6101)5月營收2.17億元年增率高達224.28％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489039"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 465655,
@@ -3110,8 +1750,8 @@
           "target_short": 959.6,
           "target_mid": 685.9,
           "target_long": 885.9,
-          "atr14": 58.63,
-          "stop_loss": 689.7,
+          "atr14": 58.62,
+          "stop_loss": 689.8,
           "broker": null,
           "main_force": null
         },
@@ -3125,29 +1765,7 @@
           "signal": "HOLD",
           "cv_sharpe": 3.9,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 寬魚國際(6101)5月營收2.17億元年增率高達224.28％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489039"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -4082766,
@@ -3158,8 +1776,8 @@
           "target_short": 666.6,
           "target_mid": 459.0,
           "target_long": 597.7,
-          "atr14": 36.24,
-          "stop_loss": 467.5,
+          "atr14": 36.21,
+          "stop_loss": 467.6,
           "broker": null,
           "main_force": null
         },
@@ -3173,41 +1791,19 @@
           "signal": "HOLD",
           "cv_sharpe": 5.06,
           "cv_win_rate": 0.58,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -7089088,
-            "投信": 80000,
+            "投信": -975000,
             "自營": -1118242,
-            "合計": -8127330
+            "合計": -9182330
           },
           "target_short": 338.5,
           "target_mid": 245.2,
           "target_long": 315.8,
-          "atr14": 20.88,
-          "stop_loss": 246.7,
+          "atr14": NaN,
+          "stop_loss": NaN,
           "broker": null,
           "main_force": null
         },
@@ -3221,29 +1817,7 @@
           "signal": "HOLD",
           "cv_sharpe": 7.57,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 4029811,
@@ -3266,8 +1840,8 @@
     },
     "銅箔/CCL": {
       "avg_ret_20d": -1.02,
-      "avg_rsi": 41.1,
-      "avg_sharpe": 3.4,
+      "avg_rsi": 41.2,
+      "avg_sharpe": 4.67,
       "stocks": [
         {
           "id": "8358",
@@ -3279,29 +1853,7 @@
           "signal": "HOLD",
           "cv_sharpe": 6.41,
           "cv_win_rate": 0.42,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 530655,
@@ -3312,7 +1864,7 @@
           "target_short": 684.2,
           "target_mid": 498.1,
           "target_long": 640.8,
-          "atr14": 45.55,
+          "atr14": 45.54,
           "stop_loss": 494.9,
           "broker": null,
           "main_force": null
@@ -3327,41 +1879,19 @@
           "signal": "SELL",
           "cv_sharpe": 5.86,
           "cv_win_rate": 0.36,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 6663,
-            "投信": -6000,
+            "投信": -7300,
             "自營": 13230,
-            "合計": 13893
+            "合計": 12593
           },
           "target_short": 5457.9,
           "target_mid": 4054.5,
           "target_long": 5193.8,
-          "atr14": 310.55,
-          "stop_loss": 4148.9,
+          "atr14": 310.39,
+          "stop_loss": 4149.2,
           "broker": null,
           "main_force": null
         },
@@ -3369,35 +1899,13 @@
           "id": "6213",
           "name": "聯茂",
           "price": 243.5,
-          "rsi": 28.5,
-          "rsi10": 39.7,
+          "rsi": 29.1,
+          "rsi10": 43.5,
           "ret_20d": -19.0,
           "signal": "HOLD",
-          "cv_sharpe": 1.74,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:50",
-              "title": "營收速報  - 啟碁(6285)5月營收121.68億元年增率高達34.82％",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489040"
-            }
-          ],
+          "cv_sharpe": 1.56,
+          "cv_win_rate": 0.33,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 206982,
@@ -3408,8 +1916,8 @@
           "target_short": 293.6,
           "target_mid": 207.0,
           "target_long": 268.1,
-          "atr14": 19.76,
-          "stop_loss": 204.0,
+          "atr14": 19.89,
+          "stop_loss": 203.7,
           "broker": null,
           "main_force": null
         },
@@ -3423,29 +1931,7 @@
           "signal": "BUY",
           "cv_sharpe": 10.02,
           "cv_win_rate": 0.72,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -394754,
@@ -3456,8 +1942,8 @@
           "target_short": 1454.9,
           "target_mid": 1156.0,
           "target_long": 1460.6,
-          "atr14": 96.99,
-          "stop_loss": 1166.0,
+          "atr14": 96.94,
+          "stop_loss": 1166.1,
           "broker": null,
           "main_force": null
         },
@@ -3469,31 +1955,9 @@
           "rsi10": 44.4,
           "ret_20d": -8.5,
           "signal": "HOLD",
-          "cv_sharpe": -7.05,
-          "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            }
-          ],
+          "cv_sharpe": -0.51,
+          "cv_win_rate": 0.5,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 122206,
@@ -3502,22 +1966,22 @@
             "合計": 522972
           },
           "target_short": 948.9,
-          "target_mid": 912.3,
-          "target_long": 986.8,
-          "atr14": 65.43,
-          "stop_loss": 700.1,
+          "target_mid": 925.9,
+          "target_long": 992.3,
+          "atr14": 65.4,
+          "stop_loss": 700.2,
           "broker": null,
           "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 1,
-      "qualified_count": 3
+      "qualified_count": 2
     },
     "AI ASIC/IP": {
       "avg_ret_20d": -20.07,
       "avg_rsi": 25.2,
-      "avg_sharpe": -1.75,
+      "avg_sharpe": -0.81,
       "stocks": [
         {
           "id": "2330",
@@ -3527,31 +1991,9 @@
           "rsi10": 48.9,
           "ret_20d": 2.7,
           "signal": "HOLD",
-          "cv_sharpe": 0.61,
-          "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:53",
-              "title": "聯強5月營收衝上678億元年增129% 連三個月刷新歷史紀錄",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489018"
-            }
-          ],
+          "cv_sharpe": 6.38,
+          "cv_win_rate": 1.0,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -20464649,
@@ -3562,7 +2004,7 @@
           "target_short": 2425.1,
           "target_mid": 1950.8,
           "target_long": 2458.7,
-          "atr14": 63.81,
+          "atr14": 63.79,
           "stop_loss": 2167.4,
           "broker": null,
           "main_force": null
@@ -3575,31 +2017,9 @@
           "rsi10": 36.7,
           "ret_20d": -25.7,
           "signal": "HOLD",
-          "cv_sharpe": 0.68,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 08:54",
-              "title": "閎康5月營收連續3個月創新高 A16引爆檢測商機",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6488862"
-            }
-          ],
+          "cv_sharpe": 1.51,
+          "cv_win_rate": 0.42,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -15429,
@@ -3610,7 +2030,7 @@
           "target_short": 5580.1,
           "target_mid": 3616.8,
           "target_long": 4775.3,
-          "atr14": 396.02,
+          "atr14": 395.98,
           "stop_loss": 3463.0,
           "broker": null,
           "main_force": null
@@ -3623,31 +2043,9 @@
           "rsi10": 39.7,
           "ret_20d": -22.4,
           "signal": "HOLD",
-          "cv_sharpe": 3.32,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "cv_sharpe": 1.41,
+          "cv_win_rate": 0.33,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 5539,
@@ -3658,7 +2056,7 @@
           "target_short": 5174.3,
           "target_mid": 3544.5,
           "target_long": 4621.1,
-          "atr14": 301.02,
+          "atr14": 300.98,
           "stop_loss": 3568.0,
           "broker": null,
           "main_force": null
@@ -3673,29 +2071,7 @@
           "signal": "HOLD",
           "cv_sharpe": -9.46,
           "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 297894,
@@ -3706,8 +2082,8 @@
           "target_short": 4033.7,
           "target_mid": 2720.0,
           "target_long": 3558.7,
-          "atr14": 253.33,
-          "stop_loss": 2693.3,
+          "atr14": 253.21,
+          "stop_loss": 2693.6,
           "broker": null,
           "main_force": null
         },
@@ -3721,29 +2097,7 @@
           "signal": "HOLD",
           "cv_sharpe": -3.91,
           "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 196,
@@ -3754,20 +2108,20 @@
           "target_short": 676.2,
           "target_mid": 425.8,
           "target_long": 566.1,
-          "atr14": 36.39,
-          "stop_loss": 428.2,
+          "atr14": 36.37,
+          "stop_loss": 428.3,
           "broker": null,
           "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 3
+      "qualified_count": 2
     },
     "AI 散熱": {
       "avg_ret_20d": 0.24,
       "avg_rsi": 51.9,
-      "avg_sharpe": 0.44,
+      "avg_sharpe": 0.09,
       "stocks": [
         {
           "id": "3017",
@@ -3777,31 +2131,9 @@
           "rsi10": 46.8,
           "ret_20d": 0.6,
           "signal": "HOLD",
-          "cv_sharpe": 4.29,
+          "cv_sharpe": 5.07,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 359882,
@@ -3810,10 +2142,10 @@
             "合計": 377744
           },
           "target_short": 2856.2,
-          "target_mid": 2261.4,
-          "target_long": 2812.2,
-          "atr14": 180.42,
-          "stop_loss": 2209.2,
+          "target_mid": 2287.6,
+          "target_long": 2822.7,
+          "atr14": 180.32,
+          "stop_loss": 2209.4,
           "broker": null,
           "main_force": null
         },
@@ -3827,29 +2159,7 @@
           "signal": "HOLD",
           "cv_sharpe": -12.57,
           "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 273833,
@@ -3858,10 +2168,10 @@
             "合計": 231810
           },
           "target_short": 1226.6,
-          "target_mid": 1341.1,
-          "target_long": 1351.2,
-          "atr14": 75.8,
-          "stop_loss": 943.4,
+          "target_mid": 1358.0,
+          "target_long": 1357.9,
+          "atr14": 75.68,
+          "stop_loss": 943.6,
           "broker": null,
           "main_force": null
         },
@@ -3873,31 +2183,9 @@
           "rsi10": 51.7,
           "ret_20d": -4.9,
           "signal": "HOLD",
-          "cv_sharpe": -0.62,
+          "cv_sharpe": -3.2,
           "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 26844,
@@ -3908,8 +2196,8 @@
           "target_short": 4122.5,
           "target_mid": 3247.0,
           "target_long": 4109.7,
-          "atr14": 316.63,
-          "stop_loss": 3186.7,
+          "atr14": 316.53,
+          "stop_loss": 3186.9,
           "broker": null,
           "main_force": null
         },
@@ -3923,41 +2211,19 @@
           "signal": "BUY",
           "cv_sharpe": 7.46,
           "cv_win_rate": 0.83,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -562459,
-            "投信": 31000,
+            "投信": 29000,
             "自營": 10306,
-            "合計": -521153
+            "合計": -523153
           },
           "target_short": 1529.9,
-          "target_mid": 1210.8,
-          "target_long": 1505.3,
-          "atr14": 94.53,
-          "stop_loss": 1185.9,
+          "target_mid": 1206.7,
+          "target_long": 1503.6,
+          "atr14": 94.45,
+          "stop_loss": 1186.1,
           "broker": null,
           "main_force": null
         },
@@ -3971,41 +2237,19 @@
           "signal": "SELL",
           "cv_sharpe": 3.66,
           "cv_win_rate": 0.56,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 1286755,
-            "投信": 283000,
+            "投信": 321000,
             "自營": -32264,
-            "合計": 1537491
+            "合計": 1575491
           },
           "target_short": 1234.2,
-          "target_mid": 1199.6,
-          "target_long": 1355.9,
-          "atr14": 95.29,
-          "stop_loss": 1019.4,
+          "target_mid": 1117.6,
+          "target_long": 1323.1,
+          "atr14": 95.23,
+          "stop_loss": 1019.5,
           "broker": null,
           "main_force": null
         }
@@ -4017,7 +2261,7 @@
     "AI 電源": {
       "avg_ret_20d": -0.53,
       "avg_rsi": 32.4,
-      "avg_sharpe": 2.75,
+      "avg_sharpe": 2.12,
       "stocks": [
         {
           "id": "2308",
@@ -4027,31 +2271,9 @@
           "rsi10": 48.7,
           "ret_20d": 0.4,
           "signal": "HOLD",
-          "cv_sharpe": 1.9,
+          "cv_sharpe": 4.13,
           "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -923333,
@@ -4060,10 +2282,10 @@
             "合計": -869235
           },
           "target_short": 2610.2,
-          "target_mid": 3382.5,
-          "target_long": 2948.6,
-          "atr14": 124.35,
-          "stop_loss": 2006.3,
+          "target_mid": 1916.8,
+          "target_long": 2461.3,
+          "atr14": 124.31,
+          "stop_loss": 2006.4,
           "broker": null,
           "main_force": null
         },
@@ -4075,31 +2297,9 @@
           "rsi10": 47.4,
           "ret_20d": -2.5,
           "signal": "HOLD",
-          "cv_sharpe": 7.26,
-          "cv_win_rate": 0.72,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "cv_sharpe": 5.29,
+          "cv_win_rate": 0.56,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -73530,
@@ -4110,8 +2310,8 @@
           "target_short": 255.9,
           "target_mid": 185.7,
           "target_long": 239.1,
-          "atr14": 15.02,
-          "stop_loss": 188.5,
+          "atr14": 14.94,
+          "stop_loss": 188.6,
           "broker": null,
           "main_force": null
         },
@@ -4123,31 +2323,9 @@
           "rsi10": 42.7,
           "ret_20d": 0.4,
           "signal": "HOLD",
-          "cv_sharpe": -0.92,
-          "cv_win_rate": 0.67,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "cv_sharpe": -3.04,
+          "cv_win_rate": 0.33,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 561600,
@@ -4156,9 +2334,9 @@
             "合計": -1835269
           },
           "target_short": 108.8,
-          "target_mid": 123.0,
-          "target_long": 112.9,
-          "atr14": 5.44,
+          "target_mid": 79.9,
+          "target_long": 98.1,
+          "atr14": 5.43,
           "stop_loss": 83.1,
           "broker": null,
           "main_force": null
@@ -4171,7 +2349,7 @@
     "被動元件": {
       "avg_ret_20d": 112.53,
       "avg_rsi": 54.1,
-      "avg_sharpe": -0.3,
+      "avg_sharpe": 1.11,
       "stocks": [
         {
           "id": "2327",
@@ -4181,31 +2359,9 @@
           "rsi10": 64.9,
           "ret_20d": 91.8,
           "signal": "HOLD",
-          "cv_sharpe": 1.29,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "cv_sharpe": 3.4,
+          "cv_win_rate": 0.67,
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": -6603998,
@@ -4229,31 +2385,9 @@
           "rsi10": 66.7,
           "ret_20d": 133.2,
           "signal": "HOLD",
-          "cv_sharpe": -1.88,
+          "cv_sharpe": -1.18,
           "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:05",
-              "title": "綜所稅退稅635億創歷史次高！「這些人」首批入帳 3批退稅期程一次看",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489041"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:03",
-              "title": "AI高階材料需求旺 鉅橡5月營收1.31億元 年增23.08%",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489035"
-            },
-            {
-              "date": "2026-06-08",
-              "datetime": "2026-06-08 09:00",
-              "title": "玉山金前5月賺177億元創歷年同期新高 EPS達1.1元",
-              "source": "鉅亨網",
-              "url": "https://news.cnyes.com/news/id/6489022"
-            }
-          ],
+          "news": [],
           "chip": {
             "date": "2026-06-08",
             "外資": 996865,
@@ -4264,8 +2398,8 @@
           "target_short": 498.8,
           "target_mid": 340.0,
           "target_long": 443.8,
-          "atr14": 31.02,
-          "stop_loss": 338.0,
+          "atr14": 31.03,
+          "stop_loss": 337.9,
           "broker": null,
           "main_force": null
         }
@@ -4308,6 +2442,13 @@
   ],
   "alerts": [
     {
+      "sector": "光通訊",
+      "id": "4906",
+      "name": "正文",
+      "type": "RSI過熱",
+      "detail": "RSI=87.4"
+    },
+    {
       "sector": "AI 散熱",
       "id": "8996",
       "name": "高力",
@@ -4318,7 +2459,6 @@
   "chart_path": "daily_reports/20260608/01_sector_strength.png",
   "failed_sectors": [],
   "partial_sectors": {
-    "IC設計": 1,
     "被動元件": 1
   },
   "scan_coverage": 100
