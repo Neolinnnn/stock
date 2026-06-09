@@ -488,6 +488,17 @@ def build_daily_payload(summary):
                 q['trend_analysis'] = d
             except Exception as e:
                 q['trend_analysis'] = {'error': str(e)}
+            # 附加產銷組合快取（若存在）
+            fund_path = docs_dir_path / 'fundamentals' / f'{sid}.json'
+            if fund_path.exists():
+                try:
+                    with open(fund_path, encoding='utf-8') as ff:
+                        fdata = json.load(ff)
+                    pm = fdata.get('product_mix')
+                    if pm:
+                        q['product_mix'] = pm
+                except Exception:
+                    pass
 
     return {
         'meta': {

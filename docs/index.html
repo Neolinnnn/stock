@@ -143,6 +143,32 @@
   .btn-add-inline{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;margin-left:4px;}
   .btn-add-inline:hover{background:var(--accent);color:#fff;}
 
+  /* 產銷組合 Modal */
+  .pm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .pm-modal{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;padding:22px 24px;}
+  .pm-modal h2{font-size:16px;font-weight:700;margin-bottom:4px;}
+  .pm-modal .pm-meta{font-size:11px;color:var(--sub);margin-bottom:16px;}
+  .pm-section{margin-bottom:16px;}
+  .pm-section h4{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+  .pm-bar-row{margin-bottom:7px;}
+  .pm-bar-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:3px;}
+  .pm-bar-name{color:var(--text);}
+  .pm-bar-right{display:flex;gap:8px;align-items:center;}
+  .pm-bar-pct{font-weight:600;min-width:36px;text-align:right;}
+  .pm-yoy{font-size:10px;padding:1px 5px;border-radius:3px;}
+  .pm-yoy.up{background:rgba(39,174,96,.15);color:var(--green);}
+  .pm-yoy.dn{background:rgba(231,76,60,.15);color:var(--red);}
+  .pm-yoy.flat{background:rgba(136,136,136,.12);color:var(--sub);}
+  .pm-track{background:rgba(255,255,255,.07);border-radius:4px;height:9px;overflow:hidden;}
+  .pm-fill{height:9px;border-radius:4px;transition:width .4s;}
+  .pm-chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .pm-chip{background:#1e2330;border:1px solid var(--border);border-radius:5px;padding:3px 10px;font-size:12px;color:var(--text);}
+  .pm-summary{font-size:12px;color:var(--sub);line-height:1.7;background:#13161d;border-radius:6px;padding:10px 12px;}
+  .pm-close{float:right;background:transparent;border:none;color:var(--sub);font-size:18px;cursor:pointer;line-height:1;margin-top:-4px;}
+  .pm-close:hover{color:var(--text);}
+  .pm-btn{background:transparent;border:1px solid var(--border);color:var(--sub);border-radius:5px;padding:4px 11px;font-size:11px;cursor:pointer;transition:.15s;}
+  .pm-btn:hover{border-color:var(--accent);color:var(--accent);}
+
   /* 個股分析 */
   .stock-search-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap;}
   .stock-search-bar input{background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-size:14px;width:180px;}
@@ -809,10 +835,12 @@ async function initStockPage(){
         <button class="fund-tab active" onclick="switchFundTab('revenue',this)">月營收</button>
         <button class="fund-tab" onclick="switchFundTab('eps',this)">EPS</button>
         <button class="fund-tab" onclick="switchFundTab('margins',this)">三率</button>
+        <button class="fund-tab" onclick="switchFundTab('product_mix',this)">🏭 產銷</button>
       </div>
       <div id="fund-revenue"></div>
       <div id="fund-eps" style="display:none"></div>
       <div id="fund-margins" style="display:none"></div>
+      <div id="fund-product-mix" style="display:none"></div>
     </div>`;
 
   document.addEventListener('click', e=>{
@@ -901,12 +929,14 @@ let _fundLoaded = false;
 function switchFundTab(tab, btn) {
   document.querySelectorAll('.fund-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  ['revenue', 'eps', 'margins'].forEach(t => {
-    document.getElementById('fund-' + t).style.display = t === tab ? '' : 'none';
+  ['revenue', 'eps', 'margins', 'product_mix'].forEach(t => {
+    const el = document.getElementById('fund-' + t.replace('_','-'));
+    if (el) el.style.display = t === tab ? '' : 'none';
   });
   if (_fundLoaded && _fundData) {
-    if (tab === 'eps')     renderFundEps(_fundData);
-    if (tab === 'margins') renderFundMargins(_fundData);
+    if (tab === 'eps')         renderFundEps(_fundData);
+    if (tab === 'margins')     renderFundMargins(_fundData);
+    if (tab === 'product_mix') renderFundProductMix(_fundData);
   }
 }
 
@@ -917,17 +947,18 @@ function loadFundamentals(stockId) {
   document.querySelectorAll('.fund-tab').forEach((b, i) => {
     b.classList.toggle('active', i === 0);
   });
-  ['revenue', 'eps', 'margins'].forEach((t, i) => {
+  ['revenue', 'eps', 'margins', 'product-mix'].forEach((t, i) => {
     const el = document.getElementById('fund-' + t);
     if (el) {
       el.style.display = i === 0 ? '' : 'none';
-      el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
+      if (i === 0) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
+      else el.innerHTML = '';
     }
   });
   fetchJSON(`./fundamentals/${stockId}.json`)
     .then(d => { _fundData = d; _fundLoaded = true; renderFundRevenue(d); })
     .catch(() => {
-      ['revenue','eps','margins'].forEach(t => {
+      ['revenue','eps','margins','product-mix'].forEach(t => {
         const el = document.getElementById('fund-' + t);
         if (el) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">— 無基本面資料</div>';
       });
@@ -1047,6 +1078,111 @@ function renderFundMargins(d) {
     yaxis:  { gridcolor: _PLY.grid, ticksuffix: '%' },
     xaxis:  { tickangle: -30 },
   }, { responsive: true, displayModeBar: false });
+}
+
+// ── 產銷組合 共用渲染 ──────────────────────────────────────────────────────────
+const _PM_COLORS = ['#4e9af1','#50c878','#9b59b6','#f39c12','#e74c3c','#1abc9c','#e67e22'];
+
+function _renderPMHtml(pm) {
+  if (!pm || !pm.product_lines) return '<div style="color:var(--sub);padding:12px">— 尚無產銷組合資料</div>';
+  const lines   = pm.product_lines || [];
+  const regions = pm.regions       || [];
+  const maxPct  = Math.max(...lines.map(l => l.share_pct || 0), 1);
+
+  let h = '';
+
+  // 產品線
+  if (lines.length) {
+    h += `<div class="pm-section"><h4>產品線佔比</h4>`;
+    lines.forEach((l, i) => {
+      const pct    = l.share_pct ?? 0;
+      const yoy    = l.yoy_growth;
+      const trend  = l.trend || 'flat';
+      const color  = _PM_COLORS[i % _PM_COLORS.length];
+      const fillW  = Math.round((pct / maxPct) * 100);
+      const yoyCls = trend === 'up' ? 'up' : trend === 'down' ? 'dn' : 'flat';
+      const yoyTxt = yoy != null ? (yoy >= 0 ? `▲ +${yoy}%` : `▼ ${yoy}%`) : '';
+      h += `<div class="pm-bar-row">
+        <div class="pm-bar-label">
+          <span class="pm-bar-name">${escHtml(l.name)}</span>
+          <span class="pm-bar-right">
+            ${yoyTxt ? `<span class="pm-yoy ${yoyCls}">${yoyTxt}</span>` : ''}
+            <span class="pm-bar-pct" style="color:${color}">${pct}%</span>
+          </span>
+        </div>
+        <div class="pm-track"><div class="pm-fill" style="width:${fillW}%;background:${color}"></div></div>
+      </div>`;
+    });
+    h += `</div>`;
+  }
+
+  // 地區分布
+  if (regions.length) {
+    h += `<div class="pm-section"><h4>地區分布</h4>`;
+    regions.forEach((r, i) => {
+      const pct   = r.share_pct ?? 0;
+      const color = _PM_COLORS[i % _PM_COLORS.length];
+      h += `<div class="pm-bar-row">
+        <div class="pm-bar-label">
+          <span class="pm-bar-name">${escHtml(r.name)}</span>
+          <span class="pm-bar-pct" style="color:${color}">${pct}%</span>
+        </div>
+        <div class="pm-track"><div class="pm-fill" style="width:${pct}%;background:${color}"></div></div>
+      </div>`;
+    });
+    h += `</div>`;
+  }
+
+  // 主要客戶
+  const customers = pm.customers || [];
+  if (customers.length) {
+    h += `<div class="pm-section"><h4>主要客戶</h4><div class="pm-chip-row">`;
+    customers.forEach(c => { h += `<span class="pm-chip">${escHtml(c)}</span>`; });
+    h += `</div></div>`;
+  }
+
+  // 商業模式 & 競爭優勢
+  const rows = [['商業模式', pm.biz_model], ['核心優勢', pm.moat]].filter(r => r[1]);
+  if (rows.length) {
+    h += `<div class="pm-section"><h4>商業模式 & 競爭優勢</h4>`;
+    rows.forEach(([label, val]) => {
+      h += `<div style="font-size:12px;margin-bottom:5px"><span style="color:var(--sub)">${label}：</span>${escHtml(val)}</div>`;
+    });
+    h += `</div>`;
+  }
+
+  // 摘要
+  if (pm.summary) {
+    h += `<div class="pm-section"><h4>業務摘要</h4><div class="pm-summary">${escHtml(pm.summary)}</div></div>`;
+  }
+
+  return h;
+}
+
+// 個股分析 — 產銷 tab
+function renderFundProductMix(d) {
+  const el = document.getElementById('fund-product-mix');
+  if (!el) return;
+  const pm = d && d.product_mix;
+  el.innerHTML = _renderPMHtml(pm);
+}
+
+// 今日行動清單 — 開啟 modal
+function openPM(sid, name) {
+  const pm = (window._PM_CACHE || {})[sid];
+  const title = document.getElementById('pm-title');
+  const meta  = document.getElementById('pm-meta');
+  const body  = document.getElementById('pm-body');
+  title.textContent = `${name}（${sid}）產銷組合`;
+  meta.textContent  = pm ? `資料期間：${pm.data_period || '—'}　更新：${pm.updated_at || '—'}` : '';
+  body.innerHTML    = _renderPMHtml(pm);
+  document.getElementById('pm-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePM() {
+  document.getElementById('pm-overlay').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 function renderFundRevenue(d) {
@@ -1858,6 +1994,8 @@ function renderDaily(data){
 
   if(qualified&&qualified.length){
     // ── 今日行動清單 ──────────────────────────────────────────────
+    window._PM_CACHE = window._PM_CACHE || {};
+    qualified.forEach(q=>{ if(q.product_mix) window._PM_CACHE[q.id]=q.product_mix; });
     html+=`<div class="section-title">🎯 今日行動清單</div><div class="action-grid">`;
     qualified.forEach(q=>{
       const ta=q.trend_analysis||{};
@@ -1910,6 +2048,9 @@ function renderDaily(data){
         ${reasons.length?`<div class="ac-reasons">
           ${reasons.map(r=>`✓ ${escHtml(r)}`).join('<br>')}
           ${risks.length?'<br>'+risks.map(r=>`<span style="color:var(--yellow)">⚠ ${escHtml(r)}</span>`).join('<br>'):''}
+        </div>`:''}
+        ${q.product_mix?`<div style="margin-top:8px">
+          <button class="pm-btn" onclick="openPM('${escHtml(q.id)}','${escHtml(q.name)}')">🏭 產銷組合</button>
         </div>`:''}
       </div>`;
     });
@@ -2262,5 +2403,15 @@ function showError(msg){
 // ── 啟動 ──────────────────────────────────────────────────────────────────────
 init();
 </script>
+
+<!-- 產銷組合 Modal -->
+<div id="pm-overlay" class="pm-overlay" style="display:none" onclick="if(event.target===this)closePM()">
+  <div class="pm-modal" id="pm-modal">
+    <button class="pm-close" onclick="closePM()">✕</button>
+    <h2 id="pm-title"></h2>
+    <div class="pm-meta" id="pm-meta"></div>
+    <div id="pm-body"></div>
+  </div>
+</div>
 </body>
 </html>

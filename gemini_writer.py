@@ -30,6 +30,35 @@ PROMPTS = {
 {data}
 日期：{date}
 {extra}""",
+
+    "product_mix": """你是台股產業分析師，請搜尋並整理以下台灣上市公司的最新產銷組合（業務結構）資料。
+
+公司：{data}
+資料日期：{date}
+
+請搜尋該公司最新的法說會、年報、季報、新聞稿，整理出：
+1. 各產品線佔營收比例（%）及年增率（%）
+2. 地區別營收分布（%）
+3. 主要客戶
+4. 商業模式（代工/JDM/ODM/自有品牌等）
+5. 核心競爭優勢或護城河
+
+請嚴格以 JSON 格式回覆（不含 markdown code block，直接輸出純 JSON）：
+{{
+  "product_lines": [
+    {{"name": "產品線名稱", "share_pct": 數字, "yoy_growth": 數字或null, "trend": "up/flat/down"}}
+  ],
+  "regions": [
+    {{"name": "地區", "share_pct": 數字}}
+  ],
+  "customers": ["客戶1", "客戶2"],
+  "biz_model": "商業模式一行說明",
+  "moat": "核心競爭優勢一行說明",
+  "summary": "2-3句整體業務摘要",
+  "data_period": "資料期間（如 2025Q1-Q3）",
+  "updated_at": "{date}"
+}}
+{extra}""",
 }
 
 
@@ -40,13 +69,14 @@ class GeminiWriter:
         if not self.api_key:
             raise ValueError("GEMINI_API_KEY 未設定")
 
-    def generate(self, task: str, context: dict[str, Any]) -> str:
+    def generate(self, task: str, context: dict[str, Any], use_grounding: bool = False) -> str:
         """
         呼叫 Gemini 生成文字
 
         Args:
             task: PROMPTS 中定義的任務類型
             context: 包含 data, date, extra 等欄位的 dict
+            use_grounding: 是否啟用 Google Search grounding（適用 product_mix 等需要即時資訊的任務）
 
         Returns:
             生成的文字字串
@@ -54,15 +84,20 @@ class GeminiWriter:
         if task not in PROMPTS:
             raise ValueError(f"未知 task: {task}，可用：{list(PROMPTS.keys())}")
 
+        data = context.get("data", {})
         prompt = PROMPTS[task].format(
-            data=json.dumps(context.get("data", {}), ensure_ascii=False, indent=2),
+            data=json.dumps(data, ensure_ascii=False, indent=2) if isinstance(data, (dict, list)) else str(data),
             date=context.get("date", ""),
             extra=context.get("extra", ""),
         )
 
-        payload = json.dumps({
+        body: dict[str, Any] = {
             "contents": [{"parts": [{"text": prompt}]}]
-        }).encode("utf-8")
+        }
+        if use_grounding:
+            body["tools"] = [{"google_search": {}}]
+
+        payload = json.dumps(body).encode("utf-8")
 
         url = GEMINI_API_URL.format(model=self.model, key=self.api_key)
         req = urllib.request.Request(
