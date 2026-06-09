@@ -424,19 +424,17 @@ def build_daily_payload(summary):
     )
 
     # ── 雙篩選第二層：對 qualified 個股跑趨勢分析，加入買入建議 ──────────────
-    # 每次重試 import，避免 module-level _ANALYZER_OK 因 CI 路徑問題被快取成 False
+    # 每次直接 import（命中 sys.modules 快取，幾乎零成本），不依賴模組級 flag
     _local_analyze = None
-    if _ANALYZER_OK:
-        _local_analyze = _analyze_stock
-    else:
-        try:
-            _root = Path(__file__).resolve().parent.parent
-            if str(_root) not in sys.path:
-                sys.path.insert(0, str(_root))
-            from indicators.stock_analyzer import analyze_stock as _local_analyze
-            print('[INFO] build_docs: 分析引擎延遲載入成功')
-        except Exception as _e2:
-            print(f'[WARN] build_docs: 分析引擎延遲載入失敗：{_e2}')
+    try:
+        _bd_root = Path(__file__).resolve().parent.parent
+        if str(_bd_root) not in sys.path:
+            sys.path.insert(0, str(_bd_root))
+        from indicators.stock_analyzer import analyze_stock as _local_analyze
+    except Exception as _e2:
+        print(f'[WARN] build_docs.build_daily_payload: 分析引擎載入失敗: {_e2}')
+        if _ANALYZER_OK:
+            _local_analyze = _analyze_stock
 
     if _local_analyze and qualified:
         docs_dir_path = Path(__file__).resolve().parent.parent / 'docs'
