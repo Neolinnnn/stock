@@ -76,6 +76,51 @@
         "kd_k_prev": 39.33,
         "kd_d_prev": 41.45,
         "macd_bar_prev": -29.33
+      },
+      "product_mix": {
+        "product_lines": [
+          {
+            "name": "網路應用設備 (Network Application Products)",
+            "share_pct": 63,
+            "yoy_growth": 361,
+            "trend": "down"
+          },
+          {
+            "name": "網路交換器 (Network Switches)",
+            "share_pct": 34,
+            "yoy_growth": 46,
+            "trend": "up"
+          },
+          {
+            "name": "網路接取設備 (Network Access Devices)",
+            "share_pct": 2,
+            "yoy_growth": null,
+            "trend": "flat"
+          }
+        ],
+        "regions": [
+          {
+            "name": "美洲 (Americas)",
+            "share_pct": 81
+          },
+          {
+            "name": "其他地區 (Other Regions)",
+            "share_pct": 19
+          }
+        ],
+        "customers": [
+          "超大規模資料中心 (Hyperscale Data Centers)",
+          "雲端服務供應商 (Cloud Service Providers - CSPs)",
+          "Meta",
+          "Amazon",
+          "HP",
+          "Dell"
+        ],
+        "biz_model": "智邦是網路設備的ODM/OEM領導廠商，主要提供軟硬體整合解決方案給終端客戶（俗稱白牌業者），同時也擁有自有品牌，主打企業和電信市場。",
+        "moat": "智邦的核心競爭優勢包括在高速網路技術（如800G、1.6T交換器、CPO、液冷散熱、機櫃級整合）的領先研發與早期量產能力，與超大規模資料中心及雲端服務供應商的深厚合作關係，在全球（台灣、越南、墨西哥、馬來西亞、美國、新加坡）的製造與研發全球化佈局，以及在全球白牌交換器市場的領導地位。",
+        "summary": "智邦的業務結構在2025年呈現明顯轉型，由AI相關的網路應用設備帶動主要增長，該產品線在2025年前三季營收佔比達63%，年增361%。同時，網路交換器業務在800G升級需求下預計在2026年將進一步提升營收佔比，凸顯其作為AI基礎設施核心供應商的關鍵地位。美洲市場為其主要營收來源，佔2025年前三季營收的81%。",
+        "data_period": "2025 Q1-Q3",
+        "updated_at": "2026-06-09"
       }
     }
   ],
