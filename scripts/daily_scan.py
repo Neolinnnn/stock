@@ -23,12 +23,30 @@ with open(_main, encoding='utf-8') as f:
 code = code.split("if __name__ == '__main__':")[0]
 exec(code, globals())
 
+import time
 import pandas as pd
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+
+
+def _retry(fn, *args, max_retries: int = 3, base_delay: float = 3.0, **kwargs):
+    """
+    對 fn(*args, **kwargs) 執行最多 max_retries 次重試，
+    每次等待 base_delay * 2^attempt 秒（指數退避）。
+    最後一次失敗才往外拋出例外。
+    """
+    for attempt in range(max_retries + 1):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            if attempt == max_retries:
+                raise
+            wait = base_delay * (2 ** attempt)
+            print(f'    [retry {attempt+1}/{max_retries}] {fn.__name__ if hasattr(fn,"__name__") else "call"} 失敗，{wait:.0f}s 後重試…（{e}）')
+            time.sleep(wait)
 
 # 支援中文
 rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
@@ -127,12 +145,19 @@ def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
 
 def _get_history(sid):
     """抓一次 twstock 歷史（~26 個月，涵蓋 CV 與技術指標所需），供
-    analyze_stock 與 fetch_price_stats 共用，避免每檔重複抓取 twstock。"""
+    analyze_stock 與 fetch_price_stats 共用，避免每檔重複抓取 twstock。
+    內建 retry（最多 3 次，指數退避）應對 TWSE 偶發限流。"""
     from twstock import Stock
-    stock = Stock(sid)
-    start = datetime.now() - timedelta(days=int(DATA_DAYS * 1.6))
-    stock.fetch_from(start.year, start.month)
-    return stock
+
+    def _fetch():
+        stock = Stock(sid)
+        start = datetime.now() - timedelta(days=int(DATA_DAYS * 1.6))
+        stock.fetch_from(start.year, start.month)
+        if not stock.price:
+            raise ValueError(f'{sid} twstock 回傳空資料')
+        return stock
+
+    return _retry(_fetch, max_retries=3, base_delay=3.0)
 
 
 def fetch_price_stats(sid, hist=None):
@@ -178,7 +203,11 @@ def fetch_price_stats(sid, hist=None):
             from FinMind.data import DataLoader as _DL
             _dl = _DL()
             one_yr_ago = (date.today() - timedelta(days=365)).strftime("%Y-%m-%d")
-            per_df = _dl.taiwan_stock_per_pbr(stock_id=sid, start_date=one_yr_ago)
+            per_df = _retry(
+                _dl.taiwan_stock_per_pbr,
+                stock_id=sid, start_date=one_yr_ago,
+                max_retries=3, base_delay=2.0,
+            )
 
             if per_df.empty:
                 raise ValueError("no per data")
@@ -319,8 +348,10 @@ def fetch_chip_data(stock_id, days=5):
         dl = DataLoader()
         end = datetime.now().strftime('%Y-%m-%d')
         start = (datetime.now() - timedelta(days=days + 5)).strftime('%Y-%m-%d')
-        df = dl.taiwan_stock_institutional_investors(
-            stock_id=stock_id, start_date=start, end_date=end
+        df = _retry(
+            dl.taiwan_stock_institutional_investors,
+            stock_id=stock_id, start_date=start, end_date=end,
+            max_retries=3, base_delay=2.0,
         )
         if df.empty:
             return {}
