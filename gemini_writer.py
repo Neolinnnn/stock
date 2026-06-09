@@ -4,6 +4,7 @@ Gemini 文字生成模組
 """
 import os
 import json
+import time
 import urllib.request
 import urllib.error
 from typing import Any
@@ -61,17 +62,35 @@ PROMPTS = {
 {extra}""",
 }
 
+# 503/429 可重試的狀態碼
+_RETRYABLE_CODES = {429, 503}
+
 
 class GeminiWriter:
     def __init__(self, model: str = DEFAULT_MODEL):
-        self.api_key = os.environ.get("GEMINI_API_KEY", "")
-        self.model = model
-        if not self.api_key:
+        # 依序收集所有可用 key：GEMINI_API_KEY, GEMINI_API_KEY_1, GEMINI_API_KEY_2, ...
+        keys = []
+        primary = os.environ.get("GEMINI_API_KEY", "")
+        if primary:
+            keys.append(primary)
+        i = 1
+        while True:
+            k = os.environ.get(f"GEMINI_API_KEY_{i}", "")
+            if not k:
+                break
+            if k not in keys:
+                keys.append(k)
+            i += 1
+
+        if not keys:
             raise ValueError("GEMINI_API_KEY 未設定")
+
+        self._keys = keys
+        self.model = model
 
     def generate(self, task: str, context: dict[str, Any], use_grounding: bool = False) -> str:
         """
-        呼叫 Gemini 生成文字
+        呼叫 Gemini 生成文字。503/429 時自動輪替備用 Key，每組 Key 最多重試一次。
 
         Args:
             task: PROMPTS 中定義的任務類型
@@ -98,22 +117,31 @@ class GeminiWriter:
             body["tools"] = [{"google_search": {}}]
 
         payload = json.dumps(body).encode("utf-8")
+        last_error: Exception | None = None
 
-        url = GEMINI_API_URL.format(model=self.model, key=self.api_key)
-        req = urllib.request.Request(
-            url,
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
+        for attempt, key in enumerate(self._keys):
+            url = GEMINI_API_URL.format(model=self.model, key=key)
+            req = urllib.request.Request(
+                url,
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            try:
+                with urllib.request.urlopen(req) as resp:
+                    result = json.loads(resp.read().decode("utf-8"))
+                    return result["candidates"][0]["content"]["parts"][0]["text"]
+            except urllib.error.HTTPError as e:
+                err_body = e.read().decode("utf-8")
+                last_error = RuntimeError(f"Gemini API 錯誤 {e.code}: {err_body}")
+                if e.code in _RETRYABLE_CODES and attempt < len(self._keys) - 1:
+                    wait = 3 * (attempt + 1)
+                    print(f"  [GeminiWriter] key[{attempt}] 回傳 {e.code}，{wait}s 後換下一組 key…")
+                    time.sleep(wait)
+                    continue
+                raise last_error from e
 
-        try:
-            with urllib.request.urlopen(req) as resp:
-                result = json.loads(resp.read().decode("utf-8"))
-                return result["candidates"][0]["content"]["parts"][0]["text"]
-        except urllib.error.HTTPError as e:
-            body = e.read().decode("utf-8")
-            raise RuntimeError(f"Gemini API 錯誤 {e.code}: {body}") from e
+        raise last_error  # type: ignore
 
 
 if __name__ == "__main__":
