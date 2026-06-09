@@ -265,6 +265,26 @@
     border-color: var(--accent);
   }
 
+  /* ── 基本面 KPI 摘要 + 數據表 ───────────────────────────────────── */
+  .fund-kpi{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .fund-kpi .kpi{background:#13161d;border:1px solid var(--border);border-radius:8px;
+    padding:8px 14px;min-width:84px;}
+  .fund-kpi .kpi-lbl{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;}
+  .fund-kpi .kpi-val{font-size:17px;font-weight:700;margin-top:2px;line-height:1.2;
+    font-variant-numeric:tabular-nums;}
+  .fund-tbl{width:100%;border-collapse:collapse;font-size:12px;
+    font-variant-numeric:tabular-nums;}
+  .fund-tbl th{position:sticky;top:0;z-index:1;background:#13161d;color:var(--sub);font-weight:500;
+    font-size:11px;text-align:right;padding:6px 10px;border-bottom:1px solid var(--border);}
+  .fund-tbl th:first-child{text-align:left;}
+  .fund-tbl td{text-align:right;padding:5px 10px;border-bottom:1px solid #20242e;}
+  .fund-tbl td:first-child{text-align:left;color:var(--sub);}
+  .fund-tbl tr:hover td{background:#181c24;}
+  .fund-tbl tr.latest td{background:rgba(31,119,180,.10);}
+  .fund-tbl tr.latest td:first-child{color:var(--text);font-weight:600;}
+  .fund-tbl-wrap{max-height:300px;overflow-y:auto;border:1px solid var(--border);
+    border-radius:8px;margin-top:10px;}
+
   /* ── 回測選股 Tab ────────────────────────────────────────────────── */
   #nav-bt:not(.active){color:#f1c40f;}
   .bt-badge{display:inline-block;background:rgba(241,196,15,.15);color:#f1c40f;
@@ -977,30 +997,24 @@ function renderFundEps(d) {
   const latestEps = e.eps[e.eps.length - 1];
   const latestYoy = e.yoy[e.yoy.length - 1];
 
-  let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
-    <div class="card" style="min-width:100px;text-align:center">
-      <div class="card-title">最新季 EPS</div>
-      <div class="card-value" style="font-size:16px">${latestEps != null ? latestEps.toFixed(2) + ' 元' : '—'}</div>
-    </div>
-    <div class="card" style="min-width:80px;text-align:center">
-      <div class="card-title">YoY</div>
-      <div class="card-value" style="font-size:16px;color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div>
-    </div>
+  let html = `<div class="fund-kpi">
+    <div class="kpi"><div class="kpi-lbl">最新季 EPS</div><div class="kpi-val">${latestEps != null ? latestEps.toFixed(2) + ' 元' : '—'}</div></div>
+    <div class="kpi"><div class="kpi-lbl">YoY</div><div class="kpi-val" style="color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div></div>
   </div>`;
 
   html += `<div id="fund-eps-chart" style="height:200px;"></div>`;
 
-  html += `<table style="width:100%;font-size:12px;margin-top:8px"><tr>
-    <th>季度</th><th>EPS（元）</th><th>QoQ</th><th>YoY</th></tr>`;
+  html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
+    <th>季度</th><th>EPS（元）</th><th>QoQ</th><th>YoY</th></tr></thead><tbody>`;
   for (let i = e.quarter.length - 1; i >= 0; i--) {
-    html += `<tr>
+    html += `<tr class="${i === e.quarter.length - 1 ? 'latest' : ''}">
       <td>${e.quarter[i]}</td>
       <td>${e.eps[i] != null ? e.eps[i].toFixed(2) : '—'}</td>
       <td style="color:${signColor(e.qoq[i])}">${fmtPct(e.qoq[i])}</td>
       <td style="color:${signColor(e.yoy[i])}">${fmtPct(e.yoy[i])}</td>
     </tr>`;
   }
-  html += '</table>';
+  html += '</tbody></table></div>';
   el.innerHTML = html;
 
   Plotly.newPlot('fund-eps-chart', [{
@@ -1030,34 +1044,25 @@ function renderFundMargins(d) {
   const latestOp    = m.operating_margin[m.operating_margin.length - 1];
   const latestNet   = m.net_margin[m.net_margin.length - 1];
 
-  let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
-    <div class="card" style="min-width:90px;text-align:center">
-      <div class="card-title">毛利率</div>
-      <div class="card-value" style="font-size:16px">${fmtPct(latestGross)}</div>
-    </div>
-    <div class="card" style="min-width:90px;text-align:center">
-      <div class="card-title">營益率</div>
-      <div class="card-value" style="font-size:16px">${fmtPct(latestOp)}</div>
-    </div>
-    <div class="card" style="min-width:90px;text-align:center">
-      <div class="card-title">淨利率</div>
-      <div class="card-value" style="font-size:16px">${fmtPct(latestNet)}</div>
-    </div>
+  let html = `<div class="fund-kpi">
+    <div class="kpi"><div class="kpi-lbl">毛利率</div><div class="kpi-val">${fmtPct(latestGross)}</div></div>
+    <div class="kpi"><div class="kpi-lbl">營益率</div><div class="kpi-val">${fmtPct(latestOp)}</div></div>
+    <div class="kpi"><div class="kpi-lbl">淨利率</div><div class="kpi-val">${fmtPct(latestNet)}</div></div>
   </div>`;
 
   html += `<div id="fund-margins-chart" style="height:200px;"></div>`;
 
-  html += `<table style="width:100%;font-size:12px;margin-top:8px"><tr>
-    <th>季度</th><th>毛利率</th><th>營益率</th><th>淨利率</th></tr>`;
+  html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
+    <th>季度</th><th>毛利率</th><th>營益率</th><th>淨利率</th></tr></thead><tbody>`;
   for (let i = m.quarter.length - 1; i >= 0; i--) {
-    html += `<tr>
+    html += `<tr class="${i === m.quarter.length - 1 ? 'latest' : ''}">
       <td>${m.quarter[i]}</td>
       <td>${fmtPct(m.gross_margin[i])}</td>
       <td>${fmtPct(m.operating_margin[i])}</td>
       <td>${fmtPct(m.net_margin[i])}</td>
     </tr>`;
   }
-  html += '</table>';
+  html += '</tbody></table></div>';
   el.innerHTML = html;
 
   Plotly.newPlot('fund-margins-chart', [
@@ -1201,39 +1206,27 @@ function renderFundRevenue(d) {
   const fmtPct = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
   const fmtRev = v => v == null ? '—' : (v / 1e8).toFixed(1) + ' 億';
 
-  let html = `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
-    <div class="card" style="min-width:100px;text-align:center">
-      <div class="card-title">最新月營收</div>
-      <div class="card-value" style="font-size:16px">${fmtRev(latest)}</div>
-    </div>
-    <div class="card" style="min-width:80px;text-align:center">
-      <div class="card-title">YoY</div>
-      <div class="card-value" style="font-size:16px;color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div>
-    </div>
-    <div class="card" style="min-width:80px;text-align:center">
-      <div class="card-title">MoM</div>
-      <div class="card-value" style="font-size:16px;color:${signColor(latestMom)}">${fmtPct(latestMom)}</div>
-    </div>
-    <div class="card" style="min-width:100px;text-align:center">
-      <div class="card-title">累計 YoY</div>
-      <div class="card-value" style="font-size:16px;color:${signColor(latestCumYoy)}">${fmtPct(latestCumYoy)}</div>
-    </div>
+  let html = `<div class="fund-kpi">
+    <div class="kpi"><div class="kpi-lbl">最新月營收</div><div class="kpi-val">${fmtRev(latest)}</div></div>
+    <div class="kpi"><div class="kpi-lbl">YoY</div><div class="kpi-val" style="color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div></div>
+    <div class="kpi"><div class="kpi-lbl">MoM</div><div class="kpi-val" style="color:${signColor(latestMom)}">${fmtPct(latestMom)}</div></div>
+    <div class="kpi"><div class="kpi-lbl">累計 YoY</div><div class="kpi-val" style="color:${signColor(latestCumYoy)}">${fmtPct(latestCumYoy)}</div></div>
   </div>`;
 
   html += `<div id="fund-rev-chart" style="height:220px;"></div>`;
 
-  html += `<table style="width:100%;font-size:12px;margin-top:8px"><tr>
-    <th>月份</th><th>月營收（億）</th><th>MoM</th><th>YoY</th></tr>`;
+  html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
+    <th>月份</th><th>月營收</th><th>MoM</th><th>YoY</th></tr></thead><tbody>`;
   const showN = Math.min(r.month.length, 24);
   for (let i = r.month.length - 1; i >= r.month.length - showN; i--) {
-    html += `<tr>
+    html += `<tr class="${i === r.month.length - 1 ? 'latest' : ''}">
       <td>${r.month[i]}</td>
       <td>${fmtRev(r.revenue[i])}</td>
       <td style="color:${signColor(r.mom[i])}">${fmtPct(r.mom[i])}</td>
       <td style="color:${signColor(r.yoy[i])}">${fmtPct(r.yoy[i])}</td>
     </tr>`;
   }
-  html += '</table>';
+  html += '</tbody></table></div>';
   el.innerHTML = html;
 
   const revB = r.revenue.map(v => +(v / 1e8).toFixed(2));
@@ -1930,7 +1923,6 @@ function renderDaily(data){
   const chg      = meta['漲跌幅%'];
   const strong   = meta['強勢族群']||'無';
   const weak     = meta['弱勢族群']||'無';
-  const qCount   = meta['雙條件推薦']||0;
   const coverage = meta['掃描涵蓋率']??100;
   const failedSectors  = meta['失敗族群']||[];
   const partialSectors = meta['部分失敗族群']||{};
@@ -1954,10 +1946,6 @@ function renderDaily(data){
     ${Object.keys(partialSectors).length?`<span style="color:var(--sub);font-size:12px;margin-left:8px">部分失敗：${escHtml(Object.entries(partialSectors).map(([k,v])=>k+'('+v+'檔)').join('、'))}</span>`:''}
     <div style="font-size:11px;color:var(--sub);margin-top:2px">以上族群當日 API 失敗，推薦結果可能不完整</div>
   </div>`:''}
-  <div class="card" style="margin-bottom:8px;display:flex;align-items:center;gap:16px">
-    <div class="card-title" style="margin:0;min-width:80px">雙條件推薦</div>
-    <div class="card-value" style="font-size:20px;color:var(--yellow)">${qCount} 檔</div>
-  </div>
   <details class="info-box" style="margin-bottom:16px;">
     <summary>雙篩選邏輯說明</summary>
     <div style="margin-top:10px;line-height:2;">三層條件依序過濾，通過才列入推薦，並以第三層加權評分輸出買入建議：</div>
@@ -1996,7 +1984,7 @@ function renderDaily(data){
     // ── 今日行動清單 ──────────────────────────────────────────────
     window._PM_CACHE = window._PM_CACHE || {};
     qualified.forEach(q=>{ if(q.product_mix) window._PM_CACHE[q.id]=q.product_mix; });
-    html+=`<div class="section-title">🎯 今日行動清單</div><div class="action-grid">`;
+    html+=`<div class="section-title">🎯 今日行動清單（${qualified.length} 檔）</div><div class="action-grid">`;
     qualified.forEach(q=>{
       const ta=q.trend_analysis||{};
       const sig=ta.buy_signal||'—';
@@ -2043,6 +2031,8 @@ function renderDaily(data){
           ${stopLoss!=null?`<div class="ac-price-item"><span class="ac-price-lbl">ATR停損</span><span class="ac-price-val dn">${fmt(stopLoss,1)}</span></div>`:''}
           ${stk.target_short!=null?`<div class="ac-price-item"><span class="ac-price-lbl">短期目標</span><span class="ac-price-val tp">${fmt(stk.target_short,1)}</span></div>`:''}
           ${stk.target_mid!=null?`<div class="ac-price-item"><span class="ac-price-lbl">中期目標</span><span class="ac-price-val tp">${fmt(stk.target_mid,1)}</span></div>`:''}
+          <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${fmt(q.rsi,1)}</span></div>
+          <div class="ac-price-item"><span class="ac-price-lbl">CV夏普</span><span class="ac-price-val" style="font-weight:600">${fmt(q.cv_sharpe,2)}</span></div>
         </div>
 
         ${reasons.length?`<div class="ac-reasons">
@@ -2055,40 +2045,6 @@ function renderDaily(data){
       </div>`;
     });
     html+=`</div>`;
-
-    html+=`<div class="section-title">⭐ 雙條件推薦個股</div>
-    <div class="card" style="overflow-x:auto;margin-bottom:20px"><table class="qualified-tbl">
-      <tr>
-        <th>代碼</th><th class="col-hide">族群</th><th>名稱</th>
-        <th class="col-hide">現價</th><th class="col-hide">RSI5</th><th class="col-hide">CV夏普</th>
-        <th>趨勢</th><th class="col-hide">MACD</th><th class="col-hide">量能</th>
-        <th>建議</th><th>評分</th>
-      </tr>
-      ${qualified.map(q=>{
-        const ta = q.trend_analysis || {};
-        const sig = ta.buy_signal || '—';
-        const score = ta.signal_score != null ? ta.signal_score : '—';
-        const sigColor = sig==='強力買入'?'var(--green)':sig==='買入'?'#5cb85c':sig==='持有'?'var(--yellow)':sig==='觀望'?'var(--sub)':'var(--red)';
-        const scoreColor = score>=75?'var(--green)':score>=60?'#5cb85c':score>=45?'var(--yellow)':'var(--red)';
-        const reasons = (ta.signal_reasons||[]).join(' · ');
-        const risks   = (ta.risk_factors||[]).join(' · ');
-        const tooltip = [reasons, risks?('⚠ '+risks):''].filter(Boolean).join(' | ');
-        return `<tr title="${escHtml(tooltip)}">
-          <td><b style="cursor:pointer" onclick="goToStock('${escHtml(q.id)}')">${escHtml(q.id)}</b></td>
-          <td class="col-hide">${escHtml(q.sector)}</td>
-          <td style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(q.id)}')">${escHtml(q.name)}</td>
-          <td class="col-hide">${fmt(q.price,1)}</td>
-          <td class="col-hide"><span class="rsi-dot ${rsiDot(Number(q.rsi))}"></span>${fmt(q.rsi,1)}</td>
-          <td class="col-hide">${fmt(q.cv_sharpe,2)}</td>
-          <td style="font-size:12px;color:var(--sub)">${escHtml(ta.trend_status||'—')}</td>
-          <td class="col-hide" style="font-size:11px;color:var(--sub)">${escHtml(ta.macd_signal||'—')}</td>
-          <td class="col-hide" style="font-size:11px;color:var(--sub)">${escHtml(ta.volume_trend||'—')}</td>
-          <td><b style="color:${sigColor}">${escHtml(sig)}</b></td>
-          <td><b style="color:${scoreColor}">${score}${score!=='—'?'/100':''}</b></td>
-        </tr>
-        ${tooltip?`<tr style="background:#13161d"><td colspan="11" style="font-size:11px;color:var(--sub);padding:4px 10px 8px">${escHtml(reasons)}${risks?` <span style="color:var(--yellow)">⚠ ${escHtml(risks)}</span>`:''}</td></tr>`:''}`;
-      }).join('')}
-    </table></div>`;
   }
 
   // ── 賣出訊號列表 ──────────────────────────────────────────────────────────
@@ -2171,9 +2127,9 @@ function renderDaily(data){
     </table>
     <div style="margin-top:10px">
       <b>目標價計算方式：</b><br>
-      <span class="tp">短期</span> — 近 20 日高點 × 1.03（3% 延伸）<br>
-      <span class="tp">中期</span> — 近 60 日高點 × 1.06（6% 延伸）<br>
-      <span class="tp">長期</span> — 近 120 日高點 × 1.12（12% 延伸）<br>
+      <span class="tp">短期</span> — 布林通道上軌（20日均線 + 2 倍標準差）<br>
+      <span class="tp">中期</span> — P/E 均值回歸（現值 vs 一年中位數，上下限 ±50%/−15%；無 PE 改用 P/B）<br>
+      <span class="tp">長期</span> — 40% P/E 目標 + 40% PEG 目標 + 20% 短期技術 加權<br>
       目標價僅供參考，不構成買賣建議。
     </div>
   </details>`;
