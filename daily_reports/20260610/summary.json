@@ -1,13 +1,13 @@
 {
   "date": "20260610",
-  "timestamp": "2026-06-10T14:19:24.108620",
+  "timestamp": "2026-06-10T14:49:18.085248",
   "market": {
     "加權指數": null,
     "漲跌幅": null
   },
   "sectors": {
     "光通訊": {
-      "avg_ret_20d": -11.18,
+      "avg_ret_20d": -8.63,
       "avg_rsi": 33.3,
       "avg_sharpe": 1.42,
       "stocks": [
@@ -43,7 +43,7 @@
           "price": 478.0,
           "rsi": 41.1,
           "rsi10": 43.9,
-          "ret_20d": NaN,
+          "ret_20d": -3.5,
           "signal": "HOLD",
           "cv_sharpe": 4.1,
           "cv_win_rate": 0.5,
@@ -55,11 +55,11 @@
             "自營": -770958,
             "合計": 880288
           },
-          "target_short": NaN,
-          "target_mid": NaN,
-          "target_long": NaN,
-          "atr14": NaN,
-          "stop_loss": NaN,
+          "target_short": 573.5,
+          "target_mid": 641.4,
+          "target_long": 619.8,
+          "atr14": 42.49,
+          "stop_loss": 393.0,
           "broker": null,
           "main_force": null
         },
@@ -446,8 +446,8 @@
           "target_short": 3967.3,
           "target_mid": 2822.0,
           "target_long": 3648.7,
-          "atr14": 301.8,
-          "stop_loss": 2716.4,
+          "atr14": 301.96,
+          "stop_loss": 2716.1,
           "broker": null,
           "main_force": null
         },
