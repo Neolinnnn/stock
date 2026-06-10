@@ -504,8 +504,8 @@ function renderWatchlist(data) {
         const sb = b.signal && b.signal!=='' && b.signal!=='—' ? 0 : 1;
         return sa - sb || a.id.localeCompare(b.id);
       }).map(s => `<tr>
-        <td><b>${escHtml(s.id)}</b></td>
-        <td>${escHtml(s.name)}</td>
+        <td><b style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.id)}</b></td>
+        <td style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.name)}</td>
         <td>${s.price!==''&&s.price!==null ? fmt(s.price,1) : '—'}</td>
         <td class="${Number(s.change_pct)>=0?'up':'dn'}">${s.change_pct!==''&&s.change_pct!==null ? sign(Number(s.change_pct))+fmt(s.change_pct,2)+'%' : '—'}</td>
         <td>${s.rsi!==''&&s.rsi!==null ? `<span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span>` : '—'}</td>
@@ -730,8 +730,8 @@ function renderBtPage(){
     const ret = Number(s.ret20||0);
     const chipN = Number(s.chipTotal||0);
     return `<tr>
-      <td><b>${escHtml(s.id)}</b></td>
-      <td>${escHtml(s.name)}${showBadge&&intersectIds.has(s.id)?`<span class="bt-badge">★雙選</span>`:''}</td>
+      <td><b style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.id)}</b></td>
+      <td style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.name)}${showBadge&&intersectIds.has(s.id)?`<span class="bt-badge">★雙選</span>`:''}</td>
       <td><span class="tag">${escHtml(s.sector)}</span></td>
       <td class="${ret>=0?'up':'dn'}">${ret>=0?'+':''}${fmt(s.ret20,1)}%</td>
       <td class="${chipN>=0?'chip-pos':'chip-neg'}">${chipN>=0?'+':''}${chipN.toLocaleString()}</td>
@@ -2069,8 +2069,8 @@ function renderDaily(data){
         else if(Number(s.chipTotal||0)<0) reasons.push('法人賣超');
         if(sharpe<0) reasons.push('CV夏普轉負');
         return `<tr>
-          <td><b>${escHtml(s.id)}</b></td>
-          <td>${escHtml(s.name)}</td>
+          <td><b style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.id)}</b></td>
+          <td style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.name)}</td>
           <td><span class="tag">${escHtml(s.sector)}</span></td>
           <td>${fmt(s.price,1)}</td>
           <td><span class="rsi-dot ${rsiDot(rsi)}"></span>${fmt(s.rsi,1)}</td>
@@ -2106,7 +2106,7 @@ function renderDaily(data){
     html+=`<div class="section-title">籌碼面：三大法人</div><div class="grid-2">`;
     const ct=rows=>`<div class="card" style="overflow-x:auto"><table>
       <tr><th>代碼</th><th>名稱</th><th>族群</th><th>外資</th><th>投信</th><th>自營</th><th>合計</th></tr>
-      ${rows.map(c=>`<tr><td>${c.id}</td><td>${c.name}</td><td>${c.sector}</td>
+      ${rows.map(c=>`<tr><td style="cursor:pointer" onclick="goToStock('${escHtml(c.id)}')">${c.id}</td><td style="cursor:pointer" onclick="goToStock('${escHtml(c.id)}')">${c.name}</td><td>${c.sector}</td>
         <td>${chip(c.foreign)}</td><td>${chip(c.trust)}</td><td>${chip(c.dealer)}</td>
         <td><b>${chip(c.total)}</b></td></tr>`).join('')}
       </table></div>`;
@@ -2148,7 +2148,7 @@ function renderDaily(data){
       <div class="sector-body"><table>
         <tr><th>代碼</th><th>名稱</th><th>現價</th><th>RSI5/10</th><th>20日%</th><th>訊號</th><th>CV夏普</th><th>法人合計</th><th>短期目標</th><th>中期目標</th><th>長期目標</th><th></th></tr>
         ${stks.map(s=>`<tr>
-          <td>${s.id}</td><td><b>${escHtml(s.name)}</b>${BT_MAP.has(s.id)?`<span class="bt-badge" onclick="showBtTooltip('${escHtml(s.id)}',event);event.stopPropagation()">★回測</span>`:''}</td>
+          <td style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')">${s.id}</td><td style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')" title="點擊查看個股分析"><b>${escHtml(s.name)}</b>${BT_MAP.has(s.id)?`<span class="bt-badge" onclick="showBtTooltip('${escHtml(s.id)}',event);event.stopPropagation()">★回測</span>`:''}</td>
           <td>${fmt(s.price,1)}</td>
           <td><span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span></td>
           <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null&&s.ret20!==undefined?sign(Number(s.ret20))+fmt(s.ret20)+'%':'—'}</td>
