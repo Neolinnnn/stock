@@ -62,13 +62,45 @@ def _sanitize(obj):
 
 # ── FinMind helpers ─────────────────────────────────────────────────────────
 
+_BD_TOKENS: list = []
+_bd_token_idx = 0
+
+
+def _collect_bd_tokens():
+    global _BD_TOKENS
+    if _BD_TOKENS:
+        return
+    tokens = []
+    for key in ['FINMIND_TOKEN'] + [f'FINMIND_TOKEN_{i}' for i in range(1, 5)]:
+        t = os.environ.get(key, '')
+        if t and t not in tokens:
+            tokens.append(t)
+    _BD_TOKENS = tokens
+    if tokens:
+        print(f'[FinMind] build_docs 載入 {len(tokens)} 組 token')
+
+
 def _get_dl():
+    _collect_bd_tokens()
     from FinMind.data import DataLoader
     dl = DataLoader()
-    token = os.environ.get('FINMIND_TOKEN', '')
-    if token:
+    if not _BD_TOKENS:
+        return dl
+    token = _BD_TOKENS[_bd_token_idx % len(_BD_TOKENS)]
+    try:
         dl.login_by_token(api_token=token)
+    except Exception:
+        pass
     return dl
+
+
+def _rotate_dl():
+    global _bd_token_idx
+    _collect_bd_tokens()
+    if len(_BD_TOKENS) > 1:
+        _bd_token_idx = (_bd_token_idx + 1) % len(_BD_TOKENS)
+        print(f'  [FinMind] build_docs 切換至 token[{_bd_token_idx}]')
+    return _get_dl()
 
 
 # ── Technical indicator computation ─────────────────────────────────────────
@@ -569,7 +601,20 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
             ok_count += 1
             time.sleep(0.3)   # 避免 API 頻率限制
         except Exception as e:
-            print(f'  [WARN] {sid} {info["name"]}: {e}')
+            msg = str(e).lower()
+            if ('upper limit' in msg or 'quota' in msg) and len(_BD_TOKENS) > 1:
+                dl = _rotate_dl()
+                try:
+                    _build_single_stock(
+                        sid, info, dl,
+                        stocks_dir, start_date, end_date, chip_start,
+                    )
+                    ok_count += 1
+                    time.sleep(0.3)
+                except Exception as e2:
+                    print(f'  [WARN] {sid} {info["name"]}: {e2}')
+            else:
+                print(f'  [WARN] {sid} {info["name"]}: {e}')
 
     # stocks_index.json
     index = [{'id': v['id'], 'name': v['name'], 'sector': v['sector']}
