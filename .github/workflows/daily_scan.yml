@@ -48,6 +48,7 @@ jobs:
       - name: Run daily scan
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
@@ -58,6 +59,7 @@ jobs:
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python scripts/analyzer_daily.py
 
@@ -66,6 +68,7 @@ jobs:
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
@@ -77,12 +80,14 @@ jobs:
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/sector_rotation_backtest.py
 
       - name: Fetch fundamentals
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/fundamentals_fetcher.py
 
       - name: Build multi-agent analysis (agents)
@@ -90,6 +95,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: |
           # 即時 regime（國際指標 + 川普/總經 grounding）+ Gemini 敘述；失敗自動降級
           python agents/pipeline.py --macro --gemini || python agents/pipeline.py

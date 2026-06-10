@@ -50,6 +50,59 @@ def _retry(fn, *args, max_retries: int = 3, base_delay: float = 3.0, **kwargs):
 
 _PRICE_CACHE_DIR = Path(__file__).parent.parent / 'price_cache'
 
+# FinMind token 輪替
+_FINMIND_TOKENS: list = []
+_finmind_token_idx = 0
+
+
+def _collect_tokens():
+    global _FINMIND_TOKENS
+    if _FINMIND_TOKENS:
+        return
+    tokens = []
+    for key in ['FINMIND_TOKEN'] + [f'FINMIND_TOKEN_{i}' for i in range(1, 5)]:
+        t = os.environ.get(key, '')
+        if t and t not in tokens:
+            tokens.append(t)
+    _FINMIND_TOKENS = tokens
+    if tokens:
+        print(f'[FinMind] 載入 {len(tokens)} 組 token')
+
+
+def _make_dl():
+    _collect_tokens()
+    from FinMind.data import DataLoader
+    dl = DataLoader()
+    if not _FINMIND_TOKENS:
+        return dl
+    token = _FINMIND_TOKENS[_finmind_token_idx % len(_FINMIND_TOKENS)]
+    try:
+        dl.login_by_token(api_token=token)
+    except Exception:
+        pass
+    return dl
+
+
+def _finmind_fetch(method_name: str, **kwargs):
+    """呼叫 FinMind DataLoader 方法；額度超限時自動輪替 token。"""
+    global _finmind_token_idx
+    _collect_tokens()
+    n = max(1, len(_FINMIND_TOKENS))
+    last_err = None
+    for attempt in range(n):
+        dl = _make_dl()
+        method = getattr(dl, method_name)
+        try:
+            return _retry(method, max_retries=2, base_delay=2.0, **kwargs)
+        except Exception as e:
+            last_err = e
+            if ('upper limit' in str(e).lower() or 'quota' in str(e).lower()) and len(_FINMIND_TOKENS) > 1:
+                _finmind_token_idx = (_finmind_token_idx + 1) % len(_FINMIND_TOKENS)
+                print(f'  [FinMind] 額度已滿，切換至 token[{_finmind_token_idx}]')
+                continue
+            raise
+    raise last_err
+
 
 class _CachedStock:
     """Duck-type for twstock.Stock backed by local price cache."""
@@ -197,21 +250,9 @@ def _get_history(sid):
     """抓取/更新 K 棒歷史，快取於 price_cache/{sid}.json。
     使用 FinMind taiwan_stock_daily（不受 TWSE IP 封鎖）。
     非週一時只補快取末日後 7 天，每次掃描僅 ~88 次 FinMind 請求。"""
-    from FinMind.data import DataLoader
-
     today = datetime.now()
     is_monday = today.weekday() == 0
     cached = None if is_monday else _load_price_cache(sid)
-
-    def _make_dl():
-        dl = DataLoader()
-        token = os.environ.get('FINMIND_TOKEN', '')
-        if token:
-            try:
-                dl.login_by_token(api_token=token)
-            except Exception:
-                pass
-        return dl
 
     def _df_to_arrays(df):
         df = df.dropna(subset=['close']).sort_values('date').reset_index(drop=True)
@@ -224,17 +265,13 @@ def _get_history(sid):
         vols   = [int(v) for v in df['Trading_Volume']]
         return dates, prices, highs, lows, vols
 
-    def _full_fetch():
-        dl = _make_dl()
+    if cached is None or len(cached['prices']) < DATA_DAYS:
         start = (today - timedelta(days=int(DATA_DAYS * 1.6))).strftime('%Y-%m-%d')
         end = today.strftime('%Y-%m-%d')
-        df = dl.taiwan_stock_daily(stock_id=sid, start_date=start, end_date=end)
+        df = _finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start, end_date=end)
         if df is None or df.empty:
             raise ValueError(f'{sid} FinMind 回傳空資料')
-        return _df_to_arrays(df)
-
-    if cached is None or len(cached['prices']) < DATA_DAYS:
-        dates, prices, highs, lows, vols = _retry(_full_fetch, max_retries=3, base_delay=3.0)
+        dates, prices, highs, lows, vols = _df_to_arrays(df)
         _save_price_cache(sid, dates, prices, highs, lows, vols)
         return _CachedStock(prices, dates, highs, lows, vols)
 
@@ -243,15 +280,11 @@ def _get_history(sid):
     fetch_start = (last_date - timedelta(days=5)).strftime('%Y-%m-%d')
     fetch_end = today.strftime('%Y-%m-%d')
 
-    def _incr_fetch():
-        dl = _make_dl()
-        df = dl.taiwan_stock_daily(stock_id=sid, start_date=fetch_start, end_date=fetch_end)
+    try:
+        df = _finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=fetch_start, end_date=fetch_end)
         if df is None or df.empty:
             raise ValueError(f'{sid} 增量抓取空資料')
-        return _df_to_arrays(df)
-
-    try:
-        new_dates, new_prices, new_highs, new_lows, new_vols = _retry(_incr_fetch, max_retries=3, base_delay=3.0)
+        new_dates, new_prices, new_highs, new_lows, new_vols = _df_to_arrays(df)
     except Exception as e:
         print(f'    [{sid}] 增量抓取失敗（{e}），使用快取（{last_date}）')
         return _CachedStock(cached['prices'], cached['dates'],
@@ -328,14 +361,8 @@ def fetch_price_stats(sid, hist=None):
         # 中期 + 長期：基本面估值（P/E + PEG），FinMind 免費 api
         try:
             import pandas as _pd
-            from FinMind.data import DataLoader as _DL
-            _dl = _DL()
             one_yr_ago = (date.today() - timedelta(days=365)).strftime("%Y-%m-%d")
-            per_df = _retry(
-                _dl.taiwan_stock_per_pbr,
-                stock_id=sid, start_date=one_yr_ago,
-                max_retries=3, base_delay=2.0,
-            )
+            per_df = _finmind_fetch('taiwan_stock_per_pbr', stock_id=sid, start_date=one_yr_ago)
 
             if per_df.empty:
                 raise ValueError("no per data")
@@ -472,15 +499,9 @@ _CHIP_MAP = {
 def fetch_chip_data(stock_id, days=5):
     """抓取三大法人近 N 日買賣超（FinMind）"""
     try:
-        from FinMind.data import DataLoader
-        dl = DataLoader()
         end = datetime.now().strftime('%Y-%m-%d')
         start = (datetime.now() - timedelta(days=days + 5)).strftime('%Y-%m-%d')
-        df = _retry(
-            dl.taiwan_stock_institutional_investors,
-            stock_id=stock_id, start_date=start, end_date=end,
-            max_retries=3, base_delay=2.0,
-        )
+        df = _finmind_fetch('taiwan_stock_institutional_investors', stock_id=stock_id, start_date=start, end_date=end)
         if df.empty:
             return {}
         df = df.sort_values('date', ascending=False)
