@@ -268,22 +268,23 @@
   /* ── 基本面 KPI 摘要 + 數據表 ───────────────────────────────────── */
   .fund-kpi{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
   .fund-kpi .kpi{background:#13161d;border:1px solid var(--border);border-radius:8px;
-    padding:8px 14px;min-width:84px;}
-  .fund-kpi .kpi-lbl{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;}
-  .fund-kpi .kpi-val{font-size:17px;font-weight:700;margin-top:2px;line-height:1.2;
+    padding:10px 16px;min-width:110px;flex:1;}
+  .fund-kpi .kpi-lbl{font-size:11px;color:var(--sub);letter-spacing:.2px;}
+  .fund-kpi .kpi-val{font-size:20px;font-weight:700;margin-top:4px;line-height:1.2;
     font-variant-numeric:tabular-nums;}
+  .fund-chart-wrap{margin-bottom:4px;}
   .fund-tbl{width:100%;border-collapse:collapse;font-size:12px;
     font-variant-numeric:tabular-nums;}
   .fund-tbl th{position:sticky;top:0;z-index:1;background:#13161d;color:var(--sub);font-weight:500;
-    font-size:11px;text-align:right;padding:6px 10px;border-bottom:1px solid var(--border);}
+    font-size:11px;text-align:right;padding:7px 10px;border-bottom:1px solid var(--border);}
   .fund-tbl th:first-child{text-align:left;}
-  .fund-tbl td{text-align:right;padding:5px 10px;border-bottom:1px solid #20242e;}
+  .fund-tbl td{text-align:right;padding:6px 10px;border-bottom:1px solid #20242e;}
   .fund-tbl td:first-child{text-align:left;color:var(--sub);}
   .fund-tbl tr:hover td{background:#181c24;}
-  .fund-tbl tr.latest td{background:rgba(31,119,180,.10);}
+  .fund-tbl tr.latest td{background:rgba(31,119,180,.12);}
   .fund-tbl tr.latest td:first-child{color:var(--text);font-weight:600;}
-  .fund-tbl-wrap{max-height:300px;overflow-y:auto;border:1px solid var(--border);
-    border-radius:8px;margin-top:10px;}
+  .fund-tbl-wrap{max-height:380px;overflow-y:auto;border:1px solid var(--border);
+    border-radius:8px;margin-top:12px;}
 
   /* ── 回測選股 Tab ────────────────────────────────────────────────── */
   #nav-bt:not(.active){color:#f1c40f;}
@@ -1002,14 +1003,14 @@ function renderFundEps(d) {
     <div class="kpi"><div class="kpi-lbl">YoY</div><div class="kpi-val" style="color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div></div>
   </div>`;
 
-  html += `<div id="fund-eps-chart" style="height:200px;"></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-eps-chart" style="height:250px;"></div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>季度</th><th>EPS（元）</th><th>QoQ</th><th>YoY</th></tr></thead><tbody>`;
   for (let i = e.quarter.length - 1; i >= 0; i--) {
     html += `<tr class="${i === e.quarter.length - 1 ? 'latest' : ''}">
       <td>${e.quarter[i]}</td>
-      <td>${e.eps[i] != null ? e.eps[i].toFixed(2) : '—'}</td>
+      <td style="color:${signColor(e.eps[i])}">${e.eps[i] != null ? e.eps[i].toFixed(2) : '—'}</td>
       <td style="color:${signColor(e.qoq[i])}">${fmtPct(e.qoq[i])}</td>
       <td style="color:${signColor(e.yoy[i])}">${fmtPct(e.yoy[i])}</td>
     </tr>`;
@@ -1018,15 +1019,14 @@ function renderFundEps(d) {
   el.innerHTML = html;
 
   Plotly.newPlot('fund-eps-chart', [{
-    x: e.quarter, y: e.eps, type: 'scatter', mode: 'lines+markers',
-    name: 'EPS', line: { color: _PLY.acc, width: 2 },
-    marker: { size: 6, color: _PLY.acc },
-    fill: 'tozeroy', fillcolor: 'rgba(188,140,255,0.1)',
+    x: e.quarter, y: e.eps, type: 'bar',
+    name: 'EPS',
+    marker: { color: e.eps.map(v => v == null ? _PLY.neu : v >= 0 ? _PLY.up : _PLY.dn) },
   }], {
-    margin: { t: 10, b: 40, l: 40, r: 10 },
+    margin: { t: 10, b: 40, l: 45, r: 10 },
     paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
     font: _PLY.font,
-    yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 元' },
+    yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 元', zeroline: true, zerolinecolor: '#404860', zerolinewidth: 1 },
     xaxis:  { tickangle: -30 },
     showlegend: false,
   }, { responsive: true, displayModeBar: false });
@@ -1050,7 +1050,7 @@ function renderFundMargins(d) {
     <div class="kpi"><div class="kpi-lbl">淨利率</div><div class="kpi-val">${fmtPct(latestNet)}</div></div>
   </div>`;
 
-  html += `<div id="fund-margins-chart" style="height:200px;"></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-margins-chart" style="height:250px;"></div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>季度</th><th>毛利率</th><th>營益率</th><th>淨利率</th></tr></thead><tbody>`;
@@ -1079,7 +1079,7 @@ function renderFundMargins(d) {
     margin: { t: 10, b: 40, l: 40, r: 10 },
     paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
     font: _PLY.font,
-    legend: { orientation: 'h', y: -0.25, font: { size: 11 } },
+    legend: { orientation: 'h', y: -0.18, font: { size: 11 } },
     yaxis:  { gridcolor: _PLY.grid, ticksuffix: '%' },
     xaxis:  { tickangle: -30 },
   }, { responsive: true, displayModeBar: false });
@@ -1213,10 +1213,10 @@ function renderFundRevenue(d) {
     <div class="kpi"><div class="kpi-lbl">累計 YoY</div><div class="kpi-val" style="color:${signColor(latestCumYoy)}">${fmtPct(latestCumYoy)}</div></div>
   </div>`;
 
-  html += `<div id="fund-rev-chart" style="height:220px;"></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-rev-chart" style="height:260px;"></div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
-    <th>月份</th><th>月營收</th><th>MoM</th><th>YoY</th></tr></thead><tbody>`;
+    <th>月份</th><th>月營收</th><th>MoM</th><th>YoY</th><th>累計YoY</th></tr></thead><tbody>`;
   const showN = Math.min(r.month.length, 24);
   for (let i = r.month.length - 1; i >= r.month.length - showN; i--) {
     html += `<tr class="${i === r.month.length - 1 ? 'latest' : ''}">
@@ -1224,6 +1224,7 @@ function renderFundRevenue(d) {
       <td>${fmtRev(r.revenue[i])}</td>
       <td style="color:${signColor(r.mom[i])}">${fmtPct(r.mom[i])}</td>
       <td style="color:${signColor(r.yoy[i])}">${fmtPct(r.yoy[i])}</td>
+      <td style="color:${signColor(r.cum_yoy ? r.cum_yoy[i] : null)}">${fmtPct(r.cum_yoy ? r.cum_yoy[i] : null)}</td>
     </tr>`;
   }
   html += '</tbody></table></div>';
