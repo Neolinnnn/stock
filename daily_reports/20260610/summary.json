@@ -1,15 +1,15 @@
 {
   "date": "20260610",
-  "timestamp": "2026-06-10T11:27:25.723170",
+  "timestamp": "2026-06-10T14:19:24.108620",
   "market": {
     "加權指數": null,
     "漲跌幅": null
   },
   "sectors": {
     "光通訊": {
-      "avg_ret_20d": -2.48,
-      "avg_rsi": 35.6,
-      "avg_sharpe": 1.56,
+      "avg_ret_20d": -11.18,
+      "avg_rsi": 33.3,
+      "avg_sharpe": 1.42,
       "stocks": [
         {
           "id": "4979",
@@ -38,64 +38,12 @@
           "main_force": null
         },
         {
-          "id": "3450",
-          "name": "聯鈞",
-          "price": 472.0,
-          "rsi": 40.4,
-          "rsi10": 49.0,
-          "ret_20d": 7.0,
-          "signal": "HOLD",
-          "cv_sharpe": -3.65,
-          "cv_win_rate": 0.28,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -1869166,
-            "投信": 718000,
-            "自營": -94799,
-            "合計": -1245965
-          },
-          "target_short": 577.9,
-          "target_mid": 401.2,
-          "target_long": 521.5,
-          "atr14": 41.41,
-          "stop_loss": 389.2,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3665",
-          "name": "貿聯-KY",
-          "price": 2155.0,
-          "rsi": 47.6,
-          "rsi10": 45.8,
-          "ret_20d": NaN,
-          "signal": "BUY",
-          "cv_sharpe": 6.12,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-09",
-            "外資": -71525,
-            "投信": 155130,
-            "自營": -10322,
-            "合計": 73283
-          },
-          "target_short": NaN,
-          "target_mid": NaN,
-          "target_long": NaN,
-          "atr14": NaN,
-          "stop_loss": NaN,
-          "broker": null,
-          "main_force": null
-        },
-        {
           "id": "3105",
           "name": "穩懋",
           "price": 478.0,
           "rsi": 41.1,
           "rsi10": 43.9,
-          "ret_20d": -3.5,
+          "ret_20d": NaN,
           "signal": "HOLD",
           "cv_sharpe": 4.1,
           "cv_win_rate": 0.5,
@@ -107,11 +55,11 @@
             "自營": -770958,
             "合計": 880288
           },
-          "target_short": 573.5,
-          "target_mid": 641.4,
-          "target_long": 619.8,
-          "atr14": 42.47,
-          "stop_loss": 393.1,
+          "target_short": NaN,
+          "target_mid": NaN,
+          "target_long": NaN,
+          "atr14": NaN,
+          "stop_loss": NaN,
           "broker": null,
           "main_force": null
         },
@@ -136,93 +84,15 @@
           "target_short": 179.0,
           "target_mid": 220.4,
           "target_long": 200.4,
-          "atr14": 10.52,
-          "stop_loss": 126.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2455",
-          "name": "全新",
-          "price": 355.5,
-          "rsi": 34.2,
-          "rsi10": 41.6,
-          "ret_20d": -4.9,
-          "signal": "HOLD",
-          "cv_sharpe": 4.2,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -2633529,
-            "投信": 120000,
-            "自營": -818673,
-            "合計": -3332202
-          },
-          "target_short": 447.1,
-          "target_mid": 302.2,
-          "target_long": 395.2,
-          "atr14": 29.34,
-          "stop_loss": 296.8,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "4906",
-          "name": "正文",
-          "price": 41.55,
-          "rsi": 27.5,
-          "rsi10": 41.4,
-          "ret_20d": 9.3,
-          "signal": "HOLD",
-          "cv_sharpe": -0.28,
-          "cv_win_rate": 0.61,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 1354241,
-            "投信": -5000,
-            "自營": -312588,
-            "合計": 1036653
-          },
-          "target_short": 54.7,
-          "target_mid": 35.3,
-          "target_long": 47.5,
-          "atr14": 3.25,
-          "stop_loss": 35.1,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2345",
-          "name": "智邦",
-          "price": 2365.0,
-          "rsi": 34.9,
-          "rsi10": 43.9,
-          "ret_20d": -2.9,
-          "signal": "BUY",
-          "cv_sharpe": 1.83,
-          "cv_win_rate": 0.44,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -142085,
-            "投信": 17682,
-            "自營": -131023,
-            "合計": -255426
-          },
-          "target_short": 2662.0,
-          "target_mid": 2010.2,
-          "target_long": 2566.3,
-          "atr14": 160.34,
-          "stop_loss": 2044.3,
+          "atr14": 10.53,
+          "stop_loss": 125.9,
           "broker": null,
           "main_force": null
         }
       ],
       "hot_count": 0,
-      "buy_count": 2,
-      "qualified_count": 5
+      "buy_count": 0,
+      "qualified_count": 2
     },
     "記憶體": {
       "avg_ret_20d": -6.59,
@@ -321,9 +191,9 @@
           "chip": {
             "date": "2026-06-10",
             "外資": 551502,
-            "投信": -120000,
+            "投信": -209000,
             "自營": -308070,
-            "合計": 123432
+            "合計": 34432
           },
           "target_short": 2909.1,
           "target_mid": 3232.5,
@@ -357,9 +227,9 @@
           "chip": {
             "date": "2026-06-10",
             "外資": 28657,
-            "投信": -169000,
+            "投信": -245000,
             "自營": 16766,
-            "合計": -123577
+            "合計": -199577
           },
           "target_short": 3891.8,
           "target_mid": 2720.0,
@@ -499,62 +369,10 @@
       "qualified_count": 0
     },
     "CoPoS封裝": {
-      "avg_ret_20d": -11.28,
-      "avg_rsi": 29.4,
-      "avg_sharpe": 3.16,
+      "avg_ret_20d": -17.28,
+      "avg_rsi": 28.8,
+      "avg_sharpe": 0.76,
       "stocks": [
-        {
-          "id": "6789",
-          "name": "采鈺",
-          "price": 460.0,
-          "rsi": 21.1,
-          "rsi10": 31.5,
-          "ret_20d": -21.1,
-          "signal": "HOLD",
-          "cv_sharpe": 6.43,
-          "cv_win_rate": 0.83,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 221886,
-            "投信": -3000,
-            "自營": -36790,
-            "合計": 182096
-          },
-          "target_short": 592.3,
-          "target_mid": 391.0,
-          "target_long": 514.1,
-          "atr14": 32.54,
-          "stop_loss": 394.9,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3535",
-          "name": "晶彩科",
-          "price": 123.0,
-          "rsi": 39.5,
-          "rsi10": 44.7,
-          "ret_20d": -1.6,
-          "signal": "HOLD",
-          "cv_sharpe": 4.3,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 240600,
-            "投信": 0,
-            "自營": -316,
-            "合計": 240284
-          },
-          "target_short": 139.4,
-          "target_mid": 104.5,
-          "target_long": 133.7,
-          "atr14": 8.88,
-          "stop_loss": 105.2,
-          "broker": null,
-          "main_force": null
-        },
         {
           "id": "3680",
           "name": "家登",
@@ -604,32 +422,6 @@
           "target_long": 403.4,
           "atr14": 24.91,
           "stop_loss": 317.7,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2467",
-          "name": "志聖",
-          "price": 540.0,
-          "rsi": 25.9,
-          "rsi10": 37.9,
-          "ret_20d": -13.7,
-          "signal": "SELL",
-          "cv_sharpe": 2.6,
-          "cv_win_rate": 0.56,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 125690,
-            "投信": -1000,
-            "自營": -12666,
-            "合計": 112024
-          },
-          "target_short": 673.6,
-          "target_mid": 459.0,
-          "target_long": 599.1,
-          "atr14": 42.59,
-          "stop_loss": 454.8,
           "broker": null,
           "main_force": null
         },
@@ -762,120 +554,16 @@
           "stop_loss": 2661.1,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3583",
-          "name": "辛耘",
-          "price": 786.0,
-          "rsi": 32.5,
-          "rsi10": 39.5,
-          "ret_20d": -18.6,
-          "signal": "HOLD",
-          "cv_sharpe": 8.25,
-          "cv_win_rate": 0.75,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -692380,
-            "投信": 318000,
-            "自營": -78036,
-            "合計": -452416
-          },
-          "target_short": 935.9,
-          "target_mid": 668.1,
-          "target_long": 863.1,
-          "atr14": 61.31,
-          "stop_loss": 663.4,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3711",
-          "name": "日月光投控",
-          "price": 539.0,
-          "rsi": 34.5,
-          "rsi10": 43.8,
-          "ret_20d": -1.6,
-          "signal": "HOLD",
-          "cv_sharpe": 3.13,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -5242835,
-            "投信": 2117,
-            "自營": -39019,
-            "合計": -5279737
-          },
-          "target_short": 667.2,
-          "target_mid": 458.1,
-          "target_long": 597.0,
-          "atr14": 35.77,
-          "stop_loss": 467.5,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2449",
-          "name": "京元電子",
-          "price": 272.0,
-          "rsi": 22.4,
-          "rsi10": 35.3,
-          "ret_20d": -10.8,
-          "signal": "HOLD",
-          "cv_sharpe": 6.59,
-          "cv_win_rate": 0.83,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -12901786,
-            "投信": -74641,
-            "自營": -906952,
-            "合計": -13883379
-          },
-          "target_short": 340.4,
-          "target_mid": 231.2,
-          "target_long": 302.0,
-          "atr14": NaN,
-          "stop_loss": NaN,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "6239",
-          "name": "力成",
-          "price": 303.0,
-          "rsi": 33.7,
-          "rsi10": 47.6,
-          "ret_20d": 30.6,
-          "signal": "HOLD",
-          "cv_sharpe": 7.58,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 3819841,
-            "投信": -4690000,
-            "自營": -1508444,
-            "合計": -2378603
-          },
-          "target_short": 406.8,
-          "target_mid": 257.6,
-          "target_long": 341.9,
-          "atr14": 23.39,
-          "stop_loss": 256.2,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 10
+      "qualified_count": 3
     },
     "銅箔/CCL": {
-      "avg_ret_20d": 3.24,
-      "avg_rsi": 47.0,
-      "avg_sharpe": 3.74,
+      "avg_ret_20d": 21.71,
+      "avg_rsi": 40.1,
+      "avg_sharpe": 7.7,
       "stocks": [
         {
           "id": "8358",
@@ -902,199 +590,17 @@
           "stop_loss": 461.6,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2383",
-          "name": "台光電",
-          "price": 4940.0,
-          "rsi": 50.4,
-          "rsi10": 52.4,
-          "ret_20d": 0.2,
-          "signal": "SELL",
-          "cv_sharpe": 6.34,
-          "cv_win_rate": 0.53,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 302908,
-            "投信": 97815,
-            "自營": -43203,
-            "合計": 357520
-          },
-          "target_short": 5471.4,
-          "target_mid": 4199.0,
-          "target_long": 5342.7,
-          "atr14": 313.62,
-          "stop_loss": 4312.8,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "6213",
-          "name": "聯茂",
-          "price": 254.0,
-          "rsi": 43.0,
-          "rsi10": 45.8,
-          "ret_20d": -7.1,
-          "signal": "HOLD",
-          "cv_sharpe": 0.8,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 2607298,
-            "投信": -3000,
-            "自營": -199465,
-            "合計": 2404833
-          },
-          "target_short": 289.0,
-          "target_mid": 215.9,
-          "target_long": 276.2,
-          "atr14": 19.77,
-          "stop_loss": 214.5,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2368",
-          "name": "金像電",
-          "price": 1420.0,
-          "rsi": 57.2,
-          "rsi10": 55.8,
-          "ret_20d": 5.2,
-          "signal": "BUY",
-          "cv_sharpe": 11.01,
-          "cv_win_rate": 0.83,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 61167,
-            "投信": 352816,
-            "自營": -172083,
-            "合計": 241900
-          },
-          "target_short": 1486.0,
-          "target_mid": 1207.0,
-          "target_long": 1518.4,
-          "atr14": 104.99,
-          "stop_loss": 1210.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "8046",
-          "name": "南電",
-          "price": 847.0,
-          "rsi": 44.1,
-          "rsi10": 47.3,
-          "ret_20d": -3.8,
-          "signal": "HOLD",
-          "cv_sharpe": -7.13,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 188882,
-            "投信": 353000,
-            "自營": -502087,
-            "合計": 39795
-          },
-          "target_short": 949.4,
-          "target_mid": 924.2,
-          "target_long": 1000.0,
-          "atr14": 66.96,
-          "stop_loss": 713.1,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 3
+      "buy_count": 0,
+      "qualified_count": 1
     },
     "AI ASIC/IP": {
-      "avg_ret_20d": -18.27,
-      "avg_rsi": 20.0,
-      "avg_sharpe": -3.03,
+      "avg_ret_20d": -26.47,
+      "avg_rsi": 13.4,
+      "avg_sharpe": -7.4,
       "stocks": [
-        {
-          "id": "2330",
-          "name": "台積電",
-          "price": 2255.0,
-          "rsi": 28.5,
-          "rsi10": 43.2,
-          "ret_20d": 1.6,
-          "signal": "HOLD",
-          "cv_sharpe": 1.32,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -15542862,
-            "投信": -3797,
-            "自營": -730914,
-            "合計": -16277573
-          },
-          "target_short": 2424.9,
-          "target_mid": 1916.8,
-          "target_long": 2424.3,
-          "atr14": 60.23,
-          "stop_loss": 2134.5,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3443",
-          "name": "創意",
-          "price": 4025.0,
-          "rsi": 18.0,
-          "rsi10": 32.2,
-          "ret_20d": -24.5,
-          "signal": "HOLD",
-          "cv_sharpe": 0.86,
-          "cv_win_rate": 0.39,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 238091,
-            "投信": 7949,
-            "自營": -143652,
-            "合計": 102388
-          },
-          "target_short": 5423.8,
-          "target_mid": 3421.2,
-          "target_long": 4546.3,
-          "atr14": 380.11,
-          "stop_loss": 3264.8,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3661",
-          "name": "世芯-KY",
-          "price": 4040.0,
-          "rsi": 26.9,
-          "rsi10": 37.2,
-          "ret_20d": -15.5,
-          "signal": "HOLD",
-          "cv_sharpe": -2.54,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -60857,
-            "投信": -6000,
-            "自營": -58036,
-            "合計": -124893
-          },
-          "target_short": 5050.9,
-          "target_mid": 3434.0,
-          "target_long": 4484.6,
-          "atr14": 287.68,
-          "stop_loss": 3464.6,
-          "broker": null,
-          "main_force": null
-        },
         {
           "id": "3529",
           "name": "力旺",
@@ -1109,9 +615,9 @@
           "chip": {
             "date": "2026-06-10",
             "外資": 64029,
-            "投信": -7999,
+            "投信": -8999,
             "自營": -71365,
-            "合計": -15335
+            "合計": -16335
           },
           "target_short": 3905.2,
           "target_mid": 2533.0,
@@ -1150,39 +656,13 @@
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "AI 散熱": {
-      "avg_ret_20d": 1.57,
-      "avg_rsi": 43.8,
-      "avg_sharpe": 0.65,
+      "avg_ret_20d": -5.16,
+      "avg_rsi": 31.1,
+      "avg_sharpe": -10.86,
       "stocks": [
-        {
-          "id": "3017",
-          "name": "奇鋐",
-          "price": 2360.0,
-          "rsi": 23.1,
-          "rsi10": 36.5,
-          "ret_20d": -8.7,
-          "signal": "HOLD",
-          "cv_sharpe": 3.04,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -768729,
-            "投信": -264687,
-            "自營": -157460,
-            "合計": -1190876
-          },
-          "target_short": 2864.2,
-          "target_mid": 2297.9,
-          "target_long": 2719.2,
-          "atr14": 178.36,
-          "stop_loss": 2003.3,
-          "broker": null,
-          "main_force": null
-        },
         {
           "id": "3324",
           "name": "雙鴻",
@@ -1208,236 +688,45 @@
           "stop_loss": 855.9,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3653",
-          "name": "健策",
-          "price": 3800.0,
-          "rsi": 51.7,
-          "rsi10": 50.4,
-          "ret_20d": 7.6,
-          "signal": "HOLD",
-          "cv_sharpe": -0.25,
-          "cv_win_rate": 0.25,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -206075,
-            "投信": 254939,
-            "自營": -55840,
-            "合計": -6976
-          },
-          "target_short": 4146.3,
-          "target_mid": 3230.0,
-          "target_long": 4097.3,
-          "atr14": 307.42,
-          "stop_loss": 3185.2,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "8210",
-          "name": "勤誠",
-          "price": 1445.0,
-          "rsi": 55.4,
-          "rsi10": 56.0,
-          "ret_20d": -4.9,
-          "signal": "BUY",
-          "cv_sharpe": 7.43,
-          "cv_win_rate": 1.0,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -425893,
-            "投信": 396000,
-            "自營": -79492,
-            "合計": -109385
-          },
-          "target_short": 1503.5,
-          "target_mid": 1228.2,
-          "target_long": 1543.4,
-          "atr14": 100.4,
-          "stop_loss": 1244.2,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "8996",
-          "name": "高力",
-          "price": 1220.0,
-          "rsi": 57.7,
-          "rsi10": 57.4,
-          "ret_20d": 19.0,
-          "signal": "HOLD",
-          "cv_sharpe": 3.88,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -120439,
-            "投信": 350000,
-            "自營": -134108,
-            "合計": 95453
-          },
-          "target_short": 1293.0,
-          "target_mid": 1123.7,
-          "target_long": 1342.5,
-          "atr14": 102.54,
-          "stop_loss": 1014.9,
-          "broker": null,
-          "main_force": null
-        }
-      ],
-      "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 3
-    },
-    "AI 電源": {
-      "avg_ret_20d": -2.19,
-      "avg_rsi": 28.5,
-      "avg_sharpe": 4.66,
-      "stocks": [
-        {
-          "id": "2308",
-          "name": "台達電",
-          "price": 2200.0,
-          "rsi": 37.0,
-          "rsi10": 45.5,
-          "ret_20d": 1.6,
-          "signal": "HOLD",
-          "cv_sharpe": 5.08,
-          "cv_win_rate": 0.78,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -6909356,
-            "投信": -251208,
-            "自營": -76410,
-            "合計": -7236974
-          },
-          "target_short": 2629.1,
-          "target_mid": 1870.0,
-          "target_long": 2417.8,
-          "atr14": 137.85,
-          "stop_loss": 1924.3,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2301",
-          "name": "光寶科",
-          "price": 213.0,
-          "rsi": 33.0,
-          "rsi10": 44.5,
-          "ret_20d": 0.7,
-          "signal": "HOLD",
-          "cv_sharpe": 8.73,
-          "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": -1722045,
-            "投信": -54211,
-            "自營": -832468,
-            "合計": -2608724
-          },
-          "target_short": 255.0,
-          "target_mid": 181.0,
-          "target_long": 234.2,
-          "atr14": 14.84,
-          "stop_loss": 183.3,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "6412",
-          "name": "群電",
-          "price": 87.0,
-          "rsi": 15.6,
-          "rsi10": 32.9,
-          "ret_20d": -8.9,
-          "signal": "HOLD",
-          "cv_sharpe": 0.16,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {
-            "date": "2026-06-10",
-            "外資": 1031086,
-            "投信": -2280000,
-            "自營": 6284,
-            "合計": -1242630
-          },
-          "target_short": 109.6,
-          "target_mid": 78.5,
-          "target_long": 93.9,
-          "atr14": 5.35,
-          "stop_loss": 76.3,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 2
+      "qualified_count": 0
     }
   },
   "strong_sectors": [
     "銅箔/CCL"
   ],
   "weak_sectors": [
+    "光通訊",
     "記憶體",
     "IC設計",
     "車用電子",
     "CoPoS封裝",
-    "AI ASIC/IP"
+    "AI ASIC/IP",
+    "AI 散熱"
   ],
-  "qualified": [
-    {
-      "sector": "光通訊",
-      "id": "3665",
-      "name": "貿聯-KY",
-      "price": 2155.0,
-      "rsi": 47.6,
-      "cv_sharpe": 6.12
-    },
-    {
-      "sector": "光通訊",
-      "id": "2345",
-      "name": "智邦",
-      "price": 2365.0,
-      "rsi": 34.9,
-      "cv_sharpe": 1.83
-    },
-    {
-      "sector": "銅箔/CCL",
-      "id": "2368",
-      "name": "金像電",
-      "price": 1420.0,
-      "rsi": 57.2,
-      "cv_sharpe": 11.01
-    },
-    {
-      "sector": "AI 散熱",
-      "id": "8210",
-      "name": "勤誠",
-      "price": 1445.0,
-      "rsi": 55.4,
-      "cv_sharpe": 7.43
-    }
-  ],
+  "qualified": [],
   "alerts": [],
   "chart_path": "daily_reports/20260610/01_sector_strength.png",
   "failed_sectors": [
     "AI伺服器",
     "光學",
     "綠能環保",
+    "AI 電源",
     "被動元件"
   ],
   "partial_sectors": {
+    "光通訊": 5,
     "記憶體": 6,
     "封測": 10,
     "IC設計": 9,
-    "車用電子": 2
+    "車用電子": 2,
+    "CoPoS封裝": 7,
+    "銅箔/CCL": 4,
+    "AI ASIC/IP": 3,
+    "AI 散熱": 4
   },
-  "scan_coverage": 71
+  "scan_coverage": 64
 }
