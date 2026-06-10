@@ -34,9 +34,13 @@ try:
 except ImportError:
     pass
 
+def _ensure_project_root_in_path():
+    for _rp in [str(Path(__file__).resolve().parent.parent), os.getcwd()]:
+        if _rp not in sys.path:
+            sys.path.insert(0, _rp)
+
 try:
-    _INDICATORS_DIR = Path(__file__).resolve().parent.parent / 'indicators'
-    sys.path.insert(0, str(_INDICATORS_DIR.parent))
+    _ensure_project_root_in_path()
     from indicators.stock_analyzer import analyze_stock as _analyze_stock
     _ANALYZER_OK = True
 except Exception as _e:
@@ -456,17 +460,18 @@ def build_daily_payload(summary):
     )
 
     # ── 雙篩選第二層：對 qualified 個股跑趨勢分析，加入買入建議 ──────────────
-    # 每次直接 import（命中 sys.modules 快取，幾乎零成本），不依賴模組級 flag
-    _local_analyze = None
-    try:
-        _bd_root = Path(__file__).resolve().parent.parent
-        if str(_bd_root) not in sys.path:
-            sys.path.insert(0, str(_bd_root))
-        from indicators.stock_analyzer import analyze_stock as _local_analyze
-    except Exception as _e2:
-        print(f'[WARN] build_docs.build_daily_payload: 分析引擎載入失敗: {_e2}')
-        if _ANALYZER_OK:
-            _local_analyze = _analyze_stock
+    _local_analyze = _analyze_stock if _ANALYZER_OK else None
+    if not _local_analyze:
+        try:
+            _ensure_project_root_in_path()
+            # 清除可能殘留的失敗 import 快取，確保重試有效
+            for _mk in list(sys.modules.keys()):
+                if _mk == 'indicators' or _mk.startswith('indicators.'):
+                    if sys.modules[_mk] is None:
+                        del sys.modules[_mk]
+            from indicators.stock_analyzer import analyze_stock as _local_analyze
+        except Exception as _e2:
+            print(f'[WARN] build_docs.build_daily_payload: 分析引擎載入失敗: {_e2}')
 
     if _local_analyze and qualified:
         docs_dir_path = Path(__file__).resolve().parent.parent / 'docs'
