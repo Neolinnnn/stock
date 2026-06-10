@@ -195,55 +195,69 @@ def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
 
 def _get_history(sid):
     """抓取/更新 K 棒歷史，快取於 price_cache/{sid}.json。
-    非週一時只補最近 1-2 個月，TWSE 請求量從 ~2300 次降至 ~88 次。"""
-    from twstock import Stock
+    使用 FinMind taiwan_stock_price（不受 TWSE IP 封鎖）。
+    非週一時只補快取末日後 7 天，每次掃描僅 ~88 次 FinMind 請求。"""
+    from FinMind.data import DataLoader
 
     today = datetime.now()
     is_monday = today.weekday() == 0
     cached = None if is_monday else _load_price_cache(sid)
 
+    def _make_dl():
+        dl = DataLoader()
+        token = os.environ.get('FINMIND_TOKEN', '')
+        if token:
+            try:
+                dl.login_by_token(api_token=token)
+            except Exception:
+                pass
+        return dl
+
+    def _df_to_arrays(df):
+        df = df.dropna(subset=['close']).sort_values('date').reset_index(drop=True)
+        if df.empty:
+            raise ValueError('close 全為 NaN')
+        dates  = [datetime.strptime(str(d), '%Y-%m-%d').date() for d in df['date']]
+        prices = [float(v) for v in df['close']]
+        highs  = [float(v) for v in df['max']]
+        lows   = [float(v) for v in df['min']]
+        vols   = [int(v) for v in df['Trading_Volume']]
+        return dates, prices, highs, lows, vols
+
     def _full_fetch():
-        stock = Stock(sid)
-        start = today - timedelta(days=int(DATA_DAYS * 1.6))
-        stock.fetch_from(start.year, start.month)
-        if not stock.price:
-            raise ValueError(f'{sid} twstock 回傳空資料')
-        return stock
+        dl = _make_dl()
+        start = (today - timedelta(days=int(DATA_DAYS * 1.6))).strftime('%Y-%m-%d')
+        end = today.strftime('%Y-%m-%d')
+        df = dl.taiwan_stock_price(stock_id=sid, start_date=start, end_date=end)
+        if df is None or df.empty:
+            raise ValueError(f'{sid} FinMind 回傳空資料')
+        return _df_to_arrays(df)
 
     if cached is None or len(cached['prices']) < DATA_DAYS:
-        stock = _retry(_full_fetch, max_retries=3, base_delay=3.0)
-        prices = list(stock.price)
-        dates = list(stock.date)
-        highs = list(getattr(stock, 'high', None) or [])
-        lows = list(getattr(stock, 'low', None) or [])
-        vols = list(getattr(stock, 'volume', None) or [])
+        dates, prices, highs, lows, vols = _retry(_full_fetch, max_retries=3, base_delay=3.0)
         _save_price_cache(sid, dates, prices, highs, lows, vols)
         return _CachedStock(prices, dates, highs, lows, vols)
 
-    # 增量：只補快取末日後的月份（退後 30 天確保無缺口）
+    # 增量：只補快取末日後（重疊 5 天確保無缺口）
     last_date = cached['dates'][-1]
-    fetch_start = last_date - timedelta(days=30)
+    fetch_start = (last_date - timedelta(days=5)).strftime('%Y-%m-%d')
+    fetch_end = today.strftime('%Y-%m-%d')
 
     def _incr_fetch():
-        stock = Stock(sid)
-        stock.fetch_from(fetch_start.year, fetch_start.month)
-        if not stock.price:
+        dl = _make_dl()
+        df = dl.taiwan_stock_price(stock_id=sid, start_date=fetch_start, end_date=fetch_end)
+        if df is None or df.empty:
             raise ValueError(f'{sid} 增量抓取空資料')
-        return stock
+        return _df_to_arrays(df)
 
     try:
-        new = _retry(_incr_fetch, max_retries=3, base_delay=3.0)
+        new_dates, new_prices, new_highs, new_lows, new_vols = _retry(_incr_fetch, max_retries=3, base_delay=3.0)
     except Exception as e:
         print(f'    [{sid}] 增量抓取失敗（{e}），使用快取（{last_date}）')
         return _CachedStock(cached['prices'], cached['dates'],
                             cached['highs'], cached['lows'], cached['volumes'])
 
     # 合併去重（以日期字串為鍵，新資料覆蓋舊資料）
-    new_dates = list(new.date)
-    new_prices = list(new.price)
-    new_highs = list(getattr(new, 'high', None) or [])
-    new_lows = list(getattr(new, 'low', None) or [])
-    new_vols = list(getattr(new, 'volume', None) or [])
 
     dm: dict = {}
     for i, d in enumerate(cached['dates']):
