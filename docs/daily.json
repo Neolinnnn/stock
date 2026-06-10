@@ -3,18 +3,13 @@
     "掃描日期": "20260610",
     "加權指數": null,
     "漲跌幅%": null,
-    "強勢族群": "AI伺服器, 封測, 光學, 車用電子, 銅箔/CCL",
-    "弱勢族群": "光通訊, 記憶體, 綠能環保, CoPoS封裝, AI ASIC/IP, AI 散熱",
-    "雙條件推薦": 2,
-    "掃描涵蓋率": 86,
-    "失敗族群": [
-      "AI 電源",
-      "被動元件"
-    ],
+    "強勢族群": "AI伺服器, 封測, 光學, 車用電子, 銅箔/CCL, 被動元件",
+    "弱勢族群": "光通訊, 記憶體, 綠能環保, CoPoS封裝, AI ASIC/IP",
+    "雙條件推薦": 3,
+    "掃描涵蓋率": 100,
+    "失敗族群": [],
     "部分失敗族群": {
-      "銅箔/CCL": 1,
-      "AI ASIC/IP": 3,
-      "AI 散熱": 4
+      "被動元件": 1
     }
   },
   "qualified": [
@@ -33,6 +28,14 @@
       "price": 1420.0,
       "rsi": 57.2,
       "cv_sharpe": 11.01
+    },
+    {
+      "sector": "AI 散熱",
+      "id": "8210",
+      "name": "勤誠",
+      "price": 1445.0,
+      "rsi": 55.4,
+      "cv_sharpe": 7.43
     }
   ],
   "sectors": [
@@ -101,8 +104,8 @@
     },
     {
       "sector": "銅箔/CCL",
-      "ret20": 4.99,
-      "rsi": 47.7,
+      "ret20": 3.24,
+      "rsi": 47.0,
       "buy": 1,
       "hot": 0
     },
@@ -254,6 +257,15 @@
       "dealer": -1787153
     },
     {
+      "id": "2327",
+      "name": "國巨",
+      "sector": "被動元件",
+      "total": 533445,
+      "foreign": -6205974,
+      "trust": 8362903,
+      "dealer": -1623484
+    },
+    {
       "id": "2243",
       "name": "怡利電",
       "sector": "車用電子",
@@ -279,6 +291,15 @@
       "foreign": 302908,
       "trust": 97815,
       "dealer": -43203
+    },
+    {
+      "id": "2492",
+      "name": "華新科",
+      "sector": "被動元件",
+      "total": 333594,
+      "foreign": 414882,
+      "trust": 33000,
+      "dealer": -114288
     },
     {
       "id": "8358",
@@ -308,6 +329,15 @@
       "dealer": -316
     },
     {
+      "id": "8996",
+      "name": "高力",
+      "sector": "AI 散熱",
+      "total": 219453,
+      "foreign": -120439,
+      "trust": 474000,
+      "dealer": -134108
+    },
+    {
       "id": "6789",
       "name": "采鈺",
       "sector": "CoPoS封裝",
@@ -324,6 +354,15 @@
       "foreign": 361157,
       "trust": -183900,
       "dealer": -56604
+    },
+    {
+      "id": "3443",
+      "name": "創意",
+      "sector": "AI ASIC/IP",
+      "total": 102388,
+      "foreign": 238091,
+      "trust": 7949,
+      "dealer": -143652
     },
     {
       "id": "2388",
@@ -398,6 +437,15 @@
       "dealer": -4000
     },
     {
+      "id": "8046",
+      "name": "南電",
+      "sector": "銅箔/CCL",
+      "total": 46795,
+      "foreign": 188882,
+      "trust": 360000,
+      "dealer": -502087
+    },
+    {
       "id": "8299",
       "name": "群聯",
       "sector": "記憶體",
@@ -441,6 +489,15 @@
       "foreign": 19917,
       "trust": 0,
       "dealer": -17215
+    },
+    {
+      "id": "3653",
+      "name": "健策",
+      "sector": "AI 散熱",
+      "total": -6976,
+      "foreign": -206075,
+      "trust": 254939,
+      "dealer": -55840
     },
     {
       "id": "3058",
@@ -495,6 +552,24 @@
       "foreign": -14805,
       "trust": -1000,
       "dealer": -53897
+    },
+    {
+      "id": "8210",
+      "name": "勤誠",
+      "sector": "AI 散熱",
+      "total": -109385,
+      "foreign": -425893,
+      "trust": 396000,
+      "dealer": -79492
+    },
+    {
+      "id": "3661",
+      "name": "世芯-KY",
+      "sector": "AI ASIC/IP",
+      "total": -124893,
+      "foreign": -60857,
+      "trust": -6000,
+      "dealer": -58036
     },
     {
       "id": "6257",
@@ -632,6 +707,15 @@
       "dealer": -209794
     },
     {
+      "id": "6412",
+      "name": "群電",
+      "sector": "AI 電源",
+      "total": -1242630,
+      "foreign": 1031086,
+      "trust": -2280000,
+      "dealer": 6284
+    },
+    {
       "id": "3450",
       "name": "聯鈞",
       "sector": "光通訊",
@@ -684,6 +768,15 @@
       "foreign": 2125657,
       "trust": -3401000,
       "dealer": -1293205
+    },
+    {
+      "id": "2301",
+      "name": "光寶科",
+      "sector": "AI 電源",
+      "total": -2608724,
+      "foreign": -1722045,
+      "trust": -54211,
+      "dealer": -832468
     },
     {
       "id": "2441",
@@ -758,6 +851,15 @@
       "dealer": -1822782
     },
     {
+      "id": "2308",
+      "name": "台達電",
+      "sector": "AI 電源",
+      "total": -7237974,
+      "foreign": -6909356,
+      "trust": -252208,
+      "dealer": -76410
+    },
+    {
       "id": "3231",
       "name": "緯創",
       "sector": "AI伺服器",
@@ -783,6 +885,15 @@
       "foreign": -12901786,
       "trust": -61681,
       "dealer": -906952
+    },
+    {
+      "id": "2330",
+      "name": "台積電",
+      "sector": "AI ASIC/IP",
+      "total": -16277573,
+      "foreign": -15542862,
+      "trust": -3797,
+      "dealer": -730914
     },
     {
       "id": "2317",
@@ -2013,6 +2124,74 @@
     },
     {
       "date": "20260610",
+      "sector": "銅箔/CCL",
+      "id": "8046",
+      "name": "南電",
+      "price": 847.0,
+      "rsi": 44.1,
+      "rsi10": 47.3,
+      "ret20": -3.8,
+      "signal": "HOLD",
+      "sharpe": -7.13,
+      "foreign": 188882,
+      "trust": 360000,
+      "dealer": -502087,
+      "chipTotal": 46795,
+      "news": ""
+    },
+    {
+      "date": "20260610",
+      "sector": "AI ASIC/IP",
+      "id": "2330",
+      "name": "台積電",
+      "price": 2255.0,
+      "rsi": 28.5,
+      "rsi10": 43.2,
+      "ret20": 1.6,
+      "signal": "HOLD",
+      "sharpe": 1.32,
+      "foreign": -15542862,
+      "trust": -3797,
+      "dealer": -730914,
+      "chipTotal": -16277573,
+      "news": ""
+    },
+    {
+      "date": "20260610",
+      "sector": "AI ASIC/IP",
+      "id": "3443",
+      "name": "創意",
+      "price": 4025.0,
+      "rsi": 18.0,
+      "rsi10": 32.2,
+      "ret20": -24.5,
+      "signal": "HOLD",
+      "sharpe": 0.86,
+      "foreign": 238091,
+      "trust": 7949,
+      "dealer": -143652,
+      "chipTotal": 102388,
+      "news": ""
+    },
+    {
+      "date": "20260610",
+      "sector": "AI ASIC/IP",
+      "id": "3661",
+      "name": "世芯-KY",
+      "price": 4040.0,
+      "rsi": 26.9,
+      "rsi10": 37.2,
+      "ret20": -15.5,
+      "signal": "HOLD",
+      "sharpe": -2.54,
+      "foreign": -60857,
+      "trust": -6000,
+      "dealer": -58036,
+      "chipTotal": -124893,
+      "news": ""
+    },
+    {
+      "date": "20260610",
       "sector": "AI ASIC/IP",
       "id": "3529",
       "name": "力旺",
@@ -2056,10 +2235,10 @@
       "ret20": -8.7,
       "signal": "HOLD",
       "sharpe": 3.04,
-      "foreign": -768729,
-      "trust": -264687,
-      "dealer": -157460,
-      "chipTotal": -1190876,
+      "foreign": "",
+      "trust": "",
+      "dealer": "",
+      "chipTotal": "",
       "news": ""
     },
     {
@@ -3583,8 +3762,8 @@
       "sector": "銅箔/CCL",
       "price": 4940.0,
       "signal": "SELL",
-      "atr14": 313.76,
-      "stopLoss": 4312.5,
+      "atr14": 313.62,
+      "stopLoss": 4312.8,
       "mainForceScore": null,
       "mainForceLabel": null,
       "top1Broker": null,
@@ -3623,8 +3802,88 @@
       "sector": "銅箔/CCL",
       "price": 1420.0,
       "signal": "BUY",
-      "atr14": 105.03,
-      "stopLoss": 1209.9,
+      "atr14": 104.99,
+      "stopLoss": 1210.0,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "銅箔/CCL",
+      "price": 847.0,
+      "signal": "HOLD",
+      "atr14": 66.96,
+      "stopLoss": 713.1,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "2330",
+      "name": "台積電",
+      "sector": "AI ASIC/IP",
+      "price": 2255.0,
+      "signal": "HOLD",
+      "atr14": 60.23,
+      "stopLoss": 2134.5,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "3443",
+      "name": "創意",
+      "sector": "AI ASIC/IP",
+      "price": 4025.0,
+      "signal": "HOLD",
+      "atr14": 380.11,
+      "stopLoss": 3264.8,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "3661",
+      "name": "世芯-KY",
+      "sector": "AI ASIC/IP",
+      "price": 4040.0,
+      "signal": "HOLD",
+      "atr14": 287.68,
+      "stopLoss": 3464.6,
       "mainForceScore": null,
       "mainForceLabel": null,
       "top1Broker": null,
