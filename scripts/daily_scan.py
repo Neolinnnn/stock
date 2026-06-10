@@ -48,6 +48,56 @@ def _retry(fn, *args, max_retries: int = 3, base_delay: float = 3.0, **kwargs):
             print(f'    [retry {attempt+1}/{max_retries}] {fn.__name__ if hasattr(fn,"__name__") else "call"} 失敗，{wait:.0f}s 後重試…（{e}）')
             time.sleep(wait)
 
+_PRICE_CACHE_DIR = Path(__file__).parent.parent / 'price_cache'
+
+
+class _CachedStock:
+    """Duck-type for twstock.Stock backed by local price cache."""
+    __slots__ = ('price', 'date', 'high', 'low', 'volume')
+
+    def __init__(self, price, date, high, low, volume=None):
+        self.price = price
+        self.date = date
+        self.high = high
+        self.low = low
+        self.volume = volume or []
+
+
+def _load_price_cache(sid: str):
+    path = _PRICE_CACHE_DIR / f'{sid}.json'
+    if not path.exists():
+        return None
+    try:
+        with open(path, encoding='utf-8') as f:
+            d = json.load(f)
+        dates = [datetime.strptime(x, '%Y-%m-%d').date() for x in d['dates']]
+        return {
+            'dates': dates,
+            'prices': d['prices'],
+            'highs': d.get('highs', []),
+            'lows': d.get('lows', []),
+            'volumes': d.get('volumes', []),
+        }
+    except Exception:
+        return None
+
+
+def _save_price_cache(sid: str, dates, prices, highs, lows, volumes):
+    _PRICE_CACHE_DIR.mkdir(exist_ok=True)
+    path = _PRICE_CACHE_DIR / f'{sid}.json'
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump({
+            'sid': sid,
+            'updated_at': datetime.now().strftime('%Y-%m-%d'),
+            'dates': [d.strftime('%Y-%m-%d') if hasattr(d, 'strftime') else str(d)
+                      for d in dates],
+            'prices': prices,
+            'highs': highs,
+            'lows': lows,
+            'volumes': volumes,
+        }, f, separators=(',', ':'))
+
+
 # 支援中文
 rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
 rcParams['axes.unicode_minus'] = False
@@ -144,20 +194,84 @@ def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
 
 
 def _get_history(sid):
-    """抓一次 twstock 歷史（~26 個月，涵蓋 CV 與技術指標所需），供
-    analyze_stock 與 fetch_price_stats 共用，避免每檔重複抓取 twstock。
-    內建 retry（最多 3 次，指數退避）應對 TWSE 偶發限流。"""
+    """抓取/更新 K 棒歷史，快取於 price_cache/{sid}.json。
+    非週一時只補最近 1-2 個月，TWSE 請求量從 ~2300 次降至 ~88 次。"""
     from twstock import Stock
 
-    def _fetch():
+    today = datetime.now()
+    is_monday = today.weekday() == 0
+    cached = None if is_monday else _load_price_cache(sid)
+
+    def _full_fetch():
         stock = Stock(sid)
-        start = datetime.now() - timedelta(days=int(DATA_DAYS * 1.6))
+        start = today - timedelta(days=int(DATA_DAYS * 1.6))
         stock.fetch_from(start.year, start.month)
         if not stock.price:
             raise ValueError(f'{sid} twstock 回傳空資料')
         return stock
 
-    return _retry(_fetch, max_retries=3, base_delay=3.0)
+    if cached is None or len(cached['prices']) < DATA_DAYS:
+        stock = _retry(_full_fetch, max_retries=3, base_delay=3.0)
+        prices = list(stock.price)
+        dates = list(stock.date)
+        highs = list(getattr(stock, 'high', None) or [])
+        lows = list(getattr(stock, 'low', None) or [])
+        vols = list(getattr(stock, 'volume', None) or [])
+        _save_price_cache(sid, dates, prices, highs, lows, vols)
+        return _CachedStock(prices, dates, highs, lows, vols)
+
+    # 增量：只補快取末日後的月份（退後 30 天確保無缺口）
+    last_date = cached['dates'][-1]
+    fetch_start = last_date - timedelta(days=30)
+
+    def _incr_fetch():
+        stock = Stock(sid)
+        stock.fetch_from(fetch_start.year, fetch_start.month)
+        if not stock.price:
+            raise ValueError(f'{sid} 增量抓取空資料')
+        return stock
+
+    try:
+        new = _retry(_incr_fetch, max_retries=3, base_delay=3.0)
+    except Exception as e:
+        print(f'    [{sid}] 增量抓取失敗（{e}），使用快取（{last_date}）')
+        return _CachedStock(cached['prices'], cached['dates'],
+                            cached['highs'], cached['lows'], cached['volumes'])
+
+    # 合併去重（以日期字串為鍵，新資料覆蓋舊資料）
+    new_dates = list(new.date)
+    new_prices = list(new.price)
+    new_highs = list(getattr(new, 'high', None) or [])
+    new_lows = list(getattr(new, 'low', None) or [])
+    new_vols = list(getattr(new, 'volume', None) or [])
+
+    dm: dict = {}
+    for i, d in enumerate(cached['dates']):
+        dk = d.strftime('%Y-%m-%d') if hasattr(d, 'strftime') else str(d)
+        dm[dk] = (
+            cached['prices'][i],
+            cached['highs'][i] if i < len(cached['highs']) else None,
+            cached['lows'][i] if i < len(cached['lows']) else None,
+            cached['volumes'][i] if i < len(cached['volumes']) else None,
+        )
+    for i, d in enumerate(new_dates):
+        dk = d.strftime('%Y-%m-%d') if hasattr(d, 'strftime') else str(d)
+        dm[dk] = (
+            new_prices[i] if i < len(new_prices) else None,
+            new_highs[i] if i < len(new_highs) else None,
+            new_lows[i] if i < len(new_lows) else None,
+            new_vols[i] if i < len(new_vols) else None,
+        )
+
+    keys = sorted(dk for dk, v in dm.items() if v[0] is not None)
+    m_dates = [datetime.strptime(k, '%Y-%m-%d').date() for k in keys]
+    m_prices = [dm[k][0] for k in keys]
+    m_highs = [dm[k][1] for k in keys]
+    m_lows = [dm[k][2] for k in keys]
+    m_vols = [dm[k][3] for k in keys]
+
+    _save_price_cache(sid, m_dates, m_prices, m_highs, m_lows, m_vols)
+    return _CachedStock(m_prices, m_dates, m_highs, m_lows, m_vols)
 
 
 def fetch_price_stats(sid, hist=None):
