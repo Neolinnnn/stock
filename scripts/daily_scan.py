@@ -195,7 +195,7 @@ def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
 
 def _get_history(sid):
     """抓取/更新 K 棒歷史，快取於 price_cache/{sid}.json。
-    使用 FinMind taiwan_stock_price（不受 TWSE IP 封鎖）。
+    使用 FinMind taiwan_stock_daily（不受 TWSE IP 封鎖）。
     非週一時只補快取末日後 7 天，每次掃描僅 ~88 次 FinMind 請求。"""
     from FinMind.data import DataLoader
 
@@ -228,7 +228,7 @@ def _get_history(sid):
         dl = _make_dl()
         start = (today - timedelta(days=int(DATA_DAYS * 1.6))).strftime('%Y-%m-%d')
         end = today.strftime('%Y-%m-%d')
-        df = dl.taiwan_stock_price(stock_id=sid, start_date=start, end_date=end)
+        df = dl.taiwan_stock_daily(stock_id=sid, start_date=start, end_date=end)
         if df is None or df.empty:
             raise ValueError(f'{sid} FinMind 回傳空資料')
         return _df_to_arrays(df)
@@ -245,7 +245,7 @@ def _get_history(sid):
 
     def _incr_fetch():
         dl = _make_dl()
-        df = dl.taiwan_stock_price(stock_id=sid, start_date=fetch_start, end_date=fetch_end)
+        df = dl.taiwan_stock_daily(stock_id=sid, start_date=fetch_start, end_date=fetch_end)
         if df is None or df.empty:
             raise ValueError(f'{sid} 增量抓取空資料')
         return _df_to_arrays(df)
