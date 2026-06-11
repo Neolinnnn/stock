@@ -4450,5 +4450,22 @@
       "brokerSource": null,
       "brokerError": null
     }
+  ],
+  "signalFlips": [
+    {
+      "id": "2345",
+      "name": "智邦",
+      "sector": "光通訊",
+      "signal_date": "20260610",
+      "signal_price": 2365.0,
+      "price": 2275.0,
+      "chg_pct": -3.81,
+      "cur_signal": "BUY",
+      "rsi": 27.1,
+      "above_ma20": false,
+      "vol_ratio": 0.94,
+      "macd_up": false,
+      "status": "轉弱"
+    }
   ]
 }

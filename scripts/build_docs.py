@@ -577,7 +577,76 @@ def build_daily_payload(summary):
         'chips':   sorted(chips, key=lambda x: x['total'], reverse=True),
         'stocks':  stocks,
         'mainForce': main_force_sorted,
+        'signalFlips': build_signal_flips(summary, qualified, stocks),
     }
+
+
+def build_signal_flips(summary, qualified, stocks, lookback_days=5):
+    """近 N 個交易日曾入選 qualified（BUY）、今日已不在清單的個股。
+    依結構位置分類：回檔測試（仍站 MA20，等動能回穩）vs 轉弱（跌破支撐）。"""
+    today = summary.get('date', '')
+    if not today:
+        return []
+    base = Path(__file__).resolve().parent.parent / 'daily_reports'
+    docs_dir_path = Path(__file__).resolve().parent.parent / 'docs'
+    prev_dates = sorted(
+        [d.name for d in base.iterdir()
+         if d.is_dir() and d.name.isdigit() and len(d.name) == 8
+         and d.name < today and (d / 'summary.json').exists()],
+        reverse=True)[:lookback_days]
+
+    today_ids = {q.get('id') for q in qualified}
+    cur_map = {s.get('id'): s for s in (stocks or [])}
+    seen, flips = set(), []
+    for d in prev_dates:  # 新→舊，取最近一次入選
+        try:
+            sj = json.loads((base / d / 'summary.json').read_text(encoding='utf-8'))
+        except Exception:
+            continue
+        for q in sj.get('qualified', []):
+            sid = q.get('id', '')
+            if not sid or sid in today_ids or sid in seen:
+                continue
+            seen.add(sid)
+            cur = cur_map.get(sid, {})
+            sig_price = q.get('price')
+            cur_price = cur.get('price')
+            chg = (round((cur_price / sig_price - 1) * 100, 2)
+                   if sig_price and cur_price else None)
+            # 結構位置：今日收盤 vs MA20（取個股 JSON 指標）
+            above_ma20 = None
+            macd_up = False
+            vol_ratio = None
+            try:
+                st = json.loads((docs_dir_path / 'stocks' / f'{sid}.json')
+                                .read_text(encoding='utf-8'))
+                closes = st.get('ohlcv', {}).get('close', [])
+                vols = st.get('ohlcv', {}).get('volume', [])
+                ma20 = (st.get('indicators', {}).get('ma20') or [])
+                hist = (st.get('indicators', {}).get('macd_hist') or [])
+                if closes and ma20 and ma20[-1] is not None:
+                    above_ma20 = closes[-1] > ma20[-1]
+                if len(hist) >= 2 and hist[-1] is not None and hist[-2] is not None:
+                    macd_up = hist[-1] > 0 and hist[-1] > hist[-2]
+                if len(vols) >= 20 and vols[-1]:
+                    vma = sum(vols[-20:]) / 20
+                    vol_ratio = round(vols[-1] / vma, 2) if vma else None
+            except Exception:
+                pass
+            healthy = bool(above_ma20) and (chg is None or chg > -8)
+            flips.append({
+                'id': sid, 'name': q.get('name', sid), 'sector': q.get('sector', ''),
+                'signal_date': d, 'signal_price': sig_price,
+                'price': cur_price, 'chg_pct': chg,
+                'cur_signal': cur.get('signal', ''),
+                'rsi': cur.get('rsi'),
+                'above_ma20': above_ma20,
+                'vol_ratio': vol_ratio, 'macd_up': macd_up,
+                'status': '回檔測試' if healthy else '轉弱',
+            })
+    # 回檔測試在前（潛在再進場），轉弱在後（警示）
+    flips.sort(key=lambda f: (f['status'] != '回檔測試', f['chg_pct'] if f['chg_pct'] is not None else 0))
+    return flips
 
 
 # ── Rich stock pages ─────────────────────────────────────────────────────────

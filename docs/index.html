@@ -2287,6 +2287,45 @@ function renderDaily(data){
     html+=`</div>`;
   }
 
+  // ── 買轉弱觀察：近5日曾入選、今日掉出清單的個股 ──────────────────────────
+  const flips=data.signalFlips||[];
+  if(flips.length){
+    html+=`<div class="section-title" style="color:var(--yellow)">🔄 買轉弱觀察（近5日曾入選、今日掉出 ${flips.length} 檔）</div>
+    <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">
+      <b style="color:var(--yellow)">回檔測試</b>＝仍站 MA20 上，等量比≥1.2 或 MACD 翻強可再進場；
+      <b style="color:var(--red)">轉弱</b>＝跌破 MA20 或自訊號日跌逾 8%，持有者注意停損
+    </div>
+    <div class="action-grid">
+      ${flips.map(f=>{
+        const healthy=f.status==='回檔測試';
+        const bc=healthy?'var(--yellow)':'var(--red)';
+        const momentumBack=(f.vol_ratio!=null&&f.vol_ratio>=1.2)||f.macd_up;
+        return `<div class="action-card" style="border-left:3px solid ${bc}">
+          <div class="ac-head">
+            <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(f.id)}')" title="點擊查看個股分析">${escHtml(f.id)}</span>
+            <span class="ac-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(f.id)}')" title="點擊查看個股分析">${escHtml(f.name)}</span>
+            <span class="ac-sector">${escHtml(f.sector)}</span>
+            <span class="ac-sig" style="color:${bc}">${escHtml(f.status)}</span>
+          </div>
+          <div class="ac-prices">
+            <div class="ac-price-item"><span class="ac-price-lbl">入選日</span><span class="ac-price-val" style="font-size:12px">${fmtDate(f.signal_date).slice(5)}</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">入選價</span><span class="ac-price-val">${fmt(f.signal_price,1)}</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(f.price,1)}</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">距訊號</span><span class="ac-price-val ${Number(f.chg_pct)>=0?'up':'dn'}">${f.chg_pct!=null?sign(Number(f.chg_pct))+f.chg_pct+'%':'—'}</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${fmt(f.rsi,1)}</span></div>
+          </div>
+          <div class="ac-reasons">
+            ${f.above_ma20===false?`<span style="color:var(--red)">⚠ 已跌破 MA20</span><br>`:f.above_ma20===true?`✓ 仍站 MA20 之上<br>`:''}
+            ${healthy?(momentumBack
+              ?`<span style="color:var(--green)">✓ 動能回穩（量比 ${f.vol_ratio??'—'}${f.macd_up?'・MACD 翻強':''}）— 可評估再進場</span>`
+              :`等待動能回穩：量比 ${f.vol_ratio??'—'}（需≥1.2）${f.macd_up?'':'・MACD 未翻強'}`)
+              :`<span style="color:var(--red)">⚠ 趨勢轉壞訊號，反彈至 MA20 附近為減碼點</span>`}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
   // ── 領頭羊突破（第二訊號源，async 載入 breakout.json） ───────────────────
   html += `<div id="breakout-section"></div>`;
 
