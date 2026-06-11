@@ -361,7 +361,6 @@
     border-top:1px solid #1e2128;font-size:11px;color:var(--sub);line-height:1.7;}
   #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
-<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
@@ -785,16 +784,16 @@ function buildDualPickHtml(data){
     </table></div>`;
   }
 
-  // 散點象限圖：x=20日動能、y=法人籌碼，右上=雙強區
-  window._DP_DATA = { stocks: data.stocks, momentumIds, chipIds, intersectIds, topSectors };
+  // 散點象限圖（純 CSS 百分比定位，零繪圖庫、手機原生觸控）：
+  // x=20日動能、y=法人籌碼，右上=雙強區
   html += `<div class="card" style="margin-bottom:12px;">
-    <div style="font-size:11px;color:var(--sub);margin-bottom:4px;">
+    <div style="font-size:11px;color:var(--sub);margin-bottom:6px;">
       每一點是一檔追蹤股：<b style="color:var(--green)">右上象限＝動能與籌碼雙強</b>；
       <span style="color:var(--yellow)">◆黃＝雙選</span>、
       <span style="color:var(--green)">●綠＝動能入選</span>、
-      <span style="color:var(--blue)">●藍＝籌碼入選</span>、灰＝其餘（點擊任一點看個股分析）
+      <span style="color:var(--blue)">●藍＝籌碼入選</span>、灰＝其餘（點任一點看個股分析）
     </div>
-    <div id="dualpick-chart" style="height:360px;"></div>
+    ${_dualPickScatterHtml(data.stocks, momentumIds, chipIds, intersectIds)}
   </div>`;
 
   // 完整兩欄收進 details，保持頁面乾淨
@@ -2321,7 +2320,7 @@ function renderDaily(data){
         return `<div class="sell-card${severe?' severe':''}">
           <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:4px;">
             <b style="font-size:15px;cursor:pointer;" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.id)}</b>
-            <span style="font-weight:600;">${escHtml(s.name)}</span>
+            <span style="font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(s.id)}')" title="點擊查看個股分析">${escHtml(s.name)}</span>
             <span class="tag" style="margin-left:auto;">${escHtml(s.sector)}</span>
           </div>
           <div style="display:flex;align-items:baseline;gap:10px;">
@@ -2421,46 +2420,54 @@ function renderDaily(data){
   });
 
   document.getElementById('page-daily').innerHTML=html;
-  _renderDualPickChart();
   _renderBreakoutSection();
 }
 
-// ── 雙維選股散點象限圖 ───────────────────────────────────────────────────────
-function _renderDualPickChart(){
-  const el=document.getElementById('dualpick-chart');
-  const dp=window._DP_DATA;
-  if(!el||!dp) return;
-  const pts=(dp.stocks||[]).filter(s=>s.ret20!=null&&s.ret20!=='');
-  if(!pts.length){ el.innerHTML='<div style="color:var(--sub);font-size:12px;padding:20px;">無資料</div>'; return; }
-  const grp=s=>dp.intersectIds.has(s.id)?'dual':dp.momentumIds.has(s.id)?'mom':dp.chipIds.has(s.id)?'chip':'rest';
-  const mk=(ids,name,color,size,symbol)=>{
-    const ss=pts.filter(s=>grp(s)===ids);
-    return {
-      x:ss.map(s=>Number(s.ret20)), y:ss.map(s=>Number(s.chipTotal||0)/1000),
-      text:ss.map(s=>`${s.id} ${s.name}`), customdata:ss.map(s=>s.id),
-      type:'scatter', mode:ids==='rest'?'markers':'markers+text',
-      textposition:'top center', textfont:{size:10,color},
-      name, marker:{size, color, symbol, opacity:ids==='rest'?0.45:0.95,
-        line:{width:ids==='dual'?2:0,color:'#fff'}},
-      hovertemplate:'%{text}<br>20日 %{x:.1f}%・法人 %{y:,.0f} 千張<extra></extra>',
-    };
-  };
-  const traces=[mk('rest','其餘','#5a6478',7,'circle'), mk('chip','籌碼入選','#4ea1f3',11,'circle'),
-                mk('mom','動能入選','#2ecc71',11,'circle'), mk('dual','★雙選','#f1b143',15,'diamond')];
+// ── 雙維選股散點象限圖（純 CSS 百分比定位，免繪圖庫、自適應手機寬度） ───────
+function _dualPickScatterHtml(stocks, momentumIds, chipIds, intersectIds){
+  const pts=(stocks||[]).filter(s=>s.ret20!=null&&s.ret20!=='');
+  if(!pts.length) return '<div style="color:var(--sub);font-size:12px;padding:20px;">無資料</div>';
   const xs=pts.map(s=>Number(s.ret20)), ys=pts.map(s=>Number(s.chipTotal||0)/1000);
   const xMax=Math.max(...xs.map(Math.abs),5)*1.15, yMax=Math.max(...ys.map(Math.abs),1)*1.15;
-  Plotly.newPlot(el,traces,{
-    margin:{t:8,b:38,l:55,r:10},
-    paper_bgcolor:'transparent',plot_bgcolor:'transparent',font:_PLY.font,
-    xaxis:{title:{text:'20日報酬 %',font:{size:11}},gridcolor:_PLY.grid,zeroline:true,zerolinecolor:'#404860',range:[-xMax,xMax]},
-    yaxis:{title:{text:'法人買賣超（千張）',font:{size:11}},gridcolor:_PLY.grid,zeroline:true,zerolinecolor:'#404860',range:[-yMax,yMax]},
-    shapes:[{type:'rect',x0:0,x1:xMax,y0:0,y1:yMax,fillcolor:'rgba(46,204,113,.05)',line:{width:0}}],
-    annotations:[{x:xMax*.97,y:yMax*.95,text:'雙強區',showarrow:false,font:{color:'rgba(46,204,113,.7)',size:12},xanchor:'right'}],
-    legend:{orientation:'h',y:-0.18,font:{size:11}},
-    hovermode:'closest',
-  },{responsive:true,displayModeBar:false}).then(()=>{
-    el.on('plotly_click',ev=>{ const sid=ev.points?.[0]?.customdata; if(sid) goToStock(sid); });
+  const px=v=>((v+xMax)/(2*xMax)*100).toFixed(2);     // x → left%
+  const py=v=>((v+yMax)/(2*yMax)*100).toFixed(2);     // y → bottom%
+  const grp=s=>intersectIds.has(s.id)?'dual':momentumIds.has(s.id)?'mom':chipIds.has(s.id)?'chip':'rest';
+  const STYLE={
+    rest:{c:'#5a6478',sz:7,z:1,op:.5,lbl:false},
+    chip:{c:'#4ea1f3',sz:11,z:2,op:.95,lbl:true},
+    mom: {c:'#2ecc71',sz:11,z:2,op:.95,lbl:true},
+    dual:{c:'#f1b143',sz:14,z:3,op:1,lbl:true},
+  };
+  let dots='';
+  pts.forEach(s=>{
+    const g=grp(s), st=STYLE[g];
+    const x=Number(s.ret20), y=Number(s.chipTotal||0)/1000;
+    const diamond=g==='dual'?'border-radius:2px;transform:translate(-50%,50%) rotate(45deg);border:2px solid #fff;':'border-radius:50%;transform:translate(-50%,50%);';
+    dots+=`<div onclick="goToStock('${escHtml(s.id)}')" title="${escHtml(s.id+' '+s.name)}｜20日 ${x.toFixed(1)}%｜法人 ${Math.round(y).toLocaleString()} 千張"
+      style="position:absolute;left:${px(x)}%;bottom:${py(y)}%;width:${st.sz}px;height:${st.sz}px;${diamond}
+        background:${st.c};opacity:${st.op};z-index:${st.z};cursor:pointer;"></div>`;
+    if(st.lbl) dots+=`<div onclick="goToStock('${escHtml(s.id)}')"
+      style="position:absolute;left:${px(x)}%;bottom:${py(y)}%;transform:translate(-50%,calc(50% - ${st.sz/2+3}px));
+        font-size:9px;color:${st.c};font-weight:700;white-space:nowrap;z-index:${st.z};cursor:pointer;">${escHtml(s.name)}</div>`;
   });
+  const xT=Math.round(xMax/1.15), yT=Math.round(yMax/1.15);
+  return `<div style="position:relative;height:340px;background:#161b22;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+    <!-- 雙強區底色 -->
+    <div style="position:absolute;left:50%;bottom:50%;width:50%;height:50%;background:rgba(46,204,113,.05);"></div>
+    <div style="position:absolute;right:6px;top:6px;font-size:11px;color:rgba(46,204,113,.65);font-weight:600;">雙強區</div>
+    <!-- 零軸 -->
+    <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:#2d3340;"></div>
+    <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:#2d3340;"></div>
+    <!-- 刻度 -->
+    <div style="position:absolute;left:2%;bottom:50%;font-size:9px;color:var(--sub);transform:translateY(50%);">-${xT}%</div>
+    <div style="position:absolute;right:2%;bottom:50%;font-size:9px;color:var(--sub);transform:translateY(50%);">+${xT}%</div>
+    <div style="position:absolute;left:50%;top:2%;font-size:9px;color:var(--sub);transform:translateX(4px);">+${yT.toLocaleString()} 千張</div>
+    <div style="position:absolute;left:50%;bottom:2%;font-size:9px;color:var(--sub);transform:translateX(4px);">-${yT.toLocaleString()} 千張</div>
+    <!-- 軸標題 -->
+    <div style="position:absolute;right:6px;bottom:50%;font-size:10px;color:var(--sub);transform:translateY(calc(50% + 14px));">20日報酬 →</div>
+    <div style="position:absolute;left:6px;top:6px;font-size:10px;color:var(--sub);">法人買賣超 ↑</div>
+    ${dots}
+  </div>`;
 }
 
 // ── 領頭羊突破（第二訊號源） ─────────────────────────────────────────────────
