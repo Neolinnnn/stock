@@ -2043,6 +2043,8 @@ function renderDaily(data){
   const date     = meta['掃描日期']||'—';
   const idx      = meta['加權指數'];
   const chg      = meta['漲跌幅%'];
+  const otcIdx   = meta['櫃買指數'];
+  const otcChg   = meta['櫃買漲跌幅%'];
   const strong   = meta['強勢族群']||'無';
   const weak     = meta['弱勢族群']||'無';
   const coverage = meta['掃描涵蓋率']??100;
@@ -2056,9 +2058,18 @@ function renderDaily(data){
   let html=`
   <div class="grid-4">
     <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
-    <div class="card"><div class="card-title">加權指數</div>
-      <div class="card-value ${signColor(Number(chg))}">${idx?Number(idx).toLocaleString():'<span style="color:var(--sub);font-size:15px">收盤未更新</span>'}</div>
-      <div class="card-sub">${chg!==''&&chg!==null&&chg!==undefined?sign(Number(chg))+Number(chg).toFixed(2)+'%':'（待收盤後更新）'}</div></div>
+    <div class="card"><div class="card-title">大盤指數</div>
+      ${(()=>{
+        const row=(lbl,v,c)=>{
+          const hasV=v!==''&&v!=null, hasC=c!==''&&c!=null;
+          return `<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">
+            <span style="font-size:11px;color:var(--sub);width:30px;">${lbl}</span>
+            <span style="font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;" class="${hasC?signColor(Number(c)):''}">${hasV?Number(v).toLocaleString():'—'}</span>
+            <span style="font-size:12px;" class="${hasC?signColor(Number(c)):''}">${hasC?sign(Number(c))+Number(c).toFixed(2)+'%':''}</span>
+          </div>`;
+        };
+        return row('加權',idx,chg)+row('櫃買',otcIdx,otcChg);
+      })()}</div>
     <div class="card"><div class="card-title">強勢族群（前5）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--green)">${top5Strong}</div></div>
     <div class="card"><div class="card-title">弱勢族群（後2）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--red)">${top2Weak||'無'}</div></div>
   </div>

@@ -563,6 +563,8 @@ def build_daily_payload(summary):
             '掃描日期':  summary.get('date', ''),
             '加權指數':  mkt.get('加權指數', ''),
             '漲跌幅%':   mkt.get('漲跌幅', ''),
+            '櫃買指數':  mkt.get('櫃買指數', ''),
+            '櫃買漲跌幅%': mkt.get('櫃買漲跌幅', ''),
             '強勢族群':   ', '.join(summary.get('strong_sectors', [])),
             '弱勢族群':   ', '.join(summary.get('weak_sectors', [])),
             '雙條件推薦':  len(qualified),

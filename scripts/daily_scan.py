@@ -408,26 +408,25 @@ def fetch_20d_return(sid):
 
 
 def fetch_market_overview():
-    """抓取大盤數據"""
-    try:
-        from twstock import Stock
-        overview = {}
-        # 加權指數
+    """抓取大盤數據（FinMind：加權指數 TAIEX + 櫃買指數 TPEx）"""
+    overview = {}
+    start = (datetime.now() - timedelta(days=15)).strftime('%Y-%m-%d')
+    for sid, key in [('TAIEX', '加權指數'), ('TPEx', '櫃買指數')]:
+        chg_key = '漲跌幅' if key == '加權指數' else '櫃買漲跌幅'
         try:
-            twii = Stock('^TWII')
-            st = datetime.now() - timedelta(days=30)
-            twii.fetch_from(st.year, st.month)
-            if twii.price:
-                cur = twii.price[-1]
-                prev = twii.price[-2] if len(twii.price) > 1 else cur
-                overview['加權指數'] = cur
-                overview['漲跌幅'] = (cur - prev) / prev * 100
-        except:
-            overview['加權指數'] = None
-            overview['漲跌幅'] = None
-        return overview
-    except Exception as e:
-        return {'error': str(e)}
+            df = _finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start)
+            if df is not None and len(df) >= 1:
+                cur = float(df.iloc[-1]['close'])
+                prev = float(df.iloc[-2]['close']) if len(df) >= 2 else cur
+                overview[key] = cur
+                overview[chg_key] = (cur - prev) / prev * 100 if prev else None
+            else:
+                overview[key] = None
+                overview[chg_key] = None
+        except Exception:
+            overview[key] = None
+            overview[chg_key] = None
+    return overview
 
 
 def fetch_news(stock_id, stock_name, days=3):
