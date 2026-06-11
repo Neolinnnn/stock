@@ -261,6 +261,23 @@
   .entry-grade.g-C{background:rgba(139,147,163,.12);color:var(--sub);border:1px solid rgba(139,147,163,.3);}
   .entry-evidence{font-size:11px;color:var(--sub);background:rgba(61,139,253,.07);
     border:1px solid rgba(61,139,253,.18);border-radius:6px;padding:5px 9px;margin-bottom:9px;line-height:1.6;}
+
+  /* ── 領頭羊突破卡 ────────────────────────────────────────── */
+  .bo-card{background:var(--card);border:1px solid rgba(241,177,67,.4);border-radius:12px;
+    padding:13px 16px;transition:transform .18s, box-shadow .18s;}
+  .bo-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35);}
+  .bo-stat{display:flex;flex-direction:column;gap:1px;}
+  .bo-stat .l{font-size:10px;color:var(--sub);}
+  .bo-stat .v{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;}
+
+  /* ── 賣出警示卡 ─────────────────────────────────────────── */
+  .sell-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:10px;margin-bottom:20px;}
+  .sell-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);
+    border-radius:10px;padding:11px 14px;}
+  .sell-card.severe{border-left-width:4px;background:linear-gradient(135deg,rgba(231,76,60,.08),var(--card));}
+  .sell-card .sc-ret{font-size:20px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;}
+  .sell-card .sc-reason{display:inline-block;background:rgba(231,76,60,.12);color:#e98080;
+    border-radius:4px;padding:1px 7px;font-size:10px;margin:2px 3px 0 0;}
   .action-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
   .action-card .ac-id{font-size:17px;font-weight:700;}
   .action-card .ac-name{font-size:14px;font-weight:600;}
@@ -768,6 +785,18 @@ function buildDualPickHtml(data){
     </table></div>`;
   }
 
+  // 散點象限圖：x=20日動能、y=法人籌碼，右上=雙強區
+  window._DP_DATA = { stocks: data.stocks, momentumIds, chipIds, intersectIds, topSectors };
+  html += `<div class="card" style="margin-bottom:12px;">
+    <div style="font-size:11px;color:var(--sub);margin-bottom:4px;">
+      每一點是一檔追蹤股：<b style="color:var(--green)">右上象限＝動能與籌碼雙強</b>；
+      <span style="color:var(--yellow)">◆黃＝雙選</span>、
+      <span style="color:var(--green)">●綠＝動能入選</span>、
+      <span style="color:var(--blue)">●藍＝籌碼入選</span>、灰＝其餘（點擊任一點看個股分析）
+    </div>
+    <div id="dualpick-chart" style="height:360px;"></div>
+  </div>`;
+
   // 完整兩欄收進 details，保持頁面乾淨
   html += `<details class="card" style="margin-bottom:20px;padding:12px 16px;">
     <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--blue);user-select:none;">
@@ -1012,7 +1041,7 @@ function renderFundEps(d) {
     <div class="kpi"><div class="kpi-lbl">YoY</div><div class="kpi-val" style="color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div></div>
   </div>`;
 
-  html += `<div class="fund-chart-wrap"><div id="fund-eps-chart" style="height:250px;"></div></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-eps-chart" style="height:300px;"></div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>季度</th><th>EPS（元）</th><th>QoQ</th><th>YoY</th></tr></thead><tbody>`;
@@ -1027,17 +1056,28 @@ function renderFundEps(d) {
   html += '</tbody></table></div>';
   el.innerHTML = html;
 
-  Plotly.newPlot('fund-eps-chart', [{
-    x: e.quarter, y: e.eps, type: 'bar',
-    name: 'EPS',
-    marker: { color: e.eps.map(v => v == null ? _PLY.neu : v >= 0 ? _PLY.up : _PLY.dn) },
-  }], {
-    margin: { t: 10, b: 40, l: 45, r: 10 },
+  // 年度分組對比：x=季度、每年一組色棒
+  const eByYear = {};
+  e.quarter.forEach((q, i) => {
+    const [y, qq] = q.split('Q');
+    (eByYear[y] = eByYear[y] || {})[qq] = e.eps[i];
+  });
+  const eYears = Object.keys(eByYear).sort();
+  const QS = ['Q1','Q2','Q3','Q4'];
+  Plotly.newPlot('fund-eps-chart', eYears.map((y, yi) => ({
+    x: QS, type: 'bar', name: y + '年',
+    y: QS.map(q => eByYear[y][q.slice(1)] ?? null),
+    marker: { color: _yrColor(yi, eYears.length) },
+    hovertemplate: y + '年%{x}：%{y} 元<extra></extra>',
+  })), {
+    barmode: 'group', bargap: 0.3, bargroupgap: 0.06,
+    margin: { t: 10, b: 30, l: 45, r: 10 },
     paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
     font: _PLY.font,
+    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 12 } },
     yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 元', zeroline: true, zerolinecolor: '#404860', zerolinewidth: 1 },
-    xaxis:  { tickangle: -30 },
-    showlegend: false,
+    xaxis:  { tickangle: 0 },
+    showlegend: true,
   }, { responsive: true, displayModeBar: false });
 }
 
@@ -1059,7 +1099,7 @@ function renderFundMargins(d) {
     <div class="kpi"><div class="kpi-lbl">淨利率</div><div class="kpi-val">${fmtPct(latestNet)}</div></div>
   </div>`;
 
-  html += `<div class="fund-chart-wrap"><div id="fund-margins-chart" style="height:250px;"></div></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-margins-chart" style="height:300px;"></div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>季度</th><th>毛利率</th><th>營益率</th><th>淨利率</th></tr></thead><tbody>`;
@@ -1074,21 +1114,25 @@ function renderFundMargins(d) {
   html += '</tbody></table></div>';
   el.innerHTML = html;
 
+  const mkLine = (ys, name, color, dash) => ({
+    x: m.quarter, y: ys, name,
+    type: 'scatter', mode: 'lines+markers+text',
+    line: { color, width: 2.5, dash: dash || 'solid' },
+    marker: { size: 6, color },
+    // 只在最後一點標數值，一眼看到目前水準
+    text: ys.map((v, i) => i === ys.length - 1 && v != null ? v.toFixed(1) + '%' : ''),
+    textposition: 'middle right', textfont: { color, size: 12 },
+    hovertemplate: name + ' %{x}：%{y:.1f}%<extra></extra>',
+  });
   Plotly.newPlot('fund-margins-chart', [
-    { x: m.quarter, y: m.gross_margin,     name: '毛利率',
-      type: 'scatter', mode: 'lines+markers',
-      line: { color: _PLY.up,  width: 2 }, marker: { size: 5, color: _PLY.up } },
-    { x: m.quarter, y: m.operating_margin, name: '營益率',
-      type: 'scatter', mode: 'lines+markers',
-      line: { color: _PLY.acc, width: 2 }, marker: { size: 5, color: _PLY.acc } },
-    { x: m.quarter, y: m.net_margin,       name: '淨利率',
-      type: 'scatter', mode: 'lines+markers',
-      line: { color: _PLY.neu, width: 2, dash: 'dot' }, marker: { size: 5, color: _PLY.neu } },
+    mkLine(m.gross_margin,     '毛利率', _PLY.up),
+    mkLine(m.operating_margin, '營益率', _PLY.acc),
+    mkLine(m.net_margin,       '淨利率', _PLY.neu, 'dot'),
   ], {
-    margin: { t: 10, b: 40, l: 40, r: 10 },
+    margin: { t: 10, b: 36, l: 42, r: 52 },
     paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
     font: _PLY.font,
-    legend: { orientation: 'h', y: -0.18, font: { size: 11 } },
+    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 12 } },
     yaxis:  { gridcolor: _PLY.grid, ticksuffix: '%' },
     xaxis:  { tickangle: -30 },
   }, { responsive: true, displayModeBar: false });
@@ -1222,7 +1266,7 @@ function renderFundRevenue(d) {
     <div class="kpi"><div class="kpi-lbl">累計 YoY</div><div class="kpi-val" style="color:${signColor(latestCumYoy)}">${fmtPct(latestCumYoy)}</div></div>
   </div>`;
 
-  html += `<div class="fund-chart-wrap"><div id="fund-rev-chart" style="height:260px;"></div></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-rev-chart" style="height:320px;"></div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>月份</th><th>月營收</th><th>MoM</th><th>YoY</th><th>累計YoY</th></tr></thead><tbody>`;
@@ -1239,27 +1283,35 @@ function renderFundRevenue(d) {
   html += '</tbody></table></div>';
   el.innerHTML = html;
 
-  const revB = r.revenue.map(v => +(v / 1e8).toFixed(2));
-  Plotly.newPlot('fund-rev-chart', [
-    {
-      x: r.month, y: revB, type: 'bar', name: '月營收（億）',
-      marker: { color: _PLY.acc },
-    },
-    {
-      x: r.month, y: r.yoy, type: 'scatter', mode: 'lines+markers',
-      name: 'YoY %', yaxis: 'y2',
-      line: { color: _PLY.up, width: 1.5 },
-      marker: { size: 4 },
-    },
-  ], {
-    margin: { t: 10, b: 40, l: 45, r: 45 },
+  // 年度分組對比：x=月份、每年一組色棒，同月直接比高低
+  const byYear = {};
+  r.month.forEach((m, i) => {
+    const y = m.slice(0, 4), mo = parseInt(m.slice(4, 6));
+    (byYear[y] = byYear[y] || {})[mo] = +(r.revenue[i] / 1e8).toFixed(2);
+  });
+  const years = Object.keys(byYear).sort();
+  const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const traces = years.map((y, yi) => ({
+    x: MONTHS, type: 'bar', name: y + '年',
+    y: MONTHS.map((_, mi) => byYear[y][mi + 1] ?? null),
+    marker: { color: _yrColor(yi, years.length) },
+    hovertemplate: y + '年%{x}：%{y} 億<extra></extra>',
+  }));
+  Plotly.newPlot('fund-rev-chart', traces, {
+    barmode: 'group', bargap: 0.25, bargroupgap: 0.06,
+    margin: { t: 10, b: 30, l: 45, r: 10 },
     paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
     font: _PLY.font,
-    legend: { orientation: 'h', y: -0.2 },
-    yaxis:  { gridcolor: _PLY.grid },
-    yaxis2: { overlaying: 'y', side: 'right', showgrid: false, ticksuffix: '%' },
-    xaxis:  { tickangle: -45 },
+    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 12 } },
+    yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 億' },
+    xaxis:  { tickangle: 0 },
   }, { responsive: true, displayModeBar: false });
+}
+
+// 年度色盤：舊年份灰藍 → 最新年亮綠，一眼鎖定今年
+function _yrColor(i, n){
+  const palette = ['#5a6478', '#4a7db5', '#bc8cff', '#2ecc71'];
+  return palette[Math.max(0, palette.length - n + i)] || palette[0];
 }
 
 const _PLY = {
@@ -1972,6 +2024,12 @@ async function renderLabPage(){
     族群已強勢時個股常已過熱；動能（量、MACD）才是進場時點的關鍵。
   </div></div>
 
+  <!-- 領頭羊突破系統 -->
+  <div class="section-title">🐏 領頭羊突破系統（第二訊號源・獨立回測）</div>
+  <div class="card" style="margin-bottom:18px;" id="lab-breakout">
+    <div style="color:var(--sub);font-size:12px;">載入 breakout_lab.json…</div>
+  </div>
+
   <!-- 方法論 -->
   <div class="card" style="margin-bottom:24px;">
     <div style="font-size:13px;font-weight:700;margin-bottom:8px;">🔬 方法論</div>
@@ -1985,6 +2043,39 @@ async function renderLabPage(){
     </div>
   </div>`;
   el.innerHTML=html;
+  _renderLabBreakout();
+}
+
+async function _renderLabBreakout(){
+  const el=document.getElementById('lab-breakout');
+  if(!el) return;
+  let b;
+  try{ b=await fetchJSON('./breakout_lab.json?v='+Math.floor(Date.now()/3600000)); }
+  catch{ el.innerHTML='<div style="color:var(--sub);font-size:12px;">尚無突破系統回測資料</div>'; return; }
+  const tr=b.exits.TRAIL15, tp=b.exits.TP18SL15;
+  const pct=v=>(v*100).toFixed(0)+'%';
+  const rules=b.rules||{};
+  el.innerHTML=`
+    <div style="font-size:12px;color:var(--sub);line-height:1.8;margin-bottom:12px;">
+      與雙篩選互補的 <b style="color:var(--text)">bottom-up</b> 選股：不看族群排名，直接抓「自己先動」的領頭羊。
+      條件：${rules.gate}（市場開關）→ ${rules.breakout} → ${rules.volume} → ${rules.chip} → ${rules.structure}。
+      範圍：${b.period.universe} 檔追蹤池・${b.period.start}起・同股不重複進場。
+    </div>
+    <div class="grid-4" style="margin-bottom:10px;">
+      <div><div class="card-title">進場筆數</div><div class="card-value">${b.period.signals}</div>
+        <div class="card-sub">獨立樣本（vs 雙篩選 128 筆）</div></div>
+      <div><div class="card-title">TP18/SL15</div><div class="card-value up">${pct(tp.win_rate)}</div>
+        <div class="card-sub">平均 +${tp.avg_ret}%・PF ${tp.profit_factor}</div></div>
+      <div><div class="card-title">追蹤停損15%</div><div class="card-value up">+${tr.avg_ret}%</div>
+        <div class="card-sub">勝率 ${pct(tr.win_rate)}・PF ${tr.profit_factor}・持有 ${tr.avg_days} 天</div></div>
+      <div><div class="card-title">Walk-Forward</div><div class="card-value">${pct(tp.wf_front.win_rate)} → ${pct(tp.wf_back.win_rate)}</div>
+        <div class="card-sub">前段 / 後段（系統在改善）</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--sub);line-height:1.7;">
+      📌 與雙篩選的關係：雙篩選抓「族群起風後的個股」（訊號穩、但稍晚）；突破系統抓「還沒帶動族群、自己先突破的領頭羊」（訊號早、靠量能+籌碼驗真假）。
+      兩者同時選中＝主升段最高信心。每日訊號顯示於今日掃描「🐏 領頭羊突破」區。
+      重跑：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_breakout_lab.py</code>
+    </div>`;
 }
 
 function setPage(page){
@@ -2197,42 +2288,46 @@ function renderDaily(data){
     html+=`</div>`;
   }
 
+  // ── 領頭羊突破（第二訊號源，async 載入 breakout.json） ───────────────────
+  html += `<div id="breakout-section"></div>`;
+
   // ── 雙維選股（原「回測選股」分頁整合） ────────────────────────────────────
   html += buildDualPickHtml(data);
 
-  // ── 賣出訊號列表 ──────────────────────────────────────────────────────────
+  // ── 賣出訊號：警示卡片（嚴重度排序，跌幅大字 + 原因 chips） ─────────────
   const sellStocks=(stocks||[]).filter(s=>s.signal==='SELL').sort((a,b)=>Number(a.ret20)-Number(b.ret20));
   if(sellStocks.length){
     html+=`<div class="section-title" style="color:var(--red)">⚠ 賣出訊號（${sellStocks.length} 檔）</div>
-    <div class="card" style="overflow-x:auto;margin-bottom:20px;border-left:3px solid var(--red)">
-    <div style="font-size:11px;color:var(--sub);padding:6px 10px 2px">RSI5<45 且 20日跌幅>5%，或 CV夏普<−0.3 — 建議減碼或停損</div>
-    <table>
-      <tr>
-        <th>代碼</th><th>名稱</th><th>族群</th>
-        <th>現價</th><th>RSI5</th><th>20日%</th><th>法人合計</th><th>賣出原因</th>
-      </tr>
+    <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">RSI5<45 且 20日跌幅>5%，或 CV夏普<−0.3 — 建議減碼或停損；依跌幅嚴重度排序</div>
+    <div class="sell-grid">
       ${sellStocks.map(s=>{
-        const rsi=Number(s.rsi||0), ret=Number(s.ret20||0), sharpe=Number(s.sharpe||0);
+        const rsi=Number(s.rsi||0), ret=Number(s.ret20||0), sharpe=Number(s.sharpe||0), chipN=Number(s.chipTotal||0);
         const reasons=[];
         if(rsi<30) reasons.push('RSI超賣');
         else if(rsi<45) reasons.push('RSI偏弱');
-        if(ret<-10) reasons.push(`20日大跌${ret.toFixed(1)}%`);
-        else if(ret<-5) reasons.push(`20日跌幅${ret.toFixed(1)}%`);
-        if(Number(s.chipTotal||0)<-500000) reasons.push('法人大賣超');
-        else if(Number(s.chipTotal||0)<0) reasons.push('法人賣超');
+        if(chipN<-500000) reasons.push('法人大賣超');
+        else if(chipN<0) reasons.push('法人賣超');
         if(sharpe<0) reasons.push('CV夏普轉負');
-        return `<tr>
-          <td><b>${escHtml(s.id)}</b></td>
-          <td>${escHtml(s.name)}</td>
-          <td><span class="tag">${escHtml(s.sector)}</span></td>
-          <td>${fmt(s.price,1)}</td>
-          <td><span class="rsi-dot ${rsiDot(rsi)}"></span>${fmt(s.rsi,1)}</td>
-          <td class="dn">${sign(ret)}${fmt(s.ret20)}%</td>
-          <td class="${Number(s.chipTotal||0)>=0?'chip-pos':'chip-neg'}">${s.chipTotal!=null?sign(Number(s.chipTotal))+Number(s.chipTotal).toLocaleString():'—'}</td>
-          <td style="font-size:11px;color:var(--red)">${reasons.join(' · ')||'技術面轉弱'}</td>
-        </tr>`;
+        const severe=ret<-10;
+        return `<div class="sell-card${severe?' severe':''}">
+          <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:4px;">
+            <b style="font-size:15px;cursor:pointer;" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.id)}</b>
+            <span style="font-weight:600;">${escHtml(s.name)}</span>
+            <span class="tag" style="margin-left:auto;">${escHtml(s.sector)}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:10px;">
+            <span class="sc-ret">${sign(ret)}${fmt(s.ret20)}%</span>
+            <span style="font-size:10px;color:var(--sub);">20日</span>
+            <span style="margin-left:auto;font-size:12px;">現價 <b>${fmt(s.price,1)}</b></span>
+          </div>
+          <div style="display:flex;gap:10px;font-size:11px;color:var(--sub);margin:4px 0 2px;">
+            <span><span class="rsi-dot ${rsiDot(rsi)}"></span>RSI ${fmt(s.rsi,1)}</span>
+            <span class="${chipN>=0?'chip-pos':'chip-neg'}">法人 ${s.chipTotal!=null?sign(chipN)+chipN.toLocaleString():'—'}</span>
+          </div>
+          <div>${reasons.map(r=>`<span class="sc-reason">${r}</span>`).join('')||'<span class="sc-reason">技術面轉弱</span>'}</div>
+        </div>`;
       }).join('')}
-    </table></div>`;
+    </div>`;
   }
 
   // 族群強弱表
@@ -2317,6 +2412,92 @@ function renderDaily(data){
   });
 
   document.getElementById('page-daily').innerHTML=html;
+  _renderDualPickChart();
+  _renderBreakoutSection();
+}
+
+// ── 雙維選股散點象限圖 ───────────────────────────────────────────────────────
+function _renderDualPickChart(){
+  const el=document.getElementById('dualpick-chart');
+  const dp=window._DP_DATA;
+  if(!el||!dp) return;
+  const pts=(dp.stocks||[]).filter(s=>s.ret20!=null&&s.ret20!=='');
+  if(!pts.length){ el.innerHTML='<div style="color:var(--sub);font-size:12px;padding:20px;">無資料</div>'; return; }
+  const grp=s=>dp.intersectIds.has(s.id)?'dual':dp.momentumIds.has(s.id)?'mom':dp.chipIds.has(s.id)?'chip':'rest';
+  const mk=(ids,name,color,size,symbol)=>{
+    const ss=pts.filter(s=>grp(s)===ids);
+    return {
+      x:ss.map(s=>Number(s.ret20)), y:ss.map(s=>Number(s.chipTotal||0)/1000),
+      text:ss.map(s=>`${s.id} ${s.name}`), customdata:ss.map(s=>s.id),
+      type:'scatter', mode:ids==='rest'?'markers':'markers+text',
+      textposition:'top center', textfont:{size:10,color},
+      name, marker:{size, color, symbol, opacity:ids==='rest'?0.45:0.95,
+        line:{width:ids==='dual'?2:0,color:'#fff'}},
+      hovertemplate:'%{text}<br>20日 %{x:.1f}%・法人 %{y:,.0f} 千張<extra></extra>',
+    };
+  };
+  const traces=[mk('rest','其餘','#5a6478',7,'circle'), mk('chip','籌碼入選','#4ea1f3',11,'circle'),
+                mk('mom','動能入選','#2ecc71',11,'circle'), mk('dual','★雙選','#f1b143',15,'diamond')];
+  const xs=pts.map(s=>Number(s.ret20)), ys=pts.map(s=>Number(s.chipTotal||0)/1000);
+  const xMax=Math.max(...xs.map(Math.abs),5)*1.15, yMax=Math.max(...ys.map(Math.abs),1)*1.15;
+  Plotly.newPlot(el,traces,{
+    margin:{t:8,b:38,l:55,r:10},
+    paper_bgcolor:'transparent',plot_bgcolor:'transparent',font:_PLY.font,
+    xaxis:{title:{text:'20日報酬 %',font:{size:11}},gridcolor:_PLY.grid,zeroline:true,zerolinecolor:'#404860',range:[-xMax,xMax]},
+    yaxis:{title:{text:'法人買賣超（千張）',font:{size:11}},gridcolor:_PLY.grid,zeroline:true,zerolinecolor:'#404860',range:[-yMax,yMax]},
+    shapes:[{type:'rect',x0:0,x1:xMax,y0:0,y1:yMax,fillcolor:'rgba(46,204,113,.05)',line:{width:0}}],
+    annotations:[{x:xMax*.97,y:yMax*.95,text:'雙強區',showarrow:false,font:{color:'rgba(46,204,113,.7)',size:12},xanchor:'right'}],
+    legend:{orientation:'h',y:-0.18,font:{size:11}},
+    hovermode:'closest',
+  },{responsive:true,displayModeBar:false}).then(()=>{
+    el.on('plotly_click',ev=>{ const sid=ev.points?.[0]?.customdata; if(sid) goToStock(sid); });
+  });
+}
+
+// ── 領頭羊突破（第二訊號源） ─────────────────────────────────────────────────
+let _BO_CACHE=null;
+async function _renderBreakoutSection(){
+  const el=document.getElementById('breakout-section');
+  if(!el) return;
+  if(!_BO_CACHE){
+    try{ _BO_CACHE=await fetchJSON('./breakout.json?v='+Math.floor(Date.now()/3600000)); }
+    catch{ el.innerHTML=''; return; }
+  }
+  const b=_BO_CACHE;
+  // 只在「今日」資料對得上時顯示（歷史日期不顯示，避免誤導）
+  if(b.date!==CUR_DATE){ el.innerHTML=''; return; }
+  const ref=b.backtest_ref||{};
+  const statsLine=`回測 ${ref.period||''}：${ref.n||'—'} 筆・TP18SL15 勝率 ${ref.tp18sl15_win?(ref.tp18sl15_win*100).toFixed(0)+'%':'—'}・追蹤停損15% 平均 +${ref.trail15_avg||'—'}%・PF ${ref.trail15_pf||'—'}`;
+  let html=`<div class="section-title" style="color:var(--yellow)">🐏 領頭羊突破（第二訊號源・與雙篩選互補）</div>
+  <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">
+    收盤創20日新高 + 量比≥1.5 + 法人5日買超 + 結構健康（大盤多頭才開機）｜ ${statsLine}
+    <a href="#" onclick="setPage('lab');return false;" style="color:var(--accent);">完整證據→策略實驗室</a>
+  </div>`;
+  if(!b.taiex_bull){
+    html+=`<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;">🌙 大盤跌破 MA60，多頭開關關閉——今日不出突破訊號</div>`;
+  }else if(!(b.picks||[]).length){
+    html+=`<div class="card" style="margin-bottom:20px;color:var(--sub);font-size:13px;">今日追蹤池無符合全部條件的突破訊號（平均每日約 1 檔，寧缺勿濫）</div>`;
+  }else{
+    html+=`<div class="action-grid">`+b.picks.map(p=>`
+      <div class="bo-card">
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
+          <b style="font-size:16px;cursor:pointer;" onclick="goToStock('${escHtml(p.id)}')">${escHtml(p.id)}</b>
+          <span style="font-weight:600;cursor:pointer;" onclick="goToStock('${escHtml(p.id)}')">${escHtml(p.name||'')}</span>
+          <span style="margin-left:auto;color:var(--yellow);font-size:11px;font-weight:700;">⚡ 突破20日高</span>
+        </div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+          <div class="bo-stat"><span class="l">收盤</span><span class="v">${fmt(p.close,1)}</span></div>
+          <div class="bo-stat"><span class="l">量比</span><span class="v" style="color:var(--green)">${p.vol_ratio}</span></div>
+          <div class="bo-stat"><span class="l">法人5日</span><span class="v chip-pos">+${Number(p.chip5).toLocaleString()}</span></div>
+          <div class="bo-stat"><span class="l">乖離MA20</span><span class="v">${p.dist_ma20}%</span></div>
+          <div class="bo-stat"><span class="l">20日漲幅</span><span class="v ${Number(p.ret20)>=0?'up':'dn'}">${sign(Number(p.ret20))}${p.ret20}%</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--sub);margin-top:8px;border-top:1px solid var(--border);padding-top:6px;">
+          建議出場：追蹤停損 15%（回測平均 +${ref.trail15_avg||15}%）
+        </div>
+      </div>`).join('')+`</div>`;
+  }
+  el.innerHTML=html;
 }
 
 // ── 主力觀察 ─────────────────────────────────────────────────────────────────

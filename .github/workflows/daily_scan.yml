@@ -57,6 +57,13 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: python scripts/daily_scan.py
 
+      - name: Breakout scan (second signal source)
+        continue-on-error: true
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: python scripts/breakout_scan.py
+
       - name: Run analyzer framework daily scan
         continue-on-error: true
         env:
