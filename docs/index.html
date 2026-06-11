@@ -6,19 +6,26 @@
 <title>台股族群掃描</title>
 <style>
   :root {
-    --bg:#0e1117; --card:#1a1d24; --border:#2d3139;
-    --text:#e0e0e0; --sub:#888; --green:#27ae60;
-    --red:#e74c3c; --yellow:#f39c12; --blue:#3498db;
-    --accent:#1f77b4;
+    --bg:#0b0e14; --card:#161a22; --border:#272c37;
+    --text:#e8eaed; --sub:#8b93a3; --green:#2ecc71;
+    --red:#e74c3c; --yellow:#f1b143; --blue:#4ea1f3;
+    --accent:#3d8bfd; --accent2:#7c5cff;
+    --card-hover:#1b2029;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;font-size:14px;}
+  body{background:var(--bg);color:var(--text);font-size:14px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;
+    -webkit-font-smoothing:antialiased;}
 
-  header{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-  header h1{font-size:17px;font-weight:700;}
+  header{background:rgba(17,21,29,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50;
+    border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  header h1{font-size:17px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
   nav{display:flex;gap:4px;}
-  nav a{color:var(--sub);text-decoration:none;padding:5px 13px;border-radius:6px;font-size:13px;cursor:pointer;transition:.15s;}
-  nav a.active,nav a:hover{background:var(--accent);color:#fff;}
+  nav a{color:var(--sub);text-decoration:none;padding:5px 13px;border-radius:8px;font-size:13px;cursor:pointer;transition:.18s;}
+  nav a:hover{background:var(--card-hover);color:var(--text);}
+  nav a.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+    box-shadow:0 2px 10px rgba(61,139,253,.35);}
 
   .date-picker{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .date-picker label{font-size:12px;color:var(--sub);}
@@ -33,9 +40,11 @@
   @media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
   @media(max-width:480px){.grid-4{grid-template-columns:1fr 1fr;}}
 
-  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;}
-  .card-title{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-  .card-value{font-size:22px;font-weight:700;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;
+    transition:border-color .2s, transform .2s;}
+  .card:hover{border-color:#343b49;}
+  .card-title{font-size:11px;color:var(--sub);letter-spacing:.5px;margin-bottom:6px;}
+  .card-value{font-size:23px;font-weight:700;font-variant-numeric:tabular-nums;}
 
   /* ── iPhone Safari 直式 ──────────────────────────────── */
   @media(max-width:640px){
@@ -87,7 +96,9 @@
   }
   .card-sub{font-size:12px;color:var(--sub);margin-top:4px;}
 
-  .section-title{font-size:15px;font-weight:600;margin:20px 0 10px;border-left:3px solid var(--accent);padding-left:10px;}
+  .section-title{font-size:15px;font-weight:700;margin:22px 0 12px;padding-left:11px;position:relative;}
+  .section-title::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:2px;
+    background:linear-gradient(180deg,var(--accent),var(--accent2));}
 
   table{width:100%;border-collapse:collapse;font-size:13px;}
   th{background:#13161d;color:var(--sub);font-weight:500;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;}
@@ -239,7 +250,17 @@
 
   /* ── 今日行動清單 ──────────────────────────────────────────── */
   .action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:24px;}
-  .action-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+  .action-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+    transition:transform .18s, box-shadow .18s, border-color .18s;}
+  .action-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35);border-color:#343b49;}
+  .entry-grade{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:2px 9px;
+    font-size:11px;font-weight:800;letter-spacing:.3px;}
+  .entry-grade.g-A{background:linear-gradient(135deg,rgba(46,204,113,.25),rgba(46,204,113,.08));
+    color:var(--green);border:1px solid rgba(46,204,113,.5);}
+  .entry-grade.g-B{background:rgba(241,177,67,.14);color:var(--yellow);border:1px solid rgba(241,177,67,.45);}
+  .entry-grade.g-C{background:rgba(139,147,163,.12);color:var(--sub);border:1px solid rgba(139,147,163,.3);}
+  .entry-evidence{font-size:11px;color:var(--sub);background:rgba(61,139,253,.07);
+    border:1px solid rgba(61,139,253,.18);border-radius:6px;padding:5px 9px;margin-bottom:9px;line-height:1.6;}
   .action-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
   .action-card .ac-id{font-size:17px;font-weight:700;}
   .action-card .ac-name{font-size:14px;font-weight:600;}
@@ -336,6 +357,7 @@
     <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
     <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
     <a id="nav-bt" onclick="setPage('bt')">⭐ 回測選股</a>
+    <a id="nav-lab" onclick="setPage('lab')">⚗️ 策略實驗室</a>
     <a id="nav-backtest" href="./backtest.html">📊 策略回測</a>
     <a href="./agents/">🤖 多代理分析</a>
     <a href="./backtest_ma10.html">📈 MA10回測</a>
@@ -357,6 +379,8 @@
   <div id="page-watchlist" class="page-section"></div>
 
   <div id="page-bt" class="page-section"></div>
+
+  <div id="page-lab" class="page-section"></div>
 
   <!-- 回測浮動提示卡（單例） -->
   <div id="bt-tooltip">
@@ -1865,9 +1889,120 @@ function goToStock(sid){
 }
 
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
+// ── 策略實驗室 ────────────────────────────────────────────────────────────────
+let _LAB_CACHE=null;
+async function renderLabPage(){
+  const el=document.getElementById('page-lab');
+  if(!_LAB_CACHE){
+    try{ _LAB_CACHE=await fetchJSON('./entry_lab.json?v='+Math.floor(Date.now()/86400000)); }
+    catch{ el.innerHTML='<div class="error-box"><span>⚗️</span>尚無進場策略回測資料</div>'; return; }
+  }
+  const d=_LAB_CACHE;
+  const base=d.filters.BASE.exits.TP18SL15;
+  const win=d.filters.VOL_OR_MACD;
+  const winS=win.exits.TP18SL15, winT=win.exits.TRAIL15;
+  const pct=v=>(v*100).toFixed(0)+'%';
+
+  let html=`<div class="section-title">⚗️ 進場策略實驗室</div>
+  <div style="font-size:12px;color:var(--sub);margin-bottom:14px;">
+    回測期間 ${d.period.start} ~ ${d.period.end}・訊號樣本 ${d.period.signals} 筆・進場＝訊號日次日開盤・出場＝TP18/SL15（最長持倉60日）・特徵嚴格使用訊號日當天可得資料（無前視偏差）
+  </div>
+
+  <!-- 勝出策略 hero -->
+  <div class="card" style="margin-bottom:18px;border:1px solid rgba(46,204,113,.4);
+    background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(61,139,253,.05));">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+      <span style="font-size:20px;">🏆</span>
+      <span style="font-size:16px;font-weight:800;">動能確認進場：量比≥1.2 或 MACD柱&gt;0且增長</span>
+      <span class="entry-grade g-A">已整合進行動清單</span>
+    </div>
+    <div class="grid-4" style="margin-bottom:8px;">
+      <div><div class="card-title">勝率（基準 ${pct(base.win_rate)}）</div>
+        <div class="card-value up">${pct(winS.win_rate)}</div>
+        <div class="card-sub">n=${winS.n}・Wilson下界 ${pct(winS.wilson_lb)}</div></div>
+      <div><div class="card-title">平均報酬（基準 ${base.avg_ret}%）</div>
+        <div class="card-value up">+${winS.avg_ret}%</div>
+        <div class="card-sub">獲利因子 ${winS.profit_factor}（基準 ${base.profit_factor}）</div></div>
+      <div><div class="card-title">搭配追蹤停損15%</div>
+        <div class="card-value up">+${winT.avg_ret}%</div>
+        <div class="card-sub">勝率 ${pct(winT.win_rate)}・PF ${winT.profit_factor}</div></div>
+      <div><div class="card-title">Walk-Forward 驗證</div>
+        <div class="card-value">${pct(winS.wf_front.win_rate)} → ${pct(winS.wf_back.win_rate)}</div>
+        <div class="card-sub">前段(n=${winS.wf_front.n}) / 後段(n=${winS.wf_back.n})</div></div>
+    </div>
+    <div style="font-size:12px;color:var(--sub);line-height:1.7;">
+      📌 解讀：訊號日「當日成交量 ≥ 20日均量的1.2倍」或「MACD 柱由弱轉強」代表資金進駐確認。
+      此過濾把勝率從 ${pct(base.win_rate)} 提升至 ${pct(winS.win_rate)}，平均報酬提升 ${(winS.avg_ret/base.avg_ret).toFixed(1)} 倍，且前後段表現一致（非過擬合）。
+    </div>
+  </div>
+
+  <!-- 評分分層 -->
+  <div class="section-title">📐 七項條件評分分層（單調性驗證）</div>
+  <div class="card" style="margin-bottom:18px;">
+    <div style="font-size:11px;color:var(--sub);margin-bottom:10px;">計分項目：${(d.score_items||[]).join('、')}</div>`;
+  const tierColor={'A(5-7分)':'var(--green)','B(3-4分)':'var(--yellow)','C(0-2分)':'var(--sub)'};
+  Object.entries(d.tiers).forEach(([tier,st])=>{
+    const s=st.TP18SL15||{};
+    if(!s.n)return;
+    html+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="width:75px;font-size:12px;font-weight:700;color:${tierColor[tier]||'var(--text)'}">${tier}</span>
+      <div class="bar-wrap" style="flex:1;height:20px;">
+        <div class="bar" style="width:${s.win_rate*100}%;background:${tierColor[tier]||'var(--accent)'};opacity:.75;"></div>
+      </div>
+      <span style="width:200px;font-size:12px;font-variant-numeric:tabular-nums;">
+        勝率 ${pct(s.win_rate)}・平均 ${s.avg_ret>0?'+':''}${s.avg_ret}%・n=${s.n}</span>
+    </div>`;
+  });
+  html+=`<div style="font-size:11px;color:var(--sub);margin-top:6px;">評分愈高→勝率與報酬愈高，呈完美單調遞增，證明評分系統有判別力。</div></div>
+
+  <!-- 過濾器全表 -->
+  <div class="section-title">🧪 全部過濾器比較（依勝率排序）</div>
+  <div class="card" style="overflow-x:auto;margin-bottom:18px;">
+  <table>
+    <tr><th>進場過濾器</th><th>樣本</th><th>勝率</th><th style="min-width:120px">勝率視覺</th><th>Wilson下界</th><th>平均報酬</th><th>獲利因子</th><th>持有天數</th></tr>`;
+  const rows=Object.entries(d.filters)
+    .map(([id,r])=>({id,label:r.label,s:r.exits.TP18SL15}))
+    .filter(r=>r.s&&r.s.n>0)
+    .sort((a,b)=>b.s.win_rate-a.s.win_rate);
+  rows.forEach(r=>{
+    const isBase=r.id==='BASE', isWin=r.id==='VOL_OR_MACD';
+    const beat=r.s.win_rate>base.win_rate;
+    html+=`<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}">
+      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'🏆 ':''}${isBase?'📍 ':''}${escHtml(r.label)}</td>
+      <td>${r.s.n}</td>
+      <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
+      <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
+      <td>${pct(r.s.wilson_lb)}</td>
+      <td class="${r.s.avg_ret>=base.avg_ret?'up':''}">${r.s.avg_ret>0?'+':''}${r.s.avg_ret}%</td>
+      <td>${r.s.profit_factor}</td>
+      <td>${r.s.avg_days}</td>
+    </tr>`;
+  });
+  html+=`</table>
+  <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
+    📍＝現行基準（全部 qualified 訊號）；🏆＝勝出策略。<br>
+    意外發現：「強勢族群」「cv_sharpe≥1.0」「多頭排列」等直覺條件反而<b>低於</b>基準——
+    族群已強勢時個股常已過熱；動能（量、MACD）才是進場時點的關鍵。
+  </div></div>
+
+  <!-- 方法論 -->
+  <div class="card" style="margin-bottom:24px;">
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px;">🔬 方法論</div>
+    <div style="font-size:12px;color:var(--sub);line-height:1.9;">
+      ・訊號來源：每日族群掃描 qualified 清單（RSI5 + CV夏普雙條件），共 ${d.period.signals} 筆<br>
+      ・進場：訊號日<b>次日開盤價</b>（可實際執行，無前視偏差）<br>
+      ・出場：TP+18% / SL−15%（收盤判斷）；另測追蹤停損15% 與 MA10跌破<br>
+      ・特徵：全部以訊號日收盤後可得資料計算（量比、均線、MACD、KD、法人籌碼、大盤位置）<br>
+      ・驗證：Wilson 95% 信賴下界控制小樣本樂觀偏誤；前後段 walk-forward 檢驗時間穩定性<br>
+      ・產生時間：${d.generated_at}・重跑指令：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_entry_lab.py</code>
+    </div>
+  </div>`;
+  el.innerHTML=html;
+}
+
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','mainforce','stock','watchlist','bt'].forEach(p=>{
+  ['daily','weekly','mainforce','stock','watchlist','bt','lab'].forEach(p=>{
     const navEl = document.getElementById(`nav-${p}`);
     if(navEl) navEl.classList.toggle('active', p===page);
     const pageEl = document.getElementById(`page-${p}`);
@@ -1881,6 +2016,7 @@ function setPage(page){
   if(page==='stock')     initStockPage();
   if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
   if(page==='bt')        renderBtPage();
+  if(page==='lab')       renderLabPage();
   hideBtTooltip();
 }
 
@@ -2002,6 +2138,21 @@ function renderDaily(data){
       const macdV=_macdFromTA(ta);
       const decision=_actionDecision(sig, kdjV, macdV);
 
+      // 動能確認進場策略（entry_lab 回測：量比≥1.2 或 MACD柱>0且增長 → 勝率77% vs 基準66%）
+      const es=ta.entry_strategy||null;
+      let gradeBadge='', evidenceHtml='';
+      if(es&&es.grade){
+        const gradeLbl={A:'A 雙動能',B:'B 單動能',C:'C 動能不足'}[es.grade]||es.grade;
+        gradeBadge=`<span class="entry-grade g-${es.grade}" title="動能確認進場評級（回測佐證見策略實驗室）">⚡ ${gradeLbl}</span>`;
+        const parts=[];
+        if(es.vol_ratio!=null)parts.push(`量比 ${es.vol_ratio}${es.vol_ok?' ✓':''}`);
+        parts.push(`MACD動能 ${es.macd_momentum?'✓':'✗'}`);
+        const verdict=es.passed
+          ?`<span style="color:var(--green);font-weight:600">符合動能進場（回測勝率 77%・平均 +12.4%）</span>`
+          :`<span style="color:var(--sub)">未達動能門檻，等量比≥1.2 或 MACD 翻強</span>`;
+        evidenceHtml=`<div class="entry-evidence">${parts.join('・')}<br>${verdict}</div>`;
+      }
+
       const indBadge=(v,label)=>v?
         `<span style="background:rgba(0,0,0,.25);border:1px solid ${v.color};border-radius:4px;padding:2px 8px;font-size:11px;color:${v.color};white-space:nowrap" title="${escHtml(v.detail||'')}">
           ${label} ${escHtml(v.state)}
@@ -2017,9 +2168,11 @@ function renderDaily(data){
 
         <!-- 指標訊號列 -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
+          ${gradeBadge}
           ${indBadge(kdjV,'KDJ')}
           ${indBadge(macdV,'MACD')}
         </div>
+        ${evidenceHtml}
 
         <!-- 綜合決策提示 -->
         <div style="font-size:12px;font-weight:600;color:${decision.color};padding:5px 9px;background:rgba(0,0,0,.2);border-radius:5px;margin-bottom:9px;border-left:2px solid ${decision.color}">

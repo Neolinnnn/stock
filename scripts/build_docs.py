@@ -527,6 +527,22 @@ def build_daily_payload(summary):
                     d['kd_d_prev'] = kd_d[-2] if len(kd_d) >= 2 else None
                 if len(hist) >= 2:
                     d['macd_bar_prev'] = hist[-2]
+                # ── 動能確認進場策略（entry_lab 回測勝出：量比≥1.2 或 MACD柱>0且增長）──
+                vols = ohlcv.get('volume', [])
+                vol_ratio = None
+                if len(vols) >= 20 and vols[-1]:
+                    vma20 = sum(vols[-20:]) / 20
+                    vol_ratio = round(vols[-1] / vma20, 2) if vma20 else None
+                macd_mom = bool(len(hist) >= 2 and hist[-1] is not None and hist[-2] is not None
+                                and hist[-1] > 0 and hist[-1] > hist[-2])
+                vol_ok = bool(vol_ratio is not None and vol_ratio >= 1.2)
+                d['entry_strategy'] = {
+                    'vol_ratio': vol_ratio,
+                    'vol_ok': vol_ok,
+                    'macd_momentum': macd_mom,
+                    'passed': vol_ok or macd_mom,
+                    'grade': 'A' if (vol_ok and macd_mom) else ('B' if (vol_ok or macd_mom) else 'C'),
+                }
                 q['trend_analysis'] = d
             except Exception as e:
                 q['trend_analysis'] = {'error': str(e)}
