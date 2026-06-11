@@ -1041,7 +1041,8 @@ function renderFundEps(d) {
     <div class="kpi"><div class="kpi-lbl">YoY</div><div class="kpi-val" style="color:${signColor(latestYoy)}">${fmtPct(latestYoy)}</div></div>
   </div>`;
 
-  html += `<div class="fund-chart-wrap"><div id="fund-eps-chart" style="height:300px;"></div></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-eps-chart" style="height:300px;"></div>
+    <div style="font-size:10px;color:var(--sub);margin-top:3px;">柱＝季 EPS（綠正紅負）　<span style="color:#f0b429">━ 去年同季</span>（柱高於線＝年增）</div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>季度</th><th>EPS（元）</th><th>QoQ</th><th>YoY</th></tr></thead><tbody>`;
@@ -1056,29 +1057,34 @@ function renderFundEps(d) {
   html += '</tbody></table></div>';
   el.innerHTML = html;
 
-  // 年度分組對比：x=季度、每年一組色棒
-  const eByYear = {};
-  e.quarter.forEach((q, i) => {
-    const [y, qq] = q.split('Q');
-    (eByYear[y] = eByYear[y] || {})[qq] = e.eps[i];
+  // lightweight-charts：柱 = 季 EPS（正綠負紅），黃線 = 去年同季 → 差距即年增
+  const QEND = { '1': '03-31', '2': '06-30', '3': '09-30', '4': '12-31' };
+  const qTime = q => { const [y, qq] = q.split('Q'); return `${y}-${QEND[qq]}`; };
+  const chEl = document.getElementById('fund-eps-chart');
+  const c = _lwc(chEl, chEl.offsetHeight || 300, true);
+  const times = e.quarter.map(qTime);
+  const lag4 = e.eps.map((_, i) => i >= 4 ? e.eps[i - 4] : null);
+  const bar = c.addHistogramSeries({ priceFormat: { type: 'price', precision: 2, minMove: 0.01 },
+    priceLineVisible: false, lastValueVisible: false });
+  bar.setData(times.map((t, i) => e.eps[i] == null ? null : {
+    time: t, value: e.eps[i],
+    color: e.eps[i] >= 0 ? 'rgba(38,166,65,.8)' : 'rgba(248,81,73,.8)',
+  }).filter(Boolean));
+  const lag = c.addLineSeries({ color: '#f0b429', lineWidth: 2,
+    priceFormat: { type: 'price', precision: 2, minMove: 0.01 },
+    priceLineVisible: false, lastValueVisible: false });
+  lag.setData(_ld(times, lag4));
+  const idxMap = {}; times.forEach((t, i) => { idxMap[t] = i; });
+  const tKey = t => `${t.year}-${String(t.month).padStart(2,'0')}-${String(t.day).padStart(2,'0')}`;
+  _legend(c, chEl, p => {
+    let i = e.eps.length - 1;
+    if (p && p.time) { const k = idxMap[tKey(p.time)]; if (k != null) i = k; }
+    const yy = e.yoy[i], yc = yy == null ? 'var(--sub)' : yy >= 0 ? '#26a641' : '#f85149';
+    return `${e.quarter[i]} EPS <span style="color:#e6edf3">${_f2(e.eps[i])} 元</span>`
+      + `　<span style="color:${yc}">YoY ${yy != null ? (yy >= 0 ? '+' : '') + yy.toFixed(1) + '%' : '—'}</span>`
+      + `　<span style="color:#f0b429">去年同季 ${_f2(lag4[i])}</span>`;
   });
-  const eYears = Object.keys(eByYear).sort();
-  const QS = ['Q1','Q2','Q3','Q4'];
-  Plotly.newPlot('fund-eps-chart', eYears.map((y, yi) => ({
-    x: QS, type: 'bar', name: y + '年',
-    y: QS.map(q => eByYear[y][q.slice(1)] ?? null),
-    marker: { color: _yrColor(yi, eYears.length) },
-    hovertemplate: y + '年%{x}：%{y} 元<extra></extra>',
-  })), {
-    barmode: 'group', bargap: 0.3, bargroupgap: 0.06,
-    margin: { t: 10, b: 30, l: 45, r: 10 },
-    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-    font: _PLY.font,
-    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 12 } },
-    yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 元', zeroline: true, zerolinecolor: '#404860', zerolinewidth: 1 },
-    xaxis:  { tickangle: 0 },
-    showlegend: true,
-  }, { responsive: true, displayModeBar: false });
+  c.timeScale().fitContent();
 }
 
 function renderFundMargins(d) {
@@ -1114,28 +1120,31 @@ function renderFundMargins(d) {
   html += '</tbody></table></div>';
   el.innerHTML = html;
 
-  const mkLine = (ys, name, color, dash) => ({
-    x: m.quarter, y: ys, name,
-    type: 'scatter', mode: 'lines+markers+text',
-    line: { color, width: 2.5, dash: dash || 'solid' },
-    marker: { size: 6, color },
-    // 只在最後一點標數值，一眼看到目前水準
-    text: ys.map((v, i) => i === ys.length - 1 && v != null ? v.toFixed(1) + '%' : ''),
-    textposition: 'middle right', textfont: { color, size: 12 },
-    hovertemplate: name + ' %{x}：%{y:.1f}%<extra></extra>',
+  // lightweight-charts：三率折線（綠=毛利、紫=營益、藍=淨利）
+  const QEND2 = { '1': '03-31', '2': '06-30', '3': '09-30', '4': '12-31' };
+  const times = m.quarter.map(q => { const [y, qq] = q.split('Q'); return `${y}-${QEND2[qq]}`; });
+  const chEl = document.getElementById('fund-margins-chart');
+  const c = _lwc(chEl, chEl.offsetHeight || 300, true);
+  const pf = { type: 'price', precision: 1, minMove: 0.1 };
+  const mk = (vals, color, w, style) => {
+    const s = c.addLineSeries({ color, lineWidth: w, lineStyle: style || 0, priceFormat: pf,
+      priceLineVisible: false, lastValueVisible: true });
+    s.setData(_ld(times, vals));
+    return s;
+  };
+  mk(m.gross_margin, '#26a641', 2.5);
+  mk(m.operating_margin, '#bc8cff', 2.5);
+  mk(m.net_margin, '#58a6ff', 2, 1);
+  const idxMap = {}; times.forEach((t, i) => { idxMap[t] = i; });
+  const tKey = t => `${t.year}-${String(t.month).padStart(2,'0')}-${String(t.day).padStart(2,'0')}`;
+  _legend(c, chEl, p => {
+    let i = m.quarter.length - 1;
+    if (p && p.time) { const k = idxMap[tKey(p.time)]; if (k != null) i = k; }
+    return `${m.quarter[i]}　<span style="color:#26a641">毛利 ${_f1(m.gross_margin[i])}%</span>`
+      + `　<span style="color:#bc8cff">營益 ${_f1(m.operating_margin[i])}%</span>`
+      + `　<span style="color:#58a6ff">淨利 ${_f1(m.net_margin[i])}%</span>`;
   });
-  Plotly.newPlot('fund-margins-chart', [
-    mkLine(m.gross_margin,     '毛利率', _PLY.up),
-    mkLine(m.operating_margin, '營益率', _PLY.acc),
-    mkLine(m.net_margin,       '淨利率', _PLY.neu, 'dot'),
-  ], {
-    margin: { t: 10, b: 36, l: 42, r: 52 },
-    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-    font: _PLY.font,
-    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 12 } },
-    yaxis:  { gridcolor: _PLY.grid, ticksuffix: '%' },
-    xaxis:  { tickangle: -30 },
-  }, { responsive: true, displayModeBar: false });
+  c.timeScale().fitContent();
 }
 
 // ── 產銷組合 共用渲染 ──────────────────────────────────────────────────────────
@@ -1266,7 +1275,8 @@ function renderFundRevenue(d) {
     <div class="kpi"><div class="kpi-lbl">累計 YoY</div><div class="kpi-val" style="color:${signColor(latestCumYoy)}">${fmtPct(latestCumYoy)}</div></div>
   </div>`;
 
-  html += `<div class="fund-chart-wrap"><div id="fund-rev-chart" style="height:320px;"></div></div>`;
+  html += `<div class="fund-chart-wrap"><div id="fund-rev-chart" style="height:300px;"></div>
+    <div style="font-size:10px;color:var(--sub);margin-top:3px;">柱＝月營收（綠：年增／紅：年減）　<span style="color:#f0b429">━ 去年同月</span>（柱高於線＝優於去年）</div></div>`;
 
   html += `<div class="fund-tbl-wrap"><table class="fund-tbl"><thead><tr>
     <th>月份</th><th>月營收</th><th>MoM</th><th>YoY</th><th>累計YoY</th></tr></thead><tbody>`;
@@ -1283,35 +1293,34 @@ function renderFundRevenue(d) {
   html += '</tbody></table></div>';
   el.innerHTML = html;
 
-  // 年度分組對比：x=月份、每年一組色棒，同月直接比高低
-  const byYear = {};
-  r.month.forEach((m, i) => {
-    const y = m.slice(0, 4), mo = parseInt(m.slice(4, 6));
-    (byYear[y] = byYear[y] || {})[mo] = +(r.revenue[i] / 1e8).toFixed(2);
+  // lightweight-charts（與技術線圖同引擎，手機觸控友善）：
+  // 柱 = 月營收（YoY>0 綠 / <0 紅），黃線 = 去年同月營收 → 柱與線的差距即年增
+  const chEl = document.getElementById('fund-rev-chart');
+  const c = _lwc(chEl, chEl.offsetHeight || 300, true);
+  const times = r.month.map(m => `${m.slice(0,4)}-${m.slice(4,6)}-01`);
+  const revB = r.revenue.map(v => v != null ? +(v / 1e8).toFixed(2) : null);
+  const lagB = revB.map((_, i) => i >= 12 ? revB[i - 12] : null);
+  const bar = c.addHistogramSeries({ priceFormat: { type: 'price', precision: 1, minMove: 0.1 },
+    priceLineVisible: false, lastValueVisible: false });
+  bar.setData(times.map((t, i) => revB[i] == null ? null : {
+    time: t, value: revB[i],
+    color: r.yoy[i] == null ? '#5a6478' : r.yoy[i] >= 0 ? 'rgba(38,166,65,.8)' : 'rgba(248,81,73,.8)',
+  }).filter(Boolean));
+  const lag = c.addLineSeries({ color: '#f0b429', lineWidth: 2,
+    priceFormat: { type: 'price', precision: 1, minMove: 0.1 },
+    priceLineVisible: false, lastValueVisible: false });
+  lag.setData(_ld(times, lagB));
+  const mKey = t => `${t.year}-${String(t.month).padStart(2,'0')}`;
+  const idxMap = {}; times.forEach((t, i) => { idxMap[t.slice(0, 7)] = i; });
+  _legend(c, chEl, p => {
+    let i = revB.length - 1;
+    if (p && p.time) { const k = idxMap[mKey(p.time)]; if (k != null) i = k; }
+    const yy = r.yoy[i], yc = yy == null ? 'var(--sub)' : yy >= 0 ? '#26a641' : '#f85149';
+    return `${r.month[i].slice(0,4)}/${r.month[i].slice(4,6)} 營收 <span style="color:#e6edf3">${_f1(revB[i])} 億</span>`
+      + `　<span style="color:${yc}">YoY ${yy != null ? (yy >= 0 ? '+' : '') + yy.toFixed(1) + '%' : '—'}</span>`
+      + `　<span style="color:#f0b429">去年同月 ${_f1(lagB[i])}</span>`;
   });
-  const years = Object.keys(byYear).sort();
-  const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const traces = years.map((y, yi) => ({
-    x: MONTHS, type: 'bar', name: y + '年',
-    y: MONTHS.map((_, mi) => byYear[y][mi + 1] ?? null),
-    marker: { color: _yrColor(yi, years.length) },
-    hovertemplate: y + '年%{x}：%{y} 億<extra></extra>',
-  }));
-  Plotly.newPlot('fund-rev-chart', traces, {
-    barmode: 'group', bargap: 0.25, bargroupgap: 0.06,
-    margin: { t: 10, b: 30, l: 45, r: 10 },
-    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
-    font: _PLY.font,
-    legend: { orientation: 'h', y: 1.12, x: 0, font: { size: 12 } },
-    yaxis:  { gridcolor: _PLY.grid, ticksuffix: ' 億' },
-    xaxis:  { tickangle: 0 },
-  }, { responsive: true, displayModeBar: false });
-}
-
-// 年度色盤：舊年份灰藍 → 最新年亮綠，一眼鎖定今年
-function _yrColor(i, n){
-  const palette = ['#5a6478', '#4a7db5', '#bc8cff', '#2ecc71'];
-  return palette[Math.max(0, palette.length - n + i)] || palette[0];
+  c.timeScale().fitContent();
 }
 
 const _PLY = {
