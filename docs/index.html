@@ -269,15 +269,6 @@
   .bo-stat{display:flex;flex-direction:column;gap:1px;}
   .bo-stat .l{font-size:10px;color:var(--sub);}
   .bo-stat .v{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;}
-
-  /* ── 賣出警示卡 ─────────────────────────────────────────── */
-  .sell-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:10px;margin-bottom:20px;}
-  .sell-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--red);
-    border-radius:10px;padding:11px 14px;}
-  .sell-card.severe{border-left-width:4px;background:linear-gradient(135deg,rgba(231,76,60,.08),var(--card));}
-  .sell-card .sc-ret{font-size:20px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;}
-  .sell-card .sc-reason{display:inline-block;background:rgba(231,76,60,.12);color:#e98080;
-    border-radius:4px;padding:1px 7px;font-size:10px;margin:2px 3px 0 0;}
   .action-card .ac-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap;}
   .action-card .ac-id{font-size:17px;font-weight:700;}
   .action-card .ac-name{font-size:14px;font-weight:600;}
@@ -2302,12 +2293,12 @@ function renderDaily(data){
   // ── 雙維選股（原「回測選股」分頁整合） ────────────────────────────────────
   html += buildDualPickHtml(data);
 
-  // ── 賣出訊號：警示卡片（嚴重度排序，跌幅大字 + 原因 chips） ─────────────
+  // ── 賣出訊號：與行動清單同款 action-card（紅色系） ───────────────────────
   const sellStocks=(stocks||[]).filter(s=>s.signal==='SELL').sort((a,b)=>Number(a.ret20)-Number(b.ret20));
   if(sellStocks.length){
     html+=`<div class="section-title" style="color:var(--red)">⚠ 賣出訊號（${sellStocks.length} 檔）</div>
     <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">RSI5<45 且 20日跌幅>5%，或 CV夏普<−0.3 — 建議減碼或停損；依跌幅嚴重度排序</div>
-    <div class="sell-grid">
+    <div class="action-grid">
       ${sellStocks.map(s=>{
         const rsi=Number(s.rsi||0), ret=Number(s.ret20||0), sharpe=Number(s.sharpe||0), chipN=Number(s.chipTotal||0);
         const reasons=[];
@@ -2316,23 +2307,24 @@ function renderDaily(data){
         if(chipN<-500000) reasons.push('法人大賣超');
         else if(chipN<0) reasons.push('法人賣超');
         if(sharpe<0) reasons.push('CV夏普轉負');
+        if(!reasons.length) reasons.push('技術面轉弱');
         const severe=ret<-10;
-        return `<div class="sell-card${severe?' severe':''}">
-          <div style="display:flex;align-items:baseline;gap:7px;margin-bottom:4px;">
-            <b style="font-size:15px;cursor:pointer;" onclick="goToStock('${escHtml(s.id)}')">${escHtml(s.id)}</b>
-            <span style="font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(s.id)}')" title="點擊查看個股分析">${escHtml(s.name)}</span>
-            <span class="tag" style="margin-left:auto;">${escHtml(s.sector)}</span>
+        return `<div class="action-card" style="border-left:3px solid var(--red);${severe?'background:linear-gradient(135deg,rgba(231,76,60,.07),var(--card));':''}">
+          <div class="ac-head">
+            <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(s.id)}')" title="點擊查看個股分析">${escHtml(s.id)}</span>
+            <span class="ac-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(s.id)}')" title="點擊查看個股分析">${escHtml(s.name)}</span>
+            <span class="ac-sector">${escHtml(s.sector)}</span>
+            <span class="ac-sig" style="color:var(--red)">${severe?'強力賣出':'賣出'}</span>
           </div>
-          <div style="display:flex;align-items:baseline;gap:10px;">
-            <span class="sc-ret">${sign(ret)}${fmt(s.ret20)}%</span>
-            <span style="font-size:10px;color:var(--sub);">20日</span>
-            <span style="margin-left:auto;font-size:12px;">現價 <b>${fmt(s.price,1)}</b></span>
+          <div class="ac-prices">
+            <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(s.price,1)}</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">20日</span><span class="ac-price-val dn">${sign(ret)}${fmt(s.ret20)}%</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600"><span class="rsi-dot ${rsiDot(rsi)}"></span>${fmt(s.rsi,1)}</span></div>
+            <div class="ac-price-item"><span class="ac-price-lbl">法人合計</span><span class="ac-price-val ${chipN>=0?'chip-pos':'chip-neg'}" style="font-weight:600">${s.chipTotal!=null?sign(chipN)+chipN.toLocaleString():'—'}</span></div>
           </div>
-          <div style="display:flex;gap:10px;font-size:11px;color:var(--sub);margin:4px 0 2px;">
-            <span><span class="rsi-dot ${rsiDot(rsi)}"></span>RSI ${fmt(s.rsi,1)}</span>
-            <span class="${chipN>=0?'chip-pos':'chip-neg'}">法人 ${s.chipTotal!=null?sign(chipN)+chipN.toLocaleString():'—'}</span>
+          <div class="ac-reasons">
+            ${reasons.map(r=>`<span style="color:var(--red)">⚠ ${r}</span>`).join('<br>')}
           </div>
-          <div>${reasons.map(r=>`<span class="sc-reason">${r}</span>`).join('')||'<span class="sc-reason">技術面轉弱</span>'}</div>
         </div>`;
       }).join('')}
     </div>`;
