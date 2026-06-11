@@ -11,8 +11,19 @@ Daily Post-Market Sector Scan
   python strategy_templates/07_daily_scan.py
 """
 import sys, os, json, math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+
+def _trading_date() -> str:
+    """
+    台灣時間 00:00~05:59 補跑視為前一個交易日資料。
+    使用 UTC+8 計算，不依賴系統時區設定。
+    """
+    tw_now = datetime.now(tz=timezone(timedelta(hours=8)))
+    if tw_now.hour < 6:
+        return (tw_now - timedelta(days=1)).strftime('%Y%m%d')
+    return tw_now.strftime('%Y%m%d')
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -635,7 +646,7 @@ def generate_sector_chart(all_results, out_dir):
 
 
 def run_daily_scan():
-    today = datetime.now().strftime('%Y%m%d')
+    today = _trading_date()
     out_dir = Path(f'daily_reports/{today}')
     out_dir.mkdir(parents=True, exist_ok=True)
 

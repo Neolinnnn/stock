@@ -120,7 +120,14 @@ jobs:
           "
           git add docs/dates.json
           git diff --cached --quiet && echo "無新增內容" && exit 0
-          git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          # 台灣時間 00~05 點補跑視為前一個交易日
+          TW_HOUR=$(TZ='Asia/Taipei' date '+%H')
+          if [ "$TW_HOUR" -lt 6 ]; then
+            SCAN_DATE=$(TZ='Asia/Taipei' date -d 'yesterday' '+%Y-%m-%d')
+          else
+            SCAN_DATE=$(TZ='Asia/Taipei' date '+%Y-%m-%d')
+          fi
+          git commit -m "auto: 每日掃描 ${SCAN_DATE}"
           # 最多重試 3 次 push（防止並發 reject）
           for i in 1 2 3; do
             git pull --rebase -X ours origin main && git push && break
