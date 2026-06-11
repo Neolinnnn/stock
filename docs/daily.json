@@ -25,47 +25,54 @@
         "trend_status": "空頭排列",
         "ma_alignment": "空頭排列 MA5<MA10<MA20",
         "trend_strength": 25,
-        "ma5": 2452.0,
-        "ma10": 2464.5,
-        "ma20": 2489.75,
-        "ma60": 2135.5,
-        "current_price": 2365.0,
-        "bias_ma5": -3.55,
-        "bias_ma10": -4.04,
-        "bias_ma20": -5.01,
+        "ma5": 2405.0,
+        "ma10": 2448.5,
+        "ma20": 2469.75,
+        "ma60": 2150.25,
+        "current_price": 2275.0,
+        "bias_ma5": -5.41,
+        "bias_ma10": -7.09,
+        "bias_ma20": -7.89,
         "volume_status": "量能正常",
-        "volume_ratio_5d": 1.39,
+        "volume_ratio_5d": 1.22,
         "volume_trend": "量能正常",
         "support_ma5": false,
         "support_ma10": false,
         "buy_signal": "強力賣出",
-        "signal_score": 21,
+        "signal_score": 13,
         "signal_reasons": [
-          "價格回踩MA5(-3.5%)，觀察支撐",
           "多頭排列，持續上漲",
-          "RSI中性(46.1)，震盪整理中"
+          "RSI中性(41.9)，震盪整理中"
         ],
         "risk_factors": [
           "空頭排列，不宜做多",
+          "乖離率過大(-5.4%)，可能破位",
           "弱勢族群逆勢，板塊阻力大"
         ],
-        "macd_dif": 45.8563,
-        "macd_dea": 79.265,
-        "macd_bar": -66.8173,
+        "macd_dif": 27.3246,
+        "macd_dea": 68.8769,
+        "macd_bar": -83.1045,
         "macd_status": "多頭",
         "macd_signal": "多頭排列，持續上漲",
-        "rsi_6": 37.5,
-        "rsi_12": 46.1,
-        "rsi_24": 52.7,
+        "rsi_6": 30.5,
+        "rsi_12": 41.9,
+        "rsi_24": 50.2,
         "rsi_status": "中性",
-        "rsi_signal": "RSI中性(46.1)，震盪整理中",
+        "rsi_signal": "RSI中性(41.9)，震盪整理中",
         "sector_is_strong": false,
-        "kd_k": 38.98,
-        "kd_d": 41.38,
-        "kd_j": 34.19,
-        "kd_k_prev": 44.83,
-        "kd_d_prev": 42.57,
-        "macd_bar_prev": -27.91
+        "kd_k": 33.35,
+        "kd_d": 38.7,
+        "kd_j": 22.66,
+        "kd_k_prev": 38.98,
+        "kd_d_prev": 41.38,
+        "macd_bar_prev": -33.38,
+        "entry_strategy": {
+          "vol_ratio": 0.94,
+          "vol_ok": false,
+          "macd_momentum": false,
+          "passed": false,
+          "grade": "C"
+        }
       },
       "product_mix": {
         "product_lines": [
@@ -164,7 +171,14 @@
         "kd_j": 52.14,
         "kd_k_prev": 35.81,
         "kd_d_prev": 34.57,
-        "macd_bar_prev": -62.99
+        "macd_bar_prev": -62.99,
+        "entry_strategy": {
+          "vol_ratio": 1.12,
+          "vol_ok": false,
+          "macd_momentum": false,
+          "passed": false,
+          "grade": "C"
+        }
       }
     },
     {
@@ -218,7 +232,14 @@
         "kd_j": 79.7,
         "kd_k_prev": 64.12,
         "kd_d_prev": 49.74,
-        "macd_bar_prev": 1.95
+        "macd_bar_prev": 1.95,
+        "entry_strategy": {
+          "vol_ratio": 1.48,
+          "vol_ok": true,
+          "macd_momentum": true,
+          "passed": true,
+          "grade": "A"
+        }
       },
       "product_mix": {
         "product_lines": [
@@ -327,7 +348,14 @@
         "kd_j": 78.43,
         "kd_k_prev": 70.26,
         "kd_d_prev": 60.26,
-        "macd_bar_prev": -6.81
+        "macd_bar_prev": -6.81,
+        "entry_strategy": {
+          "vol_ratio": 2.06,
+          "vol_ok": true,
+          "macd_momentum": false,
+          "passed": true,
+          "grade": "B"
+        }
       },
       "product_mix": {
         "product_lines": [
