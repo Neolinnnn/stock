@@ -308,7 +308,6 @@
     border-radius:8px;margin-top:12px;}
 
   /* ── 回測選股 Tab ────────────────────────────────────────────────── */
-  #nav-bt:not(.active){color:#f1c40f;}
   .bt-badge{display:inline-block;background:rgba(241,196,15,.15);color:#f1c40f;
     border:1px solid rgba(241,196,15,.4);border-radius:3px;padding:1px 5px;
     font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;cursor:pointer;}
@@ -356,7 +355,6 @@
     <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
     <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
     <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
-    <a id="nav-bt" onclick="setPage('bt')">⭐ 回測選股</a>
     <a id="nav-lab" onclick="setPage('lab')">⚗️ 策略實驗室</a>
     <a id="nav-backtest" href="./backtest.html">📊 策略回測</a>
     <a href="./agents/">🤖 多代理分析</a>
@@ -376,8 +374,6 @@
   <div id="page-mainforce" class="page-section"></div>
   <div id="page-stock"     class="page-section"></div>
   <div id="page-watchlist" class="page-section"></div>
-
-  <div id="page-bt" class="page-section"></div>
 
   <div id="page-lab" class="page-section"></div>
 
@@ -408,7 +404,7 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw14G5uB-Aic9KA
 let WL_DATA = null;
 let BT_RESULTS = null;
 let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
-let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector} — rebuilt by renderBtPage
+let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector}
 let DAILY_DATA = null; // daily.json 完整選股清單（最新掃描，64 支），供回測選股 Tab 使用
 
 // ── lightweight-charts 管理 ───────────────────────────────────────────────────
@@ -715,14 +711,9 @@ function hideBtTooltip(){
   document.getElementById('bt-tooltip').classList.remove('show');
 }
 
-// ── 回測選股：重新設計為「族群動能 × 籌碼」雙維度選股 ────────────────────────
-function renderBtPage(){
-  const el = document.getElementById('page-bt');
-  const data = DAILY_DATA || CACHE[CUR_DATE];
-  if(!data || !data.sectors || !data.stocks){
-    el.innerHTML = '<div class="error-box"><span>⚠️</span>今日掃描資料不足</div>';
-    return;
-  }
+// ── 雙維選股（族群動能 × 籌碼）：原「回測選股」分頁，已整合進今日掃描 ─────────
+function buildDualPickHtml(data){
+  if(!data || !data.sectors || !data.stocks) return '';
 
   // 取前3強勢族群（20日漲幅排名）
   const topSectors = [...data.sectors]
@@ -764,54 +755,49 @@ function renderBtPage(){
     </tr>`;
   };
 
-  let html = `
-  <div class="info-box" style="margin-bottom:16px">
-    <b style="color:var(--text)">📌 選股邏輯說明</b><br>
-    從今日 <b style="color:var(--green)">20日漲幅前3強勢族群</b>（${topSectors.join('、')}）中，分兩個維度各取前3檔：<br>
-    <b>動能篩選</b>：個股近20日漲幅最高 — 跟上強勢族群的衝刺股<br>
-    <b>籌碼篩選</b>：三大法人合計買超最多 — 主力正在佈局的股票<br>
-    <b style="color:var(--yellow)">★雙選</b>：同時被兩種方法選中，信號最強
-  </div>`;
+  let html = `<div class="section-title">🎯 雙維選股（族群動能 × 法人籌碼）</div>`;
 
-  // 交集精選
+  // 交集精選（最強訊號，直接顯示）
   if(intersectIds.size){
     const intersectStocks = [...intersectIds].map(id => data.stocks.find(s=>s.id===id)).filter(Boolean);
-    html += `<div class="section-title">⭐ 雙選精選（動能 + 籌碼同時入選）</div>
-    <div class="card" style="overflow-x:auto;margin-bottom:20px;border-left:3px solid var(--yellow)">
+    html += `<div class="card" style="overflow-x:auto;margin-bottom:12px;border-left:3px solid var(--yellow)">
+    <div style="font-size:12px;font-weight:700;color:var(--yellow);padding:2px 6px 8px;">⭐ 雙選精選 — 動能與籌碼同時入選，信號最強</div>
     <table>
       <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
       ${intersectStocks.map(s=>stockRow(s,false)).join('')}
     </table></div>`;
   }
 
-  // 兩欄：動能 / 籌碼
-  html += `<div class="grid-2">
-    <div>
-      <div class="section-title">📈 動能篩選（跟上強勢族群衝刺股）</div>
-      <div class="card" style="overflow-x:auto">
-      <div style="font-size:11px;color:var(--sub);padding:4px 6px 6px">強勢族群 × 個股20日漲幅前3</div>
-      <table>
-        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
-        ${momentumPicks.map(s=>stockRow(s,true)).join('')}
-      </table></div>
+  // 完整兩欄收進 details，保持頁面乾淨
+  html += `<details class="card" style="margin-bottom:20px;padding:12px 16px;">
+    <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--blue);user-select:none;">
+      📋 完整篩選明細（強勢族群 ${escHtml(topSectors.join('、'))} ｜ 動能前3 × 籌碼前3）
+    </summary>
+    <div style="font-size:11px;color:var(--sub);margin:8px 0 10px;line-height:1.7;">
+      <b>動能篩選</b>：個股近20日漲幅最高 — 跟上強勢族群的衝刺股；
+      <b>籌碼篩選</b>：三大法人合計買超最多 — 主力正在佈局的股票；
+      <b style="color:var(--yellow)">★雙選</b>＝兩者同時入選。賣出訊號(SELL)已排除。
     </div>
-    <div>
-      <div class="section-title">🏦 籌碼篩選（法人正在佈局的股票）</div>
-      <div class="card" style="overflow-x:auto">
-      <div style="font-size:11px;color:var(--sub);padding:4px 6px 6px">強勢族群 × 法人合計買超前3</div>
-      <table>
-        <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
-        ${chipPicks.length ? chipPicks.map(s=>stockRow(s,true)).join('') :
-          `<tr><td colspan="7" style="color:var(--sub);padding:12px">今日強勢族群中無法人買超個股</td></tr>`}
-      </table></div>
+    <div class="grid-2" style="margin-bottom:0;">
+      <div style="overflow-x:auto">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;">📈 動能篩選</div>
+        <table>
+          <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
+          ${momentumPicks.map(s=>stockRow(s,true)).join('')}
+        </table>
+      </div>
+      <div style="overflow-x:auto">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;">🏦 籌碼篩選</div>
+        <table>
+          <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
+          ${chipPicks.length ? chipPicks.map(s=>stockRow(s,true)).join('') :
+            `<tr><td colspan="7" style="color:var(--sub);padding:12px">今日強勢族群中無法人買超個股</td></tr>`}
+        </table>
+      </div>
     </div>
-  </div>
+  </details>`;
 
-  <div style="margin-top:8px;font-size:11px;color:var(--sub)">
-    資料日期：${fmtDate(CUR_DATE)}　｜　僅依技術/籌碼篩選，不構成買賣建議　｜　賣出訊號(SELL)已自動排除
-  </div>`;
-
-  el.innerHTML = html;
+  return html;
 }
 
 // ── 個股分析 ──────────────────────────────────────────────────────────────────
@@ -1863,7 +1849,9 @@ async function init(){
   await loadDate(CUR_DATE);
   // 支援外部深連結 ?stock=2330（多代理分析台的「完整個股分析」連結會帶此參數）
   const qsStock = new URLSearchParams(location.search).get('stock');
-  if(qsStock){ goToStock(qsStock); } else { setPage('daily'); }
+  if(qsStock){ goToStock(qsStock); }
+  else if(location.hash==='#lab'){ setPage('lab'); }
+  else { setPage('daily'); }
   document.addEventListener('click', e=>{
     if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
       hideBtTooltip();
@@ -2001,7 +1989,7 @@ async function renderLabPage(){
 
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','mainforce','stock','watchlist','bt','lab'].forEach(p=>{
+  ['daily','weekly','mainforce','stock','watchlist','lab'].forEach(p=>{
     const navEl = document.getElementById(`nav-${p}`);
     if(navEl) navEl.classList.toggle('active', p===page);
     const pageEl = document.getElementById(`page-${p}`);
@@ -2014,7 +2002,6 @@ function setPage(page){
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
   if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
-  if(page==='bt')        renderBtPage();
   if(page==='lab')       renderLabPage();
   hideBtTooltip();
 }
@@ -2041,7 +2028,6 @@ async function loadDate(dateStr){
   }
   renderDaily(CACHE[dateStr]);
   if(CUR_PAGE==='mainforce') renderMainForce(CACHE[dateStr]);
-  if(CUR_PAGE==='bt') renderBtPage();
   document.getElementById('loading').style.display='none';
 }
 
@@ -2199,6 +2185,9 @@ function renderDaily(data){
     });
     html+=`</div>`;
   }
+
+  // ── 雙維選股（原「回測選股」分頁整合） ────────────────────────────────────
+  html += buildDualPickHtml(data);
 
   // ── 賣出訊號列表 ──────────────────────────────────────────────────────────
   const sellStocks=(stocks||[]).filter(s=>s.signal==='SELL').sort((a,b)=>Number(a.ret20)-Number(b.ret20));
