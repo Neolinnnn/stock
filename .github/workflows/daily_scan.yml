@@ -92,6 +92,15 @@ jobs:
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/fundamentals_fetcher.py
 
+      - name: Enrich product mix (qualified stocks)
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/enrich_product_mix.py --qualified
+          # 把剛抓的產銷組合帶進當日 payload（行動清單按鈕）
+          python scripts/rebuild_daily_payload.py
+
       - name: Build multi-agent analysis (agents)
         continue-on-error: true
         env:
