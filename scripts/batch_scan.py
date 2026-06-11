@@ -296,6 +296,11 @@ def analyze_stock(stock_id, name, days=DATA_DAYS, hist=None):
     recent_sigs = generate_signals(prices[-6:], dates[-6:],
                                    s_ma[-6:], l_ma[-6:], rsi5_v[-6:])
     current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
+    # BUY 需當下仍為多頭結構（MA5>MA20）。防止「過期 BUY」：黃金交叉後隨即死叉，
+    # 但因 RSI 超賣抑制 SELL，暴跌股帶著數日前的舊 BUY 進入雙篩選推薦
+    if (current_signal == 'BUY' and latest_short is not None
+            and latest_long is not None and latest_short <= latest_long):
+        current_signal = 'HOLD'
 
     # Walk-Forward CV
     cv_results = walk_forward_cv(prices, dates, CV_FOLDS)

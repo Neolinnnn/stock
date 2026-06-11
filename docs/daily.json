@@ -7,7 +7,7 @@
     "櫃買漲跌幅%": 0.29070483604738734,
     "強勢族群": "AI伺服器, 封測, 光學, 車用電子, 被動元件",
     "弱勢族群": "光通訊, 記憶體, 綠能環保, CoPoS封裝, AI ASIC/IP",
-    "雙條件推薦": 4,
+    "雙條件推薦": 3,
     "掃描涵蓋率": 100,
     "失敗族群": [],
     "部分失敗族群": {
@@ -15,113 +15,6 @@
     }
   },
   "qualified": [
-    {
-      "sector": "光通訊",
-      "id": "2345",
-      "name": "智邦",
-      "price": 2275.0,
-      "rsi": 27.1,
-      "cv_sharpe": 1.53,
-      "trend_analysis": {
-        "code": "2345",
-        "trend_status": "空頭排列",
-        "ma_alignment": "空頭排列 MA5<MA10<MA20",
-        "trend_strength": 25,
-        "ma5": 2405.0,
-        "ma10": 2448.5,
-        "ma20": 2469.75,
-        "ma60": 2150.25,
-        "current_price": 2275.0,
-        "bias_ma5": -5.41,
-        "bias_ma10": -7.09,
-        "bias_ma20": -7.89,
-        "volume_status": "量能正常",
-        "volume_ratio_5d": 1.22,
-        "volume_trend": "量能正常",
-        "support_ma5": false,
-        "support_ma10": false,
-        "buy_signal": "強力賣出",
-        "signal_score": 13,
-        "signal_reasons": [
-          "多頭排列，持續上漲",
-          "RSI中性(41.9)，震盪整理中"
-        ],
-        "risk_factors": [
-          "空頭排列，不宜做多",
-          "乖離率過大(-5.4%)，可能破位",
-          "弱勢族群逆勢，板塊阻力大"
-        ],
-        "macd_dif": 27.3246,
-        "macd_dea": 68.8769,
-        "macd_bar": -83.1045,
-        "macd_status": "多頭",
-        "macd_signal": "多頭排列，持續上漲",
-        "rsi_6": 30.5,
-        "rsi_12": 41.9,
-        "rsi_24": 50.2,
-        "rsi_status": "中性",
-        "rsi_signal": "RSI中性(41.9)，震盪整理中",
-        "sector_is_strong": false,
-        "kd_k": 33.35,
-        "kd_d": 38.7,
-        "kd_j": 22.66,
-        "kd_k_prev": 38.98,
-        "kd_d_prev": 41.38,
-        "macd_bar_prev": -33.38,
-        "entry_strategy": {
-          "vol_ratio": 0.94,
-          "vol_ok": false,
-          "macd_momentum": false,
-          "passed": false,
-          "grade": "C"
-        }
-      },
-      "product_mix": {
-        "product_lines": [
-          {
-            "name": "網路應用設備 (Network Application Products)",
-            "share_pct": 63,
-            "yoy_growth": 361,
-            "trend": "down"
-          },
-          {
-            "name": "網路交換器 (Network Switches)",
-            "share_pct": 34,
-            "yoy_growth": 46,
-            "trend": "up"
-          },
-          {
-            "name": "網路接取設備 (Network Access Devices)",
-            "share_pct": 2,
-            "yoy_growth": null,
-            "trend": "flat"
-          }
-        ],
-        "regions": [
-          {
-            "name": "美洲 (Americas)",
-            "share_pct": 81
-          },
-          {
-            "name": "其他地區 (Other Regions)",
-            "share_pct": 19
-          }
-        ],
-        "customers": [
-          "超大規模資料中心 (Hyperscale Data Centers)",
-          "雲端服務供應商 (Cloud Service Providers - CSPs)",
-          "Meta",
-          "Amazon",
-          "HP",
-          "Dell"
-        ],
-        "biz_model": "智邦是網路設備的ODM/OEM領導廠商，主要提供軟硬體整合解決方案給終端客戶（俗稱白牌業者），同時也擁有自有品牌，主打企業和電信市場。",
-        "moat": "智邦的核心競爭優勢包括在高速網路技術（如800G、1.6T交換器、CPO、液冷散熱、機櫃級整合）的領先研發與早期量產能力，與超大規模資料中心及雲端服務供應商的深厚合作關係，在全球（台灣、越南、墨西哥、馬來西亞、美國、新加坡）的製造與研發全球化佈局，以及在全球白牌交換器市場的領導地位。",
-        "summary": "智邦的業務結構在2025年呈現明顯轉型，由AI相關的網路應用設備帶動主要增長，該產品線在2025年前三季營收佔比達63%，年增361%。同時，網路交換器業務在800G升級需求下預計在2026年將進一步提升營收佔比，凸顯其作為AI基礎設施核心供應商的關鍵地位。美洲市場為其主要營收來源，佔2025年前三季營收的81%。",
-        "data_period": "2025 Q1-Q3",
-        "updated_at": "2026-06-09"
-      }
-    },
     {
       "sector": "銅箔/CCL",
       "id": "2383",
