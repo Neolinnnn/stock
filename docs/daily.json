@@ -1,6 +1,6 @@
 {
   "meta": {
-    "掃描日期": "20260610",
+    "掃描日期": "20260611",
     "加權指數": null,
     "漲跌幅%": null,
     "強勢族群": "AI伺服器, 封測, 光學, 車用電子, 銅箔/CCL, 被動元件",
@@ -19,7 +19,99 @@
       "name": "智邦",
       "price": 2365.0,
       "rsi": 34.9,
-      "cv_sharpe": 1.83
+      "cv_sharpe": 1.83,
+      "trend_analysis": {
+        "code": "2345",
+        "trend_status": "空頭排列",
+        "ma_alignment": "空頭排列 MA5<MA10<MA20",
+        "trend_strength": 25,
+        "ma5": 2452.0,
+        "ma10": 2464.5,
+        "ma20": 2489.75,
+        "ma60": 2135.5,
+        "current_price": 2365.0,
+        "bias_ma5": -3.55,
+        "bias_ma10": -4.04,
+        "bias_ma20": -5.01,
+        "volume_status": "量能正常",
+        "volume_ratio_5d": 1.39,
+        "volume_trend": "量能正常",
+        "support_ma5": false,
+        "support_ma10": false,
+        "buy_signal": "強力賣出",
+        "signal_score": 21,
+        "signal_reasons": [
+          "價格回踩MA5(-3.5%)，觀察支撐",
+          "多頭排列，持續上漲",
+          "RSI中性(46.1)，震盪整理中"
+        ],
+        "risk_factors": [
+          "空頭排列，不宜做多",
+          "弱勢族群逆勢，板塊阻力大"
+        ],
+        "macd_dif": 45.8563,
+        "macd_dea": 79.265,
+        "macd_bar": -66.8173,
+        "macd_status": "多頭",
+        "macd_signal": "多頭排列，持續上漲",
+        "rsi_6": 37.5,
+        "rsi_12": 46.1,
+        "rsi_24": 52.7,
+        "rsi_status": "中性",
+        "rsi_signal": "RSI中性(46.1)，震盪整理中",
+        "sector_is_strong": false,
+        "kd_k": 38.98,
+        "kd_d": 41.38,
+        "kd_j": 34.19,
+        "kd_k_prev": 44.83,
+        "kd_d_prev": 42.57,
+        "macd_bar_prev": -27.92
+      },
+      "product_mix": {
+        "product_lines": [
+          {
+            "name": "網路應用設備 (Network Application Products)",
+            "share_pct": 63,
+            "yoy_growth": 361,
+            "trend": "down"
+          },
+          {
+            "name": "網路交換器 (Network Switches)",
+            "share_pct": 34,
+            "yoy_growth": 46,
+            "trend": "up"
+          },
+          {
+            "name": "網路接取設備 (Network Access Devices)",
+            "share_pct": 2,
+            "yoy_growth": null,
+            "trend": "flat"
+          }
+        ],
+        "regions": [
+          {
+            "name": "美洲 (Americas)",
+            "share_pct": 81
+          },
+          {
+            "name": "其他地區 (Other Regions)",
+            "share_pct": 19
+          }
+        ],
+        "customers": [
+          "超大規模資料中心 (Hyperscale Data Centers)",
+          "雲端服務供應商 (Cloud Service Providers - CSPs)",
+          "Meta",
+          "Amazon",
+          "HP",
+          "Dell"
+        ],
+        "biz_model": "智邦是網路設備的ODM/OEM領導廠商，主要提供軟硬體整合解決方案給終端客戶（俗稱白牌業者），同時也擁有自有品牌，主打企業和電信市場。",
+        "moat": "智邦的核心競爭優勢包括在高速網路技術（如800G、1.6T交換器、CPO、液冷散熱、機櫃級整合）的領先研發與早期量產能力，與超大規模資料中心及雲端服務供應商的深厚合作關係，在全球（台灣、越南、墨西哥、馬來西亞、美國、新加坡）的製造與研發全球化佈局，以及在全球白牌交換器市場的領導地位。",
+        "summary": "智邦的業務結構在2025年呈現明顯轉型，由AI相關的網路應用設備帶動主要增長，該產品線在2025年前三季營收佔比達63%，年增361%。同時，網路交換器業務在800G升級需求下預計在2026年將進一步提升營收佔比，凸顯其作為AI基礎設施核心供應商的關鍵地位。美洲市場為其主要營收來源，佔2025年前三季營收的81%。",
+        "data_period": "2025 Q1-Q3",
+        "updated_at": "2026-06-09"
+      }
     },
     {
       "sector": "銅箔/CCL",
@@ -27,7 +119,106 @@
       "name": "金像電",
       "price": 1420.0,
       "rsi": 57.2,
-      "cv_sharpe": 11.01
+      "cv_sharpe": 11.01,
+      "trend_analysis": {
+        "code": "2368",
+        "trend_status": "多頭排列",
+        "ma_alignment": "多頭排列 MA5>MA10>MA20",
+        "trend_strength": 75,
+        "ma5": 1388.0,
+        "ma10": 1355.0,
+        "ma20": 1345.0,
+        "ma60": 1214.4,
+        "current_price": 1420.0,
+        "bias_ma5": 2.31,
+        "bias_ma10": 4.8,
+        "bias_ma20": 5.58,
+        "volume_status": "量能正常",
+        "volume_ratio_5d": 1.4,
+        "volume_trend": "量能正常",
+        "support_ma5": false,
+        "support_ma10": false,
+        "buy_signal": "強力買入",
+        "signal_score": 96,
+        "signal_reasons": [
+          "多頭排列，順勢做多",
+          "價格略高於MA5(2.3%)，可小倉介入",
+          "多頭排列，持續上漲",
+          "RSI中性(55.7)，震盪整理中",
+          "強勢族群加持，資金輪動有利",
+          "CV夏普=11.01（優秀），歷史勝率極佳"
+        ],
+        "risk_factors": [],
+        "macd_dif": 32.9064,
+        "macd_dea": 29.6127,
+        "macd_bar": 6.5873,
+        "macd_status": "多頭",
+        "macd_signal": "多頭排列，持續上漲",
+        "rsi_6": 56.9,
+        "rsi_12": 55.7,
+        "rsi_24": 56.7,
+        "rsi_status": "中性",
+        "rsi_signal": "RSI中性(55.7)，震盪整理中",
+        "sector_is_strong": true,
+        "kd_k": 62.58,
+        "kd_d": 54.02,
+        "kd_j": 79.7,
+        "kd_k_prev": 64.12,
+        "kd_d_prev": 49.74,
+        "macd_bar_prev": 1.95
+      },
+      "product_mix": {
+        "product_lines": [
+          {
+            "name": "伺服器 (Server)",
+            "share_pct": 73,
+            "yoy_growth": null,
+            "trend": "up"
+          },
+          {
+            "name": "網通 (Networking)",
+            "share_pct": 13,
+            "yoy_growth": null,
+            "trend": "up"
+          },
+          {
+            "name": "筆記型電腦 (Notebook)",
+            "share_pct": 9,
+            "yoy_growth": null,
+            "trend": "flat/up"
+          },
+          {
+            "name": "其他 (Other)",
+            "share_pct": 5,
+            "yoy_growth": null,
+            "trend": "flat"
+          }
+        ],
+        "regions": [
+          {
+            "name": "大中華區 (Greater China)",
+            "share_pct": 70
+          },
+          {
+            "name": "全球其他地區 (Rest of World)",
+            "share_pct": 30
+          }
+        ],
+        "customers": [
+          "Amazon Web Services (AWS)",
+          "Google",
+          "Microsoft",
+          "Meta",
+          "國際伺服器品牌廠",
+          "全球網通設備商",
+          "國際筆記型電腦品牌廠"
+        ],
+        "biz_model": "金像電主要透過OEM/ODM模式，為全球客戶設計、製造與銷售高階多層印刷電路板，尤其專精於伺服器及網通設備應用。公司具備PCB全製程整合能力，從基板壓合、鑽孔、電路成型到表面處理均在自家體系內完成。",
+        "moat": "金像電的核心競爭優勢在於其高層數與低損耗PCB的先進技術，使其在全球伺服器PCB市場居於領先地位。公司深度參與雲端服務供應商(CSP)的ASIC自研晶片專案，並透過戰略性的全球產能佈局（台灣、中國、泰國）以滿足客戶需求並分散地緣政治風險，形成難以取代的技術與供應鏈護城河。",
+        "summary": "金像電2026年營運受惠於AI伺服器與高階交換器需求強勁，營收及獲利表現突出。其產品組合持續優化，其中伺服器業務（包含快速成長的AI伺服器）為主要營收貢獻來源。公司2026年第一季營收年增60.1%，5月營收年增87.3%，顯示強勁的成長動能。產品線營收佔比主要根據2025年上半年資料，地區別營收分布為合理估計。",
+        "data_period": "2025年上半年 (產品線營收佔比); 2026年第一季至近期展望 (成長趨勢)",
+        "updated_at": "2026-06-09"
+      }
     },
     {
       "sector": "AI 散熱",
@@ -35,7 +226,109 @@
       "name": "勤誠",
       "price": 1445.0,
       "rsi": 55.4,
-      "cv_sharpe": 7.43
+      "cv_sharpe": 7.43,
+      "trend_analysis": {
+        "code": "8210",
+        "trend_status": "多頭排列",
+        "ma_alignment": "多頭排列 MA5>MA10>MA20",
+        "trend_strength": 75,
+        "ma5": 1424.0,
+        "ma10": 1404.0,
+        "ma20": 1392.5,
+        "ma60": 1162.22,
+        "current_price": 1445.0,
+        "bias_ma5": 1.47,
+        "bias_ma10": 2.92,
+        "bias_ma20": 3.77,
+        "volume_status": "放量下跌",
+        "volume_ratio_5d": 1.61,
+        "volume_trend": "放量下跌，注意風險",
+        "support_ma5": true,
+        "support_ma10": false,
+        "buy_signal": "買入",
+        "signal_score": 70,
+        "signal_reasons": [
+          "多頭排列，順勢做多",
+          "價格貼近MA5(1.5%)，介入好時機",
+          "MA5支撐有效",
+          "多頭排列，持續上漲",
+          "RSI中性(56.5)，震盪整理中",
+          "CV夏普=7.43（良好）"
+        ],
+        "risk_factors": [
+          "放量下跌，注意風險"
+        ],
+        "macd_dif": 53.0973,
+        "macd_dea": 59.1882,
+        "macd_bar": -12.182,
+        "macd_status": "多頭",
+        "macd_signal": "多頭排列，持續上漲",
+        "rsi_6": 55.4,
+        "rsi_12": 56.5,
+        "rsi_24": 58.5,
+        "rsi_status": "中性",
+        "rsi_signal": "RSI中性(56.5)，震盪整理中",
+        "sector_is_strong": null,
+        "kd_k": 68.05,
+        "kd_d": 62.86,
+        "kd_j": 78.43,
+        "kd_k_prev": 70.26,
+        "kd_d_prev": 60.26,
+        "macd_bar_prev": -6.8
+      },
+      "product_mix": {
+        "product_lines": [
+          {
+            "name": "伺服器/儲存機殼及相關零組件",
+            "share_pct": 88,
+            "yoy_growth": null,
+            "trend": "up"
+          },
+          {
+            "name": "機櫃級解決方案 (含AI/水冷機櫃)",
+            "share_pct": 11,
+            "yoy_growth": null,
+            "trend": "up"
+          },
+          {
+            "name": "個人電腦機殼及其他",
+            "share_pct": 1,
+            "yoy_growth": null,
+            "trend": "flat"
+          }
+        ],
+        "regions": [
+          {
+            "name": "美國",
+            "share_pct": 60
+          },
+          {
+            "name": "中國",
+            "share_pct": 30
+          },
+          {
+            "name": "歐洲",
+            "share_pct": 7
+          },
+          {
+            "name": "其他地區",
+            "share_pct": 3
+          }
+        ],
+        "customers": [
+          "全球一線雲端服務供應商 (CSP，已掌握全球八大CSP中之六家)",
+          "Amazon (AMZN-US)",
+          "NVIDIA",
+          "全球前三大伺服器供應鏈成員",
+          "系統整合商 (SI)",
+          "大型資料中心業者"
+        ],
+        "biz_model": "勤誠採多元彈性經營模式，包含自有品牌 (Chenbro)、OEM (原廠委託製造)、ODM (原廠委託設計) 及 JDM (聯合設計製造) 服務，並積極從伺服器機殼供應商轉型為機櫃級機構整體解決方案提供者，延伸觸角至資料中心及產業解決方案。",
+        "moat": "勤誠的核心競爭優勢在於深厚的研發與設計能力，特別是針對AI伺服器高功率散熱、結構強度及模組化設計的需求。 公司與全球一線CSP及伺服器品牌建立緊密協同開發關係，從專案早期即參與設計，大幅提升客戶黏著度。 此外，勤誠積極推動全球製造在地化策略 (Glocalization)，於台灣、中國、美國及馬來西亞設立生產基地，以提升供應鏈韌性、分散地緣政治風險並就近支援客戶需求。 策略性地從單一機殼跨入更高階的機櫃級機構解決方案，包括標準IT機櫃、交換器機櫃及高難度的CDU水冷機櫃，為其在AI資料中心市場建立關鍵護城河。",
+        "summary": "勤誠（8210）受惠於全球AI應用需求強勁，2025年營收與獲利創歷史新高，2026年第一季營收年增率達71.1%，營運動能持續向上。 公司正積極從伺服器機殼領導廠轉型為機櫃級機構整體解決方案提供者，機櫃業務佔比預計在2026年將提升至一成以上，並已成功切入北美CSP的水冷機櫃專案。 透過與頂級客戶的聯合設計製造、全球化產能佈局及深厚的機構整合經驗，勤誠在AI基礎設施建置浪潮中佔據關鍵地位。",
+        "data_period": "2025全年及2026Q1資料，2026年5月營收為輔",
+        "updated_at": "2026-06-09"
+      }
     }
   ],
   "sectors": [
@@ -149,31 +442,58 @@
       "dealer": -2432976
     },
     {
-      "id": "2301",
-      "name": "光寶科",
-      "sector": "AI 電源",
-      "total": 3238000,
-      "foreign": 2968000,
-      "trust": 155000,
-      "dealer": 115000
+      "id": "2382",
+      "name": "廣達",
+      "sector": "AI伺服器",
+      "total": 11008920,
+      "foreign": -9201330,
+      "trust": 20635544,
+      "dealer": -425294
     },
     {
       "id": "4938",
       "name": "和碩",
       "sector": "AI伺服器",
-      "total": 1638710,
-      "foreign": 961710,
-      "trust": 89000,
-      "dealer": 588000
+      "total": 4986027,
+      "foreign": -7607948,
+      "trust": 12868830,
+      "dealer": -274855
     },
     {
-      "id": "2337",
-      "name": "旺宏",
-      "sector": "記憶體",
-      "total": 1619000,
-      "foreign": 1723000,
-      "trust": 0,
-      "dealer": -104000
+      "id": "6213",
+      "name": "聯茂",
+      "sector": "銅箔/CCL",
+      "total": 2404833,
+      "foreign": 2607298,
+      "trust": -3000,
+      "dealer": -199465
+    },
+    {
+      "id": "2379",
+      "name": "瑞昱",
+      "sector": "IC設計",
+      "total": 1051753,
+      "foreign": -1418700,
+      "trust": 2572005,
+      "dealer": -101552
+    },
+    {
+      "id": "4906",
+      "name": "正文",
+      "sector": "光通訊",
+      "total": 1036653,
+      "foreign": 1354241,
+      "trust": -5000,
+      "dealer": -312588
+    },
+    {
+      "id": "3034",
+      "name": "聯詠",
+      "sector": "IC設計",
+      "total": 995738,
+      "foreign": 1093497,
+      "trust": -56789,
+      "dealer": -40970
     },
     {
       "id": "3008",
@@ -194,6 +514,15 @@
       "dealer": 7952
     },
     {
+      "id": "3105",
+      "name": "穩懋",
+      "sector": "光通訊",
+      "total": 880288,
+      "foreign": 874246,
+      "trust": 777000,
+      "dealer": -770958
+    },
+    {
       "id": "2376",
       "name": "技嘉",
       "sector": "AI伺服器",
@@ -201,6 +530,15 @@
       "foreign": 1213663,
       "trust": 17006,
       "dealer": -357968
+    },
+    {
+      "id": "6415",
+      "name": "矽力-KY",
+      "sector": "IC設計",
+      "total": 623936,
+      "foreign": 705864,
+      "trust": -41000,
+      "dealer": -40928
     },
     {
       "id": "2481",
@@ -212,15 +550,6 @@
       "dealer": -1787153
     },
     {
-      "id": "6213",
-      "name": "聯茂",
-      "sector": "銅箔/CCL",
-      "total": 541000,
-      "foreign": 515000,
-      "trust": 0,
-      "dealer": 26000
-    },
-    {
       "id": "2327",
       "name": "國巨",
       "sector": "被動元件",
@@ -228,6 +557,24 @@
       "foreign": -6205974,
       "trust": 8362903,
       "dealer": -1623484
+    },
+    {
+      "id": "2243",
+      "name": "怡利電",
+      "sector": "車用電子",
+      "total": 495547,
+      "foreign": 496500,
+      "trust": 0,
+      "dealer": -953
+    },
+    {
+      "id": "3665",
+      "name": "貿聯-KY",
+      "sector": "光通訊",
+      "total": 449000,
+      "foreign": 175000,
+      "trust": 55000,
+      "dealer": 219000
     },
     {
       "id": "8150",
@@ -239,13 +586,13 @@
       "dealer": -1727332
     },
     {
-      "id": "6257",
-      "name": "矽格",
-      "sector": "封測",
-      "total": 379000,
-      "foreign": -268000,
-      "trust": 0,
-      "dealer": 647000
+      "id": "2383",
+      "name": "台光電",
+      "sector": "銅箔/CCL",
+      "total": 357520,
+      "foreign": 302908,
+      "trust": 97815,
+      "dealer": -43203
     },
     {
       "id": "2492",
@@ -266,15 +613,6 @@
       "dealer": -245490
     },
     {
-      "id": "2454",
-      "name": "聯發科",
-      "sector": "IC設計",
-      "total": 293052,
-      "foreign": 162052,
-      "trust": -129000,
-      "dealer": 260000
-    },
-    {
       "id": "2368",
       "name": "金像電",
       "sector": "銅箔/CCL",
@@ -291,6 +629,15 @@
       "foreign": 240600,
       "trust": 0,
       "dealer": -316
+    },
+    {
+      "id": "8996",
+      "name": "高力",
+      "sector": "AI 散熱",
+      "total": 219453,
+      "foreign": -120439,
+      "trust": 474000,
+      "dealer": -134108
     },
     {
       "id": "6789",
@@ -311,13 +658,22 @@
       "dealer": -56604
     },
     {
-      "id": "5269",
-      "name": "祥碩",
+      "id": "3443",
+      "name": "創意",
+      "sector": "AI ASIC/IP",
+      "total": 102388,
+      "foreign": 238091,
+      "trust": 7949,
+      "dealer": -143652
+    },
+    {
+      "id": "2388",
+      "name": "威盛",
       "sector": "IC設計",
-      "total": 98000,
-      "foreign": 49000,
-      "trust": 59000,
-      "dealer": -10000
+      "total": 94587,
+      "foreign": -132596,
+      "trust": -7000,
+      "dealer": 234183
     },
     {
       "id": "2467",
@@ -347,31 +703,13 @@
       "dealer": -11410
     },
     {
-      "id": "2357",
-      "name": "華碩",
-      "sector": "AI伺服器",
-      "total": 74000,
-      "foreign": -121000,
-      "trust": 193000,
-      "dealer": 2000
-    },
-    {
-      "id": "2329",
-      "name": "華泰",
-      "sector": "封測",
-      "total": 63000,
-      "foreign": 63000,
+      "id": "3205",
+      "name": "十銓",
+      "sector": "記憶體",
+      "total": 74665,
+      "foreign": 75000,
       "trust": 0,
-      "dealer": 0
-    },
-    {
-      "id": "8996",
-      "name": "高力",
-      "sector": "AI 散熱",
-      "total": 55000,
-      "foreign": 55000,
-      "trust": 0,
-      "dealer": 0
+      "dealer": -335
     },
     {
       "id": "7734",
@@ -383,22 +721,31 @@
       "dealer": 3452
     },
     {
-      "id": "2369",
-      "name": "菱生",
-      "sector": "封測",
-      "total": 54000,
-      "foreign": 53000,
+      "id": "1533",
+      "name": "車王電",
+      "sector": "車用電子",
+      "total": 53000,
+      "foreign": 57000,
       "trust": 0,
-      "dealer": 1000
+      "dealer": -4000
     },
     {
-      "id": "6271",
-      "name": "同欣電",
-      "sector": "封測",
-      "total": 40000,
-      "foreign": 89000,
-      "trust": -19000,
-      "dealer": -30000
+      "id": "8046",
+      "name": "南電",
+      "sector": "銅箔/CCL",
+      "total": 46795,
+      "foreign": 188882,
+      "trust": 360000,
+      "dealer": -502087
+    },
+    {
+      "id": "8299",
+      "name": "群聯",
+      "sector": "記憶體",
+      "total": 34432,
+      "foreign": 551502,
+      "trust": -209000,
+      "dealer": -308070
     },
     {
       "id": "6640",
@@ -408,15 +755,6 @@
       "foreign": 35010,
       "trust": -5000,
       "dealer": -5254
-    },
-    {
-      "id": "8046",
-      "name": "南電",
-      "sector": "銅箔/CCL",
-      "total": 8000,
-      "foreign": 10000,
-      "trust": 0,
-      "dealer": -2000
     },
     {
       "id": "6664",
@@ -446,40 +784,13 @@
       "dealer": -17215
     },
     {
-      "id": "1533",
-      "name": "車王電",
-      "sector": "車用電子",
-      "total": 1000,
-      "foreign": 1000,
-      "trust": 0,
-      "dealer": 0
-    },
-    {
-      "id": "2243",
-      "name": "怡利電",
-      "sector": "車用電子",
-      "total": -1000,
-      "foreign": -1000,
-      "trust": 0,
-      "dealer": 0
-    },
-    {
       "id": "3653",
       "name": "健策",
       "sector": "AI 散熱",
-      "total": -1000,
-      "foreign": 7000,
-      "trust": 0,
-      "dealer": -8000
-    },
-    {
-      "id": "6415",
-      "name": "矽力-KY",
-      "sector": "IC設計",
-      "total": -1200,
-      "foreign": 14400,
-      "trust": -15600,
-      "dealer": 0
+      "total": -6976,
+      "foreign": -206075,
+      "trust": 254939,
+      "dealer": -55840
     },
     {
       "id": "3058",
@@ -500,13 +811,13 @@
       "dealer": -71365
     },
     {
-      "id": "2379",
-      "name": "瑞昱",
-      "sector": "IC設計",
-      "total": -29000,
-      "foreign": -19000,
-      "trust": 0,
-      "dealer": -10000
+      "id": "4979",
+      "name": "華星光",
+      "sector": "光通訊",
+      "total": -31476,
+      "foreign": 133994,
+      "trust": -107000,
+      "dealer": -58470
     },
     {
       "id": "3552",
@@ -518,15 +829,6 @@
       "dealer": -9990
     },
     {
-      "id": "3034",
-      "name": "聯詠",
-      "sector": "IC設計",
-      "total": -55000,
-      "foreign": -58000,
-      "trust": -2000,
-      "dealer": 5000
-    },
-    {
       "id": "6187",
       "name": "萬潤",
       "sector": "CoPoS封裝",
@@ -536,31 +838,40 @@
       "dealer": -2117
     },
     {
-      "id": "2388",
-      "name": "威盛",
+      "id": "5269",
+      "name": "祥碩",
       "sector": "IC設計",
-      "total": -59000,
-      "foreign": -59000,
-      "trust": 0,
-      "dealer": 0
+      "total": -69702,
+      "foreign": -14805,
+      "trust": -1000,
+      "dealer": -53897
     },
     {
       "id": "8210",
       "name": "勤誠",
       "sector": "AI 散熱",
-      "total": -85000,
-      "foreign": -85000,
-      "trust": 0,
-      "dealer": 0
+      "total": -109385,
+      "foreign": -425893,
+      "trust": 396000,
+      "dealer": -79492
     },
     {
-      "id": "3017",
-      "name": "奇鋐",
-      "sector": "AI 散熱",
-      "total": -143000,
-      "foreign": -110000,
-      "trust": 0,
-      "dealer": -33000
+      "id": "3661",
+      "name": "世芯-KY",
+      "sector": "AI ASIC/IP",
+      "total": -124893,
+      "foreign": -60857,
+      "trust": -6000,
+      "dealer": -58036
+    },
+    {
+      "id": "6257",
+      "name": "矽格",
+      "sector": "封測",
+      "total": -156565,
+      "foreign": -73166,
+      "trust": -5000,
+      "dealer": -78399
     },
     {
       "id": "6510",
@@ -581,6 +892,15 @@
       "dealer": -131866
     },
     {
+      "id": "2345",
+      "name": "智邦",
+      "sector": "光通訊",
+      "total": -254746,
+      "foreign": -142085,
+      "trust": 18362,
+      "dealer": -131023
+    },
+    {
       "id": "5443",
       "name": "均豪",
       "sector": "CoPoS封裝",
@@ -590,13 +910,22 @@
       "dealer": -86541
     },
     {
-      "id": "3661",
-      "name": "世芯-KY",
-      "sector": "AI ASIC/IP",
-      "total": -345000,
-      "foreign": -344000,
-      "trust": 0,
-      "dealer": -1000
+      "id": "5289",
+      "name": "宜鼎",
+      "sector": "記憶體",
+      "total": -290421,
+      "foreign": -542384,
+      "trust": 306800,
+      "dealer": -54837
+    },
+    {
+      "id": "2357",
+      "name": "華碩",
+      "sector": "AI伺服器",
+      "total": -357539,
+      "foreign": 282103,
+      "trust": -719942,
+      "dealer": 80300
     },
     {
       "id": "3583",
@@ -608,58 +937,22 @@
       "dealer": -78036
     },
     {
-      "id": "6412",
-      "name": "群電",
-      "sector": "AI 電源",
-      "total": -453000,
-      "foreign": -450000,
-      "trust": 0,
-      "dealer": -3000
-    },
-    {
       "id": "4919",
       "name": "新唐",
       "sector": "IC設計",
-      "total": -490000,
-      "foreign": 293000,
-      "trust": -751000,
-      "dealer": -32000
+      "total": -620082,
+      "foreign": -597000,
+      "trust": -6000,
+      "dealer": -17082
     },
     {
-      "id": "2382",
-      "name": "廣達",
-      "sector": "AI伺服器",
-      "total": -496000,
-      "foreign": -566000,
-      "trust": 75000,
-      "dealer": -5000
-    },
-    {
-      "id": "6239",
-      "name": "力成",
+      "id": "6271",
+      "name": "同欣電",
       "sector": "封測",
-      "total": -781853,
-      "foreign": -873853,
-      "trust": 89000,
-      "dealer": 3000
-    },
-    {
-      "id": "6239",
-      "name": "力成",
-      "sector": "CoPoS封裝",
-      "total": -781853,
-      "foreign": -873853,
-      "trust": 89000,
-      "dealer": 3000
-    },
-    {
-      "id": "3443",
-      "name": "創意",
-      "sector": "AI ASIC/IP",
-      "total": -899000,
-      "foreign": -652000,
-      "trust": -125000,
-      "dealer": -122000
+      "total": -781714,
+      "foreign": -605300,
+      "trust": 0,
+      "dealer": -176414
     },
     {
       "id": "3264",
@@ -671,6 +964,42 @@
       "dealer": 6666
     },
     {
+      "id": "8086",
+      "name": "宏捷科",
+      "sector": "光通訊",
+      "total": -1028428,
+      "foreign": -900954,
+      "trust": 0,
+      "dealer": -127474
+    },
+    {
+      "id": "2451",
+      "name": "創見",
+      "sector": "記憶體",
+      "total": -1064018,
+      "foreign": 1577705,
+      "trust": -2600000,
+      "dealer": -41723
+    },
+    {
+      "id": "3017",
+      "name": "奇鋐",
+      "sector": "AI 散熱",
+      "total": -1190876,
+      "foreign": -768729,
+      "trust": -264687,
+      "dealer": -157460
+    },
+    {
+      "id": "2329",
+      "name": "華泰",
+      "sector": "封測",
+      "total": -1205979,
+      "foreign": -690925,
+      "trust": 0,
+      "dealer": -515054
+    },
+    {
       "id": "3324",
       "name": "雙鴻",
       "sector": "AI 散熱",
@@ -680,22 +1009,58 @@
       "dealer": -209794
     },
     {
-      "id": "2383",
-      "name": "台光電",
-      "sector": "銅箔/CCL",
-      "total": -1957894,
-      "foreign": -978947,
-      "trust": -20000,
-      "dealer": -958947
+      "id": "6412",
+      "name": "群電",
+      "sector": "AI 電源",
+      "total": -1242630,
+      "foreign": 1031086,
+      "trust": -2280000,
+      "dealer": 6284
     },
     {
-      "id": "2317",
-      "name": "鴻海",
-      "sector": "AI伺服器",
-      "total": -2503792,
-      "foreign": -1914792,
-      "trust": -376000,
-      "dealer": -213000
+      "id": "3450",
+      "name": "聯鈞",
+      "sector": "光通訊",
+      "total": -1245965,
+      "foreign": -1869166,
+      "trust": 718000,
+      "dealer": -94799
+    },
+    {
+      "id": "2454",
+      "name": "聯發科",
+      "sector": "IC設計",
+      "total": -1598437,
+      "foreign": -2148907,
+      "trust": 418134,
+      "dealer": 132336
+    },
+    {
+      "id": "3260",
+      "name": "威剛",
+      "sector": "記憶體",
+      "total": -1839882,
+      "foreign": -1393503,
+      "trust": 2127,
+      "dealer": -448506
+    },
+    {
+      "id": "6239",
+      "name": "力成",
+      "sector": "封測",
+      "total": -2378603,
+      "foreign": 3819841,
+      "trust": -4690000,
+      "dealer": -1508444
+    },
+    {
+      "id": "6239",
+      "name": "力成",
+      "sector": "CoPoS封裝",
+      "total": -2378603,
+      "foreign": 3819841,
+      "trust": -4690000,
+      "dealer": -1508444
     },
     {
       "id": "6147",
@@ -707,6 +1072,15 @@
       "dealer": -1293205
     },
     {
+      "id": "2301",
+      "name": "光寶科",
+      "sector": "AI 電源",
+      "total": -2608724,
+      "foreign": -1722045,
+      "trust": -54211,
+      "dealer": -832468
+    },
+    {
       "id": "2441",
       "name": "超豐",
       "sector": "封測",
@@ -716,6 +1090,15 @@
       "dealer": -488595
     },
     {
+      "id": "2369",
+      "name": "菱生",
+      "sector": "封測",
+      "total": -2962938,
+      "foreign": -2820543,
+      "trust": 0,
+      "dealer": -142395
+    },
+    {
       "id": "2458",
       "name": "義隆",
       "sector": "IC設計",
@@ -723,6 +1106,15 @@
       "foreign": -2489262,
       "trust": -343320,
       "dealer": -143744
+    },
+    {
+      "id": "2455",
+      "name": "全新",
+      "sector": "光通訊",
+      "total": -3332202,
+      "foreign": -2633529,
+      "trust": 120000,
+      "dealer": -818673
     },
     {
       "id": "2408",
@@ -750,6 +1142,15 @@
       "foreign": -5242835,
       "trust": 2117,
       "dealer": -39019
+    },
+    {
+      "id": "2337",
+      "name": "旺宏",
+      "sector": "記憶體",
+      "total": -6071370,
+      "foreign": -3868588,
+      "trust": -380000,
+      "dealer": -1822782
     },
     {
       "id": "2308",
@@ -795,11 +1196,29 @@
       "foreign": -15542862,
       "trust": -3797,
       "dealer": -730914
+    },
+    {
+      "id": "2317",
+      "name": "鴻海",
+      "sector": "AI伺服器",
+      "total": -18392451,
+      "foreign": -15652044,
+      "trust": -164207,
+      "dealer": -2576200
+    },
+    {
+      "id": "6770",
+      "name": "力積電",
+      "sector": "記憶體",
+      "total": -76406331,
+      "foreign": -73783942,
+      "trust": 0,
+      "dealer": -2622389
     }
   ],
   "stocks": [
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "4979",
       "name": "華星光",
@@ -809,14 +1228,14 @@
       "ret20": -16.0,
       "signal": "HOLD",
       "sharpe": -0.2,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 133994,
+      "trust": -107000,
+      "dealer": -58470,
+      "chipTotal": -31476,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "3450",
       "name": "聯鈞",
@@ -826,14 +1245,14 @@
       "ret20": 7.0,
       "signal": "HOLD",
       "sharpe": -3.65,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -1869166,
+      "trust": 718000,
+      "dealer": -94799,
+      "chipTotal": -1245965,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "3665",
       "name": "貿聯-KY",
@@ -843,14 +1262,14 @@
       "ret20": -100.0,
       "signal": "BUY",
       "sharpe": 2.45,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 175000,
+      "trust": 55000,
+      "dealer": 219000,
+      "chipTotal": 449000,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "3105",
       "name": "穩懋",
@@ -860,14 +1279,14 @@
       "ret20": -3.5,
       "signal": "HOLD",
       "sharpe": 4.1,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 874246,
+      "trust": 777000,
+      "dealer": -770958,
+      "chipTotal": 880288,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "8086",
       "name": "宏捷科",
@@ -877,14 +1296,14 @@
       "ret20": -6.4,
       "signal": "HOLD",
       "sharpe": 0.37,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -900954,
+      "trust": 0,
+      "dealer": -127474,
+      "chipTotal": -1028428,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "2455",
       "name": "全新",
@@ -894,14 +1313,14 @@
       "ret20": -4.9,
       "signal": "HOLD",
       "sharpe": 4.2,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -2633529,
+      "trust": 120000,
+      "dealer": -818673,
+      "chipTotal": -3332202,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "4906",
       "name": "正文",
@@ -911,14 +1330,14 @@
       "ret20": 9.3,
       "signal": "HOLD",
       "sharpe": -0.28,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 1354241,
+      "trust": -5000,
+      "dealer": -312588,
+      "chipTotal": 1036653,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光通訊",
       "id": "2345",
       "name": "智邦",
@@ -928,14 +1347,14 @@
       "ret20": -2.9,
       "signal": "BUY",
       "sharpe": 1.83,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -142085,
+      "trust": 18362,
+      "dealer": -131023,
+      "chipTotal": -254746,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "2408",
       "name": "南亞科",
@@ -952,7 +1371,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "2337",
       "name": "旺宏",
@@ -962,14 +1381,14 @@
       "ret20": -19.6,
       "signal": "HOLD",
       "sharpe": 1.0,
-      "foreign": 1723000,
-      "trust": 0,
-      "dealer": -104000,
-      "chipTotal": 1619000,
+      "foreign": -3868588,
+      "trust": -380000,
+      "dealer": -1822782,
+      "chipTotal": -6071370,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "2344",
       "name": "華邦電",
@@ -986,7 +1405,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "3006",
       "name": "晶豪科",
@@ -1003,7 +1422,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "2451",
       "name": "創見",
@@ -1013,14 +1432,14 @@
       "ret20": -10.4,
       "signal": "HOLD",
       "sharpe": 8.57,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 1577705,
+      "trust": -2600000,
+      "dealer": -41723,
+      "chipTotal": -1064018,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "5289",
       "name": "宜鼎",
@@ -1030,14 +1449,14 @@
       "ret20": 1.7,
       "signal": "HOLD",
       "sharpe": 2.65,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -542384,
+      "trust": 306800,
+      "dealer": -54837,
+      "chipTotal": -290421,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "3205",
       "name": "十銓",
@@ -1047,14 +1466,14 @@
       "ret20": -0.2,
       "signal": "HOLD",
       "sharpe": -10.84,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 75000,
+      "trust": 0,
+      "dealer": -335,
+      "chipTotal": 74665,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "3260",
       "name": "威剛",
@@ -1064,14 +1483,14 @@
       "ret20": -10.1,
       "signal": "HOLD",
       "sharpe": 9.73,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -1393503,
+      "trust": 2127,
+      "dealer": -448506,
+      "chipTotal": -1839882,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "6770",
       "name": "力積電",
@@ -1081,14 +1500,14 @@
       "ret20": 6.4,
       "signal": "HOLD",
       "sharpe": 5.29,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": -73783942,
+      "trust": 0,
+      "dealer": -2622389,
+      "chipTotal": -76406331,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "記憶體",
       "id": "8299",
       "name": "群聯",
@@ -1098,14 +1517,14 @@
       "ret20": -17.7,
       "signal": "HOLD",
       "sharpe": 8.83,
-      "foreign": "",
-      "trust": "",
-      "dealer": "",
-      "chipTotal": "",
+      "foreign": 551502,
+      "trust": -209000,
+      "dealer": -308070,
+      "chipTotal": 34432,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI伺服器",
       "id": "2317",
       "name": "鴻海",
@@ -1115,14 +1534,14 @@
       "ret20": 4.8,
       "signal": "HOLD",
       "sharpe": -1.48,
-      "foreign": -1914792,
-      "trust": -376000,
-      "dealer": -213000,
-      "chipTotal": -2503792,
+      "foreign": -15652044,
+      "trust": -164207,
+      "dealer": -2576200,
+      "chipTotal": -18392451,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI伺服器",
       "id": "2382",
       "name": "廣達",
@@ -1132,14 +1551,14 @@
       "ret20": 11.7,
       "signal": "HOLD",
       "sharpe": 3.22,
-      "foreign": -566000,
-      "trust": 75000,
-      "dealer": -5000,
-      "chipTotal": -496000,
+      "foreign": -9201330,
+      "trust": 20635544,
+      "dealer": -425294,
+      "chipTotal": 11008920,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI伺服器",
       "id": "3231",
       "name": "緯創",
@@ -1156,7 +1575,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI伺服器",
       "id": "2376",
       "name": "技嘉",
@@ -1173,7 +1592,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI伺服器",
       "id": "4938",
       "name": "和碩",
@@ -1183,14 +1602,14 @@
       "ret20": 15.9,
       "signal": "HOLD",
       "sharpe": -1.88,
-      "foreign": 961710,
-      "trust": 89000,
-      "dealer": 588000,
-      "chipTotal": 1638710,
+      "foreign": -7607948,
+      "trust": 12868830,
+      "dealer": -274855,
+      "chipTotal": 4986027,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI伺服器",
       "id": "2357",
       "name": "華碩",
@@ -1200,14 +1619,14 @@
       "ret20": 20.1,
       "signal": "HOLD",
       "sharpe": 1.96,
-      "foreign": -121000,
-      "trust": 193000,
-      "dealer": 2000,
-      "chipTotal": 74000,
+      "foreign": 282103,
+      "trust": -719942,
+      "dealer": 80300,
+      "chipTotal": -357539,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "3711",
       "name": "日月光投控",
@@ -1224,7 +1643,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "2449",
       "name": "京元電子",
@@ -1241,7 +1660,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "6510",
       "name": "精測",
@@ -1258,7 +1677,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "2441",
       "name": "超豐",
@@ -1275,7 +1694,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "6257",
       "name": "矽格",
@@ -1285,14 +1704,14 @@
       "ret20": -4.0,
       "signal": "HOLD",
       "sharpe": 1.7,
-      "foreign": -268000,
-      "trust": 0,
-      "dealer": 647000,
-      "chipTotal": 379000,
+      "foreign": -73166,
+      "trust": -5000,
+      "dealer": -78399,
+      "chipTotal": -156565,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "6239",
       "name": "力成",
@@ -1302,14 +1721,14 @@
       "ret20": 30.6,
       "signal": "HOLD",
       "sharpe": 7.58,
-      "foreign": -873853,
-      "trust": 89000,
-      "dealer": 3000,
-      "chipTotal": -781853,
+      "foreign": 3819841,
+      "trust": -4690000,
+      "dealer": -1508444,
+      "chipTotal": -2378603,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "8150",
       "name": "南茂",
@@ -1326,7 +1745,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "6147",
       "name": "頎邦",
@@ -1343,7 +1762,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "3264",
       "name": "欣銓",
@@ -1360,7 +1779,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "2369",
       "name": "菱生",
@@ -1370,14 +1789,14 @@
       "ret20": 2.1,
       "signal": "HOLD",
       "sharpe": -9.06,
-      "foreign": 53000,
+      "foreign": -2820543,
       "trust": 0,
-      "dealer": 1000,
-      "chipTotal": 54000,
+      "dealer": -142395,
+      "chipTotal": -2962938,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "2329",
       "name": "華泰",
@@ -1387,14 +1806,14 @@
       "ret20": -7.9,
       "signal": "SELL",
       "sharpe": -4.26,
-      "foreign": 63000,
+      "foreign": -690925,
       "trust": 0,
-      "dealer": 0,
-      "chipTotal": 63000,
+      "dealer": -515054,
+      "chipTotal": -1205979,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "6271",
       "name": "同欣電",
@@ -1404,14 +1823,14 @@
       "ret20": 23.6,
       "signal": "HOLD",
       "sharpe": 1.93,
-      "foreign": 89000,
-      "trust": -19000,
-      "dealer": -30000,
-      "chipTotal": 40000,
+      "foreign": -605300,
+      "trust": 0,
+      "dealer": -176414,
+      "chipTotal": -781714,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "封測",
       "id": "2481",
       "name": "強茂",
@@ -1428,7 +1847,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光學",
       "id": "3008",
       "name": "大立光",
@@ -1445,7 +1864,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "光學",
       "id": "3406",
       "name": "玉晶光",
@@ -1462,7 +1881,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "2454",
       "name": "聯發科",
@@ -1472,14 +1891,14 @@
       "ret20": 18.9,
       "signal": "HOLD",
       "sharpe": -3.67,
-      "foreign": 162052,
-      "trust": -129000,
-      "dealer": 260000,
-      "chipTotal": 293052,
+      "foreign": -2148907,
+      "trust": 418134,
+      "dealer": 132336,
+      "chipTotal": -1598437,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "3034",
       "name": "聯詠",
@@ -1489,14 +1908,14 @@
       "ret20": -1.6,
       "signal": "SELL",
       "sharpe": -7.95,
-      "foreign": -58000,
-      "trust": -2000,
-      "dealer": 5000,
-      "chipTotal": -55000,
+      "foreign": 1093497,
+      "trust": -56789,
+      "dealer": -40970,
+      "chipTotal": 995738,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "4966",
       "name": "譜瑞-KY",
@@ -1513,7 +1932,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "4919",
       "name": "新唐",
@@ -1523,14 +1942,14 @@
       "ret20": -4.2,
       "signal": "SELL",
       "sharpe": -4.36,
-      "foreign": 293000,
-      "trust": -751000,
-      "dealer": -32000,
-      "chipTotal": -490000,
+      "foreign": -597000,
+      "trust": -6000,
+      "dealer": -17082,
+      "chipTotal": -620082,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "2388",
       "name": "威盛",
@@ -1540,14 +1959,14 @@
       "ret20": -14.3,
       "signal": "HOLD",
       "sharpe": -0.4,
-      "foreign": -59000,
-      "trust": 0,
-      "dealer": 0,
-      "chipTotal": -59000,
+      "foreign": -132596,
+      "trust": -7000,
+      "dealer": 234183,
+      "chipTotal": 94587,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "2379",
       "name": "瑞昱",
@@ -1557,14 +1976,14 @@
       "ret20": 16.8,
       "signal": "HOLD",
       "sharpe": -2.49,
-      "foreign": -19000,
-      "trust": 0,
-      "dealer": -10000,
-      "chipTotal": -29000,
+      "foreign": -1418700,
+      "trust": 2572005,
+      "dealer": -101552,
+      "chipTotal": 1051753,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "6415",
       "name": "矽力-KY",
@@ -1574,14 +1993,14 @@
       "ret20": 5.3,
       "signal": "HOLD",
       "sharpe": -10.44,
-      "foreign": 14400,
-      "trust": -15600,
-      "dealer": 0,
-      "chipTotal": -1200,
+      "foreign": 705864,
+      "trust": -41000,
+      "dealer": -40928,
+      "chipTotal": 623936,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "5269",
       "name": "祥碩",
@@ -1591,14 +2010,14 @@
       "ret20": -7.3,
       "signal": "HOLD",
       "sharpe": -0.56,
-      "foreign": 49000,
-      "trust": 59000,
-      "dealer": -10000,
-      "chipTotal": 98000,
+      "foreign": -14805,
+      "trust": -1000,
+      "dealer": -53897,
+      "chipTotal": -69702,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "2458",
       "name": "義隆",
@@ -1615,7 +2034,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "IC設計",
       "id": "3058",
       "name": "聯陽",
@@ -1632,7 +2051,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "車用電子",
       "id": "3552",
       "name": "同致",
@@ -1649,7 +2068,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "車用電子",
       "id": "1533",
       "name": "車王電",
@@ -1659,14 +2078,14 @@
       "ret20": 13.7,
       "signal": "HOLD",
       "sharpe": -3.71,
-      "foreign": 1000,
+      "foreign": 57000,
       "trust": 0,
-      "dealer": 0,
-      "chipTotal": 1000,
+      "dealer": -4000,
+      "chipTotal": 53000,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "車用電子",
       "id": "2243",
       "name": "怡利電",
@@ -1676,14 +2095,14 @@
       "ret20": 41.9,
       "signal": "HOLD",
       "sharpe": -4.46,
-      "foreign": -1000,
+      "foreign": 496500,
       "trust": 0,
-      "dealer": 0,
-      "chipTotal": -1000,
+      "dealer": -953,
+      "chipTotal": 495547,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "綠能環保",
       "id": "5292",
       "name": "華懋",
@@ -1700,7 +2119,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "6789",
       "name": "采鈺",
@@ -1717,7 +2136,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "3535",
       "name": "晶彩科",
@@ -1734,7 +2153,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "3680",
       "name": "家登",
@@ -1751,7 +2170,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "6664",
       "name": "群翊",
@@ -1768,7 +2187,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "2467",
       "name": "志聖",
@@ -1785,7 +2204,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "7734",
       "name": "印能",
@@ -1802,7 +2221,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "5443",
       "name": "均豪",
@@ -1819,7 +2238,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "6640",
       "name": "均華",
@@ -1836,7 +2255,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "6187",
       "name": "萬潤",
@@ -1853,7 +2272,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "3131",
       "name": "弘塑",
@@ -1870,7 +2289,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "3583",
       "name": "辛耘",
@@ -1887,7 +2306,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "3711",
       "name": "日月光投控",
@@ -1904,7 +2323,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "2449",
       "name": "京元電子",
@@ -1921,7 +2340,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "CoPoS封裝",
       "id": "6239",
       "name": "力成",
@@ -1931,14 +2350,14 @@
       "ret20": 30.6,
       "signal": "HOLD",
       "sharpe": 7.58,
-      "foreign": -873853,
-      "trust": 89000,
-      "dealer": 3000,
-      "chipTotal": -781853,
+      "foreign": 3819841,
+      "trust": -4690000,
+      "dealer": -1508444,
+      "chipTotal": -2378603,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "銅箔/CCL",
       "id": "8358",
       "name": "金居",
@@ -1955,7 +2374,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "銅箔/CCL",
       "id": "2383",
       "name": "台光電",
@@ -1965,14 +2384,14 @@
       "ret20": 0.2,
       "signal": "SELL",
       "sharpe": 6.34,
-      "foreign": -978947,
-      "trust": -20000,
-      "dealer": -958947,
-      "chipTotal": -1957894,
+      "foreign": 302908,
+      "trust": 97815,
+      "dealer": -43203,
+      "chipTotal": 357520,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "銅箔/CCL",
       "id": "6213",
       "name": "聯茂",
@@ -1982,14 +2401,14 @@
       "ret20": -7.1,
       "signal": "HOLD",
       "sharpe": 0.8,
-      "foreign": 515000,
-      "trust": 0,
-      "dealer": 26000,
-      "chipTotal": 541000,
+      "foreign": 2607298,
+      "trust": -3000,
+      "dealer": -199465,
+      "chipTotal": 2404833,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "銅箔/CCL",
       "id": "2368",
       "name": "金像電",
@@ -2006,7 +2425,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "銅箔/CCL",
       "id": "8046",
       "name": "南電",
@@ -2016,14 +2435,14 @@
       "ret20": -3.8,
       "signal": "HOLD",
       "sharpe": -7.13,
-      "foreign": 10000,
-      "trust": 0,
-      "dealer": -2000,
-      "chipTotal": 8000,
+      "foreign": 188882,
+      "trust": 360000,
+      "dealer": -502087,
+      "chipTotal": 46795,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI ASIC/IP",
       "id": "2330",
       "name": "台積電",
@@ -2040,7 +2459,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI ASIC/IP",
       "id": "3443",
       "name": "創意",
@@ -2050,14 +2469,14 @@
       "ret20": -24.5,
       "signal": "HOLD",
       "sharpe": 0.86,
-      "foreign": -652000,
-      "trust": -125000,
-      "dealer": -122000,
-      "chipTotal": -899000,
+      "foreign": 238091,
+      "trust": 7949,
+      "dealer": -143652,
+      "chipTotal": 102388,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI ASIC/IP",
       "id": "3661",
       "name": "世芯-KY",
@@ -2067,14 +2486,14 @@
       "ret20": -15.5,
       "signal": "HOLD",
       "sharpe": -2.54,
-      "foreign": -344000,
-      "trust": 0,
-      "dealer": -1000,
-      "chipTotal": -345000,
+      "foreign": -60857,
+      "trust": -6000,
+      "dealer": -58036,
+      "chipTotal": -124893,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI ASIC/IP",
       "id": "3529",
       "name": "力旺",
@@ -2091,7 +2510,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI ASIC/IP",
       "id": "6643",
       "name": "M31",
@@ -2108,7 +2527,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 散熱",
       "id": "3017",
       "name": "奇鋐",
@@ -2118,14 +2537,14 @@
       "ret20": -8.7,
       "signal": "HOLD",
       "sharpe": 3.04,
-      "foreign": -110000,
-      "trust": 0,
-      "dealer": -33000,
-      "chipTotal": -143000,
+      "foreign": -768729,
+      "trust": -264687,
+      "dealer": -157460,
+      "chipTotal": -1190876,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 散熱",
       "id": "3324",
       "name": "雙鴻",
@@ -2142,7 +2561,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 散熱",
       "id": "3653",
       "name": "健策",
@@ -2152,14 +2571,14 @@
       "ret20": 7.6,
       "signal": "HOLD",
       "sharpe": -0.25,
-      "foreign": 7000,
-      "trust": 0,
-      "dealer": -8000,
-      "chipTotal": -1000,
+      "foreign": -206075,
+      "trust": 254939,
+      "dealer": -55840,
+      "chipTotal": -6976,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 散熱",
       "id": "8210",
       "name": "勤誠",
@@ -2169,14 +2588,14 @@
       "ret20": -4.9,
       "signal": "BUY",
       "sharpe": 7.43,
-      "foreign": -85000,
-      "trust": 0,
-      "dealer": 0,
-      "chipTotal": -85000,
+      "foreign": -425893,
+      "trust": 396000,
+      "dealer": -79492,
+      "chipTotal": -109385,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 散熱",
       "id": "8996",
       "name": "高力",
@@ -2186,14 +2605,14 @@
       "ret20": 19.0,
       "signal": "HOLD",
       "sharpe": 3.88,
-      "foreign": 55000,
-      "trust": 0,
-      "dealer": 0,
-      "chipTotal": 55000,
+      "foreign": -120439,
+      "trust": 474000,
+      "dealer": -134108,
+      "chipTotal": 219453,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 電源",
       "id": "2308",
       "name": "台達電",
@@ -2210,7 +2629,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 電源",
       "id": "2301",
       "name": "光寶科",
@@ -2220,14 +2639,14 @@
       "ret20": 0.7,
       "signal": "HOLD",
       "sharpe": 8.73,
-      "foreign": 2968000,
-      "trust": 155000,
-      "dealer": 115000,
-      "chipTotal": 3238000,
+      "foreign": -1722045,
+      "trust": -54211,
+      "dealer": -832468,
+      "chipTotal": -2608724,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "AI 電源",
       "id": "6412",
       "name": "群電",
@@ -2237,14 +2656,14 @@
       "ret20": -8.9,
       "signal": "HOLD",
       "sharpe": 0.16,
-      "foreign": -450000,
-      "trust": 0,
-      "dealer": -3000,
-      "chipTotal": -453000,
+      "foreign": 1031086,
+      "trust": -2280000,
+      "dealer": 6284,
+      "chipTotal": -1242630,
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "被動元件",
       "id": "2327",
       "name": "國巨",
@@ -2261,7 +2680,7 @@
       "news": ""
     },
     {
-      "date": "20260610",
+      "date": "20260611",
       "sector": "被動元件",
       "id": "2492",
       "name": "華新科",
