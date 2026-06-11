@@ -3,41 +3,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>台股族群分析台 20260611</title>
 <style>
-:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2333;--border:#2d3748;--txt:#e6edf3;
---dim:#8b949e;--accent:#58a6ff;--bull:#3fb950;--bear:#f85149;--warn:#d29922;--chip:#21262d}
+:root{--bg:#0b0e14;--panel:#161a22;--panel2:#1b2029;--border:#272c37;--txt:#e8eaed;
+--dim:#8b93a3;--accent:#3d8bfd;--accent2:#7c5cff;--bull:#2ecc71;--bear:#e74c3c;--warn:#f1b143;--chip:#21262d}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--txt);font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;line-height:1.6}
-header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px solid var(--border);padding:16px 28px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.title{font-size:20px;font-weight:700;display:flex;align-items:center;gap:9px}
+body{background:var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased;
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif}
+header{background:rgba(17,21,29,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 28px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.title{font-size:19px;font-weight:800;display:flex;align-items:center;gap:9px;
+background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .title .dot{width:9px;height:9px;border-radius:50%;background:var(--bull);box-shadow:0 0 8px var(--bull)}
 .hmeta{font-size:13px;color:var(--dim);margin-left:auto;display:flex;gap:18px;flex-wrap:wrap}
 .hmeta b{color:var(--txt)}
 .regime{padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700}
-.r-on{background:rgba(63,185,80,.15);color:var(--bull);border:1px solid var(--bull)}
-.r-neu{background:rgba(210,153,34,.15);color:var(--warn);border:1px solid var(--warn)}
-.r-off{background:rgba(248,81,73,.15);color:var(--bear);border:1px solid var(--bear)}
-.layout{display:grid;grid-template-columns:230px 250px 1fr;gap:0;height:calc(100vh - 60px)}
+.r-on{background:rgba(46,204,113,.15);color:var(--bull);border:1px solid var(--bull)}
+.r-neu{background:rgba(241,177,67,.15);color:var(--warn);border:1px solid var(--warn)}
+.r-off{background:rgba(231,76,60,.15);color:var(--bear);border:1px solid var(--bear)}
+.layout{display:grid;grid-template-columns:235px 255px 1fr;gap:0;height:calc(100vh - 60px)}
 .col{overflow-y:auto;border-right:1px solid var(--border);padding:12px}
 .col h4{font-size:11px;color:var(--dim);letter-spacing:1px;margin:6px 8px 10px}
-.row{padding:9px 11px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:3px;border:1px solid transparent}
+.row{padding:9px 11px;border-radius:9px;cursor:pointer;font-size:13px;margin-bottom:4px;border:1px solid transparent;transition:.15s}
+.row .rtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .row:hover{background:var(--chip)}
-.row.active{background:var(--panel2);border-color:var(--accent)}
-.row .sc{font-weight:700;font-size:12px;padding:1px 7px;border-radius:5px}
+.row.active{background:var(--panel2);border-color:var(--accent);box-shadow:0 2px 10px rgba(61,139,253,.18)}
+.row .sc{font-weight:700;font-size:12px;padding:1px 7px;border-radius:5px;white-space:nowrap}
+.row .scorebar{height:3px;border-radius:2px;background:#252b38;margin-top:6px;overflow:hidden}
+.row .scorebar i{display:block;height:100%;border-radius:2px}
 .pos{color:var(--bull)}.neg{color:var(--bear)}.neu{color:var(--warn)}
 .detail{overflow-y:auto;padding:22px 26px}
 .dhead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
 .dhead .nm{font-size:22px;font-weight:800}.dhead .id{color:var(--dim)}
 .dhead .pr{font-size:18px;font-weight:700;margin-left:auto}
-.action{font-size:14px;font-weight:800;padding:4px 14px;border-radius:8px}
-.a-buy{background:rgba(63,185,80,.18);color:var(--bull)}
-.a-part{background:rgba(88,166,255,.18);color:var(--accent)}
-.a-wait{background:rgba(210,153,34,.18);color:var(--warn)}
-.a-cut{background:rgba(248,81,73,.18);color:var(--bear)}
-.sumtxt{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:14px;color:#c9d1d9;margin:14px 0 20px}
-.sec-h{font-size:13px;color:var(--accent);margin:22px 0 12px;border-left:3px solid var(--accent);padding-left:9px;letter-spacing:1px}
+.action{font-size:15px;font-weight:800;padding:5px 16px;border-radius:9px}
+.a-buy{background:rgba(46,204,113,.18);color:var(--bull);border:1px solid rgba(46,204,113,.45)}
+.a-part{background:rgba(61,139,253,.18);color:var(--accent);border:1px solid rgba(61,139,253,.45)}
+.a-wait{background:rgba(241,177,67,.18);color:var(--warn);border:1px solid rgba(241,177,67,.45)}
+.a-cut{background:rgba(231,76,60,.18);color:var(--bear);border:1px solid rgba(231,76,60,.45)}
+.sumtxt{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:14px;color:#c9d1d9;margin:14px 0 18px}
+.sec-h{font-size:13px;font-weight:700;margin:22px 0 12px;padding-left:10px;letter-spacing:1px;position:relative}
+.sec-h::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:2px;background:linear-gradient(180deg,var(--accent),var(--accent2))}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.tab{background:var(--chip);border:1px solid var(--border);color:var(--dim);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
-.tab.active{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+.tab{background:var(--chip);border:1px solid var(--border);color:var(--dim);padding:7px 14px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+.tab:hover{color:var(--txt)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(61,139,253,.35)}
 .acard{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;display:none}
 .acard.active{display:block}
 .acard .ah{display:flex;align-items:center;gap:10px;margin-bottom:12px}
@@ -64,7 +71,7 @@ header{background:linear-gradient(135deg,#161b22,#1c2333);border-bottom:1px soli
 .side ul{list-style:none;font-size:13px;color:#c9d1d9}
 .side li{padding:4px 0 4px 16px;position:relative}.side li::before{content:"▸";position:absolute;left:0}
 .side.bull li::before{color:var(--bull)}.side.bear li::before{color:var(--bear)}
-.dec{background:linear-gradient(135deg,var(--panel2),var(--panel));border:1px solid var(--accent);border-radius:12px;padding:18px;margin-top:8px}
+.dec{background:linear-gradient(135deg,rgba(61,139,253,.08),var(--panel));border:1px solid rgba(61,139,253,.45);border-radius:12px;padding:18px;margin-top:8px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
 .dec .rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:6px}
 .dec .rc{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:11px}
 .dec .rc .k{font-size:11px;color:var(--dim)}.dec .rc .v{font-size:16px;font-weight:700;margin-top:2px}
@@ -212,11 +219,17 @@ function renderHeader(){
   document.getElementById('h-sec').textContent=DATA.sectors.length;
   document.getElementById('h-cnt').textContent=DATA.stock_count;
 }
+function scoreBar(v){
+  const w=Math.min(Math.abs(v),100);
+  const col=v>10?'var(--bull)':(v<-10?'var(--bear)':'var(--warn)');
+  return `<div class="scorebar"><i style="width:${w}%;background:${col}"></i></div>`;
+}
 function renderSectors(){
   const el=document.getElementById('col-sectors');
   el.innerHTML='<h4>族群排行</h4>'+DATA.sectors.map((s,i)=>
     `<div class="row ${i===curSec?'active':''}" onclick="selSec(${i})">
-       <span>${s.name}</span><span class="sc ${scoreClass(s.sector_score)}">${s.sector_score}</span></div>`).join('');
+       <div class="rtop"><span>${s.name}</span><span class="sc ${scoreClass(s.sector_score)}">${s.sector_score}</span></div>
+       ${scoreBar(s.sector_score)}</div>`).join('');
 }
 function sectorCard(sec){
   const sy=sec.synthesis;
@@ -235,8 +248,9 @@ function renderStocks(){
   const el=document.getElementById('col-stocks');
   el.innerHTML=`<h4>${sec.name}（${sec.stocks.length} 檔）</h4>`+sectorCard(sec)+sec.stocks.map((st,i)=>
     `<div class="row ${i===curStk?'active':''}" onclick="selStk(${i})">
-       <span>${st.name} <span style="color:var(--dim)">${st.id}</span></span>
-       <span class="sc ${scoreClass(st.decision.composite)}">${st.decision.composite}</span></div>`).join('');
+       <div class="rtop"><span>${st.name} <span style="color:var(--dim)">${st.id}</span></span>
+       <span class="sc ${scoreClass(st.decision.composite)}">${st.decision.composite}</span></div>
+       ${scoreBar(st.decision.composite)}</div>`).join('');
 }
 function analystCard(key,label,a){
   const v=a.verdict, vc=scoreClass(a.score);
@@ -270,20 +284,9 @@ function renderDetail(){
       <span class="action ${actionClass(d.action)}">${d.action}</span>
       <span class="pr">$${st.price}</span></div>
     <div class="sumtxt">${st.summary_text}</div>
-    ${renderEvents()}
-    <div class="sec-h">① 分析師團隊</div>
-    <div class="glossary">
-      <b>指標說明</b>：20日報酬=近20交易日漲跌幅｜RSI(14)=相對強弱，&gt;70過熱、&lt;30超賣｜
-      回測夏普值=每單位風險的報酬，越高越穩｜營收年增率=最新月營收 YoY｜
-      大盤情緒分數=國際指標+外電綜合(-100~+100)｜買賣超單位為「張」</div>
-    <div class="tabs">${tabs}</div>${cards}
-    <div class="sec-h">② 多空研究員辯論</div>
-    <div class="debate">
-      <div class="side bull"><h3>🐂 多方</h3><ul>${bull}</ul></div>
-      <div class="side bear"><h3>🐻 空方</h3><ul>${bear}</ul></div></div>
-    <div class="sec-h">③④⑤ 交易員 → 風控 → 投組經理</div>
+    <div class="sec-h">🎯 最終決策（交易員 → 風控 → 投組經理）</div>
     <div class="dec">
-      <div style="font-size:13px;color:var(--dim)">綜合評分 ${d.composite}｜信心度 ${d.confidence}%</div>
+      <div style="font-size:13px;color:var(--dim)">綜合評分 <b style="color:var(--txt)">${d.composite}</b>｜信心度 <b style="color:var(--txt)">${d.confidence}%</b></div>
       <div class="rg">
         <div class="rc"><div class="k">建議行動</div><div class="v ${actionClass(d.action).replace('a-','').replace('buy','pos').replace('part','')}">${d.action}</div></div>
         <div class="rc"><div class="k">部位上限(regime)</div><div class="v">${d.exposure_pct}%</div></div>
@@ -294,7 +297,18 @@ function renderDetail(){
       </div>
       <div style="margin-top:12px">風控旗標：${flags}</div>
     </div>
-    <div class="sec-h">⑥ 個股近期新聞</div>
+    ${renderEvents()}
+    <div class="sec-h">🧑‍💼 分析師團隊</div>
+    <div class="glossary">
+      <b>指標說明</b>：20日報酬=近20交易日漲跌幅｜RSI(14)=相對強弱，&gt;70過熱、&lt;30超賣｜
+      回測夏普值=每單位風險的報酬，越高越穩｜營收年增率=最新月營收 YoY｜
+      大盤情緒分數=國際指標+外電綜合(-100~+100)｜買賣超單位為「張」</div>
+    <div class="tabs">${tabs}</div>${cards}
+    <div class="sec-h">⚔️ 多空研究員辯論</div>
+    <div class="debate">
+      <div class="side bull"><h3>🐂 多方</h3><ul>${bull}</ul></div>
+      <div class="side bear"><h3>🐻 空方</h3><ul>${bear}</ul></div></div>
+    <div class="sec-h">📰 個股近期新聞</div>
     <div class="news-list">${newsHtml}</div>`;
 }
 function renderEvents(){
