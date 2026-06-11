@@ -34,18 +34,29 @@ try:
 except ImportError:
     pass
 
-def _ensure_project_root_in_path():
-    for _rp in [str(Path(__file__).resolve().parent.parent), os.getcwd()]:
-        if _rp not in sys.path:
-            sys.path.insert(0, _rp)
+def _load_analyze_stock():
+    """直接從絕對路徑載入，避免 sys.path 上其他套件的 indicators 命名空間衝突。"""
+    import importlib.util
+    root = Path(__file__).resolve().parent.parent
+    src = root / 'indicators' / 'stock_analyzer.py'
+    if not src.exists():
+        # fallback: 嘗試 os.getcwd()
+        src = Path(os.getcwd()) / 'indicators' / 'stock_analyzer.py'
+    if not src.exists():
+        raise FileNotFoundError(f'stock_analyzer.py not found near {root}')
+    spec = importlib.util.spec_from_file_location('_stock_analyzer_bd', src)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.analyze_stock
 
 try:
-    _ensure_project_root_in_path()
-    from indicators.stock_analyzer import analyze_stock as _analyze_stock
+    _analyze_stock = _load_analyze_stock()
     _ANALYZER_OK = True
+    print('[build_docs] 分析引擎載入成功')
 except Exception as _e:
     print(f'[WARN] build_docs: 分析引擎載入失敗：{_e}')
     _ANALYZER_OK = False
+    _analyze_stock = None
 
 
 def _nan_to_none(v):
@@ -460,16 +471,10 @@ def build_daily_payload(summary):
     )
 
     # ── 雙篩選第二層：對 qualified 個股跑趨勢分析，加入買入建議 ──────────────
-    _local_analyze = _analyze_stock if _ANALYZER_OK else None
+    _local_analyze = _analyze_stock  # 已由模組級 _load_analyze_stock() 載入
     if not _local_analyze:
         try:
-            _ensure_project_root_in_path()
-            # 清除可能殘留的失敗 import 快取，確保重試有效
-            for _mk in list(sys.modules.keys()):
-                if _mk == 'indicators' or _mk.startswith('indicators.'):
-                    if sys.modules[_mk] is None:
-                        del sys.modules[_mk]
-            from indicators.stock_analyzer import analyze_stock as _local_analyze
+            _local_analyze = _load_analyze_stock()
         except Exception as _e2:
             print(f'[WARN] build_docs.build_daily_payload: 分析引擎載入失敗: {_e2}')
 
