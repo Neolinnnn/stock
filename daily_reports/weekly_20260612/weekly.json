@@ -1,0 +1,89 @@
+{
+  "week_ending": "2026-06-12",
+  "days_covered": 5,
+  "sector_changes": [
+    {
+      "sector": "車用電子",
+      "change": 17.44
+    },
+    {
+      "sector": "銅箔/CCL",
+      "change": 12.69
+    },
+    {
+      "sector": "光通訊",
+      "change": 7.96
+    },
+    {
+      "sector": "AI ASIC/IP",
+      "change": 7.76
+    },
+    {
+      "sector": "AI 電源",
+      "change": 6.18
+    },
+    {
+      "sector": "IC設計",
+      "change": 5.45
+    },
+    {
+      "sector": "AI 散熱",
+      "change": 4.8
+    },
+    {
+      "sector": "封測",
+      "change": 2.94
+    },
+    {
+      "sector": "AI伺服器",
+      "change": 2.74
+    },
+    {
+      "sector": "記憶體",
+      "change": 2.38
+    },
+    {
+      "sector": "綠能環保",
+      "change": 0.32
+    },
+    {
+      "sector": "CoPoS封裝",
+      "change": -3.33
+    },
+    {
+      "sector": "光學",
+      "change": -18.93
+    },
+    {
+      "sector": "被動元件",
+      "change": -19.41
+    }
+  ],
+  "top_buys": [
+    {
+      "stock": "2368 金像電",
+      "buy_days": 5
+    },
+    {
+      "stock": "8210 勤誠",
+      "buy_days": 5
+    },
+    {
+      "stock": "2345 智邦",
+      "buy_days": 3
+    },
+    {
+      "stock": "3665 貿聯-KY",
+      "buy_days": 2
+    },
+    {
+      "stock": "2383 台光電",
+      "buy_days": 2
+    },
+    {
+      "stock": "6510 精測",
+      "buy_days": 1
+    }
+  ],
+  "chart_path": "daily_reports/weekly_20260612/01_weekly_sector_trend.png"
+}
