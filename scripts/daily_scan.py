@@ -246,9 +246,37 @@ def _atr_stop_loss(highs, lows, closes, period=14, multiplier=2.0):
     return round(atr, 2), round(closes[-1] - multiplier * atr, 1)
 
 
+def _yf_history(sid: str, start: str, end: str):
+    """yfinance 備援（FinMind 額度耗盡/失敗時用）：回傳與 FinMind 同欄位的 DataFrame。
+    上市 .TW → 上櫃 .TWO 依序嘗試。yfinance 為軟依賴（macro/requirements.txt 已含）。"""
+    try:
+        import yfinance as yf
+    except ImportError:
+        return None
+    import pandas as _pd
+    end_plus = (datetime.strptime(end, '%Y-%m-%d') + timedelta(days=1)).strftime('%Y-%m-%d')
+    for suffix in ('.TW', '.TWO'):
+        try:
+            h = yf.Ticker(sid + suffix).history(start=start, end=end_plus, auto_adjust=False)
+        except Exception:
+            continue
+        if h is None or h.empty:
+            continue
+        df = _pd.DataFrame({
+            'date': [d.strftime('%Y-%m-%d') for d in h.index],
+            'close': h['Close'].values,
+            'max': h['High'].values,
+            'min': h['Low'].values,
+            'Trading_Volume': h['Volume'].fillna(0).values,
+        })
+        print(f'    [{sid}] FinMind 失敗，改用 yfinance 備援（{sid}{suffix}，{len(df)} 筆）')
+        return df
+    return None
+
+
 def _get_history(sid):
     """抓取/更新 K 棒歷史，快取於 price_cache/{sid}.json。
-    使用 FinMind taiwan_stock_daily（不受 TWSE IP 封鎖）。
+    使用 FinMind taiwan_stock_daily（不受 TWSE IP 封鎖）；失敗時 yfinance 備援。
     非週一時只補快取末日後 7 天，每次掃描僅 ~88 次 FinMind 請求。"""
     today = datetime.now()
     is_monday = today.weekday() == 0
@@ -268,9 +296,14 @@ def _get_history(sid):
     if cached is None or len(cached['prices']) < DATA_DAYS:
         start = (today - timedelta(days=int(DATA_DAYS * 1.6))).strftime('%Y-%m-%d')
         end = today.strftime('%Y-%m-%d')
-        df = _finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start, end_date=end)
+        try:
+            df = _finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start, end_date=end)
+        except Exception:
+            df = None
         if df is None or df.empty:
-            raise ValueError(f'{sid} FinMind 回傳空資料')
+            df = _yf_history(sid, start, end)
+        if df is None or df.empty:
+            raise ValueError(f'{sid} FinMind 與 yfinance 均無資料')
         dates, prices, highs, lows, vols = _df_to_arrays(df)
         _save_price_cache(sid, dates, prices, highs, lows, vols)
         return _CachedStock(prices, dates, highs, lows, vols)
@@ -286,9 +319,12 @@ def _get_history(sid):
             raise ValueError(f'{sid} 增量抓取空資料')
         new_dates, new_prices, new_highs, new_lows, new_vols = _df_to_arrays(df)
     except Exception as e:
-        print(f'    [{sid}] 增量抓取失敗（{e}），使用快取（{last_date}）')
-        return _CachedStock(cached['prices'], cached['dates'],
-                            cached['highs'], cached['lows'], cached['volumes'])
+        df = _yf_history(sid, fetch_start, fetch_end)
+        if df is None or df.empty:
+            print(f'    [{sid}] 增量抓取失敗（{e}），使用快取（{last_date}）')
+            return _CachedStock(cached['prices'], cached['dates'],
+                                cached['highs'], cached['lows'], cached['volumes'])
+        new_dates, new_prices, new_highs, new_lows, new_vols = _df_to_arrays(df)
 
     # 合併去重（以日期字串為鍵，新資料覆蓋舊資料）
 

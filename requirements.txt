@@ -10,3 +10,4 @@ httpx>=0.27.0
 scipy>=1.11.0
 tqdm>=4.66.0
 scikit-learn>=1.3.0
+yfinance>=0.2.40        # 價格備援：FinMind 額度耗盡/失敗時 _yf_history 啟用（軟依賴）
