@@ -43,6 +43,22 @@ def compute_sector_metrics(week_reports, prev_changes):
     return metrics
 
 
+def load_prev_week_changes(today_str, base_dir=Path('daily_reports')):
+    """找早於 today_str 的最近一份 weekly_*/weekly.json，回傳 {sector: change}。"""
+    base_dir = Path(base_dir)
+    candidates = []
+    for p in base_dir.glob('weekly_*/weekly.json'):
+        tag = p.parent.name.replace('weekly_', '')
+        if tag.isdigit() and tag < today_str:
+            candidates.append((tag, p))
+    if not candidates:
+        return {}
+    _, latest = max(candidates, key=lambda x: x[0])
+    with open(latest, encoding='utf-8') as f:
+        data = json.load(f)
+    return {c['sector']: c['change'] for c in data.get('sector_changes', [])}
+
+
 def run_weekly_summary():
     today = datetime.now()
     week_reports = []

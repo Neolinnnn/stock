@@ -33,3 +33,24 @@ def test_compute_sector_metrics_prev_change_lookup():
     week = [_report({'A': 0.0}), _report({'A': 2.0})]
     metrics = compute_sector_metrics(week, prev_changes={'A': 5.0})
     assert metrics[0]['prev_change'] == 5.0
+
+
+import json
+from weekly_summary import load_prev_week_changes
+
+
+def test_load_prev_week_changes_reads_latest_prior(tmp_path):
+    # 建兩個舊週報資料夾，應讀較新的那個（且早於 today）
+    (tmp_path / 'weekly_20260605').mkdir()
+    (tmp_path / 'weekly_20260605' / 'weekly.json').write_text(
+        json.dumps({'sector_changes': [{'sector': 'A', 'change': 5.0}]}), encoding='utf-8')
+    (tmp_path / 'weekly_20260529').mkdir()
+    (tmp_path / 'weekly_20260529' / 'weekly.json').write_text(
+        json.dumps({'sector_changes': [{'sector': 'A', 'change': 1.0}]}), encoding='utf-8')
+
+    prev = load_prev_week_changes('20260612', base_dir=tmp_path)
+    assert prev == {'A': 5.0}
+
+
+def test_load_prev_week_changes_none_when_absent(tmp_path):
+    assert load_prev_week_changes('20260612', base_dir=tmp_path) == {}
