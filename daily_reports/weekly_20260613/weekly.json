@@ -1,9 +1,7 @@
 {
-  "meta": {
-    "date": "2026-06-13",
-    "days": 5
-  },
-  "changes": [
+  "week_ending": "2026-06-13",
+  "days_covered": 5,
+  "sector_changes": [
     {
       "sector": "車用電子",
       "change": 17.44,
@@ -89,31 +87,32 @@
       "prev_change": -19.41
     }
   ],
-  "buys": [
+  "top_buys": [
     {
       "stock": "2368 金像電",
-      "days": 5
+      "buy_days": 5
     },
     {
       "stock": "8210 勤誠",
-      "days": 5
+      "buy_days": 5
     },
     {
       "stock": "2345 智邦",
-      "days": 3
+      "buy_days": 3
     },
     {
       "stock": "3665 貿聯-KY",
-      "days": 2
+      "buy_days": 2
     },
     {
       "stock": "2383 台光電",
-      "days": 2
+      "buy_days": 2
     },
     {
       "stock": "6510 精測",
-      "days": 1
+      "buy_days": 1
     }
   ],
+  "chart_path": "daily_reports\\weekly_20260613\\01_weekly_sector_trend.png",
   "narrative": ""
 }

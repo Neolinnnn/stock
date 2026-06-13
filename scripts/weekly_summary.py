@@ -133,14 +133,9 @@ def run_weekly_summary():
     plt.savefig(chart_path, dpi=100, bbox_inches='tight')
     plt.close()
 
-    # 本週最強/最弱族群
-    last = week_reports[-1]['sectors']
-    first = week_reports[0]['sectors']
-    changes = {}
-    for sector in last:
-        if sector in first:
-            changes[sector] = last[sector]['avg_ret_20d'] - first[sector]['avg_ret_20d']
-    sorted_changes = sorted(changes.items(), key=lambda x: x[1], reverse=True)
+    # 本週族群變化（含水位與 vs 上週）
+    prev_changes = load_prev_week_changes(today.strftime('%Y%m%d'))
+    sector_metrics = compute_sector_metrics(week_reports, prev_changes)
 
     # 本週累計 BUY 訊號次數
     buy_counts = {}
@@ -155,10 +150,23 @@ def run_weekly_summary():
     summary = {
         'week_ending': today.strftime('%Y-%m-%d'),
         'days_covered': len(week_reports),
-        'sector_changes': [{'sector': s, 'change': round(c, 2)} for s, c in sorted_changes],
+        'sector_changes': sector_metrics,
         'top_buys': [{'stock': k, 'buy_days': v} for k, v in top_buys],
         'chart_path': str(chart_path),
+        'narrative': '',
     }
+
+    # 第一層敘事（Gemini；失敗安全略過）
+    try:
+        import sys, os
+        sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+        from gemini_writer import GeminiWriter
+        narrative_ctx = build_narrative_context(sector_metrics, summary['top_buys'])
+        summary['narrative'] = generate_narrative(
+            GeminiWriter(), narrative_ctx, today.strftime('%Y-%m-%d'))
+    except Exception as e:
+        print(f'   ⚠ 敘事模組載入失敗，略過：{e}')
+        summary['narrative'] = ''
 
     # 輸出
     json_path = out_dir / 'weekly.json'
@@ -168,8 +176,8 @@ def run_weekly_summary():
     md = [f"# 週報 {today.strftime('%Y-%m-%d')}\n\n"]
     md.append(f"**涵蓋**：{len(week_reports)} 個交易日\n")
     md.append(f"\n## 族群一週變化（動能變化）\n")
-    for s, c in sorted_changes:
-        md.append(f"- {s}：{c:+.2f} pp\n")
+    for m in sector_metrics:
+        md.append(f"- {m['sector']}：{m['change']:+.2f} pp（水位 {m['level']:+.2f}）\n")
     md.append(f"\n## 本週累計 BUY 訊號 Top 10\n")
     for k, v in top_buys:
         md.append(f"- {k} — {v} 次\n")
@@ -189,6 +197,10 @@ def run_weekly_summary():
     with open(docs_dir / 'weekly.json', 'w', encoding='utf-8') as f:
         json.dump(build_weekly_payload(summary), f, ensure_ascii=False, indent=2, default=str)
     print('  docs/weekly.json 已更新')
+
+    import shutil
+    shutil.copy(chart_path, docs_dir / 'weekly_sector_trend.png')
+    print('  docs/weekly_sector_trend.png 已更新')
 
     # Notion 上傳
     try:
