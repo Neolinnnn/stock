@@ -20,6 +20,29 @@ rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS
 rcParams['axes.unicode_minus'] = False
 
 
+def compute_sector_metrics(week_reports, prev_changes):
+    """由舊到新排序的 week_reports，計算每族群本週變化、最新水位、上週變化。
+
+    回傳依 change 由大到小排序的 list[dict]。
+    """
+    first = week_reports[0]['sectors']
+    last = week_reports[-1]['sectors']
+    metrics = []
+    for sector, data in last.items():
+        if sector not in first:
+            continue
+        level = data['avg_ret_20d']
+        change = level - first[sector]['avg_ret_20d']
+        metrics.append({
+            'sector': sector,
+            'change': round(change, 2),
+            'level': round(level, 2),
+            'prev_change': prev_changes.get(sector),
+        })
+    metrics.sort(key=lambda m: m['change'], reverse=True)
+    return metrics
+
+
 def run_weekly_summary():
     today = datetime.now()
     week_reports = []
