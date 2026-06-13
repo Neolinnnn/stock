@@ -206,8 +206,17 @@ def run_weekly_summary():
 def build_weekly_payload(summary):
     return {
         'meta': {'date': summary.get('week_ending', ''), 'days': summary.get('days_covered', 0)},
-        'changes': [{'sector': c['sector'], 'change': c['change']} for c in summary.get('sector_changes', [])],
+        'changes': [
+            {
+                'sector': c['sector'],
+                'change': c['change'],
+                'level': c.get('level'),
+                'prev_change': c.get('prev_change'),
+            }
+            for c in summary.get('sector_changes', [])
+        ],
         'buys': [{'stock': b['stock'], 'days': b['buy_days']} for b in summary.get('top_buys', [])],
+        'narrative': summary.get('narrative', ''),
     }
 
 

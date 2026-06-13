@@ -90,3 +90,27 @@ def test_generate_narrative_returns_text():
 def test_generate_narrative_fallbacks_to_empty_on_error():
     out = generate_narrative(_FakeWriter(raise_it=True), {'x': 1}, '20260612')
     assert out == ''
+
+
+from weekly_summary import build_weekly_payload
+
+
+def test_build_weekly_payload_carries_new_fields():
+    summary = {
+        'week_ending': '2026-06-12',
+        'days_covered': 5,
+        'sector_changes': [{'sector': 'A', 'change': 3.0, 'level': 4.0, 'prev_change': 1.0}],
+        'top_buys': [{'stock': '2368 金像電', 'buy_days': 5}],
+        'narrative': '本週輪動回顧…',
+    }
+    payload = build_weekly_payload(summary)
+    assert payload['meta']['date'] == '2026-06-12'
+    assert payload['changes'][0] == {'sector': 'A', 'change': 3.0, 'level': 4.0, 'prev_change': 1.0}
+    assert payload['buys'][0] == {'stock': '2368 金像電', 'days': 5}
+    assert payload['narrative'] == '本週輪動回顧…'
+
+
+def test_build_weekly_payload_narrative_defaults_empty():
+    summary = {'week_ending': '2026-06-12', 'days_covered': 5,
+               'sector_changes': [], 'top_buys': []}
+    assert build_weekly_payload(summary)['narrative'] == ''
