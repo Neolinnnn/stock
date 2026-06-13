@@ -83,8 +83,8 @@ def generate_narrative(writer, context_data, date_str):
         return ''
 
 
-def run_weekly_summary():
-    today = datetime.now()
+def run_weekly_summary(as_of=None, upload_notion=True):
+    today = as_of or datetime.now()
     week_reports = []
 
     # 找過去 7 天的日報
@@ -203,14 +203,15 @@ def run_weekly_summary():
     print('  docs/weekly_sector_trend.png 已更新')
 
     # Notion 上傳
-    try:
-        import sys, os
-        sys.path.insert(0, os.path.dirname(__file__))
-        from notion_upload import upload_weekly_report
-        page_id = upload_weekly_report(summary)
-        print(f"   Notion：{page_id}")
-    except Exception as e:
-        print(f"   Notion 上傳失敗：{e}")
+    if upload_notion:
+        try:
+            import sys, os
+            sys.path.insert(0, os.path.dirname(__file__))
+            from notion_upload import upload_weekly_report
+            page_id = upload_weekly_report(summary)
+            print(f"   Notion：{page_id}")
+        except Exception as e:
+            print(f"   Notion 上傳失敗：{e}")
 
     return summary
 

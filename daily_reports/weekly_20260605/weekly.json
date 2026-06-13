@@ -4,59 +4,87 @@
   "sector_changes": [
     {
       "sector": "CoPoS封裝",
-      "change": 74.71
+      "change": 74.71,
+      "level": 76.61,
+      "prev_change": 4.94
     },
     {
       "sector": "光學",
-      "change": 8.69
+      "change": 8.69,
+      "level": 38.99,
+      "prev_change": -4.67
     },
     {
       "sector": "AI 散熱",
-      "change": 6.74
+      "change": 6.74,
+      "level": 3.48,
+      "prev_change": 0.21
     },
     {
       "sector": "綠能環保",
-      "change": -0.43
+      "change": -0.43,
+      "level": -4.2,
+      "prev_change": 5.1
     },
     {
       "sector": "車用電子",
-      "change": -2.81
+      "change": -2.81,
+      "level": 11.54,
+      "prev_change": 1.74
     },
     {
       "sector": "銅箔/CCL",
-      "change": -7.56
+      "change": -7.56,
+      "level": 4.06,
+      "prev_change": -31.24
     },
     {
       "sector": "封測",
-      "change": -7.65
+      "change": -7.65,
+      "level": 19.51,
+      "prev_change": 15.41
     },
     {
       "sector": "AI伺服器",
-      "change": -7.93
+      "change": -7.93,
+      "level": 19.15,
+      "prev_change": 11.7
     },
     {
       "sector": "光通訊",
-      "change": -9.2
+      "change": -9.2,
+      "level": 3.95,
+      "prev_change": -2.16
     },
     {
       "sector": "AI ASIC/IP",
-      "change": -9.39
+      "change": -9.39,
+      "level": -11.14,
+      "prev_change": -6.95
     },
     {
       "sector": "AI 電源",
-      "change": -11.19
+      "change": -11.19,
+      "level": 10.38,
+      "prev_change": 6.32
     },
     {
       "sector": "IC設計",
-      "change": -13.45
+      "change": -13.45,
+      "level": 10.7,
+      "prev_change": -2.82
     },
     {
       "sector": "被動元件",
-      "change": -17.93
+      "change": -17.93,
+      "level": 148.65,
+      "prev_change": 26.23
     },
     {
       "sector": "記憶體",
-      "change": -24.35
+      "change": -24.35,
+      "level": 12.11,
+      "prev_change": 6.89
     }
   ],
   "top_buys": [
@@ -81,5 +109,6 @@
       "buy_days": 1
     }
   ],
-  "chart_path": "daily_reports/weekly_20260605/01_weekly_sector_trend.png"
+  "chart_path": "daily_reports\\weekly_20260605\\01_weekly_sector_trend.png",
+  "narrative": ""
 }
