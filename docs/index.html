@@ -2688,38 +2688,110 @@ function mfToggle(i){
 }
 
 // ── 週報 ──────────────────────────────────────────────────────────────────────
+function sectorQuadrant(level, change){
+  const L=Number(level)||0, C=Number(change)||0;
+  if(L>=0 && C>=0) return {label:'領漲',sub:'高檔續強',color:'var(--green)'};
+  if(L<0  && C>=0) return {label:'接棒',sub:'落底翻揚',color:'#4a9eff'};
+  if(L>=0 && C<0)  return {label:'退燒',sub:'高檔回落',color:'var(--yellow)'};
+  return {label:'落後',sub:'弱勢加速',color:'var(--red)'};
+}
 function renderWeekly(){
   const el=document.getElementById('page-weekly');
   if(!WEEKLY_DATA){
     el.innerHTML=`<div class="error-box"><span>📭</span>尚無週報資料</div>`;
     return;
   }
-  const {meta,changes,buys}=WEEKLY_DATA;
-  let html=`
+  const {meta,changes,buys,narrative}=WEEKLY_DATA;
+  let html='';
+  // 第一層 · 本週敘事（narrative 為空則隱藏）
+  if(narrative && narrative.trim()){
+    html+=`<div class="card" style="margin-bottom:14px;border-left:3px solid var(--accent,#4a9eff)">
+      <div class="card-title">📋 本週敘事</div>
+      <div style="white-space:pre-wrap;line-height:1.7;font-size:13px;margin-top:6px">${escHtml(narrative)}</div>
+    </div>`;
+  }
+  html+=`
   <div class="grid-4" style="grid-template-columns:repeat(2,1fr)">
     <div class="card"><div class="card-title">週報日期</div><div class="card-value" style="font-size:18px">${meta.date||'—'}</div></div>
     <div class="card"><div class="card-title">涵蓋交易日</div><div class="card-value">${meta.days||'—'} 日</div></div>
-  </div>
-  <div class="grid-2">`;
-  html+=`<div><div class="section-title">族群動能變化</div><div class="card"><table>
-    <tr><th>族群</th><th>動能變化 (pp)</th><th></th></tr>`;
-  const maxC=Math.max(...changes.map(c=>Math.abs(Number(c.change)||0)),1);
+  </div>`;
+  // 第二層 · 族群輪動（水位 × 本週動能）
+  html+=`<div class="section-title">族群輪動（水位 × 本週動能）</div><div class="card"><table>
+    <tr><th>族群</th><th>狀態</th><th>水位</th><th>本週變化</th><th>vs 上週</th></tr>`;
   changes.forEach(c=>{
-    const v=Number(c.change)||0;
-    const w=Math.min(Math.abs(v)/maxC*100,100);
-    const col=v>=0?'var(--green)':'var(--red)';
-    html+=`<tr><td>${c.sector}</td>
+    const v=Number(c.change)||0, lvl=c.level, q=sectorQuadrant(lvl,v);
+    let vsLast='—';
+    if(c.prev_change!=null){
+      const d=v-Number(c.prev_change);
+      vsLast = d>0 ? `<span class="up">↑ 加速</span>` : d<0 ? `<span class="dn">↓ 減速</span>` : '持平';
+    }
+    html+=`<tr>
+      <td>${c.sector}</td>
+      <td><span class="badge" style="background:${q.color};color:#111">${q.label}</span> <span style="color:var(--sub);font-size:11px">${q.sub}</span></td>
+      <td class="${signColor(lvl)}">${lvl!=null?sign(lvl)+fmt(lvl,2):'—'}</td>
       <td class="${signColor(v)}">${sign(v)}${fmt(v,2)} pp</td>
-      <td style="width:100px"><div class="bar-wrap"><div class="bar" style="width:${w}%;background:${col}"></div></div></td></tr>`;
+      <td>${vsLast}</td>
+    </tr>`;
   });
-  html+=`</table></div></div>`;
-  html+=`<div><div class="section-title">本週累計 BUY Top 10</div><div class="card"><table>
-    <tr><th>排名</th><th>個股</th><th>BUY 次數</th></tr>`;
-  buys.forEach((b,i)=>{
-    html+=`<tr><td style="color:var(--sub)">${i+1}</td><td>${b.stock}</td>
-      <td><span class="badge buy">${b.days} 次</span></td></tr>`;
+  html+=`</table>
+    <img src="./weekly_sector_trend.png?v=${Date.now()}" alt="族群趨勢" style="width:100%;margin-top:10px;border-radius:6px" onerror="this.style.display='none'">
+  </div>`;
+  // 第三層 · 行動清單：週報 buys join 今日 daily 狀態
+  const dailyById={};
+  (DAILY_DATA && DAILY_DATA.stocks ? DAILY_DATA.stocks : []).forEach(s=>{dailyById[String(s.id)]=s;});
+  const quadBySector={};
+  changes.forEach(c=>{quadBySector[c.sector]=sectorQuadrant(c.level,c.change);});
+  html+=`<div class="section-title">本週行動清單（BUY 累計 × 今日狀態）</div>
+    <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">連續入選次數越高代表本週持續強勢；「今日」欄位顯示最新掃描訊號是否仍 BUY</div>
+    <div class="action-grid">`;
+  buys.forEach(b=>{
+    const id=String(b.stock).split(' ')[0];
+    const nm=String(b.stock).split(' ').slice(1).join(' ');
+    const d=dailyById[id]||{};
+    const sig=d.signal||'—';
+    const sigColor=sig==='BUY'?'var(--green)':sig==='SELL'?'var(--red)':'var(--yellow)';
+    const sigText=sig==='BUY'?'今日仍 BUY':sig==='SELL'?'今日轉 SELL':sig==='HOLD'?'今日轉 HOLD':'今日無資料';
+    const rsi=Number(d.rsi||0), chipN=Number(d.chipTotal||0);
+    const q=d.sector?quadBySector[d.sector]:null;
+    html+=`<div class="action-card" style="border-left:3px solid ${sigColor}">
+      <div class="ac-head">
+        <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(id)}')">${escHtml(id)}</span>
+        <span class="ac-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px" onclick="goToStock('${escHtml(id)}')">${escHtml(nm)}</span>
+        ${d.sector?`<span class="ac-sector">${escHtml(d.sector)}${q?'・'+q.label:''}</span>`:''}
+        <span class="ac-sig" style="color:${sigColor}">${sigText}</span>
+      </div>
+      <div class="ac-prices">
+        <div class="ac-price-item"><span class="ac-price-lbl">本週入選</span><span class="ac-price-val" style="font-weight:600">${b.days} 次</span></div>
+        <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${d.price!=null?fmt(d.price,1):'—'}</span></div>
+        <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${d.rsi!=null?`<span class="rsi-dot ${rsiDot(rsi)}"></span>`+fmt(rsi,1):'—'}</span></div>
+        <div class="ac-price-item"><span class="ac-price-lbl">法人合計</span><span class="ac-price-val ${chipN>=0?'chip-pos':'chip-neg'}" style="font-weight:600">${d.chipTotal!=null?sign(chipN)+chipN.toLocaleString():'—'}</span></div>
+      </div>
+    </div>`;
   });
-  html+=`</table></div></div></div>`;
+  html+=`</div>`;
+  // 本週退燒觀察（複用 daily.json 的 signalFlips）
+  const flips=(DAILY_DATA && DAILY_DATA.signalFlips)?DAILY_DATA.signalFlips:[];
+  if(flips.length){
+    html+=`<div class="section-title" style="color:var(--yellow)">🔄 本週退燒觀察（${flips.length} 檔）</div>
+      <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">近期曾入選、今日掉出清單 — 持有者注意，詳見每日分頁</div>
+      <div class="action-grid">`;
+    flips.forEach(f=>{
+      const bc=f.status==='回檔測試'?'var(--yellow)':'var(--red)';
+      html+=`<div class="action-card" style="border-left:3px solid ${bc}">
+        <div class="ac-head">
+          <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(f.id)}')">${escHtml(f.id)}</span>
+          <span class="ac-name" style="cursor:pointer" onclick="goToStock('${escHtml(f.id)}')">${escHtml(f.name)}</span>
+          <span class="ac-sector">${escHtml(f.sector||'')}</span>
+          <span class="ac-sig" style="color:${bc}">${escHtml(f.status)}</span>
+        </div>
+        <div class="ac-prices">
+          <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(f.price,1)}</span></div>
+          <div class="ac-price-item"><span class="ac-price-lbl">距訊號</span><span class="ac-price-val ${Number(f.chg_pct)>=0?'up':'dn'}">${f.chg_pct!=null?sign(Number(f.chg_pct))+f.chg_pct+'%':'—'}</span></div>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
   el.innerHTML=html;
 }
 
