@@ -59,6 +59,30 @@ def load_prev_week_changes(today_str, base_dir=Path('daily_reports')):
     return {c['sector']: c['change'] for c in data.get('sector_changes', [])}
 
 
+def build_narrative_context(sector_metrics, top_buys):
+    """組裝給 Gemini 的 weekly_report context.data。"""
+    return {
+        'sector_metrics': sector_metrics,
+        'accelerating': sector_metrics[:3],
+        'decelerating': sorted(sector_metrics, key=lambda m: m['change'])[:3],
+        'top_buys': top_buys,
+    }
+
+
+def generate_narrative(writer, context_data, date_str):
+    """呼叫 Gemini 生成兩段週報敘事；任何失敗回傳空字串（前端會隱藏敘事卡）。"""
+    extra = ('請輸出兩段，第一段標題「本週輪動回顧」描述族群強弱輪動，'
+             '第二段標題「下週聚焦」點出值得追蹤的族群與個股，繁體中文、各 200 字內。')
+    try:
+        return writer.generate(
+            task='weekly_report',
+            context={'date': date_str, 'data': context_data, 'extra': extra},
+        )
+    except Exception as e:
+        print(f'   ⚠ Gemini 週報敘事生成失敗，略過：{e}')
+        return ''
+
+
 def run_weekly_summary():
     today = datetime.now()
     week_reports = []

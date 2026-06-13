@@ -54,3 +54,39 @@ def test_load_prev_week_changes_reads_latest_prior(tmp_path):
 
 def test_load_prev_week_changes_none_when_absent(tmp_path):
     assert load_prev_week_changes('20260612', base_dir=tmp_path) == {}
+
+
+from weekly_summary import build_narrative_context, generate_narrative
+
+
+def test_build_narrative_context_picks_top_movers():
+    metrics = [
+        {'sector': 'A', 'change': 9.0, 'level': 10.0, 'prev_change': 1.0},
+        {'sector': 'B', 'change': 3.0, 'level': 2.0, 'prev_change': None},
+        {'sector': 'C', 'change': -8.0, 'level': -5.0, 'prev_change': 2.0},
+    ]
+    top_buys = [{'stock': '2368 金像電', 'buy_days': 5}]
+    ctx = build_narrative_context(metrics, top_buys)
+    assert ctx['accelerating'][0]['sector'] == 'A'
+    assert ctx['decelerating'][0]['sector'] == 'C'
+    assert ctx['top_buys'] == top_buys
+    assert ctx['sector_metrics'] == metrics
+
+
+class _FakeWriter:
+    def __init__(self, raise_it=False):
+        self.raise_it = raise_it
+    def generate(self, task, context, **kw):
+        if self.raise_it:
+            raise RuntimeError('api down')
+        return '本週輪動回顧…\n下週聚焦…'
+
+
+def test_generate_narrative_returns_text():
+    out = generate_narrative(_FakeWriter(), {'x': 1}, '20260612')
+    assert '回顧' in out
+
+
+def test_generate_narrative_fallbacks_to_empty_on_error():
+    out = generate_narrative(_FakeWriter(raise_it=True), {'x': 1}, '20260612')
+    assert out == ''
