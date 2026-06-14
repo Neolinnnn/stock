@@ -26,6 +26,7 @@ PERIODS = [
     ('6m',  'backtest_results_6m.json',    '近6個月'),
     ('9m',  'backtest_results_9m.json',    '近9個月'),
     ('12m', 'backtest_results_12m.json',   '近12個月'),
+    ('36m', 'backtest_results_36m.json',   '近3年'),
 ]
 
 TRAILING = [

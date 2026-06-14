@@ -423,6 +423,7 @@ def main():
     parser.add_argument('--qualified-only',  action='store_true', help='只回測雙條件達標個股')
     parser.add_argument('--compare',         action='store_true', help='同時回測全BUY與雙條件，對比輸出')
     parser.add_argument('--start', default=BACKTEST_START, help='回測起始日 YYYYMMDD')
+    parser.add_argument('--output', default='', help='結果輸出檔名（預設 backtest_results.json）')
     args = parser.parse_args()
 
     print(f"\n{'='*60}")
@@ -480,7 +481,7 @@ def main():
         combos_qual = None
 
     # Step 5: 存檔
-    out_path = Path('backtest_results.json')
+    out_path = Path(args.output) if args.output else Path('backtest_results.json')
     results = {
         'generated_at': datetime.now().isoformat(),
         'date_range': {'start': args.start, 'end': dt_date.today().strftime('%Y%m%d')},

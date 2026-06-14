@@ -120,6 +120,8 @@ def backtest(signals, prices, initial=100_000, cost=0.001425):
     for s in signals:
         p = prices[s['idx']]
         if s['signal'] == 'BUY' and capital > 0:
+            if p <= 0:
+                continue
             num = int(capital / p / 1000) * 1000
             if num == 0:
                 continue
