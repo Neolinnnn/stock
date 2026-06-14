@@ -1,6 +1,3 @@
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
-
 from backtest import calc_next_trading_day, calc_stats, simulate_position
 
 TRADING_DAYS = ['20260301', '20260302', '20260303', '20260304', '20260305']

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "taiwan-stock-scan"
+version = "0.1.0"
+description = "台股族群掃描系統 — 族群掃描 / 週報 / 回測 / 多代理分析"
+requires-python = ">=3.11"
+# 執行期依賴維持以 requirements.txt 為單一來源（CI 直接 pip install -r）。
+# 此處刻意不重複列出，避免兩份清單漂移。
+
+# 第一方套件（皆已含 __init__.py）。安裝後 `pip install -e .` 即可
+# `import indicators / macro / model / agents`，逐步取代各檔的 sys.path hack。
+[tool.setuptools]
+packages = ["agents", "indicators", "macro", "model"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# 根目錄供 indicators/macro/... 套件；scripts 供 weekly_summary 等扁平模組 import。
+# 有了這行，測試檔不再需要自己 sys.path.insert。
+pythonpath = [".", "scripts"]
