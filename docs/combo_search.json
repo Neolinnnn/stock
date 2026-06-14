@@ -1,0 +1,1865 @@
+{
+ "generated_at": "2026-06-14 20:20",
+ "signals_total": 3007,
+ "wf_split": "20240626",
+ "min_n": 20,
+ "top_combos": [
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TRAIL15",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 827,
+    "open": 18,
+    "win_rate": 0.5393,
+    "wilson": 0.5052,
+    "avg_ret": 9.91,
+    "pf": 3.07,
+    "avg_days": 39.7
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.5972,
+    "wilson": 0.55,
+    "avg_ret": 10.17,
+    "pf": 3.63,
+    "avg_days": 45.5
+   },
+   "back": {
+    "n": 400,
+    "open": 18,
+    "win_rate": 0.4775,
+    "wilson": 0.429,
+    "avg_ret": 9.65,
+    "pf": 2.67,
+    "avg_days": 33.6
+   },
+   "score": 15.3701,
+   "n_picked": 845
+  },
+  {
+   "fid": "TREND_NOCHASE",
+   "eid": "TRAIL15",
+   "filter": "多頭排列+乖離≤8%",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 812,
+    "open": 15,
+    "win_rate": 0.5283,
+    "wilson": 0.4939,
+    "avg_ret": 9.51,
+    "pf": 2.9,
+    "avg_days": 42.6
+   },
+   "front": {
+    "n": 465,
+    "open": 0,
+    "win_rate": 0.6172,
+    "wilson": 0.5722,
+    "avg_ret": 10.52,
+    "pf": 3.89,
+    "avg_days": 47.9
+   },
+   "back": {
+    "n": 347,
+    "open": 15,
+    "win_rate": 0.4092,
+    "wilson": 0.3588,
+    "avg_ret": 8.14,
+    "pf": 2.19,
+    "avg_days": 35.4
+   },
+   "score": 13.6213,
+   "n_picked": 827
+  },
+  {
+   "fid": "BREAK_VOL",
+   "eid": "TRAIL15",
+   "filter": "突破20日高+量比≥1.5",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 321,
+    "open": 2,
+    "win_rate": 0.4984,
+    "wilson": 0.4441,
+    "avg_ret": 9.92,
+    "pf": 2.94,
+    "avg_days": 41.4
+   },
+   "front": {
+    "n": 183,
+    "open": 0,
+    "win_rate": 0.4754,
+    "wilson": 0.4043,
+    "avg_ret": 9.12,
+    "pf": 2.95,
+    "avg_days": 46.3
+   },
+   "back": {
+    "n": 138,
+    "open": 2,
+    "win_rate": 0.529,
+    "wilson": 0.446,
+    "avg_ret": 10.97,
+    "pf": 2.94,
+    "avg_days": 34.9
+   },
+   "score": 12.9521,
+   "n_picked": 323
+  },
+  {
+   "fid": "MASTACK",
+   "eid": "TRAIL15",
+   "filter": "多頭排列(C>MA5>MA20>MA60)",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 997,
+    "open": 18,
+    "win_rate": 0.5306,
+    "wilson": 0.4996,
+    "avg_ret": 9.16,
+    "pf": 2.79,
+    "avg_days": 40.2
+   },
+   "front": {
+    "n": 515,
+    "open": 0,
+    "win_rate": 0.6078,
+    "wilson": 0.5649,
+    "avg_ret": 10.47,
+    "pf": 3.67,
+    "avg_days": 46.7
+   },
+   "back": {
+    "n": 482,
+    "open": 18,
+    "win_rate": 0.4481,
+    "wilson": 0.4043,
+    "avg_ret": 7.77,
+    "pf": 2.21,
+    "avg_days": 33.2
+   },
+   "score": 12.768,
+   "n_picked": 1015
+  },
+  {
+   "fid": "MASTACK_VOL",
+   "eid": "TRAIL15",
+   "filter": "多頭排列+量比≥1.2",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 428,
+    "open": 9,
+    "win_rate": 0.5117,
+    "wilson": 0.4644,
+    "avg_ret": 9.26,
+    "pf": 2.83,
+    "avg_days": 38.5
+   },
+   "front": {
+    "n": 215,
+    "open": 0,
+    "win_rate": 0.5488,
+    "wilson": 0.482,
+    "avg_ret": 10.28,
+    "pf": 3.39,
+    "avg_days": 44.8
+   },
+   "back": {
+    "n": 213,
+    "open": 9,
+    "win_rate": 0.4742,
+    "wilson": 0.4082,
+    "avg_ret": 8.24,
+    "pf": 2.42,
+    "avg_days": 32.0
+   },
+   "score": 12.17,
+   "n_picked": 437
+  },
+  {
+   "fid": "FULL5",
+   "eid": "TRAIL15",
+   "filter": "多頭+量+MACD+KD+大盤",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 322,
+    "open": 5,
+    "win_rate": 0.4907,
+    "wilson": 0.4365,
+    "avg_ret": 9.42,
+    "pf": 2.92,
+    "avg_days": 37.1
+   },
+   "front": {
+    "n": 160,
+    "open": 0,
+    "win_rate": 0.4938,
+    "wilson": 0.4173,
+    "avg_ret": 10.14,
+    "pf": 3.32,
+    "avg_days": 42.2
+   },
+   "back": {
+    "n": 162,
+    "open": 5,
+    "win_rate": 0.4877,
+    "wilson": 0.4119,
+    "avg_ret": 8.71,
+    "pf": 2.6,
+    "avg_days": 32.1
+   },
+   "score": 12.0065,
+   "n_picked": 327
+  },
+  {
+   "fid": "TRIPLE",
+   "eid": "TRAIL15",
+   "filter": "多頭+量比1.2+MACD增長",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 393,
+    "open": 5,
+    "win_rate": 0.5115,
+    "wilson": 0.4622,
+    "avg_ret": 9.24,
+    "pf": 2.81,
+    "avg_days": 38.7
+   },
+   "front": {
+    "n": 200,
+    "open": 0,
+    "win_rate": 0.555,
+    "wilson": 0.4857,
+    "avg_ret": 10.5,
+    "pf": 3.44,
+    "avg_days": 44.8
+   },
+   "back": {
+    "n": 193,
+    "open": 5,
+    "win_rate": 0.4663,
+    "wilson": 0.3973,
+    "avg_ret": 7.93,
+    "pf": 2.33,
+    "avg_days": 32.5
+   },
+   "score": 12.0007,
+   "n_picked": 398
+  },
+  {
+   "fid": "VOL12",
+   "eid": "TRAIL15",
+   "filter": "量比≥1.2",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 884,
+    "open": 20,
+    "win_rate": 0.5,
+    "wilson": 0.4671,
+    "avg_ret": 9.18,
+    "pf": 2.72,
+    "avg_days": 41.5
+   },
+   "front": {
+    "n": 464,
+    "open": 0,
+    "win_rate": 0.5022,
+    "wilson": 0.4568,
+    "avg_ret": 6.94,
+    "pf": 2.42,
+    "avg_days": 46.1
+   },
+   "back": {
+    "n": 420,
+    "open": 20,
+    "win_rate": 0.4976,
+    "wilson": 0.45,
+    "avg_ret": 11.65,
+    "pf": 3.01,
+    "avg_days": 36.5
+   },
+   "score": 11.6633,
+   "n_picked": 904
+  },
+  {
+   "fid": "VOL15",
+   "eid": "TRAIL15",
+   "filter": "量比≥1.5",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 568,
+    "open": 12,
+    "win_rate": 0.4912,
+    "wilson": 0.4503,
+    "avg_ret": 9.36,
+    "pf": 2.66,
+    "avg_days": 40.6
+   },
+   "front": {
+    "n": 309,
+    "open": 0,
+    "win_rate": 0.4919,
+    "wilson": 0.4366,
+    "avg_ret": 6.98,
+    "pf": 2.27,
+    "avg_days": 45.1
+   },
+   "back": {
+    "n": 259,
+    "open": 12,
+    "win_rate": 0.4903,
+    "wilson": 0.4301,
+    "avg_ret": 12.21,
+    "pf": 3.08,
+    "avg_days": 35.3
+   },
+   "score": 11.2114,
+   "n_picked": 580
+  },
+  {
+   "fid": "BREAK20",
+   "eid": "TRAIL15",
+   "filter": "創20日收盤新高",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 620,
+    "open": 4,
+    "win_rate": 0.5081,
+    "wilson": 0.4688,
+    "avg_ret": 8.5,
+    "pf": 2.78,
+    "avg_days": 42.5
+   },
+   "front": {
+    "n": 318,
+    "open": 0,
+    "win_rate": 0.5314,
+    "wilson": 0.4766,
+    "avg_ret": 9.34,
+    "pf": 3.39,
+    "avg_days": 48.5
+   },
+   "back": {
+    "n": 302,
+    "open": 4,
+    "win_rate": 0.4834,
+    "wilson": 0.4276,
+    "avg_ret": 7.62,
+    "pf": 2.34,
+    "avg_days": 36.1
+   },
+   "score": 11.0777,
+   "n_picked": 624
+  },
+  {
+   "fid": "SECTOR",
+   "eid": "TRAIL15",
+   "filter": "強勢族群",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1364,
+    "open": 21,
+    "win_rate": 0.5147,
+    "wilson": 0.4881,
+    "avg_ret": 8.22,
+    "pf": 2.52,
+    "avg_days": 39.8
+   },
+   "front": {
+    "n": 717,
+    "open": 0,
+    "win_rate": 0.5607,
+    "wilson": 0.5241,
+    "avg_ret": 8.71,
+    "pf": 2.96,
+    "avg_days": 46.2
+   },
+   "back": {
+    "n": 647,
+    "open": 21,
+    "win_rate": 0.4637,
+    "wilson": 0.4256,
+    "avg_ret": 7.68,
+    "pf": 2.19,
+    "avg_days": 32.8
+   },
+   "score": 10.1107,
+   "n_picked": 1385
+  },
+  {
+   "fid": "SCORE_5",
+   "eid": "TRAIL15",
+   "filter": "評分≥5（7維綜合）",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1396,
+    "open": 21,
+    "win_rate": 0.5043,
+    "wilson": 0.4781,
+    "avg_ret": 7.93,
+    "pf": 2.52,
+    "avg_days": 42.7
+   },
+   "front": {
+    "n": 757,
+    "open": 0,
+    "win_rate": 0.5575,
+    "wilson": 0.5219,
+    "avg_ret": 8.42,
+    "pf": 3.13,
+    "avg_days": 48.0
+   },
+   "back": {
+    "n": 639,
+    "open": 21,
+    "win_rate": 0.4413,
+    "wilson": 0.4033,
+    "avg_ret": 7.35,
+    "pf": 2.1,
+    "avg_days": 36.5
+   },
+   "score": 9.5542,
+   "n_picked": 1417
+  },
+  {
+   "fid": "SCORE_4",
+   "eid": "TRAIL15",
+   "filter": "評分≥4（7維綜合）",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2012,
+    "open": 33,
+    "win_rate": 0.506,
+    "wilson": 0.4841,
+    "avg_ret": 7.85,
+    "pf": 2.45,
+    "avg_days": 42.8
+   },
+   "front": {
+    "n": 1061,
+    "open": 0,
+    "win_rate": 0.5674,
+    "wilson": 0.5374,
+    "avg_ret": 7.76,
+    "pf": 2.87,
+    "avg_days": 47.8
+   },
+   "back": {
+    "n": 951,
+    "open": 33,
+    "win_rate": 0.4374,
+    "wilson": 0.4062,
+    "avg_ret": 7.95,
+    "pf": 2.16,
+    "avg_days": 37.1
+   },
+   "score": 9.3105,
+   "n_picked": 2045
+  },
+  {
+   "fid": "MACD_KD",
+   "eid": "TRAIL15",
+   "filter": "MACD增長+KD金叉",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1568,
+    "open": 13,
+    "win_rate": 0.5051,
+    "wilson": 0.4804,
+    "avg_ret": 7.66,
+    "pf": 2.41,
+    "avg_days": 43.0
+   },
+   "front": {
+    "n": 819,
+    "open": 0,
+    "win_rate": 0.5641,
+    "wilson": 0.5299,
+    "avg_ret": 8.01,
+    "pf": 2.88,
+    "avg_days": 48.1
+   },
+   "back": {
+    "n": 749,
+    "open": 13,
+    "win_rate": 0.4406,
+    "wilson": 0.4054,
+    "avg_ret": 7.28,
+    "pf": 2.08,
+    "avg_days": 37.4
+   },
+   "score": 8.8685,
+   "n_picked": 1581
+  },
+  {
+   "fid": "MACD",
+   "eid": "TRAIL15",
+   "filter": "MACD柱>0且增長",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1620,
+    "open": 14,
+    "win_rate": 0.5068,
+    "wilson": 0.4825,
+    "avg_ret": 7.66,
+    "pf": 2.38,
+    "avg_days": 43.1
+   },
+   "front": {
+    "n": 840,
+    "open": 0,
+    "win_rate": 0.5643,
+    "wilson": 0.5305,
+    "avg_ret": 7.75,
+    "pf": 2.73,
+    "avg_days": 48.0
+   },
+   "back": {
+    "n": 780,
+    "open": 14,
+    "win_rate": 0.4449,
+    "wilson": 0.4104,
+    "avg_ret": 7.56,
+    "pf": 2.13,
+    "avg_days": 37.8
+   },
+   "score": 8.7964,
+   "n_picked": 1634
+  },
+  {
+   "fid": "REGIME",
+   "eid": "TRAIL15",
+   "filter": "大盤多頭(>MA60)",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2329,
+    "open": 47,
+    "win_rate": 0.4903,
+    "wilson": 0.4701,
+    "avg_ret": 7.56,
+    "pf": 2.33,
+    "avg_days": 42.0
+   },
+   "front": {
+    "n": 1197,
+    "open": 0,
+    "win_rate": 0.5447,
+    "wilson": 0.5164,
+    "avg_ret": 6.69,
+    "pf": 2.44,
+    "avg_days": 46.7
+   },
+   "back": {
+    "n": 1132,
+    "open": 47,
+    "win_rate": 0.4329,
+    "wilson": 0.4043,
+    "avg_ret": 8.48,
+    "pf": 2.24,
+    "avg_days": 37.0
+   },
+   "score": 8.2807,
+   "n_picked": 2376
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP20_SL15",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 828,
+    "open": 17,
+    "win_rate": 0.6039,
+    "wilson": 0.5701,
+    "avg_ret": 6.14,
+    "pf": 2.15,
+    "avg_days": 34.6
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6323,
+    "wilson": 0.5856,
+    "avg_ret": 6.23,
+    "pf": 2.36,
+    "avg_days": 40.7
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5736,
+    "wilson": 0.5247,
+    "avg_ret": 6.04,
+    "pf": 1.98,
+    "avg_days": 28.1
+   },
+   "score": 7.5259,
+   "n_picked": 845
+  },
+  {
+   "fid": "KDGOLD",
+   "eid": "TRAIL15",
+   "filter": "KD金叉(K>D)",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2430,
+    "open": 37,
+    "win_rate": 0.5029,
+    "wilson": 0.483,
+    "avg_ret": 6.98,
+    "pf": 2.23,
+    "avg_days": 42.5
+   },
+   "front": {
+    "n": 1274,
+    "open": 0,
+    "win_rate": 0.5816,
+    "wilson": 0.5543,
+    "avg_ret": 7.65,
+    "pf": 2.8,
+    "avg_days": 48.0
+   },
+   "back": {
+    "n": 1156,
+    "open": 37,
+    "win_rate": 0.4161,
+    "wilson": 0.388,
+    "avg_ret": 6.23,
+    "pf": 1.86,
+    "avg_days": 36.6
+   },
+   "score": 7.5181,
+   "n_picked": 2467
+  },
+  {
+   "fid": "RSI_MID",
+   "eid": "TRAIL15",
+   "filter": "RSI14∈[50,75]",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2278,
+    "open": 40,
+    "win_rate": 0.5026,
+    "wilson": 0.4821,
+    "avg_ret": 6.99,
+    "pf": 2.21,
+    "avg_days": 42.1
+   },
+   "front": {
+    "n": 1201,
+    "open": 0,
+    "win_rate": 0.5762,
+    "wilson": 0.548,
+    "avg_ret": 7.07,
+    "pf": 2.51,
+    "avg_days": 47.2
+   },
+   "back": {
+    "n": 1077,
+    "open": 40,
+    "win_rate": 0.4206,
+    "wilson": 0.3915,
+    "avg_ret": 6.9,
+    "pf": 1.98,
+    "avg_days": 36.4
+   },
+   "score": 7.4474,
+   "n_picked": 2318
+  },
+  {
+   "fid": "CHIP_TREND",
+   "eid": "TRAIL15",
+   "filter": "法人買超+站上MA20",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1641,
+    "open": 18,
+    "win_rate": 0.5058,
+    "wilson": 0.4816,
+    "avg_ret": 6.73,
+    "pf": 2.26,
+    "avg_days": 43.8
+   },
+   "front": {
+    "n": 864,
+    "open": 0,
+    "win_rate": 0.5845,
+    "wilson": 0.5513,
+    "avg_ret": 8.2,
+    "pf": 3.22,
+    "avg_days": 49.1
+   },
+   "back": {
+    "n": 777,
+    "open": 18,
+    "win_rate": 0.4183,
+    "wilson": 0.3841,
+    "avg_ret": 5.1,
+    "pf": 1.71,
+    "avg_days": 37.9
+   },
+   "score": 7.325,
+   "n_picked": 1659
+  },
+  {
+   "fid": "CHIP",
+   "eid": "TRAIL15",
+   "filter": "法人3日淨買超>0",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1752,
+    "open": 21,
+    "win_rate": 0.5063,
+    "wilson": 0.4829,
+    "avg_ret": 6.68,
+    "pf": 2.26,
+    "avg_days": 43.7
+   },
+   "front": {
+    "n": 915,
+    "open": 0,
+    "win_rate": 0.5836,
+    "wilson": 0.5514,
+    "avg_ret": 8.1,
+    "pf": 3.19,
+    "avg_days": 49.0
+   },
+   "back": {
+    "n": 837,
+    "open": 21,
+    "win_rate": 0.4217,
+    "wilson": 0.3887,
+    "avg_ret": 5.13,
+    "pf": 1.73,
+    "avg_days": 37.9
+   },
+   "score": 7.2902,
+   "n_picked": 1773
+  },
+  {
+   "fid": "BASE",
+   "eid": "TRAIL15",
+   "filter": "基準（全部 BUY）",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2960,
+    "open": 47,
+    "win_rate": 0.5003,
+    "wilson": 0.4823,
+    "avg_ret": 6.83,
+    "pf": 2.17,
+    "avg_days": 42.7
+   },
+   "front": {
+    "n": 1509,
+    "open": 0,
+    "win_rate": 0.5759,
+    "wilson": 0.5508,
+    "avg_ret": 7.14,
+    "pf": 2.6,
+    "avg_days": 47.8
+   },
+   "back": {
+    "n": 1451,
+    "open": 47,
+    "win_rate": 0.4218,
+    "wilson": 0.3966,
+    "avg_ret": 6.51,
+    "pf": 1.9,
+    "avg_days": 37.3
+   },
+   "score": 7.1482,
+   "n_picked": 3007
+  },
+  {
+   "fid": "FULL5",
+   "eid": "TP20_SL15",
+   "filter": "多頭+量+MACD+KD+大盤",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 322,
+    "open": 5,
+    "win_rate": 0.5839,
+    "wilson": 0.5293,
+    "avg_ret": 6.06,
+    "pf": 2.12,
+    "avg_days": 32.7
+   },
+   "front": {
+    "n": 160,
+    "open": 0,
+    "win_rate": 0.5625,
+    "wilson": 0.4851,
+    "avg_ret": 5.01,
+    "pf": 1.97,
+    "avg_days": 39.2
+   },
+   "back": {
+    "n": 162,
+    "open": 5,
+    "win_rate": 0.6049,
+    "wilson": 0.5281,
+    "avg_ret": 7.1,
+    "pf": 2.25,
+    "avg_days": 26.3
+   },
+   "score": 6.8,
+   "n_picked": 327
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP15_SL15",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利15%/停損15%",
+   "full": {
+    "n": 828,
+    "open": 17,
+    "win_rate": 0.6401,
+    "wilson": 0.6068,
+    "avg_ret": 5.35,
+    "pf": 2.08,
+    "avg_days": 31.0
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6838,
+    "wilson": 0.6383,
+    "avg_ret": 6.18,
+    "pf": 2.55,
+    "avg_days": 36.6
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5935,
+    "wilson": 0.5448,
+    "avg_ret": 4.46,
+    "pf": 1.75,
+    "avg_days": 25.0
+   },
+   "score": 6.7525,
+   "n_picked": 845
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP18_SL15",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利18%/停損15%",
+   "full": {
+    "n": 828,
+    "open": 17,
+    "win_rate": 0.6099,
+    "wilson": 0.5762,
+    "avg_ret": 5.61,
+    "pf": 2.06,
+    "avg_days": 33.3
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6393,
+    "wilson": 0.5927,
+    "avg_ret": 5.89,
+    "pf": 2.3,
+    "avg_days": 39.5
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5786,
+    "wilson": 0.5297,
+    "avg_ret": 5.31,
+    "pf": 1.87,
+    "avg_days": 26.8
+   },
+   "score": 6.6589,
+   "n_picked": 845
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP20_SL12",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 832,
+    "open": 13,
+    "win_rate": 0.5769,
+    "wilson": 0.5431,
+    "avg_ret": 5.8,
+    "pf": 2.11,
+    "avg_days": 31.8
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6112,
+    "wilson": 0.5642,
+    "avg_ret": 6.02,
+    "pf": 2.33,
+    "avg_days": 38.7
+   },
+   "back": {
+    "n": 405,
+    "open": 13,
+    "win_rate": 0.5407,
+    "wilson": 0.4921,
+    "avg_ret": 5.57,
+    "pf": 1.94,
+    "avg_days": 24.6
+   },
+   "score": 6.6465,
+   "n_picked": 845
+  },
+  {
+   "fid": "NOCHASE",
+   "eid": "TRAIL15",
+   "filter": "乖離MA20≤8%",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2632,
+    "open": 44,
+    "win_rate": 0.4951,
+    "wilson": 0.476,
+    "avg_ret": 6.47,
+    "pf": 2.14,
+    "avg_days": 43.8
+   },
+   "front": {
+    "n": 1410,
+    "open": 0,
+    "win_rate": 0.5801,
+    "wilson": 0.5542,
+    "avg_ret": 7.33,
+    "pf": 2.82,
+    "avg_days": 48.5
+   },
+   "back": {
+    "n": 1222,
+    "open": 44,
+    "win_rate": 0.3969,
+    "wilson": 0.3698,
+    "avg_ret": 5.47,
+    "pf": 1.72,
+    "avg_days": 38.4
+   },
+   "score": 6.5906,
+   "n_picked": 2676
+  },
+  {
+   "fid": "PULLBACK",
+   "eid": "TRAIL15",
+   "filter": "乖離0~8%（近均線）",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 2244,
+    "open": 31,
+    "win_rate": 0.4955,
+    "wilson": 0.4749,
+    "avg_ret": 6.39,
+    "pf": 2.13,
+    "avg_days": 44.3
+   },
+   "front": {
+    "n": 1233,
+    "open": 0,
+    "win_rate": 0.575,
+    "wilson": 0.5472,
+    "avg_ret": 7.12,
+    "pf": 2.72,
+    "avg_days": 48.7
+   },
+   "back": {
+    "n": 1011,
+    "open": 31,
+    "win_rate": 0.3986,
+    "wilson": 0.3689,
+    "avg_ret": 5.5,
+    "pf": 1.73,
+    "avg_days": 38.8
+   },
+   "score": 6.4637,
+   "n_picked": 2275
+  },
+  {
+   "fid": "MASTACK_VOL",
+   "eid": "TP20_SL15",
+   "filter": "多頭排列+量比≥1.2",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 428,
+    "open": 9,
+    "win_rate": 0.5888,
+    "wilson": 0.5416,
+    "avg_ret": 5.57,
+    "pf": 2.0,
+    "avg_days": 33.4
+   },
+   "front": {
+    "n": 215,
+    "open": 0,
+    "win_rate": 0.6047,
+    "wilson": 0.538,
+    "avg_ret": 5.29,
+    "pf": 2.09,
+    "avg_days": 40.2
+   },
+   "back": {
+    "n": 213,
+    "open": 9,
+    "win_rate": 0.5728,
+    "wilson": 0.5056,
+    "avg_ret": 5.85,
+    "pf": 1.94,
+    "avg_days": 26.6
+   },
+   "score": 6.0334,
+   "n_picked": 437
+  },
+  {
+   "fid": "TRIPLE",
+   "eid": "TP20_SL15",
+   "filter": "多頭+量比1.2+MACD增長",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 393,
+    "open": 5,
+    "win_rate": 0.5878,
+    "wilson": 0.5385,
+    "avg_ret": 5.56,
+    "pf": 1.99,
+    "avg_days": 33.4
+   },
+   "front": {
+    "n": 200,
+    "open": 0,
+    "win_rate": 0.61,
+    "wilson": 0.5409,
+    "avg_ret": 5.54,
+    "pf": 2.12,
+    "avg_days": 39.8
+   },
+   "back": {
+    "n": 193,
+    "open": 5,
+    "win_rate": 0.5648,
+    "wilson": 0.4942,
+    "avg_ret": 5.58,
+    "pf": 1.88,
+    "avg_days": 26.9
+   },
+   "score": 5.9582,
+   "n_picked": 398
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP15_SL12",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利15%/停損12%",
+   "full": {
+    "n": 832,
+    "open": 13,
+    "win_rate": 0.613,
+    "wilson": 0.5794,
+    "avg_ret": 5.03,
+    "pf": 2.04,
+    "avg_days": 28.4
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6628,
+    "wilson": 0.6166,
+    "avg_ret": 5.86,
+    "pf": 2.46,
+    "avg_days": 34.7
+   },
+   "back": {
+    "n": 405,
+    "open": 13,
+    "win_rate": 0.5605,
+    "wilson": 0.5118,
+    "avg_ret": 4.16,
+    "pf": 1.73,
+    "avg_days": 21.8
+   },
+   "score": 5.9453,
+   "n_picked": 845
+  },
+  {
+   "fid": "FULL5",
+   "eid": "TP18_SL15",
+   "filter": "多頭+量+MACD+KD+大盤",
+   "exit": "停利18%/停損15%",
+   "full": {
+    "n": 322,
+    "open": 5,
+    "win_rate": 0.5901,
+    "wilson": 0.5356,
+    "avg_ret": 5.45,
+    "pf": 2.03,
+    "avg_days": 31.8
+   },
+   "front": {
+    "n": 160,
+    "open": 0,
+    "win_rate": 0.5687,
+    "wilson": 0.4913,
+    "avg_ret": 4.49,
+    "pf": 1.89,
+    "avg_days": 38.3
+   },
+   "back": {
+    "n": 162,
+    "open": 5,
+    "win_rate": 0.6111,
+    "wilson": 0.5343,
+    "avg_ret": 6.4,
+    "pf": 2.15,
+    "avg_days": 25.3
+   },
+   "score": 5.9256,
+   "n_picked": 327
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP18_SL12",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利18%/停損12%",
+   "full": {
+    "n": 832,
+    "open": 13,
+    "win_rate": 0.5829,
+    "wilson": 0.5491,
+    "avg_ret": 5.27,
+    "pf": 2.02,
+    "avg_days": 30.6
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6183,
+    "wilson": 0.5713,
+    "avg_ret": 5.63,
+    "pf": 2.26,
+    "avg_days": 37.5
+   },
+   "back": {
+    "n": 405,
+    "open": 13,
+    "win_rate": 0.5457,
+    "wilson": 0.497,
+    "avg_ret": 4.89,
+    "pf": 1.83,
+    "avg_days": 23.4
+   },
+   "score": 5.8454,
+   "n_picked": 845
+  },
+  {
+   "fid": "BREAK_VOL",
+   "eid": "TP20_SL10",
+   "filter": "突破20日高+量比≥1.5",
+   "exit": "停利20%/停損10%",
+   "full": {
+    "n": 323,
+    "open": 0,
+    "win_rate": 0.5139,
+    "wilson": 0.4596,
+    "avg_ret": 5.65,
+    "pf": 2.21,
+    "avg_days": 30.0
+   },
+   "front": {
+    "n": 183,
+    "open": 0,
+    "win_rate": 0.4754,
+    "wilson": 0.4043,
+    "avg_ret": 4.02,
+    "pf": 1.84,
+    "avg_days": 35.8
+   },
+   "back": {
+    "n": 140,
+    "open": 0,
+    "win_rate": 0.5643,
+    "wilson": 0.4815,
+    "avg_ret": 7.76,
+    "pf": 2.71,
+    "avg_days": 22.3
+   },
+   "score": 5.7388,
+   "n_picked": 323
+  },
+  {
+   "fid": "MA20UP",
+   "eid": "TRAIL15",
+   "filter": "站上MA20且MA20上揚",
+   "exit": "追蹤停損15%",
+   "full": {
+    "n": 1402,
+    "open": 24,
+    "win_rate": 0.4743,
+    "wilson": 0.4483,
+    "avg_ret": 6.13,
+    "pf": 2.02,
+    "avg_days": 41.3
+   },
+   "front": {
+    "n": 743,
+    "open": 0,
+    "win_rate": 0.5451,
+    "wilson": 0.5091,
+    "avg_ret": 7.7,
+    "pf": 2.64,
+    "avg_days": 47.1
+   },
+   "back": {
+    "n": 659,
+    "open": 24,
+    "win_rate": 0.3945,
+    "wilson": 0.3579,
+    "avg_ret": 4.36,
+    "pf": 1.58,
+    "avg_days": 34.7
+   },
+   "score": 5.5511,
+   "n_picked": 1426
+  },
+  {
+   "fid": "MASTACK",
+   "eid": "TP20_SL15",
+   "filter": "多頭排列(C>MA5>MA20>MA60)",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 998,
+    "open": 17,
+    "win_rate": 0.5862,
+    "wilson": 0.5553,
+    "avg_ret": 5.17,
+    "pf": 1.91,
+    "avg_days": 34.9
+   },
+   "front": {
+    "n": 515,
+    "open": 0,
+    "win_rate": 0.6408,
+    "wilson": 0.5984,
+    "avg_ret": 6.04,
+    "pf": 2.33,
+    "avg_days": 41.0
+   },
+   "back": {
+    "n": 483,
+    "open": 17,
+    "win_rate": 0.528,
+    "wilson": 0.4834,
+    "avg_ret": 4.23,
+    "pf": 1.62,
+    "avg_days": 28.3
+   },
+   "score": 5.4834,
+   "n_picked": 1015
+  },
+  {
+   "fid": "MASTACK_VOL",
+   "eid": "TP18_SL15",
+   "filter": "多頭排列+量比≥1.2",
+   "exit": "停利18%/停損15%",
+   "full": {
+    "n": 428,
+    "open": 9,
+    "win_rate": 0.5958,
+    "wilson": 0.5486,
+    "avg_ret": 5.07,
+    "pf": 1.93,
+    "avg_days": 32.4
+   },
+   "front": {
+    "n": 215,
+    "open": 0,
+    "win_rate": 0.6093,
+    "wilson": 0.5427,
+    "avg_ret": 4.86,
+    "pf": 2.01,
+    "avg_days": 39.4
+   },
+   "back": {
+    "n": 213,
+    "open": 9,
+    "win_rate": 0.5822,
+    "wilson": 0.515,
+    "avg_ret": 5.27,
+    "pf": 1.87,
+    "avg_days": 25.4
+   },
+   "score": 5.3681,
+   "n_picked": 437
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP20_SL10",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利20%/停損10%",
+   "full": {
+    "n": 833,
+    "open": 12,
+    "win_rate": 0.5378,
+    "wilson": 0.5039,
+    "avg_ret": 5.24,
+    "pf": 2.02,
+    "avg_days": 28.7
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.5691,
+    "wilson": 0.5217,
+    "avg_ret": 5.29,
+    "pf": 2.13,
+    "avg_days": 35.4
+   },
+   "back": {
+    "n": 406,
+    "open": 12,
+    "win_rate": 0.5049,
+    "wilson": 0.4565,
+    "avg_ret": 5.17,
+    "pf": 1.92,
+    "avg_days": 21.7
+   },
+   "score": 5.3337,
+   "n_picked": 845
+  },
+  {
+   "fid": "TRIPLE",
+   "eid": "TP18_SL15",
+   "filter": "多頭+量比1.2+MACD增長",
+   "exit": "停利18%/停損15%",
+   "full": {
+    "n": 393,
+    "open": 5,
+    "win_rate": 0.5954,
+    "wilson": 0.5462,
+    "avg_ret": 5.08,
+    "pf": 1.92,
+    "avg_days": 32.5
+   },
+   "front": {
+    "n": 200,
+    "open": 0,
+    "win_rate": 0.615,
+    "wilson": 0.546,
+    "avg_ret": 5.08,
+    "pf": 2.04,
+    "avg_days": 38.9
+   },
+   "back": {
+    "n": 193,
+    "open": 5,
+    "win_rate": 0.5751,
+    "wilson": 0.5046,
+    "avg_ret": 5.08,
+    "pf": 1.82,
+    "avg_days": 25.9
+   },
+   "score": 5.3274,
+   "n_picked": 398
+  },
+  {
+   "fid": "SECTOR",
+   "eid": "TP20_SL15",
+   "filter": "強勢族群",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 1368,
+    "open": 17,
+    "win_rate": 0.5716,
+    "wilson": 0.5452,
+    "avg_ret": 5.16,
+    "pf": 1.89,
+    "avg_days": 35.0
+   },
+   "front": {
+    "n": 717,
+    "open": 0,
+    "win_rate": 0.5914,
+    "wilson": 0.555,
+    "avg_ret": 5.21,
+    "pf": 2.0,
+    "avg_days": 41.1
+   },
+   "back": {
+    "n": 651,
+    "open": 17,
+    "win_rate": 0.5499,
+    "wilson": 0.5115,
+    "avg_ret": 5.1,
+    "pf": 1.79,
+    "avg_days": 28.2
+   },
+   "score": 5.317,
+   "n_picked": 1385
+  },
+  {
+   "fid": "FULL5",
+   "eid": "TP20_SL12",
+   "filter": "多頭+量+MACD+KD+大盤",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 325,
+    "open": 2,
+    "win_rate": 0.5446,
+    "wilson": 0.4903,
+    "avg_ret": 5.38,
+    "pf": 1.99,
+    "avg_days": 29.7
+   },
+   "front": {
+    "n": 160,
+    "open": 0,
+    "win_rate": 0.5312,
+    "wilson": 0.4541,
+    "avg_ret": 4.58,
+    "pf": 1.89,
+    "avg_days": 36.3
+   },
+   "back": {
+    "n": 165,
+    "open": 2,
+    "win_rate": 0.5576,
+    "wilson": 0.4813,
+    "avg_ret": 6.15,
+    "pf": 2.08,
+    "avg_days": 23.3
+   },
+   "score": 5.2492,
+   "n_picked": 327
+  },
+  {
+   "fid": "MASTACK_VOL",
+   "eid": "TP20_SL12",
+   "filter": "多頭排列+量比≥1.2",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 432,
+    "open": 5,
+    "win_rate": 0.5579,
+    "wilson": 0.5107,
+    "avg_ret": 5.16,
+    "pf": 1.95,
+    "avg_days": 30.7
+   },
+   "front": {
+    "n": 215,
+    "open": 0,
+    "win_rate": 0.5814,
+    "wilson": 0.5146,
+    "avg_ret": 4.99,
+    "pf": 2.03,
+    "avg_days": 37.8
+   },
+   "back": {
+    "n": 217,
+    "open": 5,
+    "win_rate": 0.5346,
+    "wilson": 0.4682,
+    "avg_ret": 5.33,
+    "pf": 1.89,
+    "avg_days": 23.7
+   },
+   "score": 5.1387,
+   "n_picked": 437
+  },
+  {
+   "fid": "BREAK20",
+   "eid": "TP20_SL15",
+   "filter": "創20日收盤新高",
+   "exit": "停利20%/停損15%",
+   "full": {
+    "n": 622,
+    "open": 2,
+    "win_rate": 0.5547,
+    "wilson": 0.5154,
+    "avg_ret": 5.01,
+    "pf": 1.96,
+    "avg_days": 37.0
+   },
+   "front": {
+    "n": 318,
+    "open": 0,
+    "win_rate": 0.5566,
+    "wilson": 0.5016,
+    "avg_ret": 5.12,
+    "pf": 2.15,
+    "avg_days": 42.2
+   },
+   "back": {
+    "n": 304,
+    "open": 2,
+    "win_rate": 0.5526,
+    "wilson": 0.4964,
+    "avg_ret": 4.9,
+    "pf": 1.81,
+    "avg_days": 31.5
+   },
+   "score": 5.061,
+   "n_picked": 624
+  },
+  {
+   "fid": "MASTACK",
+   "eid": "TP20_SL12",
+   "filter": "多頭排列(C>MA5>MA20>MA60)",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 1002,
+    "open": 13,
+    "win_rate": 0.5609,
+    "wilson": 0.53,
+    "avg_ret": 4.97,
+    "pf": 1.91,
+    "avg_days": 32.0
+   },
+   "front": {
+    "n": 515,
+    "open": 0,
+    "win_rate": 0.6214,
+    "wilson": 0.5787,
+    "avg_ret": 5.87,
+    "pf": 2.31,
+    "avg_days": 38.9
+   },
+   "back": {
+    "n": 487,
+    "open": 13,
+    "win_rate": 0.4969,
+    "wilson": 0.4527,
+    "avg_ret": 4.01,
+    "pf": 1.61,
+    "avg_days": 24.7
+   },
+   "score": 5.0311,
+   "n_picked": 1015
+  },
+  {
+   "fid": "FULL5",
+   "eid": "TP15_SL15",
+   "filter": "多頭+量+MACD+KD+大盤",
+   "exit": "停利15%/停損15%",
+   "full": {
+    "n": 322,
+    "open": 5,
+    "win_rate": 0.6087,
+    "wilson": 0.5544,
+    "avg_ret": 4.69,
+    "pf": 1.92,
+    "avg_days": 30.0
+   },
+   "front": {
+    "n": 160,
+    "open": 0,
+    "win_rate": 0.6,
+    "wilson": 0.5226,
+    "avg_ret": 4.37,
+    "pf": 1.94,
+    "avg_days": 36.1
+   },
+   "back": {
+    "n": 162,
+    "open": 5,
+    "win_rate": 0.6173,
+    "wilson": 0.5405,
+    "avg_ret": 5.0,
+    "pf": 1.92,
+    "avg_days": 23.9
+   },
+   "score": 4.9923,
+   "n_picked": 327
+  },
+  {
+   "fid": "BREAK_VOL",
+   "eid": "TP20_SL12",
+   "filter": "突破20日高+量比≥1.5",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 323,
+    "open": 0,
+    "win_rate": 0.5232,
+    "wilson": 0.4688,
+    "avg_ret": 5.27,
+    "pf": 2.02,
+    "avg_days": 32.6
+   },
+   "front": {
+    "n": 183,
+    "open": 0,
+    "win_rate": 0.4918,
+    "wilson": 0.4203,
+    "avg_ret": 3.99,
+    "pf": 1.79,
+    "avg_days": 38.5
+   },
+   "back": {
+    "n": 140,
+    "open": 0,
+    "win_rate": 0.5643,
+    "wilson": 0.4815,
+    "avg_ret": 6.95,
+    "pf": 2.3,
+    "avg_days": 24.8
+   },
+   "score": 4.9906,
+   "n_picked": 323
+  },
+  {
+   "fid": "MASTACK",
+   "eid": "TP15_SL15",
+   "filter": "多頭排列(C>MA5>MA20>MA60)",
+   "exit": "停利15%/停損15%",
+   "full": {
+    "n": 998,
+    "open": 17,
+    "win_rate": 0.6212,
+    "wilson": 0.5907,
+    "avg_ret": 4.53,
+    "pf": 1.86,
+    "avg_days": 31.3
+   },
+   "front": {
+    "n": 515,
+    "open": 0,
+    "win_rate": 0.6835,
+    "wilson": 0.6421,
+    "avg_ret": 5.94,
+    "pf": 2.48,
+    "avg_days": 36.9
+   },
+   "back": {
+    "n": 483,
+    "open": 17,
+    "win_rate": 0.5549,
+    "wilson": 0.5103,
+    "avg_ret": 3.02,
+    "pf": 1.46,
+    "avg_days": 25.2
+   },
+   "score": 4.9771,
+   "n_picked": 1015
+  },
+  {
+   "fid": "TRIPLE",
+   "eid": "TP20_SL12",
+   "filter": "多頭+量比1.2+MACD增長",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 396,
+    "open": 2,
+    "win_rate": 0.5556,
+    "wilson": 0.5063,
+    "avg_ret": 5.11,
+    "pf": 1.92,
+    "avg_days": 30.7
+   },
+   "front": {
+    "n": 200,
+    "open": 0,
+    "win_rate": 0.585,
+    "wilson": 0.5157,
+    "avg_ret": 5.19,
+    "pf": 2.04,
+    "avg_days": 37.2
+   },
+   "back": {
+    "n": 196,
+    "open": 2,
+    "win_rate": 0.5255,
+    "wilson": 0.4558,
+    "avg_ret": 5.03,
+    "pf": 1.82,
+    "avg_days": 24.0
+   },
+   "score": 4.9674,
+   "n_picked": 398
+  },
+  {
+   "fid": "MASTACK",
+   "eid": "TP18_SL15",
+   "filter": "多頭排列(C>MA5>MA20>MA60)",
+   "exit": "停利18%/停損15%",
+   "full": {
+    "n": 998,
+    "open": 17,
+    "win_rate": 0.5922,
+    "wilson": 0.5614,
+    "avg_ret": 4.75,
+    "pf": 1.85,
+    "avg_days": 33.7
+   },
+   "front": {
+    "n": 515,
+    "open": 0,
+    "win_rate": 0.6466,
+    "wilson": 0.6044,
+    "avg_ret": 5.84,
+    "pf": 2.31,
+    "avg_days": 39.7
+   },
+   "back": {
+    "n": 483,
+    "open": 17,
+    "win_rate": 0.5342,
+    "wilson": 0.4896,
+    "avg_ret": 3.59,
+    "pf": 1.53,
+    "avg_days": 27.2
+   },
+   "score": 4.9333,
+   "n_picked": 1015
+  },
+  {
+   "fid": "BREAK20",
+   "eid": "TP20_SL12",
+   "filter": "創20日收盤新高",
+   "exit": "停利20%/停損12%",
+   "full": {
+    "n": 623,
+    "open": 1,
+    "win_rate": 0.5361,
+    "wilson": 0.4969,
+    "avg_ret": 4.98,
+    "pf": 1.99,
+    "avg_days": 34.5
+   },
+   "front": {
+    "n": 318,
+    "open": 0,
+    "win_rate": 0.5503,
+    "wilson": 0.4954,
+    "avg_ret": 5.26,
+    "pf": 2.24,
+    "avg_days": 40.4
+   },
+   "back": {
+    "n": 305,
+    "open": 1,
+    "win_rate": 0.5213,
+    "wilson": 0.4653,
+    "avg_ret": 4.68,
+    "pf": 1.8,
+    "avg_days": 28.3
+   },
+   "score": 4.9244,
+   "n_picked": 624
+  }
+ ],
+ "robust_combos": [
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP15_SL15",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利15%/停損15%",
+   "full": {
+    "n": 828,
+    "open": 17,
+    "win_rate": 0.6401,
+    "wilson": 0.6068,
+    "avg_ret": 5.35,
+    "pf": 2.08,
+    "avg_days": 31.0
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6838,
+    "wilson": 0.6383,
+    "avg_ret": 6.18,
+    "pf": 2.55,
+    "avg_days": 36.6
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5935,
+    "wilson": 0.5448,
+    "avg_ret": 4.46,
+    "pf": 1.75,
+    "avg_days": 25.0
+   },
+   "score": 6.7525,
+   "n_picked": 845
+  },
+  {
+   "fid": "REGIME_TREND",
+   "eid": "TP18_SL15",
+   "filter": "大盤多頭+多頭排列",
+   "exit": "停利18%/停損15%",
+   "full": {
+    "n": 828,
+    "open": 17,
+    "win_rate": 0.6099,
+    "wilson": 0.5762,
+    "avg_ret": 5.61,
+    "pf": 2.06,
+    "avg_days": 33.3
+   },
+   "front": {
+    "n": 427,
+    "open": 0,
+    "win_rate": 0.6393,
+    "wilson": 0.5927,
+    "avg_ret": 5.89,
+    "pf": 2.3,
+    "avg_days": 39.5
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5786,
+    "wilson": 0.5297,
+    "avg_ret": 5.31,
+    "pf": 1.87,
+    "avg_days": 26.8
+   },
+   "score": 6.6589,
+   "n_picked": 845
+  },
+  {
+   "fid": "SECTOR",
+   "eid": "TP15_SL15",
+   "filter": "強勢族群",
+   "exit": "停利15%/停損15%",
+   "full": {
+    "n": 1368,
+    "open": 17,
+    "win_rate": 0.606,
+    "wilson": 0.5798,
+    "avg_ret": 4.35,
+    "pf": 1.8,
+    "avg_days": 30.9
+   },
+   "front": {
+    "n": 717,
+    "open": 0,
+    "win_rate": 0.6318,
+    "wilson": 0.5959,
+    "avg_ret": 4.9,
+    "pf": 2.04,
+    "avg_days": 36.5
+   },
+   "back": {
+    "n": 651,
+    "open": 17,
+    "win_rate": 0.5776,
+    "wilson": 0.5393,
+    "avg_ret": 3.74,
+    "pf": 1.6,
+    "avg_days": 24.8
+   },
+   "score": 4.5398,
+   "n_picked": 1385
+  }
+ ]
+}

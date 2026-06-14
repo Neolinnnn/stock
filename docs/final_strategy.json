@@ -1,0 +1,178 @@
+{
+ "generated_at": "2026-06-14 21:20",
+ "wf_split": "20240626",
+ "total_signals": 3007,
+ "gated_signals": 844,
+ "scenarios": {
+  "A 現行：全BUY × TP15SL15": {
+   "full": {
+    "n": 2976,
+    "open": 31,
+    "win_rate": 0.5739,
+    "wilson": 0.5561,
+    "avg_ret": 3.41,
+    "med_ret": 6.26,
+    "pf": 1.62,
+    "avg_days": 34.0,
+    "best": 28.95,
+    "worst": -23.3,
+    "sum_ret": 10154.7
+   },
+   "front": {
+    "n": 1509,
+    "open": 0,
+    "win_rate": 0.6342,
+    "wilson": 0.6096,
+    "avg_ret": 5.46,
+    "med_ret": 10.53,
+    "pf": 2.38,
+    "avg_days": 38.4,
+    "best": 28.95,
+    "worst": -23.3,
+    "sum_ret": 8234.1
+   },
+   "back": {
+    "n": 1467,
+    "open": 31,
+    "win_rate": 0.5119,
+    "wilson": 0.4864,
+    "avg_ret": 1.31,
+    "med_ret": 1.59,
+    "pf": 1.18,
+    "avg_days": 29.5,
+    "best": 26.25,
+    "worst": -23.1,
+    "sum_ret": 1920.6
+   }
+  },
+  "B 閘門 × TP15SL15": {
+   "full": {
+    "n": 827,
+    "open": 17,
+    "win_rate": 0.6421,
+    "wilson": 0.6088,
+    "avg_ret": 5.6,
+    "med_ret": 15.2,
+    "pf": 2.19,
+    "avg_days": 31.0,
+    "best": 26.02,
+    "worst": -21.45,
+    "sum_ret": 4635.0
+   },
+   "front": {
+    "n": 426,
+    "open": 0,
+    "win_rate": 0.6878,
+    "wilson": 0.6423,
+    "avg_ret": 6.68,
+    "med_ret": 15.11,
+    "pf": 2.9,
+    "avg_days": 36.6,
+    "best": 26.02,
+    "worst": -20.66,
+    "sum_ret": 2845.5
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5935,
+    "wilson": 0.5448,
+    "avg_ret": 4.46,
+    "med_ret": 15.38,
+    "pf": 1.75,
+    "avg_days": 25.0,
+    "best": 25.47,
+    "worst": -21.45,
+    "sum_ret": 1789.5
+   }
+  },
+  "C 閘門 × HYBRID": {
+   "full": {
+    "n": 827,
+    "open": 17,
+    "win_rate": 0.6312,
+    "wilson": 0.5978,
+    "avg_ret": 8.62,
+    "med_ret": 7.26,
+    "pf": 2.83,
+    "avg_days": 36.2,
+    "best": 140.32,
+    "worst": -21.45,
+    "sum_ret": 7132.5
+   },
+   "front": {
+    "n": 426,
+    "open": 0,
+    "win_rate": 0.6784,
+    "wilson": 0.6326,
+    "avg_ret": 9.9,
+    "med_ret": 8.12,
+    "pf": 3.8,
+    "avg_days": 41.8,
+    "best": 111.38,
+    "worst": -20.66,
+    "sum_ret": 4219.2
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.581,
+    "wilson": 0.5322,
+    "avg_ret": 7.27,
+    "med_ret": 5.87,
+    "pf": 2.21,
+    "avg_days": 30.3,
+    "best": 140.32,
+    "worst": -21.45,
+    "sum_ret": 2913.3
+   }
+  },
+  "D 閘門 × 自適應(最終)": {
+   "full": {
+    "n": 827,
+    "open": 17,
+    "win_rate": 0.6385,
+    "wilson": 0.6051,
+    "avg_ret": 8.02,
+    "med_ret": 9.04,
+    "pf": 2.7,
+    "avg_days": 34.6,
+    "best": 140.32,
+    "worst": -21.45,
+    "sum_ret": 6633.8
+   },
+   "front": {
+    "n": 426,
+    "open": 0,
+    "win_rate": 0.6854,
+    "wilson": 0.6399,
+    "avg_ret": 8.7,
+    "med_ret": 11.56,
+    "pf": 3.47,
+    "avg_days": 39.7,
+    "best": 89.27,
+    "worst": -20.66,
+    "sum_ret": 3705.4
+   },
+   "back": {
+    "n": 401,
+    "open": 17,
+    "win_rate": 0.5885,
+    "wilson": 0.5397,
+    "avg_ret": 7.3,
+    "med_ret": 6.9,
+    "pf": 2.22,
+    "avg_days": 29.2,
+    "best": 140.32,
+    "worst": -21.45,
+    "sum_ret": 2928.4
+   }
+  }
+ },
+ "gate_regime_dist": {
+  "暖身": 52,
+  "上漲期": 553,
+  "停滯期": 232,
+  "修正期": 7
+ }
+}

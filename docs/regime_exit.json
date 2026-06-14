@@ -1,0 +1,219 @@
+{
+ "generated_at": "2026-06-14 20:39",
+ "regime_days": {
+  "上漲期": 428,
+  "停滯期": 217,
+  "修正期": 56,
+  "下跌期": 26
+ },
+ "overall": {
+  "TP15SL15": {
+   "n": 3013,
+   "open": 31,
+   "win_rate": 0.5738,
+   "wilson": 0.5561,
+   "avg_ret": 3.38,
+   "med_ret": 6.14,
+   "pf": 1.61,
+   "avg_days": 34.1,
+   "best": 28.95,
+   "worst": -23.3
+  },
+  "TRAIL15": {
+   "n": 2997,
+   "open": 47,
+   "win_rate": 0.5035,
+   "wilson": 0.4856,
+   "avg_ret": 7.23,
+   "med_ret": 0.36,
+   "pf": 2.32,
+   "avg_days": 42.8,
+   "best": 257.02,
+   "worst": -27.66
+  },
+  "HYBRID": {
+   "n": 3013,
+   "open": 31,
+   "win_rate": 0.5679,
+   "wilson": 0.5501,
+   "avg_ret": 5.39,
+   "med_ret": 4.46,
+   "pf": 1.98,
+   "avg_days": 38.4,
+   "best": 143.96,
+   "worst": -23.3
+  }
+ },
+ "cross": {
+  "上漲期": {
+   "n_signals": 1471,
+   "exits": {
+    "TP15SL15": {
+     "n": 1440,
+     "open": 31,
+     "win_rate": 0.6104,
+     "wilson": 0.585,
+     "avg_ret": 4.96,
+     "med_ret": 15.18,
+     "pf": 1.97,
+     "avg_days": 30.3,
+     "best": 26.25,
+     "worst": -23.3
+    },
+    "TRAIL15": {
+     "n": 1424,
+     "open": 47,
+     "win_rate": 0.533,
+     "wilson": 0.507,
+     "avg_ret": 11.31,
+     "med_ret": 1.91,
+     "pf": 3.31,
+     "avg_days": 40.1,
+     "best": 257.02,
+     "worst": -26.57
+    },
+    "HYBRID": {
+     "n": 1440,
+     "open": 31,
+     "win_rate": 0.6049,
+     "wilson": 0.5794,
+     "avg_ret": 8.48,
+     "med_ret": 7.14,
+     "pf": 2.66,
+     "avg_days": 35.7,
+     "best": 143.96,
+     "worst": -23.3
+    }
+   }
+  },
+  "停滯期": {
+   "n_signals": 1164,
+   "exits": {
+    "TP15SL15": {
+     "n": 1164,
+     "open": 0,
+     "win_rate": 0.5301,
+     "wilson": 0.5013,
+     "avg_ret": 1.77,
+     "med_ret": 1.81,
+     "pf": 1.3,
+     "avg_days": 37.9,
+     "best": 28.95,
+     "worst": -23.12
+    },
+    "TRAIL15": {
+     "n": 1164,
+     "open": 0,
+     "win_rate": 0.4665,
+     "wilson": 0.438,
+     "avg_ret": 2.86,
+     "med_ret": -1.11,
+     "pf": 1.47,
+     "avg_days": 45.7,
+     "best": 166.29,
+     "worst": -27.66
+    },
+    "HYBRID": {
+     "n": 1164,
+     "open": 0,
+     "win_rate": 0.5284,
+     "wilson": 0.4996,
+     "avg_ret": 2.59,
+     "med_ret": 1.69,
+     "pf": 1.44,
+     "avg_days": 41.3,
+     "best": 94.32,
+     "worst": -23.12
+    }
+   }
+  },
+  "修正期": {
+   "n_signals": 232,
+   "exits": {
+    "TP15SL15": {
+     "n": 232,
+     "open": 0,
+     "win_rate": 0.4569,
+     "wilson": 0.394,
+     "avg_ret": -1.27,
+     "med_ret": -3.97,
+     "pf": 0.83,
+     "avg_days": 37.3,
+     "best": 25.13,
+     "worst": -20.44
+    },
+    "TRAIL15": {
+     "n": 232,
+     "open": 0,
+     "win_rate": 0.4224,
+     "wilson": 0.3606,
+     "avg_ret": 0.3,
+     "med_ret": -4.4,
+     "pf": 1.04,
+     "avg_days": 42.5,
+     "best": 68.39,
+     "worst": -21.82
+    },
+    "HYBRID": {
+     "n": 232,
+     "open": 0,
+     "win_rate": 0.4483,
+     "wilson": 0.3856,
+     "avg_ret": -1.54,
+     "med_ret": -3.97,
+     "pf": 0.79,
+     "avg_days": 40.2,
+     "best": 53.74,
+     "worst": -20.44
+    }
+   }
+  },
+  "下跌期": {
+   "n_signals": 52,
+   "exits": {
+    "TP15SL15": {
+     "n": 52,
+     "open": 0,
+     "win_rate": 0.8077,
+     "wilson": 0.681,
+     "avg_ret": 11.23,
+     "med_ret": 16.5,
+     "pf": 5.71,
+     "avg_days": 25.0,
+     "best": 21.27,
+     "worst": -18.98
+    },
+    "TRAIL15": {
+     "n": 52,
+     "open": 0,
+     "win_rate": 0.7115,
+     "wilson": 0.5773,
+     "avg_ret": 16.63,
+     "med_ret": 12.73,
+     "pf": 6.92,
+     "avg_days": 48.5,
+     "best": 67.57,
+     "worst": -18.25
+    },
+    "HYBRID": {
+     "n": 52,
+     "open": 0,
+     "win_rate": 0.7308,
+     "wilson": 0.5975,
+     "avg_ret": 6.99,
+     "med_ret": 11.69,
+     "pf": 3.74,
+     "avg_days": 29.6,
+     "best": 32.77,
+     "worst": -18.98
+    }
+   }
+  }
+ },
+ "hybrid_params": {
+  "profit_trigger": 0.15,
+  "profit_floor": 0.07,
+  "phase1_sl": 0.15,
+  "phase2_timeout": 25
+ }
+}
