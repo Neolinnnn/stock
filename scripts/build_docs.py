@@ -16,9 +16,8 @@ import math
 import os
 import time
 from pathlib import Path
-import sys
 
-sys.path.insert(0, os.path.dirname(__file__))
+from datafeed import finmind_fetch
 
 try:
     import pandas as pd
@@ -76,46 +75,7 @@ def _sanitize(obj):
 
 
 # ── FinMind helpers ─────────────────────────────────────────────────────────
-
-_BD_TOKENS: list = []
-_bd_token_idx = 0
-
-
-def _collect_bd_tokens():
-    global _BD_TOKENS
-    if _BD_TOKENS:
-        return
-    tokens = []
-    for key in ['FINMIND_TOKEN'] + [f'FINMIND_TOKEN_{i}' for i in range(1, 5)]:
-        t = os.environ.get(key, '')
-        if t and t not in tokens:
-            tokens.append(t)
-    _BD_TOKENS = tokens
-    if tokens:
-        print(f'[FinMind] build_docs 載入 {len(tokens)} 組 token')
-
-
-def _get_dl():
-    _collect_bd_tokens()
-    from FinMind.data import DataLoader
-    dl = DataLoader()
-    if not _BD_TOKENS:
-        return dl
-    token = _BD_TOKENS[_bd_token_idx % len(_BD_TOKENS)]
-    try:
-        dl.login_by_token(api_token=token)
-    except Exception:
-        pass
-    return dl
-
-
-def _rotate_dl():
-    global _bd_token_idx
-    _collect_bd_tokens()
-    if len(_BD_TOKENS) > 1:
-        _bd_token_idx = (_bd_token_idx + 1) % len(_BD_TOKENS)
-        print(f'  [FinMind] build_docs 切換至 token[{_bd_token_idx}]')
-    return _get_dl()
+# token 輪替委派 datafeed.finmind_fetch（不在此重複實作）
 
 
 # ── Technical indicator computation ─────────────────────────────────────────
@@ -675,14 +635,6 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
                         'id': sid, 'name': st['name'], 'sector': sector
                     }
 
-    # 初始化 FinMind
-    try:
-        dl = _get_dl()
-        finmind_ok = True
-    except Exception as e:
-        print(f'[WARN] FinMind 初始化失敗：{e}  → 跳過 OHLCV 抓取')
-        finmind_ok = False
-
     from datetime import datetime, timedelta
     end_date   = datetime.now().strftime('%Y-%m-%d')
     start_date = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
@@ -692,26 +644,12 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
     for sid, info in stock_info_map.items():
         try:
             _build_single_stock(
-                sid, info, dl if finmind_ok else None,
-                stocks_dir, start_date, end_date, chip_start,
+                sid, info, stocks_dir, start_date, end_date, chip_start,
             )
             ok_count += 1
             time.sleep(0.3)   # 避免 API 頻率限制
         except Exception as e:
-            msg = str(e).lower()
-            if ('upper limit' in msg or 'quota' in msg) and len(_BD_TOKENS) > 1:
-                dl = _rotate_dl()
-                try:
-                    _build_single_stock(
-                        sid, info, dl,
-                        stocks_dir, start_date, end_date, chip_start,
-                    )
-                    ok_count += 1
-                    time.sleep(0.3)
-                except Exception as e2:
-                    print(f'  [WARN] {sid} {info["name"]}: {e2}')
-            else:
-                print(f'  [WARN] {sid} {info["name"]}: {e}')
+            print(f'  [WARN] {sid} {info["name"]}: {e}')
 
     # stocks_index.json
     index = [{'id': v['id'], 'name': v['name'], 'sector': v['sector']}
@@ -723,26 +661,21 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
     print(f'stocks/ 已更新：{ok_count}/{len(stock_info_map)} 檔個股（豐富格式）')
 
 
-def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_start):
+def _build_single_stock(sid, info, stocks_dir, start_date, end_date, chip_start):
     from datetime import datetime
 
     # ── 抓 OHLCV ──────────────────────────────────────────────────────────────
-    if dl is not None:
-        df_raw = dl.taiwan_stock_daily(
-            stock_id=sid, start_date=start_date, end_date=end_date
-        )
-        if df_raw.empty:
-            print(f'  [SKIP] {sid} 無資料')
-            return
-        df_raw = df_raw.sort_values('date').rename(
-            columns={'max': 'high', 'min': 'low', 'Trading_Volume': 'volume'}
-        )
-        for col in ['open', 'high', 'low', 'close', 'volume']:
-            df_raw[col] = pd.to_numeric(df_raw[col], errors='coerce')
-        df_raw = df_raw.dropna(subset=['close']).reset_index(drop=True)
-    else:
-        print(f'  [SKIP] {sid} — 無 FinMind 連線')
+    df_raw = finmind_fetch('taiwan_stock_daily',
+                           stock_id=sid, start_date=start_date, end_date=end_date)
+    if df_raw is None or df_raw.empty:
+        print(f'  [SKIP] {sid} 無資料')
         return
+    df_raw = df_raw.sort_values('date').rename(
+        columns={'max': 'high', 'min': 'low', 'Trading_Volume': 'volume'}
+    )
+    for col in ['open', 'high', 'low', 'close', 'volume']:
+        df_raw[col] = pd.to_numeric(df_raw[col], errors='coerce')
+    df_raw = df_raw.dropna(subset=['close']).reset_index(drop=True)
 
     # ── 計算指標 ──────────────────────────────────────────────────────────────
     if len(df_raw) < 26:
@@ -752,9 +685,8 @@ def _build_single_stock(sid, info, dl, stocks_dir, start_date, end_date, chip_st
     # ── 抓籌碼 ────────────────────────────────────────────────────────────────
     chip_data = {}
     try:
-        chip_raw = dl.taiwan_stock_institutional_investors(
-            stock_id=sid, start_date=chip_start, end_date=end_date
-        )
+        chip_raw = finmind_fetch('taiwan_stock_institutional_investors',
+                                 stock_id=sid, start_date=chip_start, end_date=end_date)
         chip_data = _chip_aggregate(chip_raw)
     except Exception:
         pass

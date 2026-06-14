@@ -205,8 +205,6 @@ def run_weekly_summary(as_of=None, upload_notion=True):
     # Notion 上傳
     if upload_notion:
         try:
-            import sys, os
-            sys.path.insert(0, os.path.dirname(__file__))
             from notion_upload import upload_weekly_report
             page_id = upload_weekly_report(summary)
             print(f"   Notion：{page_id}")
