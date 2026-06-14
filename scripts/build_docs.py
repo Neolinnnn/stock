@@ -538,6 +538,35 @@ def build_daily_payload(summary):
         'stocks':  stocks,
         'mainForce': main_force_sorted,
         'signalFlips': build_signal_flips(summary, qualified, stocks),
+        'positions': _build_positions_payload(summary.get('positions')),
+    }
+
+
+def _build_positions_payload(pos):
+    """將 summary['positions'] 轉成前端用的精簡結構（HYBRID 策略區塊）。"""
+    if not pos:
+        return None
+    return {
+        'taiexBull':  pos.get('taiex_bull'),
+        'taiexClose': pos.get('taiex_close'),
+        'taiexMa60':  pos.get('taiex_ma60'),
+        'gateBuys': [
+            {'id': g['id'], 'name': g.get('name', ''),
+             'sector': g.get('sector', ''), 'price': _nan_to_none(g.get('price'))}
+            for g in pos.get('gate_buys', [])
+        ],
+        'newExits': [
+            {'id': e['id'], 'name': e.get('name', ''),
+             'returnPct': e.get('return_pct'), 'reason': e.get('exit_reason'),
+             'holdingDays': e.get('holding_days')}
+            for e in pos.get('new_exits', [])
+        ],
+        'holding': [
+            {'id': h['id'], 'name': h.get('name', ''),
+             'entryPrice': _nan_to_none(h.get('entry_price')),
+             'phase': h.get('phase')}
+            for h in pos.get('holding', [])
+        ],
     }
 
 
