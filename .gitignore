@@ -10,3 +10,6 @@ google_service_account.json
 github-repos/
 data/cache/
 price_cache/
+
+# 回測快取（可由 FinMind 重新下載，不進版控）
+backtest_cache/

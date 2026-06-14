@@ -243,6 +243,25 @@ def fetch_market_overview():
     return overview
 
 
+def fetch_taiex_ma60():
+    """抓 TAIEX 近 ~130 日，回傳 (收盤, MA60, 是否站上 MA60)。
+
+    進場閘門用。資料不足時預設多頭（與回測 build_features 一致），避免單次
+    資料異常就把當日所有閘門 BUY 全擋掉。
+    """
+    start = (datetime.now() - timedelta(days=130)).strftime('%Y-%m-%d')
+    try:
+        df = _finmind_fetch('taiwan_stock_daily', stock_id='TAIEX', start_date=start)
+        if df is None or len(df) < 60:
+            return None, None, True
+        closes = [float(x) for x in df['close'].tolist()]
+        cur  = closes[-1]
+        ma60 = sum(closes[-60:]) / 60
+        return round(cur, 2), round(ma60, 2), bool(cur > ma60)
+    except Exception:
+        return None, None, True
+
+
 def fetch_news(stock_id, stock_name, days=3):
     """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
     import urllib.request, json as _json
@@ -349,6 +368,14 @@ def scan_sector(sector_name, stocks):
             except Exception:
                 hist = None
             r = analyze_stock(sid, name, hist=hist)
+            # 補算 MA10/MA60（analyze_stock 僅提供 MA5/MA20），供進場閘門與持倉出場追蹤
+            try:
+                _p = [x for x in list(hist.price) if x is not None] if hist is not None else []
+                r['ma10'] = round(sum(_p[-10:]) / 10, 2) if len(_p) >= 10 else None
+                r['ma60'] = round(sum(_p[-60:]) / 60, 2) if len(_p) >= 60 else None
+            except Exception:
+                r['ma10'] = r.get('ma10')
+                r['ma60'] = None
             ret_20d, t_short, t_mid, t_long, atr_val, stop_price = fetch_price_stats(sid, hist=hist)
             r['ret_20d'] = ret_20d
             r['target_short'] = t_short
@@ -473,6 +500,37 @@ def run_daily_scan():
 
     # 4. 整合摘要
     summary = build_summary(today, market, all_results, chart_path)
+
+    # 4.5 持倉追蹤 + 進場閘門（HYBRID 出場）
+    try:
+        from position_tracker import passes_gate, update_positions
+        taiex_close, taiex_ma60, taiex_bull = fetch_taiex_ma60()
+        scan_lookup, gate_buys = {}, []
+        for sector, data in summary['sectors'].items():
+            for st in data['stocks']:
+                scan_lookup[st['id']] = {
+                    'price': st.get('price'), 'ma5': st.get('ma5'),
+                    'ma10': st.get('ma10'), 'ma20': st.get('ma20'),
+                    'ma60': st.get('ma60'),
+                }
+                if passes_gate(st, taiex_bull):
+                    gate_buys.append({'id': st['id'], 'name': st['name'],
+                                      'price': st.get('price'), 'sector': sector})
+        track = update_positions(today, scan_lookup, taiex_bull, gate_buys)
+        summary['positions'] = {
+            'taiex_bull': taiex_bull, 'taiex_close': taiex_close, 'taiex_ma60': taiex_ma60,
+            'gate_buys':   gate_buys,
+            'new_entries': track['new_entries'],
+            'new_exits':   track['new_exits'],
+            'holding':     track['holding'],
+        }
+        print(f"  🎯 持倉追蹤｜大盤{'多頭' if taiex_bull else '空頭'}"
+              f"｜閘門BUY {len(gate_buys)}｜新進場 {len(track['new_entries'])}"
+              f"｜出場 {len(track['new_exits'])}｜持有 {len(track['holding'])}")
+        for ex in track['new_exits']:
+            print(f"     ⮕ 出場 {ex['id']} {ex['name']} {ex['return_pct']:+.1f}% ({ex['exit_reason']})")
+    except Exception as e:
+        print(f"  ⚠ 持倉追蹤失敗：{e}")
 
     # 5. 輸出 JSON + Markdown
     json_path = out_dir / 'summary.json'
@@ -665,6 +723,10 @@ def build_summary(date, market, all_results, chart_path):
                     'rsi10': round(r['rsi10'], 1) if r.get('rsi10') else None,
                     'ret_20d': round(r['ret_20d'] * 100, 1) if r.get('ret_20d') else None,
                     'signal': r['signal'],
+                    'ma5':  r.get('ma5'),
+                    'ma10': r.get('ma10'),
+                    'ma20': r.get('ma20'),
+                    'ma60': r.get('ma60'),
                     'cv_sharpe': round(r['cv_sharpe'], 2),
                     'cv_win_rate': round(r['cv_win_rate'], 2),
                     'news': r.get('news', []),
@@ -763,6 +825,31 @@ def summary_to_markdown(s):
                       f"價={q['price']}  RSI={q['rsi']}  夏普={q['cv_sharpe']}\n")
     else:
         md.append("- 無\n")
+
+    # HYBRID 策略：進場閘門 + 持倉追蹤出場（回測勝率63%/avg+8.6%/PF2.83）
+    pos = s.get('positions')
+    if pos:
+        bull = '多頭' if pos.get('taiex_bull') else '空頭'
+        md.append(f"\n## HYBRID 策略訊號（大盤{bull}）\n")
+        ge = pos.get('gate_buys', [])
+        md.append(f"\n### 🟢 進場閘門 BUY（{len(ge)} 檔）— 大盤多頭+個股多頭排列\n")
+        if ge:
+            for g in ge:
+                md.append(f"- [{g.get('sector','')}] {g['id']} {g['name']}  價={g.get('price')}\n")
+        else:
+            md.append("- 無\n")
+        ex = pos.get('new_exits', [])
+        if ex:
+            md.append(f"\n### 🔴 出場訊號（{len(ex)} 檔）\n")
+            for e in ex:
+                md.append(f"- {e['id']} {e['name']}  {e['return_pct']:+.1f}%  "
+                          f"（{e['exit_reason']}，持有約{e.get('holding_days','?')}日）\n")
+        hold = pos.get('holding', [])
+        if hold:
+            md.append(f"\n### 📌 持有中（{len(hold)} 檔）\n")
+            for h in hold:
+                ph = 'Phase2(已達15%抱MA10)' if h.get('phase') == 2 else 'Phase1'
+                md.append(f"- {h['id']} {h['name']}  進場={h.get('entry_price')}  {ph}\n")
 
     md.append(f"\n## 風險警示\n")
     if s['alerts']:
