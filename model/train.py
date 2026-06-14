@@ -77,12 +77,11 @@ def build_features(df: pd.DataFrame, chip_raw: pd.DataFrame,
 
 def train(stock_ids: list[str] | None = None):
     from datetime import datetime, timedelta
-    from FinMind.data import DataLoader
+    from datafeed import finmind_fetch
 
     if stock_ids is None:
         stock_ids = ["2330", "2317", "2454", "2382", "3711"]
 
-    dl = DataLoader()
     end = datetime.now().strftime("%Y-%m-%d")
     start = (datetime.now() - timedelta(days=800)).strftime("%Y-%m-%d")
 
@@ -90,15 +89,15 @@ def train(stock_ids: list[str] | None = None):
     for sid in stock_ids:
         print(f"Fetching {sid} ...")
         try:
-            df_raw = dl.taiwan_stock_daily(stock_id=sid, start_date=start, end_date=end)
+            df_raw = finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start, end_date=end)
             if df_raw.empty:
                 print(f"  {sid}: no data, skipped"); continue
             df_raw = df_raw.sort_values("date").rename(columns={"max": "high", "min": "low", "Trading_Volume": "volume"})
             for col in ["open", "high", "low", "close", "volume"]:
                 df_raw[col] = pd.to_numeric(df_raw[col], errors="coerce")
 
-            chip_raw   = dl.taiwan_stock_institutional_investors(stock_id=sid, start_date=start, end_date=end)
-            margin_raw = dl.taiwan_stock_margin_purchase_short_sale(stock_id=sid, start_date=start, end_date=end)
+            chip_raw   = finmind_fetch('taiwan_stock_institutional_investors', stock_id=sid, start_date=start, end_date=end)
+            margin_raw = finmind_fetch('taiwan_stock_margin_purchase_short_sale', stock_id=sid, start_date=start, end_date=end)
 
             built = build_features(df_raw, chip_raw, margin_raw)
             built = built.replace([np.inf, -np.inf], np.nan).dropna()

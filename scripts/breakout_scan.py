@@ -20,7 +20,6 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / 'scripts'))
 
 from datafeed import finmind_fetch as _finmind_fetch  # 統一取數層（token 輪替）
 

@@ -14,8 +14,6 @@ import sys, os, json, math
 from datetime import datetime, timedelta
 from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(__file__))
-
 # 載入主引擎
 _main = os.path.join(os.path.dirname(__file__), 'batch_scan.py')
 with open(_main, encoding='utf-8') as f:

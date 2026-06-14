@@ -13,7 +13,6 @@ _spec    = importlib.util.spec_from_file_location('analyzer_framework', _fw_path
 _fw      = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_fw)
 
-sys.path.insert(0, str(Path(__file__).parent))
 from notion_upload import upload_analyzer_daily
 
 
