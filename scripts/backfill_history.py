@@ -167,11 +167,12 @@ def walk_forward_cv(prices, n_folds=CV_FOLDS):
 # ── 擷取股價快取 ──────────────────────────────────────────────────────────────
 
 def fetch_all_prices(dl, start_date, end_date):
-    """批次取得所有股票從 start_date 到 end_date 的日 K。
-    回傳 dict: stock_id -> DataFrame (date, close)
+    """批次取得所有股票從 start_date 到 end_date 的日 K（完整 OHLCV）。
+    回傳 dict: stock_id -> DataFrame (date, open, high, low, close, volume)
     """
     print(f"  📥 下載日 K：{start_date} ~ {end_date}（{len(ALL_STOCK_IDS)} 檔）")
     cache = {}
+    empty_cols = ['date', 'open', 'high', 'low', 'close', 'volume']
     for sid in ALL_STOCK_IDS:
         try:
             df = dl.taiwan_stock_daily(
@@ -180,14 +181,17 @@ def fetch_all_prices(dl, start_date, end_date):
                 end_date=end_date,
             )
             if df.empty:
-                cache[sid] = pd.DataFrame(columns=['date', 'close'])
+                cache[sid] = pd.DataFrame(columns=empty_cols)
                 continue
             df['date'] = pd.to_datetime(df['date']).dt.date
-            df = df.sort_values('date')[['date', 'close']].reset_index(drop=True)
+            df = df.rename(columns={'max': 'high', 'min': 'low', 'Trading_Volume': 'volume'})
+            for col in ['open', 'high', 'low', 'close', 'volume']:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            df = df.sort_values('date')[empty_cols].reset_index(drop=True)
             cache[sid] = df
         except Exception as e:
             print(f"    ⚠️  {sid} 下載失敗：{e}")
-            cache[sid] = pd.DataFrame(columns=['date', 'close'])
+            cache[sid] = pd.DataFrame(columns=empty_cols)
     return cache
 
 
@@ -223,26 +227,37 @@ def fetch_chip_history(dl, start_date, end_date):
     return chip_map
 
 
+# ── 載入 6 維評分器 ──────────────────────────────────────────────────────────
+def _load_analyzer():
+    import importlib.util
+    root = Path(__file__).resolve().parent.parent
+    src  = root / 'indicators' / 'stock_analyzer.py'
+    spec = importlib.util.spec_from_file_location('_sa_bf', src)
+    mod  = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.analyze_stock
+
+try:
+    _analyze_stock = _load_analyzer()
+    print('[backfill] 6維評分器載入成功')
+except Exception as _e:
+    _analyze_stock = None
+    print(f'[backfill] 6維評分器載入失敗：{_e}，降回 MA 交叉訊號')
+
+
 # ── 單日單股分析 ──────────────────────────────────────────────────────────────
 
 def analyze_stock_on_date(sid, name, target_date, price_df, chip_map):
-    """使用截至 target_date 的資料計算指標。"""
-    df = price_df[price_df['date'] <= target_date].tail(500)
+    """使用截至 target_date 的資料計算指標。
+    訊號邏輯：6維評分（analyze_stock）>= 60 且 MA5 > MA20（確認上升趨勢）。
+    若評分器不可用則 fallback 到 MA 交叉邏輯。
+    """
+    df = price_df[price_df['date'] <= target_date].tail(500).copy()
     if len(df) < MA_LONG + RSI_PERIOD + 10:
         return {'id': sid, 'name': name, 'error': '資料不足'}
 
     prices = df['close'].tolist()
     latest_price = prices[-1]
-
-    s_ma   = sma(prices, MA_SHORT)
-    l_ma   = sma(prices, MA_LONG)
-    rsi_v  = calc_rsi(prices, RSI_PERIOD)
-
-    latest_rsi = rsi_v[-1] if rsi_v[-1] is not None else 50.0
-
-    # 當前信號（最後 6 根）
-    recent_sigs = generate_signals(prices[-6:], s_ma[-6:], l_ma[-6:], rsi_v[-6:])
-    current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
 
     # 20 日報酬
     ret_20d = None
@@ -250,7 +265,7 @@ def analyze_stock_on_date(sid, name, target_date, price_df, chip_map):
         p20 = prices[-21]
         ret_20d = (latest_price - p20) / p20 if p20 else None
 
-    # Walk-Forward CV
+    # Walk-Forward CV（用 close）
     cv_results = walk_forward_cv(prices)
     if cv_results:
         avg_sharpe = np.mean([r['sharpe']   for r in cv_results])
@@ -261,6 +276,39 @@ def analyze_stock_on_date(sid, name, target_date, price_df, chip_map):
 
     # 籌碼
     chip = chip_map.get((sid, target_date), {})
+
+    # ── 訊號：6 維評分 + MA5 > MA20 過濾 ────────────────────────────────────
+    if _analyze_stock is not None and 'open' in df.columns:
+        df_str = df.copy()
+        df_str['date'] = df_str['date'].apply(
+            lambda d: d.strftime('%Y-%m-%d') if hasattr(d, 'strftime') else str(d)
+        )
+        try:
+            result = _analyze_stock(df_str, sid)
+            score  = result.signal_score
+            ma5    = result.ma5
+            ma20   = result.ma20
+            latest_rsi = result.rsi_6
+
+            # BUY：評分 >= 60 AND MA5 > MA20（上升趨勢確認）
+            is_buy = (score >= 60 and ma5 > ma20)
+            current_signal = 'BUY' if is_buy else 'HOLD'
+        except Exception:
+            # fallback
+            s_ma  = sma(prices, MA_SHORT)
+            l_ma  = sma(prices, MA_LONG)
+            rsi_v = calc_rsi(prices, RSI_PERIOD)
+            latest_rsi = rsi_v[-1] if rsi_v[-1] is not None else 50.0
+            recent_sigs = generate_signals(prices[-6:], s_ma[-6:], l_ma[-6:], rsi_v[-6:])
+            current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
+    else:
+        # fallback：MA 交叉
+        s_ma  = sma(prices, MA_SHORT)
+        l_ma  = sma(prices, MA_LONG)
+        rsi_v = calc_rsi(prices, RSI_PERIOD)
+        latest_rsi = rsi_v[-1] if rsi_v[-1] is not None else 50.0
+        recent_sigs = generate_signals(prices[-6:], s_ma[-6:], l_ma[-6:], rsi_v[-6:])
+        current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
 
     return {
         'id': sid, 'name': name,
