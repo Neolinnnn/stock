@@ -102,7 +102,8 @@ def test_load_buy_signals_basic(tmp_path):
     sigs = load_buy_signals(str(tmp_path), start_date='20260301')
     assert len(sigs) == 2
     assert sigs[0] == {'date': '20260301', 'stock_id': '2330',
-                        'stock_name': '台積電', 'signal_close': 100.0}
+                        'stock_name': '台積電', 'signal_close': 100.0,
+                        'cv_sharpe': 0, 'cv_win_rate': 0}
     assert sigs[1]['stock_id'] == '2317'
 
 def test_load_buy_signals_dedup(tmp_path):
@@ -147,16 +148,18 @@ def test_run_backtest_combo_integration():
     ]
     price_data = {
         '2330': {
-            '20260302': {'open': 100.0, 'close': 100.0},
-            '20260303': {'open': 100.0, 'close': 105.0},
-            '20260304': {'open': 100.0, 'close': 111.0},  # TP10% hit (>=110)
+            '20260302': {'open': 100.0, 'close': 100.0, 'high': 100.0, 'low': 100.0},
+            # prev_close=106; (111-106)/106 ≈ 4.7% < 5% → state=SELL_OPEN (not PULLBACK)
+            '20260303': {'open': 100.0, 'close': 106.0, 'high': 106.0, 'low': 100.0},
+            '20260304': {'open': 100.0, 'close': 111.0, 'high': 111.0, 'low': 100.0},  # TP10% → SELL_OPEN
+            '20260305': {'open': 112.0, 'close': 112.0, 'high': 112.0, 'low': 111.0},  # sell at open → WIN
         },
         '2317': {
-            '20260303': {'open': 200.0, 'close': 200.0},
-            '20260304': {'open': 200.0, 'close': 188.0},  # SL5% hit (<=190)
+            '20260303': {'open': 200.0, 'close': 200.0, 'high': 200.0, 'low': 200.0},
+            '20260304': {'open': 200.0, 'close': 188.0, 'high': 200.0, 'low': 188.0},  # SL5% → LOSS
         },
     }
-    trading_days = ['20260301','20260302','20260303','20260304']
+    trading_days = ['20260301','20260302','20260303','20260304','20260305']
     result = run_backtest_combo(signals, price_data, trading_days, tp=0.10, sl=0.05)
     assert result['stats']['total'] == 2
     assert result['stats']['wins'] == 1
@@ -173,7 +176,7 @@ def test_run_all_backtests_keys():
     trading_days = ['20260301', '20260302']
     result = run_all_backtests(signals, price_data, trading_days)
     assert set(result.keys()) == {
-        'TP10_SL5','TP10_SL10','TP10_SL12',
-        'TP12_SL5','TP12_SL10','TP12_SL12',
-        'TP15_SL5','TP15_SL10','TP15_SL12',
+        'TP15_SL10','TP15_SL12','TP15_SL15',
+        'TP18_SL10','TP18_SL12','TP18_SL15',
+        'TP20_SL10','TP20_SL12','TP20_SL15',
     }
