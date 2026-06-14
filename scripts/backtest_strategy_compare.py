@@ -25,11 +25,10 @@ from pathlib import Path
 from collections import defaultdict
 
 ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / 'scripts'))
+sys.path.insert(0, str(ROOT))  # indicators package
 
 import pandas as pd
-from finmind_client import get_dataloader
+from datafeed import finmind_fetch
 from indicators.stock_analyzer import analyze_stock
 
 # ── 設定 ─────────────────────────────────────────────────────────────────────
@@ -73,11 +72,10 @@ def load_qualified_signals() -> list[dict]:
 
 # ── 價格 ─────────────────────────────────────────────────────────────────────
 def fetch_price_data(stock_ids, start, end):
-    dl = get_dataloader()
     pd_out = {}
     for sid in stock_ids:
         try:
-            df = dl.taiwan_stock_daily(stock_id=sid, start_date=start, end_date=end)
+            df = finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start, end_date=end)
             if df is None or df.empty:
                 pd_out[sid] = {}
                 continue

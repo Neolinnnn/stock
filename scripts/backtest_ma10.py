@@ -16,13 +16,12 @@ from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / 'scripts'))
+sys.path.insert(0, str(ROOT))  # indicators package
 
 import pandas as pd
 
 try:
-    from finmind_client import get_dataloader
+    from datafeed import finmind_fetch
     _FINMIND_OK = True
 except Exception as e:
     print(f'[WARN] FinMind 載入失敗：{e}')
@@ -80,11 +79,10 @@ def fetch_price_data(stock_ids: list[str],
                      start: str, end: str) -> dict:
     """回傳 {stock_id: {date_str: {open, high, low, close}}}"""
     print(f'  下載 OHLC：{start} ~ {end}（{len(stock_ids)} 檔）')
-    dl = get_dataloader()
     price_data = {}
     for sid in stock_ids:
         try:
-            df = dl.taiwan_stock_daily(stock_id=sid, start_date=start, end_date=end)
+            df = finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=start, end_date=end)
             if df is None or df.empty:
                 price_data[sid] = {}
                 continue

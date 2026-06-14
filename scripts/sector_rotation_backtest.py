@@ -125,12 +125,11 @@ def load_prices_cached(
 
 def fetch_prices_finmind(stock_id: str, start: str, end: str) -> pd.DataFrame:
     """從 FinMind 抓 TaiwanStockPrice（含 TAIEX），回傳 date/close 欄位"""
-    from finmind_client import get_dataloader
-    dl = get_dataloader()
+    from datafeed import finmind_fetch
     start_iso = f'{start[:4]}-{start[4:6]}-{start[6:8]}'
     end_iso   = f'{end[:4]}-{end[4:6]}-{end[6:8]}'
-    df = dl.taiwan_stock_daily(stock_id=stock_id,
-                               start_date=start_iso, end_date=end_iso)
+    df = finmind_fetch('taiwan_stock_daily', stock_id=stock_id,
+                       start_date=start_iso, end_date=end_iso)
     if df is None or df.empty:
         return pd.DataFrame(columns=['date', 'close'])
     return df[['date', 'close']].copy()
