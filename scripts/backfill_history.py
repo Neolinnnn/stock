@@ -21,6 +21,7 @@ from matplotlib import rcParams
 
 sys.path.insert(0, os.path.dirname(__file__))
 from finmind_client import get_dataloader
+from datafeed import finmind_fetch, collect_tokens
 
 rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
 rcParams['axes.unicode_minus'] = False
@@ -169,18 +170,20 @@ def walk_forward_cv(prices, n_folds=CV_FOLDS):
 def fetch_all_prices(dl, start_date, end_date):
     """批次取得所有股票從 start_date 到 end_date 的日 K（完整 OHLCV）。
     回傳 dict: stock_id -> DataFrame (date, open, high, low, close, volume)
+    使用 finmind_fetch 走多 token 輪替，避免配額耗盡後整批失敗。
     """
     print(f"  📥 下載日 K：{start_date} ~ {end_date}（{len(ALL_STOCK_IDS)} 檔）")
     cache = {}
     empty_cols = ['date', 'open', 'high', 'low', 'close', 'volume']
     for sid in ALL_STOCK_IDS:
         try:
-            df = dl.taiwan_stock_daily(
+            df = finmind_fetch(
+                'taiwan_stock_daily',
                 stock_id=sid,
                 start_date=start_date,
                 end_date=end_date,
             )
-            if df.empty:
+            if df is None or df.empty:
                 cache[sid] = pd.DataFrame(columns=empty_cols)
                 continue
             df['date'] = pd.to_datetime(df['date']).dt.date
@@ -201,7 +204,8 @@ def fetch_chip_history(dl, start_date, end_date):
     chip_map = {}
     for sid in ALL_STOCK_IDS:
         try:
-            df = dl.taiwan_stock_institutional_investors(
+            df = finmind_fetch(
+                'taiwan_stock_institutional_investors',
                 stock_id=sid,
                 start_date=start_date,
                 end_date=end_date,
@@ -277,38 +281,36 @@ def analyze_stock_on_date(sid, name, target_date, price_df, chip_map):
     # 籌碼
     chip = chip_map.get((sid, target_date), {})
 
-    # ── 訊號：6 維評分 + MA5 > MA20 過濾 ────────────────────────────────────
-    if _analyze_stock is not None and 'open' in df.columns:
+    # ── 訊號：MA 黃金交叉（觸發）→ 6 維評分 ≥ 60（品質確認）────────────────
+    s_ma  = sma(prices, MA_SHORT)
+    l_ma  = sma(prices, MA_LONG)
+    rsi_v = calc_rsi(prices, RSI_PERIOD)
+    latest_rsi = rsi_v[-1] if rsi_v[-1] is not None else 50.0
+
+    # 近 5 根內是否有 MA5 穿越 MA20（前一根 MA5<=MA20，當根 MA5>MA20）
+    CROSS_WINDOW = 5
+    ma_golden_cross = False
+    for i in range(max(1, len(s_ma) - CROSS_WINDOW), len(s_ma)):
+        if (s_ma[i-1] is not None and l_ma[i-1] is not None and
+                s_ma[i] is not None and l_ma[i] is not None):
+            if s_ma[i-1] <= l_ma[i-1] and s_ma[i] > l_ma[i]:
+                ma_golden_cross = True
+                break
+
+    if ma_golden_cross and _analyze_stock is not None and 'open' in df.columns:
         df_str = df.copy()
         df_str['date'] = df_str['date'].apply(
             lambda d: d.strftime('%Y-%m-%d') if hasattr(d, 'strftime') else str(d)
         )
         try:
             result = _analyze_stock(df_str, sid)
-            score  = result.signal_score
-            ma5    = result.ma5
-            ma20   = result.ma20
             latest_rsi = result.rsi_6
-
-            # BUY：評分 >= 60 AND MA5 > MA20（上升趨勢確認）
-            is_buy = (score >= 60 and ma5 > ma20)
-            current_signal = 'BUY' if is_buy else 'HOLD'
+            # BUY：MA 黃金交叉（觸發）AND 6 維評分 ≥ 60（品質確認）
+            current_signal = 'BUY' if result.signal_score >= 60 else 'HOLD'
         except Exception:
-            # fallback
-            s_ma  = sma(prices, MA_SHORT)
-            l_ma  = sma(prices, MA_LONG)
-            rsi_v = calc_rsi(prices, RSI_PERIOD)
-            latest_rsi = rsi_v[-1] if rsi_v[-1] is not None else 50.0
-            recent_sigs = generate_signals(prices[-6:], s_ma[-6:], l_ma[-6:], rsi_v[-6:])
-            current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
+            current_signal = 'HOLD'
     else:
-        # fallback：MA 交叉
-        s_ma  = sma(prices, MA_SHORT)
-        l_ma  = sma(prices, MA_LONG)
-        rsi_v = calc_rsi(prices, RSI_PERIOD)
-        latest_rsi = rsi_v[-1] if rsi_v[-1] is not None else 50.0
-        recent_sigs = generate_signals(prices[-6:], s_ma[-6:], l_ma[-6:], rsi_v[-6:])
-        current_signal = recent_sigs[-1]['signal'] if recent_sigs else 'HOLD'
+        current_signal = 'HOLD'
 
     return {
         'id': sid, 'name': name,
