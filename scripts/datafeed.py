@@ -43,6 +43,11 @@ def collect_tokens():
     global _FINMIND_TOKENS
     if _FINMIND_TOKENS:
         return
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(Path(__file__).parent.parent / '.env')
+    except ImportError:
+        pass
     tokens = []
     for key in ['FINMIND_TOKEN'] + [f'FINMIND_TOKEN_{i}' for i in range(1, 5)]:
         t = os.environ.get(key, '')
@@ -80,7 +85,11 @@ def finmind_fetch(method_name: str, **kwargs):
             return retry(method, max_retries=2, base_delay=2.0, **kwargs)
         except Exception as e:
             last_err = e
-            if ('upper limit' in str(e).lower() or 'quota' in str(e).lower()) and len(_FINMIND_TOKENS) > 1:
+            err_s = str(e).lower()
+            # KeyError('data') = FinMind 回傳無 data 欄位，通常是限流的另一種表現
+            is_quota = ('upper limit' in err_s or 'quota' in err_s or
+                        (isinstance(e, KeyError) and str(e) == "'data'"))
+            if is_quota and len(_FINMIND_TOKENS) > 1:
                 _finmind_token_idx = (_finmind_token_idx + 1) % len(_FINMIND_TOKENS)
                 print(f'  [FinMind] 額度已滿，切換至 token[{_finmind_token_idx}]')
                 continue

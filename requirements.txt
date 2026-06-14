@@ -11,3 +11,4 @@ scipy>=1.11.0
 tqdm>=4.66.0
 scikit-learn>=1.3.0
 yfinance>=0.2.40        # 價格備援：FinMind 額度耗盡/失敗時 _yf_history 啟用（軟依賴）
+python-dotenv>=1.0.0   # 本機開發：自動載入 .env 的 FINMIND_TOKEN 等環境變數
