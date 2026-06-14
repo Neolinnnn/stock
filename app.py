@@ -4,6 +4,7 @@ Streamlit app：讀取 daily_reports/ 下的 JSON，呈現每日掃描 / 週報 
 """
 import json
 import os
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -13,6 +14,10 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+
+# app.py 在 repo 根目錄；scripts/ 非 package，需明確加入才能 import datafeed 等模組
+sys.path.insert(0, str(Path(__file__).parent / 'scripts'))
+from datafeed import make_dataloader as _make_dl
 
 @st.cache_data(ttl=3600)
 def _calc_target(sid: str, price: float):
@@ -40,8 +45,7 @@ def _calc_target(sid: str, price: float):
 
         # 中期 + 長期：P/E 均值回歸 + PEG
         try:
-            from FinMind.data import DataLoader as _DL
-            _dl = _DL()
+            _dl = _make_dl()
             _one_yr = (_date.today() - _td2(days=365)).strftime("%Y-%m-%d")
             _per = _dl.taiwan_stock_per_pbr(stock_id=sid, start_date=_one_yr)
             if _per.empty:
@@ -290,9 +294,8 @@ def tab_daily():
     chg = mkt.get("漲跌幅")
     if not idx:
         try:
-            from FinMind.data import DataLoader as _DL
             from datetime import datetime as _dt, timedelta as _td
-            _dl = _DL()
+            _dl = _make_dl()
             for _offset in range(5):
                 _d = (_dt.now() - _td(days=_offset)).strftime("%Y-%m-%d")
                 _df = _dl.tse(_d)
@@ -497,10 +500,9 @@ def tab_stock():
     sid = stock_id.strip()
 
     with st.spinner(f"分析 {sid} 中..."):
-        from FinMind.data import DataLoader
         from datetime import datetime, timedelta
 
-        dl = DataLoader()
+        dl = _make_dl()
         end       = datetime.now().strftime("%Y-%m-%d")
         start_120 = (datetime.now() - timedelta(days=240)).strftime("%Y-%m-%d")
         start_30  = (datetime.now() - timedelta(days=60)).strftime("%Y-%m-%d")
@@ -1229,9 +1231,8 @@ def tab_concepts():
 @st.cache_data(ttl=3600)
 def _fetch_ohlcv(stock_id: str, days: int = 120):
     """用 FinMind 抓 OHLCV，回傳 pandas DataFrame"""
-    from FinMind.data import DataLoader
     from datetime import datetime, timedelta
-    dl = DataLoader()
+    dl = _make_dl()
     end = datetime.now().strftime("%Y-%m-%d")
     start = (datetime.now() - timedelta(days=days * 2)).strftime("%Y-%m-%d")  # 預留日曆日
     df = dl.taiwan_stock_daily(stock_id=stock_id, start_date=start, end_date=end)
@@ -1367,7 +1368,6 @@ def _scan_one(sid: str):
     """掃描單一股票，回傳結果 dict（帶快取，1 小時 TTL）"""
     import statistics as _stat, urllib.request as _ur, json as _js
     from twstock import Stock as _S
-    from FinMind.data import DataLoader as _DL
     from datetime import datetime as _dt, timedelta as _td
 
     result = {"代碼": sid, "名稱": sid, "現價": "—", "RSI": "—",
@@ -1401,7 +1401,7 @@ def _scan_one(sid: str):
         try:
             from datetime import date as _date2
             _one_yr = (_date2.today() - _td(days=365)).strftime("%Y-%m-%d")
-            _per = _DL().taiwan_stock_per_pbr(stock_id=sid, start_date=_one_yr)
+            _per = _make_dl().taiwan_stock_per_pbr(stock_id=sid, start_date=_one_yr)
             if _per.empty:
                 raise ValueError
             _vpe = _per[_per["PER"] > 0]["PER"]
@@ -1432,7 +1432,7 @@ def _scan_one(sid: str):
 
     # 籌碼
     try:
-        _dl = _DL()
+        _dl = _make_dl()
         _end = _dt.now().strftime("%Y-%m-%d")
         _start = (_dt.now() - _td(days=10)).strftime("%Y-%m-%d")
         _chip = _dl.taiwan_stock_institutional_investors(stock_id=sid, start_date=_start, end_date=_end)
@@ -1465,8 +1465,7 @@ def _scan_one(sid: str):
 
     # 公司名稱
     try:
-        from FinMind.data import DataLoader as _DL2
-        _info = _DL2().taiwan_stock_info()
+        _info = _make_dl().taiwan_stock_info()
         _row = _info[_info["stock_id"] == sid]
         if not _row.empty:
             result["名稱"] = _row["stock_name"].values[0]

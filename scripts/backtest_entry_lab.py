@@ -14,17 +14,15 @@
 """
 import json
 import math
-import os
-import sys
 import time
 import argparse
 from pathlib import Path
 from collections import defaultdict
 
 ROOT = Path(__file__).parent.parent
-sys.path.insert(0, str(ROOT / 'scripts'))
 
 import pandas as pd
+from datafeed import make_dataloader
 
 CACHE_DIR = ROOT / 'backtest_cache'
 CACHE_DIR.mkdir(exist_ok=True)
@@ -33,29 +31,12 @@ FETCH_START = '2024-10-01'   # 提前抓供 MA60 + RSI 暖身
 MAX_HOLD_DAYS = 60
 HARD_STOP = -0.20
 
-# ── FinMind ──────────────────────────────────────────────────────────────────
-
-def _load_env():
-    env_path = ROOT / '.env'
-    if env_path.exists():
-        for line in env_path.read_text(encoding='utf-8').splitlines():
-            line = line.strip()
-            if line and not line.startswith('#') and '=' in line:
-                k, v = line.split('=', 1)
-                os.environ.setdefault(k.strip(), v.strip())
-
-
 _DL = None
 
 def get_dl():
     global _DL
     if _DL is None:
-        _load_env()
-        from FinMind.data import DataLoader
-        _DL = DataLoader()
-        token = os.environ.get('FINMIND_TOKEN') or os.environ.get('FINMIND_TOKEN_1')
-        if token:
-            _DL.login_by_token(api_token=token)
+        _DL = make_dataloader()
     return _DL
 
 
