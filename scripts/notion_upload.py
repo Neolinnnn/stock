@@ -115,6 +115,33 @@ def upload_daily_report(summary: dict) -> str:
     else:
         blocks.append(_p('今日無符合雙條件個股'))
 
+    # ── HYBRID 策略訊號（進場閘門 + 持倉追蹤出場，回測勝率63%/avg+8.6%/PF2.83）──
+    pos = summary.get('positions')
+    if pos:
+        blocks.append(_div())
+        bull = '多頭' if pos.get('taiex_bull') else '空頭'
+        blocks.append(_h2(f'HYBRID 策略訊號（大盤{bull}）'))
+        gate = pos.get('gate_buys', [])
+        blocks.append(_h3(f'🟢 進場閘門 BUY（{len(gate)} 檔）'))
+        if gate:
+            for g in gate:
+                blocks.append(_li(f"{g['id']} {g.get('name','')}（{g.get('sector','')}）  現價 {g.get('price')}"))
+        else:
+            blocks.append(_p('無'))
+        exits = pos.get('new_exits', [])
+        if exits:
+            blocks.append(_h3(f'🔴 出場訊號（{len(exits)} 檔）'))
+            for e in exits:
+                blocks.append(_li(
+                    f"{e['id']} {e.get('name','')}  {e.get('return_pct'):+.1f}%  "
+                    f"（{e.get('exit_reason')}，持有約{e.get('holding_days','?')}日）"))
+        hold = pos.get('holding', [])
+        if hold:
+            blocks.append(_h3(f'📌 持有中（{len(hold)} 檔）'))
+            for h in hold:
+                ph = 'Phase2（已達15%抱MA10）' if h.get('phase') == 2 else 'Phase1'
+                blocks.append(_li(f"{h['id']} {h.get('name','')}  進場 {h.get('entry_price')}  {ph}"))
+
     # ── 風險警示 ──
     blocks.append(_div())
     blocks.append(_h2('風險警示'))
