@@ -367,6 +367,7 @@
     <a href="./agents/">🤖 多代理分析</a>
   </nav>
   <div class="date-picker" id="date-picker-wrap">
+    <button class="date-nav" id="btn-scan" title="手動觸發每日掃描（GitHub Actions）" onclick="triggerScan()">⚙</button>
     <button class="date-nav" id="btn-prev" onclick="stepDate(-1)">◀</button>
     <label>日期</label>
     <select id="date-select" onchange="loadDate(this.value)"></select>
@@ -481,6 +482,42 @@ function showToast(msg) {
   t.classList.add('show');
   if (_toastTimer) clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => { t.classList.remove('show'); _toastTimer = null; }, 3000);
+}
+
+// ── ⚙ 手動觸發 GitHub Actions 每日掃描 ──────────────────────────────────────
+// token 僅存於瀏覽器 localStorage，不會上傳；需 fine-grained PAT 對 Neolinnnn/stock 給 Actions: Read & Write
+const GH_REPO = 'Neolinnnn/stock';
+const GH_WORKFLOW = 'daily_scan.yml';
+async function triggerScan() {
+  let token = localStorage.getItem('gh_token');
+  if (!token) {
+    token = (prompt('貼上 GitHub fine-grained token\n（範圍：Neolinnnn/stock，權限 Actions: Read & Write）\n只會存在本機瀏覽器') || '').trim();
+    if (!token) return;
+    localStorage.setItem('gh_token', token);
+  }
+  if (!confirm('立即觸發每日掃描？\n（GitHub Actions 跑完約需數分鐘）')) return;
+  const btn = document.getElementById('btn-scan');
+  btn.disabled = true;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
+      body: JSON.stringify({ ref: 'main' }),
+    });
+    if (res.status === 204) {
+      showToast('✅ 已觸發掃描，數分鐘後完成');
+    } else if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('gh_token');
+      showToast('❌ token 無效或權限不足，已清除，請再點一次重設');
+    } else {
+      const msg = await res.text();
+      showToast(`❌ 觸發失敗（${res.status}）：${msg.slice(0, 80)}`);
+    }
+  } catch (e) {
+    showToast(`❌ 觸發失敗：${e.message}`);
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 function escHtml(s) {
