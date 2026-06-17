@@ -1,0 +1,58 @@
+name: 補掃描 — 小摩AI供應鏈
+
+on:
+  workflow_dispatch:   # 手動觸發，可在 Actions 頁面選分支
+
+concurrency:
+  group: scan-jpmorgan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # 使用觸發此 workflow 的分支（不鎖定 main）
+
+      - name: Restore price cache
+        uses: actions/cache@v4
+        with:
+          path: price_cache
+          key: price-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            price-cache-${{ runner.os }}-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt
+
+      - name: Run JP Morgan sector scan
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: python scripts/scan_jpmorgan.py
+
+      - name: Commit updated scan data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add daily_reports/ docs/
+          git diff --cached --quiet && echo "無新增內容" && exit 0
+          git commit -m "auto: 補掃描 小摩AI供應鏈 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin ${{ github.ref_name }} && git push && break
+            echo "Push 失敗，第 ${i} 次重試..."
+            sleep $((i * 5))
+          done
