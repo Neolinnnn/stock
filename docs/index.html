@@ -154,6 +154,35 @@
   .btn-add-inline{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;margin-left:4px;}
   .btn-add-inline:hover{background:var(--accent);color:#fff;}
 
+  /* ── 自選清單掃描功能 ─────────────────────────────────── */
+  .wl-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .wl-header-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .btn-scan{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:600;}
+  .btn-scan:hover{opacity:.85;}
+  .btn-scan:disabled{opacity:.38;cursor:not-allowed;}
+  .btn-icon{background:transparent;border:1px solid var(--border);color:var(--sub);border-radius:6px;padding:5px 9px;font-size:13px;cursor:pointer;}
+  .btn-icon:hover{border-color:var(--accent);color:var(--accent);}
+  .wl-status-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub);padding:8px 12px;background:#13161d;border-radius:6px;margin-bottom:12px;}
+  .wl-status-bar.running{color:var(--yellow);border:1px solid rgba(241,177,67,.25);}
+  .wl-status-bar.done{color:var(--green);border:1px solid rgba(46,204,113,.25);}
+  .wl-status-bar.fail{color:var(--red);border:1px solid rgba(231,76,60,.25);}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spin{display:inline-block;animation:spin .9s linear infinite;}
+  .wl-chip-list{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+  .wl-chip{display:inline-flex;align-items:center;gap:4px;background:#1e2330;border:1px solid var(--border);border-radius:20px;padding:3px 6px 3px 10px;font-size:12px;cursor:default;}
+  .wl-chip-rm{background:none;border:none;color:var(--sub);cursor:pointer;font-size:10px;padding:0 3px;line-height:1;}
+  .wl-chip-rm:hover{color:var(--red);}
+  /* PAT modal */
+  .pat-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .pat-modal{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:460px;width:100%;padding:24px;}
+  .pat-modal h3{font-size:15px;font-weight:700;margin-bottom:6px;}
+  .pat-modal p{font-size:12px;color:var(--sub);line-height:1.7;margin-bottom:14px;}
+  .pat-modal input{width:100%;background:#13161d;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:13px;margin-bottom:10px;font-family:monospace;}
+  .pat-modal .pat-btns{display:flex;gap:8px;justify-content:flex-end;}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--sub);border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;}
+  .btn-ghost:hover{border-color:var(--text);color:var(--text);}
+  .wl-scan-result{margin-top:20px;}
+
   /* 產銷組合 Modal */
   .pm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;}
   .pm-modal{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;padding:22px 24px;}
@@ -487,107 +516,281 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
+// ── 自選清單：localStorage 版本 ────────────────────────────────────────────
+const GH_OWNER = 'Neolinnnn';
+const GH_REPO  = 'stock';
+const GH_WF    = 'scan_watchlist.yml';
+
+let WL_STOCKS = [];  // [{id, name}, ...]
+let WL_SCAN   = { running: false, dispatchTime: null, pollTimer: null, status: '' };
+
+function _wlLoad() {
+  try { WL_STOCKS = JSON.parse(localStorage.getItem('wl_stocks') || '[]'); } catch { WL_STOCKS = []; }
+}
+function _wlSave() { localStorage.setItem('wl_stocks', JSON.stringify(WL_STOCKS)); }
+function _wlPat()  { return localStorage.getItem('gh_pat') || ''; }
+
 async function loadWatchlist(silent=false) {
-  if (!APPS_SCRIPT_URL) {
-    document.getElementById('page-watchlist').innerHTML =
-      '<div class="error-box"><span>⚙️</span>請先設定 APPS_SCRIPT_URL</div>';
-    return;
-  }
-  if (!silent) document.getElementById('page-watchlist').innerHTML = '<div id="loading">載入中…</div>';
-  try {
-    const data = await fetchJSON(`${APPS_SCRIPT_URL}?action=list`);
-    WL_DATA = data;
-    renderWatchlist(data);
-  } catch(e) {
-    document.getElementById('page-watchlist').innerHTML =
-      '<div class="error-box"><span>❌</span>載入失敗，請重試</div>';
-  }
+  _wlLoad();
+  renderWatchlist();
 }
 
-function renderWatchlist(data) {
-  const stocks = (data && data.stocks) || [];
-  const updated = data && data.updated_at
-    ? new Date(data.updated_at).toLocaleString('zh-TW', {timeZone:'Asia/Taipei'})
-    : '';
+function renderWatchlist() {
+  _wlLoad();
+  const today = CUR_DATE || '';
+  // 從已快取的日資料找個股資料
+  const dailyStocks = (CACHE[today] && CACHE[today].stocks) || [];
+  const dailyMap = {};
+  dailyStocks.forEach(s => { dailyMap[s.id] = s; });
 
-  let html = `
-  <div class="wl-add-bar">
-    <input id="wl-input" type="text" placeholder="輸入代碼 例：2330" maxlength="6"
-      onkeydown="if(event.key==='Enter')wlAdd()">
-    <button class="btn-primary" onclick="wlAdd()">＋ 新增</button>
-    <span id="wl-msg" style="font-size:12px;color:var(--sub)"></span>
+  // ── 標題列（搜尋 + 掃描 + 設定）
+  let html = `<div class="wl-header">
+    <div class="wl-header-left">
+      <div class="wl-add-bar" style="margin:0">
+        <input id="wl-input" type="text" placeholder="輸入代碼 例：2330" maxlength="6"
+          onkeydown="if(event.key==='Enter')wlAdd()" list="wl-datalist">
+        <datalist id="wl-datalist">${(STOCKS_INDEX||[]).map(s=>`<option value="${escHtml(s.id)}">${escHtml(s.name)}</option>`).join('')}</datalist>
+        <button class="btn-primary" onclick="wlAdd()">＋ 新增</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="btn-scan" id="btn-scan-wl"
+        ${WL_STOCKS.length===0||WL_SCAN.running?'disabled':''}
+        onclick="wlScan()">
+        ${WL_SCAN.running?'<span class="spin">⟳</span> 掃描中…':'🚀 開始掃描 ('+WL_STOCKS.length+' 檔)'}
+      </button>
+      <button class="btn-icon" onclick="showPatModal()" title="GitHub PAT 設定">⚙️</button>
+    </div>
   </div>`;
 
-  if (!stocks.length) {
-    html += `<div class="error-box" style="margin-top:0"><span>📋</span>尚無自選股票，請輸入代碼新增</div>`;
-  } else {
-    html += `<div class="card" style="overflow-x:auto"><table>
-      <tr>
-        <th>代碼</th><th>名稱</th><th>現價</th><th>漲跌幅</th>
-        <th>RSI5/10</th><th>20日%</th><th>訊號</th><th>法人合計</th><th>操作</th>
-      </tr>
-      ${stocks.sort((a,b)=>{
-        const sa = a.signal && a.signal!=='' && a.signal!=='—' ? 0 : 1;
-        const sb = b.signal && b.signal!=='' && b.signal!=='—' ? 0 : 1;
-        return sa - sb || a.id.localeCompare(b.id);
-      }).map(s => `<tr>
-        <td><b>${escHtml(s.id)}</b></td>
-        <td>${escHtml(s.name)}</td>
-        <td>${s.price!==''&&s.price!==null ? fmt(s.price,1) : '—'}</td>
-        <td class="${Number(s.change_pct)>=0?'up':'dn'}">${s.change_pct!==''&&s.change_pct!==null ? sign(Number(s.change_pct))+fmt(s.change_pct,2)+'%' : '—'}</td>
-        <td>${s.rsi!==''&&s.rsi!==null ? `<span class="rsi-dot ${rsiDot(Number(s.rsi))}"></span>${fmt(s.rsi,1)}<span style="color:var(--sub);font-size:11px">/${s.rsi10!=null&&s.rsi10!==''?fmt(s.rsi10,1):'—'}</span>` : '—'}</td>
-        <td class="${signColor(Number(s.ret20))}">${s.ret20!==''&&s.ret20!==null ? sign(Number(s.ret20))+fmt(s.ret20)+'%' : '—'}</td>
-        <td>${s.signal ? badge(s.signal) : '—'}</td>
-        <td>${chip(s.chip_total)}</td>
-        <td><button class="btn-remove" onclick="wlRemove('${escHtml(s.id)}')">✕</button></td>
-      </tr>`).join('')}
-    </table></div>`;
+  // ── 掃描狀態列
+  if (WL_SCAN.running || WL_SCAN.status) {
+    const cls = WL_SCAN.running ? 'running' : WL_SCAN.status === 'success' ? 'done' : 'fail';
+    const icon = WL_SCAN.running ? '<span class="spin">⟳</span>' : WL_SCAN.status === 'success' ? '✅' : '❌';
+    const msg  = WL_SCAN.running
+      ? `GitHub Action 執行中（約 2–3 分鐘），每 15 秒自動輪詢…`
+      : WL_SCAN.status === 'success'
+        ? '掃描完成，結果已更新至下方表格'
+        : `掃描失敗（${WL_SCAN.status}），請至 GitHub Actions 頁面查看`;
+    html += `<div class="wl-status-bar ${cls}">${icon} ${msg}</div>`;
   }
 
-  html += `<div style="margin-top:10px;font-size:11px;color:var(--sub)">
-    最後更新：${updated}&nbsp;&nbsp;
-    <button class="date-nav" onclick="loadWatchlist()">↻ 重新整理</button>
-  </div>`;
+  // ── 股票 chip 列（快速一覽）
+  if (WL_STOCKS.length) {
+    html += `<div class="wl-chip-list">`;
+    WL_STOCKS.forEach(s => {
+      const d = dailyMap[s.id];
+      const sig = d ? d.signal : '';
+      const sigClass = sig==='BUY'?'buy':sig==='SELL'?'sell':'hold';
+      html += `<div class="wl-chip">
+        <span>${escHtml(s.id)}</span>
+        <span style="color:var(--sub)">${escHtml(s.name)}</span>
+        ${sig?`<span class="badge ${sigClass}" style="font-size:10px;padding:1px 5px">${sig}</span>`:''}
+        <button class="wl-chip-rm" onclick="wlRemove('${escHtml(s.id)}')" title="移除">✕</button>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── 股票資料表
+  if (!WL_STOCKS.length) {
+    html += `<div class="error-box" style="margin-top:0"><span>⭐</span>尚無自選股票<br><small style="font-size:13px;margin-top:8px;display:block">輸入股票代碼新增，或從其他頁面點「＋」</small></div>`;
+  } else {
+    // 找掃描結果（優先取「自選清單」族群，其次取各族群）
+    const wlSectorStocks = (CACHE[today] && CACHE[today].sectors && CACHE[today].sectors['自選清單'] && CACHE[today].sectors['自選清單'].stocks) || [];
+    const wlSectorMap = {};
+    wlSectorStocks.forEach(s => { wlSectorMap[s.id] = s; });
+
+    html += `<div class="card" style="overflow-x:auto"><table>
+      <tr>
+        <th>代碼</th><th>名稱</th><th>現價</th>
+        <th>RSI5/10</th><th>20日%</th><th>訊號</th><th>法人合計</th>
+        <th>停損</th><th>操作</th>
+      </tr>`;
+
+    WL_STOCKS.forEach(s => {
+      // 優先用自選清單族群掃描結果，次用當日其他族群
+      const d = wlSectorMap[s.id] || dailyMap[s.id];
+      const hasData = !!d;
+
+      if (hasData) {
+        const rsi = d.rsi ?? d.rsi5;
+        const ret20 = d.ret_20d ?? d.ret20;
+        const chipT = d.chip_total ?? d.chipTotal ?? (d.chip && d.chip['合計']);
+        html += `<tr>
+          <td><b>${escHtml(s.id)}</b></td>
+          <td>${escHtml(s.name)}</td>
+          <td>${d.price!=null?fmt(d.price,1):'—'}</td>
+          <td>${rsi!=null?`<span class="rsi-dot ${rsiDot(Number(rsi))}"></span>${fmt(Number(rsi),1)}`:'—'}${d.rsi10!=null?`<span style="color:var(--sub);font-size:11px">/${fmt(Number(d.rsi10),1)}</span>`:''}</td>
+          <td class="${signColor(Number(ret20))}">${ret20!=null?sign(Number(ret20))+fmt(Number(ret20))+'%':'—'}</td>
+          <td>${d.signal?badge(d.signal):'—'}</td>
+          <td>${chip(chipT)}</td>
+          <td style="font-size:12px;color:var(--sub)">${d.stop_loss!=null?fmt(d.stop_loss,1):'—'}</td>
+          <td><button class="btn-remove" onclick="wlRemove('${escHtml(s.id)}')">✕</button></td>
+        </tr>`;
+      } else {
+        html += `<tr>
+          <td><b>${escHtml(s.id)}</b></td>
+          <td>${escHtml(s.name)}</td>
+          <td colspan="6" style="color:var(--sub);font-size:12px">未在今日掃描範圍，點「開始掃描」取得資料</td>
+          <td><button class="btn-remove" onclick="wlRemove('${escHtml(s.id)}')">✕</button></td>
+        </tr>`;
+      }
+    });
+    html += `</table></div>`;
+
+    // 掃描時間戳
+    const ts = CACHE[today] && CACHE[today].sectors && CACHE[today].sectors['自選清單']
+      ? `自選清單最後掃描：${fmtDate(today)}`
+      : `今日掃描不含自選清單，請點「開始掃描」`;
+    html += `<div style="margin-top:8px;font-size:11px;color:var(--sub)">${ts}</div>`;
+  }
 
   document.getElementById('page-watchlist').innerHTML = html;
 }
 
-async function wlAdd(idOverride) {
-  if (!APPS_SCRIPT_URL) { showToast('請先設定 APPS_SCRIPT_URL'); return; }
-  const id = (idOverride || document.getElementById('wl-input')?.value || '').trim().toUpperCase();
+function wlAdd(idOverride) {
+  _wlLoad();
+  const raw = idOverride || document.getElementById('wl-input')?.value || '';
+  const id = raw.trim().toUpperCase();
   if (!id) return;
-  const msg = document.getElementById('wl-msg');
-  if (msg) msg.textContent = '新增中…';
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-
-      body: JSON.stringify({ action: 'add', id }),
-    });
-    const data = await res.json();
-    if (data.ok) {
-      showToast(`✓ ${id} ${data.name} 已加入自選清單`);
-      if (document.getElementById('wl-input')) document.getElementById('wl-input').value = '';
-      loadWatchlist(true);
-    } else {
-      const msgs = { duplicate:'已在清單中', limit_reached:'自選清單已達 50 檔上限', not_found:'代碼無效，請確認股票代碼' };
-      showToast(msgs[data.error] || `新增失敗：${data.error}`);
-    }
-  } catch { showToast('新增失敗，請重試'); }
-  if (msg) msg.textContent = '';
+  if (WL_STOCKS.find(s => s.id === id)) { showToast('已在清單中'); return; }
+  if (WL_STOCKS.length >= 50) { showToast('自選清單已達 50 檔上限'); return; }
+  const found = (STOCKS_INDEX || []).find(s => s.id === id);
+  const name = found ? found.name : id;
+  if (!found) { showToast(`${id}：代碼不在掃描庫，仍可新增（掃描時才驗證）`); }
+  WL_STOCKS.push({ id, name });
+  _wlSave();
+  if (document.getElementById('wl-input')) document.getElementById('wl-input').value = '';
+  if (found) showToast(`✓ ${id} ${name} 已加入自選清單`);
+  renderWatchlist();
 }
 
-async function wlRemove(id) {
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
+function wlRemove(id) {
+  _wlLoad();
+  WL_STOCKS = WL_STOCKS.filter(s => s.id !== id);
+  _wlSave();
+  showToast(`${id} 已從自選清單移除`);
+  renderWatchlist();
+}
 
-      body: JSON.stringify({ action: 'remove', id }),
-    });
-    const data = await res.json();
-    if (data.ok) { showToast(`${id} 已從自選清單移除`); loadWatchlist(true); }
-    else showToast(`移除失敗：${data.error}`);
-  } catch { showToast('移除失敗，請重試'); }
+async function wlScan() {
+  const pat = _wlPat();
+  if (!pat) { showPatModal(); return; }
+  _wlLoad();
+  if (!WL_STOCKS.length) { showToast('請先新增股票'); return; }
+  const stocks = WL_STOCKS.map(s => s.id).join(',');
+
+  WL_SCAN.running = true;
+  WL_SCAN.status  = '';
+  WL_SCAN.dispatchTime = new Date().toISOString();
+  renderWatchlist();
+
+  try {
+    const resp = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/workflows/${GH_WF}/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main', inputs: { stocks } })
+      }
+    );
+    if (resp.status === 204) {
+      showToast('✅ 掃描已排程，約 2–3 分鐘後完成');
+      _wlPollStart();
+    } else if (resp.status === 401 || resp.status === 403) {
+      showToast('❌ PAT 無效或無 Actions 權限，請重新設定');
+      WL_SCAN.running = false; WL_SCAN.status = 'auth_error';
+      renderWatchlist();
+    } else {
+      const err = await resp.json().catch(() => ({}));
+      showToast(`❌ 觸發失敗：${err.message || resp.status}`);
+      WL_SCAN.running = false; WL_SCAN.status = 'error';
+      renderWatchlist();
+    }
+  } catch(e) {
+    showToast('❌ 網路錯誤：' + e.message);
+    WL_SCAN.running = false; WL_SCAN.status = 'error';
+    renderWatchlist();
+  }
+}
+
+function _wlPollStart() {
+  if (WL_SCAN.pollTimer) clearInterval(WL_SCAN.pollTimer);
+  WL_SCAN.pollTimer = setInterval(_wlPollTick, 15000);
+  setTimeout(_wlPollTick, 8000);  // 首次 8 秒後
+}
+
+async function _wlPollTick() {
+  const pat = _wlPat();
+  if (!pat) return;
+  try {
+    const resp = await fetch(
+      `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/actions/runs?per_page=10`,
+      { headers: { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github+json' } }
+    );
+    if (!resp.ok) return;
+    const data = await resp.json();
+    const dispatchTs = new Date(WL_SCAN.dispatchTime).getTime();
+    const run = (data.workflow_runs || []).find(r =>
+      r.path && r.path.endsWith(GH_WF) &&
+      new Date(r.created_at).getTime() >= dispatchTs - 5000
+    );
+    if (!run) return;
+    if (run.status === 'completed') {
+      clearInterval(WL_SCAN.pollTimer);
+      WL_SCAN.pollTimer = null;
+      WL_SCAN.running   = false;
+      WL_SCAN.status    = run.conclusion;
+      if (run.conclusion === 'success') {
+        // 清除快取，重載今日資料，再顯示結果
+        if (CUR_DATE) { delete CACHE[CUR_DATE]; await loadDate(CUR_DATE); }
+        showToast('✅ 掃描完成！結果已更新');
+      } else {
+        showToast(`❌ 掃描失敗（${run.conclusion}）`);
+      }
+      renderWatchlist();
+    }
+    // 還在跑就繼續等
+  } catch { /* ignore */ }
+}
+
+// PAT Modal
+function showPatModal() {
+  if (document.getElementById('pat-overlay')) return;
+  const cur = _wlPat();
+  const el = document.createElement('div');
+  el.id = 'pat-overlay';
+  el.className = 'pat-overlay';
+  el.innerHTML = `<div class="pat-modal">
+    <h3>⚙️ GitHub Personal Access Token</h3>
+    <p>觸發 GitHub Actions 掃描需要 PAT。<br>
+    請至 GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens，<br>
+    建立一個針對此 repo 有 <b>Actions: Read & Write</b> 權限的 token，貼入下方。<br>
+    Token 僅存於本地瀏覽器（localStorage），不會傳至任何伺服器。</p>
+    <input id="pat-input" type="password" placeholder="github_pat_..." value="${escHtml(cur)}">
+    <div class="pat-btns">
+      <button class="btn-ghost" onclick="document.getElementById('pat-overlay').remove()">取消</button>
+      <button class="btn-primary" onclick="savePatModal()">儲存</button>
+    </div>
+  </div>`;
+  el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+  document.body.appendChild(el);
+  setTimeout(() => document.getElementById('pat-input')?.focus(), 50);
+}
+
+function savePatModal() {
+  const v = (document.getElementById('pat-input')?.value || '').trim();
+  if (!v) { showToast('請輸入 PAT'); return; }
+  localStorage.setItem('gh_pat', v);
+  document.getElementById('pat-overlay')?.remove();
+  showToast('✅ PAT 已儲存，現在可以點「開始掃描」');
+  renderWatchlist();
 }
 
 // ── 輔助函式 ──────────────────────────────────────────────────────────────────
