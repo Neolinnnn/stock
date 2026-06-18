@@ -1,8 +1,29 @@
 {
- "date": "20260617",
- "generated_at": "2026-06-17 17:31",
+ "date": "20260618",
+ "generated_at": "2026-06-18 11:40",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "2458",
+   "close": 172.0,
+   "vol_ratio": 3.69,
+   "dist_ma20": 7.9,
+   "ret20": 8.52,
+   "last_date": "2026-06-18",
+   "chip5": 1371079.0,
+   "name": "義隆"
+  },
+  {
+   "id": "3034",
+   "close": 516.0,
+   "vol_ratio": 1.68,
+   "dist_ma20": 5.0,
+   "ret20": 6.5,
+   "last_date": "2026-06-18",
+   "chip5": 1708035.0,
+   "name": "聯詠"
+  }
+ ],
  "backtest_ref": {
   "n": 183,
   "tp18sl15_win": 0.65,
