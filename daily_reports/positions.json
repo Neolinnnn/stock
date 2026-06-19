@@ -1,5 +1,5 @@
 {
-  "updated": "20260618",
+  "updated": "20260619",
   "open": [
     {
       "id": "2383",
@@ -30,11 +30,11 @@
       "name": "晶彩科",
       "signal_date": "20260618",
       "signal_price": 134.0,
-      "status": "pending_entry",
+      "status": "holding",
       "phase": 1,
-      "entry_date": null,
-      "entry_price": null,
-      "high_watermark": null,
+      "entry_date": "20260619",
+      "entry_price": 134.0,
+      "high_watermark": 134.0,
       "days_since_high": 0
     },
     {
@@ -42,11 +42,11 @@
       "name": "創意",
       "signal_date": "20260618",
       "signal_price": 4860.0,
-      "status": "pending_entry",
+      "status": "holding",
       "phase": 1,
-      "entry_date": null,
-      "entry_price": null,
-      "high_watermark": null,
+      "entry_date": "20260619",
+      "entry_price": 4860.0,
+      "high_watermark": 4860.0,
       "days_since_high": 0
     }
   ],
