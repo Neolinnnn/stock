@@ -413,13 +413,17 @@ def scan_sector(sector_name, stocks):
             )
             if worth_chip and fetch_broker_top15 is not None:
                 br = fetch_broker_top15(sid, period='5')
+                total_buyer_net = sum(b['net'] for b in br.get('top_buyers', [])) or 1
+                total_seller_net = sum(abs(s['net']) for s in br.get('top_sellers', [])) or 1
                 r['broker'] = {
                     'top_buyers': [
-                        {'name': b[0], 'lots': b[1], 'pct': b[2]}
+                        {'name': b['name'], 'lots': b['net'],
+                         'pct': round(b['net'] / total_buyer_net * 100, 1)}
                         for b in br.get('top_buyers', [])[:5]
                     ],
                     'top_sellers': [
-                        {'name': se[0], 'lots': se[1], 'pct': se[2]}
+                        {'name': se['name'], 'lots': se['net'],
+                         'pct': round(abs(se['net']) / total_seller_net * 100, 1)}
                         for se in br.get('top_sellers', [])[:5]
                     ],
                     'net_concentration': br.get('net_concentration', 0),
