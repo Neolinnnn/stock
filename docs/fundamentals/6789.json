@@ -1,1 +1,90 @@
-{"stock_id": "6789", "name": "采鈺", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [1.5], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [32.24], "operating_margin": [22.83], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:29"}
+{
+  "stock_id": "6789",
+  "name": "采鈺",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      1.5
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      32.24
+    ],
+    "operating_margin": [
+      22.83
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:29",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "影像感測器 (CIS)",
+        "share_pct": 67.4,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "微型光學元件 (MOE)",
+        "share_pct": 30.4,
+        "yoy_growth": -9.5,
+        "trend": "down"
+      },
+      {
+        "name": "其他營運事業部",
+        "share_pct": 2.2,
+        "yoy_growth": null,
+        "trend": "flat"
+      },
+      {
+        "name": "矽光子與CPO相關 (新興業務)",
+        "share_pct": null,
+        "yoy_growth": null,
+        "trend": "up"
+      }
+    ],
+    "regions": [],
+    "customers": [
+      "Sony",
+      "OmniVision",
+      "格科微 (Galaxycore)",
+      "精材 (Xintec)",
+      "蘋果 (Apple) - 潛在"
+    ],
+    "biz_model": "采鈺主要從事彩色濾光膜、微透鏡、影像感測及微型光學元件相關產品及模組的研發、設計、製造及銷售。公司已從傳統的影像感測器代工廠轉型為矽光子與超穎透鏡領域的關鍵領導者，逐步拓展至共同封裝光學元件 (CPO) 等高階技術應用，業務模式包含代工 (Foundry) 及與客戶共同開發 (JDM/ODM) 先進光學元件。",
+    "moat": "采鈺的核心競爭優勢在於與台積電 (TSMC) 生態系的深度綁定，享有晶圓級光學製程的技術護城河與議價能力。其在高精度製程、良率控制與量產穩定性具備優勢，並掌握奈米光柱 (Nano Light Pillar) 與超穎透鏡 (MetaLens) 等關鍵技術以提升影像感測效率。同時，公司積極布局矽光子與CPO等AI高速運算相關技術，並計劃與台積電合作建置CoPoS先進封裝實驗線，進一步鞏固其在半導體光學領域的領先地位。",
+    "summary": "采鈺在2026年第一季營運穩健成長，影像感測器(CIS)產品營收表現良好，而微型光學元件(MOE)則年減9.5%。公司整體營收在2026年Q1年增約7.99%，並預期在高畫素CIS、車用市場以及新興矽光子/CPO等業務帶動下，中長期成長可期。資料來源主要來自2026年第一季財報公告及分析報告，產品線營收佔比部分參考較早期的公開資訊，但趨勢已根據最新營運表現更新。",
+    "data_period": "2026 Q1 及 2026年5月營收",
+    "updated_at": "2026-06-22"
+  }
+}
