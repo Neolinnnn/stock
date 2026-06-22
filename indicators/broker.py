@@ -139,10 +139,16 @@ def _safe_float(s: str) -> Optional[float]:
         return None
 
 
-def fetch_broker_top15(stock_id: str) -> dict:
-    """抓取個股近期主力券商 top15 買賣超（histock.tw 預設窗口）"""
-    if stock_id in _CACHE:
-        return _CACHE[stock_id]
+def fetch_broker_top15(stock_id: str, period: str = "5") -> dict:
+    """抓取個股近期主力券商 top15 買賣超
+
+    Args:
+        stock_id: 股票代號
+        period: 統計天數窗口（histock t 參數）。1/5/10/20/60 日，預設 5。
+    """
+    cache_key = f"{stock_id}:{period}"
+    if cache_key in _CACHE:
+        return _CACHE[cache_key]
 
     result: dict = {
         "top_buyers": [],
@@ -152,23 +158,23 @@ def fetch_broker_top15(stock_id: str) -> dict:
         "error": None,
     }
 
-    url = f"https://histock.tw/stock/branch.aspx?no={stock_id}"
+    url = f"https://histock.tw/stock/branch.aspx?no={stock_id}&t={period}"
     html = _http_get(url, timeout=8)
     if html is None:
         result["error"] = "fetch_failed"
-        _CACHE[stock_id] = result
+        _CACHE[cache_key] = result
         return result
 
     try:
         buyers, sellers = _parse_histock(html)
     except Exception as e:
         result["error"] = f"parse_failed: {e}"
-        _CACHE[stock_id] = result
+        _CACHE[cache_key] = result
         return result
 
     if not buyers and not sellers:
         result["error"] = "no_data"
-        _CACHE[stock_id] = result
+        _CACHE[cache_key] = result
         return result
 
     result["top_buyers"] = buyers
@@ -178,7 +184,7 @@ def fetch_broker_top15(stock_id: str) -> dict:
     )
     result["source"] = "histock"
 
-    _CACHE[stock_id] = result
+    _CACHE[cache_key] = result
     time.sleep(0.6)  # 禮貌延遲
     return result
 

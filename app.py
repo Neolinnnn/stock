@@ -1028,16 +1028,28 @@ J 值位置<br>
     with col2:
         if not chip_agg.empty:
             _plot_chip = chip_agg.tail(15).copy()
-            _fig_chip = go.Figure()
-            for _cn in ["外資", "投信", "自營"]:
-                _fig_chip.add_trace(go.Bar(name=_cn, x=_plot_chip["日期"], y=_plot_chip[_cn]))
-            _fig_chip.update_layout(
-                barmode="relative",
-                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                font_color="#fafafa", height=280,
-                margin=dict(l=0, r=0, t=10, b=0),
-                legend=dict(orientation="h", y=1.1),
+            _fig_chip = make_subplots(
+                rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.12,
+                subplot_titles=("外資 (張)", "投信 (張)"),
             )
+            for _row, (_cn, _pos_c, _neg_c) in enumerate(
+                [("外資", "#27ae60", "#e74c3c"), ("投信", "#3498db", "#e67e22")], start=1
+            ):
+                _vals = _plot_chip[_cn]
+                _colors = [_pos_c if v >= 0 else _neg_c for v in _vals]
+                _fig_chip.add_trace(
+                    go.Bar(name=_cn, x=_plot_chip["日期"], y=_vals,
+                           marker_color=_colors, showlegend=False),
+                    row=_row, col=1,
+                )
+                _fig_chip.add_hline(y=0, line_color="rgba(255,255,255,0.3)",
+                                    line_width=0.8, row=_row, col=1)
+            _fig_chip.update_layout(
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                font_color="#fafafa", height=360,
+                margin=dict(l=0, r=0, t=30, b=0),
+            )
+            _fig_chip.update_annotations(font_size=12)
             st.plotly_chart(_fig_chip, use_container_width=True)
 
     st.divider()
