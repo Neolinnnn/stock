@@ -1,1 +1,99 @@
-{"stock_id": "2308", "name": "台達電", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [7.91], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [37.0], "operating_margin": [17.83], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:31"}
+{
+  "stock_id": "2308",
+  "name": "台達電",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      7.91
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      37.0
+    ],
+    "operating_margin": [
+      17.83
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:31",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "電源及零組件 (Power Electronics)",
+        "share_pct": 54,
+        "yoy_growth": 43,
+        "trend": "up"
+      },
+      {
+        "name": "基礎設施 (Infrastructure)",
+        "share_pct": 32,
+        "yoy_growth": 48,
+        "trend": "up"
+      },
+      {
+        "name": "自動化 (Automation)",
+        "share_pct": 9,
+        "yoy_growth": null,
+        "trend": "down"
+      },
+      {
+        "name": "交通 (Mobility)",
+        "share_pct": 5,
+        "yoy_growth": -27,
+        "trend": "down"
+      }
+    ],
+    "regions": [
+      {
+        "name": "大中華區 (Greater China)",
+        "share_pct": 42.5
+      },
+      {
+        "name": "其他國際市場 (Other International)",
+        "share_pct": 57.5
+      }
+    ],
+    "customers": [
+      "雲端服務供應商/超大規模資料中心業者 (如 Amazon Web Services, Microsoft, Google)",
+      "第一線汽車OEM廠 (如 Tesla, Volkswagen, Stellantis, Mercedes-Benz, BMW, General Motors)",
+      "電信營運商",
+      "工業自動化公司和製造業客戶",
+      "公用事業、車隊營運商、地方政府"
+    ],
+    "biz_model": "台達電的商業模式從傳統的電子零組件OEM/ODM製造商，逐步轉型為高效率電源與散熱解決方案及整合系統提供者，特別是針對資料中心、電動車基礎設施、工業自動化和智慧能源應用，並朝向「能源即服務」及經常性收入模式發展。",
+    "moat": "台達電的核心競爭優勢在於高研發投入與專利護城河、領先業界的產品效率（如98%效率及80 Plus Titanium等級電源）、垂直整合能力、全球多元化生產佈局（包含中國、泰國、印度、美國等地），以及在超大規模業者和一線車廠的供應商認證地位。",
+    "summary": "台達電2026年第一季營收表現強勁，主要受惠於AI資料中心相關的電源及零組件與基礎設施業務的顯著成長，這兩大產品線的營收年增率均超過40%。然而，自動化業務獲利大幅衰退，交通事業（電動車）則因市場波動面臨營收下滑且持續虧損。地域營收分佈方面，大中華區約佔2025年總營收的40-45%，其餘為北美、歐洲及東南亞等國際市場，其中印度市場表現出強勁增長。",
+    "data_period": "2026 Q1",
+    "updated_at": "2026-06-19"
+  }
+}

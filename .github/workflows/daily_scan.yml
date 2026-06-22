@@ -57,6 +57,26 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: python scripts/daily_scan.py
 
+      - name: Fetch fundamentals
+        continue-on-error: true
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: python scripts/fundamentals_fetcher.py
+
+      - name: Enrich product mix (qualified stocks)
+        # 緊接 daily_scan + fundamentals 後，搶在週報／多代理敘述前用 Gemini 配額，
+        # 確保行動清單產銷組合在同一天就能顯示
+        continue-on-error: true
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+        run: |
+          python scripts/enrich_product_mix.py --qualified
+          # 把剛抓的產銷組合帶進當日 payload（行動清單按鈕）
+          python scripts/rebuild_daily_payload.py
+
       - name: Breakout scan (second signal source)
         continue-on-error: true
         env:
@@ -91,22 +111,6 @@ jobs:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/sector_rotation_backtest.py
-
-      - name: Fetch fundamentals
-        continue-on-error: true
-        env:
-          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
-        run: python scripts/fundamentals_fetcher.py
-
-      - name: Enrich product mix (qualified stocks)
-        continue-on-error: true
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python scripts/enrich_product_mix.py --qualified
-          # 把剛抓的產銷組合帶進當日 payload（行動清單按鈕）
-          python scripts/rebuild_daily_payload.py
 
       - name: Build multi-agent analysis (agents)
         continue-on-error: true

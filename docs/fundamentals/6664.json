@@ -1,1 +1,82 @@
-{"stock_id": "6664", "name": "群翊", "source": "finmind", "revenue": null, "eps": null, "margins": null, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:29"}
+{
+  "stock_id": "6664",
+  "name": "群翊",
+  "source": "finmind",
+  "revenue": null,
+  "eps": null,
+  "margins": null,
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:29",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "IC 載板與先進封裝 (含AI伺服器及玻璃基板設備)",
+        "share_pct": 55,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "PCB (含軟板) 製程設備",
+        "share_pct": 20,
+        "yoy_growth": null,
+        "trend": "flat"
+      },
+      {
+        "name": "光電及光學設備",
+        "share_pct": 20,
+        "yoy_growth": null,
+        "trend": "flat"
+      },
+      {
+        "name": "其他應用設備",
+        "share_pct": 5,
+        "yoy_growth": null,
+        "trend": "flat"
+      }
+    ],
+    "regions": [
+      {
+        "name": "中國",
+        "share_pct": 40
+      },
+      {
+        "name": "日本與韓國",
+        "share_pct": 30
+      },
+      {
+        "name": "歐洲與美洲",
+        "share_pct": 15
+      },
+      {
+        "name": "其他亞洲地區",
+        "share_pct": 15
+      }
+    ],
+    "customers": [
+      "歐洲IDM客戶",
+      "美系半導體龍頭",
+      "晶圓代工大廠 (如台積電)",
+      "封測廠 (如日月光)",
+      "台灣、日本、韓國前十大載板廠",
+      "美系電動車與低軌衛星大廠 (如Tesla/SpaceX)"
+    ],
+    "biz_model": "群翊為自動化製程設備設計、製造與銷售商，提供高度客製化的塗佈、烘烤、壓膜、乾燥及自動化整合解決方案，主要服務電子與半導體產業客戶。",
+    "moat": "群翊在PCB乾製程設備領域居全球領先地位，並在半導體先進封裝及玻璃基板技術上具備長期技術優勢和客戶關係。其核心競爭力在於高精密塗佈烘烤技術、廣泛的專利佈局、與一線客戶的深度合作，以及對先進封裝如玻璃核心載板等新技術的領先佈局，形成高技術門檻與客戶黏著度。",
+    "summary": "群翊（6664）作為全球領先的電子及半導體產業自動化製程設備供應商，正積極轉型，將業務重心轉向高毛利的先進封裝、IC載板、AI伺服器及玻璃基板設備，這些高階產品預計在2025年佔營收比重將超過六成。公司憑藉其核心的塗佈、烘烤、壓膜技術與高度客製化能力，深入半導體一線大廠供應鏈，並已切入美系低軌衛星與電動車巨頭，展現強勁的成長動能與深厚的護城河。",
+    "data_period": "2024-2026 Q1 (依最新季報與產業報告)",
+    "updated_at": "2026-06-22"
+  }
+}

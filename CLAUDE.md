@@ -76,7 +76,7 @@ GEMINI_API_KEY_2=# your api key
 ## 專案結構
 
 ```
-台股研究/
+stock_research/
 ├── app.py                 # Streamlit UI
 ├── gemini_writer.py       # Gemini 文字生成模組（Claude 不直接生成文字）
 ├── daily_reports/         # 每日掃描 JSON 輸出

@@ -1,1 +1,53 @@
-{"stock_id": "5443", "name": "均豪", "source": "finmind", "revenue": null, "eps": null, "margins": null, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:29"}
+{
+  "stock_id": "5443",
+  "name": "均豪",
+  "source": "finmind",
+  "revenue": null,
+  "eps": null,
+  "margins": null,
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:29",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "半導體製程與檢測設備 (含先進封裝、再生晶圓)",
+        "share_pct": 87.0,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "顯示器製程設備",
+        "share_pct": 13.0,
+        "yoy_growth": null,
+        "trend": "down"
+      }
+    ],
+    "regions": [],
+    "customers": [
+      "台積電 (TSMC)",
+      "日月光 (ASE)",
+      "群創 (Innolux)",
+      "友達 (AUO)",
+      "再生晶圓大廠",
+      "國際封裝大廠"
+    ],
+    "biz_model": "均豪以自有品牌「GPM」專注於電子產業的製程與檢測自動化設備製造，透過客製化、高精度解決方案，並主導「G2C+聯盟」（與均華、志聖合作），提供客戶從前段到後段封裝的一站式整合解決方案。",
+    "moat": "均豪的核心競爭優勢在於其成功從面板設備廠轉型為高階半導體與先進封裝設備供應商，尤其在AOI檢測、精密研磨(CMP)、平面化製程及大尺寸基板處理技術上具備深厚經驗，使其在CoWoS與FOPLP等先進封裝領域扮演關鍵「品質守門員」角色，並透過G2C+聯盟提供綜效，加強與主要客戶的黏著度。此外，公司積極整合AI演算法與數位雙生技術，提升研發效率。",
+    "summary": "均豪在2026年第一季已成功轉型，半導體業務佔營收比重高達87%，顯著優化獲利結構。公司憑藉G2C+聯盟的整合能力及在先進製程檢測、研磨等核心技術，成為台積電及其他一線大廠在AI晶片與先進封裝領域的關鍵設備供應商。訂單能見度已達2026年底，預期營運將持續受惠於AI與先進製程擴產需求。",
+    "data_period": "2026 Q1",
+    "updated_at": "2026-06-22"
+  }
+}

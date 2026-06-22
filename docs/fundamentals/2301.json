@@ -1,1 +1,87 @@
-{"stock_id": "2301", "name": "光寶科", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [1.66], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [21.66], "operating_margin": [9.44], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:31"}
+{
+  "stock_id": "2301",
+  "name": "光寶科",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      1.66
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      21.66
+    ],
+    "operating_margin": [
+      9.44
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:31",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "雲端及物聯網 (Cloud & AIoT)",
+        "share_pct": 53,
+        "yoy_growth": 47,
+        "trend": "up"
+      },
+      {
+        "name": "資訊及消費性電子 (IT & Consumer Electronics)",
+        "share_pct": 30,
+        "yoy_growth": -5,
+        "trend": "down"
+      },
+      {
+        "name": "光電 (Opto-electronics)",
+        "share_pct": 17,
+        "yoy_growth": 5,
+        "trend": "up"
+      }
+    ],
+    "regions": [],
+    "customers": [
+      "NVIDIA (AI伺服器)",
+      "OpenAI (伺服器電源)",
+      "雲端服務供應商/資料中心",
+      "QCT (廣達雲達)",
+      "鴻海",
+      "緯創",
+      "英業達 (ODM/系統整合夥伴)",
+      "低軌衛星電源主要供應商"
+    ],
+    "biz_model": "光寶科正從傳統電子零組件製造商轉型為AI基礎建設的「AI電能整合系統方案商」，提供伺服器電源、電源機架、電池備援模組（BBU）及液冷散熱等整體解決方案，並透過協同開發模式與主要客戶合作，同時透過併購宇智網通強化5G+及AI邊緣運算佈局。",
+    "moat": "光寶科的核心競爭優勢在於其在AI伺服器電源領域的領先地位，包括高功率（8.5kW PSU/BBU、110kW Power Shelf）及高壓直流（800V HVDC兆瓦級電源機櫃與液冷整合方案）技術。公司具備從元件到系統整合的綜合能力，並在全球（台灣、美國、越南）進行擴產，以快速響應客戶需求。此外，公司持續投入研發，專注於綠色資料中心、永續運輸與高效能基礎設施等高價值領域，並成功轉型至高毛利業務。",
+    "summary": "光寶科2026年第一季營收表現強勁，年增19%，其中雲端及物聯網部門貢獻過半營收並實現47%年增長，成為主要成長引擎，AI相關產品營收佔比預計在2026年挑戰三成。公司正積極轉型為AI電能整合系統解決方案提供者，並在全球擴大產能佈局，以抓住AI基礎設施升級帶來的長期機會。",
+    "data_period": "2026 Q1 及 2026 年度展望",
+    "updated_at": "2026-06-19"
+  }
+}

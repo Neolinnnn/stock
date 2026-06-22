@@ -1,0 +1,69 @@
+name: 單檔即時掃描
+
+on:
+  workflow_dispatch:
+    inputs:
+      stock_id:
+        description: '股票代碼（例 2316）'
+        required: true
+        type: string
+
+# 同一檔重複觸發時取消舊 run，避免互撞
+concurrency:
+  group: scan-one-${{ github.event.inputs.stock_id }}
+  cancel-in-progress: true
+
+jobs:
+  scan-one:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore price cache
+        uses: actions/cache@v4
+        with:
+          path: price_cache
+          key: price-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            price-cache-${{ runner.os }}-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt
+
+      - name: Scan single stock
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+        run: python scripts/scan_one_stock.py "${{ github.event.inputs.stock_id }}"
+
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git add docs/stocks/ docs/fundamentals/
+          git diff --cached --quiet && echo "無新增內容" && exit 0
+          git commit -m "auto: 單檔掃描 ${{ github.event.inputs.stock_id }}"
+          # 最多重試 3 次 push（防止與每日掃描並發 reject）
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin main && git push && break
+            echo "Push 失敗，第 ${i} 次重試..."
+            sleep $((i * 5))
+          done

@@ -1,1 +1,121 @@
-{"stock_id": "2388", "name": "威盛", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [0.08], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [23.95], "operating_margin": [-24.02], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:28"}
+{
+  "stock_id": "2388",
+  "name": "威盛",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      0.08
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      23.95
+    ],
+    "operating_margin": [
+      -24.02
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:28",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "邊緣AI解決方案 (Edge AI)",
+        "share_pct": 35,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "智能車載系統 (Mobile360)",
+        "share_pct": 30,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "嵌入式系統",
+        "share_pct": 20,
+        "yoy_growth": null,
+        "trend": "flat"
+      },
+      {
+        "name": "ASIC設計服務 (透過威宏科技)",
+        "share_pct": 10,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "高速傳輸介面 (透過威鋒電子)",
+        "share_pct": 5,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "光通訊 (新興業務)",
+        "share_pct": 0,
+        "yoy_growth": null,
+        "trend": "up"
+      }
+    ],
+    "regions": [
+      {
+        "name": "北美",
+        "share_pct": null
+      },
+      {
+        "name": "歐洲",
+        "share_pct": null
+      },
+      {
+        "name": "亞太 (含台灣與大中華)",
+        "share_pct": null
+      },
+      {
+        "name": "南美洲",
+        "share_pct": null
+      }
+    ],
+    "customers": [
+      "全球物流車隊",
+      "工業自動化企業",
+      "車廠",
+      "智慧城市相關單位",
+      "智慧工廠",
+      "智慧零售業",
+      "政府及企業標案客戶"
+    ],
+    "biz_model": "威盛電子作為一家無廠半導體IC設計公司，其商業模式已從傳統PC晶片組轉型為提供涵蓋處理器、系統整合的智能邊緣解決方案，專注於B2B市場。透過子公司威宏科技提供ASIC設計服務，威鋒電子提供高速傳輸介面晶片，並以客製化服務和軟硬體整合能力與客戶建立長期合作夥伴關係。",
+    "moat": "威盛的核心競爭優勢在於其在邊緣運算(Edge AI)領域的深厚佈局，能提供整合NPU的處理器與系統平台，實現終端設備的即時AI運算。公司具備從半導體晶片設計（涵蓋6奈米、並已著眼3奈米ASIC設計與參與台積電矽光子平台）、電腦視覺(Computer Vision)到軟硬體整合的完整解決方案能力，並透過客製化服務和長期客戶黏著度，在智能車載、工業自動化、智慧建築等垂直市場形成進入障礙。光通訊技術的積極投入也為其帶來新的成長動能。",
+    "summary": "威盛電子（2388）已成功轉型為邊緣AI解決方案領導廠商，2026年1至5月累計合併營收年成長34.31%，顯示其在智能車載系統、邊緣運算及ASIC設計服務等領域的強勁成長動能。目前邊緣AI與車載系統是營收成長最快的產品線，主要客戶為全球物流、工業自動化及車廠等企業級客戶。由於公開資料未提供各產品線及地區營收的具體比例，產品線佔比為合理估計，年增率為整體營收年增率。",
+    "data_period": "2026 Q1 - May",
+    "updated_at": "2026-06-20"
+  }
+}

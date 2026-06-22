@@ -1,1 +1,106 @@
-{"stock_id": "3653", "name": "健策", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [9.53], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [41.78], "operating_margin": [31.98], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:30"}
+{
+  "stock_id": "3653",
+  "name": "健策",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      9.53
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      41.78
+    ],
+    "operating_margin": [
+      31.98
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:30",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "散熱產品 (Thermal Solutions)",
+        "share_pct": 72.31,
+        "yoy_growth": 77.0,
+        "trend": "up"
+      },
+      {
+        "name": "導線架 (Lead Frames)",
+        "share_pct": 9.23,
+        "yoy_growth": null,
+        "trend": "flat_to_up"
+      },
+      {
+        "name": "電子零組件 (Electronic Components, incl. ILM)",
+        "share_pct": 6.63,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "其他 (Others)",
+        "share_pct": 10.57,
+        "yoy_growth": null,
+        "trend": "flat"
+      },
+      {
+        "name": "通訊連接器 (Communication Connectors)",
+        "share_pct": 1.27,
+        "yoy_growth": null,
+        "trend": "flat_to_up"
+      }
+    ],
+    "regions": [
+      {
+        "name": "台灣 (Domestic)",
+        "share_pct": 23.04
+      },
+      {
+        "name": "海外 (International)",
+        "share_pct": 76.96
+      }
+    ],
+    "customers": [
+      "AMD",
+      "Intel",
+      "NVIDIA",
+      "台積電 (TSMC)",
+      "伺服器大廠 (Server OEMs)",
+      "車用電子客戶 (Automotive Electronics Clients)"
+    ],
+    "biz_model": "健策主要以精密沖壓技術為基礎，提供高階散熱解決方案及精密金屬機構件。其商業模式涵蓋OEM/ODM，並透過與客戶共同開發（JDM）先進散熱模組與關鍵零組件，實現高度垂直整合，從模具設計、沖壓、CNC加工、電鍍到組裝測試。",
+    "moat": "核心競爭優勢包括：在高階均熱片（Vapor Chamber）、微通道蓋板（Micro Channel Lid, MCL）及ILM扣件等AI伺服器散熱關鍵零組件領域的技術領先地位；具備從設計到量產的垂直整合製造能力，可提供整合性散熱與機構解決方案；與全球主要半導體及伺服器大廠建立長期緊密的合作關係，形成高客戶黏著度；以及持續投入新世代散熱技術研發，以應對高功耗趨勢。",
+    "summary": "健策精密是AI伺服器與電動車散熱解決方案的領導廠商，特別在高階均熱片、液冷模組及ILM扣件等領域具備核心競爭力。受惠於AI與HPC需求強勁，散熱產品佔營收比重已超過70%，且持續高速增長。公司積極擴充台灣產能，並布局下一代散熱技術，預期未來營運成長動能持續強勁。產品線佔比資料來自2026年1-5月累計營收，地區別營收分布為2020年資料估計，產品線年增率為2025年第三季資料，整體趨勢判斷為最新新聞資訊。",
+    "data_period": "2026年1月-5月累計 (產品線); 2025年第三季 (部分產品線年增率); 2020年 (地區別營收)",
+    "updated_at": "2026-06-22"
+  }
+}

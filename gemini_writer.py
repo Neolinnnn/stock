@@ -119,7 +119,11 @@ class GeminiWriter:
         payload = json.dumps(body).encode("utf-8")
         last_error: Exception | None = None
 
-        for attempt, key in enumerate(self._keys):
+        # 429 → 換 key（不同 project 配額）；503 → 等待後同 key 重試，最多 3 次
+        _503_retries = 3
+        attempt = 0
+        while attempt < len(self._keys):
+            key = self._keys[attempt]
             url = GEMINI_API_URL.format(model=self.model, key=key)
             req = urllib.request.Request(
                 url,
@@ -134,12 +138,30 @@ class GeminiWriter:
             except urllib.error.HTTPError as e:
                 err_body = e.read().decode("utf-8")
                 last_error = RuntimeError(f"Gemini API 錯誤 {e.code}: {err_body}")
-                if e.code in _RETRYABLE_CODES and attempt < len(self._keys) - 1:
-                    wait = 3 * (attempt + 1)
-                    print(f"  [GeminiWriter] key[{attempt}] 回傳 {e.code}，{wait}s 後換下一組 key…")
-                    time.sleep(wait)
-                    continue
-                raise last_error from e
+                if e.code == 429:
+                    # 配額耗盡 → 換下一組 key
+                    if attempt < len(self._keys) - 1:
+                        wait = 3 * (attempt + 1)
+                        print(f"  [GeminiWriter] key[{attempt}] 回傳 429，{wait}s 後換下一組 key…")
+                        time.sleep(wait)
+                        attempt += 1
+                        _503_retries = 3  # 新 key 重置 503 重試次數
+                    else:
+                        raise last_error from e
+                elif e.code == 503:
+                    # 伺服器繁忙 → 等 30s 後重試同一 key（最多 3 次再換 key）
+                    if _503_retries > 0:
+                        _503_retries -= 1
+                        print(f"  [GeminiWriter] key[{attempt}] 回傳 503，等 30s 後重試（剩 {_503_retries} 次）…")
+                        time.sleep(30)
+                    elif attempt < len(self._keys) - 1:
+                        print(f"  [GeminiWriter] key[{attempt}] 503 重試耗盡，換下一組 key…")
+                        attempt += 1
+                        _503_retries = 3
+                    else:
+                        raise last_error from e
+                else:
+                    raise last_error from e
 
         raise last_error  # type: ignore
 

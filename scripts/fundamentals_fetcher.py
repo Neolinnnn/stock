@@ -271,6 +271,14 @@ def write_fundamentals(stock_id: str, name: str, result: dict):
     FUNDAMENTALS_DIR.mkdir(parents=True, exist_ok=True)
     result['generated_at'] = datetime.now().strftime('%Y-%m-%d %H:%M')
     path = FUNDAMENTALS_DIR / f'{stock_id}.json'
+    # 保留由 enrich_product_mix.py 另外寫入的 product_mix，避免整檔覆寫時被洗掉
+    if path.exists():
+        try:
+            existing = json.loads(path.read_text(encoding='utf-8'))
+            if existing.get('product_mix') and 'product_mix' not in result:
+                result['product_mix'] = existing['product_mix']
+        except Exception:
+            pass
     path.write_text(json.dumps(result, ensure_ascii=False), encoding='utf-8')
 
 

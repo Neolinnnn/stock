@@ -704,7 +704,7 @@ def _build_single_stock(sid, info, stocks_dir, start_date, end_date, chip_start)
     )
     for col in ['open', 'high', 'low', 'close', 'volume']:
         df_raw[col] = pd.to_numeric(df_raw[col], errors='coerce')
-    df_raw = df_raw.dropna(subset=['close']).reset_index(drop=True)
+    df_raw = df_raw[df_raw['close'] > 0].dropna(subset=['close']).reset_index(drop=True)
 
     # ── 計算指標 ──────────────────────────────────────────────────────────────
     if len(df_raw) < 26:

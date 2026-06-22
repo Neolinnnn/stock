@@ -1,1 +1,109 @@
-{"stock_id": "1533", "name": "車王電", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [0.84], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [27.81], "operating_margin": [7.12], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:28"}
+{
+  "stock_id": "1533",
+  "name": "車王電",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      0.84
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      27.81
+    ],
+    "operating_margin": [
+      7.12
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:28",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "電動巴士及電能電控系統 (Electric Buses & Energy/Control Systems)",
+        "share_pct": 60,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "車用電子零組件 (Automotive Electronic Components)",
+        "share_pct": 30,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "汽車與工業用鋰電池工具 (Automotive & Industrial Lithium Battery Tools)",
+        "share_pct": 10,
+        "yoy_growth": null,
+        "trend": "up"
+      }
+    ],
+    "regions": [
+      {
+        "name": "台灣",
+        "share_pct": null
+      },
+      {
+        "name": "北美 (North America)",
+        "share_pct": null
+      },
+      {
+        "name": "日本",
+        "share_pct": null
+      },
+      {
+        "name": "歐洲",
+        "share_pct": null
+      },
+      {
+        "name": "中東",
+        "share_pct": null
+      },
+      {
+        "name": "亞洲 (不含日本)",
+        "share_pct": null
+      }
+    ],
+    "customers": [
+      "國內外客運業者 (Domestic and international public transport operators)",
+      "美國Optimal集團 (US Optimal Group)",
+      "日本住友商事及西鐵 (Japan Sumitomo Corporation and Nishitetsu)",
+      "國際車廠及製造業 (International car manufacturers and manufacturing industries)",
+      "全球售後服務市場 (Global aftermarket)"
+    ],
+    "biz_model": "車王電以自有品牌「MOBILETRON」行銷全球汽車電子售後服務市場，並以「Durofix」品牌發展工業用鋰電池工具。透過子公司華德動能，車王電轉型為電動巴士整車製造商及提供電能電控系統的一站式解決方案平台，同時也進行ODM/JDM合作與產品代工。",
+    "moat": "車王電具備高度垂直整合能力，是國內唯一能從關鍵零組件（如BMS、VCU）自主設計製造到電動巴士整車開發的企業。公司掌握電池熱管理、高壓分電、智慧充電及車隊管理軟體等核心技術，並取得國際高階認證，在國內電動巴士及充電樁市場具領先地位，並積極拓展海外市場與氫能技術。",
+    "summary": "車王電正從傳統汽車電子轉型為涵蓋電動巴士、汽車電子及工業用鋰電池工具的多元化科技集團，其中電動巴士相關業務已是最大的營收來源，在2026年第一季佔營收比重超過60%。雖然各產品線和地區的具體營收比例及年增率數據較難取得，但電動巴士業務的顯著增長是集團整體營收年增62.84%的主要動能。",
+    "data_period": "2025-2026Q1",
+    "updated_at": "2026-06-19"
+  }
+}

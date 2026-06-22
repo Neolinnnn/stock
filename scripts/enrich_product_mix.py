@@ -150,13 +150,30 @@ def get_sids_from_qualified() -> list[tuple[str, str]]:
     return []
 
 
+def get_sids_missing_pm() -> list[tuple[str, str]]:
+    """從 fundamentals 目錄取得尚無 product_mix 的 (sid, name) 清單"""
+    result = []
+    for path in sorted(FUND_DIR.glob("*.json")):
+        sid = path.stem
+        try:
+            d = json.loads(path.read_text(encoding="utf-8"))
+            if not d.get("product_mix"):
+                result.append((sid, d.get("name", sid)))
+        except Exception:
+            pass
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description="產銷組合資料抓取")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--all", action="store_true", help="處理所有 fundamentals 股票")
+    group.add_argument("--missing", action="store_true", help="只處理尚無 product_mix 的股票")
     group.add_argument("--qualified", action="store_true", help="只處理今日 qualified 股票")
     group.add_argument("--sids", nargs="+", metavar="SID", help="指定股票代碼")
     parser.add_argument("--force", action="store_true", help="強制重新抓取（忽略快取時效）")
+    parser.add_argument("--limit", type=int, default=0, metavar="N",
+                        help="每次最多處理 N 支（用於每日分批，預設不限）")
     args = parser.parse_args()
 
     # 建立 Gemini writer
@@ -169,6 +186,11 @@ def main():
     # 決定目標清單
     if args.all:
         targets = get_sids_from_fundamentals()
+    elif args.missing:
+        targets = get_sids_missing_pm()
+        if not targets:
+            print("[INFO] 所有 fundamentals 股票已有 product_mix，無需更新")
+            sys.exit(0)
     elif args.qualified:
         targets = get_sids_from_qualified()
         if not targets:
@@ -180,6 +202,9 @@ def main():
     else:
         parser.print_help()
         sys.exit(0)
+
+    if args.limit > 0:
+        targets = targets[: args.limit]
 
     print(f"[enrich_product_mix] 共 {len(targets)} 支股票，force={args.force}")
     updated = 0

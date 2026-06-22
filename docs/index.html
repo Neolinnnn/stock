@@ -488,36 +488,62 @@ function showToast(msg) {
 // token 僅存於瀏覽器 localStorage，不會上傳；需 fine-grained PAT 對 Neolinnnn/stock 給 Actions: Read & Write
 const GH_REPO = 'Neolinnnn/stock';
 const GH_WORKFLOW = 'daily_scan.yml';
-async function triggerScan() {
+const GH_WORKFLOW_ONE = 'scan_one.yml';
+
+// 共用：取得/驗證 gh_token 後 POST workflow_dispatch。回傳 true 表示成功觸發（204）。
+async function ghDispatch(workflow, inputs) {
   let token = localStorage.getItem('gh_token');
   if (!token) {
     token = (prompt('貼上 GitHub fine-grained token\n（範圍：Neolinnnn/stock，權限 Actions: Read & Write）\n只會存在本機瀏覽器') || '').trim();
-    if (!token) return;
+    if (!token) return false;
     localStorage.setItem('gh_token', token);
   }
+  const body = { ref: 'main' };
+  if (inputs && Object.keys(inputs).length) body.inputs = inputs;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${workflow}/dispatches`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
+      body: JSON.stringify(body),
+    });
+    if (res.status === 204) return true;
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('gh_token');
+      showToast('❌ token 無效或權限不足，已清除，請再試一次重設');
+      return false;
+    }
+    const msg = await res.text();
+    showToast(`❌ 觸發失敗（${res.status}）：${msg.slice(0, 80)}`);
+  } catch (e) {
+    showToast(`❌ 觸發失敗：${e.message}`);
+  }
+  return false;
+}
+
+async function triggerScan() {
   if (!confirm('立即觸發每日掃描？\n（GitHub Actions 跑完約需數分鐘）')) return;
   const btn = document.getElementById('btn-scan');
   btn.disabled = true;
   try {
-    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${GH_WORKFLOW}/dispatches`, {
-      method: 'POST',
-      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
-      body: JSON.stringify({ ref: 'main' }),
-    });
-    if (res.status === 204) {
-      showToast('✅ 已觸發掃描，數分鐘後完成');
-    } else if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem('gh_token');
-      showToast('❌ token 無效或權限不足，已清除，請再點一次重設');
-    } else {
-      const msg = await res.text();
-      showToast(`❌ 觸發失敗（${res.status}）：${msg.slice(0, 80)}`);
-    }
-  } catch (e) {
-    showToast(`❌ 觸發失敗：${e.message}`);
+    if (await ghDispatch(GH_WORKFLOW, {})) showToast('✅ 已觸發掃描，數分鐘後完成');
   } finally {
     btn.disabled = false;
   }
+}
+
+// 自選新增非族群股時觸發單檔掃描，並輕量輪詢資料就緒
+async function dispatchStockScan(id) {
+  if (!await ghDispatch(GH_WORKFLOW_ONE, { stock_id: id })) return;
+  showToast(`⏳ ${id} 資料抓取中，約 1–2 分鐘後可看完整分析`);
+  let tries = 0;
+  const timer = setInterval(async () => {
+    tries++;
+    try {
+      const r = await fetch(`./stocks/${id}.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (r.ok) { clearInterval(timer); showToast(`✅ ${id} 資料已就緒`); return; }
+    } catch {}
+    if (tries >= 6) clearInterval(timer);
+  }, 20000);
 }
 
 function escHtml(s) {
@@ -605,6 +631,11 @@ async function wlAdd(idOverride) {
     if (data.ok) {
       showToast(`✓ ${id} ${data.name} 已加入自選清單`);
       if (document.getElementById('wl-input')) document.getElementById('wl-input').value = '';
+      // 若無深度資料檔（非族群股、或從未掃過），即時觸發單檔掃描補資料
+      try {
+        const probe = await fetch(`./stocks/${id}.json?t=${Date.now()}`, { cache: 'no-store' });
+        if (!probe.ok) dispatchStockScan(id);
+      } catch { dispatchStockScan(id); }
       loadWatchlist(true);
     } else {
       const msgs = { duplicate:'已在清單中', limit_reached:'自選清單已達 50 檔上限', not_found:'代碼無效，請確認股票代碼' };
@@ -1262,16 +1293,31 @@ function renderFundProductMix(d) {
 }
 
 // 今日行動清單 — 開啟 modal
-function openPM(sid, name) {
-  const pm = (window._PM_CACHE || {})[sid];
+async function openPM(sid, name) {
   const title = document.getElementById('pm-title');
   const meta  = document.getElementById('pm-meta');
   const body  = document.getElementById('pm-body');
   title.textContent = `${name}（${sid}）產銷組合`;
-  meta.textContent  = pm ? `資料期間：${pm.data_period || '—'}　更新：${pm.updated_at || '—'}` : '';
-  body.innerHTML    = _renderPMHtml(pm);
   document.getElementById('pm-overlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+
+  window._PM_CACHE = window._PM_CACHE || {};
+  let pm = window._PM_CACHE[sid];
+  // 當日 payload 沒帶到時（例如首次入選當天 enrich 尚未完成），
+  // 即時從 fundamentals 檔補抓，不必等 payload 重建。
+  if (!pm) {
+    meta.textContent = '';
+    body.innerHTML   = '<div style="color:var(--sub);padding:12px">載入產銷組合中…</div>';
+    try {
+      const fd = await fetchJSON(`./fundamentals/${sid}.json`);
+      pm = fd && fd.product_mix;
+      if (pm) window._PM_CACHE[sid] = pm;
+    } catch (e) {
+      pm = null;
+    }
+  }
+  meta.textContent = pm ? `資料期間：${pm.data_period || '—'}　更新：${pm.updated_at || '—'}` : '';
+  body.innerHTML   = _renderPMHtml(pm);
 }
 
 function closePM() {
@@ -2353,9 +2399,9 @@ function renderDaily(data){
           ${reasons.map(r=>`✓ ${escHtml(r)}`).join('<br>')}
           ${risks.length?'<br>'+risks.map(r=>`<span style="color:var(--yellow)">⚠ ${escHtml(r)}</span>`).join('<br>'):''}
         </div>`:''}
-        ${q.product_mix?`<div style="margin-top:8px">
+        <div style="margin-top:8px">
           <button class="pm-btn" onclick="openPM('${escHtml(q.id)}','${escHtml(q.name)}')">🏭 產銷組合</button>
-        </div>`:''}
+        </div>
       </div>`;
     });
     html+=`</div>`;

@@ -1,1 +1,103 @@
-{"stock_id": "6213", "name": "聯茂", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [0.87], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [11.42], "operating_margin": [4.64], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:30"}
+{
+  "stock_id": "6213",
+  "name": "聯茂",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      0.87
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      11.42
+    ],
+    "operating_margin": [
+      4.64
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:30",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "基礎建設 (伺服器與網通)",
+        "share_pct": 72,
+        "yoy_growth": 31.6,
+        "trend": "up"
+      },
+      {
+        "name": "車用電子",
+        "share_pct": 14,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "消費性電子",
+        "share_pct": 9,
+        "yoy_growth": null,
+        "trend": "down"
+      },
+      {
+        "name": "智慧型手機",
+        "share_pct": 5,
+        "yoy_growth": null,
+        "trend": "down"
+      }
+    ],
+    "regions": [
+      {
+        "name": "亞洲 (主要為台灣以外市場)",
+        "share_pct": 95.7
+      },
+      {
+        "name": "台灣 (內銷)",
+        "share_pct": 3
+      },
+      {
+        "name": "其他地區",
+        "share_pct": 1.3
+      }
+    ],
+    "customers": [
+      "NVIDIA",
+      "AWS",
+      "Meta (AI ASIC客戶)",
+      "美系AI GPU大廠",
+      "伺服器ODM終端及PCB板廠"
+    ],
+    "biz_model": "聯茂電子主要業務為銅箔基板(CCL)及玻璃纖維膠片(PP)的生產與銷售，並提供多層壓合板專業代工服務，屬B2B材料供應商與代工模式。",
+    "moat": "聯茂的核心競爭優勢在於高階CCL材料的技術領先地位，特別是針對AI伺服器、高速運算、5G及車用電子所需的超低耗損(M7、M8)及極低耗損(M9、M10)材料。公司具備通過國際大廠嚴苛認證與穩定量產的能力，並透過泰國廠擴產 分散地緣政治風險及確保高階產能供應，同時在原物料供應緊俏時具備成本轉嫁能力。",
+    "summary": "聯茂(6213)在2026年第一季營收達91.43億元，年成長20.62%，主要受惠於基礎建設中伺服器與網通需求的強勁成長，特別是AI伺服器與通用伺服器升級帶動高階材料(M7以上)滲透率提升。公司積極優化產品組合，將重心轉向高毛利的高階材料，並成功切入美系AI ASIC客戶及低軌衛星供應鏈。",
+    "data_period": "2026年第一季及2026年第二季展望",
+    "updated_at": "2026-06-22"
+  }
+}

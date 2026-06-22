@@ -1,1 +1,100 @@
-{"stock_id": "3661", "name": "世芯-KY", "source": "mixed", "revenue": null, "eps": {"quarter": ["2026Q1"], "eps": [17.55], "qoq": [null], "yoy": [null]}, "margins": {"quarter": ["2026Q1"], "gross_margin": [50.18], "operating_margin": [32.66], "net_margin": [0.0]}, "meta": {"revenue_months": 24, "financial_quarters": 8, "fetch_errors": [{"field": "revenue", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}, {"field": "eps_margins", "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"}]}, "generated_at": "2026-06-16 12:30"}
+{
+  "stock_id": "3661",
+  "name": "世芯-KY",
+  "source": "mixed",
+  "revenue": null,
+  "eps": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "eps": [
+      17.55
+    ],
+    "qoq": [
+      null
+    ],
+    "yoy": [
+      null
+    ]
+  },
+  "margins": {
+    "quarter": [
+      "2026Q1"
+    ],
+    "gross_margin": [
+      50.18
+    ],
+    "operating_margin": [
+      32.66
+    ],
+    "net_margin": [
+      0.0
+    ]
+  },
+  "meta": {
+    "revenue_months": 24,
+    "financial_quarters": 8,
+    "fetch_errors": [
+      {
+        "field": "revenue",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      },
+      {
+        "field": "eps_margins",
+        "error": "FinMind API unexpected response: Requests reach the upper limit. https://finmindtrade.com/"
+      }
+    ]
+  },
+  "generated_at": "2026-06-16 12:30",
+  "product_mix": {
+    "product_lines": [
+      {
+        "name": "AI/HPC ASIC",
+        "share_pct": 85,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "網通ASIC",
+        "share_pct": 10,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "車用ADAS ASIC",
+        "share_pct": 5,
+        "yoy_growth": null,
+        "trend": "up"
+      }
+    ],
+    "regions": [
+      {
+        "name": "北美",
+        "share_pct": 80
+      },
+      {
+        "name": "中國",
+        "share_pct": 10
+      },
+      {
+        "name": "日本",
+        "share_pct": 5
+      },
+      {
+        "name": "其他 (含東南亞)",
+        "share_pct": 5
+      }
+    ],
+    "customers": [
+      "AWS (Amazon Web Services)",
+      "Intel (Habana Labs)",
+      "理想汽車 (Li Auto)",
+      "其他北美雲端服務供應商"
+    ],
+    "biz_model": "世芯-KY採用無晶圓廠(Fabless)模式，提供客製化特殊應用積體電路(ASIC)設計服務及一站式量產服務（Turn-key）。其業務主要分為委託設計服務（NRE）和量產服務，NRE負責晶片從設計到驗證，量產服務則涵蓋晶圓製造、封裝、測試到出貨的供應鏈管理。",
+    "moat": "世芯-KY的核心競爭優勢包括：1. 技術領先：掌握3nm/2nm先進製程與CoWoS異質整合能力，並在2奈米GAA架構與Chiplet設計上取得領先地位。 2. 供應鏈地位：作為台積電（TSMC）價值鏈聯盟（VCA）成員，能確保稀缺的先進製程與封裝產能。 3. 客戶黏著度：與AWS、Intel等大型客戶深度綁定，透過NRE專案積累長期量產營收基礎。 4. 解決複雜工程難題：擅長解決AI運算晶片所需的大晶片設計與異質整合挑戰。",
+    "summary": "世芯-KY是全球領先的AI/HPC ASIC設計服務公司，受惠於北美雲端服務供應商對客製化AI加速晶片的需求強勁。公司提供從先進製程設計到量產的一站式解決方案，憑藉技術領先和與台積電、主要客戶的深度合作，建立了堅實的競爭護城河。預計2026年下半年營運將因3奈米AI加速器量產而爆發性成長。",
+    "data_period": "2025Q3-2026Q1及2026年展望",
+    "updated_at": "2026-06-20"
+  }
+}

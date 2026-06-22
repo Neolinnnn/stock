@@ -16,7 +16,7 @@
 ## 📁 資料夾結構
 
 ```
-台股研究/
+stock_research/
 ├── 🚀 01_快速開始指南.md          ← 從這裡開始！
 ├── 📥 download_repos.sh            ← 自動下載所有GitHub倉庫的腳本
 ├── 📖 README.md                    ← 本文件
@@ -47,7 +47,7 @@
 
 ```bash
 # 進入台股研究資料夾
-cd /path/to/台股研究
+cd /path/to/stock_research
 
 # 執行下載腳本
 bash download_repos.sh

@@ -2,7 +2,7 @@
 離線訓練腳本。執行一次，輸出 model/rf_model.pkl。
 
 用法：
-    cd 台股研究
+    cd stock_research
     python model/train.py
 """
 import sys
