@@ -1,6 +1,6 @@
 {
   "date": "20260623",
-  "timestamp": "2026-06-23T10:29:39.167081",
+  "timestamp": "2026-06-23T10:48:15.704434",
   "market": {
     "加權指數": 47100.65,
     "漲跌幅": -1.3423538551671292,
@@ -3708,17 +3708,17 @@
       {
         "id": "2441",
         "name": "超豐",
-        "status": "pending_entry"
+        "entry_price": 136.0
       },
       {
         "id": "8046",
         "name": "南電",
-        "status": "pending_entry"
+        "entry_price": 909.0
       },
       {
         "id": "8046",
         "name": "南電",
-        "status": "pending_entry"
+        "entry_price": 909.0
       }
     ],
     "new_exits": [],
@@ -3781,6 +3781,42 @@
         "entry_date": "20260622",
         "entry_price": 409.5,
         "high_watermark": 409.5,
+        "days_since_high": 0
+      },
+      {
+        "id": "2441",
+        "name": "超豐",
+        "signal_date": "20260623",
+        "signal_price": 136.0,
+        "status": "holding",
+        "phase": 1,
+        "entry_date": "20260623",
+        "entry_price": 136.0,
+        "high_watermark": 136.0,
+        "days_since_high": 0
+      },
+      {
+        "id": "8046",
+        "name": "南電",
+        "signal_date": "20260623",
+        "signal_price": 909.0,
+        "status": "holding",
+        "phase": 1,
+        "entry_date": "20260623",
+        "entry_price": 909.0,
+        "high_watermark": 909.0,
+        "days_since_high": 0
+      },
+      {
+        "id": "8046",
+        "name": "南電",
+        "signal_date": "20260623",
+        "signal_price": 909.0,
+        "status": "holding",
+        "phase": 1,
+        "entry_date": "20260623",
+        "entry_price": 909.0,
+        "high_watermark": 909.0,
         "days_since_high": 0
       }
     ]
