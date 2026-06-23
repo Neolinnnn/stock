@@ -126,6 +126,10 @@ jobs:
           # 產生靜態頁 docs/agents/index.html（每日覆寫為最新）
           python agents/build_preview.py --docs
 
+      - name: Audit static content (健檢報告)
+        continue-on-error: true
+        run: python scripts/audit_docs.py
+
       - name: Commit reports
         run: |
           git config user.name "github-actions[bot]"

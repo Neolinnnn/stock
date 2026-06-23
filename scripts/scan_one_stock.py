@@ -44,7 +44,7 @@ def resolve_name(sid: str) -> str:
 
 
 def scan_technical(sid: str, name: str) -> bool:
-    """產生 docs/stocks/{sid}.json。"""
+    """產生 docs/stocks/{sid}.json，並把個股併入 stocks_index.json。"""
     import build_docs
     stocks_dir = DOCS_DIR / "stocks"
     stocks_dir.mkdir(parents=True, exist_ok=True)
@@ -54,7 +54,24 @@ def scan_technical(sid: str, name: str) -> bool:
     build_docs._build_single_stock(
         sid, info, stocks_dir, start_date, end_date, start_date
     )
-    return (stocks_dir / f"{sid}.json").exists()
+    ok = (stocks_dir / f"{sid}.json").exists()
+    if ok:
+        _upsert_index(sid, name)
+    return ok
+
+
+def _upsert_index(sid: str, name: str) -> None:
+    """個股不存在於 stocks_index.json 才 append，避免索引漏掉自選股。"""
+    import json
+    path = DOCS_DIR / "stocks_index.json"
+    try:
+        idx = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+    except Exception:
+        idx = []
+    if not any(x.get("id") == sid for x in idx):
+        idx.append({"id": sid, "name": name, "sector": "自選"})
+        path.write_text(json.dumps(idx, ensure_ascii=False, separators=(",", ":")),
+                        encoding="utf-8")
 
 
 def scan_fundamentals(sid: str, name: str) -> bool:

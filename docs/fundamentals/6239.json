@@ -201,7 +201,6 @@
   },
   "eps": {
     "quarter": [
-      "2023Q4",
       "2024Q1",
       "2024Q2",
       "2024Q3",
@@ -213,7 +212,6 @@
       "2026Q1"
     ],
     "eps": [
-      5.31,
       2.32,
       2.45,
       2.28,
@@ -226,7 +224,6 @@
     ],
     "qoq": [
       null,
-      -56.31,
       5.6,
       -6.94,
       -10.53,
@@ -241,7 +238,6 @@
       null,
       null,
       null,
-      -61.58,
       -31.9,
       -46.94,
       -8.77,
@@ -251,7 +247,6 @@
   },
   "margins": {
     "quarter": [
-      "2023Q4",
       "2024Q1",
       "2024Q2",
       "2024Q3",
@@ -263,7 +258,6 @@
       "2026Q1"
     ],
     "gross_margin": [
-      20.54,
       17.5,
       19.02,
       21.44,
@@ -275,7 +269,6 @@
       19.44
     ],
     "operating_margin": [
-      13.58,
       11.15,
       13.16,
       15.12,
@@ -287,7 +280,6 @@
       12.95
     ],
     "net_margin": [
-      20.83,
       9.47,
       9.33,
       9.29,
@@ -304,12 +296,18 @@
     "financial_quarters": 8,
     "fetch_errors": []
   },
-  "generated_at": "2026-06-16 12:28",
+  "generated_at": "2026-06-23 19:41",
   "product_mix": {
     "product_lines": [
       {
-        "name": "邏輯晶片 (Logic IC)",
-        "share_pct": 44,
+        "name": "邏輯晶片 (Logic)",
+        "share_pct": 40,
+        "yoy_growth": null,
+        "trend": "up"
+      },
+      {
+        "name": "NAND Flash",
+        "share_pct": 25,
         "yoy_growth": null,
         "trend": "up"
       },
@@ -320,51 +318,55 @@
         "trend": "up"
       },
       {
-        "name": "NAND Flash",
-        "share_pct": 22,
+        "name": "SiP/模組 (SiP/Module)",
+        "share_pct": 11,
         "yoy_growth": null,
         "trend": "up"
-      },
-      {
-        "name": "SiP/模組 (SiP/Module)",
-        "share_pct": 10,
-        "yoy_growth": null,
-        "trend": "flat"
-      },
-      {
-        "name": "Power Module",
-        "share_pct": null,
-        "yoy_growth": null,
-        "trend": "down"
       }
     ],
     "regions": [
       {
-        "name": "美國",
+        "name": "台灣 (Taiwan)",
         "share_pct": null
       },
       {
-        "name": "日本",
+        "name": "新加坡 (Singapore)",
         "share_pct": null
       },
       {
-        "name": "中國",
+        "name": "日本 (Japan)",
+        "share_pct": null
+      },
+      {
+        "name": "美國 (America)",
+        "share_pct": null
+      },
+      {
+        "name": "歐洲 (Europe)",
+        "share_pct": null
+      },
+      {
+        "name": "中國、香港、澳門 (China, Hong Kong, Macao)",
+        "share_pct": null
+      },
+      {
+        "name": "其他地區 (Other regions)",
         "share_pct": null
       }
     ],
     "customers": [
       "美光 (Micron)",
       "SK海力士 (SK Hynix)",
-      "鎧俠 (Kioxia)",
       "金士頓 (Kingston)",
-      "英特爾 (Intel)",
-      "AMD",
-      "NVIDIA (間接/潛在)"
+      "中國長鑫存儲 (ChangXin Memory)",
+      "NVIDIA",
+      "Intel",
+      "NXP"
     ],
-    "biz_model": "力成科技為半導體晶片的委外封裝測試服務 (OSAT) 廠商，專注於積體電路與半導體元件的封裝、測試、設計、製造及買賣業務，不直接銷售自有品牌產品，主要為上游晶圓製造商和記憶體廠提供服務。",
-    "moat": "力成的核心競爭優勢在於全球領先的記憶體封測技術，特別是在高頻寬記憶體 (HBM) 領域的佈局，以及在AI趨勢下，積極投入扇出型面板級封裝 (FOPLP) 等先進封裝技術的研發與量產，並與主要客戶建立深度合作夥伴關係。",
-    "summary": "力成科技受惠於記憶體市場復甦和AI相關需求強勁，2026年第一季營收達213億元，年增37.8%，稅後淨利年增57%，每股稅後純益(EPS)為2.5元，獲利創同期次高。儘管最新的產品線營收比例細項資訊停留在2025年第二季，但公司預期DRAM、NAND Flash受AI及智慧手機備貨帶動，訂單動能強勁，邏輯晶片方面FCBGA需求亦持續成長。公司正逐步退出Power Module業務。主要市場為美國、日本及中國。",
-    "data_period": "產品線比例為2025 Q2，財務表現為2026 Q1",
-    "updated_at": "2026-06-22"
+    "biz_model": "力成作為專業委外封裝測試服務商 (OSAT)，提供晶圓凸塊、針測、IC封裝、最終測試、預燒至成品，以及固態硬碟封裝和系統級封裝 (SiP) 等一站式統包 (Turnkey) 服務，並提供直接出貨 (Drop-shipment) 服務。",
+    "moat": "力成的核心競爭優勢在於其作為全球領先的記憶體封裝測試服務供應商地位，並持續投入先進封裝技術 (如FOPLP、CPO、HBM、2.5D/3D IC整合) 的研發與量產，擁有穩定的品質、精湛的技術，與國際主要半導體客戶建立長期合作關係，以及多元化的產品組合分散風險。",
+    "summary": "力成科技受惠於記憶體市場復甦及AI/HPC需求暢旺，2026年第一季營收與獲利創下近年新高，預期全年營收將實現雙位數成長。公司正積極拓展邏輯晶片業務，特別是在高階封裝領域，並將扇出型面板級封裝 (FOPLP) 作為未來重要的成長動能。目前產品線營收比重以邏輯晶片為大宗，其次為NAND Flash與DRAM，先進封裝業務正逐步提升其貢獻度。",
+    "data_period": "2025 Q3 (產品線營收佔比), 2026 Q1 (營運展望)",
+    "updated_at": "2026-06-23"
   }
 }

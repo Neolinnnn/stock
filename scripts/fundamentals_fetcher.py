@@ -192,9 +192,12 @@ def fetch_revenue_twse(stock_id: str):
     records = []
     for row in rows:
         try:
-            year = int(row['年份']) + 1911
-            month = int(row['月份'])
-            revenue = int(str(row.get('當月營收', '0')).replace(',', '') or 0)
+            # 欄位：資料年月 '11505'（民國年+月）、營業收入-當月營收（單位：千元）
+            ym = str(row.get('資料年月', '')).strip()
+            year = int(ym[:3]) + 1911
+            month = int(ym[3:])
+            # ×1000 換成元，與 FinMind taiwan_stock_month_revenue 同單位
+            revenue = int(str(row.get('營業收入-當月營收', '0')).replace(',', '') or 0) * 1000
             records.append({
                 'date': f'{year}-{month:02d}-01',
                 'stock_id': stock_id,
@@ -230,6 +233,14 @@ def fetch_financials_twse(stock_id: str):
             v = str(r.get(key, '') or '').replace(',', '').strip()
             return float(v) * 1000 if v else 0.0
 
+        def to_num_any(*keys):
+            """多候選欄名擇一（不同產業損益表欄名不同），取第一個有值者。"""
+            for k in keys:
+                v = str(r.get(k, '') or '').replace(',', '').strip()
+                if v:
+                    return float(v) * 1000
+            return 0.0
+
         records = [
             {'date': date_str, 'stock_id': stock_id, 'type': 'Revenue',
              'value': to_num('營業收入'), 'origin_name': ''},
@@ -237,8 +248,11 @@ def fetch_financials_twse(stock_id: str):
              'value': to_num('營業毛利（毛損）'), 'origin_name': ''},
             {'date': date_str, 'stock_id': stock_id, 'type': 'OperatingIncome',
              'value': to_num('營業利益（損失）'), 'origin_name': ''},
+            # 淨利歸屬母公司：一般業欄名優先，再退回本期淨利／綜合損益總額
             {'date': date_str, 'stock_id': stock_id, 'type': 'EquityAttributableToOwnersOfParent',
-             'value': to_num('本期歸屬於母公司業主之綜合損益總額'), 'origin_name': ''},
+             'value': to_num_any('淨利（淨損）歸屬於母公司業主', '本期淨利（淨損）',
+                                 '本期綜合損益總額', '本期歸屬於母公司業主之綜合損益總額'),
+             'origin_name': ''},
             {'date': date_str, 'stock_id': stock_id, 'type': 'EPS',
              'value': float(str(r.get('基本每股盈餘（元）', 0) or 0).replace(',', '')),
              'origin_name': ''},

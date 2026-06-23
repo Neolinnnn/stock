@@ -114,6 +114,14 @@ def enrich_one(sid: str, name: str, writer: GeminiWriter, force: bool = False) -
         print(f"  [{sid}] JSON 解析失敗，原始回覆前 200 字：{raw[:200]}")
         return False
 
+    # 佔比合理性驗證：加總須落在 [80,120]、且不得有 None，否則視為不合格不覆寫舊值
+    lines = pm.get("product_lines", [])
+    shares = [l.get("share_pct") for l in lines]
+    total = sum(s for s in shares if isinstance(s, (int, float)))
+    if not lines or any(s is None for s in shares) or total > 120 or total < 80:
+        print(f"  [{sid}] 產銷佔比不合理（和={total}, 缺值={any(s is None for s in shares)}），保留舊值不覆寫")
+        return False
+
     pm["updated_at"] = today
     fund["product_mix"] = pm
     _save_fund(sid, fund)
