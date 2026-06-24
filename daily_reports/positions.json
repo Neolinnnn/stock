@@ -1,5 +1,5 @@
 {
-  "updated": "20260623",
+  "updated": "20260624",
   "open": [
     {
       "id": "2383",
@@ -95,6 +95,18 @@
       "entry_date": "20260623",
       "entry_price": 909.0,
       "high_watermark": 909.0,
+      "days_since_high": 0
+    },
+    {
+      "id": "6271",
+      "name": "同欣電",
+      "signal_date": "20260624",
+      "signal_price": 251.5,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
