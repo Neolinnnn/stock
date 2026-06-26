@@ -1,118 +1,140 @@
 {
   "meta": {
-    "date": "2026-06-12",
+    "date": "2026-06-26",
     "days": 5
   },
   "changes": [
     {
-      "sector": "車用電子",
-      "change": 17.44,
-      "level": 26.99,
-      "prev_change": -2.81
-    },
-    {
       "sector": "銅箔/CCL",
-      "change": 12.69,
-      "level": 11.67,
-      "prev_change": -7.56
-    },
-    {
-      "sector": "光通訊",
-      "change": 7.96,
-      "level": 4.54,
-      "prev_change": -9.2
+      "change": -0.07,
+      "level": 12.67,
+      "prev_change": 12.69
     },
     {
       "sector": "AI ASIC/IP",
-      "change": 7.76,
-      "level": -12.31,
-      "prev_change": -9.39
+      "change": -1.77,
+      "level": -9.15,
+      "prev_change": 7.76
     },
     {
-      "sector": "AI 電源",
-      "change": 6.18,
-      "level": 5.65,
-      "prev_change": -11.19
-    },
-    {
-      "sector": "IC設計",
-      "change": 5.45,
-      "level": 4.98,
-      "prev_change": -13.45
+      "sector": "車用電子",
+      "change": -4.44,
+      "level": 28.74,
+      "prev_change": 17.44
     },
     {
       "sector": "AI 散熱",
-      "change": 4.8,
-      "level": 5.04,
-      "prev_change": 6.74
-    },
-    {
-      "sector": "封測",
-      "change": 2.94,
-      "level": 11.67,
-      "prev_change": -7.65
+      "change": -8.41,
+      "level": -0.17,
+      "prev_change": 4.8
     },
     {
       "sector": "AI伺服器",
-      "change": 2.74,
-      "level": 15.07,
-      "prev_change": -7.93
-    },
-    {
-      "sector": "記憶體",
-      "change": 2.38,
-      "level": 1.46,
-      "prev_change": -24.35
-    },
-    {
-      "sector": "綠能環保",
-      "change": 0.32,
-      "level": -5.73,
-      "prev_change": -0.43
-    },
-    {
-      "sector": "CoPoS封裝",
-      "change": -3.33,
-      "level": -5.17,
-      "prev_change": 74.71
+      "change": -8.62,
+      "level": 1.8,
+      "prev_change": 2.74
     },
     {
       "sector": "光學",
-      "change": -18.93,
-      "level": 14.64,
-      "prev_change": 8.69
+      "change": -10.33,
+      "level": 30.09,
+      "prev_change": -18.93
+    },
+    {
+      "sector": "小摩AI供應鏈",
+      "change": -10.69,
+      "level": 1.38,
+      "prev_change": null
+    },
+    {
+      "sector": "光通訊",
+      "change": -13.73,
+      "level": -10.78,
+      "prev_change": 7.96
+    },
+    {
+      "sector": "綠能環保",
+      "change": -13.83,
+      "level": -9.96,
+      "prev_change": 0.32
+    },
+    {
+      "sector": "IC設計",
+      "change": -14.14,
+      "level": -1.91,
+      "prev_change": 5.45
+    },
+    {
+      "sector": "CoPoS封裝",
+      "change": -15.91,
+      "level": -10.78,
+      "prev_change": -3.33
+    },
+    {
+      "sector": "記憶體",
+      "change": -17.39,
+      "level": 4.3,
+      "prev_change": 2.38
+    },
+    {
+      "sector": "AI 電源",
+      "change": -18.76,
+      "level": -15.76,
+      "prev_change": 6.18
+    },
+    {
+      "sector": "封測",
+      "change": -23.52,
+      "level": -3.42,
+      "prev_change": 2.94
     },
     {
       "sector": "被動元件",
-      "change": -19.41,
-      "level": 93.12,
-      "prev_change": -17.93
+      "change": -52.5,
+      "level": 37.63,
+      "prev_change": -19.41
     }
   ],
   "buys": [
     {
-      "stock": "2368 金像電",
-      "days": 5
+      "stock": "8046 南電",
+      "days": 6
     },
     {
-      "stock": "8210 勤誠",
-      "days": 5
+      "stock": "2455 全新",
+      "days": 4
     },
     {
-      "stock": "2345 智邦",
-      "days": 3
+      "stock": "3443 創意",
+      "days": 4
+    },
+    {
+      "stock": "2441 超豐",
+      "days": 4
     },
     {
       "stock": "3665 貿聯-KY",
+      "days": 3
+    },
+    {
+      "stock": "6271 同欣電",
+      "days": 3
+    },
+    {
+      "stock": "2467 志聖",
+      "days": 3
+    },
+    {
+      "stock": "3535 晶彩科",
       "days": 2
     },
     {
-      "stock": "2383 台光電",
+      "stock": "8299 群聯",
       "days": 2
     },
     {
-      "stock": "6510 精測",
-      "days": 1
+      "stock": "3680 家登",
+      "days": 2
     }
   ],
   "narrative": ""

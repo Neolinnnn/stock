@@ -1,5 +1,5 @@
 {
-  "updated": "20260625",
+  "updated": "20260626",
   "open": [
     {
       "id": "2383",
@@ -26,18 +26,6 @@
       "days_since_high": 0
     },
     {
-      "id": "3535",
-      "name": "晶彩科",
-      "signal_date": "20260618",
-      "signal_price": 134.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20260619",
-      "entry_price": 134.0,
-      "high_watermark": 134.0,
-      "days_since_high": 0
-    },
-    {
       "id": "3443",
       "name": "創意",
       "signal_date": "20260618",
@@ -47,18 +35,6 @@
       "entry_date": "20260619",
       "entry_price": 4860.0,
       "high_watermark": 4860.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "2455",
-      "name": "全新",
-      "signal_date": "20260622",
-      "signal_price": 409.5,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20260622",
-      "entry_price": 409.5,
-      "high_watermark": 409.5,
       "days_since_high": 0
     },
     {
@@ -79,10 +55,10 @@
       "signal_date": "20260623",
       "signal_price": 909.0,
       "status": "holding",
-      "phase": 1,
+      "phase": 2,
       "entry_date": "20260623",
       "entry_price": 909.0,
-      "high_watermark": 909.0,
+      "high_watermark": 1125.0,
       "days_since_high": 0
     },
     {
@@ -91,10 +67,10 @@
       "signal_date": "20260623",
       "signal_price": 909.0,
       "status": "holding",
-      "phase": 1,
+      "phase": 2,
       "entry_date": "20260623",
       "entry_price": 909.0,
-      "high_watermark": 909.0,
+      "high_watermark": 1125.0,
       "days_since_high": 0
     },
     {
@@ -110,5 +86,38 @@
       "days_since_high": 0
     }
   ],
-  "closed": []
+  "closed": [
+    {
+      "id": "3535",
+      "name": "晶彩科",
+      "signal_date": "20260618",
+      "signal_price": 134.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20260619",
+      "entry_price": 134.0,
+      "high_watermark": 134.0,
+      "days_since_high": 0,
+      "exit_date": "20260626",
+      "exit_price": 112.0,
+      "return_pct": -16.42,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2455",
+      "name": "全新",
+      "signal_date": "20260622",
+      "signal_price": 409.5,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20260622",
+      "entry_price": 409.5,
+      "high_watermark": 409.5,
+      "days_since_high": 0,
+      "exit_date": "20260626",
+      "exit_price": 348.0,
+      "return_pct": -15.02,
+      "exit_reason": "SL"
+    }
+  ]
 }
