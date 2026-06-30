@@ -39,6 +39,19 @@ from datafeed import finmind_fetch as _finmind_fetch
 rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
 rcParams['axes.unicode_minus'] = False
 
+# 進場乖離率上限：qualified 推薦只取「貼近 MA10」的個股，避免追高。
+# 依據 2026 全市場回測（136 筆訊號）：乖離 MA10 ≤2% 勝率 27% / 平均 +0.1%，
+# 對照全收 19% / -2.5%；乖離 2~6% 區間勝率僅 9~10%（追高重災區）。
+MAX_BIAS_MA10 = 2.0
+
+# 族群 regime 閘門：qualified 推薦只取「所屬族群正強勢」（avg_ret > 3，與
+# strong_sectors 同一定義）的個股。2026 回測顯示大盤 regime 無效（指數全程
+# 站上 MA60、127/128 筆皆多頭），真正有效的是族群強弱疊加乖離率：
+#   乖離≤2% 單獨        → 45 筆 勝率 27% / 平均 +0.1%
+#   乖離≤2% + 族群強勢  → 21 筆 勝率 38% / 平均 +3.1%
+# 代價是訊號數大幅縮減（更挑）。設 False 可關閉此閘門。
+REQUIRE_STRONG_SECTOR = True
+
 # ── 7 大族群定義 ──────────────────────────────────────────────────────────────
 SECTORS = {
     '光通訊': {
@@ -532,15 +545,19 @@ def run_daily_scan():
     try:
         from position_tracker import passes_gate, update_positions
         taiex_close, taiex_ma60, taiex_bull = fetch_taiex_ma60()
+        strong_set = set(summary.get('strong_sectors', []))
         scan_lookup, gate_buys = {}, []
         for sector, data in summary['sectors'].items():
+            # 族群強勢閘門：REQUIRE_STRONG_SECTOR=False 時不過濾
+            sector_strong = (not REQUIRE_STRONG_SECTOR) or (sector in strong_set)
             for st in data['stocks']:
                 scan_lookup[st['id']] = {
                     'price': st.get('price'), 'ma5': st.get('ma5'),
                     'ma10': st.get('ma10'), 'ma20': st.get('ma20'),
                     'ma60': st.get('ma60'),
                 }
-                if passes_gate(st, taiex_bull):
+                if passes_gate(st, taiex_bull, sector_strong=sector_strong,
+                               max_bias_ma10=MAX_BIAS_MA10):
                     gate_buys.append({'id': st['id'], 'name': st['name'],
                                       'price': st.get('price'), 'sector': sector})
         track = update_positions(today, scan_lookup, taiex_bull, gate_buys)
@@ -809,8 +826,15 @@ def build_summary(date, market, all_results, chart_path):
             all_weak.append(sector)
 
         # 推薦名單
+        # 乖離率閘門：(price - MA10) / MA10；ma10 缺值→NaN→比較為 False，保守剔除。
+        _ma10 = pd.to_numeric(df['ma10'], errors='coerce')
+        _bias_ma10 = (pd.to_numeric(df['price'], errors='coerce') - _ma10) / _ma10 * 100
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
-                   (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2)]
+                   (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
+                   (_bias_ma10 <= MAX_BIAS_MA10)]
+        # 族群非強勢時，整族群不納入推薦（regime 閘門）
+        if REQUIRE_STRONG_SECTOR and not (avg_ret > 3):
+            final = final.iloc[0:0]
         for _, r in final.iterrows():
             if r['id'] in _qualified_seen:
                 continue
@@ -819,6 +843,7 @@ def build_summary(date, market, all_results, chart_path):
                 'sector': sector, 'id': r['id'], 'name': r['name'],
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
+                'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
             })
 
         # 風險警示
