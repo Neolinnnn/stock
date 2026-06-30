@@ -44,6 +44,14 @@ rcParams['axes.unicode_minus'] = False
 # 對照全收 19% / -2.5%；乖離 2~6% 區間勝率僅 9~10%（追高重災區）。
 MAX_BIAS_MA10 = 2.0
 
+# 族群 regime 閘門：qualified 推薦只取「所屬族群正強勢」（avg_ret > 3，與
+# strong_sectors 同一定義）的個股。2026 回測顯示大盤 regime 無效（指數全程
+# 站上 MA60、127/128 筆皆多頭），真正有效的是族群強弱疊加乖離率：
+#   乖離≤2% 單獨        → 45 筆 勝率 27% / 平均 +0.1%
+#   乖離≤2% + 族群強勢  → 21 筆 勝率 38% / 平均 +3.1%
+# 代價是訊號數大幅縮減（更挑）。設 False 可關閉此閘門。
+REQUIRE_STRONG_SECTOR = True
+
 # ── 7 大族群定義 ──────────────────────────────────────────────────────────────
 SECTORS = {
     '光通訊': {
@@ -820,6 +828,9 @@ def build_summary(date, market, all_results, chart_path):
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
                    (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
                    (_bias_ma10 <= MAX_BIAS_MA10)]
+        # 族群非強勢時，整族群不納入推薦（regime 閘門）
+        if REQUIRE_STRONG_SECTOR and not (avg_ret > 3):
+            final = final.iloc[0:0]
         for _, r in final.iterrows():
             if r['id'] in _qualified_seen:
                 continue

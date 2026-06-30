@@ -34,8 +34,12 @@ def collect_signals() -> list[dict]:
         if not sf.exists():
             continue
         data = json.loads(sf.read_text(encoding='utf-8'))
+        strong = set(data.get('strong_sectors', []))
+        weak = set(data.get('weak_sectors', []))
         for s in data.get('qualified', []):
-            sigs.append({'date': d.name, 'id': str(s.get('id')), 'name': s.get('name')})
+            sec = s.get('sector')
+            sigs.append({'date': d.name, 'id': str(s.get('id')), 'name': s.get('name'),
+                         'sector': sec, 'sec_strong': sec in strong, 'sec_weak': sec in weak})
     return sigs
 
 
@@ -111,6 +115,7 @@ def evaluate(sigs: list[dict], price: dict) -> list[dict]:
         out.append({
             'date': s['date'], 'id': s['id'], 'name': s['name'],
             'score': a.signal_score, 'bias10': round(a.bias_ma10, 1),
+            'sec_strong': s['sec_strong'], 'sec_weak': s['sec_weak'],
             'result': oc[0] if oc else 'N/A',
             'ret': round(oc[1], 1) if oc else None,
         })
@@ -156,12 +161,23 @@ def summarize(rows: list[dict]) -> str:
         n, wr, avg = block(by_m[m])
         L.append(f'| {m[:4]}/{m[4:6]} | {n} | {wr} | {avg} |')
 
+    L.append('\n## 依族群 regime')
+    L.append('| 族群狀態 | 筆數 | 勝率 | 平均報酬 |')
+    L.append('|---|---|---|---|')
+    for cond, lab in [(lambda x: x['sec_strong'], '強勢'),
+                      (lambda x: not x['sec_strong'] and not x['sec_weak'], '中性'),
+                      (lambda x: x['sec_weak'], '弱勢')]:
+        n, wr, avg = block([x for x in done if cond(x)])
+        L.append(f'| {lab} | {n} | {wr} | {avg} |')
+
     L.append('\n## 過濾規則模擬')
     L.append('| 規則 | 筆數 | 勝率 | 平均報酬 |')
     L.append('|---|---|---|---|')
     for cond, lab in [(lambda x: True, '現況（全收）'),
                       (lambda x: x['bias10'] <= 2, '乖離 MA10 ≤2%'),
-                      (lambda x: x['bias10'] <= 0, '乖離 MA10 ≤0%')]:
+                      (lambda x: x['bias10'] <= 0, '乖離 MA10 ≤0%'),
+                      (lambda x: x['bias10'] <= 2 and x['sec_strong'], '乖離 ≤2% + 族群強勢'),
+                      (lambda x: x['bias10'] <= 2 and x['sec_weak'], '乖離 ≤2% + 族群弱勢')]:
         n, wr, avg = block([x for x in done if cond(x)])
         L.append(f'| {lab} | {n} | {wr} | {avg} |')
     return '\n'.join(L)
