@@ -545,15 +545,19 @@ def run_daily_scan():
     try:
         from position_tracker import passes_gate, update_positions
         taiex_close, taiex_ma60, taiex_bull = fetch_taiex_ma60()
+        strong_set = set(summary.get('strong_sectors', []))
         scan_lookup, gate_buys = {}, []
         for sector, data in summary['sectors'].items():
+            # 族群強勢閘門：REQUIRE_STRONG_SECTOR=False 時不過濾
+            sector_strong = (not REQUIRE_STRONG_SECTOR) or (sector in strong_set)
             for st in data['stocks']:
                 scan_lookup[st['id']] = {
                     'price': st.get('price'), 'ma5': st.get('ma5'),
                     'ma10': st.get('ma10'), 'ma20': st.get('ma20'),
                     'ma60': st.get('ma60'),
                 }
-                if passes_gate(st, taiex_bull):
+                if passes_gate(st, taiex_bull, sector_strong=sector_strong,
+                               max_bias_ma10=MAX_BIAS_MA10):
                     gate_buys.append({'id': st['id'], 'name': st['name'],
                                       'price': st.get('price'), 'sector': sector})
         track = update_positions(today, scan_lookup, taiex_bull, gate_buys)

@@ -190,6 +190,7 @@ def main():
     ap.add_argument('--report', help='輸出 markdown 報告路徑')
     ap.add_argument('--start', default='20260101', help='訊號起始日 YYYYMMDD')
     ap.add_argument('--end', default='20261231', help='訊號終止日 YYYYMMDD')
+    ap.add_argument('--dump', help='輸出逐筆評分 JSON 路徑')
     args = ap.parse_args()
 
     sigs = collect_signals(args.start, args.end)
@@ -198,6 +199,8 @@ def main():
     price = load_prices(ids)
     rows = evaluate(sigs, price)
     print(f'完成評分 {len(rows)} 筆\n')
+    if args.dump:
+        Path(args.dump).write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding='utf-8')
     report = summarize(rows)
     print(report)
     if args.report:

@@ -107,6 +107,12 @@ def main():
         entry_price = float(nxt.iloc[0]['open'])
         regime = regimes.get(sig['date'], '暖身')
         gate = bool(feat['ma_stack'] and feat['taiex_bull'])
+        # 進場乖離 MA10（驗證「貼均線 + 族群強勢」加在閘門上的效果）
+        _upto = ohlcv[ohlcv['date'] <= sig['date']]
+        _ma10 = float(_upto['close'].tail(10).mean()) if len(_upto) >= 10 else 0
+        _c = float(_upto.iloc[-1]['close'])
+        bias10 = (_c - _ma10) / _ma10 if _ma10 else 1.0
+        gate_plus = bool(gate and sig.get('sector_strong', False) and bias10 <= 0.02)
 
         exit_tp  = sim_tpsl(ohlcv, entry_date, entry_price, 0.15, 0.15)
         exit_hyb = sim_hybrid(ohlcv, entry_date, entry_price)
@@ -114,7 +120,7 @@ def main():
         exit_ada = exit_hyb if regime == '上漲期' else exit_tp
 
         rows.append({
-            'date': sig['date'], 'regime': regime, 'gate': gate,
+            'date': sig['date'], 'regime': regime, 'gate': gate, 'gate_plus': gate_plus,
             'tp': exit_tp, 'hyb': exit_hyb, 'ada': exit_ada,
         })
 
@@ -130,12 +136,14 @@ def main():
         return full, front, back
 
     gated = [r for r in rows if r['gate']]
+    gated_plus = [r for r in rows if r['gate_plus']]
 
     scenarios = {
         'A 現行：全BUY × TP15SL15':  (rows,  'tp'),
         'B 閘門 × TP15SL15':         (gated, 'tp'),
         'C 閘門 × HYBRID':           (gated, 'hyb'),
         'D 閘門 × 自適應(最終)':      (gated, 'ada'),
+        'E 閘門+族群+乖離 × 自適應':   (gated_plus, 'ada'),
     }
 
     print('\n════════ 策略對照（全期間） ════════')

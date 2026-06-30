@@ -39,11 +39,20 @@ PHASE2_TIMEOUT = 25     # Phase 2 未創新高的時間停損（交易日）
 
 # ── 進場閘門 ──────────────────────────────────────────────────────────────────
 
-def passes_gate(stock: dict, taiex_bull: bool) -> bool:
+def passes_gate(stock: dict, taiex_bull: bool, *,
+                sector_strong: bool = True,
+                max_bias_ma10: float | None = None) -> bool:
     """判斷個股是否通過進場閘門。
 
-    stock 需含：signal, price, ma5, ma20, ma60（ma10 不需）。
+    stock 需含：signal, price, ma5, ma20, ma60；檢查乖離時另需 ma10。
     taiex_bull：TAIEX 收盤 > MA60。
+    sector_strong：個股所屬族群是否強勢（avg_ret>3）。daily_scan 依
+        strong_sectors 傳入；REQUIRE_STRONG_SECTOR=False 時恆傳 True（不過濾）。
+    max_bias_ma10：進場乖離 MA10 上限（%）；None 表示不檢查。
+
+    族群強勢 + 乖離兩道閘門依 2025/1~2026/6 回測加入：套在現有閘門上，
+    HYBRID 自適應出場勝率 63%→71%、PF 2.56→3.05（代價：訊號數大幅縮減）。
+    預設參數不啟用新閘門，維持原行為；由呼叫端帶入啟用。
     """
     if not taiex_bull:
         return False
@@ -56,7 +65,19 @@ def passes_gate(stock: dict, taiex_bull: bool) -> bool:
     if None in (c, ma5, ma20, ma60):
         return False
     # 多頭排列：收盤 > MA5 > MA20 > MA60
-    return c > ma5 > ma20 > ma60
+    if not (c > ma5 > ma20 > ma60):
+        return False
+    # 族群強勢閘門
+    if not sector_strong:
+        return False
+    # 乖離率閘門：進場貼近 MA10，避免追高
+    if max_bias_ma10 is not None:
+        ma10 = stock.get('ma10')
+        if ma10 is None or ma10 == 0:
+            return False
+        if (c - ma10) / ma10 * 100 > max_bias_ma10:
+            return False
+    return True
 
 
 # ── 狀態檔讀寫 ────────────────────────────────────────────────────────────────
