@@ -132,148 +132,283 @@
   ],
   "chips": [
     {
-      "id": "4938",
-      "name": "和碩",
-      "sector": "AI伺服器",
-      "total": 6888866,
-      "foreign": 7918954,
-      "trust": -1504418,
-      "dealer": 474330
+      "id": "2449",
+      "name": "京元電子",
+      "sector": "封測",
+      "total": 16479571,
+      "foreign": 15739155,
+      "trust": -194670,
+      "dealer": 935086
     },
     {
-      "id": "2327",
-      "name": "國巨",
-      "sector": "被動元件",
-      "total": 4422259,
-      "foreign": 3152275,
-      "trust": 1796423,
-      "dealer": -526439
+      "id": "2449",
+      "name": "京元電子",
+      "sector": "CoPoS封裝",
+      "total": 16479571,
+      "foreign": 15739155,
+      "trust": -194670,
+      "dealer": 935086
     },
     {
-      "id": "2327",
-      "name": "國巨",
-      "sector": "小摩AI供應鏈",
-      "total": 4422259,
-      "foreign": 3152275,
-      "trust": 1796423,
-      "dealer": -526439
+      "id": "8150",
+      "name": "南茂",
+      "sector": "封測",
+      "total": 8401217,
+      "foreign": 7554896,
+      "trust": 0,
+      "dealer": 846321
     },
     {
-      "id": "8046",
-      "name": "南電",
+      "id": "3037",
+      "name": "欣興",
       "sector": "ABF載板",
-      "total": 4309010,
-      "foreign": 2358882,
-      "trust": 1906125,
-      "dealer": 44003
+      "total": 5933050,
+      "foreign": 3620829,
+      "trust": 1866000,
+      "dealer": 446221
     },
     {
-      "id": "8046",
-      "name": "南電",
-      "sector": "銅箔/CCL",
-      "total": 4309010,
-      "foreign": 2358882,
-      "trust": 1906125,
-      "dealer": 44003
-    },
-    {
-      "id": "8046",
-      "name": "南電",
+      "id": "3037",
+      "name": "欣興",
       "sector": "小摩AI供應鏈",
-      "total": 4309010,
-      "foreign": 2358882,
-      "trust": 1906125,
-      "dealer": 44003
+      "total": 5933050,
+      "foreign": 3620829,
+      "trust": 1866000,
+      "dealer": 446221
     },
     {
-      "id": "2382",
-      "name": "廣達",
+      "id": "3711",
+      "name": "日月光投控",
+      "sector": "封測",
+      "total": 5764524,
+      "foreign": 5971523,
+      "trust": -655480,
+      "dealer": 448481
+    },
+    {
+      "id": "3711",
+      "name": "日月光投控",
+      "sector": "CoPoS封裝",
+      "total": 5764524,
+      "foreign": 5971523,
+      "trust": -655480,
+      "dealer": 448481
+    },
+    {
+      "id": "3231",
+      "name": "緯創",
       "sector": "AI伺服器",
-      "total": 2500569,
-      "foreign": -695137,
-      "trust": 2930530,
-      "dealer": 265176
-    },
-    {
-      "id": "2458",
-      "name": "義隆",
-      "sector": "IC設計",
-      "total": 1630562,
-      "foreign": 450750,
-      "trust": 1076574,
-      "dealer": 103238
-    },
-    {
-      "id": "2492",
-      "name": "華新科",
-      "sector": "被動元件",
-      "total": 1479096,
-      "foreign": 1538322,
-      "trust": 2000,
-      "dealer": -61226
-    },
-    {
-      "id": "2492",
-      "name": "華新科",
-      "sector": "小摩AI供應鏈",
-      "total": 1479096,
-      "foreign": 1538322,
-      "trust": 2000,
-      "dealer": -61226
+      "total": 5292082,
+      "foreign": -1035054,
+      "trust": 5898000,
+      "dealer": 429136
     },
     {
       "id": "2301",
       "name": "光寶科",
       "sector": "AI 電源",
-      "total": 1179022,
-      "foreign": 2069576,
-      "trust": -1136882,
-      "dealer": 246328
+      "total": 5066576,
+      "foreign": 6668574,
+      "trust": -2065000,
+      "dealer": 463002
     },
     {
-      "id": "3034",
-      "name": "聯詠",
-      "sector": "IC設計",
-      "total": 1065157,
-      "foreign": 700306,
-      "trust": 431434,
-      "dealer": -66583
+      "id": "6271",
+      "name": "同欣電",
+      "sector": "封測",
+      "total": 4982481,
+      "foreign": 4713601,
+      "trust": 0,
+      "dealer": 268880
+    },
+    {
+      "id": "4958",
+      "name": "臻鼎-KY",
+      "sector": "ABF載板",
+      "total": 4946210,
+      "foreign": 4265153,
+      "trust": -1000,
+      "dealer": 682057
+    },
+    {
+      "id": "4958",
+      "name": "臻鼎",
+      "sector": "小摩AI供應鏈",
+      "total": 4946210,
+      "foreign": 4265153,
+      "trust": -1000,
+      "dealer": 682057
+    },
+    {
+      "id": "6239",
+      "name": "力成",
+      "sector": "封測",
+      "total": 3275824,
+      "foreign": 4883262,
+      "trust": -2232797,
+      "dealer": 625359
+    },
+    {
+      "id": "6239",
+      "name": "力成",
+      "sector": "CoPoS封裝",
+      "total": 3275824,
+      "foreign": 4883262,
+      "trust": -2232797,
+      "dealer": 625359
+    },
+    {
+      "id": "6278",
+      "name": "台表科",
+      "sector": "小摩AI供應鏈",
+      "total": 2682488,
+      "foreign": 1464674,
+      "trust": 1072183,
+      "dealer": 145631
+    },
+    {
+      "id": "2376",
+      "name": "技嘉",
+      "sector": "AI伺服器",
+      "total": 2492394,
+      "foreign": 1030383,
+      "trust": 1321000,
+      "dealer": 141011
+    },
+    {
+      "id": "4938",
+      "name": "和碩",
+      "sector": "AI伺服器",
+      "total": 2211357,
+      "foreign": 2794235,
+      "trust": -737499,
+      "dealer": 154621
+    },
+    {
+      "id": "3017",
+      "name": "奇鋐",
+      "sector": "AI 散熱",
+      "total": 2010764,
+      "foreign": 1693823,
+      "trust": 259000,
+      "dealer": 57941
+    },
+    {
+      "id": "6257",
+      "name": "矽格",
+      "sector": "封測",
+      "total": 1920609,
+      "foreign": 1870654,
+      "trust": -195866,
+      "dealer": 245821
+    },
+    {
+      "id": "2382",
+      "name": "廣達",
+      "sector": "AI伺服器",
+      "total": 1802344,
+      "foreign": -159196,
+      "trust": 1772750,
+      "dealer": 188790
+    },
+    {
+      "id": "3715",
+      "name": "定穎",
+      "sector": "小摩AI供應鏈",
+      "total": 1751575,
+      "foreign": 1954705,
+      "trust": 0,
+      "dealer": -203130
     },
     {
       "id": "2367",
       "name": "燿華",
       "sector": "小摩AI供應鏈",
-      "total": 1004482,
-      "foreign": 1020113,
+      "total": 1695544,
+      "foreign": 1525085,
       "trust": 0,
-      "dealer": -15631
+      "dealer": 170459
     },
     {
-      "id": "5269",
-      "name": "祥碩",
-      "sector": "IC設計",
-      "total": 779620,
-      "foreign": 455437,
-      "trust": 269000,
-      "dealer": 55183
+      "id": "4906",
+      "name": "正文",
+      "sector": "光通訊",
+      "total": 1609269,
+      "foreign": 1576144,
+      "trust": 0,
+      "dealer": 33125
     },
     {
-      "id": "2454",
-      "name": "聯發科",
-      "sector": "IC設計",
-      "total": 752025,
-      "foreign": 1125600,
-      "trust": -615665,
-      "dealer": 242090
+      "id": "2441",
+      "name": "超豐",
+      "sector": "封測",
+      "total": 1303506,
+      "foreign": 863130,
+      "trust": -1000,
+      "dealer": 441376
     },
     {
-      "id": "2308",
-      "name": "台達電",
+      "id": "6412",
+      "name": "群電",
       "sector": "AI 電源",
-      "total": 709298,
-      "foreign": 233391,
-      "trust": -79656,
-      "dealer": 555563
+      "total": 1164839,
+      "foreign": 1072408,
+      "trust": 14927,
+      "dealer": 77504
+    },
+    {
+      "id": "6412",
+      "name": "群電",
+      "sector": "小摩AI供應鏈",
+      "total": 1164839,
+      "foreign": 1072408,
+      "trust": 14927,
+      "dealer": 77504
+    },
+    {
+      "id": "2467",
+      "name": "志聖",
+      "sector": "CoPoS封裝",
+      "total": 835713,
+      "foreign": 801835,
+      "trust": -10927,
+      "dealer": 44805
+    },
+    {
+      "id": "2329",
+      "name": "華泰",
+      "sector": "封測",
+      "total": 802360,
+      "foreign": 615042,
+      "trust": 0,
+      "dealer": 187318
+    },
+    {
+      "id": "3583",
+      "name": "辛耘",
+      "sector": "CoPoS封裝",
+      "total": 778106,
+      "foreign": 760416,
+      "trust": 0,
+      "dealer": 17690
+    },
+    {
+      "id": "2492",
+      "name": "華新科",
+      "sector": "被動元件",
+      "total": 727624,
+      "foreign": 813426,
+      "trust": -20000,
+      "dealer": -65802
+    },
+    {
+      "id": "2492",
+      "name": "華新科",
+      "sector": "小摩AI供應鏈",
+      "total": 727624,
+      "foreign": 813426,
+      "trust": -20000,
+      "dealer": -65802
     },
     {
       "id": "8358",
@@ -285,15 +420,6 @@
       "dealer": 269324
     },
     {
-      "id": "2376",
-      "name": "技嘉",
-      "sector": "AI伺服器",
-      "total": 662456,
-      "foreign": -840479,
-      "trust": 1412236,
-      "dealer": 90699
-    },
-    {
       "id": "3264",
       "name": "欣銓",
       "sector": "封測",
@@ -303,130 +429,76 @@
       "dealer": 101872
     },
     {
-      "id": "2481",
-      "name": "強茂",
+      "id": "2369",
+      "name": "菱生",
       "sector": "封測",
-      "total": 552339,
-      "foreign": 1884897,
-      "trust": -1058000,
-      "dealer": -274558
-    },
-    {
-      "id": "3017",
-      "name": "奇鋐",
-      "sector": "AI 散熱",
-      "total": 546540,
-      "foreign": 312425,
-      "trust": 214187,
-      "dealer": 19928
-    },
-    {
-      "id": "3406",
-      "name": "玉晶光",
-      "sector": "光學",
-      "total": 448791,
-      "foreign": 659830,
-      "trust": -252000,
-      "dealer": 40961
-    },
-    {
-      "id": "2379",
-      "name": "瑞昱",
-      "sector": "IC設計",
-      "total": 441338,
-      "foreign": -347427,
-      "trust": 824037,
-      "dealer": -35272
-    },
-    {
-      "id": "3653",
-      "name": "健策",
-      "sector": "AI 散熱",
-      "total": 410751,
-      "foreign": 318092,
-      "trust": 82051,
-      "dealer": 10608
-    },
-    {
-      "id": "3583",
-      "name": "辛耘",
-      "sector": "CoPoS封裝",
-      "total": 393116,
-      "foreign": 387555,
+      "total": 519504,
+      "foreign": 376005,
       "trust": 0,
-      "dealer": 5561
+      "dealer": 143499
     },
     {
-      "id": "6239",
-      "name": "力成",
-      "sector": "封測",
-      "total": 367915,
-      "foreign": 3273598,
-      "trust": -2703000,
-      "dealer": -202683
-    },
-    {
-      "id": "6239",
-      "name": "力成",
-      "sector": "CoPoS封裝",
-      "total": 367915,
-      "foreign": 3273598,
-      "trust": -2703000,
-      "dealer": -202683
-    },
-    {
-      "id": "6415",
-      "name": "矽力-KY",
-      "sector": "IC設計",
-      "total": 245597,
-      "foreign": 189420,
-      "trust": 75000,
-      "dealer": -18823
-    },
-    {
-      "id": "3661",
-      "name": "世芯-KY",
-      "sector": "AI ASIC/IP",
-      "total": 239478,
-      "foreign": 215808,
-      "trust": 14046,
-      "dealer": 9624
-    },
-    {
-      "id": "6278",
-      "name": "台表科",
+      "id": "6176",
+      "name": "瑞儀",
       "sector": "小摩AI供應鏈",
-      "total": 216200,
-      "foreign": -67585,
-      "trust": 391710,
-      "dealer": -107925
+      "total": 473537,
+      "foreign": 1217923,
+      "trust": -772184,
+      "dealer": 27798
     },
     {
-      "id": "3665",
-      "name": "貿聯-KY",
+      "id": "2345",
+      "name": "智邦",
       "sector": "光通訊",
-      "total": 185647,
-      "foreign": 274665,
-      "trust": -75889,
-      "dealer": -13129
-    },
-    {
-      "id": "8996",
-      "name": "高力",
-      "sector": "AI 散熱",
-      "total": 175561,
-      "foreign": 252907,
-      "trust": -57274,
-      "dealer": -20072
+      "total": 411524,
+      "foreign": 313738,
+      "trust": 77000,
+      "dealer": 20786
     },
     {
       "id": "2421",
       "name": "建準",
       "sector": "小摩AI供應鏈",
-      "total": 153597,
-      "foreign": 192557,
-      "trust": -1000,
-      "dealer": -37960
+      "total": 364472,
+      "foreign": 103767,
+      "trust": 223000,
+      "dealer": 37705
+    },
+    {
+      "id": "2454",
+      "name": "聯發科",
+      "sector": "IC設計",
+      "total": 265788,
+      "foreign": 814245,
+      "trust": -678596,
+      "dealer": 130139
+    },
+    {
+      "id": "3058",
+      "name": "聯陽",
+      "sector": "IC設計",
+      "total": 254000,
+      "foreign": 254000,
+      "trust": 0,
+      "dealer": 0
+    },
+    {
+      "id": "5269",
+      "name": "祥碩",
+      "sector": "IC設計",
+      "total": 176571,
+      "foreign": -99066,
+      "trust": 262000,
+      "dealer": 13637
+    },
+    {
+      "id": "2360",
+      "name": "致茂",
+      "sector": "小摩AI供應鏈",
+      "total": 142012,
+      "foreign": 19055,
+      "trust": 136791,
+      "dealer": -13834
     },
     {
       "id": "8299",
@@ -438,6 +510,33 @@
       "dealer": 43805
     },
     {
+      "id": "3034",
+      "name": "聯詠",
+      "sector": "IC設計",
+      "total": 131981,
+      "foreign": -275122,
+      "trust": 278276,
+      "dealer": 128827
+    },
+    {
+      "id": "3661",
+      "name": "世芯-KY",
+      "sector": "AI ASIC/IP",
+      "total": 111225,
+      "foreign": 44337,
+      "trust": 1000,
+      "dealer": 65888
+    },
+    {
+      "id": "8996",
+      "name": "高力",
+      "sector": "AI 散熱",
+      "total": 99845,
+      "foreign": 147953,
+      "trust": -41019,
+      "dealer": -7089
+    },
+    {
       "id": "6274",
       "name": "台燿",
       "sector": "小摩AI供應鏈",
@@ -447,13 +546,13 @@
       "dealer": 79659
     },
     {
-      "id": "3044",
-      "name": "健鼎",
-      "sector": "小摩AI供應鏈",
-      "total": 87759,
-      "foreign": 394270,
-      "trust": -321977,
-      "dealer": 15466
+      "id": "6789",
+      "name": "采鈺",
+      "sector": "CoPoS封裝",
+      "total": 87688,
+      "foreign": 85372,
+      "trust": -22000,
+      "dealer": 24316
     },
     {
       "id": "3680",
@@ -465,31 +564,22 @@
       "dealer": 60803
     },
     {
-      "id": "6257",
-      "name": "矽格",
-      "sector": "封測",
-      "total": 69905,
-      "foreign": 385102,
-      "trust": -239000,
-      "dealer": -76197
-    },
-    {
-      "id": "2360",
-      "name": "致茂",
-      "sector": "小摩AI供應鏈",
-      "total": 58738,
-      "foreign": 67288,
-      "trust": -9723,
-      "dealer": 1173
-    },
-    {
-      "id": "6789",
-      "name": "采鈺",
+      "id": "3535",
+      "name": "晶彩科",
       "sector": "CoPoS封裝",
-      "total": 56213,
-      "foreign": 62694,
-      "trust": 2000,
-      "dealer": -8481
+      "total": 69315,
+      "foreign": 69000,
+      "trust": 0,
+      "dealer": 315
+    },
+    {
+      "id": "2388",
+      "name": "威盛",
+      "sector": "IC設計",
+      "total": 64958,
+      "foreign": -173875,
+      "trust": 40000,
+      "dealer": 198833
     },
     {
       "id": "8086",
@@ -499,24 +589,6 @@
       "foreign": -67404,
       "trust": 0,
       "dealer": 114526
-    },
-    {
-      "id": "2368",
-      "name": "金像電",
-      "sector": "銅箔/CCL",
-      "total": 46493,
-      "foreign": 1593754,
-      "trust": -1541781,
-      "dealer": -5480
-    },
-    {
-      "id": "2368",
-      "name": "金像電",
-      "sector": "小摩AI供應鏈",
-      "total": 46493,
-      "foreign": 1593754,
-      "trust": -1541781,
-      "dealer": -5480
     },
     {
       "id": "6643",
@@ -555,94 +627,31 @@
       "dealer": 26609
     },
     {
-      "id": "3058",
-      "name": "聯陽",
-      "sector": "IC設計",
-      "total": 32000,
-      "foreign": 31000,
-      "trust": 0,
-      "dealer": 1000
-    },
-    {
       "id": "2243",
       "name": "怡利電",
       "sector": "車用電子",
-      "total": 22000,
-      "foreign": 20000,
+      "total": 23000,
+      "foreign": 24000,
       "trust": 0,
-      "dealer": 2000
+      "dealer": -1000
     },
     {
-      "id": "2383",
-      "name": "台光電",
-      "sector": "銅箔/CCL",
-      "total": 21569,
-      "foreign": 72513,
-      "trust": -30576,
-      "dealer": -20368
-    },
-    {
-      "id": "2383",
-      "name": "台光電",
-      "sector": "小摩AI供應鏈",
-      "total": 21569,
-      "foreign": 72513,
-      "trust": -30576,
-      "dealer": -20368
-    },
-    {
-      "id": "3443",
-      "name": "創意",
-      "sector": "AI ASIC/IP",
-      "total": 14894,
-      "foreign": -22750,
-      "trust": 20177,
-      "dealer": 17467
-    },
-    {
-      "id": "2330",
-      "name": "台積電",
-      "sector": "AI ASIC/IP",
-      "total": 3576,
-      "foreign": -1912490,
-      "trust": 919216,
-      "dealer": 996850
-    },
-    {
-      "id": "7769",
-      "name": "鴻勤",
-      "sector": "小摩AI供應鏈",
-      "total": 3061,
-      "foreign": 432,
-      "trust": 833,
-      "dealer": 1796
+      "id": "1533",
+      "name": "車王電",
+      "sector": "車用電子",
+      "total": 18198,
+      "foreign": 19198,
+      "trust": 0,
+      "dealer": -1000
     },
     {
       "id": "5292",
       "name": "華懋",
       "sector": "綠能環保",
-      "total": 2863,
-      "foreign": -12000,
+      "total": 7690,
+      "foreign": 1471,
       "trust": 0,
-      "dealer": 14863
-    },
-    {
-      "id": "3535",
-      "name": "晶彩科",
-      "sector": "CoPoS封裝",
-      "total": 2428,
-      "foreign": 2908,
-      "trust": 0,
-      "dealer": -480
-    },
-    {
-      "id": "2467",
-      "name": "志聖",
-      "sector": "CoPoS封裝",
-      "total": -192,
-      "foreign": 354,
-      "trust": -1000,
-      "dealer": 454
+      "dealer": 6219
     },
     {
       "id": "7734",
@@ -654,13 +663,13 @@
       "dealer": 194
     },
     {
-      "id": "1533",
-      "name": "車王電",
-      "sector": "車用電子",
-      "total": -19000,
-      "foreign": -15000,
-      "trust": 0,
-      "dealer": -4000
+      "id": "3044",
+      "name": "健鼎",
+      "sector": "小摩AI供應鏈",
+      "total": -22726,
+      "foreign": 625632,
+      "trust": -735000,
+      "dealer": 86642
     },
     {
       "id": "3205",
@@ -681,33 +690,6 @@
       "dealer": -45
     },
     {
-      "id": "6412",
-      "name": "群電",
-      "sector": "AI 電源",
-      "total": -41926,
-      "foreign": -61000,
-      "trust": 26115,
-      "dealer": -7041
-    },
-    {
-      "id": "6412",
-      "name": "群電",
-      "sector": "小摩AI供應鏈",
-      "total": -41926,
-      "foreign": -61000,
-      "trust": 26115,
-      "dealer": -7041
-    },
-    {
-      "id": "2455",
-      "name": "全新",
-      "sector": "光通訊",
-      "total": -47922,
-      "foreign": 122593,
-      "trust": 0,
-      "dealer": -170515
-    },
-    {
       "id": "6640",
       "name": "均華",
       "sector": "CoPoS封裝",
@@ -715,6 +697,24 @@
       "foreign": -46995,
       "trust": 0,
       "dealer": -3409
+    },
+    {
+      "id": "3443",
+      "name": "創意",
+      "sector": "AI ASIC/IP",
+      "total": -55052,
+      "foreign": -63007,
+      "trust": 21032,
+      "dealer": -13077
+    },
+    {
+      "id": "8210",
+      "name": "勤誠",
+      "sector": "AI 散熱",
+      "total": -57761,
+      "foreign": -131422,
+      "trust": 34000,
+      "dealer": 39661
     },
     {
       "id": "6510",
@@ -735,22 +735,31 @@
       "dealer": 28609
     },
     {
-      "id": "3008",
-      "name": "大立光",
-      "sector": "光學",
-      "total": -85011,
-      "foreign": 188341,
-      "trust": -280945,
-      "dealer": 7593
+      "id": "3653",
+      "name": "健策",
+      "sector": "AI 散熱",
+      "total": -75152,
+      "foreign": -81875,
+      "trust": 0,
+      "dealer": 6723
     },
     {
-      "id": "8210",
-      "name": "勤誠",
-      "sector": "AI 散熱",
-      "total": -118243,
-      "foreign": 123938,
-      "trust": -235000,
-      "dealer": -7181
+      "id": "3665",
+      "name": "貿聯-KY",
+      "sector": "光通訊",
+      "total": -112336,
+      "foreign": -148633,
+      "trust": 19000,
+      "dealer": 17297
+    },
+    {
+      "id": "7769",
+      "name": "鴻勤",
+      "sector": "小摩AI供應鏈",
+      "total": -126004,
+      "foreign": -117710,
+      "trust": -8000,
+      "dealer": -294
     },
     {
       "id": "5443",
@@ -771,6 +780,15 @@
       "dealer": 46105
     },
     {
+      "id": "2481",
+      "name": "強茂",
+      "sector": "封測",
+      "total": -156669,
+      "foreign": -350893,
+      "trust": 0,
+      "dealer": 194224
+    },
+    {
       "id": "3324",
       "name": "雙鴻",
       "sector": "AI 散熱",
@@ -778,6 +796,96 @@
       "foreign": -268312,
       "trust": 1000,
       "dealer": 90110
+    },
+    {
+      "id": "2317",
+      "name": "鴻海",
+      "sector": "AI伺服器",
+      "total": -179722,
+      "foreign": -763643,
+      "trust": -832035,
+      "dealer": 1415956
+    },
+    {
+      "id": "3406",
+      "name": "玉晶光",
+      "sector": "光學",
+      "total": -190794,
+      "foreign": -188642,
+      "trust": 19000,
+      "dealer": -21152
+    },
+    {
+      "id": "6415",
+      "name": "矽力-KY",
+      "sector": "IC設計",
+      "total": -252799,
+      "foreign": -337483,
+      "trust": 80000,
+      "dealer": 4684
+    },
+    {
+      "id": "2383",
+      "name": "台光電",
+      "sector": "銅箔/CCL",
+      "total": -257769,
+      "foreign": -111163,
+      "trust": -209000,
+      "dealer": 62394
+    },
+    {
+      "id": "2383",
+      "name": "台光電",
+      "sector": "小摩AI供應鏈",
+      "total": -257769,
+      "foreign": -111163,
+      "trust": -209000,
+      "dealer": 62394
+    },
+    {
+      "id": "5469",
+      "name": "瀚宇博",
+      "sector": "小摩AI供應鏈",
+      "total": -266720,
+      "foreign": -2297492,
+      "trust": 2168000,
+      "dealer": -137228
+    },
+    {
+      "id": "3450",
+      "name": "聯鈞",
+      "sector": "光通訊",
+      "total": -276396,
+      "foreign": -272000,
+      "trust": 0,
+      "dealer": -4396
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "ABF載板",
+      "total": -276870,
+      "foreign": -676369,
+      "trust": 102000,
+      "dealer": 297499
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "銅箔/CCL",
+      "total": -276870,
+      "foreign": -676369,
+      "trust": 102000,
+      "dealer": 297499
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "小摩AI供應鏈",
+      "total": -276870,
+      "foreign": -676369,
+      "trust": 102000,
+      "dealer": 297499
     },
     {
       "id": "4966",
@@ -789,40 +897,40 @@
       "dealer": -3867
     },
     {
-      "id": "2345",
-      "name": "智邦",
-      "sector": "光通訊",
-      "total": -330272,
-      "foreign": -195811,
-      "trust": -170258,
-      "dealer": 35797
+      "id": "2368",
+      "name": "金像電",
+      "sector": "銅箔/CCL",
+      "total": -358063,
+      "foreign": -220759,
+      "trust": -197000,
+      "dealer": 59696
     },
     {
-      "id": "6271",
-      "name": "同欣電",
-      "sector": "封測",
-      "total": -393831,
-      "foreign": -133383,
-      "trust": 1000,
-      "dealer": -261448
-    },
-    {
-      "id": "3037",
-      "name": "欣興",
-      "sector": "ABF載板",
-      "total": -428312,
-      "foreign": -2028734,
-      "trust": 1544770,
-      "dealer": 55652
-    },
-    {
-      "id": "3037",
-      "name": "欣興",
+      "id": "2368",
+      "name": "金像電",
       "sector": "小摩AI供應鏈",
-      "total": -428312,
-      "foreign": -2028734,
-      "trust": 1544770,
-      "dealer": 55652
+      "total": -358063,
+      "foreign": -220759,
+      "trust": -197000,
+      "dealer": 59696
+    },
+    {
+      "id": "4919",
+      "name": "新唐",
+      "sector": "IC設計",
+      "total": -402944,
+      "foreign": -448913,
+      "trust": 23000,
+      "dealer": 22969
+    },
+    {
+      "id": "6269",
+      "name": "台郡",
+      "sector": "小摩AI供應鏈",
+      "total": -432091,
+      "foreign": -586330,
+      "trust": 0,
+      "dealer": 154239
     },
     {
       "id": "6187",
@@ -834,22 +942,31 @@
       "dealer": 2260
     },
     {
+      "id": "2379",
+      "name": "瑞昱",
+      "sector": "IC設計",
+      "total": -518113,
+      "foreign": -1244436,
+      "trust": 830193,
+      "dealer": -103870
+    },
+    {
+      "id": "2458",
+      "name": "義隆",
+      "sector": "IC設計",
+      "total": -564086,
+      "foreign": -1738233,
+      "trust": 1044108,
+      "dealer": 130039
+    },
+    {
       "id": "3006",
       "name": "晶豪科",
       "sector": "記憶體",
-      "total": -682548,
-      "foreign": -603791,
-      "trust": 14000,
-      "dealer": -92757
-    },
-    {
-      "id": "4919",
-      "name": "新唐",
-      "sector": "IC設計",
-      "total": -697544,
-      "foreign": -231020,
-      "trust": 13000,
-      "dealer": -479524
+      "total": -702500,
+      "foreign": -730662,
+      "trust": 20000,
+      "dealer": 8162
     },
     {
       "id": "5289",
@@ -861,22 +978,40 @@
       "dealer": 40235
     },
     {
-      "id": "2451",
-      "name": "創見",
-      "sector": "記憶體",
-      "total": -733600,
-      "foreign": -794720,
-      "trust": 82000,
-      "dealer": -20880
+      "id": "6213",
+      "name": "聯茂",
+      "sector": "銅箔/CCL",
+      "total": -740933,
+      "foreign": -2009834,
+      "trust": 294000,
+      "dealer": 974901
     },
     {
-      "id": "3450",
-      "name": "聯鈞",
+      "id": "6213",
+      "name": "聯茂",
+      "sector": "小摩AI供應鏈",
+      "total": -740933,
+      "foreign": -2009834,
+      "trust": 294000,
+      "dealer": 974901
+    },
+    {
+      "id": "2455",
+      "name": "全新",
       "sector": "光通訊",
-      "total": -832005,
-      "foreign": -814969,
-      "trust": -1000,
-      "dealer": -16036
+      "total": -799160,
+      "foreign": 156374,
+      "trust": -999000,
+      "dealer": 43466
+    },
+    {
+      "id": "2330",
+      "name": "台積電",
+      "sector": "AI ASIC/IP",
+      "total": -823914,
+      "foreign": -1425774,
+      "trust": -50595,
+      "dealer": 652455
     },
     {
       "id": "4979",
@@ -888,40 +1023,31 @@
       "dealer": -1348
     },
     {
-      "id": "2357",
-      "name": "華碩",
-      "sector": "AI伺服器",
-      "total": -848558,
-      "foreign": -832176,
-      "trust": -131166,
-      "dealer": 114784
+      "id": "3008",
+      "name": "大立光",
+      "sector": "光學",
+      "total": -1024505,
+      "foreign": -1102321,
+      "trust": 0,
+      "dealer": 77816
     },
     {
-      "id": "2388",
-      "name": "威盛",
-      "sector": "IC設計",
-      "total": -949056,
-      "foreign": -798853,
-      "trust": 30000,
-      "dealer": -180203
-    },
-    {
-      "id": "6269",
-      "name": "台郡",
+      "id": "2313",
+      "name": "華通",
       "sector": "小摩AI供應鏈",
-      "total": -1330968,
-      "foreign": -1167425,
-      "trust": -1000,
-      "dealer": -162543
+      "total": -1078283,
+      "foreign": -1221936,
+      "trust": -64000,
+      "dealer": 207653
     },
     {
-      "id": "5469",
-      "name": "瀚宇博",
-      "sector": "小摩AI供應鏈",
-      "total": -1342912,
-      "foreign": -3706740,
-      "trust": 2075000,
-      "dealer": 288828
+      "id": "2308",
+      "name": "台達電",
+      "sector": "AI 電源",
+      "total": -1080363,
+      "foreign": -1444331,
+      "trust": 40000,
+      "dealer": 323968
     },
     {
       "id": "3260",
@@ -933,130 +1059,40 @@
       "dealer": 19273
     },
     {
-      "id": "6213",
-      "name": "聯茂",
-      "sector": "銅箔/CCL",
-      "total": -1550323,
-      "foreign": -1707723,
-      "trust": 1000,
-      "dealer": 156400
-    },
-    {
-      "id": "6213",
-      "name": "聯茂",
-      "sector": "小摩AI供應鏈",
-      "total": -1550323,
-      "foreign": -1707723,
-      "trust": 1000,
-      "dealer": 156400
-    },
-    {
-      "id": "4906",
-      "name": "正文",
-      "sector": "光通訊",
-      "total": -1573765,
-      "foreign": -1470900,
-      "trust": 0,
-      "dealer": -102865
-    },
-    {
-      "id": "4958",
-      "name": "臻鼎-KY",
-      "sector": "ABF載板",
-      "total": -1736780,
-      "foreign": -1713399,
-      "trust": 73755,
-      "dealer": -97136
-    },
-    {
-      "id": "4958",
-      "name": "臻鼎",
-      "sector": "小摩AI供應鏈",
-      "total": -1736780,
-      "foreign": -1713399,
-      "trust": 73755,
-      "dealer": -97136
-    },
-    {
-      "id": "3711",
-      "name": "日月光投控",
-      "sector": "封測",
-      "total": -1764575,
-      "foreign": -442086,
-      "trust": -1393129,
-      "dealer": 70640
-    },
-    {
-      "id": "3711",
-      "name": "日月光投控",
-      "sector": "CoPoS封裝",
-      "total": -1764575,
-      "foreign": -442086,
-      "trust": -1393129,
-      "dealer": 70640
-    },
-    {
-      "id": "3189",
-      "name": "景碩",
-      "sector": "ABF載板",
-      "total": -1813827,
-      "foreign": -5431078,
-      "trust": 3479000,
-      "dealer": 138251
-    },
-    {
-      "id": "3189",
-      "name": "景碩",
-      "sector": "小摩AI供應鏈",
-      "total": -1813827,
-      "foreign": -5431078,
-      "trust": 3479000,
-      "dealer": 138251
-    },
-    {
-      "id": "2408",
-      "name": "南亞科",
-      "sector": "記憶體",
-      "total": -2163148,
-      "foreign": -2700682,
-      "trust": 3370159,
-      "dealer": -2832625
-    },
-    {
-      "id": "3231",
-      "name": "緯創",
+      "id": "2357",
+      "name": "華碩",
       "sector": "AI伺服器",
-      "total": -2177870,
-      "foreign": -6967519,
-      "trust": 4395614,
-      "dealer": 394035
+      "total": -1734389,
+      "foreign": -1475271,
+      "trust": -163939,
+      "dealer": -95179
     },
     {
-      "id": "6176",
-      "name": "瑞儀",
+      "id": "3189",
+      "name": "景碩",
+      "sector": "ABF載板",
+      "total": -2281284,
+      "foreign": -2965666,
+      "trust": 194000,
+      "dealer": 490382
+    },
+    {
+      "id": "3189",
+      "name": "景碩",
       "sector": "小摩AI供應鏈",
-      "total": -2438446,
-      "foreign": -789376,
-      "trust": -1628838,
-      "dealer": -20232
+      "total": -2281284,
+      "foreign": -2965666,
+      "trust": 194000,
+      "dealer": 490382
     },
     {
-      "id": "2329",
-      "name": "華泰",
-      "sector": "封測",
-      "total": -2594835,
-      "foreign": -2374736,
-      "trust": 6000,
-      "dealer": -226099
-    },
-    {
-      "id": "2441",
-      "name": "超豐",
-      "sector": "封測",
-      "total": -2614962,
-      "foreign": -1843270,
-      "trust": -539000,
-      "dealer": -232692
+      "id": "2451",
+      "name": "創見",
+      "sector": "記憶體",
+      "total": -2300096,
+      "foreign": -2320187,
+      "trust": -3000,
+      "dealer": 23091
     },
     {
       "id": "3105",
@@ -1075,51 +1111,6 @@
       "foreign": -2791655,
       "trust": -154724,
       "dealer": 252089
-    },
-    {
-      "id": "3715",
-      "name": "定穎",
-      "sector": "小摩AI供應鏈",
-      "total": -2723427,
-      "foreign": -2404075,
-      "trust": 0,
-      "dealer": -319352
-    },
-    {
-      "id": "2313",
-      "name": "華通",
-      "sector": "小摩AI供應鏈",
-      "total": -2732232,
-      "foreign": -3065433,
-      "trust": 23000,
-      "dealer": 310201
-    },
-    {
-      "id": "2449",
-      "name": "京元電子",
-      "sector": "封測",
-      "total": -3038767,
-      "foreign": -2745001,
-      "trust": -345741,
-      "dealer": 51975
-    },
-    {
-      "id": "2449",
-      "name": "京元電子",
-      "sector": "CoPoS封裝",
-      "total": -3038767,
-      "foreign": -2745001,
-      "trust": -345741,
-      "dealer": 51975
-    },
-    {
-      "id": "2369",
-      "name": "菱生",
-      "sector": "封測",
-      "total": -4060985,
-      "foreign": -3553766,
-      "trust": 0,
-      "dealer": -507219
     },
     {
       "id": "6147",
@@ -1131,49 +1122,58 @@
       "dealer": 98041
     },
     {
-      "id": "2344",
-      "name": "華邦電",
-      "sector": "記憶體",
-      "total": -11955431,
-      "foreign": -20610326,
-      "trust": 11985901,
-      "dealer": -3331006
+      "id": "2327",
+      "name": "國巨",
+      "sector": "被動元件",
+      "total": -8071562,
+      "foreign": -4471717,
+      "trust": -4196803,
+      "dealer": 596958
     },
     {
-      "id": "2317",
-      "name": "鴻海",
-      "sector": "AI伺服器",
-      "total": -18144344,
-      "foreign": -20344952,
-      "trust": 1866782,
-      "dealer": 333826
-    },
-    {
-      "id": "8150",
-      "name": "南茂",
-      "sector": "封測",
-      "total": -18669591,
-      "foreign": -17488518,
-      "trust": 172000,
-      "dealer": -1353073
-    },
-    {
-      "id": "2337",
-      "name": "旺宏",
-      "sector": "記憶體",
-      "total": -21660595,
-      "foreign": -20271919,
-      "trust": 157000,
-      "dealer": -1545676
+      "id": "2327",
+      "name": "國巨",
+      "sector": "小摩AI供應鏈",
+      "total": -8071562,
+      "foreign": -4471717,
+      "trust": -4196803,
+      "dealer": 596958
     },
     {
       "id": "6770",
       "name": "力積電",
       "sector": "記憶體",
-      "total": -27449022,
-      "foreign": -26786141,
-      "trust": 114000,
-      "dealer": -776881
+      "total": -18652796,
+      "foreign": -19909530,
+      "trust": 0,
+      "dealer": 1256734
+    },
+    {
+      "id": "2408",
+      "name": "南亞科",
+      "sector": "記憶體",
+      "total": -18760509,
+      "foreign": -18345212,
+      "trust": 749000,
+      "dealer": -1164297
+    },
+    {
+      "id": "2344",
+      "name": "華邦電",
+      "sector": "記憶體",
+      "total": -24073749,
+      "foreign": -21920097,
+      "trust": -5152445,
+      "dealer": 2998793
+    },
+    {
+      "id": "2337",
+      "name": "旺宏",
+      "sector": "記憶體",
+      "total": -40605989,
+      "foreign": -40486441,
+      "trust": 150000,
+      "dealer": -269548
     }
   ],
   "stocks": [
@@ -1205,10 +1205,10 @@
       "ret20": -1.3,
       "signal": "HOLD",
       "sharpe": -6.17,
-      "foreign": -814969,
-      "trust": -1000,
-      "dealer": -16036,
-      "chipTotal": -832005,
+      "foreign": -272000,
+      "trust": 0,
+      "dealer": -4396,
+      "chipTotal": -276396,
       "news": ""
     },
     {
@@ -1222,10 +1222,10 @@
       "ret20": -9.7,
       "signal": "SELL",
       "sharpe": 2.18,
-      "foreign": 274665,
-      "trust": -75889,
-      "dealer": -13129,
-      "chipTotal": 185647,
+      "foreign": -148633,
+      "trust": 19000,
+      "dealer": 17297,
+      "chipTotal": -112336,
       "news": ""
     },
     {
@@ -1273,10 +1273,10 @@
       "ret20": -16.5,
       "signal": "HOLD",
       "sharpe": -3.11,
-      "foreign": 122593,
-      "trust": 0,
-      "dealer": -170515,
-      "chipTotal": -47922,
+      "foreign": 156374,
+      "trust": -999000,
+      "dealer": 43466,
+      "chipTotal": -799160,
       "news": ""
     },
     {
@@ -1290,10 +1290,10 @@
       "ret20": -20.0,
       "signal": "HOLD",
       "sharpe": 1.99,
-      "foreign": -1470900,
+      "foreign": 1576144,
       "trust": 0,
-      "dealer": -102865,
-      "chipTotal": -1573765,
+      "dealer": 33125,
+      "chipTotal": 1609269,
       "news": ""
     },
     {
@@ -1307,10 +1307,10 @@
       "ret20": -0.6,
       "signal": "SELL",
       "sharpe": -2.84,
-      "foreign": -195811,
-      "trust": -170258,
-      "dealer": 35797,
-      "chipTotal": -330272,
+      "foreign": 313738,
+      "trust": 77000,
+      "dealer": 20786,
+      "chipTotal": 411524,
       "news": ""
     },
     {
@@ -1324,10 +1324,10 @@
       "ret20": 18.6,
       "signal": "HOLD",
       "sharpe": 9.96,
-      "foreign": -2700682,
-      "trust": 3370159,
-      "dealer": -2832625,
-      "chipTotal": -2163148,
+      "foreign": -18345212,
+      "trust": 749000,
+      "dealer": -1164297,
+      "chipTotal": -18760509,
       "news": ""
     },
     {
@@ -1341,10 +1341,10 @@
       "ret20": -7.2,
       "signal": "HOLD",
       "sharpe": 1.05,
-      "foreign": -20271919,
-      "trust": 157000,
-      "dealer": -1545676,
-      "chipTotal": -21660595,
+      "foreign": -40486441,
+      "trust": 150000,
+      "dealer": -269548,
+      "chipTotal": -40605989,
       "news": ""
     },
     {
@@ -1358,10 +1358,10 @@
       "ret20": 23.5,
       "signal": "HOLD",
       "sharpe": 8.95,
-      "foreign": -20610326,
-      "trust": 11985901,
-      "dealer": -3331006,
-      "chipTotal": -11955431,
+      "foreign": -21920097,
+      "trust": -5152445,
+      "dealer": 2998793,
+      "chipTotal": -24073749,
       "news": ""
     },
     {
@@ -1375,10 +1375,10 @@
       "ret20": -9.6,
       "signal": "HOLD",
       "sharpe": 0.97,
-      "foreign": -603791,
-      "trust": 14000,
-      "dealer": -92757,
-      "chipTotal": -682548,
+      "foreign": -730662,
+      "trust": 20000,
+      "dealer": 8162,
+      "chipTotal": -702500,
       "news": ""
     },
     {
@@ -1392,10 +1392,10 @@
       "ret20": -25.5,
       "signal": "HOLD",
       "sharpe": 4.66,
-      "foreign": -794720,
-      "trust": 82000,
-      "dealer": -20880,
-      "chipTotal": -733600,
+      "foreign": -2320187,
+      "trust": -3000,
+      "dealer": 23091,
+      "chipTotal": -2300096,
       "news": ""
     },
     {
@@ -1460,10 +1460,10 @@
       "ret20": -8.4,
       "signal": "HOLD",
       "sharpe": -0.6,
-      "foreign": -26786141,
-      "trust": 114000,
-      "dealer": -776881,
-      "chipTotal": -27449022,
+      "foreign": -19909530,
+      "trust": 0,
+      "dealer": 1256734,
+      "chipTotal": -18652796,
       "news": ""
     },
     {
@@ -1494,10 +1494,10 @@
       "ret20": -14.5,
       "signal": "HOLD",
       "sharpe": -2.38,
-      "foreign": -20344952,
-      "trust": 1866782,
-      "dealer": 333826,
-      "chipTotal": -18144344,
+      "foreign": -763643,
+      "trust": -832035,
+      "dealer": 1415956,
+      "chipTotal": -179722,
       "news": ""
     },
     {
@@ -1511,10 +1511,10 @@
       "ret20": -1.2,
       "signal": "SELL",
       "sharpe": 0.05,
-      "foreign": -695137,
-      "trust": 2930530,
-      "dealer": 265176,
-      "chipTotal": 2500569,
+      "foreign": -159196,
+      "trust": 1772750,
+      "dealer": 188790,
+      "chipTotal": 1802344,
       "news": ""
     },
     {
@@ -1528,10 +1528,10 @@
       "ret20": -8.9,
       "signal": "HOLD",
       "sharpe": 0.19,
-      "foreign": -6967519,
-      "trust": 4395614,
-      "dealer": 394035,
-      "chipTotal": -2177870,
+      "foreign": -1035054,
+      "trust": 5898000,
+      "dealer": 429136,
+      "chipTotal": 5292082,
       "news": ""
     },
     {
@@ -1545,10 +1545,10 @@
       "ret20": -11.1,
       "signal": "HOLD",
       "sharpe": -5.8,
-      "foreign": -840479,
-      "trust": 1412236,
-      "dealer": 90699,
-      "chipTotal": 662456,
+      "foreign": 1030383,
+      "trust": 1321000,
+      "dealer": 141011,
+      "chipTotal": 2492394,
       "news": ""
     },
     {
@@ -1562,10 +1562,10 @@
       "ret20": -8.1,
       "signal": "HOLD",
       "sharpe": -7.99,
-      "foreign": 7918954,
-      "trust": -1504418,
-      "dealer": 474330,
-      "chipTotal": 6888866,
+      "foreign": 2794235,
+      "trust": -737499,
+      "dealer": 154621,
+      "chipTotal": 2211357,
       "news": ""
     },
     {
@@ -1579,10 +1579,10 @@
       "ret20": -16.4,
       "signal": "HOLD",
       "sharpe": -3.26,
-      "foreign": -832176,
-      "trust": -131166,
-      "dealer": 114784,
-      "chipTotal": -848558,
+      "foreign": -1475271,
+      "trust": -163939,
+      "dealer": -95179,
+      "chipTotal": -1734389,
       "news": ""
     },
     {
@@ -1596,10 +1596,10 @@
       "ret20": 13.1,
       "signal": "HOLD",
       "sharpe": 0.17,
-      "foreign": -442086,
-      "trust": -1393129,
-      "dealer": 70640,
-      "chipTotal": -1764575,
+      "foreign": 5971523,
+      "trust": -655480,
+      "dealer": 448481,
+      "chipTotal": 5764524,
       "news": ""
     },
     {
@@ -1613,10 +1613,10 @@
       "ret20": 6.1,
       "signal": "HOLD",
       "sharpe": 10.16,
-      "foreign": -2745001,
-      "trust": -345741,
-      "dealer": 51975,
-      "chipTotal": -3038767,
+      "foreign": 15739155,
+      "trust": -194670,
+      "dealer": 935086,
+      "chipTotal": 16479571,
       "news": ""
     },
     {
@@ -1647,10 +1647,10 @@
       "ret20": -0.7,
       "signal": "HOLD",
       "sharpe": 5.26,
-      "foreign": -1843270,
-      "trust": -539000,
-      "dealer": -232692,
-      "chipTotal": -2614962,
+      "foreign": 863130,
+      "trust": -1000,
+      "dealer": 441376,
+      "chipTotal": 1303506,
       "news": ""
     },
     {
@@ -1664,10 +1664,10 @@
       "ret20": 8.0,
       "signal": "HOLD",
       "sharpe": -0.43,
-      "foreign": 385102,
-      "trust": -239000,
-      "dealer": -76197,
-      "chipTotal": 69905,
+      "foreign": 1870654,
+      "trust": -195866,
+      "dealer": 245821,
+      "chipTotal": 1920609,
       "news": ""
     },
     {
@@ -1681,10 +1681,10 @@
       "ret20": -7.8,
       "signal": "HOLD",
       "sharpe": -0.26,
-      "foreign": 3273598,
-      "trust": -2703000,
-      "dealer": -202683,
-      "chipTotal": 367915,
+      "foreign": 4883262,
+      "trust": -2232797,
+      "dealer": 625359,
+      "chipTotal": 3275824,
       "news": ""
     },
     {
@@ -1698,10 +1698,10 @@
       "ret20": -6.6,
       "signal": "SELL",
       "sharpe": 4.76,
-      "foreign": -17488518,
-      "trust": 172000,
-      "dealer": -1353073,
-      "chipTotal": -18669591,
+      "foreign": 7554896,
+      "trust": 0,
+      "dealer": 846321,
+      "chipTotal": 8401217,
       "news": ""
     },
     {
@@ -1749,10 +1749,10 @@
       "ret20": -1.3,
       "signal": "HOLD",
       "sharpe": -12.78,
-      "foreign": -3553766,
+      "foreign": 376005,
       "trust": 0,
-      "dealer": -507219,
-      "chipTotal": -4060985,
+      "dealer": 143499,
+      "chipTotal": 519504,
       "news": ""
     },
     {
@@ -1766,10 +1766,10 @@
       "ret20": -12.0,
       "signal": "HOLD",
       "sharpe": -3.87,
-      "foreign": -2374736,
-      "trust": 6000,
-      "dealer": -226099,
-      "chipTotal": -2594835,
+      "foreign": 615042,
+      "trust": 0,
+      "dealer": 187318,
+      "chipTotal": 802360,
       "news": ""
     },
     {
@@ -1783,10 +1783,10 @@
       "ret20": 7.9,
       "signal": "BUY",
       "sharpe": 1.07,
-      "foreign": -133383,
-      "trust": 1000,
-      "dealer": -261448,
-      "chipTotal": -393831,
+      "foreign": 4713601,
+      "trust": 0,
+      "dealer": 268880,
+      "chipTotal": 4982481,
       "news": ""
     },
     {
@@ -1800,10 +1800,10 @@
       "ret20": 16.2,
       "signal": "HOLD",
       "sharpe": 1.98,
-      "foreign": 1884897,
-      "trust": -1058000,
-      "dealer": -274558,
-      "chipTotal": 552339,
+      "foreign": -350893,
+      "trust": 0,
+      "dealer": 194224,
+      "chipTotal": -156669,
       "news": ""
     },
     {
@@ -1817,10 +1817,10 @@
       "ret20": 11.9,
       "signal": "HOLD",
       "sharpe": -5.07,
-      "foreign": 188341,
-      "trust": -280945,
-      "dealer": 7593,
-      "chipTotal": -85011,
+      "foreign": -1102321,
+      "trust": 0,
+      "dealer": 77816,
+      "chipTotal": -1024505,
       "news": ""
     },
     {
@@ -1834,10 +1834,10 @@
       "ret20": 9.3,
       "signal": "HOLD",
       "sharpe": 2.02,
-      "foreign": 659830,
-      "trust": -252000,
-      "dealer": 40961,
-      "chipTotal": 448791,
+      "foreign": -188642,
+      "trust": 19000,
+      "dealer": -21152,
+      "chipTotal": -190794,
       "news": ""
     },
     {
@@ -1851,10 +1851,10 @@
       "ret20": -6.8,
       "signal": "HOLD",
       "sharpe": -1.88,
-      "foreign": 1125600,
-      "trust": -615665,
-      "dealer": 242090,
-      "chipTotal": 752025,
+      "foreign": 814245,
+      "trust": -678596,
+      "dealer": 130139,
+      "chipTotal": 265788,
       "news": ""
     },
     {
@@ -1868,10 +1868,10 @@
       "ret20": 7.8,
       "signal": "HOLD",
       "sharpe": -4.72,
-      "foreign": 700306,
-      "trust": 431434,
-      "dealer": -66583,
-      "chipTotal": 1065157,
+      "foreign": -275122,
+      "trust": 278276,
+      "dealer": 128827,
+      "chipTotal": 131981,
       "news": ""
     },
     {
@@ -1902,10 +1902,10 @@
       "ret20": -16.6,
       "signal": "SELL",
       "sharpe": -4.21,
-      "foreign": -231020,
-      "trust": 13000,
-      "dealer": -479524,
-      "chipTotal": -697544,
+      "foreign": -448913,
+      "trust": 23000,
+      "dealer": 22969,
+      "chipTotal": -402944,
       "news": ""
     },
     {
@@ -1919,10 +1919,10 @@
       "ret20": -2.0,
       "signal": "HOLD",
       "sharpe": 4.53,
-      "foreign": -798853,
-      "trust": 30000,
-      "dealer": -180203,
-      "chipTotal": -949056,
+      "foreign": -173875,
+      "trust": 40000,
+      "dealer": 198833,
+      "chipTotal": 64958,
       "news": ""
     },
     {
@@ -1936,10 +1936,10 @@
       "ret20": 32.3,
       "signal": "HOLD",
       "sharpe": -1.33,
-      "foreign": -347427,
-      "trust": 824037,
-      "dealer": -35272,
-      "chipTotal": 441338,
+      "foreign": -1244436,
+      "trust": 830193,
+      "dealer": -103870,
+      "chipTotal": -518113,
       "news": ""
     },
     {
@@ -1953,10 +1953,10 @@
       "ret20": -1.3,
       "signal": "HOLD",
       "sharpe": 3.31,
-      "foreign": 189420,
-      "trust": 75000,
-      "dealer": -18823,
-      "chipTotal": 245597,
+      "foreign": -337483,
+      "trust": 80000,
+      "dealer": 4684,
+      "chipTotal": -252799,
       "news": ""
     },
     {
@@ -1970,10 +1970,10 @@
       "ret20": -3.3,
       "signal": "HOLD",
       "sharpe": -0.94,
-      "foreign": 455437,
-      "trust": 269000,
-      "dealer": 55183,
-      "chipTotal": 779620,
+      "foreign": -99066,
+      "trust": 262000,
+      "dealer": 13637,
+      "chipTotal": 176571,
       "news": ""
     },
     {
@@ -1987,10 +1987,10 @@
       "ret20": 13.2,
       "signal": "HOLD",
       "sharpe": -1.06,
-      "foreign": 450750,
-      "trust": 1076574,
-      "dealer": 103238,
-      "chipTotal": 1630562,
+      "foreign": -1738233,
+      "trust": 1044108,
+      "dealer": 130039,
+      "chipTotal": -564086,
       "news": ""
     },
     {
@@ -2004,10 +2004,10 @@
       "ret20": -1.2,
       "signal": "SELL",
       "sharpe": -4.28,
-      "foreign": 31000,
+      "foreign": 254000,
       "trust": 0,
-      "dealer": 1000,
-      "chipTotal": 32000,
+      "dealer": 0,
+      "chipTotal": 254000,
       "news": ""
     },
     {
@@ -2038,10 +2038,10 @@
       "ret20": -9.7,
       "signal": "HOLD",
       "sharpe": -3.24,
-      "foreign": -15000,
+      "foreign": 19198,
       "trust": 0,
-      "dealer": -4000,
-      "chipTotal": -19000,
+      "dealer": -1000,
+      "chipTotal": 18198,
       "news": ""
     },
     {
@@ -2055,10 +2055,10 @@
       "ret20": 90.3,
       "signal": "HOLD",
       "sharpe": -5.88,
-      "foreign": 20000,
+      "foreign": 24000,
       "trust": 0,
-      "dealer": 2000,
-      "chipTotal": 22000,
+      "dealer": -1000,
+      "chipTotal": 23000,
       "news": ""
     },
     {
@@ -2072,10 +2072,10 @@
       "ret20": -4.4,
       "signal": "SELL",
       "sharpe": -1.18,
-      "foreign": -12000,
+      "foreign": 1471,
       "trust": 0,
-      "dealer": 14863,
-      "chipTotal": 2863,
+      "dealer": 6219,
+      "chipTotal": 7690,
       "news": ""
     },
     {
@@ -2089,10 +2089,10 @@
       "ret20": -6.2,
       "signal": "HOLD",
       "sharpe": 4.9,
-      "foreign": 62694,
-      "trust": 2000,
-      "dealer": -8481,
-      "chipTotal": 56213,
+      "foreign": 85372,
+      "trust": -22000,
+      "dealer": 24316,
+      "chipTotal": 87688,
       "news": ""
     },
     {
@@ -2106,10 +2106,10 @@
       "ret20": -13.8,
       "signal": "HOLD",
       "sharpe": 4.77,
-      "foreign": 2908,
+      "foreign": 69000,
       "trust": 0,
-      "dealer": -480,
-      "chipTotal": 2428,
+      "dealer": 315,
+      "chipTotal": 69315,
       "news": ""
     },
     {
@@ -2157,10 +2157,10 @@
       "ret20": -2.7,
       "signal": "SELL",
       "sharpe": 9.02,
-      "foreign": 354,
-      "trust": -1000,
-      "dealer": 454,
-      "chipTotal": -192,
+      "foreign": 801835,
+      "trust": -10927,
+      "dealer": 44805,
+      "chipTotal": 835713,
       "news": ""
     },
     {
@@ -2259,10 +2259,10 @@
       "ret20": 4.3,
       "signal": "HOLD",
       "sharpe": 11.3,
-      "foreign": 387555,
+      "foreign": 760416,
       "trust": 0,
-      "dealer": 5561,
-      "chipTotal": 393116,
+      "dealer": 17690,
+      "chipTotal": 778106,
       "news": ""
     },
     {
@@ -2276,10 +2276,10 @@
       "ret20": 13.1,
       "signal": "HOLD",
       "sharpe": 0.17,
-      "foreign": -442086,
-      "trust": -1393129,
-      "dealer": 70640,
-      "chipTotal": -1764575,
+      "foreign": 5971523,
+      "trust": -655480,
+      "dealer": 448481,
+      "chipTotal": 5764524,
       "news": ""
     },
     {
@@ -2293,10 +2293,10 @@
       "ret20": 6.1,
       "signal": "HOLD",
       "sharpe": 10.16,
-      "foreign": -2745001,
-      "trust": -345741,
-      "dealer": 51975,
-      "chipTotal": -3038767,
+      "foreign": 15739155,
+      "trust": -194670,
+      "dealer": 935086,
+      "chipTotal": 16479571,
       "news": ""
     },
     {
@@ -2310,10 +2310,10 @@
       "ret20": -7.8,
       "signal": "HOLD",
       "sharpe": -0.26,
-      "foreign": 3273598,
-      "trust": -2703000,
-      "dealer": -202683,
-      "chipTotal": 367915,
+      "foreign": 4883262,
+      "trust": -2232797,
+      "dealer": 625359,
+      "chipTotal": 3275824,
       "news": ""
     },
     {
@@ -2327,10 +2327,10 @@
       "ret20": 1.9,
       "signal": "HOLD",
       "sharpe": 1.57,
-      "foreign": -2028734,
-      "trust": 1544770,
-      "dealer": 55652,
-      "chipTotal": -428312,
+      "foreign": 3620829,
+      "trust": 1866000,
+      "dealer": 446221,
+      "chipTotal": 5933050,
       "news": ""
     },
     {
@@ -2344,10 +2344,10 @@
       "ret20": 15.0,
       "signal": "HOLD",
       "sharpe": 1.94,
-      "foreign": -1713399,
-      "trust": 73755,
-      "dealer": -97136,
-      "chipTotal": -1736780,
+      "foreign": 4265153,
+      "trust": -1000,
+      "dealer": 682057,
+      "chipTotal": 4946210,
       "news": ""
     },
     {
@@ -2361,10 +2361,10 @@
       "ret20": 30.9,
       "signal": "HOLD",
       "sharpe": -2.94,
-      "foreign": 2358882,
-      "trust": 1906125,
-      "dealer": 44003,
-      "chipTotal": 4309010,
+      "foreign": -676369,
+      "trust": 102000,
+      "dealer": 297499,
+      "chipTotal": -276870,
       "news": ""
     },
     {
@@ -2378,10 +2378,10 @@
       "ret20": 15.1,
       "signal": "HOLD",
       "sharpe": 2.68,
-      "foreign": -5431078,
-      "trust": 3479000,
-      "dealer": 138251,
-      "chipTotal": -1813827,
+      "foreign": -2965666,
+      "trust": 194000,
+      "dealer": 490382,
+      "chipTotal": -2281284,
       "news": ""
     },
     {
@@ -2412,10 +2412,10 @@
       "ret20": 6.3,
       "signal": "HOLD",
       "sharpe": 6.89,
-      "foreign": 72513,
-      "trust": -30576,
-      "dealer": -20368,
-      "chipTotal": 21569,
+      "foreign": -111163,
+      "trust": -209000,
+      "dealer": 62394,
+      "chipTotal": -257769,
       "news": ""
     },
     {
@@ -2429,10 +2429,10 @@
       "ret20": 25.6,
       "signal": "HOLD",
       "sharpe": 1.73,
-      "foreign": -1707723,
-      "trust": 1000,
-      "dealer": 156400,
-      "chipTotal": -1550323,
+      "foreign": -2009834,
+      "trust": 294000,
+      "dealer": 974901,
+      "chipTotal": -740933,
       "news": ""
     },
     {
@@ -2446,10 +2446,10 @@
       "ret20": -9.4,
       "signal": "HOLD",
       "sharpe": 10.47,
-      "foreign": 1593754,
-      "trust": -1541781,
-      "dealer": -5480,
-      "chipTotal": 46493,
+      "foreign": -220759,
+      "trust": -197000,
+      "dealer": 59696,
+      "chipTotal": -358063,
       "news": ""
     },
     {
@@ -2463,10 +2463,10 @@
       "ret20": 30.9,
       "signal": "HOLD",
       "sharpe": -2.94,
-      "foreign": 2358882,
-      "trust": 1906125,
-      "dealer": 44003,
-      "chipTotal": 4309010,
+      "foreign": -676369,
+      "trust": 102000,
+      "dealer": 297499,
+      "chipTotal": -276870,
       "news": ""
     },
     {
@@ -2480,10 +2480,10 @@
       "ret20": 2.3,
       "signal": "HOLD",
       "sharpe": -4.32,
-      "foreign": -1912490,
-      "trust": 919216,
-      "dealer": 996850,
-      "chipTotal": 3576,
+      "foreign": -1425774,
+      "trust": -50595,
+      "dealer": 652455,
+      "chipTotal": -823914,
       "news": ""
     },
     {
@@ -2497,10 +2497,10 @@
       "ret20": 4.1,
       "signal": "HOLD",
       "sharpe": 2.93,
-      "foreign": -22750,
-      "trust": 20177,
-      "dealer": 17467,
-      "chipTotal": 14894,
+      "foreign": -63007,
+      "trust": 21032,
+      "dealer": -13077,
+      "chipTotal": -55052,
       "news": ""
     },
     {
@@ -2514,10 +2514,10 @@
       "ret20": -13.9,
       "signal": "HOLD",
       "sharpe": -8.44,
-      "foreign": 215808,
-      "trust": 14046,
-      "dealer": 9624,
-      "chipTotal": 239478,
+      "foreign": 44337,
+      "trust": 1000,
+      "dealer": 65888,
+      "chipTotal": 111225,
       "news": ""
     },
     {
@@ -2565,10 +2565,10 @@
       "ret20": -9.3,
       "signal": "HOLD",
       "sharpe": -3.58,
-      "foreign": 312425,
-      "trust": 214187,
-      "dealer": 19928,
-      "chipTotal": 546540,
+      "foreign": 1693823,
+      "trust": 259000,
+      "dealer": 57941,
+      "chipTotal": 2010764,
       "news": ""
     },
     {
@@ -2599,10 +2599,10 @@
       "ret20": -10.7,
       "signal": "HOLD",
       "sharpe": -0.19,
-      "foreign": 318092,
-      "trust": 82051,
-      "dealer": 10608,
-      "chipTotal": 410751,
+      "foreign": -81875,
+      "trust": 0,
+      "dealer": 6723,
+      "chipTotal": -75152,
       "news": ""
     },
     {
@@ -2616,10 +2616,10 @@
       "ret20": -8.2,
       "signal": "HOLD",
       "sharpe": 6.76,
-      "foreign": 123938,
-      "trust": -235000,
-      "dealer": -7181,
-      "chipTotal": -118243,
+      "foreign": -131422,
+      "trust": 34000,
+      "dealer": 39661,
+      "chipTotal": -57761,
       "news": ""
     },
     {
@@ -2633,10 +2633,10 @@
       "ret20": 48.3,
       "signal": "HOLD",
       "sharpe": 5.67,
-      "foreign": 252907,
-      "trust": -57274,
-      "dealer": -20072,
-      "chipTotal": 175561,
+      "foreign": 147953,
+      "trust": -41019,
+      "dealer": -7089,
+      "chipTotal": 99845,
       "news": ""
     },
     {
@@ -2650,10 +2650,10 @@
       "ret20": -19.4,
       "signal": "HOLD",
       "sharpe": 5.81,
-      "foreign": 233391,
-      "trust": -79656,
-      "dealer": 555563,
-      "chipTotal": 709298,
+      "foreign": -1444331,
+      "trust": 40000,
+      "dealer": 323968,
+      "chipTotal": -1080363,
       "news": ""
     },
     {
@@ -2667,10 +2667,10 @@
       "ret20": -5.3,
       "signal": "HOLD",
       "sharpe": 7.98,
-      "foreign": 2069576,
-      "trust": -1136882,
-      "dealer": 246328,
-      "chipTotal": 1179022,
+      "foreign": 6668574,
+      "trust": -2065000,
+      "dealer": 463002,
+      "chipTotal": 5066576,
       "news": ""
     },
     {
@@ -2684,10 +2684,10 @@
       "ret20": -10.1,
       "signal": "HOLD",
       "sharpe": 3.95,
-      "foreign": -61000,
-      "trust": 26115,
-      "dealer": -7041,
-      "chipTotal": -41926,
+      "foreign": 1072408,
+      "trust": 14927,
+      "dealer": 77504,
+      "chipTotal": 1164839,
       "news": ""
     },
     {
@@ -2701,10 +2701,10 @@
       "ret20": 44.3,
       "signal": "HOLD",
       "sharpe": 1.45,
-      "foreign": 3152275,
-      "trust": 1796423,
-      "dealer": -526439,
-      "chipTotal": 4422259,
+      "foreign": -4471717,
+      "trust": -4196803,
+      "dealer": 596958,
+      "chipTotal": -8071562,
       "news": ""
     },
     {
@@ -2718,10 +2718,10 @@
       "ret20": 35.8,
       "signal": "HOLD",
       "sharpe": 3.13,
-      "foreign": 1538322,
-      "trust": 2000,
-      "dealer": -61226,
-      "chipTotal": 1479096,
+      "foreign": 813426,
+      "trust": -20000,
+      "dealer": -65802,
+      "chipTotal": 727624,
       "news": ""
     },
     {
@@ -2735,10 +2735,10 @@
       "ret20": 44.3,
       "signal": "HOLD",
       "sharpe": 1.45,
-      "foreign": 3152275,
-      "trust": 1796423,
-      "dealer": -526439,
-      "chipTotal": 4422259,
+      "foreign": -4471717,
+      "trust": -4196803,
+      "dealer": 596958,
+      "chipTotal": -8071562,
       "news": ""
     },
     {
@@ -2752,10 +2752,10 @@
       "ret20": 35.8,
       "signal": "HOLD",
       "sharpe": 3.13,
-      "foreign": 1538322,
-      "trust": 2000,
-      "dealer": -61226,
-      "chipTotal": 1479096,
+      "foreign": 813426,
+      "trust": -20000,
+      "dealer": -65802,
+      "chipTotal": 727624,
       "news": ""
     },
     {
@@ -2769,10 +2769,10 @@
       "ret20": -16.3,
       "signal": "HOLD",
       "sharpe": -1.54,
-      "foreign": 67288,
-      "trust": -9723,
-      "dealer": 1173,
-      "chipTotal": 58738,
+      "foreign": 19055,
+      "trust": 136791,
+      "dealer": -13834,
+      "chipTotal": 142012,
       "news": ""
     },
     {
@@ -2786,10 +2786,10 @@
       "ret20": -13.9,
       "signal": "HOLD",
       "sharpe": 5.91,
-      "foreign": 432,
-      "trust": 833,
-      "dealer": 1796,
-      "chipTotal": 3061,
+      "foreign": -117710,
+      "trust": -8000,
+      "dealer": -294,
+      "chipTotal": -126004,
       "news": ""
     },
     {
@@ -2820,10 +2820,10 @@
       "ret20": 1.9,
       "signal": "HOLD",
       "sharpe": 1.57,
-      "foreign": -2028734,
-      "trust": 1544770,
-      "dealer": 55652,
-      "chipTotal": -428312,
+      "foreign": 3620829,
+      "trust": 1866000,
+      "dealer": 446221,
+      "chipTotal": 5933050,
       "news": ""
     },
     {
@@ -2837,10 +2837,10 @@
       "ret20": 15.1,
       "signal": "HOLD",
       "sharpe": 2.68,
-      "foreign": -5431078,
-      "trust": 3479000,
-      "dealer": 138251,
-      "chipTotal": -1813827,
+      "foreign": -2965666,
+      "trust": 194000,
+      "dealer": 490382,
+      "chipTotal": -2281284,
       "news": ""
     },
     {
@@ -2854,10 +2854,10 @@
       "ret20": 30.9,
       "signal": "HOLD",
       "sharpe": -2.94,
-      "foreign": 2358882,
-      "trust": 1906125,
-      "dealer": 44003,
-      "chipTotal": 4309010,
+      "foreign": -676369,
+      "trust": 102000,
+      "dealer": 297499,
+      "chipTotal": -276870,
       "news": ""
     },
     {
@@ -2871,10 +2871,10 @@
       "ret20": 6.3,
       "signal": "HOLD",
       "sharpe": 6.89,
-      "foreign": 72513,
-      "trust": -30576,
-      "dealer": -20368,
-      "chipTotal": 21569,
+      "foreign": -111163,
+      "trust": -209000,
+      "dealer": 62394,
+      "chipTotal": -257769,
       "news": ""
     },
     {
@@ -2888,10 +2888,10 @@
       "ret20": 25.6,
       "signal": "HOLD",
       "sharpe": 1.73,
-      "foreign": -1707723,
-      "trust": 1000,
-      "dealer": 156400,
-      "chipTotal": -1550323,
+      "foreign": -2009834,
+      "trust": 294000,
+      "dealer": 974901,
+      "chipTotal": -740933,
       "news": ""
     },
     {
@@ -2922,10 +2922,10 @@
       "ret20": -9.4,
       "signal": "HOLD",
       "sharpe": 10.47,
-      "foreign": 1593754,
-      "trust": -1541781,
-      "dealer": -5480,
-      "chipTotal": 46493,
+      "foreign": -220759,
+      "trust": -197000,
+      "dealer": 59696,
+      "chipTotal": -358063,
       "news": ""
     },
     {
@@ -2939,10 +2939,10 @@
       "ret20": -3.3,
       "signal": "HOLD",
       "sharpe": -1.97,
-      "foreign": -2404075,
+      "foreign": 1954705,
       "trust": 0,
-      "dealer": -319352,
-      "chipTotal": -2723427,
+      "dealer": -203130,
+      "chipTotal": 1751575,
       "news": ""
     },
     {
@@ -2956,10 +2956,10 @@
       "ret20": null,
       "signal": "SELL",
       "sharpe": -0.66,
-      "foreign": 394270,
-      "trust": -321977,
-      "dealer": 15466,
-      "chipTotal": 87759,
+      "foreign": 625632,
+      "trust": -735000,
+      "dealer": 86642,
+      "chipTotal": -22726,
       "news": ""
     },
     {
@@ -2973,10 +2973,10 @@
       "ret20": 3.8,
       "signal": "HOLD",
       "sharpe": -5.63,
-      "foreign": -3706740,
-      "trust": 2075000,
-      "dealer": 288828,
-      "chipTotal": -1342912,
+      "foreign": -2297492,
+      "trust": 2168000,
+      "dealer": -137228,
+      "chipTotal": -266720,
       "news": ""
     },
     {
@@ -2990,10 +2990,10 @@
       "ret20": -17.6,
       "signal": "HOLD",
       "sharpe": 3.9,
-      "foreign": -3065433,
-      "trust": 23000,
-      "dealer": 310201,
-      "chipTotal": -2732232,
+      "foreign": -1221936,
+      "trust": -64000,
+      "dealer": 207653,
+      "chipTotal": -1078283,
       "news": ""
     },
     {
@@ -3007,10 +3007,10 @@
       "ret20": -16.0,
       "signal": "HOLD",
       "sharpe": -1.18,
-      "foreign": 1020113,
+      "foreign": 1525085,
       "trust": 0,
-      "dealer": -15631,
-      "chipTotal": 1004482,
+      "dealer": 170459,
+      "chipTotal": 1695544,
       "news": ""
     },
     {
@@ -3024,10 +3024,10 @@
       "ret20": 15.0,
       "signal": "HOLD",
       "sharpe": 1.94,
-      "foreign": -1713399,
-      "trust": 73755,
-      "dealer": -97136,
-      "chipTotal": -1736780,
+      "foreign": 4265153,
+      "trust": -1000,
+      "dealer": 682057,
+      "chipTotal": 4946210,
       "news": ""
     },
     {
@@ -3041,10 +3041,10 @@
       "ret20": 2.7,
       "signal": "SELL",
       "sharpe": -7.0,
-      "foreign": -1167425,
-      "trust": -1000,
-      "dealer": -162543,
-      "chipTotal": -1330968,
+      "foreign": -586330,
+      "trust": 0,
+      "dealer": 154239,
+      "chipTotal": -432091,
       "news": ""
     },
     {
@@ -3058,10 +3058,10 @@
       "ret20": -10.1,
       "signal": "HOLD",
       "sharpe": 3.95,
-      "foreign": -61000,
-      "trust": 26115,
-      "dealer": -7041,
-      "chipTotal": -41926,
+      "foreign": 1072408,
+      "trust": 14927,
+      "dealer": 77504,
+      "chipTotal": 1164839,
       "news": ""
     },
     {
@@ -3075,10 +3075,10 @@
       "ret20": -13.9,
       "signal": "HOLD",
       "sharpe": -6.21,
-      "foreign": 192557,
-      "trust": -1000,
-      "dealer": -37960,
-      "chipTotal": 153597,
+      "foreign": 103767,
+      "trust": 223000,
+      "dealer": 37705,
+      "chipTotal": 364472,
       "news": ""
     },
     {
@@ -3092,10 +3092,10 @@
       "ret20": -2.7,
       "signal": "HOLD",
       "sharpe": -3.88,
-      "foreign": -67585,
-      "trust": 391710,
-      "dealer": -107925,
-      "chipTotal": 216200,
+      "foreign": 1464674,
+      "trust": 1072183,
+      "dealer": 145631,
+      "chipTotal": 2682488,
       "news": ""
     },
     {
@@ -3143,10 +3143,10 @@
       "ret20": -17.1,
       "signal": "HOLD",
       "sharpe": -9.26,
-      "foreign": -789376,
-      "trust": -1628838,
-      "dealer": -20232,
-      "chipTotal": -2438446,
+      "foreign": 1217923,
+      "trust": -772184,
+      "dealer": 27798,
+      "chipTotal": 473537,
       "news": ""
     }
   ],
