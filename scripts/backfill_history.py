@@ -66,9 +66,15 @@ SECTORS = {
         '3131': '弘塑', '3583': '辛耘',
         '3711': '日月光投控', '2449': '京元電子', '6239': '力成',
     },
+    'ABF載板': {
+        '3037': '欣興',
+        '4958': '臻鼎-KY',
+        '8046': '南電',
+        '3189': '景碩',
+    },
 }
 
-ALL_STOCK_IDS = [sid for s in SECTORS.values() for sid in s]
+ALL_STOCK_IDS = list(dict.fromkeys(sid for s in SECTORS.values() for sid in s))
 
 MA_SHORT   = 5
 MA_LONG    = 20

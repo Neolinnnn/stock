@@ -2939,6 +2939,58 @@
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 2
+    },
+    "ABF載板": {
+      "avg_ret_20d": 9.0,
+      "avg_rsi": 23.0,
+      "avg_sharpe": 1.48,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 786.0,
+          "rsi": 23.0,
+          "rsi10": 40.0,
+          "ret_20d": 9.0,
+          "signal": "HOLD",
+          "cv_sharpe": 1.48,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-15",
+              "title": "〈台幣〉股匯雙殺 連4貶收31.551元探近2周新低",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-15",
+              "title": "叩關4萬2屢敗屢戰 外資本周賣超907億元並減碼台積電4.17萬張",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-15",
+              "title": "迎戰AIPC換機潮 華碩全面部署六大電競新品與商用市場",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-15",
+            "外資": 1591730,
+            "投信": -1512000,
+            "自營": -147853,
+            "合計": -68123
+          },
+          "target_short": 1037.5,
+          "target_mid": 923.2,
+          "target_long": 985.5,
+          "atr14": 63.52,
+          "stop_loss": 659.0,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2951,7 +3003,8 @@
     "CoPoS封裝",
     "銅箔/CCL",
     "AI ASIC/IP",
-    "AI 電源"
+    "AI 電源",
+    "ABF載板"
   ],
   "weak_sectors": [],
   "qualified": [],

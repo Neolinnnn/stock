@@ -3505,6 +3505,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": -15.6,
+      "avg_rsi": 40.7,
+      "avg_sharpe": -0.26,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 848.0,
+          "rsi": 40.7,
+          "rsi10": 47.5,
+          "ret_20d": -15.6,
+          "signal": "SELL",
+          "cv_sharpe": -0.26,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-05-29",
+              "title": "中華電信馬拉松式股東會邁入第十個小時 股東喊「開到半夜」",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-29",
+              "title": "〈台幣〉熱錢狂湧匯市爆史上第五大巨量 5月強升2.64角",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-29",
+              "title": "〈國泰金法說〉國壽獲利進補！金控明年股利樂觀 李長庚談併購「不會為併而併」",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-29",
+            "外資": 43377,
+            "投信": -1492000,
+            "自營": -79190,
+            "合計": -1527813
+          },
+          "target_short": 1004.5,
+          "target_mid": 926.0,
+          "target_long": 1012.2,
+          "atr14": 63.09,
+          "stop_loss": 721.8,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3522,7 +3574,8 @@
   ],
   "weak_sectors": [
     "綠能環保",
-    "AI 散熱"
+    "AI 散熱",
+    "ABF載板"
   ],
   "qualified": [
     {

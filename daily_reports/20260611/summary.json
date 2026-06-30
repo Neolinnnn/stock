@@ -2397,6 +2397,42 @@
       "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 1
+    },
+    "ABF載板": {
+      "avg_ret_20d": -4.7,
+      "avg_rsi": 36.3,
+      "avg_sharpe": -6.3,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 807.0,
+          "rsi": 36.3,
+          "rsi10": 42.7,
+          "ret_20d": -4.7,
+          "signal": "SELL",
+          "cv_sharpe": -6.3,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-06-11",
+            "外資": -1641949,
+            "投信": -169000,
+            "自營": 172663,
+            "合計": -1638286
+          },
+          "target_short": 950.7,
+          "target_mid": 924.2,
+          "target_long": 979.5,
+          "atr14": 68.32,
+          "stop_loss": 670.4,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2411,7 +2447,8 @@
     "記憶體",
     "綠能環保",
     "CoPoS封裝",
-    "AI ASIC/IP"
+    "AI ASIC/IP",
+    "ABF載板"
   ],
   "qualified": [
     {

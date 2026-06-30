@@ -3757,6 +3757,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": 1.1,
+      "avg_rsi": 54.9,
+      "avg_sharpe": 1.08,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 884.0,
+          "rsi": 54.9,
+          "rsi10": 54.4,
+          "ret_20d": 1.1,
+          "signal": "HOLD",
+          "cv_sharpe": 1.08,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-25",
+              "title": "竣邦-KY看好營運動能穩步增強 今年審慎樂觀",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-25",
+              "title": "賴清德：千億元挺中小微企及傳產升級轉型 2040前協助百萬家智慧化",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-25",
+              "title": "台股暴漲衝破4萬3 外資買超494億元 大買華邦電、力積電各逾7萬張",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-25",
+            "外資": -6227050,
+            "投信": -2521000,
+            "自營": -157904,
+            "合計": -8905954
+          },
+          "target_short": 1026.3,
+          "target_mid": 927.7,
+          "target_long": 1036.0,
+          "atr14": 62.84,
+          "stop_loss": 758.3,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3771,7 +3823,8 @@
     "銅箔/CCL",
     "AI ASIC/IP",
     "AI 電源",
-    "被動元件"
+    "被動元件",
+    "ABF載板"
   ],
   "weak_sectors": [
     "綠能環保",

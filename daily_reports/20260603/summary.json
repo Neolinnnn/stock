@@ -2791,6 +2791,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": -3.8,
+      "avg_rsi": 40.7,
+      "avg_sharpe": -4.35,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 848.0,
+          "rsi": 40.7,
+          "rsi10": 47.5,
+          "ret_20d": -3.8,
+          "signal": "SELL",
+          "cv_sharpe": -4.35,
+          "cv_win_rate": 0.25,
+          "news": [
+            {
+              "date": "2026-06-03",
+              "title": "亞洲創新籌資平台專屬網站正式上線 助力打造台灣成為亞洲那斯達克",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-03",
+              "title": "旅館業Q1平均房價3101元較去年漲1.5% 住用率連3年達5成",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-03",
+              "title": "台灣碳定價寫歷史！首期碳費入帳49.7億240家企業全繳清 護國群山扛22億最「多金」",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-06-03",
+            "外資": 8066510,
+            "投信": -441000,
+            "自營": 25831,
+            "合計": 7651341
+          },
+          "target_short": 964.0,
+          "target_mid": 924.2,
+          "target_long": 1032.5,
+          "atr14": 65.21,
+          "stop_loss": 773.6,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2808,7 +2860,8 @@
     "被動元件"
   ],
   "weak_sectors": [
-    "綠能環保"
+    "綠能環保",
+    "ABF載板"
   ],
   "qualified": [],
   "alerts": [

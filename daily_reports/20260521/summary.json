@@ -3169,6 +3169,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": 8.6,
+      "avg_rsi": 60.1,
+      "avg_sharpe": 1.08,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 872.0,
+          "rsi": 60.1,
+          "rsi10": 55.1,
+          "ret_20d": 8.6,
+          "signal": "HOLD",
+          "cv_sharpe": 1.08,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-21",
+              "title": "開創AI PC與無人機新局 義隆電子榮獲COMPUTEX BC Award 2026雙項大獎",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-21",
+              "title": "記憶體漲價帶動提前拉貨 全球電視Q1出貨量達4712萬台創疫情後同期新高",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-21",
+              "title": "全聯林敏雄：沒有在看股票 不考慮併購餐飲相關業態",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-21",
+            "外資": -813434,
+            "投信": 1060000,
+            "自營": 55939,
+            "合計": 302505
+          },
+          "target_short": 1025.1,
+          "target_mid": 923.2,
+          "target_long": 1027.7,
+          "atr14": 61.09,
+          "stop_loss": 749.8,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3179,7 +3231,8 @@
     "車用電子",
     "AI ASIC/IP",
     "AI 電源",
-    "被動元件"
+    "被動元件",
+    "ABF載板"
   ],
   "weak_sectors": [
     "綠能環保",

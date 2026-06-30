@@ -3511,6 +3511,136 @@
       "hot_count": 11,
       "buy_count": 1,
       "qualified_count": 16
+    },
+    "ABF載板": {
+      "avg_ret_20d": 11.82,
+      "avg_rsi": 65.0,
+      "avg_sharpe": 3.77,
+      "hot_count": 1,
+      "buy_count": 1,
+      "qualified_count": 3,
+      "stocks": [
+        {
+          "id": "3037",
+          "name": "欣興",
+          "price": 1005.0,
+          "rsi": 65.2,
+          "rsi10": 58.5,
+          "ret_20d": 3.6,
+          "signal": "HOLD",
+          "ma5": 980.4,
+          "ma10": 942.2,
+          "ma20": 979.3,
+          "ma60": 810.67,
+          "cv_sharpe": 3.09,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-06-22",
+            "外資": 5460963,
+            "投信": 2175002,
+            "自營": 114618,
+            "合計": 7750583
+          },
+          "target_short": 1103.8,
+          "target_mid": 854.2,
+          "target_long": 1085.1,
+          "atr14": 66.91,
+          "stop_loss": 871.2,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "3189",
+          "name": "景碩",
+          "price": 796.0,
+          "rsi": 78.7,
+          "rsi10": 69.3,
+          "ret_20d": 30.7,
+          "signal": "SELL",
+          "ma5": 705.6,
+          "ma10": 682.9,
+          "ma20": 698.3,
+          "ma60": 531.88,
+          "cv_sharpe": 4.54,
+          "cv_win_rate": 0.58,
+          "news": [],
+          "chip": {
+            "date": "2026-06-22",
+            "外資": -108563,
+            "投信": 1238232,
+            "自營": 447513,
+            "合計": 1577182
+          },
+          "target_short": 792.8,
+          "target_mid": 676.6,
+          "target_long": 843.1,
+          "atr14": 57.04,
+          "stop_loss": 681.9,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 864.0,
+          "rsi": 48.6,
+          "rsi10": 49.8,
+          "ret_20d": -7.5,
+          "signal": "BUY",
+          "ma5": 877.0,
+          "ma10": 860.3,
+          "ma20": 870.3,
+          "ma60": 806.85,
+          "cv_sharpe": 1.97,
+          "cv_win_rate": 0.39,
+          "news": [],
+          "chip": {
+            "date": "2026-06-22",
+            "外資": -2620417,
+            "投信": -3241738,
+            "自營": 400641,
+            "合計": -5461514
+          },
+          "target_short": 935.3,
+          "target_mid": 926.0,
+          "target_long": 1006.7,
+          "atr14": 62.27,
+          "stop_loss": 739.5,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "4958",
+          "name": "臻鼎-KY",
+          "price": 622.0,
+          "rsi": 67.5,
+          "rsi10": 67.7,
+          "ret_20d": 20.5,
+          "signal": "HOLD",
+          "ma5": 623.4,
+          "ma10": 575.7,
+          "ma20": 546.67,
+          "ma60": 405.73,
+          "cv_sharpe": 5.48,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-06-22",
+            "外資": -7287098,
+            "投信": -2419091,
+            "自營": -271909,
+            "合計": -9978098
+          },
+          "target_short": 645.9,
+          "target_mid": 528.7,
+          "target_long": 664.1,
+          "atr14": 38.61,
+          "stop_loss": 544.8,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3525,7 +3655,8 @@
     "銅箔/CCL",
     "AI 散熱",
     "被動元件",
-    "小摩AI供應鏈"
+    "小摩AI供應鏈",
+    "ABF載板"
   ],
   "weak_sectors": [
     "AI ASIC/IP"

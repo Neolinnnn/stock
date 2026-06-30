@@ -2949,6 +2949,58 @@
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 2
+    },
+    "ABF載板": {
+      "avg_ret_20d": 9.3,
+      "avg_rsi": 25.4,
+      "avg_sharpe": 1.48,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 791.0,
+          "rsi": 25.4,
+          "rsi10": 40.9,
+          "ret_20d": 9.3,
+          "signal": "HOLD",
+          "cv_sharpe": 1.48,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-18",
+              "title": "隴華每股淨值跌破5元5/20起打入全額交割 中福、永冠-KY併案停止買賣",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-18",
+              "title": "中鋼、所羅門及台灣穗高獲A+企業創新研發加持 搶攻綠能車用與人形機器人商機",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-18",
+              "title": "彭金隆親訪南山人壽高雄專區 總保費達標率83%、件均保費飆1731萬元",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-18",
+            "外資": 39735,
+            "投信": -33000,
+            "自營": -82916,
+            "合計": -76181
+          },
+          "target_short": 1029.3,
+          "target_mid": 924.2,
+          "target_long": 986.9,
+          "atr14": 61.34,
+          "stop_loss": 668.3,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2959,7 +3011,8 @@
     "CoPoS封裝",
     "銅箔/CCL",
     "AI ASIC/IP",
-    "AI 電源"
+    "AI 電源",
+    "ABF載板"
   ],
   "weak_sectors": [
     "車用電子"

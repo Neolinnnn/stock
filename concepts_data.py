@@ -113,6 +113,12 @@ CONCEPTS: dict[str, list[tuple[str, str]]] = {
         ("6153", "嘉聯益"),  # Apple FPC，高階 FPCB
         ("8039", "台虹"),    # FPC 基材 / 電磁屏蔽膜
     ],
+    "ABF載板": [
+        ("3037", "欣興"),    # ABF 載板，HDI 雙棲
+        ("4958", "臻鼎-KY"), # ABF 載板，高端封裝基板
+        ("8046", "南電"),    # ABF 載板，CPU/GPU 高階封裝
+        ("3189", "景碩"),    # BT/ABF 載板，AP/WiFi 晶片
+    ],
     "PCB 載板": [
         ("3189", "景碩"),    # BT 載板，AP/WiFi 晶片
         ("8046", "南電"),    # ABF 載板，CPU/GPU 高階封裝

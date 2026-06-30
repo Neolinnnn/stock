@@ -2409,6 +2409,42 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 1
+    },
+    "ABF載板": {
+      "avg_ret_20d": 13.0,
+      "avg_rsi": 62.8,
+      "avg_sharpe": 1.39,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 902.0,
+          "rsi": 62.8,
+          "rsi10": 55.7,
+          "ret_20d": 13.0,
+          "signal": "SELL",
+          "cv_sharpe": 1.39,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-06-16",
+            "外資": 2623901,
+            "投信": 124476,
+            "自營": 213663,
+            "合計": 2962040
+          },
+          "target_short": 944.3,
+          "target_mid": 924.2,
+          "target_long": 1027.6,
+          "atr14": 66.58,
+          "stop_loss": 768.8,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2423,7 +2459,8 @@
     "銅箔/CCL",
     "AI 散熱",
     "AI 電源",
-    "被動元件"
+    "被動元件",
+    "ABF載板"
   ],
   "weak_sectors": [],
   "qualified": [
