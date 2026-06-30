@@ -39,6 +39,11 @@ from datafeed import finmind_fetch as _finmind_fetch
 rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
 rcParams['axes.unicode_minus'] = False
 
+# 進場乖離率上限：qualified 推薦只取「貼近 MA10」的個股，避免追高。
+# 依據 2026 全市場回測（136 筆訊號）：乖離 MA10 ≤2% 勝率 27% / 平均 +0.1%，
+# 對照全收 19% / -2.5%；乖離 2~6% 區間勝率僅 9~10%（追高重災區）。
+MAX_BIAS_MA10 = 2.0
+
 # ── 7 大族群定義 ──────────────────────────────────────────────────────────────
 SECTORS = {
     '光通訊': {
@@ -809,8 +814,12 @@ def build_summary(date, market, all_results, chart_path):
             all_weak.append(sector)
 
         # 推薦名單
+        # 乖離率閘門：(price - MA10) / MA10；ma10 缺值→NaN→比較為 False，保守剔除。
+        _ma10 = pd.to_numeric(df['ma10'], errors='coerce')
+        _bias_ma10 = (pd.to_numeric(df['price'], errors='coerce') - _ma10) / _ma10 * 100
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
-                   (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2)]
+                   (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
+                   (_bias_ma10 <= MAX_BIAS_MA10)]
         for _, r in final.iterrows():
             if r['id'] in _qualified_seen:
                 continue
@@ -819,6 +828,7 @@ def build_summary(date, market, all_results, chart_path):
                 'sector': sector, 'id': r['id'], 'name': r['name'],
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
+                'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
             })
 
         # 風險警示
