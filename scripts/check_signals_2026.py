@@ -25,10 +25,10 @@ HARD_STOP = -0.20          # 硬停損 -20%
 FETCH_END = '2026-06-30'   # 補抓終點
 
 
-def collect_signals() -> list[dict]:
+def collect_signals(start: str = '20260101', end: str = '20261231') -> list[dict]:
     sigs = []
     for d in sorted((ROOT / 'daily_reports').iterdir()):
-        if not d.is_dir() or not d.name.startswith('2026'):
+        if not d.is_dir() or not (start <= d.name <= end):
             continue
         sf = d / 'summary.json'
         if not sf.exists():
@@ -186,11 +186,13 @@ def summarize(rows: list[dict]) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--report', help='輸出 markdown 報告路徑')
+    ap.add_argument('--start', default='20260101', help='訊號起始日 YYYYMMDD')
+    ap.add_argument('--end', default='20261231', help='訊號終止日 YYYYMMDD')
     args = ap.parse_args()
 
-    sigs = collect_signals()
+    sigs = collect_signals(args.start, args.end)
     ids = sorted(set(s['id'] for s in sigs))
-    print(f'2026 訊號 {len(sigs)} 筆 / {len(ids)} 檔')
+    print(f'訊號 {len(sigs)} 筆 / {len(ids)} 檔（{args.start}~{args.end}）')
     price = load_prices(ids)
     rows = evaluate(sigs, price)
     print(f'完成評分 {len(rows)} 筆\n')
