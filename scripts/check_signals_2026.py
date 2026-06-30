@@ -176,7 +176,9 @@ def summarize(rows: list[dict]) -> str:
     for cond, lab in [(lambda x: True, '現況（全收）'),
                       (lambda x: x['bias10'] <= 2, '乖離 MA10 ≤2%'),
                       (lambda x: x['bias10'] <= 0, '乖離 MA10 ≤0%'),
+                      (lambda x: x['sec_strong'], '族群強勢（單獨）'),
                       (lambda x: x['bias10'] <= 2 and x['sec_strong'], '乖離 ≤2% + 族群強勢'),
+                      (lambda x: x['bias10'] <= 0 and x['sec_strong'], '乖離 ≤0% + 族群強勢'),
                       (lambda x: x['bias10'] <= 2 and x['sec_weak'], '乖離 ≤2% + 族群弱勢')]:
         n, wr, avg = block([x for x in done if cond(x)])
         L.append(f'| {lab} | {n} | {wr} | {avg} |')
