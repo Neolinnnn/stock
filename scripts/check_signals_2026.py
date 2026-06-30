@@ -22,6 +22,7 @@ from indicators.stock_analyzer import analyze_stock
 
 CACHE = ROOT / 'backtest_cache'
 HARD_STOP = -0.20          # 硬停損 -20%
+MAX_HOLD = 60              # 最長持有交易日（與 sim_ma10 一致）
 FETCH_END = '2026-06-30'   # 補抓終點
 
 
@@ -73,7 +74,9 @@ def load_prices(ids: list[str]) -> dict:
 
 
 def ma10_outcome(rows: dict, entry: str) -> tuple | None:
-    """MA10 出場法：收盤跌破 MA10 次日出；硬停損 -20%。"""
+    """MA10 出場：收盤跌破 MA10 → 次日開盤出場；硬停損 -20% 當日收盤；
+    最長持有 60 交易日。與 backtest_combo_search.sim_ma10 一致（含 pending 機制，
+    避免用偵測到跌破的當日收盤出場造成的 look-ahead）。"""
     td = sorted(rows)
     if entry not in td:
         return None
@@ -81,15 +84,20 @@ def ma10_outcome(rows: dict, entry: str) -> tuple | None:
     if ep == 0:
         return None
     closes = {d: float(rows[d]['close']) for d in td}
-    for d in td:
-        if d <= entry:
-            continue
+    after = [d for d in td if d > entry]
+    pending = False
+    for hold, d in enumerate(after, 1):
+        if pending:                              # 昨日跌破 MA10 → 今日開盤出
+            op = float(rows[d]['open'])
+            return ('WIN' if op > ep else 'LOSS', (op - ep) / ep * 100, d)
         c = closes[d]
         i = td.index(d)
         ma = sum(closes[td[j]] for j in range(i - 9, i + 1)) / 10 if i >= 9 else None
-        if c <= ep * (1 + HARD_STOP):
+        if c <= ep * (1 + HARD_STOP):            # 硬停損：當日收盤
             return ('LOSS', (c - ep) / ep * 100, d)
-        if ma and c < ma:
+        if ma and c < ma:                        # 收盤跌破 MA10 → 次日開盤出
+            pending = True
+        if hold >= MAX_HOLD:                      # 最長持有
             return ('WIN' if c > ep else 'LOSS', (c - ep) / ep * 100, d)
     last = td[-1]
     return ('OPEN', (closes[last] - ep) / ep * 100, last)
@@ -122,7 +130,7 @@ def evaluate(sigs: list[dict], price: dict) -> list[dict]:
     return out
 
 
-def summarize(rows: list[dict]) -> str:
+def summarize(rows: list[dict], start: str = '', end: str = '') -> str:
     done = [x for x in rows if x['result'] in ('WIN', 'LOSS')]
     def block(grp):
         if not grp:
@@ -132,6 +140,11 @@ def summarize(rows: list[dict]) -> str:
         return f'{len(grp)}筆', f'{w/len(grp)*100:.0f}%', f'{avg:+.1f}%'
 
     L = []
+    if start or end:
+        L.append(f'# 進場訊號檢查（{start} ~ {end}）\n')
+        L.append(f'用 `analyze_stock` 逐筆評分 + MA10 出場（跌破→次日開盤，與 '
+                 f'sim_ma10 一致）回測。重跑：'
+                 f'`python scripts/check_signals_2026.py --start {start} --end {end}`\n')
     n, wr, avg = block(done)
     L.append(f'## 整體\n已結算 {n}，勝率 {wr}，平均報酬 {avg}（未出場 '
              f'{sum(1 for x in rows if x["result"]=="OPEN")} 筆）\n')
@@ -201,7 +214,7 @@ def main():
     print(f'完成評分 {len(rows)} 筆\n')
     if args.dump:
         Path(args.dump).write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding='utf-8')
-    report = summarize(rows)
+    report = summarize(rows, args.start, args.end)
     print(report)
     if args.report:
         Path(args.report).write_text(report + '\n', encoding='utf-8')
