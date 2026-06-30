@@ -5,7 +5,7 @@
     "漲跌幅%": 0.9605633701698101,
     "櫃買指數": 412.93,
     "櫃買漲跌幅%": -0.5610942542021827,
-    "強勢族群": "光學, 車用電子, 銅箔/CCL, 被動元件",
+    "強勢族群": "光學, 車用電子, 銅箔/CCL, 被動元件, ABF載板",
     "弱勢族群": "光通訊, AI伺服器, 封測, 綠能環保, CoPoS封裝, AI ASIC/IP, AI 電源",
     "雙條件推薦": 1,
     "掃描涵蓋率": 100,
@@ -22,116 +22,7 @@
       "name": "超豐",
       "price": 129.0,
       "rsi": 36.9,
-      "cv_sharpe": 7.84,
-      "trend_analysis": {
-        "code": "2441",
-        "trend_status": "多頭排列",
-        "ma_alignment": "多頭排列 MA5>MA10>MA20",
-        "trend_strength": 75,
-        "ma5": 136.7,
-        "ma10": 133.75,
-        "ma20": 131.4,
-        "ma60": 110.03,
-        "current_price": 129.0,
-        "bias_ma5": -5.63,
-        "bias_ma10": -3.55,
-        "bias_ma20": -1.83,
-        "volume_status": "縮量回調",
-        "volume_ratio_5d": 0.6,
-        "volume_trend": "縮量回調，洗盤特徵明顯（佳）",
-        "support_ma5": false,
-        "support_ma10": false,
-        "buy_signal": "持有",
-        "signal_score": 48,
-        "signal_reasons": [
-          "多頭排列，順勢做多",
-          "縮量回調，主力洗盤",
-          "多頭排列，持續上漲",
-          "RSI中性(50.2)，震盪整理中",
-          "CV夏普=7.84（良好）"
-        ],
-        "risk_factors": [
-          "乖離率過大(-5.6%)，可能破位",
-          "弱勢族群逆勢，板塊阻力大"
-        ],
-        "macd_dif": 5.487,
-        "macd_dea": 6.2314,
-        "macd_bar": -1.4888,
-        "macd_status": "多頭",
-        "macd_signal": "多頭排列，持續上漲",
-        "rsi_6": 40.4,
-        "rsi_12": 50.2,
-        "rsi_24": 55.8,
-        "rsi_status": "中性",
-        "rsi_signal": "RSI中性(50.2)，震盪整理中",
-        "sector_is_strong": false,
-        "kd_k": 51.66,
-        "kd_d": 62.4,
-        "kd_j": 30.18,
-        "kd_k_prev": 67.27,
-        "kd_d_prev": 67.77,
-        "macd_bar_prev": -0.08,
-        "entry_strategy": {
-          "vol_ratio": 0.88,
-          "vol_ok": false,
-          "macd_momentum": false,
-          "passed": false,
-          "grade": "C"
-        }
-      },
-      "product_mix": {
-        "product_lines": [
-          {
-            "name": "封裝業務 (Packaging Services)",
-            "share_pct": 76.3,
-            "yoy_growth": null,
-            "trend": "up"
-          },
-          {
-            "name": "測試業務 (Testing Services)",
-            "share_pct": 16.2,
-            "yoy_growth": null,
-            "trend": "up"
-          },
-          {
-            "name": "凸塊與雙面封裝 (Bumping & Double-sided Packaging)",
-            "share_pct": 7.5,
-            "yoy_growth": null,
-            "trend": "up"
-          }
-        ],
-        "regions": [
-          {
-            "name": "台灣內銷",
-            "share_pct": 70
-          },
-          {
-            "name": "美洲",
-            "share_pct": null
-          },
-          {
-            "name": "中國大陸",
-            "share_pct": null
-          },
-          {
-            "name": "歐洲",
-            "share_pct": null
-          },
-          {
-            "name": "亞洲其他地區",
-            "share_pct": null
-          }
-        ],
-        "customers": [
-          "台灣IC設計客戶",
-          "美系GPU大廠電源管理IC供應商"
-        ],
-        "biz_model": "超豐主要從事積體電路的封裝與測試代工服務（OSAT），提供從晶圓測試到成品測試及多種封裝形式的一條龍整合服務。",
-        "moat": "核心競爭優勢包括全面的IC封測能力、與台灣IC設計客戶的穩固關係、製程效率與成本控制能力，以及積極轉型高附加價值產品（如覆晶封裝）的策略。同時，大股東力成科技的結盟也帶來技術資源與客戶串聯優勢。",
-        "summary": "超豐2025年營收穩健成長10.2%，2026年第一季營收年增21.2%，主要受惠於AI資料中心和記憶體需求的帶動。公司正積極擴充覆晶封裝產能，並提升高階產品比重，以應對市場變化並強化競爭力。",
-        "data_period": "2025全年及2026年第一季",
-        "updated_at": "2026-06-20"
-      }
+      "cv_sharpe": 7.84
     }
   ],
   "sectors": [
@@ -239,6 +130,13 @@
       "rsi": 40.8,
       "buy": 0,
       "hot": 3
+    },
+    {
+      "sector": "ABF載板",
+      "ret20": 10.57,
+      "rsi": 58.1,
+      "buy": 0,
+      "hot": 1
     }
   ],
   "chips": [
@@ -282,6 +180,15 @@
       "id": "8046",
       "name": "南電",
       "sector": "小摩AI供應鏈",
+      "total": 3940010,
+      "foreign": 2358882,
+      "trust": 1537125,
+      "dealer": 44003
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "ABF載板",
       "total": 3940010,
       "foreign": 2358882,
       "trust": 1537125,
@@ -963,6 +870,15 @@
       "dealer": 55652
     },
     {
+      "id": "3037",
+      "name": "欣興",
+      "sector": "ABF載板",
+      "total": -428312,
+      "foreign": -2028734,
+      "trust": 1544770,
+      "dealer": 55652
+    },
+    {
       "id": "8358",
       "name": "金居",
       "sector": "銅箔/CCL",
@@ -1089,6 +1005,15 @@
       "dealer": -97136
     },
     {
+      "id": "4958",
+      "name": "臻鼎-KY",
+      "sector": "ABF載板",
+      "total": -1736780,
+      "foreign": -1713399,
+      "trust": 73755,
+      "dealer": -97136
+    },
+    {
       "id": "3711",
       "name": "日月光投控",
       "sector": "封測",
@@ -1110,6 +1035,15 @@
       "id": "3189",
       "name": "景碩",
       "sector": "小摩AI供應鏈",
+      "total": -2077827,
+      "foreign": -5431078,
+      "trust": 3215000,
+      "dealer": 138251
+    },
+    {
+      "id": "3189",
+      "name": "景碩",
+      "sector": "ABF載板",
       "total": -2077827,
       "foreign": -5431078,
       "trust": 3215000,
@@ -3154,6 +3088,74 @@
       "trust": -1628838,
       "dealer": -20232,
       "chipTotal": -2438446,
+      "news": ""
+    },
+    {
+      "date": "20260629",
+      "sector": "ABF載板",
+      "id": "3037",
+      "name": "欣興",
+      "price": 976.0,
+      "rsi": 51.0,
+      "rsi10": 52.2,
+      "ret20": -7.5,
+      "signal": "HOLD",
+      "sharpe": 1.26,
+      "foreign": -2028734,
+      "trust": 1544770,
+      "dealer": 55652,
+      "chipTotal": -428312,
+      "news": ""
+    },
+    {
+      "date": "20260629",
+      "sector": "ABF載板",
+      "id": "3189",
+      "name": "景碩",
+      "price": 810.0,
+      "rsi": 68.5,
+      "rsi10": 64.7,
+      "ret20": 11.1,
+      "signal": "HOLD",
+      "sharpe": 3.17,
+      "foreign": -5431078,
+      "trust": 3215000,
+      "dealer": 138251,
+      "chipTotal": -2077827,
+      "news": ""
+    },
+    {
+      "date": "20260629",
+      "sector": "ABF載板",
+      "id": "8046",
+      "name": "南電",
+      "price": 1080.0,
+      "rsi": 73.3,
+      "rsi10": 68.4,
+      "ret20": 27.4,
+      "signal": "HOLD",
+      "sharpe": -2.47,
+      "foreign": 2358882,
+      "trust": 1537125,
+      "dealer": 44003,
+      "chipTotal": 3940010,
+      "news": ""
+    },
+    {
+      "date": "20260629",
+      "sector": "ABF載板",
+      "id": "4958",
+      "name": "臻鼎-KY",
+      "price": 573.0,
+      "rsi": 39.7,
+      "rsi10": 52.3,
+      "ret20": 11.3,
+      "signal": "HOLD",
+      "sharpe": 2.28,
+      "foreign": -1713399,
+      "trust": 73755,
+      "dealer": -97136,
+      "chipTotal": -1736780,
       "news": ""
     }
   ],
@@ -5386,6 +5388,86 @@
       "signal": "HOLD",
       "atr14": 3.37,
       "stopLoss": 80.2,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "3037",
+      "name": "欣興",
+      "sector": "ABF載板",
+      "price": 976.0,
+      "signal": "HOLD",
+      "atr14": 72.99,
+      "stopLoss": 830.0,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "3189",
+      "name": "景碩",
+      "sector": "ABF載板",
+      "price": 810.0,
+      "signal": "HOLD",
+      "atr14": 61.21,
+      "stopLoss": 687.6,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "ABF載板",
+      "price": 1080.0,
+      "signal": "HOLD",
+      "atr14": 70.92,
+      "stopLoss": 938.2,
+      "mainForceScore": null,
+      "mainForceLabel": null,
+      "top1Broker": null,
+      "top1Lots": null,
+      "top5BuyLots": null,
+      "concentration": null,
+      "brokerNet": null,
+      "topBuyers": [],
+      "topSellers": [],
+      "brokerSource": null,
+      "brokerError": null
+    },
+    {
+      "id": "4958",
+      "name": "臻鼎-KY",
+      "sector": "ABF載板",
+      "price": 573.0,
+      "signal": "HOLD",
+      "atr14": 39.46,
+      "stopLoss": 494.1,
       "mainForceScore": null,
       "mainForceLabel": null,
       "top1Broker": null,

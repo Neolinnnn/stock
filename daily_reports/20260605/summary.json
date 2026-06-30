@@ -3799,6 +3799,58 @@
       "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 1
+    },
+    "ABF載板": {
+      "avg_ret_20d": -1.1,
+      "avg_rsi": 40.1,
+      "avg_sharpe": -7.13,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 845.0,
+          "rsi": 40.1,
+          "rsi10": 46.3,
+          "ret_20d": -1.1,
+          "signal": "HOLD",
+          "cv_sharpe": -7.13,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-06-05",
+              "title": "禾伸堂5月營收年增21% 創近5年同期高",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-05",
+              "title": "旭然何兆全交棒轉任集團最高顧問 董事長由何宜臻接任",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-05",
+              "title": "營收速報  - 中探針(6217)5月營收4.06億元年增率高達51.18％",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-06-05",
+            "外資": 1571058,
+            "投信": -2475000,
+            "自營": -6959,
+            "合計": -910901
+          },
+          "target_short": 953.5,
+          "target_mid": 924.2,
+          "target_long": 999.8,
+          "atr14": 63.39,
+          "stop_loss": 718.2,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3817,7 +3869,8 @@
   ],
   "weak_sectors": [
     "綠能環保",
-    "AI ASIC/IP"
+    "AI ASIC/IP",
+    "ABF載板"
   ],
   "qualified": [],
   "alerts": [

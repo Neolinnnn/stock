@@ -2823,6 +2823,58 @@
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 3
+    },
+    "ABF載板": {
+      "avg_ret_20d": 0.3,
+      "avg_rsi": 29.2,
+      "avg_sharpe": 1.48,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 798.0,
+          "rsi": 29.2,
+          "rsi10": 42.3,
+          "ret_20d": 0.3,
+          "signal": "HOLD",
+          "cv_sharpe": 1.48,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-19",
+              "title": "巨生醫獲SelectUSA醫療科技組金牌 啟動美國A輪募資目標1000萬美元",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-19",
+              "title": "台股3天跌掉1576點 金管會信心喊話：基本面仍穩健、信用擔保無異常",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-19",
+              "title": "證券業首見 國泰證取得ISO 27017雲端服務資安認證",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-19",
+            "外資": -130287,
+            "投信": 151000,
+            "自營": -20549,
+            "合計": 164
+          },
+          "target_short": 1029.2,
+          "target_mid": 923.2,
+          "target_long": 990.1,
+          "atr14": 60.1,
+          "stop_loss": 677.8,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2831,7 +2883,8 @@
     "光學",
     "IC設計",
     "銅箔/CCL",
-    "AI 電源"
+    "AI 電源",
+    "ABF載板"
   ],
   "weak_sectors": [
     "車用電子",

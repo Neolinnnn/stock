@@ -2707,6 +2707,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": 17.5,
+      "avg_rsi": 73.4,
+      "avg_sharpe": 1.08,
+      "hot_count": 1,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 934.0,
+          "rsi": 73.4,
+          "rsi10": 63.1,
+          "ret_20d": 17.5,
+          "signal": "HOLD",
+          "cv_sharpe": 1.08,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-22",
+              "title": "瘋台股更求穩健！逾4成上班族去年靠2種股票獲利 擁380萬資產才感到「安全」",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-22",
+              "title": "中保科董事長林建涵接任台灣智慧城市產業聯盟會長",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-22",
+              "title": "中華電信工會陳情爭取加薪 公司：已連5年加薪 籲理性協商",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-22",
+            "外資": 1855577,
+            "投信": 1838000,
+            "自營": 179598,
+            "合計": 3873175
+          },
+          "target_short": 1026.0,
+          "target_mid": 926.0,
+          "target_long": 1061.3,
+          "atr14": 62.44,
+          "stop_loss": 809.1,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2721,7 +2773,8 @@
     "銅箔/CCL",
     "AI ASIC/IP",
     "AI 電源",
-    "被動元件"
+    "被動元件",
+    "ABF載板"
   ],
   "weak_sectors": [
     "綠能環保",

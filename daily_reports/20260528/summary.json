@@ -3799,6 +3799,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": -7.2,
+      "avg_rsi": 41.2,
+      "avg_sharpe": 0.06,
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 850.0,
+          "rsi": 41.2,
+          "rsi10": 47.8,
+          "ret_20d": -7.2,
+          "signal": "BUY",
+          "cv_sharpe": 0.06,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-05-28",
+              "title": "台美國防產業論壇重磅登場 貿協：深化雙方供應鏈合作交流",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-28",
+              "title": "〈台幣〉台股爆量翻黑 中止連6升收31.428元",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-28",
+              "title": "興勤AI、車用需求旺產能滿載 毛利率下半年回穩",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-28",
+            "外資": -4031693,
+            "投信": -1539000,
+            "自營": -58051,
+            "合計": -5628744
+          },
+          "target_short": 1022.5,
+          "target_mid": 926.0,
+          "target_long": 1016.9,
+          "atr14": 64.71,
+          "stop_loss": 720.6,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3817,7 +3869,8 @@
   ],
   "weak_sectors": [
     "綠能環保",
-    "AI 散熱"
+    "AI 散熱",
+    "ABF載板"
   ],
   "qualified": [
     {

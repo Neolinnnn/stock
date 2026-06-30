@@ -2407,6 +2407,42 @@
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1
+    },
+    "ABF載板": {
+      "avg_ret_20d": -8.5,
+      "avg_rsi": 36.5,
+      "avg_sharpe": -0.51,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 831.0,
+          "rsi": 36.5,
+          "rsi10": 44.4,
+          "ret_20d": -8.5,
+          "signal": "HOLD",
+          "cv_sharpe": -0.51,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-06-08",
+            "外資": 122206,
+            "投信": 348000,
+            "自營": 52766,
+            "合計": 522972
+          },
+          "target_short": 948.9,
+          "target_mid": 925.9,
+          "target_long": 992.3,
+          "atr14": 65.4,
+          "stop_loss": 700.2,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2421,7 +2457,8 @@
     "光通訊",
     "綠能環保",
     "銅箔/CCL",
-    "AI ASIC/IP"
+    "AI ASIC/IP",
+    "ABF載板"
   ],
   "qualified": [
     {

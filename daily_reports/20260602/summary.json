@@ -3211,6 +3211,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": -13.5,
+      "avg_rsi": 45.7,
+      "avg_sharpe": -7.09,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 862.0,
+          "rsi": 45.7,
+          "rsi10": 49.3,
+          "ret_20d": -13.5,
+          "signal": "HOLD",
+          "cv_sharpe": -7.09,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-06-02",
+              "title": "〈ETF成分股調整〉00919換股18進18出 五大壽險金控全入列、剔除AI過熱股",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-02",
+              "title": "打破「男主外」！奶爸申辦比50.3%首超女性 以日彈性育嬰留停衝破2.4萬筆",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-02",
+              "title": "〈房產〉土方之亂漸緩  全台4月新住宅開工量現反彈達1.1萬戶",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-06-02",
+            "外資": -3124991,
+            "投信": -199000,
+            "自營": -160186,
+            "合計": -3484177
+          },
+          "target_short": 969.8,
+          "target_mid": 924.2,
+          "target_long": 1011.9,
+          "atr14": 65.3,
+          "stop_loss": 731.4,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3226,7 +3278,8 @@
   ],
   "weak_sectors": [
     "銅箔/CCL",
-    "AI 散熱"
+    "AI 散熱",
+    "ABF載板"
   ],
   "qualified": [
     {

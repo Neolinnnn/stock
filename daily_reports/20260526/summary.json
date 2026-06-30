@@ -3337,6 +3337,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": 1.0,
+      "avg_rsi": 63.6,
+      "avg_sharpe": 1.08,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 922.0,
+          "rsi": 63.6,
+          "rsi10": 59.2,
+          "ret_20d": 1.0,
+          "signal": "HOLD",
+          "cv_sharpe": 1.08,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-05-26",
+              "title": "瑞軒自結4月EPS0.03元 較去年同期虧轉盈",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-26",
+              "title": "美中AI分流  CRIF示警：台灣半導體恐面臨一場高級進化淘汰賽",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-26",
+              "title": "民航局攜手地方推無人機物流常態化 更多無人機有望投入第一線運作",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-26",
+            "外資": 4947217,
+            "投信": -420000,
+            "自營": 19204,
+            "合計": 4546421
+          },
+          "target_short": 1027.0,
+          "target_mid": 925.9,
+          "target_long": 1055.2,
+          "atr14": 63.78,
+          "stop_loss": 794.4,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3351,7 +3403,8 @@
     "銅箔/CCL",
     "AI ASIC/IP",
     "AI 電源",
-    "被動元件"
+    "被動元件",
+    "ABF載板"
   ],
   "weak_sectors": [
     "綠能環保"

@@ -3085,6 +3085,58 @@
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
+    },
+    "ABF載板": {
+      "avg_ret_20d": -2.9,
+      "avg_rsi": 57.4,
+      "avg_sharpe": 0.38,
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 905.0,
+          "rsi": 57.4,
+          "rsi10": 56.2,
+          "ret_20d": -2.9,
+          "signal": "BUY",
+          "cv_sharpe": 0.38,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-05-27",
+              "title": "Go Healthy全球徵案啟動 貿協：加速台灣大健康產業國際布局",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-27",
+              "title": "台泥綠能嘉義漁電共生撤照爭議延燒 養殖戶與地主聯名提告縣府",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-05-27",
+              "title": "勞部端6大友善育兒「升級版」：婚假比照軍公教14日 產假3個月 企托支出減稅200%",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-05-27",
+            "外資": 576912,
+            "投信": -792000,
+            "自營": -38231,
+            "合計": -253319
+          },
+          "target_short": 1024.7,
+          "target_mid": 925.9,
+          "target_long": 1045.9,
+          "atr14": 64.15,
+          "stop_loss": 776.7,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -3101,7 +3153,8 @@
     "被動元件"
   ],
   "weak_sectors": [
-    "綠能環保"
+    "綠能環保",
+    "ABF載板"
   ],
   "qualified": [
     {

@@ -2833,6 +2833,58 @@
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1
+    },
+    "ABF載板": {
+      "avg_ret_20d": -7.3,
+      "avg_rsi": 49.2,
+      "avg_sharpe": -6.79,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 878.0,
+          "rsi": 49.2,
+          "rsi10": 51.1,
+          "ret_20d": -7.3,
+          "signal": "HOLD",
+          "cv_sharpe": -6.79,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-06-04",
+              "title": "皇昌營造5月營收15.48億元改寫單月次高 年增86%",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-04",
+              "title": "深化台捷AI供應鏈！龔明鑫會晤捷克議長韋德齊 與國發會宣布加碼5千萬歐元挺台商插旗",
+              "source": "鉅亨網"
+            },
+            {
+              "date": "2026-06-04",
+              "title": "仁寶量子技術結合AI 跨足新藥開發領域",
+              "source": "鉅亨網"
+            }
+          ],
+          "chip": {
+            "date": "2026-06-04",
+            "外資": 24793,
+            "投信": 401000,
+            "自營": -89922,
+            "合計": 335871
+          },
+          "target_short": 953.6,
+          "target_mid": 924.2,
+          "target_long": 1016.9,
+          "atr14": 63.26,
+          "stop_loss": 751.5,
+          "broker": null,
+          "main_force": null
+        }
+      ]
     }
   },
   "strong_sectors": [
@@ -2850,7 +2902,8 @@
   ],
   "weak_sectors": [
     "銅箔/CCL",
-    "AI ASIC/IP"
+    "AI ASIC/IP",
+    "ABF載板"
   ],
   "qualified": [],
   "alerts": [
