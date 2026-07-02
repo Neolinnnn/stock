@@ -1,6 +1,6 @@
 {
   "date": "20260702",
-  "timestamp": "2026-07-02T10:20:09.358596",
+  "timestamp": "2026-07-02T22:30:46.690122",
   "market": {
     "加權指數": 46744.16,
     "漲跌幅": -0.5845085145384757,
@@ -33,15 +33,33 @@
             "外資": 1851345,
             "投信": -1507000,
             "自營": -22303,
-            "合計": 322042
+            "合計": 322042,
+            "近5日": -810777,
+            "近5日外資": 1893080,
+            "近5日投信": -2654000,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -2.5,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 613.8,
           "target_mid": 378.2,
           "target_long": 505.5,
           "atr14": 40.39,
           "stop_loss": 364.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3450",
@@ -63,15 +81,33 @@
             "外資": -36436,
             "投信": 1000,
             "自營": 35741,
-            "合計": 305
+            "合計": 305,
+            "近5日": -1475370,
+            "近5日外資": -1237054,
+            "近5日投信": 9000,
+            "連買日": 1,
+            "投信連買日": 1,
+            "集中度": -5.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 605.6,
           "target_mid": 425.8,
           "target_long": 552.0,
           "atr14": 41.62,
           "stop_loss": 417.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3665",
@@ -91,17 +127,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 142877,
-            "投信": -150804,
+            "投信": -152804,
             "自營": 7308,
-            "合計": -619
+            "合計": -2619,
+            "近5日": 687516,
+            "近5日外資": 1146584,
+            "近5日投信": -423643,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 7.3,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 2919.7,
           "target_mid": 1858.6,
           "target_long": 2388.2,
           "atr14": 230.57,
           "stop_loss": 1578.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 59.5,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3105",
@@ -123,8 +177,16 @@
             "外資": -544223,
             "投信": -31062,
             "自營": 311153,
-            "合計": -264132
+            "合計": -264132,
+            "近5日": -8298504,
+            "近5日外資": -2171724,
+            "近5日投信": -6275774,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -7.7,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 558.0,
           "target_mid": 616.5,
           "target_long": 571.9,
@@ -153,15 +215,27 @@
             "外資": -61294,
             "投信": 0,
             "自營": -19160,
-            "合計": -80454
+            "合計": -80454,
+            "近5日": -3451999,
+            "近5日外資": -3341098,
+            "近5日投信": 585,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -22.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 168.3,
           "target_mid": 217.5,
           "target_long": 196.1,
           "atr14": 8.93,
           "stop_loss": 127.1,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 46.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2455",
@@ -183,15 +257,27 @@
             "外資": -981802,
             "投信": -11000,
             "自營": 352170,
-            "合計": -640632
+            "合計": -640632,
+            "近5日": -1870818,
+            "近5日外資": -625209,
+            "近5日投信": -1568000,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -17.5,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 437.7,
           "target_mid": 295.8,
           "target_long": 386.8,
           "atr14": 26.42,
           "stop_loss": 295.2,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 50.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "4906",
@@ -203,8 +289,8 @@
           "signal": "HOLD",
           "ma5": 41.74,
           "ma10": 43.27,
-          "ma20": 43.85,
-          "ma60": 41.35,
+          "ma20": 43.86,
+          "ma60": 41.34,
           "cv_sharpe": 1.5,
           "cv_win_rate": 0.72,
           "news": [],
@@ -213,15 +299,33 @@
             "外資": 508968,
             "投信": -6000,
             "自營": 70684,
-            "合計": 573652
+            "合計": 573652,
+            "近5日": -1797742,
+            "近5日外資": -1639593,
+            "近5日投信": -6000,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -4.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 48.3,
           "target_mid": 36.0,
           "target_long": 46.9,
           "atr14": 2.78,
           "stop_loss": 36.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2345",
@@ -241,17 +345,29 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -315747,
-            "投信": 173093,
+            "投信": 182093,
             "自營": 114189,
-            "合計": -28465
+            "合計": -19465,
+            "近5日": 1580377,
+            "近5日外資": 1219620,
+            "近5日投信": 200136,
+            "連買日": 0,
+            "投信連買日": 3,
+            "集中度": 7.8,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 2686.9,
           "target_mid": 2337.5,
           "target_long": 2902.4,
           "atr14": 163.67,
           "stop_loss": 2422.7,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 49.8,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         }
       ],
       "hot_count": 1,
@@ -281,10 +397,18 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 6208849,
-            "投信": -4557625,
+            "投信": -6968625,
             "自營": 690036,
-            "合計": 2341260
+            "合計": -69740,
+            "近5日": -26340576,
+            "近5日外資": -17322902,
+            "近5日投信": -3047093,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.3,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 513.9,
           "target_mid": 610.5,
           "target_long": 558.6,
@@ -313,8 +437,16 @@
             "外資": -10799606,
             "投信": 250000,
             "自營": 277865,
-            "合計": -10271741
+            "合計": -10271741,
+            "近5日": -41976121,
+            "近5日外資": -32692581,
+            "近5日投信": -9238000,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -7.3,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 182.2,
           "target_mid": 123.7,
           "target_long": 164.5,
@@ -343,15 +475,33 @@
             "外資": 41390209,
             "投信": -35310574,
             "自營": 1502946,
-            "合計": 7582581
+            "合計": 7582581,
+            "近5日": -78117604,
+            "近5日外資": -42264080,
+            "近5日投信": -32107482,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -7.7,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 236.6,
           "target_mid": 275.2,
           "target_long": 252.8,
           "atr14": 14.6,
           "stop_loss": 154.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3006",
@@ -373,8 +523,16 @@
             "外資": 347392,
             "投信": -643000,
             "自營": 270120,
-            "合計": -25488
+            "合計": -25488,
+            "近5日": -2567324,
+            "近5日外資": -2093055,
+            "近5日投信": -583000,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 255.3,
           "target_mid": 246.2,
           "target_long": 259.3,
@@ -403,15 +561,33 @@
             "外資": 345970,
             "投信": 80400,
             "自營": 41521,
-            "合計": 467891
+            "合計": 467891,
+            "近5日": -5961809,
+            "近5日外資": -6397519,
+            "近5日投信": 466400,
+            "連買日": 1,
+            "投信連買日": 2,
+            "集中度": -18.0,
+            "土洋同買": false
           },
+          "chip_tier": "weak",
           "target_short": 344.7,
           "target_mid": 387.0,
           "target_long": 335.5,
           "atr14": 16.6,
           "stop_loss": 224.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 38.7,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "5289",
@@ -433,15 +609,33 @@
             "外資": -388140,
             "投信": 619651,
             "自營": 26633,
-            "合計": 258144
+            "合計": 258144,
+            "近5日": -1423965,
+            "近5日外資": 63711,
+            "近5日投信": -1508657,
+            "連買日": 2,
+            "投信連買日": 1,
+            "集中度": -7.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 2058.8,
           "target_mid": 2435.3,
           "target_long": 2230.1,
           "atr14": 134.12,
           "stop_loss": 1446.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3205",
@@ -453,8 +647,8 @@
           "signal": "HOLD",
           "ma5": 52.14,
           "ma10": 52.35,
-          "ma20": 53.28,
-          "ma60": 55.4,
+          "ma20": 53.27,
+          "ma60": 55.41,
           "cv_sharpe": -2.32,
           "cv_win_rate": 0.33,
           "news": [],
@@ -463,15 +657,33 @@
             "外資": 34000,
             "投信": 0,
             "自營": 4,
-            "合計": 34004
+            "合計": 34004,
+            "近5日": 27683,
+            "近5日外資": 28610,
+            "近5日投信": 0,
+            "連買日": 2,
+            "投信連買日": 0,
+            "集中度": 5.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 56.1,
           "target_mid": 50.8,
           "target_long": 57.4,
           "atr14": 1.57,
           "stop_loss": 49.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 52.3,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3260",
@@ -493,15 +705,33 @@
             "外資": 683717,
             "投信": 262741,
             "自營": 40419,
-            "合計": 986877
+            "合計": 986877,
+            "近5日": -4464584,
+            "近5日外資": -3416100,
+            "近5日投信": -727427,
+            "連買日": 1,
+            "投信連買日": 1,
+            "集中度": -8.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 443.3,
           "target_mid": 612.0,
           "target_long": 510.0,
           "atr14": 22.07,
           "stop_loss": 363.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6770",
@@ -523,8 +753,16 @@
             "外資": -1502063,
             "投信": 18000,
             "自營": 653333,
-            "合計": -830730
+            "合計": -830730,
+            "近5日": -77667519,
+            "近5日外資": -75326694,
+            "近5日投信": 771000,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -6.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 87.0,
           "target_mid": 70.2,
           "target_long": 84.3,
@@ -551,10 +789,18 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -332499,
-            "投信": 29811,
+            "投信": -21189,
             "自營": -37341,
-            "合計": -340029
+            "合計": -391029,
+            "近5日": -555201,
+            "近5日外資": -203099,
+            "近5日投信": -145577,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -2.7,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 2612.6,
           "target_mid": 3360.0,
           "target_long": 2954.5,
@@ -593,15 +839,27 @@
             "外資": -25247595,
             "投信": 1555301,
             "自營": -3624339,
-            "合計": -27316633
+            "合計": -27316633,
+            "近5日": -98408209,
+            "近5日外資": -99074232,
+            "近5日投信": 2963430,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -31.1,
+            "土洋同買": false
           },
+          "chip_tier": "weak",
           "target_short": 289.5,
           "target_mid": 232.1,
           "target_long": 262.6,
           "atr14": 9.62,
           "stop_loss": 219.8,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 25.5,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2382",
@@ -623,15 +881,33 @@
             "外資": -1360348,
             "投信": 2545688,
             "自營": 302668,
-            "合計": 1488008
+            "合計": 1488008,
+            "近5日": 12056727,
+            "近5日外資": -1319042,
+            "近5日投信": 12377196,
+            "連買日": 5,
+            "投信連買日": 5,
+            "集中度": 18.2,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 393.2,
           "target_mid": 316.1,
           "target_long": 380.1,
           "atr14": 13.7,
           "stop_loss": 341.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 61.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3231",
@@ -653,15 +929,33 @@
             "外資": -8366208,
             "投信": 3003412,
             "自營": 268934,
-            "合計": -5093862
+            "合計": -5093862,
+            "近5日": -23306571,
+            "近5日外資": -51598125,
+            "近5日投信": 27257601,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -15.3,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 171.7,
           "target_mid": 174.7,
           "target_long": 177.7,
           "atr14": 6.41,
           "stop_loss": 145.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 71.9,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2376",
@@ -683,15 +977,33 @@
             "外資": -1697997,
             "投信": 1070104,
             "自營": 113763,
-            "合計": -514130
+            "合計": -514130,
+            "近5日": 1389210,
+            "近5日外資": -4667628,
+            "近5日投信": 5858891,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 3.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 369.4,
           "target_mid": 336.6,
           "target_long": 365.3,
           "atr14": 14.58,
           "stop_loss": 309.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "4938",
@@ -713,15 +1025,33 @@
             "外資": 3692661,
             "投信": -3026571,
             "自營": 465430,
-            "合計": 1131520
+            "合計": 1131520,
+            "近5日": -824333,
+            "近5日外資": 12408915,
+            "近5日投信": -14127550,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": -0.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 99.2,
           "target_mid": 70.7,
           "target_long": 87.8,
           "atr14": 3.94,
           "stop_loss": 75.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2357",
@@ -743,15 +1073,33 @@
             "外資": 1131417,
             "投信": 256503,
             "自營": -511066,
-            "合計": 876854
+            "合計": 876854,
+            "近5日": -2669765,
+            "近5日外資": -237866,
+            "近5日投信": -966195,
+            "連買日": 2,
+            "投信連買日": 2,
+            "集中度": -6.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 910.8,
           "target_mid": 689.4,
           "target_long": 756.5,
           "atr14": 32.83,
           "stop_loss": 601.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 0,
@@ -781,17 +1129,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 284124,
-            "投信": 1337121,
+            "投信": 2159121,
             "自營": 321476,
-            "合計": 1942721
+            "合計": 2764721,
+            "近5日": 15248208,
+            "近5日外資": 14233120,
+            "近5日投信": 169581,
+            "連買日": 3,
+            "投信連買日": 2,
+            "集中度": 11.2,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 725.0,
           "target_mid": 617.9,
           "target_long": 770.2,
           "atr14": 40.09,
           "stop_loss": 646.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 72.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2449",
@@ -811,17 +1177,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 1814394,
-            "投信": 93178,
+            "投信": 1719178,
             "自營": 412981,
-            "合計": 2320553
+            "合計": 3946553,
+            "近5日": 21328767,
+            "近5日外資": 22576426,
+            "近5日投信": -2075923,
+            "連買日": 3,
+            "投信連買日": 1,
+            "集中度": 12.7,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 358.5,
           "target_mid": 295.4,
           "target_long": 370.6,
           "atr14": 21.55,
           "stop_loss": 304.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 67.2,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6510",
@@ -843,15 +1227,27 @@
             "外資": 14252,
             "投信": -146040,
             "自營": -3903,
-            "合計": -135691
+            "合計": -135691,
+            "近5日": -392095,
+            "近5日外資": 239004,
+            "近5日投信": -638763,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -12.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 3780.1,
           "target_mid": 2754.0,
           "target_long": 3542.4,
           "atr14": 233.86,
           "stop_loss": 2772.3,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 62.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2441",
@@ -873,15 +1269,33 @@
             "外資": 593729,
             "投信": 299000,
             "自營": 276199,
-            "合計": 1168928
+            "合計": 1168928,
+            "近5日": -2969489,
+            "近5日外資": -894323,
+            "近5日投信": -2346000,
+            "連買日": 3,
+            "投信連買日": 2,
+            "集中度": -6.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 146.4,
           "target_mid": 120.7,
           "target_long": 151.4,
           "atr14": 7.44,
           "stop_loss": 127.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6257",
@@ -903,15 +1317,33 @@
             "外資": -51221,
             "投信": -12500,
             "自營": 62166,
-            "合計": -1555
+            "合計": -1555,
+            "近5日": 5039305,
+            "近5日外資": 5923041,
+            "近5日投信": -1049432,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 8.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 255.6,
           "target_mid": 213.3,
           "target_long": 267.0,
           "atr14": 14.12,
           "stop_loss": 222.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 77.9,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6239",
@@ -933,15 +1365,33 @@
             "外資": 485676,
             "投信": -3219000,
             "自營": -111980,
-            "合計": -2845304
+            "合計": -2845304,
+            "近5日": 3416871,
+            "近5日外資": 18439351,
+            "近5日投信": -13099379,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 369.3,
           "target_mid": 283.5,
           "target_long": 360.7,
           "atr14": 24.95,
           "stop_loss": 283.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "8150",
@@ -963,15 +1413,33 @@
             "外資": -13757679,
             "投信": 5312000,
             "自營": 136973,
-            "合計": -8308706
+            "合計": -8308706,
+            "近5日": 22559600,
+            "近5日外資": 8476966,
+            "近5日投信": 13422000,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 6.3,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 112.3,
           "target_mid": 119.2,
           "target_long": 126.6,
           "atr14": 9.29,
           "stop_loss": 89.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 71.2,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6147",
@@ -993,8 +1461,16 @@
             "外資": -104608,
             "投信": -4751000,
             "自營": 659436,
-            "合計": -4196172
+            "合計": -4196172,
+            "近5日": -13011126,
+            "近5日外資": 6055142,
+            "近5日投信": -18459084,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -7.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 279.0,
           "target_mid": 179.8,
           "target_long": 237.7,
@@ -1023,15 +1499,33 @@
             "外資": 2418422,
             "投信": -323000,
             "自營": 86449,
-            "合計": 2181871
+            "合計": 2181871,
+            "近5日": 4348295,
+            "近5日外資": 7437994,
+            "近5日投信": -3474045,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": 11.1,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 247.3,
           "target_mid": 211.7,
           "target_long": 263.6,
           "atr14": 15.88,
           "stop_loss": 217.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 61.9,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2369",
@@ -1053,15 +1547,33 @@
             "外資": 818810,
             "投信": 0,
             "自營": 34371,
-            "合計": 853181
+            "合計": 853181,
+            "近5日": -6938496,
+            "近5日外資": -6492957,
+            "近5日投信": 0,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -6.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 45.4,
           "target_mid": 34.0,
           "target_long": 44.2,
           "atr14": 2.72,
           "stop_loss": 34.5,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2329",
@@ -1083,15 +1595,27 @@
             "外資": -784407,
             "投信": 0,
             "自營": -5832,
-            "合計": -790239
+            "合計": -790239,
+            "近5日": -5585769,
+            "近5日外資": -4969817,
+            "近5日投信": 6000,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -20.3,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 58.6,
           "target_mid": 67.4,
           "target_long": 65.0,
           "atr14": 2.94,
           "stop_loss": 47.2,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 46.5,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6271",
@@ -1113,15 +1637,33 @@
             "外資": -5322661,
             "投信": 20000,
             "自營": -575459,
-            "合計": -5878120
+            "合計": -5878120,
+            "近5日": -1041965,
+            "近5日外資": -2063202,
+            "近5日投信": 740000,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -0.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 283.2,
           "target_mid": 224.4,
           "target_long": 283.7,
           "atr14": 20.15,
           "stop_loss": 223.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2481",
@@ -1143,15 +1685,33 @@
             "外資": 10576,
             "投信": -624000,
             "自營": 897405,
-            "合計": 283981
+            "合計": 283981,
+            "近5日": 1452748,
+            "近5日外資": 3856240,
+            "近5日投信": -3695000,
+            "連買日": 2,
+            "投信連買日": 0,
+            "集中度": 3.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 212.5,
           "target_mid": 181.5,
           "target_long": 226.1,
           "atr14": 14.69,
           "stop_loss": 184.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 4,
@@ -1183,15 +1743,27 @@
             "外資": -301315,
             "投信": -122073,
             "自營": 61345,
-            "合計": -362043
+            "合計": -362043,
+            "近5日": -2208281,
+            "近5日外資": -1614307,
+            "近5日投信": -734614,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -13.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 5523.8,
           "target_mid": 3650.8,
           "target_long": 4743.7,
           "atr14": 282.37,
           "stop_loss": 3730.3,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 49.8,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3406",
@@ -1213,8 +1785,16 @@
             "外資": -237688,
             "投信": 23000,
             "自營": 49417,
-            "合計": -165271
+            "合計": -165271,
+            "近5日": -459865,
+            "近5日外資": 51493,
+            "近5日投信": -435000,
+            "連買日": 0,
+            "投信連買日": 3,
+            "集中度": -3.3,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 785.1,
           "target_mid": 547.4,
           "target_long": 683.9,
@@ -1251,17 +1831,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -1113284,
-            "投信": 76889,
+            "投信": 86989,
             "自營": 100487,
-            "合計": -935908
+            "合計": -925808,
+            "近5日": -7045072,
+            "近5日外資": -3918232,
+            "近5日投信": -2302240,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -9.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 4686.1,
           "target_mid": 3693.2,
           "target_long": 4673.9,
           "atr14": 279.4,
           "stop_loss": 3786.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3034",
@@ -1283,15 +1881,33 @@
             "外資": -817439,
             "投信": 160711,
             "自營": 117469,
-            "合計": -539259
+            "合計": -539259,
+            "近5日": -1659678,
+            "近5日外資": -2469467,
+            "近5日投信": 609448,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -4.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 571.3,
           "target_mid": 459.8,
           "target_long": 562.6,
           "atr14": 23.94,
           "stop_loss": 493.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "4966",
@@ -1313,15 +1929,33 @@
             "外資": -42465,
             "投信": 230000,
             "自營": 28925,
-            "合計": 216460
+            "合計": 216460,
+            "近5日": 278869,
+            "近5日外資": 1019584,
+            "近5日投信": -700700,
+            "連買日": 2,
+            "投信連買日": 1,
+            "集中度": 3.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 738.7,
           "target_mid": 588.4,
           "target_long": 698.7,
           "atr14": 40.81,
           "stop_loss": 574.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "4919",
@@ -1343,15 +1977,33 @@
             "外資": 831599,
             "投信": 18000,
             "自營": 79506,
-            "合計": 929105
+            "合計": 929105,
+            "近5日": -1962214,
+            "近5日外資": -839767,
+            "近5日投信": 81000,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": -3.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 208.2,
           "target_mid": 157.2,
           "target_long": 204.4,
           "atr14": 16.32,
           "stop_loss": 152.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2388",
@@ -1373,8 +2025,16 @@
             "外資": -86465,
             "投信": 13000,
             "自營": -162872,
-            "合計": -236337
+            "合計": -236337,
+            "近5日": -2166655,
+            "近5日外資": -1605214,
+            "近5日投信": 83000,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -9.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 83.5,
           "target_mid": 75.8,
           "target_long": 84.3,
@@ -1401,17 +2061,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -1410300,
-            "投信": 888254,
+            "投信": 872254,
             "自營": -50809,
-            "合計": -572855
+            "合計": -588855,
+            "近5日": -1219186,
+            "近5日外資": -6914795,
+            "近5日投信": 6363159,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -3.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 923.3,
           "target_mid": 689.4,
           "target_long": 879.5,
           "atr14": 53.69,
           "stop_loss": 703.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6415",
@@ -1433,15 +2111,33 @@
             "外資": 366562,
             "投信": -22500,
             "自營": 11654,
-            "合計": 355716
+            "合計": 355716,
+            "近5日": -139272,
+            "近5日外資": 153696,
+            "近5日投信": -273500,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -1.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 681.6,
           "target_mid": 530.4,
           "target_long": 673.0,
           "atr14": 43.64,
           "stop_loss": 536.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "5269",
@@ -1463,15 +2159,33 @@
             "外資": 80601,
             "投信": 254000,
             "自營": 8439,
-            "合計": 343040
+            "合計": 343040,
+            "近5日": 1325540,
+            "近5日外資": -39925,
+            "近5日投信": 1303000,
+            "連買日": 4,
+            "投信連買日": 5,
+            "集中度": 17.2,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 1559.5,
           "target_mid": 1591.7,
           "target_long": 1670.0,
           "atr14": 71.34,
           "stop_loss": 1377.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 59.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2458",
@@ -1493,15 +2207,33 @@
             "外資": -1506358,
             "投信": 1714476,
             "自營": -3871,
-            "合計": 204247
+            "合計": 204247,
+            "近5日": 1013929,
+            "近5日外資": -4810707,
+            "近5日投信": 5818920,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": 1.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 192.8,
           "target_mid": 157.7,
           "target_long": 191.0,
           "atr14": 10.64,
           "stop_loss": 164.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3058",
@@ -1523,15 +2255,33 @@
             "外資": 546250,
             "投信": 0,
             "自營": 0,
-            "合計": 546250
+            "合計": 546250,
+            "近5日": 513250,
+            "近5日外資": 509250,
+            "近5日投信": 0,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 13.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 10.1,
           "target_mid": 9.4,
           "target_long": 10.2,
           "atr14": 0.35,
           "stop_loss": 8.5,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 42.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         }
       ],
       "hot_count": 1,
@@ -1552,8 +2302,8 @@
           "ret_20d": -14.2,
           "signal": "HOLD",
           "ma5": 47.73,
-          "ma10": 49.28,
-          "ma20": 49.85,
+          "ma10": 49.29,
+          "ma20": 49.86,
           "ma60": 53.36,
           "cv_sharpe": -6.01,
           "cv_win_rate": 0.17,
@@ -1563,15 +2313,33 @@
             "外資": 18000,
             "投信": 0,
             "自營": 0,
-            "合計": 18000
+            "合計": 18000,
+            "近5日": -160878,
+            "近5日外資": -156106,
+            "近5日投信": 0,
+            "連買日": 2,
+            "投信連買日": 0,
+            "集中度": -15.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 53.9,
           "target_mid": 54.8,
           "target_long": 57.5,
           "atr14": 1.64,
           "stop_loss": 44.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 46.7,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "1533",
@@ -1593,15 +2361,33 @@
             "外資": 69000,
             "投信": 0,
             "自營": -1000,
-            "合計": 68000
+            "合計": 68000,
+            "近5日": 65198,
+            "近5日外資": 73198,
+            "近5日投信": 0,
+            "連買日": 3,
+            "投信連買日": 0,
+            "集中度": 9.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 40.0,
           "target_mid": 53.8,
           "target_long": 47.0,
           "atr14": 1.21,
           "stop_loss": 33.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 47.9,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2243",
@@ -1623,8 +2409,16 @@
             "外資": -27000,
             "投信": 0,
             "自營": 0,
-            "合計": -27000
+            "合計": -27000,
+            "近5日": 39000,
+            "近5日外資": 34000,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 1.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 67.6,
           "target_mid": 68.5,
           "target_long": 72.3,
@@ -1663,15 +2457,33 @@
             "外資": -7000,
             "投信": 0,
             "自營": -2343,
-            "合計": -9343
+            "合計": -9343,
+            "近5日": -3186,
+            "近5日外資": -19619,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -0.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 233.7,
           "target_mid": 187.0,
           "target_long": 228.7,
           "atr14": 7.65,
           "stop_loss": 204.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 0,
@@ -1703,15 +2515,33 @@
             "外資": -137904,
             "投信": 2000,
             "自營": -16928,
-            "合計": -152832
+            "合計": -152832,
+            "近5日": 196019,
+            "近5日外資": 269495,
+            "近5日投信": -14000,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": 1.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 569.0,
           "target_mid": 450.5,
           "target_long": 569.6,
           "atr14": 30.28,
           "stop_loss": 469.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3535",
@@ -1733,15 +2563,33 @@
             "外資": 15750,
             "投信": 0,
             "自營": 1622,
-            "合計": 17372
+            "合計": 17372,
+            "近5日": -91223,
+            "近5日外資": -91642,
+            "近5日投信": 0,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -1.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 139.7,
           "target_mid": 120.0,
           "target_long": 136.0,
           "atr14": 6.64,
           "stop_loss": 102.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3680",
@@ -1763,15 +2611,33 @@
             "外資": -8048,
             "投信": -316776,
             "自營": 2377,
-            "合計": -322447
+            "合計": -322447,
+            "近5日": 327997,
+            "近5日外資": 2024661,
+            "近5日投信": -1883861,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.5,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 562.0,
           "target_mid": 475.7,
           "target_long": 591.3,
           "atr14": 31.73,
           "stop_loss": 491.5,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6664",
@@ -1793,15 +2659,33 @@
             "外資": 91450,
             "投信": 0,
             "自營": 19749,
-            "合計": 111199
+            "合計": 111199,
+            "近5日": 240006,
+            "近5日外資": 188083,
+            "近5日投信": 0,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": 7.5,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 413.7,
           "target_mid": 346.8,
           "target_long": 430.4,
           "atr14": 20.35,
           "stop_loss": 367.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 48.1,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2467",
@@ -1823,15 +2707,33 @@
             "外資": 512253,
             "投信": -20600,
             "自營": -26514,
-            "合計": 465139
+            "合計": 465139,
+            "近5日": 1869995,
+            "近5日外資": 1895303,
+            "近5日投信": -82016,
+            "連買日": 3,
+            "投信連買日": 0,
+            "集中度": 16.1,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 653.5,
           "target_mid": 559.3,
           "target_long": 696.6,
           "atr14": 40.79,
           "stop_loss": 576.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 57.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "7734",
@@ -1853,15 +2755,33 @@
             "外資": 23099,
             "投信": 5000,
             "自營": 4821,
-            "合計": 32920
+            "合計": 32920,
+            "近5日": -28018,
+            "近5日外資": 11254,
+            "近5日投信": -38000,
+            "連買日": 1,
+            "投信連買日": 1,
+            "集中度": -5.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 3607.0,
           "target_mid": 2762.5,
           "target_long": 3516.4,
           "atr14": 277.43,
           "stop_loss": 2695.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "5443",
@@ -1883,15 +2803,33 @@
             "外資": 363453,
             "投信": 0,
             "自營": -119620,
-            "合計": 243833
+            "合計": 243833,
+            "近5日": 3477407,
+            "近5日外資": 3297545,
+            "近5日投信": 0,
+            "連買日": 2,
+            "投信連買日": 0,
+            "集中度": 11.8,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 122.4,
           "target_mid": 103.3,
           "target_long": 129.0,
           "atr14": 7.03,
           "stop_loss": 107.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 58.8,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6640",
@@ -1913,15 +2851,33 @@
             "外資": -373610,
             "投信": 1000,
             "自營": 10594,
-            "合計": -362016
+            "合計": -362016,
+            "近5日": -385542,
+            "近5日外資": -408704,
+            "近5日投信": -1000,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -19.7,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1208.3,
           "target_mid": 994.5,
           "target_long": 1247.9,
           "atr14": 82.05,
           "stop_loss": 1005.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 55.3,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6187",
@@ -1943,15 +2899,27 @@
             "外資": -425172,
             "投信": -352860,
             "自營": 7487,
-            "合計": -770545
+            "合計": -770545,
+            "近5日": -1871229,
+            "近5日外資": -294585,
+            "近5日投信": -1573412,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -18.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1245.1,
           "target_mid": 854.2,
           "target_long": 1113.3,
           "atr14": 90.79,
           "stop_loss": 823.4,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 56.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3131",
@@ -1973,15 +2941,33 @@
             "外資": -9192,
             "投信": 126043,
             "自營": -16722,
-            "合計": 100129
+            "合計": 100129,
+            "近5日": 304317,
+            "近5日外資": 26735,
+            "近5日投信": 314502,
+            "連買日": 5,
+            "投信連買日": 1,
+            "集中度": 13.3,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 3869.2,
           "target_mid": 3319.2,
           "target_long": 4132.1,
           "atr14": 239.57,
           "stop_loss": 3425.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 49.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3583",
@@ -2003,15 +2989,33 @@
             "外資": 136119,
             "投信": -44000,
             "自營": 10308,
-            "合計": 102427
+            "合計": 102427,
+            "近5日": 1644627,
+            "近5日外資": 1774135,
+            "近5日投信": -126000,
+            "連買日": 5,
+            "投信連買日": 0,
+            "集中度": 16.1,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 930.6,
           "target_mid": 771.8,
           "target_long": 967.0,
           "atr14": 54.55,
           "stop_loss": 798.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 63.8,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3711",
@@ -2031,17 +3035,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 284124,
-            "投信": 1337121,
+            "投信": 2159121,
             "自營": 321476,
-            "合計": 1942721
+            "合計": 2764721,
+            "近5日": 15248208,
+            "近5日外資": 14233120,
+            "近5日投信": 169581,
+            "連買日": 3,
+            "投信連買日": 2,
+            "集中度": 11.2,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 725.0,
           "target_mid": 617.9,
           "target_long": 770.2,
           "atr14": 40.09,
           "stop_loss": 646.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 72.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2449",
@@ -2061,17 +3083,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 1814394,
-            "投信": 93178,
+            "投信": 1719178,
             "自營": 412981,
-            "合計": 2320553
+            "合計": 3946553,
+            "近5日": 21328767,
+            "近5日外資": 22576426,
+            "近5日投信": -2075923,
+            "連買日": 3,
+            "投信連買日": 1,
+            "集中度": 12.7,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 358.5,
           "target_mid": 295.4,
           "target_long": 370.6,
           "atr14": 21.55,
           "stop_loss": 304.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 67.2,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6239",
@@ -2093,15 +3133,33 @@
             "外資": 485676,
             "投信": -3219000,
             "自營": -111980,
-            "合計": -2845304
+            "合計": -2845304,
+            "近5日": 3416871,
+            "近5日外資": 18439351,
+            "近5日投信": -13099379,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 369.3,
           "target_mid": 283.5,
           "target_long": 360.7,
           "atr14": 24.95,
           "stop_loss": 283.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 7,
@@ -2133,8 +3191,16 @@
             "外資": -11429884,
             "投信": 285415,
             "自營": 117979,
-            "合計": -11026490
+            "合計": -11026490,
+            "近5日": -8504452,
+            "近5日外資": -18752606,
+            "近5日投信": 10506442,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -4.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1067.7,
           "target_mid": 832.1,
           "target_long": 1055.5,
@@ -2163,15 +3229,33 @@
             "外資": -1717206,
             "投信": 84280,
             "自營": -6463,
-            "合計": -1639389
+            "合計": -1639389,
+            "近5日": -9433550,
+            "近5日外資": -10546852,
+            "近5日投信": 1045240,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -4.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 671.4,
           "target_mid": 508.3,
           "target_long": 648.6,
           "atr14": 40.38,
           "stop_loss": 517.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "8046",
@@ -2191,17 +3275,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -2304810,
-            "投信": 158084,
+            "投信": 677084,
             "自營": 137894,
-            "合計": -2008832
+            "合計": -1489832,
+            "近5日": 11039640,
+            "近5日外資": 4939066,
+            "近5日投信": 6498251,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 11.4,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 1202.6,
           "target_mid": 973.2,
           "target_long": 1225.2,
           "atr14": 77.2,
           "stop_loss": 990.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 53.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3189",
@@ -2223,15 +3325,33 @@
             "外資": -8111145,
             "投信": 54100,
             "自營": -126585,
-            "合計": -8183630
+            "合計": -8183630,
+            "近5日": -5787601,
+            "近5日外資": -13601840,
+            "近5日投信": 8240767,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -3.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 901.8,
           "target_mid": 705.5,
           "target_long": 894.2,
           "atr14": 63.59,
           "stop_loss": 702.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 0,
@@ -2263,15 +3383,27 @@
             "外資": -1051659,
             "投信": -705737,
             "自營": 160737,
-            "合計": -1596659
+            "合計": -1596659,
+            "近5日": -6845741,
+            "近5日外資": -6554062,
+            "近5日投信": -821387,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -12.0,
+            "土洋同買": false
           },
+          "chip_tier": "weak",
           "target_short": 696.4,
           "target_mid": 484.5,
           "target_long": 629.5,
           "atr14": 48.35,
           "stop_loss": 473.3,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 37.8,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2383",
@@ -2293,15 +3425,33 @@
             "外資": -36476,
             "投信": 6255,
             "自營": 53937,
-            "合計": 23716
+            "合計": 23716,
+            "近5日": -215142,
+            "近5日外資": 83675,
+            "近5日投信": -444874,
+            "連買日": 1,
+            "投信連買日": 1,
+            "集中度": -3.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 5940.0,
           "target_mid": 4806.8,
           "target_long": 6051.3,
           "atr14": 327.94,
           "stop_loss": 4999.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6213",
@@ -2323,15 +3473,33 @@
             "外資": -43403,
             "投信": 128300,
             "自營": -60099,
-            "合計": 24798
+            "合計": 24798,
+            "近5日": 1557095,
+            "近5日外資": -1333646,
+            "近5日投信": 1952300,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": 1.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 381.6,
           "target_mid": 304.7,
           "target_long": 384.6,
           "atr14": 24.59,
           "stop_loss": 309.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2368",
@@ -2353,8 +3521,16 @@
             "外資": -66146,
             "投信": -237559,
             "自營": 143920,
-            "合計": -159785
+            "合計": -159785,
+            "近5日": 1246832,
+            "近5日外資": 3415495,
+            "近5日投信": -2255232,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 4.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1479.2,
           "target_mid": 1049.8,
           "target_long": 1357.9,
@@ -2381,17 +3557,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -2304810,
-            "投信": 158084,
+            "投信": 677084,
             "自營": 137894,
-            "合計": -2008832
+            "合計": -1489832,
+            "近5日": 11039640,
+            "近5日外資": 4939066,
+            "近5日投信": 6498251,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 11.4,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 1202.6,
           "target_mid": 973.2,
           "target_long": 1225.2,
           "atr14": 77.2,
           "stop_loss": 990.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 53.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         }
       ],
       "hot_count": 1,
@@ -2423,15 +3617,33 @@
             "外資": -12253526,
             "投信": 1025849,
             "自營": 216739,
-            "合計": -11010938
+            "合計": -11010938,
+            "近5日": -12651683,
+            "近5日外資": -22473322,
+            "近5日投信": 7332465,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -5.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 2530.0,
           "target_mid": 2095.2,
           "target_long": 2625.9,
           "atr14": 65.56,
           "stop_loss": 2333.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3443",
@@ -2453,15 +3665,33 @@
             "外資": 244847,
             "投信": 115299,
             "自營": 27603,
-            "合計": 387749
+            "合計": 387749,
+            "近5日": 331517,
+            "近5日外資": 129100,
+            "近5日投信": 407051,
+            "連買日": 2,
+            "投信連買日": 5,
+            "集中度": 3.1,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 5344.2,
           "target_mid": 4530.5,
           "target_long": 5652.6,
           "atr14": 368.89,
           "stop_loss": 4592.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3661",
@@ -2483,8 +3713,16 @@
             "外資": -331348,
             "投信": 28031,
             "自營": 196372,
-            "合計": -106945
+            "合計": -106945,
+            "近5日": 196911,
+            "近5日外資": -124305,
+            "近5日投信": 72892,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 1.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 4679.6,
           "target_mid": 4160.8,
           "target_long": 5145.6,
@@ -2513,15 +3751,33 @@
             "外資": 20733,
             "投信": -10830,
             "自營": -4114,
-            "合計": 5789
+            "合計": 5789,
+            "近5日": 59508,
+            "近5日外資": -13835,
+            "近5日投信": 42943,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 2.5,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 3475.7,
           "target_mid": 2528.8,
           "target_long": 3253.6,
           "atr14": 204.69,
           "stop_loss": 2565.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6643",
@@ -2543,15 +3799,33 @@
             "外資": 67232,
             "投信": 0,
             "自營": 11033,
-            "合計": 78265
+            "合計": 78265,
+            "近5日": 4018,
+            "近5日外資": 4786,
+            "近5日投信": 0,
+            "連買日": 3,
+            "投信連買日": 0,
+            "集中度": 0.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 545.9,
           "target_mid": 423.7,
           "target_long": 537.9,
           "atr14": 27.86,
           "stop_loss": 442.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 2,
@@ -2583,15 +3857,33 @@
             "外資": 115408,
             "投信": 1231925,
             "自營": 76172,
-            "合計": 1423505
+            "合計": 1423505,
+            "近5日": 3197125,
+            "近5日外資": 938605,
+            "近5日投信": 2179174,
+            "連買日": 4,
+            "投信連買日": 5,
+            "集中度": 12.7,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 2735.9,
           "target_mid": 2335.3,
           "target_long": 2906.1,
           "atr14": 164.62,
           "stop_loss": 2410.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 56.3,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3324",
@@ -2613,15 +3905,33 @@
             "外資": 88413,
             "投信": 379,
             "自營": 50487,
-            "合計": 139279
+            "合計": 139279,
+            "近5日": -375759,
+            "近5日外資": -339140,
+            "近5日投信": 2073,
+            "連買日": 2,
+            "投信連買日": 3,
+            "集中度": -3.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1149.2,
           "target_mid": 1358.1,
           "target_long": 1313.9,
           "atr14": 57.62,
           "stop_loss": 924.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3653",
@@ -2641,17 +3951,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": 49984,
-            "投信": -34106,
+            "投信": -33106,
             "自營": -8254,
-            "合計": 7624
+            "合計": 8624,
+            "近5日": 1047253,
+            "近5日外資": 1297337,
+            "近5日投信": -250038,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 20.4,
+            "土洋同買": false
           },
+          "chip_tier": "strong",
           "target_short": 4098.5,
           "target_mid": 2953.8,
           "target_long": 3808.2,
           "atr14": 258.54,
           "stop_loss": 2957.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 63.3,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "8210",
@@ -2673,15 +4001,33 @@
             "外資": 179331,
             "投信": -371000,
             "自營": 5547,
-            "合計": -186122
+            "合計": -186122,
+            "近5日": -685087,
+            "近5日外資": -132094,
+            "近5日投信": -580000,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -15.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1515.2,
           "target_mid": 1238.2,
           "target_long": 1479.5,
           "atr14": 75.05,
           "stop_loss": 1159.9,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 55.7,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "8996",
@@ -2703,8 +4049,16 @@
             "外資": -299155,
             "投信": -226000,
             "自營": 2266,
-            "合計": -522889
+            "合計": -522889,
+            "近5日": 18867,
+            "近5日外資": 699280,
+            "近5日投信": -698301,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 0.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1687.6,
           "target_mid": 1202.8,
           "target_long": 1554.4,
@@ -2743,15 +4097,27 @@
             "外資": -1491012,
             "投信": 88919,
             "自營": -37201,
-            "合計": -1439294
+            "合計": -1439294,
+            "近5日": -8601104,
+            "近5日外資": -7783974,
+            "近5日投信": -932837,
+            "連買日": 0,
+            "投信連買日": 3,
+            "集中度": -11.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 2457.1,
           "target_mid": 1674.5,
           "target_long": 2185.6,
           "atr14": 117.28,
           "stop_loss": 1735.4,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 57.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2301",
@@ -2773,15 +4139,33 @@
             "外資": 3176407,
             "投信": -730395,
             "自營": 376298,
-            "合計": 2822310
+            "合計": 2822310,
+            "近5日": 271264,
+            "近5日外資": 6851192,
+            "近5日投信": -7035285,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": 0.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 239.1,
           "target_mid": 188.3,
           "target_long": 238.3,
           "atr14": 13.23,
           "stop_loss": 195.0,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6412",
@@ -2803,15 +4187,33 @@
             "外資": 350500,
             "投信": 6963,
             "自營": 75689,
-            "合計": 433152
+            "合計": 433152,
+            "近5日": 281199,
+            "近5日外資": 321513,
+            "近5日投信": -20587,
+            "連買日": 1,
+            "投信連買日": 4,
+            "集中度": 2.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 100.4,
           "target_mid": 82.5,
           "target_long": 99.1,
           "atr14": 4.12,
           "stop_loss": 88.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         }
       ],
       "hot_count": 0,
@@ -2841,10 +4243,18 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -3582151,
-            "投信": -640152,
+            "投信": -630152,
             "自營": 41008,
-            "合計": -4181295
+            "合計": -4171295,
+            "近5日": -11405180,
+            "近5日外資": 1187789,
+            "近5日投信": -11840442,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -4.1,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1227.5,
           "target_mid": 896.8,
           "target_long": 1152.8,
@@ -2873,15 +4283,33 @@
             "外資": -224575,
             "投信": 2100,
             "自營": 47329,
-            "合計": -175146
+            "合計": -175146,
+            "近5日": 3972551,
+            "近5日外資": 5105432,
+            "近5日投信": 21100,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": 25.4,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 664.6,
           "target_mid": 476.8,
           "target_long": 615.4,
           "atr14": 45.64,
           "stop_loss": 469.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 69.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         }
       ],
       "hot_count": 0,
@@ -2911,10 +4339,18 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -3582151,
-            "投信": -640152,
+            "投信": -630152,
             "自營": 41008,
-            "合計": -4181295
+            "合計": -4171295,
+            "近5日": -11405180,
+            "近5日外資": 1187789,
+            "近5日投信": -11840442,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -4.1,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1227.5,
           "target_mid": 896.8,
           "target_long": 1152.8,
@@ -2943,15 +4379,33 @@
             "外資": -224575,
             "投信": 2100,
             "自營": 47329,
-            "合計": -175146
+            "合計": -175146,
+            "近5日": 3972551,
+            "近5日外資": 5105432,
+            "近5日投信": 21100,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": 25.4,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 664.6,
           "target_mid": 476.8,
           "target_long": 615.4,
           "atr14": 45.64,
           "stop_loss": 469.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 69.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2360",
@@ -2973,15 +4427,33 @@
             "外資": -1407,
             "投信": -54434,
             "自營": 15887,
-            "合計": -39954
+            "合計": -39954,
+            "近5日": 106639,
+            "近5日外資": 106496,
+            "近5日投信": -19995,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 0.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 2566.6,
           "target_mid": 1878.5,
           "target_long": 2413.9,
           "atr14": 148.09,
           "stop_loss": 1913.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "7769",
@@ -3001,17 +4473,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -146293,
-            "投信": 29902,
+            "投信": 32902,
             "自營": 828,
-            "合計": -115563
+            "合計": -112563,
+            "近5日": -132662,
+            "近5日外資": -369409,
+            "近5日投信": 246596,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -3.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 7543.7,
           "target_mid": 5975.5,
           "target_long": 7554.5,
           "atr14": 419.47,
           "stop_loss": 6191.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6510",
@@ -3033,15 +4523,27 @@
             "外資": 14252,
             "投信": -146040,
             "自營": -3903,
-            "合計": -135691
+            "合計": -135691,
+            "近5日": -392095,
+            "近5日外資": 239004,
+            "近5日投信": -638763,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -12.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 3780.1,
           "target_mid": 2754.0,
           "target_long": 3542.4,
           "atr14": 233.86,
           "stop_loss": 2772.3,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 62.4,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3037",
@@ -3063,8 +4565,16 @@
             "外資": -11429884,
             "投信": 285415,
             "自營": 117979,
-            "合計": -11026490
+            "合計": -11026490,
+            "近5日": -8504452,
+            "近5日外資": -18752606,
+            "近5日投信": 10506442,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -4.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1067.7,
           "target_mid": 832.1,
           "target_long": 1055.5,
@@ -3093,15 +4603,33 @@
             "外資": -8111145,
             "投信": 54100,
             "自營": -126585,
-            "合計": -8183630
+            "合計": -8183630,
+            "近5日": -5787601,
+            "近5日外資": -13601840,
+            "近5日投信": 8240767,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -3.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 901.8,
           "target_mid": 705.5,
           "target_long": 894.2,
           "atr14": 63.59,
           "stop_loss": 702.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "8046",
@@ -3121,17 +4649,35 @@
           "chip": {
             "date": "2026-07-02",
             "外資": -2304810,
-            "投信": 158084,
+            "投信": 677084,
             "自營": 137894,
-            "合計": -2008832
+            "合計": -1489832,
+            "近5日": 11039640,
+            "近5日外資": 4939066,
+            "近5日投信": 6498251,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 11.4,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 1202.6,
           "target_mid": 973.2,
           "target_long": 1225.2,
           "atr14": 77.2,
           "stop_loss": 990.6,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 53.6,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2383",
@@ -3153,15 +4699,33 @@
             "外資": -36476,
             "投信": 6255,
             "自營": 53937,
-            "合計": 23716
+            "合計": 23716,
+            "近5日": -215142,
+            "近5日外資": 83675,
+            "近5日投信": -444874,
+            "連買日": 1,
+            "投信連買日": 1,
+            "集中度": -3.9,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 5940.0,
           "target_mid": 4806.8,
           "target_long": 6051.3,
           "atr14": 327.94,
           "stop_loss": 4999.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6213",
@@ -3183,15 +4747,33 @@
             "外資": -43403,
             "投信": 128300,
             "自營": -60099,
-            "合計": 24798
+            "合計": 24798,
+            "近5日": 1557095,
+            "近5日外資": -1333646,
+            "近5日投信": 1952300,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": 1.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 381.6,
           "target_mid": 304.7,
           "target_long": 384.6,
           "atr14": 24.59,
           "stop_loss": 309.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6274",
@@ -3213,15 +4795,33 @@
             "外資": -687173,
             "投信": 64578,
             "自營": -203,
-            "合計": -622798
+            "合計": -622798,
+            "近5日": 1491403,
+            "近5日外資": 728627,
+            "近5日投信": 705578,
+            "連買日": 0,
+            "投信連買日": 3,
+            "集中度": 5.6,
+            "土洋同買": true
           },
+          "chip_tier": "strong",
           "target_short": 1877.9,
           "target_mid": 1436.5,
           "target_long": 1829.0,
           "atr14": 130.95,
           "stop_loss": 1428.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 57.0,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2368",
@@ -3243,8 +4843,16 @@
             "外資": -66146,
             "投信": -237559,
             "自營": 143920,
-            "合計": -159785
+            "合計": -159785,
+            "近5日": 1246832,
+            "近5日外資": 3415495,
+            "近5日投信": -2255232,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 4.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 1479.2,
           "target_mid": 1049.8,
           "target_long": 1357.9,
@@ -3273,15 +4881,33 @@
             "外資": 163247,
             "投信": -3000,
             "自營": 52200,
-            "合計": 212447
+            "合計": 212447,
+            "近5日": -3717177,
+            "近5日外資": -3148011,
+            "近5日投信": -3000,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -10.5,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 187.4,
           "target_mid": 149.2,
           "target_long": 188.4,
           "atr14": 10.4,
           "stop_loss": 154.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 49.7,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "3044",
@@ -3303,8 +4929,16 @@
             "外資": 2538344,
             "投信": -3344220,
             "自營": 54781,
-            "合計": -751095
+            "合計": -751095,
+            "近5日": -2061025,
+            "近5日外資": 5706754,
+            "近5日投信": -7954144,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -8.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 574.8,
           "target_mid": 430.1,
           "target_long": 539.2,
@@ -3333,15 +4967,33 @@
             "外資": -2158500,
             "投信": 2151000,
             "自營": 27645,
-            "合計": 20145
+            "合計": 20145,
+            "近5日": 3572786,
+            "近5日外資": -6456339,
+            "近5日投信": 9864000,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": 6.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 91.5,
           "target_mid": 83.0,
           "target_long": 91.9,
           "atr14": 4.2,
           "stop_loss": 79.1,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 67.0,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "2313",
@@ -3363,8 +5015,16 @@
             "外資": -5934086,
             "投信": -103000,
             "自營": 281164,
-            "合計": -5755922
+            "合計": -5755922,
+            "近5日": -13493350,
+            "近5日外資": -13343537,
+            "近5日投信": -626000,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -9.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 284.5,
           "target_mid": 194.2,
           "target_long": 253.4,
@@ -3393,15 +5053,33 @@
             "外資": 1018044,
             "投信": 0,
             "自營": -31910,
-            "合計": 986134
+            "合計": 986134,
+            "近5日": 3005081,
+            "近5日外資": 3482566,
+            "近5日投信": 0,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 4.6,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 67.2,
           "target_mid": 45.8,
           "target_long": 60.9,
           "atr14": 3.37,
           "stop_loss": 47.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "4958",
@@ -3423,15 +5101,33 @@
             "外資": -1717206,
             "投信": 84280,
             "自營": -6463,
-            "合計": -1639389
+            "合計": -1639389,
+            "近5日": -9433550,
+            "近5日外資": -10546852,
+            "近5日投信": 1045240,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -4.8,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 671.4,
           "target_mid": 508.3,
           "target_long": 648.6,
           "atr14": 40.38,
           "stop_loss": 517.2,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6269",
@@ -3453,15 +5149,27 @@
             "外資": -1409884,
             "投信": 2000,
             "自營": -50514,
-            "合計": -1458398
+            "合計": -1458398,
+            "近5日": -10166490,
+            "近5日外資": -9559412,
+            "近5日投信": 1000,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -23.5,
+            "土洋同買": false
           },
+          "chip_tier": "weak",
           "target_short": 85.6,
           "target_mid": 59.8,
           "target_long": 74.9,
           "atr14": 5.62,
           "stop_loss": 54.5,
           "broker": null,
-          "main_force": null
+          "main_force": {
+            "score": 20.7,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         },
         {
           "id": "6412",
@@ -3483,15 +5191,33 @@
             "外資": 350500,
             "投信": 6963,
             "自營": 75689,
-            "合計": 433152
+            "合計": 433152,
+            "近5日": 281199,
+            "近5日外資": 321513,
+            "近5日投信": -20587,
+            "連買日": 1,
+            "投信連買日": 4,
+            "集中度": 2.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 100.4,
           "target_mid": 82.5,
           "target_long": 99.1,
           "atr14": 4.12,
           "stop_loss": 88.8,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "2421",
@@ -3513,15 +5239,33 @@
             "外資": 357166,
             "投信": 2000,
             "自營": 16880,
-            "合計": 376046
+            "合計": 376046,
+            "近5日": 211110,
+            "近5日外資": 76291,
+            "近5日投信": 224000,
+            "連買日": 4,
+            "投信連買日": 1,
+            "集中度": 1.8,
+            "土洋同買": true
           },
+          "chip_tier": "neutral",
           "target_short": 164.0,
           "target_mid": 168.6,
           "target_long": 170.2,
           "atr14": 6.64,
           "stop_loss": 134.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6278",
@@ -3543,15 +5287,33 @@
             "外資": -1589226,
             "投信": 889000,
             "自營": 157686,
-            "合計": -542540
+            "合計": -542540,
+            "近5日": 748683,
+            "近5日外資": -2161459,
+            "近5日投信": 2854553,
+            "連買日": 0,
+            "投信連買日": 4,
+            "集中度": 1.4,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 220.6,
           "target_mid": 184.4,
           "target_long": 226.2,
           "atr14": 13.33,
           "stop_loss": 190.3,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "3105",
@@ -3573,8 +5335,16 @@
             "外資": -544223,
             "投信": -31062,
             "自營": 311153,
-            "合計": -264132
+            "合計": -264132,
+            "近5日": -8298504,
+            "近5日外資": -2171724,
+            "近5日投信": -6275774,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -7.7,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 558.0,
           "target_mid": 616.5,
           "target_long": 571.9,
@@ -3603,15 +5373,33 @@
             "外資": -2669835,
             "投信": 1713369,
             "自營": 75924,
-            "合計": -880542
+            "合計": -880542,
+            "近5日": -116737,
+            "近5日外資": -8627504,
+            "近5日投信": 8378522,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -0.2,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 217.0,
           "target_mid": 195.5,
           "target_long": 221.3,
           "atr14": 13.41,
           "stop_loss": 178.7,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": null,
+            "label": "資料不足",
+            "reason": "no_data"
+          }
         },
         {
           "id": "6176",
@@ -3623,7 +5411,7 @@
           "signal": "HOLD",
           "ma5": 87.2,
           "ma10": 88.5,
-          "ma20": 90.49,
+          "ma20": 90.48,
           "ma60": 96.7,
           "cv_sharpe": -9.63,
           "cv_win_rate": 0.0,
@@ -3633,15 +5421,33 @@
             "外資": 2300750,
             "投信": -1469259,
             "自營": 13202,
-            "合計": 844693
+            "合計": 844693,
+            "近5日": -5987575,
+            "近5日外資": 1217630,
+            "近5日投信": -7091642,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -19.0,
+            "土洋同買": false
           },
+          "chip_tier": "neutral",
           "target_short": 98.8,
           "target_mid": 101.3,
           "target_long": 98.5,
           "atr14": 3.05,
           "stop_loss": 81.4,
-          "broker": null,
-          "main_force": null
+          "broker": {
+            "top_buyers": [],
+            "top_sellers": [],
+            "net_concentration": 0,
+            "source": null,
+            "error": "no_data"
+          },
+          "main_force": {
+            "score": 47.9,
+            "label": "（同日預覽補值）",
+            "reason": "histock_throttled"
+          }
         }
       ],
       "hot_count": 1,
@@ -3799,7 +5605,7 @@
       "detail": "RSI=71.4"
     }
   ],
-  "chart_path": "daily_reports/20260702/01_sector_strength.png",
+  "chart_path": "daily_reports\\20260702\\01_sector_strength.png",
   "failed_sectors": [],
   "partial_sectors": {
     "被動元件": 1,
@@ -3872,7 +5678,7 @@
         "entry_date": "20260623",
         "entry_price": 909.0,
         "high_watermark": 1185.0,
-        "days_since_high": 4
+        "days_since_high": 2
       },
       {
         "id": "8046",
@@ -3884,7 +5690,7 @@
         "entry_date": "20260623",
         "entry_price": 909.0,
         "high_watermark": 1185.0,
-        "days_since_high": 4
+        "days_since_high": 2
       },
       {
         "id": "6271",
