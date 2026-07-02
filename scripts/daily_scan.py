@@ -365,7 +365,14 @@ _CHIP_MAP = {
 
 
 def fetch_chip_data(stock_id, days=5):
-    """抓取三大法人近 N 日買賣超（FinMind）"""
+    """抓取三大法人買賣超（FinMind）：最新一日明細 + 近 N 日累計/連買天數。
+
+    回傳欄位（單位：股）：
+      date/外資/投信/自營/合計 — 最新一日明細
+      近5日/近5日外資/近5日投信 — N 日累計
+      連買日/投信連買日 — 自最新一日起連續買超天數
+    累計與連買欄位供籌碼分層顯示用，不影響訊號與進場閘門。
+    """
     try:
         end = datetime.now().strftime('%Y-%m-%d')
         start = (datetime.now() - timedelta(days=days + 5)).strftime('%Y-%m-%d')
@@ -373,15 +380,38 @@ def fetch_chip_data(stock_id, days=5):
         if df.empty:
             return {}
         df = df.sort_values('date', ascending=False)
-        latest_date = df['date'].iloc[0]
-        day_df = df[df['date'] == latest_date]
-        result = {'date': str(latest_date), '外資': 0, '投信': 0, '自營': 0}
-        for _, row in day_df.iterrows():
-            zh = _CHIP_MAP.get(str(row.get('name', '')))
-            if zh:
-                result[zh] += int(row.get('buy', 0) - row.get('sell', 0))
-        result['合計'] = result['外資'] + result['投信'] + result['自營']
-        return result
+
+        # 每日各類別淨額（新→舊，取近 N 個交易日）
+        daily = []
+        for d in sorted(df['date'].unique(), reverse=True)[:days]:
+            day_df = df[df['date'] == d]
+            agg = {'外資': 0, '投信': 0, '自營': 0}
+            for _, row in day_df.iterrows():
+                zh = _CHIP_MAP.get(str(row.get('name', '')))
+                if zh:
+                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0))
+            agg['合計'] = agg['外資'] + agg['投信'] + agg['自營']
+            daily.append(agg)
+
+        def _streak(key):
+            s = 0
+            for d in daily:
+                if d[key] <= 0:
+                    break
+                s += 1
+            return s
+
+        latest = daily[0]
+        return {
+            'date': str(df['date'].iloc[0]),
+            '外資': latest['外資'], '投信': latest['投信'],
+            '自營': latest['自營'], '合計': latest['合計'],
+            '近5日':     sum(d['合計'] for d in daily),
+            '近5日外資': sum(d['外資'] for d in daily),
+            '近5日投信': sum(d['投信'] for d in daily),
+            '連買日':     _streak('合計'),
+            '投信連買日': _streak('投信'),
+        }
     except Exception:
         return {}
 
@@ -394,6 +424,10 @@ def scan_sector(sector_name, stocks):
     except Exception:
         fetch_broker_top15 = None
         main_force_score = None
+    try:
+        from indicators.chip import chip_tier
+    except Exception:
+        chip_tier = None
 
     def _scan_one(sid, name):
         """單檔完整抓取：twstock 抓一次共用，再補新聞/籌碼/分點。"""
@@ -421,6 +455,20 @@ def scan_sector(sector_name, stocks):
             r['stop_loss']    = stop_price   # ATR(14) × 2 動態停損價
             r['news'] = fetch_news(sid, name, days=3)
             r['chip'] = fetch_chip_data(sid, days=5)
+
+            # 5日籌碼集中度 = 法人近5日買賣超 / 近5日總成交量（皆為股，可直除）
+            # 土洋同買 = 外資與投信近5日皆買超。兩者供籌碼分層顯示用。
+            _c = r.get('chip') or {}
+            if _c:
+                try:
+                    _v5 = [v for v in list(hist.volume)[-5:] if v] if hist is not None else []
+                    _vol5 = sum(_v5) if len(_v5) == 5 else None
+                except Exception:
+                    _vol5 = None
+                _c['集中度'] = (round(_c.get('近5日', 0) / _vol5 * 100, 1)
+                              if _vol5 else None)
+                _c['土洋同買'] = bool(_c.get('近5日外資', 0) > 0
+                                    and _c.get('近5日投信', 0) > 0)
 
             # 分點資料：只對「值得關注」的個股抓取，避免過度頻繁請求
             #   條件：BUY 訊號 或 RSI 落於 50~75 趨勢中段 或 三大法人淨買 > 0
@@ -453,6 +501,14 @@ def scan_sector(sector_name, stocks):
             else:
                 r['broker'] = None
                 r['main_force'] = None
+
+            # 籌碼分層（顯示用，不影響訊號與 passes_gate）：
+            # 集中度 × 土洋同買 × 主力分數（門檻校準見 indicators/chip.py）
+            r['chip_tier'] = chip_tier(
+                (r.get('chip') or {}).get('集中度'),
+                (r.get('chip') or {}).get('土洋同買', False),
+                (r.get('main_force') or {}).get('score'),
+            ) if chip_tier else None
             return r
         except Exception as e:
             return {'id': sid, 'name': name, 'error': str(e)}
@@ -665,6 +721,12 @@ def build_daily_payload(summary):
                 'trust': chip.get('投信', ''),
                 'dealer': chip.get('自營', ''),
                 'chipTotal': chip.get('合計', ''),
+                'chip5d': chip.get('近5日'),
+                'chipDays': chip.get('連買日'),
+                'chipConc': chip.get('集中度'),
+                'chipDualBuy': chip.get('土洋同買'),
+                'trustDays': chip.get('投信連買日'),
+                'chipTier': st.get('chip_tier'),
                 'news': ' / '.join(n['title'] for n in st.get('news', [])[:2]),
             })
             # 主力觀察資料（含 ATR 停損、分點、主力分）— 獨立給新分頁用
@@ -804,6 +866,7 @@ def build_summary(date, market, all_results, chart_path):
                     'cv_win_rate': round(r['cv_win_rate'], 2),
                     'news': r.get('news', []),
                     'chip': r.get('chip', {}),
+                    'chip_tier': r.get('chip_tier'),
                     'target_short': r.get('target_short'),
                     'target_mid':   r.get('target_mid'),
                     'target_long':  r.get('target_long'),

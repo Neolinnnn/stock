@@ -42,6 +42,37 @@ def aggregate_chip(df: pd.DataFrame, days: int = 10) -> pd.DataFrame:
     return result
 
 
+# 5 日籌碼集中度門檻（%）＝ 法人近5日買賣超 / 近5日總成交量 ×100。
+# 依 101 檔追蹤股 × 86 交易日（8,686 觀察點）分布校準：
+#   +10% ≈ P90（前 15%）、+5% ≈ P75、−10% ≈ P10；
+#   土洋同買出現率 18%、同買時集中度中位數 +8.5%。
+CONC_STRONG = 10.0   # 加持門檻（單獨集中度）
+CONC_DUAL = 5.0      # 加持門檻（搭配土洋同買時放寬）
+CONC_WEAK = -10.0    # 背離門檻
+
+
+def chip_tier(conc, dual_buy, mf_score) -> str:
+    """籌碼分層（顯示用，不進 passes_gate 閘門）。
+
+    Args:
+        conc: 5日籌碼集中度 %（法人近5日買賣超/近5日總成交量）；None 表示資料缺漏
+        dual_buy: 外資與投信近 5 日皆買超（土洋同買）
+        mf_score: 分點主力強度分數 0~100（main_force_score）；None 表示未抓/失敗
+
+    Returns:
+        'strong'  籌碼加持 — 主力分數>=55 且（集中度>=+10%，或 土洋同買且集中度>=+5%）
+        'weak'    籌碼背離 — 主力分數<45 且 集中度<=-10%
+        'neutral' 其餘（含任一資料缺漏，優雅降級不擋訊號）
+    """
+    if conc is None or mf_score is None:
+        return 'neutral'
+    if mf_score >= 55 and (conc >= CONC_STRONG or (dual_buy and conc >= CONC_DUAL)):
+        return 'strong'
+    if mf_score < 45 and conc <= CONC_WEAK:
+        return 'weak'
+    return 'neutral'
+
+
 def main_force_signal(chip_df: pd.DataFrame, df_price: pd.DataFrame) -> dict:
     """
     根據三大法人籌碼變化及股價走勢，判斷主力動向信號。

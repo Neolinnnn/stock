@@ -372,6 +372,12 @@ def build_daily_payload(summary):
                 'trust':     chip.get('投信', ''),
                 'dealer':    chip.get('自營', ''),
                 'chipTotal': chip.get('合計', ''),
+                'chip5d':    chip.get('近5日'),
+                'chipDays':  chip.get('連買日'),
+                'chipConc':  chip.get('集中度'),
+                'chipDualBuy': chip.get('土洋同買'),
+                'trustDays': chip.get('投信連買日'),
+                'chipTier':  st.get('chip_tier'),
                 'news': ' / '.join(
                     n['title'] for n in st.get('news', [])[:2]
                 ),

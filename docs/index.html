@@ -850,40 +850,13 @@ function buildDualPickHtml(data){
       每一點是一檔追蹤股：<b style="color:var(--green)">右上象限＝動能與籌碼雙強</b>；
       <span style="color:var(--yellow)">◆黃＝雙選</span>、
       <span style="color:var(--green)">●綠＝動能入選</span>、
-      <span style="color:var(--blue)">●藍＝籌碼入選</span>、灰＝其餘（點任一點看個股分析）
+      <span style="color:var(--blue)">●藍＝籌碼入選</span>、灰＝其餘（點任一點看個股分析）<br>
+      入選基準：強勢族群 ${escHtml(topSectors.join('、'))} 中，20日漲幅前3（動能）× 法人買超前3（籌碼），排除 SELL
     </div>
     ${_dualPickScatterHtml(data.stocks, momentumIds, chipIds, intersectIds)}
   </div>`;
 
-  // 完整兩欄收進 details，保持頁面乾淨
-  html += `<details class="card" style="margin-bottom:20px;padding:12px 16px;">
-    <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--blue);user-select:none;">
-      📋 完整篩選明細（強勢族群 ${escHtml(topSectors.join('、'))} ｜ 動能前3 × 籌碼前3）
-    </summary>
-    <div style="font-size:11px;color:var(--sub);margin:8px 0 10px;line-height:1.7;">
-      <b>動能篩選</b>：個股近20日漲幅最高 — 跟上強勢族群的衝刺股；
-      <b>籌碼篩選</b>：三大法人合計買超最多 — 主力正在佈局的股票；
-      <b style="color:var(--yellow)">★雙選</b>＝兩者同時入選。賣出訊號(SELL)已排除。
-    </div>
-    <div class="grid-2" style="margin-bottom:0;">
-      <div style="overflow-x:auto">
-        <div style="font-size:12px;font-weight:600;margin-bottom:6px;">📈 動能篩選</div>
-        <table>
-          <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
-          ${momentumPicks.map(s=>stockRow(s,true)).join('')}
-        </table>
-      </div>
-      <div style="overflow-x:auto">
-        <div style="font-size:12px;font-weight:600;margin-bottom:6px;">🏦 籌碼篩選</div>
-        <table>
-          <tr><th>代碼</th><th>名稱</th><th>族群</th><th>20日%</th><th>法人合計</th><th>RSI5</th><th>訊號</th></tr>
-          ${chipPicks.length ? chipPicks.map(s=>stockRow(s,true)).join('') :
-            `<tr><td colspan="7" style="color:var(--sub);padding:12px">今日強勢族群中無法人買超個股</td></tr>`}
-        </table>
-      </div>
-    </div>
-  </details>`;
-
+  // 完整明細表已移除：籌碼維度改由行動清單的分層徽章呈現，此區保留散點圖總覽
   return html;
 }
 
@@ -2328,7 +2301,10 @@ function renderDaily(data){
     window._PM_CACHE = window._PM_CACHE || {};
     qualified.forEach(q=>{ if(q.product_mix) window._PM_CACHE[q.id]=q.product_mix; });
     html+=`<div class="section-title">🎯 今日行動清單（${qualified.length} 檔）</div><div class="action-grid">`;
-    qualified.forEach(q=>{
+    // 籌碼分層排序：加持在前、背離殿後（分層僅顯示參考，不影響入選）
+    const _chipTierOf=q=>((stocks||[]).find(s=>s.id===q.id)||{}).chipTier;
+    const _chipTierRank={strong:0,weak:2};
+    [...qualified].sort((a,b)=>(_chipTierRank[_chipTierOf(a)]??1)-(_chipTierRank[_chipTierOf(b)]??1)).forEach(q=>{
       const ta=q.trend_analysis||{};
       const sig=ta.buy_signal||'—';
       const score=ta.signal_score!=null?ta.signal_score:'—';
@@ -2364,6 +2340,18 @@ function renderDaily(data){
           ${label} ${escHtml(v.state)}
         </span>`:'';
 
+      // 籌碼分層徽章（5日集中度 × 土洋同買 × 分點主力分數；顯示參考，不影響入選）
+      let chipBadge='';
+      if(stk.chipTier==='strong'||stk.chipTier==='weak'){
+        const isS=stk.chipTier==='strong';
+        const cCol=isS?'var(--green)':'var(--red)';
+        const cParts=[];
+        if(stk.chipConc!=null)cParts.push(`集中度${Number(stk.chipConc)>=0?'+':''}${fmt(stk.chipConc,1)}%`);
+        if(stk.chipDualBuy)cParts.push('土洋同買');
+        if(Number(stk.trustDays)>=2)cParts.push(`投信連買${stk.trustDays}日`);
+        chipBadge=`<span style="background:rgba(0,0,0,.25);border:1px solid ${cCol};border-radius:4px;padding:2px 8px;font-size:11px;color:${cCol};white-space:nowrap" title="集中度＝法人近5日買賣超÷近5日成交量（+10%≈前15%、-10%≈後15%，依101檔×86日校準）；土洋同買＝外資投信5日皆買超。分層僅供參考，不影響訊號與入選">${isS?'🟢 籌碼加持':'🔴 籌碼背離'}${cParts.length?' '+cParts.join('・'):''}</span>`;
+      }
+
       html+=`<div class="action-card" style="border-left-color:${borderColor}">
         <div class="ac-head">
           <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(q.id)}')" title="點擊查看個股分析">${escHtml(q.id)}</span>
@@ -2375,6 +2363,7 @@ function renderDaily(data){
         <!-- 指標訊號列 -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
           ${gradeBadge}
+          ${chipBadge}
           ${indBadge(kdjV,'KDJ')}
           ${indBadge(macdV,'MACD')}
         </div>
