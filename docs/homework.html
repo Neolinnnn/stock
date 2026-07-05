@@ -177,12 +177,66 @@ function narrativeHTML(n, pm){
     <div class="sec-title">綜合判斷</div><div class="verdict">${esc(n.verdict)}</div>`;
 }
 
+// ── 雲端產生功課：觸發 GitHub Actions（token 與主站共用，只存本機 localStorage） ──
+const GH_REPO = 'Neolinnnn/stock';
+const GH_WORKFLOW_HOMEWORK = 'homework_one.yml';
+
+async function ghDispatch(workflow, inputs) {
+  let token = localStorage.getItem('gh_token');
+  if (!token) {
+    token = (prompt('貼上 GitHub fine-grained token\n（範圍：Neolinnnn/stock，權限 Actions: Read & Write）\n只會存在本機瀏覽器') || '').trim();
+    if (!token) return false;
+    localStorage.setItem('gh_token', token);
+  }
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${workflow}/dispatches`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
+      body: JSON.stringify({ ref: 'main', inputs }),
+    });
+    if (res.status === 204) return true;
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('gh_token');
+      alert('token 無效或權限不足，已清除，請再按一次重新設定');
+      return false;
+    }
+    alert(`觸發失敗（${res.status}）：${(await res.text()).slice(0, 120)}`);
+  } catch (e) {
+    alert(`觸發失敗：${e.message}`);
+  }
+  return false;
+}
+
+async function generateHomework(btn) {
+  btn.disabled = true;
+  if (!await ghDispatch(GH_WORKFLOW_HOMEWORK, { stock_id: sid })) { btn.disabled = false; return; }
+  const status = $('#gen-status');
+  const started = Date.now();
+  status.textContent = '⏳ 已觸發，產生中…（含部署約 2–4 分鐘，完成後自動載入）';
+  const timer = setInterval(async () => {
+    const mins = Math.floor((Date.now() - started) / 60000);
+    status.textContent = `⏳ 產生中… 已等 ${mins} 分鐘（含部署約 2–4 分鐘，完成後自動載入）`;
+    try {
+      const r = await fetch(`homework/${sid}.json?t=` + Date.now(), { cache: 'no-store' });
+      if (r.ok) { clearInterval(timer); location.reload(); return; }
+    } catch {}
+    if (Date.now() - started > 8 * 60000) {
+      clearInterval(timer);
+      status.textContent = '⚠️ 超過 8 分鐘仍未完成，請到 GitHub Actions 查看 run 是否失敗';
+      btn.disabled = false;
+    }
+  }, 20000);
+}
+
 async function renderReport(){
   let d;
   try { d = await (await fetch(`homework/${sid}.json?t=` + Date.now())).json(); }
   catch(e){
-    $('#main').innerHTML = `<div class="card">找不到 ${esc(sid)} 的功課。請先執行：
-      <code style="color:var(--blue)">python scripts/fundamental_homework.py ${esc(sid)}</code></div>`;
+    $('#main').innerHTML = `<div class="card">找不到 ${esc(sid)} 的功課。
+      <button id="btn-gen" style="margin-left:8px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer">☁️ 立即產生功課</button>
+      <div id="gen-status" style="color:var(--sub);font-size:13px;margin-top:10px"></div>
+      <div style="color:var(--sub);font-size:12px;margin-top:10px">或在本機執行：<code style="color:var(--blue)">python scripts/fundamental_homework.py ${esc(sid)}</code></div></div>`;
+    $('#btn-gen').addEventListener('click', e => generateHomework(e.target));
     return;
   }
   document.title = `${d.name} ${d.stock_id}｜基本面功課`;
