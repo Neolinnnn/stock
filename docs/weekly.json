@@ -3,6 +3,14 @@
     "date": "2026-07-03",
     "days": 5
   },
+  "market": {
+    "taiex_close": 46780.62,
+    "taiex_week_pct": 4.96,
+    "otc_close": 445.38,
+    "otc_week_pct": 7.25,
+    "taiex_bull": true,
+    "taiex_ma60": 42193.2
+  },
   "changes": [
     {
       "sector": "銅箔/CCL",
@@ -104,32 +112,169 @@
   "buys": [
     {
       "stock": "8150 南茂",
-      "days": 3
+      "days": 3,
+      "tier": "strong",
+      "gate": false
     },
     {
       "stock": "6271 同欣電",
-      "days": 2
+      "days": 2,
+      "tier": "neutral",
+      "gate": false
     },
     {
       "stock": "5269 祥碩",
-      "days": 2
+      "days": 2,
+      "tier": "strong",
+      "gate": false
     },
     {
       "stock": "2441 超豐",
-      "days": 1
+      "days": 1,
+      "tier": "neutral",
+      "gate": false
     },
     {
       "stock": "3665 貿聯-KY",
-      "days": 1
+      "days": 1,
+      "tier": "neutral",
+      "gate": false
     },
     {
       "stock": "6640 均華",
-      "days": 1
+      "days": 1,
+      "tier": "neutral",
+      "gate": false
     },
     {
       "stock": "2301 光寶科",
-      "days": 1
+      "days": 1,
+      "tier": "neutral",
+      "gate": false
     }
   ],
-  "narrative": ""
+  "positions": {
+    "entries": [],
+    "exits": [],
+    "holding": [
+      {
+        "id": "2383",
+        "name": "台光電",
+        "entry_price": 5600.0,
+        "price": 6080.0,
+        "pnl_pct": 8.57,
+        "phase": 1,
+        "days_since_high": 0
+      },
+      {
+        "id": "3443",
+        "name": "創意",
+        "entry_price": 4860.0,
+        "price": 5040.0,
+        "pnl_pct": 3.7,
+        "phase": 1,
+        "days_since_high": 0
+      },
+      {
+        "id": "2441",
+        "name": "超豐",
+        "entry_price": 136.0,
+        "price": 142.0,
+        "pnl_pct": 4.41,
+        "phase": 1,
+        "days_since_high": 0
+      },
+      {
+        "id": "8046",
+        "name": "南電",
+        "entry_price": 909.0,
+        "price": 1185.0,
+        "pnl_pct": 30.36,
+        "phase": 2,
+        "days_since_high": 3
+      },
+      {
+        "id": "6271",
+        "name": "同欣電",
+        "entry_price": 251.5,
+        "price": 279.0,
+        "pnl_pct": 10.93,
+        "phase": 1,
+        "days_since_high": 0
+      }
+    ]
+  },
+  "alerts": [
+    {
+      "id": "2243",
+      "name": "怡利電",
+      "type": "RSI過熱",
+      "days": 5,
+      "detail": "RSI=89.0"
+    },
+    {
+      "id": "6213",
+      "name": "聯茂",
+      "type": "RSI過熱",
+      "days": 5,
+      "detail": "RSI=83.0"
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "type": "RSI過熱",
+      "days": 4,
+      "detail": "RSI=74.5"
+    },
+    {
+      "id": "3711",
+      "name": "日月光投控",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=83.9"
+    },
+    {
+      "id": "5443",
+      "name": "均豪",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=71.6"
+    },
+    {
+      "id": "2345",
+      "name": "智邦",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=76.8"
+    },
+    {
+      "id": "8069",
+      "name": "元太",
+      "type": "RSI過熱",
+      "days": 2,
+      "detail": "RSI=75.8"
+    },
+    {
+      "id": "3189",
+      "name": "景碩",
+      "type": "RSI過熱",
+      "days": 2,
+      "detail": "RSI=78.8"
+    },
+    {
+      "id": "2327",
+      "name": "國巨",
+      "type": "RSI過熱",
+      "days": 2,
+      "detail": "RSI=70.1"
+    },
+    {
+      "id": "3680",
+      "name": "家登",
+      "type": "RSI過熱",
+      "days": 2,
+      "detail": "RSI=71.6"
+    }
+  ],
+  "narrative": "**本週輪動回顧**\n本週台股表現強勁，加權指數上漲4.96%，櫃買指數更是大漲7.25%，顯示市場資金活絡。族群輪動加速，前週表現平淡或疲弱的族群本週大放異彩。銅箔/CCL、封測、車用電子為本週領漲三強，分別有14.79%、13.71%、12.11%的漲幅，並從前期的盤整或下跌轉為加速上攻。CoPoS封裝、ABF載板等先進封裝相關族群也呈現強勁的補漲行情。被動元件、封測與CoPoS封裝更是上演V型反轉，顯示資金快速回補。相比之下，AI伺服器、記憶體與光學等前波強勢族群則明顯轉弱，漲勢進入休息。\n\n**下週聚焦**\n展望下週，市場資金可望持續在產業景氣觸底反彈的族群中尋找機會。本週展現強勁反彈動能且加速的「銅箔/CCL」、「封測」、「車用電子」將是主要焦點，其中台光電(2383)、南茂(8150)、超豐(2441)、同欣電(6271)均有持股或法人買超訊號，值得留意。「ABF載板」在南電(8046)領軍下，動能亦不容小覷。此外，從谷底翻揚的「CoPoS封裝」及「被動元件」族群，如均華(6640)、國巨(2327)，在產業基本面有望改善下，可望延續其反彈氣勢。\n\n**風險提醒**\n在市場熱度升溫之際，投資人需留意部分個股RSI過熱的風險。本週警示清單中，怡利電(2243)、聯茂(6213)、南電(8046)、日月光投控(3711)等強勢股已出現RSI過熱訊號，操作上應避免追高，並嚴設停損點。同時，前波強勢的「光學」、「AI伺服器」、「記憶體」及「AI散熱」族群本週已進入降溫或轉弱區塊，短期內可能面臨修正壓力，建議避開此類資金撤出的族群，將重心轉往本週強勢且有基本面支撐的輪動族群。"
 }

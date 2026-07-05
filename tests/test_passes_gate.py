@@ -69,3 +69,18 @@ def test_combined_gate():
                        sector_strong=True, max_bias_ma10=2.0) is False
     assert passes_gate(_stock(), taiex_bull=True,
                        sector_strong=False, max_bias_ma10=2.0) is False
+
+
+# ── update_positions：同日同檔跨族群重複 gate_buys 只建一筆 ──────────────────
+import position_tracker
+
+
+def test_update_positions_dedupes_same_day_gate_buys(tmp_path, monkeypatch):
+    monkeypatch.setattr(position_tracker, 'POSITIONS_FILE',
+                        tmp_path / 'positions.json')
+    dup = {'id': '2383', 'name': '台光電', 'price': 5200.0}
+    result = position_tracker.update_positions(
+        '20260617', scan_lookup={}, taiex_bull=True,
+        gate_buys=[dup, dict(dup)])
+    assert len(result['state']['open']) == 1
+    assert len(result['new_entries']) == 1

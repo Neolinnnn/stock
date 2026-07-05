@@ -201,10 +201,11 @@ def update_positions(today: str, scan_lookup: dict, taiex_bull: bool,
         else:
             still_open.append(pos)
 
-    # 3) 新閘門 BUY → 加入 pending_entry（排除已持倉）
+    # 3) 新閘門 BUY → 加入 pending_entry（排除已持倉；同檔跨族群重複入選只計一次）
     for b in gate_buys:
         if b['id'] in held_ids:
             continue
+        held_ids.add(b['id'])
         still_open.append({
             'id':     b['id'],
             'name':   b.get('name', b['id']),

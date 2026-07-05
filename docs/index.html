@@ -2352,6 +2352,16 @@ function renderDaily(data){
         chipBadge=`<span style="background:rgba(0,0,0,.25);border:1px solid ${cCol};border-radius:4px;padding:2px 8px;font-size:11px;color:${cCol};white-space:nowrap" title="集中度＝法人近5日買賣超÷近5日成交量（+10%≈前15%、-10%≈後15%，依101檔×86日校準）；土洋同買＝外資投信5日皆買超。分層僅供參考，不影響訊號與入選">${isS?'🟢 籌碼加持':'🔴 籌碼背離'}${cParts.length?' '+cParts.join('・'):''}</span>`;
       }
 
+      // 乖離 MA10 分層徽章（入選門檻已固定 ≤2%；此處僅將通過者細分貼近程度供參考）
+      let biasBadge='';
+      if(q.bias_ma10!=null){
+        const b=Number(q.bias_ma10);
+        const isDeep=b<=0;
+        const bCol=isDeep?'var(--green)':'var(--yellow)';
+        const bLbl=isDeep?'貼均線下緣':'貼均線';
+        biasBadge=`<span style="background:rgba(0,0,0,.25);border:1px solid ${bCol};border-radius:4px;padding:2px 8px;font-size:11px;color:${bCol};white-space:nowrap" title="乖離 MA10＝(現價-MA10)/MA10；回測顯示乖離≤2%整體勝率27%、疊族群強勢達38%（daily_scan.py MAX_BIAS_MA10），此徽章僅細分入選後貼近程度，不影響入選">📐 ${bLbl} ${b>=0?'+':''}${b.toFixed(1)}%</span>`;
+      }
+
       html+=`<div class="action-card" style="border-left-color:${borderColor}">
         <div class="ac-head">
           <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(q.id)}')" title="點擊查看個股分析">${escHtml(q.id)}</span>
@@ -2364,6 +2374,7 @@ function renderDaily(data){
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
           ${gradeBadge}
           ${chipBadge}
+          ${biasBadge}
           ${indBadge(kdjV,'KDJ')}
           ${indBadge(macdV,'MACD')}
         </div>
@@ -2811,6 +2822,9 @@ function renderWeekly(){
     return;
   }
   const {meta,changes,buys,narrative}=WEEKLY_DATA;
+  const wkMarket=WEEKLY_DATA.market||null;
+  const wkPos=WEEKLY_DATA.positions||null;
+  const wkAlerts=WEEKLY_DATA.alerts||[];
   let html='';
   // 第一層 · 本週敘事（narrative 為空則隱藏）
   if(narrative && narrative.trim()){
@@ -2819,11 +2833,25 @@ function renderWeekly(){
       <div style="white-space:pre-wrap;line-height:1.7;font-size:13px;margin-top:6px">${escHtml(narrative)}</div>
     </div>`;
   }
-  html+=`
-  <div class="grid-4" style="grid-template-columns:repeat(2,1fr)">
-    <div class="card"><div class="card-title">週報日期</div><div class="card-value" style="font-size:18px">${meta.date||'—'}</div></div>
-    <div class="card"><div class="card-title">涵蓋交易日</div><div class="card-value">${meta.days||'—'} 日</div></div>
-  </div>`;
+  // 市場總覽（舊版 weekly.json 無 market 時退回兩卡）
+  if(wkMarket){
+    const twp=wkMarket.taiex_week_pct, owp=wkMarket.otc_week_pct;
+    const gate=wkMarket.taiex_bull==null?'—':wkMarket.taiex_bull?'🟢 多頭':'🔴 空頭';
+    const gateSub=wkMarket.taiex_ma60!=null?`60MA ${Number(wkMarket.taiex_ma60).toLocaleString(undefined,{maximumFractionDigits:0})}`:'';
+    html+=`
+    <div class="grid-4">
+      <div class="card"><div class="card-title">週報日期</div><div class="card-value" style="font-size:16px">${meta.date||'—'}</div><div style="font-size:11px;color:var(--sub)">涵蓋 ${meta.days||'—'} 個交易日</div></div>
+      <div class="card"><div class="card-title">加權指數</div><div class="card-value" style="font-size:16px">${wkMarket.taiex_close!=null?Number(wkMarket.taiex_close).toLocaleString():'—'}</div><div class="${signColor(twp)}" style="font-size:12px">${twp!=null?'本週 '+sign(twp)+fmt(twp,2)+'%':''}</div></div>
+      <div class="card"><div class="card-title">櫃買指數</div><div class="card-value" style="font-size:16px">${wkMarket.otc_close!=null?fmt(wkMarket.otc_close,2):'—'}</div><div class="${signColor(owp)}" style="font-size:12px">${owp!=null?'本週 '+sign(owp)+fmt(owp,2)+'%':''}</div></div>
+      <div class="card"><div class="card-title">多空閘門</div><div class="card-value" style="font-size:16px">${gate}</div><div style="font-size:11px;color:var(--sub)">${gateSub}</div></div>
+    </div>`;
+  }else{
+    html+=`
+    <div class="grid-4" style="grid-template-columns:repeat(2,1fr)">
+      <div class="card"><div class="card-title">週報日期</div><div class="card-value" style="font-size:18px">${meta.date||'—'}</div></div>
+      <div class="card"><div class="card-title">涵蓋交易日</div><div class="card-value">${meta.days||'—'} 日</div></div>
+    </div>`;
+  }
   // 第二層 · 族群輪動（水位 × 本週動能）
   html+=`<div class="section-title">族群輪動（水位 × 本週動能）</div><div class="card"><table>
     <tr><th>族群</th><th>狀態</th><th>水位</th><th>本週變化</th><th>vs 上週</th></tr>`;
@@ -2870,7 +2898,8 @@ function renderWeekly(){
         <span class="ac-sig" style="color:${sigColor}">${sigText}</span>
       </div>
       <div class="ac-prices">
-        <div class="ac-price-item"><span class="ac-price-lbl">本週入選</span><span class="ac-price-val" style="font-weight:600">${b.days} 次</span></div>
+        <div class="ac-price-item"><span class="ac-price-lbl">本週入選</span><span class="ac-price-val" style="font-weight:600">${b.days} 次${b.gate?' ✅閘門':''}</span></div>
+        <div class="ac-price-item"><span class="ac-price-lbl">籌碼層</span><span class="ac-price-val" style="font-weight:600;color:${b.tier==='strong'?'var(--green)':b.tier==='weak'?'var(--red)':'var(--sub)'}">${b.tier==='strong'?'強':b.tier==='weak'?'弱':b.tier==='neutral'?'中':'—'}</span></div>
         <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${d.price!=null?fmt(d.price,1):'—'}</span></div>
         <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${d.rsi!=null?`<span class="rsi-dot ${rsiDot(rsi)}"></span>`+fmt(rsi,1):'—'}</span></div>
         <div class="ac-price-item"><span class="ac-price-lbl">法人合計</span><span class="ac-price-val ${chipN>=0?'chip-pos':'chip-neg'}" style="font-weight:600">${d.chipTotal!=null?sign(chipN)+chipN.toLocaleString():'—'}</span></div>
@@ -2878,6 +2907,40 @@ function renderWeekly(){
     </div>`;
   });
   html+=`</div>`;
+  // 持倉週記（舊版 weekly.json 無 positions 時隱藏）
+  if(wkPos){
+    const ent=wkPos.entries||[], ext=wkPos.exits||[], hold=wkPos.holding||[];
+    html+=`<div class="section-title">📒 持倉週記</div><div class="card">`;
+    html+=`<div style="font-size:13px;line-height:1.9">`;
+    html+=`<div><b>本週新進場：</b>${ent.length?ent.map(e=>`${escHtml(e.id)} ${escHtml(e.name)}`).join('、'):'無'}</div>`;
+    html+=`<div><b>本週出場：</b>${ext.length?ext.map(x=>`${escHtml(x.id)} ${escHtml(x.name)}（<span class="${signColor(x.return_pct)}">${sign(x.return_pct)}${fmt(x.return_pct,1)}%</span>・${escHtml(x.exit_reason||'')}）`).join('、'):'無'}</div>`;
+    html+=`</div>`;
+    if(hold.length){
+      html+=`<table style="margin-top:8px"><tr><th>持有中</th><th>進場價</th><th>現價</th><th>未實現</th><th>Phase</th><th>距高點</th></tr>`;
+      hold.forEach(h=>{
+        html+=`<tr><td>${escHtml(h.id)} ${escHtml(h.name)}</td>
+          <td>${h.entry_price!=null?fmt(h.entry_price,1):'—'}</td>
+          <td>${h.price!=null?fmt(h.price,1):'—'}</td>
+          <td class="${signColor(h.pnl_pct)}">${h.pnl_pct!=null?sign(h.pnl_pct)+fmt(h.pnl_pct,1)+'%':'—'}</td>
+          <td>${h.phase!=null?'P'+h.phase:'—'}</td>
+          <td>${h.days_since_high!=null?h.days_since_high+' 天':'—'}</td></tr>`;
+      });
+      html+=`</table>`;
+    }else{
+      html+=`<div style="font-size:13px;margin-top:6px"><b>持有中：</b>無</div>`;
+    }
+    html+=`</div>`;
+  }
+  // 風險警示（週內累計）
+  if(wkAlerts.length){
+    html+=`<div class="section-title" style="color:var(--yellow)">⚠️ 風險警示（週內累計）</div><div class="card"><table>
+      <tr><th>股票</th><th>類型</th><th>週內天數</th><th>最新數值</th></tr>`;
+    wkAlerts.forEach(a=>{
+      html+=`<tr><td>${escHtml(a.id)} ${escHtml(a.name)}</td><td>${escHtml(a.type)}</td>
+        <td>${a.days} 天</td><td>${escHtml(a.detail||'')}</td></tr>`;
+    });
+    html+=`</table></div>`;
+  }
   // 本週退燒觀察（複用 daily.json 的 signalFlips）
   const flips=(DAILY_DATA && DAILY_DATA.signalFlips)?DAILY_DATA.signalFlips:[];
   if(flips.length){
