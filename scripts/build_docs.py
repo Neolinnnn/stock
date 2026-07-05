@@ -428,8 +428,26 @@ def build_daily_payload(summary):
             'price':     q.get('price', ''),
             'rsi':       q.get('rsi', ''),
             'cv_sharpe': q.get('cv_sharpe', ''),
+            'bias_ma10': q.get('bias_ma10'),
         }
         for q in summary.get('qualified', [])
+    ]
+    qualified_ids = {q['id'] for q in qualified}
+    # 雙篩選命中但未進今日行動清單者（乖離率或族群強勢閘門未過）─供前端分層顯示用
+    dual_filter_excluded = [
+        {
+            'sector':       d.get('sector', ''),
+            'id':           d.get('id', ''),
+            'name':         d.get('name', ''),
+            'price':        d.get('price', ''),
+            'rsi':          d.get('rsi', ''),
+            'cv_sharpe':    d.get('cv_sharpe', ''),
+            'bias_ma10':    d.get('bias_ma10'),
+            'sector_strong': d.get('sector_strong'),
+            'passes_bias':  d.get('passes_bias'),
+        }
+        for d in summary.get('dual_filter', [])
+        if d.get('id') not in qualified_ids
     ]
     main_force_sorted = sorted(
         main_force,
@@ -539,6 +557,7 @@ def build_daily_payload(summary):
             '部分失敗族群': summary.get('partial_sectors', {}),
         },
         'qualified': qualified,
+        'dualFilterExcluded': dual_filter_excluded,
         'sectors': sectors,
         'chips':   sorted(chips, key=lambda x: x['total'], reverse=True),
         'stocks':  stocks,

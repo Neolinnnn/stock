@@ -820,8 +820,10 @@ def build_summary(date, market, all_results, chart_path):
     sectors_summary = {}
     all_strong = []  # 強勢股
     all_weak = []    # 弱勢股
-    all_qualified = []  # 雙條件達標
+    all_qualified = []  # 雙條件達標（含乖離率＋族群強勢閘門，目前行動清單使用）
     _qualified_seen = set()  # 去重：同一個股只列一次
+    all_dual_filter = []  # 雙篩選命中（僅 BUY+cv_sharpe+cv_win_rate+cv_max_dd，未套乖離率/族群閘門）
+    _dual_filter_seen = set()
     all_alerts = []  # 風險警示
     failed_sectors = []   # 全部個股 API 失敗，整族群被跳過
     partial_sectors = {}  # 部分個股失敗 {sector: 失敗數}
@@ -896,7 +898,8 @@ def build_summary(date, market, all_results, chart_path):
                    (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
                    (_bias_ma10 <= MAX_BIAS_MA10)]
         # 族群非強勢時，整族群不納入推薦（regime 閘門）
-        if REQUIRE_STRONG_SECTOR and not (avg_ret > 3):
+        sector_strong = bool(avg_ret > 3)
+        if REQUIRE_STRONG_SECTOR and not sector_strong:
             final = final.iloc[0:0]
         for _, r in final.iterrows():
             if r['id'] in _qualified_seen:
@@ -907,6 +910,26 @@ def build_summary(date, market, all_results, chart_path):
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
                 'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
+            })
+
+        # 雙篩選命中（舊邏輯：BUY + cv_sharpe/cv_win_rate/cv_max_dd，不含乖離率與族群強勢閘門）
+        # 用來讓前端分層顯示「加乖離率篩選前 vs 後」剩下哪些
+        dual_hit = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
+                      (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2)]
+        for _, r in dual_hit.iterrows():
+            if r['id'] in _dual_filter_seen:
+                continue
+            _dual_filter_seen.add(r['id'])
+            bias_v = round(float(_bias_ma10.loc[r.name]), 1)
+            passes_bias = bias_v <= MAX_BIAS_MA10
+            all_dual_filter.append({
+                'sector': sector, 'id': r['id'], 'name': r['name'],
+                'price': r['price'], 'rsi': round(r['rsi'], 1),
+                'cv_sharpe': round(r['cv_sharpe'], 2),
+                'bias_ma10': bias_v,
+                'sector_strong': sector_strong,
+                'passes_bias': passes_bias,
+                'passes_all': passes_bias and (sector_strong if REQUIRE_STRONG_SECTOR else True),
             })
 
         # 風險警示
@@ -928,6 +951,7 @@ def build_summary(date, market, all_results, chart_path):
         'strong_sectors': all_strong,
         'weak_sectors': all_weak,
         'qualified': all_qualified,
+        'dual_filter': all_dual_filter,
         'alerts': all_alerts,
         'chart_path': chart_path,
         'failed_sectors': failed_sectors,

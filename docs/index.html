@@ -2407,6 +2407,45 @@ function renderDaily(data){
     html+=`</div>`;
   }
 
+  // ── 雙篩選分層：舊邏輯（BUY+cv_sharpe+cv_win_rate+cv_max_dd）命中、
+  //    但被乖離率/族群強勢閘門擋在今日行動清單外者 ──────────────────────────
+  const dfExcluded = data.dualFilterExcluded || [];
+  if (dfExcluded.length) {
+    html += `<details style="margin:14px 0;">
+      <summary class="section-title" style="cursor:pointer;color:var(--sub);display:inline-block">
+        📋 雙篩選命中、未進今日行動清單（${dfExcluded.length} 檔）
+      </summary>
+      <div style="font-size:11px;color:var(--sub);margin:6px 0 10px;">
+        這些個股符合舊版雙篩選（BUY + CV夏普≥0.3 + CV勝率≥0.4 + 回撤≤20%），
+        但加上乖離率/族群強勢閘門後被排除，僅供參考，不建議進場。
+      </div>
+      <div class="action-grid">
+        ${dfExcluded.map(d => {
+          const failBias = d.passes_bias === false;
+          const failSector = d.sector_strong === false;
+          const reasons2 = [];
+          if (failBias) reasons2.push(`乖離MA10 ${d.bias_ma10 != null ? (d.bias_ma10 >= 0 ? '+' : '') + d.bias_ma10 + '%' : '—'}（超過 2%）`);
+          if (failSector) reasons2.push('所屬族群非強勢');
+          return `<div class="action-card" style="border-left:3px solid var(--sub);opacity:.85">
+            <div class="ac-head">
+              <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(d.id)}')" title="點擊查看個股分析">${escHtml(d.id)}</span>
+              <span class="ac-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(d.id)}')" title="點擊查看個股分析">${escHtml(d.name)}</span>
+              <span class="ac-sector">${escHtml(d.sector)}</span>
+            </div>
+            <div class="ac-prices">
+              <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(d.price,1)}</span></div>
+              <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${fmt(d.rsi,1)}</span></div>
+              <div class="ac-price-item"><span class="ac-price-lbl">CV夏普</span><span class="ac-price-val" style="font-weight:600">${fmt(d.cv_sharpe,2)}</span></div>
+            </div>
+            <div class="ac-reasons">
+              ${reasons2.map(r => `<span style="color:var(--yellow)">⚠ 未列入原因：${escHtml(r)}</span>`).join('<br>')}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </details>`;
+  }
+
   // ── 買轉弱觀察：近5日曾入選、今日掉出清單的個股 ──────────────────────────
   const flips=data.signalFlips||[];
   if(flips.length){
