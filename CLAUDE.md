@@ -93,6 +93,17 @@ stock_research/
 - 報告內文、市場分析、個股敘述 → **Gemini 生成**
 - 架構圖、流程規劃、資料結構設計 → **Claude 負責**
 
+---
+
+## 網頁上線流程（測試版 → 正式版）
+
+**新功能或改動主站頁面時，一律先進測試版，驗證後才進正式版。**
+
+- **測試版**：`docs/preview.html`（index.html 的沙盒副本）。新分頁、新導覽入口、UI 改動先加在這裡。
+- **正式版**：`docs/index.html` 及其他正式頁面。只放已在測試版驗證過的功能。
+- 流程：改 preview.html → push 部署 → 使用者在線上測試版確認 OK → 才把改動搬進 index.html。
+- 新增獨立頁面（如 homework.html、backtest.html）本體可直接上，但**導覽入口**同樣先加 preview.html，驗證後再加 index.html。
+
 # AI Behavior Guidelines (by Andrej Karpathy)
 
 Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
