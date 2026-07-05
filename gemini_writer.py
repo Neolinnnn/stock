@@ -65,6 +65,30 @@ PROMPTS = {
   "updated_at": "{date}"
 }}
 {extra}""",
+
+    "fundamental_homework": """你是台股基本面研究員，請為以下公司做一份「基本面功課」的質性研究。請搜尋該公司最新的法說會、年報、季報、新聞稿。
+
+公司與量化數據：
+{data}
+資料日期：{date}
+
+請整理：
+1. business：公司在做什麼、主要產品線與商業模式（3-4 句）
+2. customers / competitors：主要客戶與主要競爭對手（各 2-4 個，每個附一句定位說明）
+3. catalysts：近期題材與成長催化（2-4 條，每條一句）
+4. risks：三大風險（每條一句）
+5. verdict：綜合判斷（2-3 句），必須引用上面提供的量化數據（如營收 YoY、毛利率走勢、PE 百分位）佐證
+
+請嚴格以 JSON 格式回覆（不含 markdown code block，直接輸出純 JSON）：
+{{
+  "business": "業務說明",
+  "customers": ["客戶：定位說明"],
+  "competitors": ["競爭者：定位說明"],
+  "catalysts": ["題材1"],
+  "risks": ["風險1", "風險2", "風險3"],
+  "verdict": "綜合判斷"
+}}
+{extra}""",
 }
 
 # 503/429 可重試的狀態碼

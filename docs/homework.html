@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>基本面功課</title>
+<style>
+  :root {
+    --bg:#0b0e14; --card:#161a22; --border:#272c37;
+    --text:#e8eaed; --sub:#8b93a3; --green:#2ecc71;
+    --red:#e74c3c; --yellow:#f1b143; --blue:#4ea1f3;
+    --accent:#3d8bfd; --accent2:#7c5cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-size:14px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  header{background:rgba(17,21,29,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50;
+    border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  header h1{font-size:17px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  header a{color:var(--sub);text-decoration:none;font-size:13px;}
+  header a:hover{color:var(--text);}
+  main{padding:20px 24px;max-width:1100px;margin:0 auto;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+  .card h2{font-size:13px;color:var(--sub);letter-spacing:.5px;margin-bottom:12px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:800px){.grid-2{grid-template-columns:1fr;}}
+
+  .score-hero{display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .score-ring{width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;flex-shrink:0;}
+  .stock-title{font-size:22px;font-weight:700;}
+  .stock-meta{color:var(--sub);font-size:12px;margin-top:4px;}
+
+  .check-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:baseline;}
+  .check-item:last-child{border-bottom:none;}
+  .check-dot{font-size:14px;flex-shrink:0;}
+  .check-label{font-weight:600;min-width:150px;}
+  .check-note{color:var(--sub);font-size:13px;}
+
+  .kv{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--sub);}
+  .chart-box{height:220px;}
+  .narrative p{line-height:1.75;margin-bottom:10px;}
+  .narrative ul{padding-left:20px;line-height:1.8;color:var(--text);}
+  .narrative .sec-title{font-size:12px;color:var(--sub);margin:14px 0 6px;letter-spacing:.5px;}
+  .verdict{background:#1b2029;border-left:3px solid var(--accent);padding:12px 14px;border-radius:0 8px 8px 0;line-height:1.75;}
+  .err{color:var(--yellow);}
+  .pill{display:inline-block;background:#1e2330;border:1px solid var(--border);border-radius:20px;
+    padding:3px 12px;font-size:12px;margin:0 6px 6px 0;}
+  table.mix{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
+  table.mix td,table.mix th{padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:13px;}
+  table.mix th{color:var(--sub);font-weight:500;}
+
+  .idx-item{display:flex;justify-content:space-between;align-items:center;padding:11px 4px;
+    border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);}
+  .idx-item:hover{background:#1b2029;}
+  .idx-score{font-weight:700;font-variant-numeric:tabular-nums;}
+  #search{width:100%;background:#13161d;color:var(--text);border:1px solid var(--border);
+    border-radius:8px;padding:9px 12px;font-size:14px;margin-bottom:12px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>📚 基本面功課</h1>
+  <a href="index.html">← 回主站</a>
+</header>
+<main id="main"><div class="card" id="loading">載入中…</div></main>
+
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const sid = new URLSearchParams(location.search).get('sid');
+const COLORS = {green:'#2ecc71', yellow:'#f1b143', red:'#e74c3c', gray:'#8b93a3'};
+const DOTS = {green:'🟢', yellow:'🟡', red:'🔴', gray:'⚪'};
+const fmt = v => v == null ? '—' : v.toLocaleString('zh-TW');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function scoreColor(s){ return s == null ? COLORS.gray : s >= 70 ? COLORS.green : s >= 45 ? COLORS.yellow : COLORS.red; }
+
+// ── 首頁：功課清單 ──────────────────────────────────────────────────────────
+async function renderIndex(){
+  let items = [];
+  try { items = await (await fetch('homework/index.json?t=' + Date.now())).json(); } catch(e){}
+  const list = items.map(i => `
+    <a class="idx-item" href="homework.html?sid=${esc(i.stock_id)}">
+      <span>${esc(i.name)} <span style="color:var(--sub)">${esc(i.stock_id)}</span></span>
+      <span><span style="color:var(--sub);font-size:12px;margin-right:12px">${esc(i.generated_at || '')}</span>
+      <span class="idx-score" style="color:${scoreColor(i.score)}">${i.score ?? '—'}</span></span>
+    </a>`).join('');
+  $('#main').innerHTML = `
+    <div class="card">
+      <h2>已完成功課（${items.length}）</h2>
+      <input id="search" placeholder="輸入代號直接開功課，例：2330" />
+      ${list || '<div style="color:var(--sub)">尚無功課。執行 python scripts/fundamental_homework.py 2330 產生。</div>'}
+    </div>`;
+  $('#search').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.value.trim()) location.href = 'homework.html?sid=' + e.target.value.trim();
+  });
+}
+
+// ── 報告頁 ──────────────────────────────────────────────────────────────────
+function mkChart(el){
+  return LightweightCharts.createChart(el, {
+    layout:{background:{color:'transparent'}, textColor:'#8b93a3', fontSize:11},
+    grid:{vertLines:{color:'#1c212b'}, horzLines:{color:'#1c212b'}},
+    rightPriceScale:{borderColor:'#272c37'}, timeScale:{borderColor:'#272c37'},
+    height:220, autoSize:true,
+  });
+}
+
+function revenueChart(rev){
+  if (!rev || !rev.month) return;
+  const chart = mkChart($('#rev-chart'));
+  const bars = rev.month.map((m,i) => ({
+    time: m.slice(0,4)+'-'+m.slice(4)+'-01',
+    value: rev.revenue[i]/1e8,
+    color: (rev.yoy[i] ?? 0) >= 0 ? 'rgba(46,204,113,.55)' : 'rgba(231,76,60,.55)',
+  }));
+  chart.addHistogramSeries({priceFormat:{type:'volume'}}).setData(bars);
+  const yoy = rev.month.map((m,i) => rev.yoy[i] == null ? null :
+    ({time: m.slice(0,4)+'-'+m.slice(4)+'-01', value: rev.yoy[i]})).filter(Boolean);
+  chart.addLineSeries({color:'#f1b143', lineWidth:2, priceScaleId:'left'}).setData(yoy);
+  chart.priceScale('left').applyOptions({visible:true, borderColor:'#272c37'});
+  chart.timeScale().fitContent();
+}
+
+function qTime(q){ // '2024Q1' → '2024-03-31'
+  const y = q.slice(0,4), n = +q.slice(5);
+  return `${y}-${String(n*3).padStart(2,'0')}-28`;
+}
+
+function marginChart(margins, eps){
+  if (!margins && !eps) return;
+  const chart = mkChart($('#margin-chart'));
+  if (margins && margins.quarter){
+    const line = (key, color) => {
+      const data = margins.quarter.map((q,i) => margins[key][i] == null ? null :
+        ({time:qTime(q), value:margins[key][i]})).filter(Boolean);
+      if (data.length) chart.addLineSeries({color, lineWidth:2}).setData(data);
+    };
+    line('gross_margin','#2ecc71'); line('operating_margin','#7c5cff'); line('net_margin','#4ea1f3');
+  }
+  if (eps && eps.quarter){
+    const bars = eps.quarter.map((q,i) => eps.eps[i] == null ? null : ({
+      time:qTime(q), value:eps.eps[i],
+      color: eps.eps[i] >= 0 ? 'rgba(46,204,113,.5)' : 'rgba(231,76,60,.5)',
+    })).filter(Boolean);
+    if (bars.length){
+      chart.addHistogramSeries({priceScaleId:'left'}).setData(bars);
+      chart.priceScale('left').applyOptions({visible:true, borderColor:'#272c37'});
+    }
+  }
+  chart.timeScale().fitContent();
+}
+
+function narrativeHTML(n, pm){
+  if (!n) return '<div class="err">無質性研究資料</div>';
+  if (n.error) return `<div class="err">${esc(n.error)}</div>`;
+  const list = arr => (arr||[]).map(x => `<li>${esc(x)}</li>`).join('');
+  let mix = '';
+  if (pm && pm.product_lines && pm.product_lines.length){
+    mix = `<div class="sec-title">產品組合（enrich_product_mix）</div>
+      <table class="mix"><tr><th>產品線</th><th>營收占比</th><th>年增率</th></tr>
+      ${pm.product_lines.map(l => `<tr><td>${esc(l.name)}</td><td>${l.share_pct}%</td>
+        <td>${l.yoy_growth == null ? '—' : l.yoy_growth + '%'}</td></tr>`).join('')}</table>`;
+  }
+  return `
+    <p>${esc(n.business)}</p>
+    ${mix}
+    <div class="sec-title">主要客戶</div><div>${(n.customers||[]).map(c=>`<span class="pill">${esc(c)}</span>`).join('')}</div>
+    <div class="sec-title">競爭對手</div><div>${(n.competitors||[]).map(c=>`<span class="pill">${esc(c)}</span>`).join('')}</div>
+    <div class="sec-title">題材催化</div><ul>${list(n.catalysts)}</ul>
+    <div class="sec-title">風險</div><ul>${list(n.risks)}</ul>
+    <div class="sec-title">綜合判斷</div><div class="verdict">${esc(n.verdict)}</div>`;
+}
+
+async function renderReport(){
+  let d;
+  try { d = await (await fetch(`homework/${sid}.json?t=` + Date.now())).json(); }
+  catch(e){
+    $('#main').innerHTML = `<div class="card">找不到 ${esc(sid)} 的功課。請先執行：
+      <code style="color:var(--blue)">python scripts/fundamental_homework.py ${esc(sid)}</code></div>`;
+    return;
+  }
+  document.title = `${d.name} ${d.stock_id}｜基本面功課`;
+  const sc = scoreColor(d.score);
+  const v = d.valuation || {}, c = d.chip || {};
+  $('#main').innerHTML = `
+    <div class="card score-hero">
+      <div class="score-ring" style="border:5px solid ${sc};color:${sc}">${d.score ?? '—'}</div>
+      <div>
+        <div class="stock-title">${esc(d.name)} <span style="color:var(--sub);font-size:15px">${esc(d.stock_id)}</span></div>
+        <div class="stock-meta">功課日期 ${esc(d.generated_at)}｜綜合分數 0–100，依 8 條檢查清單加權</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><h2>✅ 檢查清單</h2>${(d.checklist||[]).map(i => `
+        <div class="check-item"><span class="check-dot">${DOTS[i.status]}</span>
+          <span class="check-label">${esc(i.label)}</span>
+          <span class="check-note">${esc(i.note)}</span></div>`).join('')}
+      </div>
+      <div class="card"><h2>💰 估值與籌碼</h2>
+        <div class="kv"><span class="k">本益比 PE</span><span>${v.per ?? '—'}${v.pe_percentile != null ? `（近5年第 ${v.pe_percentile} 百分位）` : ''}</span></div>
+        <div class="kv"><span class="k">股價淨值比 PB</span><span>${v.pbr ?? '—'}${v.pb_percentile != null ? `（第 ${v.pb_percentile} 百分位）` : ''}</span></div>
+        <div class="kv"><span class="k">殖利率</span><span>${v.dividend_yield != null ? v.dividend_yield + '%' : '—'}</span></div>
+        <div class="kv"><span class="k">法人 20 日淨買超</span><span style="color:${(c.net20??0)>=0?COLORS.green:COLORS.red}">${fmt(c.net20)} 張</span></div>
+        <div class="kv"><span class="k">法人 60 日淨買超</span><span style="color:${(c.net60??0)>=0?COLORS.green:COLORS.red}">${fmt(c.net60)} 張</span></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><h2>📈 月營收（億）與 YoY%（黃線）</h2><div id="rev-chart" class="chart-box"></div></div>
+      <div class="card"><h2>📊 三率%（線）與季 EPS（柱，左軸）</h2><div id="margin-chart" class="chart-box"></div></div>
+    </div>
+    <div class="card narrative"><h2>🔍 質性研究（Gemini + Google Search）</h2>
+      ${narrativeHTML(d.narrative, d.product_mix)}</div>`;
+  revenueChart(d.revenue);
+  marginChart(d.margins, d.eps);
+}
+
+sid ? renderReport() : renderIndex();
+</script>
+</body>
+</html>
