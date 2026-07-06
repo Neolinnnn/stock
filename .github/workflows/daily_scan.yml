@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
     steps:
@@ -135,6 +136,7 @@ jobs:
         run: python scripts/coverage_report.py
 
       - name: Commit reports
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -149,7 +151,11 @@ jobs:
           print(f'dates.json 已更新：{len(dates)} 個日期，最新={dates[0] if dates else \"無\"}')
           "
           git add docs/dates.json
-          git diff --cached --quiet && echo "無新增內容" && exit 0
+          if git diff --cached --quiet; then
+            echo "無新增內容"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
           for i in 1 2 3; do
@@ -157,3 +163,12 @@ jobs:
             echo "Push 失敗，第 ${i} 次重試..."
             sleep $((i * 5))
           done
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Pages deploy
+        # bot commit 用 GITHUB_TOKEN push，不會自動觸發 deploy_pages.yml 的 push 事件
+        # （GitHub 防遞迴機制），須顯式呼叫 workflow_dispatch API 才會真的部署
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy_pages.yml --ref main
