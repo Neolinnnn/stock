@@ -1,8 +1,19 @@
 {
- "date": "20260703",
- "generated_at": "2026-07-03 10:29",
+ "date": "20260706",
+ "generated_at": "2026-07-06 06:34",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "2441",
+   "close": 145.0,
+   "vol_ratio": 3.16,
+   "dist_ma20": 9.23,
+   "ret20": 10.27,
+   "last_date": "2026-07-06",
+   "chip5": 511388.0,
+   "name": "超豐"
+  }
+ ],
  "backtest_ref": {
   "n": 183,
   "tp18sl15_win": 0.65,
