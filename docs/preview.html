@@ -2444,11 +2444,16 @@ function renderDaily(data){
           const reasons2 = [];
           if (failBias) reasons2.push(`乖離MA10 ${d.bias_ma10 != null ? (d.bias_ma10 >= 0 ? '+' : '') + d.bias_ma10 + '%' : '—'}（超過 2%）`);
           if (failSector) reasons2.push('所屬族群非強勢');
+          const ta2 = d.trend_analysis || {};
+          const sig2 = ta2.buy_signal || '—';
+          const score2 = ta2.signal_score != null ? ta2.signal_score : '—';
+          const sigColor2 = sig2==='強力買入'?'var(--green)':sig2==='買入'?'#5cb85c':sig2==='持有'?'var(--yellow)':'var(--sub)';
           return `<div class="action-card" style="border-left:3px solid var(--sub);opacity:.85">
             <div class="ac-head">
               <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(d.id)}')" title="點擊查看個股分析">${escHtml(d.id)}</span>
               <span class="ac-name" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.35)" onclick="goToStock('${escHtml(d.id)}')" title="點擊查看個股分析">${escHtml(d.name)}</span>
               <span class="ac-sector">${escHtml(d.sector)}</span>
+              <span class="ac-sig" style="color:${sigColor2}">${escHtml(sig2)} ${score2!=='—'?score2+'/100':''}</span>
             </div>
             <div class="ac-prices">
               <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(d.price,1)}</span></div>

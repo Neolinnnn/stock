@@ -462,85 +462,92 @@ def build_daily_payload(summary):
         except Exception as _e2:
             print(f'[WARN] build_docs.build_daily_payload: 分析引擎載入失敗: {_e2}')
 
-    if _local_analyze and qualified:
+    def _attach_trend_analysis(q, docs_dir_path, strong_set, weak_set, with_product_mix):
+        sid    = q.get('id', '')
+        sector = q.get('sector', '')
+        cv_sharpe = q.get('cv_sharpe')
+        # 判斷族群強弱：strong_sectors 為強，weak_sectors 為弱，其餘 None
+        if sector in strong_set:
+            sector_is_strong = True
+        elif sector in weak_set:
+            sector_is_strong = False
+        else:
+            sector_is_strong = None
+        stock_json = docs_dir_path / 'stocks' / f'{sid}.json'
+        try:
+            with open(stock_json, encoding='utf-8') as f:
+                st = json.load(f)
+            ohlcv = st.get('ohlcv', {})
+            df = pd.DataFrame({
+                'date':   ohlcv.get('date', []),
+                'open':   ohlcv.get('open', []),
+                'high':   ohlcv.get('high', []),
+                'low':    ohlcv.get('low', []),
+                'close':  ohlcv.get('close', []),
+                'volume': ohlcv.get('volume', []),
+            })
+            result = _local_analyze(
+                df, sid,
+                sector_is_strong=sector_is_strong,
+                cv_sharpe=float(cv_sharpe) if cv_sharpe is not None else None,
+            )
+            d = result.to_dict()
+            d['sector_is_strong'] = sector_is_strong
+            # 補充 KDJ 與 MACD 前一根柱，供前端行動清單使用
+            ind = st.get('indicators', {})
+            kd_k = ind.get('kd_k') or []
+            kd_d = ind.get('kd_d') or []
+            kd_j = ind.get('kd_j') or []
+            hist = ind.get('macd_hist') or []
+            if len(kd_k) >= 2:
+                d['kd_k']      = kd_k[-1]
+                d['kd_d']      = kd_d[-1] if kd_d else None
+                d['kd_j']      = kd_j[-1] if kd_j else None
+                d['kd_k_prev'] = kd_k[-2]
+                d['kd_d_prev'] = kd_d[-2] if len(kd_d) >= 2 else None
+            if len(hist) >= 2:
+                d['macd_bar_prev'] = hist[-2]
+            # ── 動能確認進場策略（entry_lab 回測勝出：量比≥1.2 或 MACD柱>0且增長）──
+            vols = ohlcv.get('volume', [])
+            vol_ratio = None
+            if len(vols) >= 20 and vols[-1]:
+                vma20 = sum(vols[-20:]) / 20
+                vol_ratio = round(vols[-1] / vma20, 2) if vma20 else None
+            macd_mom = bool(len(hist) >= 2 and hist[-1] is not None and hist[-2] is not None
+                            and hist[-1] > 0 and hist[-1] > hist[-2])
+            vol_ok = bool(vol_ratio is not None and vol_ratio >= 1.2)
+            d['entry_strategy'] = {
+                'vol_ratio': vol_ratio,
+                'vol_ok': vol_ok,
+                'macd_momentum': macd_mom,
+                'passed': vol_ok or macd_mom,
+                'grade': 'A' if (vol_ok and macd_mom) else ('B' if (vol_ok or macd_mom) else 'C'),
+            }
+            q['trend_analysis'] = d
+        except Exception as e:
+            q['trend_analysis'] = {'error': str(e)}
+        if not with_product_mix:
+            return
+        # 附加產銷組合快取（若存在）
+        fund_path = docs_dir_path / 'fundamentals' / f'{sid}.json'
+        if fund_path.exists():
+            try:
+                with open(fund_path, encoding='utf-8') as ff:
+                    fdata = json.load(ff)
+                pm = fdata.get('product_mix')
+                if pm:
+                    q['product_mix'] = pm
+            except Exception:
+                pass
+
+    if _local_analyze and (qualified or dual_filter_excluded):
         docs_dir_path = Path(__file__).resolve().parent.parent / 'docs'
         strong_set = set(summary.get('strong_sectors', []))
         weak_set   = set(summary.get('weak_sectors',   []))
         for q in qualified:
-            sid    = q.get('id', '')
-            sector = q.get('sector', '')
-            cv_sharpe = q.get('cv_sharpe')
-            # 判斷族群強弱：strong_sectors 為強，weak_sectors 為弱，其餘 None
-            if sector in strong_set:
-                sector_is_strong = True
-            elif sector in weak_set:
-                sector_is_strong = False
-            else:
-                sector_is_strong = None
-            stock_json = docs_dir_path / 'stocks' / f'{sid}.json'
-            try:
-                with open(stock_json, encoding='utf-8') as f:
-                    st = json.load(f)
-                ohlcv = st.get('ohlcv', {})
-                df = pd.DataFrame({
-                    'date':   ohlcv.get('date', []),
-                    'open':   ohlcv.get('open', []),
-                    'high':   ohlcv.get('high', []),
-                    'low':    ohlcv.get('low', []),
-                    'close':  ohlcv.get('close', []),
-                    'volume': ohlcv.get('volume', []),
-                })
-                result = _local_analyze(
-                    df, sid,
-                    sector_is_strong=sector_is_strong,
-                    cv_sharpe=float(cv_sharpe) if cv_sharpe is not None else None,
-                )
-                d = result.to_dict()
-                d['sector_is_strong'] = sector_is_strong
-                # 補充 KDJ 與 MACD 前一根柱，供前端行動清單使用
-                ind = st.get('indicators', {})
-                kd_k = ind.get('kd_k') or []
-                kd_d = ind.get('kd_d') or []
-                kd_j = ind.get('kd_j') or []
-                hist = ind.get('macd_hist') or []
-                if len(kd_k) >= 2:
-                    d['kd_k']      = kd_k[-1]
-                    d['kd_d']      = kd_d[-1] if kd_d else None
-                    d['kd_j']      = kd_j[-1] if kd_j else None
-                    d['kd_k_prev'] = kd_k[-2]
-                    d['kd_d_prev'] = kd_d[-2] if len(kd_d) >= 2 else None
-                if len(hist) >= 2:
-                    d['macd_bar_prev'] = hist[-2]
-                # ── 動能確認進場策略（entry_lab 回測勝出：量比≥1.2 或 MACD柱>0且增長）──
-                vols = ohlcv.get('volume', [])
-                vol_ratio = None
-                if len(vols) >= 20 and vols[-1]:
-                    vma20 = sum(vols[-20:]) / 20
-                    vol_ratio = round(vols[-1] / vma20, 2) if vma20 else None
-                macd_mom = bool(len(hist) >= 2 and hist[-1] is not None and hist[-2] is not None
-                                and hist[-1] > 0 and hist[-1] > hist[-2])
-                vol_ok = bool(vol_ratio is not None and vol_ratio >= 1.2)
-                d['entry_strategy'] = {
-                    'vol_ratio': vol_ratio,
-                    'vol_ok': vol_ok,
-                    'macd_momentum': macd_mom,
-                    'passed': vol_ok or macd_mom,
-                    'grade': 'A' if (vol_ok and macd_mom) else ('B' if (vol_ok or macd_mom) else 'C'),
-                }
-                q['trend_analysis'] = d
-            except Exception as e:
-                q['trend_analysis'] = {'error': str(e)}
-            # 附加產銷組合快取（若存在）
-            fund_path = docs_dir_path / 'fundamentals' / f'{sid}.json'
-            if fund_path.exists():
-                try:
-                    with open(fund_path, encoding='utf-8') as ff:
-                        fdata = json.load(ff)
-                    pm = fdata.get('product_mix')
-                    if pm:
-                        q['product_mix'] = pm
-                except Exception:
-                    pass
+            _attach_trend_analysis(q, docs_dir_path, strong_set, weak_set, with_product_mix=True)
+        for d in dual_filter_excluded:
+            _attach_trend_analysis(d, docs_dir_path, strong_set, weak_set, with_product_mix=False)
 
     return {
         'meta': {
