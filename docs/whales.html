@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>大戶追蹤</title>
+<style>
+  :root {
+    --bg:#0b0e14; --card:#161a22; --border:#272c37;
+    --text:#e8eaed; --sub:#8b93a3; --green:#2ecc71;
+    --red:#e74c3c; --yellow:#f1b143; --blue:#4ea1f3;
+    --accent:#3d8bfd; --accent2:#7c5cff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-size:14px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang TC','Noto Sans TC','Microsoft JhengHei',sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  header{background:rgba(17,21,29,.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50;
+    border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  header h1{font-size:17px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  header a{color:var(--sub);text-decoration:none;font-size:13px;}
+  header a:hover{color:var(--text);}
+  main{padding:20px 24px;max-width:1100px;margin:0 auto;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+  .card h2{font-size:13px;color:var(--sub);letter-spacing:.5px;margin-bottom:12px;}
+  .meta{color:var(--sub);font-size:12px;line-height:1.7;}
+  .tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .tab{background:#1e2330;border:1px solid var(--border);color:var(--sub);border-radius:20px;
+    padding:5px 14px;font-size:12px;cursor:pointer;}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;}
+  td,th{padding:7px 8px;border-bottom:1px solid var(--border);text-align:right;font-size:13px;white-space:nowrap;}
+  th{color:var(--sub);font-weight:500;}
+  td:first-child,th:first-child{text-align:left;}
+  tr.clickable{cursor:pointer;}
+  tr.clickable:hover{background:#1b2029;}
+  .up{color:var(--green);} .down{color:var(--red);} .flat{color:var(--sub);}
+  .tbl-wrap{overflow-x:auto;}
+  .stock-picker{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+  select,input#search{background:#13161d;color:var(--text);border:1px solid var(--border);
+    border-radius:8px;padding:8px 12px;font-size:14px;}
+  input#search{width:180px;}
+  .chart-box{height:260px;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-bottom:8px;}
+  .legend span::before{content:'●';margin-right:4px;}
+  .lg-b1000::before{color:var(--accent);} .lg-b400::before{color:var(--accent2);}
+  .lg-retail::before{color:var(--yellow);} .lg-price::before{color:#5c6373;}
+  .hint{color:var(--sub);font-size:13px;line-height:1.7;}
+  .stat-row{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:12px;}
+  .stat .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .stat .k{color:var(--sub);font-size:12px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>💰 大戶追蹤</h1>
+  <a href="index.html">← 回主站</a>
+  <span class="meta" id="head-meta"></span>
+</header>
+<main id="main"><div class="card" id="loading">載入中…</div></main>
+
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtW = w => w ? w.slice(0,4)+'-'+w.slice(4,6)+'-'+w.slice(6,8) : '—';
+const fmtN = v => v == null ? '—' : v.toLocaleString('zh-TW');
+const fmtPct = v => v == null ? '—' : v.toFixed(2) + '%';
+const fmtChg = v => v == null ? '—' :
+  `<span class="${v > 0 ? 'up' : v < 0 ? 'down' : 'flat'}">${v > 0 ? '+' : ''}${v.toFixed(2)}</span>`;
+
+let DATA = null, curTab = 'up_w1', curSid = null, chart = null;
+
+async function init(){
+  try {
+    DATA = await (await fetch('whales.json?t=' + Date.now())).json();
+  } catch(e){
+    $('#loading').textContent = '尚無大戶資料（whales.json 未產生）。執行 python scripts/whale_scan.py 產生。';
+    return;
+  }
+  $('#head-meta').textContent = `資料週別 ${fmtW(DATA.latest_week)}｜更新 ${DATA.updated}`;
+  $('#main').innerHTML = `
+    <div class="card">
+      <h2>千張大戶排行（週變化）</h2>
+      <div class="tabs">
+        <button class="tab" data-tab="up_w1">📈 本週加碼</button>
+        <button class="tab" data-tab="down_w1">📉 本週減碼</button>
+        <button class="tab" data-tab="top_big1000">👑 持股比最高</button>
+      </div>
+      <div id="rank-body"></div>
+    </div>
+    <div class="card">
+      <h2>個股大戶持股走勢</h2>
+      <div class="stock-picker">
+        <select id="stock-select"></select>
+        <input id="search" placeholder="輸入代號，例：2330" />
+      </div>
+      <div id="stock-detail"></div>
+    </div>
+    <div class="card">
+      <h2>說明</h2>
+      <div class="hint">
+        資料來源：${esc(DATA.source)}，統計至每週五、週六公布。<br>
+        千張大戶＝持股 1,000 張以上；&gt;400 張＝持股 400 張以上（含千張）；散戶＝持股 100 張以下。比例為占集保庫存數比例。<br>
+        TDCC 開放資料僅提供最新一週，歷史由每週掃描累積；週增減排行需至少累積兩週資料。
+      </div>
+    </div>`;
+  document.querySelectorAll('.tab').forEach(b =>
+    b.addEventListener('click', () => { curTab = b.dataset.tab; renderRank(); }));
+  buildPicker();
+  if (!(DATA.rankings.up_w1 || []).length) curTab = 'top_big1000'; // 僅一週資料時先看持股比排行
+  renderRank();
+  const first = (DATA.rankings.top_big1000[0] || {}).id || Object.keys(DATA.stocks)[0];
+  selectStock(first);
+}
+
+function renderRank(){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === curTab));
+  const rows = (DATA.rankings || {})[curTab] || [];
+  if (!rows.length){
+    $('#rank-body').innerHTML = '<div class="hint">需累積至少兩週資料才有週增減排行（TDCC 每週更新一次，下週自動出現）。</div>';
+    return;
+  }
+  $('#rank-body').innerHTML = `<div class="tbl-wrap"><table>
+    <tr><th>個股</th><th>族群</th><th>千張大戶</th><th>週增減</th><th>4週增減</th><th>&gt;400張</th><th>散戶</th><th>股東人數</th></tr>
+    ${rows.map(r => `<tr class="clickable" onclick="selectStock('${esc(r.id)}')">
+      <td>${esc(r.name)} <span style="color:var(--sub)">${esc(r.id)}</span></td>
+      <td style="text-align:left;color:var(--sub)">${esc(r.sector)}</td>
+      <td>${fmtPct(r.big1000)}</td><td>${fmtChg(r.chg_w1)}</td><td>${fmtChg(r.chg_w4)}</td>
+      <td>${fmtPct(r.big400)}</td><td>${fmtPct(r.retail)}</td><td>${fmtN(r.holders)}</td>
+    </tr>`).join('')}
+  </table></div>`;
+}
+
+function buildPicker(){
+  const groups = {};
+  for (const [sid, rec] of Object.entries(DATA.stocks))
+    (groups[rec.sector || '其他'] ??= []).push({sid, name: rec.name || sid});
+  $('#stock-select').innerHTML = Object.keys(groups).sort().map(g =>
+    `<optgroup label="${esc(g)}">${groups[g].map(s =>
+      `<option value="${esc(s.sid)}">${esc(s.sid)} ${esc(s.name)}</option>`).join('')}</optgroup>`).join('');
+  $('#stock-select').addEventListener('change', e => selectStock(e.target.value));
+  $('#search').addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const v = e.target.value.trim();
+    if (DATA.stocks[v]) selectStock(v);
+    else e.target.value = '';
+  });
+}
+
+async function selectStock(sid){
+  if (!DATA.stocks[sid]) return;
+  curSid = sid;
+  $('#stock-select').value = sid;
+  const rec = DATA.stocks[sid];
+  const last = rec.weeks.length - 1;
+  const chg = last >= 1 && rec.big1000[last-1] != null ?
+    +(rec.big1000[last] - rec.big1000[last-1]).toFixed(2) : null;
+  $('#stock-detail').innerHTML = `
+    <div class="stat-row">
+      <div class="stat"><div class="v">${fmtPct(rec.big1000[last])}</div><div class="k">千張大戶（${esc(rec.name || sid)} ${esc(sid)}）</div></div>
+      <div class="stat"><div class="v">${fmtChg(chg)}</div><div class="k">週增減</div></div>
+      <div class="stat"><div class="v">${fmtPct(rec.big400[last])}</div><div class="k">&gt;400張</div></div>
+      <div class="stat"><div class="v">${fmtPct(rec.retail[last])}</div><div class="k">散戶（&lt;100張）</div></div>
+      <div class="stat"><div class="v">${fmtN(rec.holders[last])}</div><div class="k">股東人數</div></div>
+    </div>
+    <div class="legend"><span class="lg-b1000">千張大戶%</span><span class="lg-b400">&gt;400張%</span><span class="lg-retail">散戶%</span><span class="lg-price">收盤價（右軸）</span></div>
+    <div class="chart-box" id="whale-chart"></div>
+    <div class="tbl-wrap" style="margin-top:14px" id="week-table"></div>`;
+  renderWeekTable(rec);
+  renderChart(rec, sid);
+}
+
+function renderWeekTable(rec){
+  const rows = [];
+  for (let i = rec.weeks.length - 1; i >= 0 && rows.length < 12; i--){
+    const d1 = i >= 1 && rec.big1000[i-1] != null && rec.big1000[i] != null ?
+      +(rec.big1000[i] - rec.big1000[i-1]).toFixed(2) : null;
+    const dh = i >= 1 && rec.holders[i-1] && rec.holders[i] ? rec.holders[i] - rec.holders[i-1] : null;
+    rows.push(`<tr><td>${fmtW(rec.weeks[i])}</td><td>${fmtPct(rec.big1000[i])}</td><td>${fmtChg(d1)}</td>
+      <td>${fmtPct(rec.big400[i])}</td><td>${fmtPct(rec.retail[i])}</td>
+      <td>${fmtN(rec.holders[i])}</td><td>${dh == null ? '—' : fmtChg(dh)}</td></tr>`);
+  }
+  $('#week-table').innerHTML = `<table>
+    <tr><th>週別</th><th>千張大戶</th><th>Δ</th><th>&gt;400張</th><th>散戶</th><th>股東人數</th><th>Δ人數</th></tr>
+    ${rows.join('')}</table>`;
+}
+
+async function renderChart(rec, sid){
+  if (chart){ chart.remove(); chart = null; }
+  const el = $('#whale-chart');
+  if (typeof LightweightCharts === 'undefined'){
+    el.innerHTML = '<div class="hint">圖表函式庫載入失敗（CDN 無法連線）。</div>';
+    return;
+  }
+  chart = LightweightCharts.createChart(el, {
+    layout:{background:{color:'transparent'}, textColor:'#8b93a3', fontSize:11},
+    grid:{vertLines:{color:'#1c212b'}, horzLines:{color:'#1c212b'}},
+    rightPriceScale:{borderColor:'#272c37'},
+    leftPriceScale:{visible:true, borderColor:'#272c37'},
+    timeScale:{borderColor:'#272c37'},
+    height:260, autoSize:true,
+  });
+  const toSeries = arr => rec.weeks.map((w,i) => arr[i] == null ? null :
+    ({time: fmtW(w), value: arr[i]})).filter(Boolean);
+  chart.addLineSeries({color:'#3d8bfd', lineWidth:2, priceScaleId:'left',
+    title:'千張大戶%'}).setData(toSeries(rec.big1000));
+  chart.addLineSeries({color:'#7c5cff', lineWidth:1, priceScaleId:'left',
+    title:'>400張%'}).setData(toSeries(rec.big400));
+  chart.addLineSeries({color:'#f1b143', lineWidth:1, priceScaleId:'left',
+    title:'散戶%'}).setData(toSeries(rec.retail));
+  // 股價疊圖（右軸，取自個股分析 JSON；無檔案時略過）
+  try {
+    const d = await (await fetch(`stocks/${sid}.json`)).json();
+    if (curSid !== sid) return; // 使用者已切換個股
+    const price = d.ohlcv.date.map((t,i) => ({time: t, value: d.ohlcv.close[i]}));
+    chart.addAreaSeries({lineColor:'#5c6373', topColor:'rgba(92,99,115,.25)',
+      bottomColor:'rgba(92,99,115,0)', lineWidth:1, priceScaleId:'right',
+      title:'收盤價'}).setData(price);
+  } catch(e){}
+  chart.timeScale().fitContent();
+}
+
+init();
+</script>
+</body>
+</html>

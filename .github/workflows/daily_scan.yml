@@ -87,6 +87,14 @@ jobs:
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/breakout_scan.py
 
+      - name: Whale scan (大戶籌碼，TDCC 每週六更新)
+        # TDCC 只提供最新一週 → 每日執行累積歷史；同週重跑只是覆蓋同筆資料
+        continue-on-error: true
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: python scripts/whale_scan.py --backfill
+
       - name: Run analyzer framework daily scan
         continue-on-error: true
         env:
