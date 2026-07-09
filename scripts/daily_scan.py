@@ -449,6 +449,23 @@ def scan_sector(sector_name, stocks):
             except Exception:
                 r['ma10'] = r.get('ma10')
                 r['ma60'] = None
+            # Meta 模型特徵：動能/波動/60日高點距離（見 model/meta_features.py）
+            try:
+                import statistics as _stats
+                _p = [x for x in list(hist.price) if x is not None] if hist is not None else []
+                _n = len(_p)
+                _c = _p[-1] if _p else None
+                r['mom5']  = round((_c / _p[-6]  - 1) * 100, 2) if _n >= 6  and _p[-6]  else None
+                r['mom20'] = round((_c / _p[-21] - 1) * 100, 2) if _n >= 21 and _p[-21] else None
+                if _n >= 21:
+                    _rets = [(_p[j] / _p[j-1] - 1) * 100 for j in range(_n - 20, _n) if _p[j-1]]
+                    r['vol20'] = round(_stats.stdev(_rets), 2) if len(_rets) >= 2 else None
+                else:
+                    r['vol20'] = None
+                _hi60 = max(_p[-60:]) if _n >= 20 else None
+                r['dist_high60'] = round((_c / _hi60 - 1) * 100, 2) if _hi60 else None
+            except Exception:
+                r['mom5'] = r['mom20'] = r['vol20'] = r['dist_high60'] = None
             ret_20d, t_short, t_mid, t_long, atr_val, stop_price = fetch_price_stats(sid, hist=hist)
             r['ret_20d'] = ret_20d
             r['target_short'] = t_short
@@ -635,6 +652,46 @@ def run_daily_scan():
     except Exception as e:
         print(f"  ⚠ 持倉追蹤失敗：{e}")
 
+    # 4.6 影子模式：Meta 模型 AI 信心度（僅記錄觀察，不影響任何閘門與建議）
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+        from model.meta_predict import score_signal, build_features as _meta_feats
+
+        pos = summary.get('positions') or {}
+        _tb = pos.get('taiex_bull')
+        _tc, _tm = pos.get('taiex_close'), pos.get('taiex_ma60')
+        _tbias = round((_tc - _tm) / _tm * 100, 2) if _tc and _tm else None
+
+        _stock_of, _sector_of = {}, {}
+        for _sec, _data in summary['sectors'].items():
+            for _st in _data['stocks']:
+                _stock_of.setdefault(_st['id'], _st)
+                _sector_of.setdefault(_st['id'], _sec)
+        _strong = set(summary.get('strong_sectors', []))
+
+        def _ai_conf(sid):
+            _st = _stock_of.get(sid)
+            if not _st:
+                return None
+            _sec = _sector_of.get(sid)
+            feats = _meta_feats(
+                _st,
+                sector_ret20=summary['sectors'].get(_sec, {}).get('avg_ret_20d'),
+                sector_strong=1 if _sec in _strong else 0,
+                taiex_bull=(None if _tb is None else (1 if _tb else 0)),
+                taiex_bias=_tbias,
+            )
+            return score_signal(feats)
+
+        _scored = 0
+        for rec in (summary.get('qualified', []) + summary.get('dual_filter', [])
+                    + (pos.get('gate_buys') or [])):
+            rec['ai_confidence'] = _ai_conf(rec['id'])
+            _scored += rec['ai_confidence'] is not None
+        print(f"  🤖 AI 信心度（影子模式）已評分 {_scored} 筆訊號")
+    except Exception as e:
+        print(f"  ⚠ AI 信心度影子評分失敗（不影響掃描）：{e}")
+
     # 5. 輸出 JSON + Markdown
     json_path = out_dir / 'summary.json'
     with open(json_path, 'w', encoding='utf-8') as f:
@@ -801,7 +858,8 @@ def _build_positions_payload(pos):
         'taiexMa60':  pos.get('taiex_ma60'),
         'gateBuys': [
             {'id': g['id'], 'name': g.get('name', ''),
-             'sector': g.get('sector', ''), 'price': _nan_to_none(g.get('price'))}
+             'sector': g.get('sector', ''), 'price': _nan_to_none(g.get('price')),
+             'aiConf': g.get('ai_confidence')}
             for g in pos.get('gate_buys', [])
         ],
         'newExits': [
@@ -869,6 +927,10 @@ def build_summary(date, market, all_results, chart_path):
                     'ma60': r.get('ma60'),
                     'cv_sharpe': round(r['cv_sharpe'], 2),
                     'cv_win_rate': round(r['cv_win_rate'], 2),
+                    'mom5':  r.get('mom5'),
+                    'mom20': r.get('mom20'),
+                    'vol20': r.get('vol20'),
+                    'dist_high60': r.get('dist_high60'),
                     'news': r.get('news', []),
                     'chip': r.get('chip', {}),
                     'chip_tier': r.get('chip_tier'),
