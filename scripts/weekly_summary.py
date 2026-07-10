@@ -324,7 +324,12 @@ def render_markdown(summary):
     return ''.join(md)
 
 
-_UP, _DOWN, _NEUTRAL = '#16a34a', '#dc2626', '#9ca3af'
+# 與網頁深色主題一致的色票（docs 前端 :root 變數）
+_CARD = '#161a22'    # 卡片底色
+_TEXT = '#e8eaed'    # 主要文字
+_SUB = '#8b93a3'     # 次要文字
+_BORDER = '#272c37'  # 格線／邊框
+_UP, _DOWN, _NEUTRAL = '#2ecc71', '#e74c3c', '#4a5162'  # 綠漲／紅跌／中性
 
 
 def draw_sector_small_multiples(sector_trend, dates, out_path):
@@ -344,10 +349,11 @@ def draw_sector_small_multiples(sector_trend, dates, out_path):
     n = len(series)
 
     if n == 0:
-        fig, ax = plt.subplots(figsize=(8, 3))
-        ax.text(0.5, 0.5, '本週資料不足', ha='center', va='center', fontsize=14)
+        fig, ax = plt.subplots(figsize=(8, 3), facecolor=_CARD)
+        ax.set_facecolor(_CARD)
+        ax.text(0.5, 0.5, '本週資料不足', ha='center', va='center', fontsize=14, color=_SUB)
         ax.axis('off')
-        fig.savefig(out_path, dpi=100, bbox_inches='tight')
+        fig.savefig(out_path, dpi=100, bbox_inches='tight', facecolor=_CARD)
         plt.close(fig)
         return
 
@@ -363,19 +369,20 @@ def draw_sector_small_multiples(sector_trend, dates, out_path):
     xlabels = [f'{d[4:6]}/{d[6:8]}' for d in dates]  # MM/DD
 
     fig, axes = plt.subplots(nrows, ncols, figsize=(ncols * 2.7, nrows * 1.95),
-                             sharex=True, sharey=True)
+                             sharex=True, sharey=True, facecolor=_CARD)
     axes = list(axes.flatten()) if n > 1 else [axes]
 
     for i, (sector, pts) in enumerate(series):
         ax = axes[i]
+        ax.set_facecolor(_CARD)
         xs = [p[0] for p in pts]
         vals = [p[1] for p in pts]
         delta = vals[-1] - vals[0]
         color = _UP if delta >= 0 else _DOWN
         ax.plot(xs, vals, color=color, linewidth=2, marker='o', markersize=3.5,
-                markerfacecolor=color, markeredgecolor='white', markeredgewidth=0.5,
+                markerfacecolor=color, markeredgecolor=_CARD, markeredgewidth=0.6,
                 zorder=3)
-        ax.fill_between(xs, vals, 0, color=color, alpha=0.10, zorder=1)
+        ax.fill_between(xs, vals, 0, color=color, alpha=0.13, zorder=1)
         ax.axhline(0, color=_NEUTRAL, linewidth=0.7, zorder=0)
         ax.set_title(f'{sector}  {delta:+.1f}', fontsize=10, color=color, pad=3)
         # 末值標籤
@@ -385,19 +392,20 @@ def draw_sector_small_multiples(sector_trend, dates, out_path):
         ax.set_xlim(-0.3, last_i + 0.9)  # 右側留白給末值標籤
         ax.set_xticks([0, last_i])
         ax.set_xticklabels([xlabels[0], xlabels[-1]])
-        ax.tick_params(labelsize=7, length=2)
-        ax.grid(axis='y', alpha=0.15)
-        for spine in ('top', 'right'):
-            ax.spines[spine].set_visible(False)
+        ax.tick_params(labelsize=7, length=2, colors=_SUB)
+        ax.grid(axis='y', color=_BORDER, alpha=0.6, linewidth=0.6)
+        for side, spine in ax.spines.items():
+            spine.set_visible(side in ('left', 'bottom'))
+            spine.set_color(_BORDER)
 
     for j in range(n, len(axes)):
         axes[j].axis('off')
 
     fig.suptitle('本週各族群 20 日平均報酬走勢（依本週變化排序 · 綠漲紅跌 · 單位 %）',
-                 fontsize=13, y=1.0)
-    fig.supylabel('20 日平均報酬 (%)', fontsize=10)
+                 fontsize=13, y=1.0, color=_TEXT)
+    fig.supylabel('20 日平均報酬 (%)', fontsize=10, color=_SUB)
     fig.tight_layout(rect=[0.01, 0, 1, 0.98])
-    fig.savefig(out_path, dpi=100, bbox_inches='tight')
+    fig.savefig(out_path, dpi=100, bbox_inches='tight', facecolor=_CARD)
     plt.close(fig)
 
 
