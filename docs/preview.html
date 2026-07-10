@@ -2202,6 +2202,13 @@ function stepDate(dir){
 }
 
 // ── 今日掃描 ──────────────────────────────────────────────────────────────────
+// AI 信心度徽章（meta 模型影子模式：僅供觀察，不影響入選與閘門）
+function aiConfBadge(v){
+  if(v==null||isNaN(Number(v))) return '';
+  const p=Number(v)*100;
+  const col=p>=60?'var(--green)':p>=50?'var(--yellow)':'var(--red)';
+  return `<span style="background:rgba(0,0,0,.25);border:1px solid ${col};border-radius:4px;padding:2px 8px;font-size:11px;color:${col};white-space:nowrap" title="Meta 模型預估此訊號依 HYBRID 出場規則的勝率（962 筆歷史訊號、最近200筆滾動訓練；walk-forward 外推驗證：信心≥60% 組勝率 54.7% vs 全體 46.0%、平均報酬 +4.2% vs +0.1%）。影子模式觀察中，不影響入選與閘門">🤖 AI勝率 ${p.toFixed(0)}%</span>`;
+}
 // HYBRID 策略卡片：進場閘門 BUY / 出場訊號 / 持有中（回測勝率63%、avg+8.6%、PF2.83）
 function hybridCard(p){
   if(!p) return '';
@@ -2216,7 +2223,15 @@ function hybridCard(p){
   body += `<div style="margin-top:10px;"><b style="color:var(--green);font-size:13px;">🟢 進場閘門 BUY</b>${pill(gate.length,'#26a65b')}<span style="font-size:11px;color:var(--sub);margin-left:8px;">大盤多頭 + 個股多頭排列(收&gt;MA5&gt;MA20&gt;MA60)</span>`;
   if(gate.length){
     body += `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">` +
-      gate.map(g=>`<span style="font-size:12px;background:#1e2330;border:1px solid var(--border);border-radius:6px;padding:3px 9px;">${escHtml(g.id)} ${escHtml(g.name)} <span style="color:var(--sub)">${g.price??''}</span></span>`).join('') + `</div>`;
+      gate.map(g=>{
+        let ai='';
+        if(g.aiConf!=null&&!isNaN(Number(g.aiConf))){
+          const pc=Number(g.aiConf)*100;
+          const c=pc>=60?'var(--green)':pc>=50?'var(--yellow)':'var(--red)';
+          ai=` <span style="color:${c};font-weight:600" title="AI 預估勝率（影子模式，不影響閘門）">🤖${pc.toFixed(0)}%</span>`;
+        }
+        return `<span style="font-size:12px;background:#1e2330;border:1px solid var(--border);border-radius:6px;padding:3px 9px;">${escHtml(g.id)} ${escHtml(g.name)} <span style="color:var(--sub)">${g.price??''}</span>${ai}</span>`;
+      }).join('') + `</div>`;
   } else { body += `<span style="font-size:12px;color:var(--sub);margin-left:8px;">無</span>`; }
   body += `</div>`;
   // 出場訊號
@@ -2390,6 +2405,7 @@ function renderDaily(data){
 
         <!-- 指標訊號列 -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
+          ${aiConfBadge(q.ai_confidence)}
           ${gradeBadge}
           ${chipBadge}
           ${biasBadge}
@@ -2455,6 +2471,7 @@ function renderDaily(data){
               <span class="ac-sector">${escHtml(d.sector)}</span>
               <span class="ac-sig" style="color:${sigColor2}">${escHtml(sig2)} ${score2!=='—'?score2+'/100':''}</span>
             </div>
+            ${d.ai_confidence!=null?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">${aiConfBadge(d.ai_confidence)}</div>`:''}
             <div class="ac-prices">
               <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(d.price,1)}</span></div>
               <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${fmt(d.rsi,1)}</span></div>

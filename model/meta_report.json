@@ -1,0 +1,109 @@
+{
+  "features": [
+    "rsi",
+    "ret_20d",
+    "cv_sharpe",
+    "cv_win_rate",
+    "bias_ma5",
+    "bias_ma10",
+    "bias_ma20",
+    "ma_bull",
+    "mom5",
+    "mom20",
+    "vol20",
+    "dist_high60",
+    "sector_ret20",
+    "sector_strong",
+    "chip_dir",
+    "taiex_bull",
+    "taiex_bias"
+  ],
+  "trained_at": "2026-07-09T07:48:49",
+  "n_train": 200,
+  "train_window": 200,
+  "dataset_range": [
+    "20230223",
+    "20260622"
+  ],
+  "oof_auc": 0.5972,
+  "oof_baseline": {
+    "n": 578,
+    "win_rate": 0.4602,
+    "avg_return": 0.11
+  },
+  "oof_policies": [
+    {
+      "threshold": 0.5,
+      "kept": 335,
+      "kept_pct": 58.0,
+      "win_rate": 0.5254,
+      "avg_return": 3.15
+    },
+    {
+      "threshold": 0.55,
+      "kept": 312,
+      "kept_pct": 54.0,
+      "win_rate": 0.5353,
+      "avg_return": 3.65
+    },
+    {
+      "threshold": 0.6,
+      "kept": 287,
+      "kept_pct": 49.7,
+      "win_rate": 0.547,
+      "avg_return": 4.2
+    }
+  ],
+  "folds": [
+    {
+      "fold": 1,
+      "train_n": 200,
+      "test_range": [
+        "20240315",
+        "20240620"
+      ],
+      "test_n": 115,
+      "test_base_win_rate": 0.5565
+    },
+    {
+      "fold": 2,
+      "train_n": 200,
+      "test_range": [
+        "20240621",
+        "20240927"
+      ],
+      "test_n": 116,
+      "test_base_win_rate": 0.4052
+    },
+    {
+      "fold": 3,
+      "train_n": 200,
+      "test_range": [
+        "20240930",
+        "20250109"
+      ],
+      "test_n": 115,
+      "test_base_win_rate": 0.3043
+    },
+    {
+      "fold": 4,
+      "train_n": 200,
+      "test_range": [
+        "20250109",
+        "20250731"
+      ],
+      "test_n": 116,
+      "test_base_win_rate": 0.3017
+    },
+    {
+      "fold": 5,
+      "train_n": 200,
+      "test_range": [
+        "20250801",
+        "20260622"
+      ],
+      "test_n": 116,
+      "test_base_win_rate": 0.7328
+    }
+  ]
+}

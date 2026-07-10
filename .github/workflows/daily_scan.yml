@@ -115,6 +115,15 @@ jobs:
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/sector_rotation_backtest.py
 
+      - name: Retrain meta model (Fridays only)
+        # AI 學習閉環：用一週新累積的結案訊號重建資料集 → 滾動窗再訓練。
+        # 影子模式評分用（不影響訊號與閘門），失敗不擋每日流程。
+        if: github.event.schedule == '45 7 * * 5'
+        continue-on-error: true
+        run: |
+          python scripts/build_signal_dataset.py
+          python model/meta_train.py
+
       - name: Build multi-agent analysis (agents)
         continue-on-error: true
         env:
@@ -142,6 +151,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git add daily_reports/ docs/
+          # Meta 模型週五再訓練產物（資料集 / 模型 / 驗證報告）
+          git add model/ 2>/dev/null || true
           # 強制重新產生 dates.json（從 docs/ 現有 JSON 掃描），確保即使 build_docs
           # 中途失敗也不會漏掉新日期
           python3 -c "

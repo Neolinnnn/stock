@@ -429,6 +429,7 @@ def build_daily_payload(summary):
             'rsi':       q.get('rsi', ''),
             'cv_sharpe': q.get('cv_sharpe', ''),
             'bias_ma10': q.get('bias_ma10'),
+            'ai_confidence': q.get('ai_confidence'),
         }
         for q in summary.get('qualified', [])
     ]
@@ -445,6 +446,7 @@ def build_daily_payload(summary):
             'bias_ma10':    d.get('bias_ma10'),
             'sector_strong': d.get('sector_strong'),
             'passes_bias':  d.get('passes_bias'),
+            'ai_confidence': d.get('ai_confidence'),
         }
         for d in summary.get('dual_filter', [])
         if d.get('id') not in qualified_ids
@@ -584,7 +586,8 @@ def _build_positions_payload(pos):
         'taiexMa60':  pos.get('taiex_ma60'),
         'gateBuys': [
             {'id': g['id'], 'name': g.get('name', ''),
-             'sector': g.get('sector', ''), 'price': _nan_to_none(g.get('price'))}
+             'sector': g.get('sector', ''), 'price': _nan_to_none(g.get('price')),
+             'aiConf': g.get('ai_confidence')}
             for g in pos.get('gate_buys', [])
         ],
         'newExits': [
