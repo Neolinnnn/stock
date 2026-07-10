@@ -27,7 +27,6 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib import rcParams
 
 
 # 取數統一走 datafeed（FinMind token 輪替 + 價格快取 + yfinance 備援）
@@ -35,9 +34,9 @@ import datafeed
 from datafeed import finmind_fetch as _finmind_fetch
 
 
-# 支援中文
-rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
-rcParams['axes.unicode_minus'] = False
+# 支援中文（跨平台自動偵測，CI 用 Noto CJK）
+from cjk_font import setup_cjk_font
+setup_cjk_font()
 
 # 進場乖離率上限：qualified 推薦只取「貼近 MA10」的個股，避免追高。
 # 依據 2026 全市場回測（136 筆訊號）：乖離 MA10 ≤2% 勝率 27% / 平均 +0.1%，

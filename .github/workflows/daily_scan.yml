@@ -34,6 +34,9 @@ jobs:
           restore-keys: |
             price-cache-${{ runner.os }}-
 
+      - name: Install CJK fonts (圖表中文字型，避免豆腐方塊)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

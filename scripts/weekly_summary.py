@@ -7,7 +7,7 @@
 用法：
   python scripts/weekly_summary.py
 """
-import sys, os, json
+import sys, os, json, math
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -16,10 +16,9 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib import rcParams
 
-rcParams['font.sans-serif'] = ['Microsoft JhengHei', 'SimHei', 'Arial Unicode MS']
-rcParams['axes.unicode_minus'] = False
+from cjk_font import setup_cjk_font
+setup_cjk_font()
 
 TIER_LABEL = {'strong': '強', 'neutral': '中', 'weak': '弱'}
 
@@ -325,6 +324,83 @@ def render_markdown(summary):
     return ''.join(md)
 
 
+_UP, _DOWN, _NEUTRAL = '#16a34a', '#dc2626', '#9ca3af'
+
+
+def draw_sector_small_multiples(sector_trend, dates, out_path):
+    """
+    小倍數分面圖：每個族群一格獨立走勢，取代原本 18 條線疊在一起的義大利麵圖。
+    - 依「本週淨變化」(末值−首值) 由大到小排序，輪動最強者置左上
+    - 漲綠跌紅，標題標示族群名與淨變化
+    - 共用 y 軸，各族群報酬量級可直接比較
+    """
+    # 對齊每個族群到日期軸：(x索引, 值) 只取有資料的日子
+    series = []
+    for sector, vals in sector_trend.items():
+        pts = [(i, v) for i, v in enumerate(vals) if v is not None]
+        if len(pts) >= 2:
+            series.append((sector, pts))
+    series.sort(key=lambda kv: kv[1][-1][1] - kv[1][0][1], reverse=True)  # 依淨變化排序
+    n = len(series)
+
+    if n == 0:
+        fig, ax = plt.subplots(figsize=(8, 3))
+        ax.text(0.5, 0.5, '本週資料不足', ha='center', va='center', fontsize=14)
+        ax.axis('off')
+        fig.savefig(out_path, dpi=100, bbox_inches='tight')
+        plt.close(fig)
+        return
+
+    ncols = 4 if n > 6 else min(n, 3)
+    nrows = math.ceil(n / ncols)
+
+    all_vals = [v for _, pts in series for _, v in pts]
+    lo, hi = min(all_vals), max(all_vals)
+    pad = max((hi - lo) * 0.15, 1.0)
+    ylim = (lo - pad, hi + pad)
+
+    last_i = len(dates) - 1
+    xlabels = [f'{d[4:6]}/{d[6:8]}' for d in dates]  # MM/DD
+
+    fig, axes = plt.subplots(nrows, ncols, figsize=(ncols * 2.7, nrows * 1.95),
+                             sharex=True, sharey=True)
+    axes = list(axes.flatten()) if n > 1 else [axes]
+
+    for i, (sector, pts) in enumerate(series):
+        ax = axes[i]
+        xs = [p[0] for p in pts]
+        vals = [p[1] for p in pts]
+        delta = vals[-1] - vals[0]
+        color = _UP if delta >= 0 else _DOWN
+        ax.plot(xs, vals, color=color, linewidth=2, marker='o', markersize=3.5,
+                markerfacecolor=color, markeredgecolor='white', markeredgewidth=0.5,
+                zorder=3)
+        ax.fill_between(xs, vals, 0, color=color, alpha=0.10, zorder=1)
+        ax.axhline(0, color=_NEUTRAL, linewidth=0.7, zorder=0)
+        ax.set_title(f'{sector}  {delta:+.1f}', fontsize=10, color=color, pad=3)
+        # 末值標籤
+        ax.annotate(f'{vals[-1]:+.0f}', (xs[-1], vals[-1]), fontsize=8, color=color,
+                    ha='left', va='center', xytext=(3, 0), textcoords='offset points')
+        ax.set_ylim(ylim)
+        ax.set_xlim(-0.3, last_i + 0.9)  # 右側留白給末值標籤
+        ax.set_xticks([0, last_i])
+        ax.set_xticklabels([xlabels[0], xlabels[-1]])
+        ax.tick_params(labelsize=7, length=2)
+        ax.grid(axis='y', alpha=0.15)
+        for spine in ('top', 'right'):
+            ax.spines[spine].set_visible(False)
+
+    for j in range(n, len(axes)):
+        axes[j].axis('off')
+
+    fig.suptitle('本週各族群 20 日平均報酬走勢（依本週變化排序 · 綠漲紅跌 · 單位 %）',
+                 fontsize=13, y=1.0)
+    fig.supylabel('20 日平均報酬 (%)', fontsize=10)
+    fig.tight_layout(rect=[0.01, 0, 1, 0.98])
+    fig.savefig(out_path, dpi=100, bbox_inches='tight')
+    plt.close(fig)
+
+
 def run_weekly_summary(as_of=None, upload_notion=True):
     today = as_of or datetime.now()
     week_reports = []
@@ -351,29 +427,15 @@ def run_weekly_summary(as_of=None, upload_notion=True):
     print(f"  涵蓋：{len(week_reports)} 個交易日")
     print(f"{'='*78}\n")
 
-    # 各族群一週平均報酬變化
+    # 各族群一週平均報酬變化（對齊到日期軸，缺日補 None——族群可能週中新增/整併）
     sector_trend = {}
-    for report in week_reports:
+    for i, report in enumerate(week_reports):
         for sector, data in report['sectors'].items():
-            if sector not in sector_trend:
-                sector_trend[sector] = []
-            sector_trend[sector].append(data['avg_ret_20d'])
+            sector_trend.setdefault(sector, [None] * len(week_reports))[i] = data['avg_ret_20d']
 
-    # 繪製族群趨勢圖
-    fig, ax = plt.subplots(figsize=(12, 6))
     dates = [r['date'] for r in week_reports]
-    for sector, rets in sector_trend.items():
-        ax.plot(dates, rets, marker='o', label=sector, linewidth=2)
-    ax.set_title('本週各族群 20 日平均報酬變化')
-    ax.set_ylabel('平均報酬 (%)')
-    ax.axhline(0, color='gray', linewidth=0.5)
-    ax.legend(loc='best', ncol=2)
-    ax.grid(alpha=0.3)
-    plt.xticks(rotation=30)
-    plt.tight_layout()
     chart_path = out_dir / '01_weekly_sector_trend.png'
-    plt.savefig(chart_path, dpi=100, bbox_inches='tight')
-    plt.close()
+    draw_sector_small_multiples(sector_trend, dates, chart_path)
 
     # 各節資料彙整
     prev_changes = load_prev_week_changes(today.strftime('%Y%m%d'))
