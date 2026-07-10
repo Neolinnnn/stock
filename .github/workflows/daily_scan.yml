@@ -58,6 +58,11 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
         run: python scripts/daily_scan.py
 
+      - name: Fundamentals event update (TWSE/TPEx 彙總表比對)
+        # 免金鑰、零 FinMind 額度：新月營收直接 append，新一季財報標記強制重抓
+        continue-on-error: true
+        run: python scripts/fundamentals_event_update.py
+
       - name: Fetch fundamentals
         continue-on-error: true
         env:
@@ -94,6 +99,15 @@ jobs:
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python scripts/analyzer_daily.py
+
+      - name: Rotation radar collect (全市場行情快取)
+        continue-on-error: true
+        run: python scripts/rotation_radar.py --collect
+
+      - name: Rotation radar report (Fridays only)
+        if: github.event.schedule == '45 7 * * 5'
+        continue-on-error: true
+        run: python scripts/rotation_radar.py --report
 
       - name: Run weekly summary (Fridays only)
         if: github.event.schedule == '45 7 * * 5'
@@ -142,6 +156,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git add daily_reports/ docs/
+          # 動能雷達快取（若當日 collect 失敗目錄可能不存在）
+          [ -d data/radar_cache ] && git add data/radar_cache/ || true
           # 強制重新產生 dates.json（從 docs/ 現有 JSON 掃描），確保即使 build_docs
           # 中途失敗也不會漏掉新日期
           python3 -c "

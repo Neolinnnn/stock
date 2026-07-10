@@ -26,19 +26,12 @@ def _round2(v):
 
 # ── 月營收解析 ────────────────────────────────────────────────────────────────
 
-def parse_revenue(df):
+def compute_revenue_stats(months, revs):
     """
-    輸入：FinMind taiwan_stock_month_revenue DataFrame
+    輸入：months=['202401', ...]（YYYYMM 字串）、revs=[int, ...]（元）
     輸出：{month, revenue, mom, yoy, cum_yoy} 平行陣列 dict
     """
-    if df is None or df.empty:
-        return None
-
-    df = df.sort_values(['revenue_year', 'revenue_month']).reset_index(drop=True)
-
-    months  = [f"{int(r.revenue_year)}{int(r.revenue_month):02d}" for _, r in df.iterrows()]
-    revs    = [int(r.revenue) for _, r in df.iterrows()]
-    n       = len(revs)
+    n = len(revs)
 
     # MoM
     mom = [None] + [_pct_change(revs[i], revs[i-1]) for i in range(1, n)]
@@ -74,6 +67,21 @@ def parse_revenue(df):
     }
 
 
+def parse_revenue(df):
+    """
+    輸入：FinMind taiwan_stock_month_revenue DataFrame
+    輸出：{month, revenue, mom, yoy, cum_yoy} 平行陣列 dict
+    """
+    if df is None or df.empty:
+        return None
+
+    df = df.sort_values(['revenue_year', 'revenue_month']).reset_index(drop=True)
+
+    months = [f"{int(r.revenue_year)}{int(r.revenue_month):02d}" for _, r in df.iterrows()]
+    revs   = [int(r.revenue) for _, r in df.iterrows()]
+    return compute_revenue_stats(months, revs)
+
+
 # ── 財務報表解析 ──────────────────────────────────────────────────────────────
 
 def _date_to_quarter(date_str):
@@ -81,6 +89,16 @@ def _date_to_quarter(date_str):
     d = datetime.strptime(date_str[:10], '%Y-%m-%d')
     q = (d.month - 1) // 3 + 1
     return f"{d.year}Q{q}"
+
+
+def compute_eps_stats(quarters, eps_vals):
+    """輸入平行陣列（quarters=['2024Q1', ...]），輸出 {quarter, eps, qoq, yoy}。"""
+    n = len(quarters)
+    qoq = [None] + [_pct_change(eps_vals[i], eps_vals[i-1]) for i in range(1, n)]
+    yoy = [None] * n
+    for i in range(4, n):
+        yoy[i] = _pct_change(eps_vals[i], eps_vals[i-4])
+    return {'quarter': quarters, 'eps': eps_vals, 'qoq': qoq, 'yoy': yoy}
 
 
 def parse_financials(df):
@@ -103,7 +121,6 @@ def parse_financials(df):
     pivot = pivot.sort_index()
 
     quarters = [_date_to_quarter(d) for d in pivot.index]
-    n = len(quarters)
 
     eps_vals  = [_round2(v) for v in pivot['EPS'].tolist()]
     rev_vals  = [float(v) for v in pivot['Revenue'].tolist()]
@@ -111,23 +128,12 @@ def parse_financials(df):
     oi_vals   = [float(v) for v in pivot['OperatingIncome'].tolist()]
     ni_vals   = [float(v) for v in pivot['EquityAttributableToOwnersOfParent'].tolist()]
 
-    # QoQ / YoY for EPS
-    eps_qoq = [None] + [_pct_change(eps_vals[i], eps_vals[i-1]) for i in range(1, n)]
-    eps_yoy = [None] * n
-    for i in range(4, n):
-        eps_yoy[i] = _pct_change(eps_vals[i], eps_vals[i-4])
-
     # 三率 = 各項 / Revenue * 100
     def to_margin(vals):
         return [_round2(v / r * 100) if r and r != 0 else None
                 for v, r in zip(vals, rev_vals)]
 
-    eps_dict = {
-        'quarter': quarters,
-        'eps':     eps_vals,
-        'qoq':     eps_qoq,
-        'yoy':     eps_yoy,
-    }
+    eps_dict = compute_eps_stats(quarters, eps_vals)
     margins_dict = {
         'quarter':           quarters,
         'gross_margin':      to_margin(gp_vals),
@@ -176,17 +182,38 @@ def fetch_financials_finmind(dl, stock_id: str, quarters: int = 8):
 
 def _twse_get(url: str, timeout: int = 15):
     import httpx
-    r = httpx.get(url, timeout=timeout,
-                  headers={'Accept': 'application/json'})
+    try:
+        r = httpx.get(url, timeout=timeout,
+                      headers={'Accept': 'application/json'})
+    except httpx.ConnectError:
+        # TPEx 憑證缺 Subject Key Identifier，新版 Python 驗證會失敗 → 降級重試
+        r = httpx.get(url, timeout=timeout, verify=False,
+                      headers={'Accept': 'application/json'})
     r.raise_for_status()
     return r.json()
 
 
+def _open_rows(stock_id: str, urls: list):
+    """依序查多個 OpenAPI 彙總表（上市→上櫃），回傳該股票的 rows。"""
+    for url in urls:
+        try:
+            data = _twse_get(url)
+        except Exception:
+            continue
+        rows = [r for r in data
+                if str(r.get('公司代號') or r.get('SecuritiesCompanyCode') or '').strip() == stock_id]
+        if rows:
+            return rows
+    return []
+
+
 def fetch_revenue_twse(stock_id: str):
-    """TWSE OpenAPI 月營收 fallback（僅當前最新批次）。"""
+    """TWSE/TPEx OpenAPI 月營收 fallback（僅當前最新批次）。"""
     import pandas as pd
-    data = _twse_get('https://openapi.twse.com.tw/v1/opendata/t187ap05_L')
-    rows = [r for r in data if r.get('公司代號', '').strip() == stock_id]
+    rows = _open_rows(stock_id, [
+        'https://openapi.twse.com.tw/v1/opendata/t187ap05_L',
+        'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O',
+    ])
     if not rows:
         return None
     records = []
@@ -213,17 +240,20 @@ def fetch_revenue_twse(stock_id: str):
 
 
 def fetch_financials_twse(stock_id: str):
-    """TWSE OpenAPI 損益表 fallback（最新一期）。"""
+    """TWSE/TPEx OpenAPI 損益表 fallback（最新一期）。"""
     import pandas as pd
     import calendar
-    data = _twse_get('https://openapi.twse.com.tw/v1/opendata/t187ap06_L_ci')
-    rows = [r for r in data if r.get('公司代號', '').strip() == stock_id]
+    rows = _open_rows(stock_id, [
+        'https://openapi.twse.com.tw/v1/opendata/t187ap06_L_ci',
+        'https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_ci',
+    ])
     if not rows:
         return None
     r = rows[0]
     try:
-        year_tw = int(r.get('年度', 0))
-        q = int(r.get('季別', 1))
+        # TPEx 版 meta 欄位為英文（Year/Season），報表科目仍為中文
+        year_tw = int(r.get('年度') or r.get('Year') or 0)
+        q = int(r.get('季別') or r.get('Season') or 1)
         year = year_tw + 1911
         month_end = q * 3
         last_day = calendar.monthrange(year, month_end)[1]
@@ -266,6 +296,15 @@ def fetch_financials_twse(stock_id: str):
 
 DOCS_DIR = Path(__file__).parent.parent / 'docs'
 FUNDAMENTALS_DIR = DOCS_DIR / 'fundamentals'
+STALE_PATH = Path(__file__).parent.parent / 'data' / 'cache' / 'fundamentals_stale.json'
+
+
+def load_stale() -> set:
+    """讀取 fundamentals_event_update.py 標記的財報過期清單（強制重抓）。"""
+    try:
+        return set(json.loads(STALE_PATH.read_text(encoding='utf-8')).get('stocks', []))
+    except Exception:
+        return set()
 
 
 def _should_skip(stock_id: str, min_days: int = 7) -> bool:
@@ -281,16 +320,62 @@ def _should_skip(stock_id: str, min_days: int = 7) -> bool:
         return False
 
 
+def _merge_revenue(old, new):
+    """以月份為主鍵聯集新舊月營收，重算指標。防止單月 fallback 洗掉長歷史。"""
+    if not (old and old.get('month')):
+        return new
+    if not (new and new.get('month')):
+        return old
+    m = dict(zip(old['month'], old['revenue']))
+    m.update(dict(zip(new['month'], new['revenue'])))
+    months = sorted(m)
+    return compute_revenue_stats(months, [m[k] for k in months])
+
+
+def _merge_eps(old, new):
+    """以季度為主鍵聯集新舊 EPS，重算 QoQ/YoY。"""
+    if not (old and old.get('quarter')):
+        return new
+    if not (new and new.get('quarter')):
+        return old
+    m = dict(zip(old['quarter'], old['eps']))
+    m.update(dict(zip(new['quarter'], new['eps'])))
+    quarters = sorted(m)
+    return compute_eps_stats(quarters, [m[k] for k in quarters])
+
+
+def _merge_margins(old, new):
+    """以季度為主鍵聯集新舊三率。"""
+    if not (old and old.get('quarter')):
+        return new
+    if not (new and new.get('quarter')):
+        return old
+    fields = ('gross_margin', 'operating_margin', 'net_margin')
+    m = {}
+    for src in (old, new):
+        for i, q in enumerate(src['quarter']):
+            m[q] = tuple(src[f][i] for f in fields)
+    quarters = sorted(m)
+    out = {'quarter': quarters}
+    for j, f in enumerate(fields):
+        out[f] = [m[q][j] for q in quarters]
+    return out
+
+
 def write_fundamentals(stock_id: str, name: str, result: dict):
     FUNDAMENTALS_DIR.mkdir(parents=True, exist_ok=True)
     result['generated_at'] = datetime.now().strftime('%Y-%m-%d %H:%M')
     path = FUNDAMENTALS_DIR / f'{stock_id}.json'
-    # 保留由 enrich_product_mix.py 另外寫入的 product_mix，避免整檔覆寫時被洗掉
     if path.exists():
         try:
             existing = json.loads(path.read_text(encoding='utf-8'))
+            # 保留由 enrich_product_mix.py 另外寫入的 product_mix，避免整檔覆寫時被洗掉
             if existing.get('product_mix') and 'product_mix' not in result:
                 result['product_mix'] = existing['product_mix']
+            # 與既有歷史合併：fallback 只有最新一期時不可洗掉長歷史
+            result['revenue'] = _merge_revenue(existing.get('revenue'), result.get('revenue'))
+            result['eps'] = _merge_eps(existing.get('eps'), result.get('eps'))
+            result['margins'] = _merge_margins(existing.get('margins'), result.get('margins'))
         except Exception:
             pass
     path.write_text(json.dumps(result, ensure_ascii=False), encoding='utf-8')
@@ -311,11 +396,13 @@ def build_fundamentals(stock_list: list, skip_days: int = 7):
         finmind_ok = False
 
     ok, skipped = 0, 0
+    stale = load_stale()
 
     for info in stock_list:
         sid, name = info['id'], info['name']
 
-        if _should_skip(sid, skip_days):
+        # 事件更新標記為財報過期者不受 7 天 skip 保護，強制重抓
+        if sid not in stale and _should_skip(sid, skip_days):
             skipped += 1
             continue
 
@@ -335,6 +422,8 @@ def build_fundamentals(stock_list: list, skip_days: int = 7):
             if df is None:
                 raise ValueError('FinMind 未啟用')
             result['revenue'] = parse_revenue(df)
+            if not result['revenue']:
+                raise ValueError('FinMind 月營收解析為空')
         except Exception as e:
             result['meta']['fetch_errors'].append({'field': 'revenue', 'error': str(e)})
             try:
@@ -351,6 +440,8 @@ def build_fundamentals(stock_list: list, skip_days: int = 7):
             if df is None:
                 raise ValueError('FinMind 未啟用')
             result['eps'], result['margins'] = parse_financials(df)
+            if not result['eps']:
+                raise ValueError('FinMind 財報欄位不足')
         except Exception as e:
             result['meta']['fetch_errors'].append({'field': 'eps_margins', 'error': str(e)})
             try:
