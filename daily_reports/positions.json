@@ -1,18 +1,6 @@
 {
-  "updated": "20260716",
+  "updated": "20260717",
   "open": [
-    {
-      "id": "2383",
-      "name": "台光電",
-      "signal_date": "20260617",
-      "signal_price": 5200.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20260618",
-      "entry_price": 5600.0,
-      "high_watermark": 5600.0,
-      "days_since_high": 0
-    },
     {
       "id": "2441",
       "name": "超豐",
@@ -23,18 +11,6 @@
       "entry_date": "20260623",
       "entry_price": 136.0,
       "high_watermark": 136.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "6271",
-      "name": "同欣電",
-      "signal_date": "20260624",
-      "signal_price": 251.5,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20260624",
-      "entry_price": 251.5,
-      "high_watermark": 251.5,
       "days_since_high": 0
     }
   ],
@@ -101,6 +77,38 @@
       "exit_date": "20260714",
       "exit_price": 4020.0,
       "return_pct": -17.28,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2383",
+      "name": "台光電",
+      "signal_date": "20260617",
+      "signal_price": 5200.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20260618",
+      "entry_price": 5600.0,
+      "high_watermark": 5600.0,
+      "days_since_high": 0,
+      "exit_date": "20260717",
+      "exit_price": 4495.0,
+      "return_pct": -19.73,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "6271",
+      "name": "同欣電",
+      "signal_date": "20260624",
+      "signal_price": 251.5,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20260624",
+      "entry_price": 251.5,
+      "high_watermark": 251.5,
+      "days_since_high": 0,
+      "exit_date": "20260717",
+      "exit_price": 203.0,
+      "return_pct": -19.28,
       "exit_reason": "SL"
     }
   ]
