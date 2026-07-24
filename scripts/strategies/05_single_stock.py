@@ -6,10 +6,12 @@ Single Stock Deep Dive Analysis
     python strategy_templates/05_single_stock_deep_dive.py 4906
 """
 import sys, os
-sys.path.insert(0, os.path.dirname(__file__))
+_here = os.path.dirname(os.path.abspath(__file__))
+_scripts = os.path.dirname(_here)
+sys.path.insert(0, _here)
+sys.path.insert(0, _scripts)
 
-_here = os.path.dirname(__file__)
-_main = os.path.join(_here, '03_batch_scan_with_cv.py')
+_main = os.path.join(_scripts, 'batch_scan.py')
 with open(_main, encoding='utf-8') as f:
     code = f.read()
 code = code.split("if __name__ == '__main__':")[0]
