@@ -369,7 +369,7 @@ _CHIP_MAP = {
 def fetch_chip_data(stock_id, days=5):
     """抓取三大法人買賣超（FinMind）：最新一日明細 + 近 N 日累計/連買天數。
 
-    回傳欄位（單位：股）：
+    回傳欄位（單位：張，與 build_docs._chip_series 一致）：
       date/外資/投信/自營/合計 — 最新一日明細
       近5日/近5日外資/近5日投信 — N 日累計
       連買日/投信連買日 — 自最新一日起連續買超天數
@@ -391,7 +391,8 @@ def fetch_chip_data(stock_id, days=5):
             for _, row in day_df.iterrows():
                 zh = _CHIP_MAP.get(str(row.get('name', '')))
                 if zh:
-                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0))
+                    # FinMind 的 buy/sell 單位是股，除 1000 轉為張
+                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0)) // 1000
             agg['合計'] = agg['外資'] + agg['投信'] + agg['自營']
             daily.append(agg)
 
