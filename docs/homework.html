@@ -69,7 +69,9 @@
 </header>
 <main id="main"><div class="card" id="loading">載入中…</div></main>
 
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"
+        integrity="sha384-OK7vELvjHdhUFi31JYioPIcRHTROLdcDa6ZsNWgvgLaKj+9JqhU0Ad8g4wz3CXjA"
+        crossorigin="anonymous"></script>
 <script>
 const $ = s => document.querySelector(s);
 const sid = new URLSearchParams(location.search).get('sid');
@@ -97,7 +99,8 @@ async function renderIndex(){
       ${list || '<div style="color:var(--sub)">尚無功課。執行 python scripts/fundamental_homework.py 2330 產生。</div>'}
     </div>`;
   $('#search').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target.value.trim()) location.href = 'homework.html?sid=' + e.target.value.trim();
+    if (e.key === 'Enter' && e.target.value.trim())
+      location.href = 'homework.html?sid=' + encodeURIComponent(e.target.value.trim());
   });
 }
 

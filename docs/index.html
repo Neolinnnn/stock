@@ -352,7 +352,9 @@
     border-top:1px solid #1e2128;font-size:11px;color:var(--sub);line-height:1.7;}
   #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"
+        integrity="sha384-OK7vELvjHdhUFi31JYioPIcRHTROLdcDa6ZsNWgvgLaKj+9JqhU0Ad8g4wz3CXjA"
+        crossorigin="anonymous"></script>
 </head>
 <body>
 <script>
@@ -375,11 +377,11 @@ if (/preview\.html$/i.test(location.pathname)) {
 <header>
   <h1>📊 台股族群掃描</h1>
   <nav>
-    <a id="nav-daily"     onclick="setPage('daily')">今日掃描</a>
-    <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
-    <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
-    <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
-    <a id="nav-lab" onclick="setPage('lab')">⚗️ 策略實驗室</a>
+    <a id="nav-daily"     role="button" tabindex="0" onclick="setPage('daily')">今日掃描</a>
+    <a id="nav-weekly"    role="button" tabindex="0" onclick="setPage('weekly')">週報</a>
+    <a id="nav-stock"     role="button" tabindex="0" onclick="setPage('stock')">🔍 個股分析</a>
+    <a id="nav-watchlist" role="button" tabindex="0" onclick="setPage('watchlist')">⭐ 自選清單</a>
+    <a id="nav-lab"       role="button" tabindex="0" onclick="setPage('lab')">⚗️ 策略實驗室</a>
     <a id="nav-backtest" href="./backtest.html">📊 策略回測</a>
     <a href="./homework.html">📚 基本面功課</a>
     <a href="./radar.html">🛰️ 動能雷達</a>
@@ -712,10 +714,12 @@ function buildBtMap(results){
     if(!lastRb.holdings) return;
     lastRb.holdings.forEach(h=>{
       if(!map.has(h.stock_id)){
-        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector});
+        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector, asof:lastRb.date});
       }
       const entry = map.get(h.stock_id);
       entry.count++;
+      // 各 variant 的最後調倉日可能不同（週調/月調），取最新的那個顯示
+      if(lastRb.date && (!entry.asof || lastRb.date > entry.asof)) entry.asof = lastRb.date;
       entry.strategies.push({id:variant.id, label:variant.label, sharpe:results.ranking.find(r=>r.id===id)?.sharpe||0});
     });
   });
@@ -780,7 +784,10 @@ function showBtTooltip(sid, event){
   document.getElementById('bt-tt-signal').innerHTML    = daily && daily.signal ? badge(daily.signal) : '—';
   document.getElementById('bt-tt-sharpe').textContent  = daily ? fmt(daily.sharpe,2)  : '—';
   document.getElementById('bt-tt-stop').textContent    = daily && daily.stopLoss!=null ? fmt(daily.stopLoss,1) : '—';
-  document.getElementById('bt-tt-count').textContent   = `⭐ 出現 ${bt.count}/5 策略`;
+  // 持股來自回測最後一次調倉，不是今日選股 — 必須標日期，否則會被誤讀成
+  // 「今天有 N 個策略選中它」（旁邊並排的現價/RSI 是今日資料）
+  document.getElementById('bt-tt-count').textContent   =
+    `⭐ ${bt.asof ? fmtDate(bt.asof) + ' 調倉時' : '回測期末'}由 ${bt.count}/5 策略持有`;
   document.getElementById('bt-tt-strat-names').textContent = bt.strategies.map(s=>s.label).join('、');
 
   const tt = document.getElementById('bt-tooltip');
@@ -1035,23 +1042,31 @@ function spRender(d){
 let _fundData = null;
 let _fundLoaded = false;
 
+let _fundTab = 'revenue';   // 目前選中的分頁，資料稍後到達時要補 render
+
+function renderFundTab(tab) {
+  if (!_fundLoaded || !_fundData) return;
+  if (tab === 'revenue')     renderFundRevenue(_fundData);
+  if (tab === 'eps')         renderFundEps(_fundData);
+  if (tab === 'margins')     renderFundMargins(_fundData);
+  if (tab === 'product_mix') renderFundProductMix(_fundData);
+}
+
 function switchFundTab(tab, btn) {
   document.querySelectorAll('.fund-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _fundTab = tab;
   ['revenue', 'eps', 'margins', 'product_mix'].forEach(t => {
     const el = document.getElementById('fund-' + t.replace('_','-'));
     if (el) el.style.display = t === tab ? '' : 'none';
   });
-  if (_fundLoaded && _fundData) {
-    if (tab === 'eps')         renderFundEps(_fundData);
-    if (tab === 'margins')     renderFundMargins(_fundData);
-    if (tab === 'product_mix') renderFundProductMix(_fundData);
-  }
+  renderFundTab(tab);
 }
 
 function loadFundamentals(stockId) {
   _fundData = null;
   _fundLoaded = false;
+  _fundTab = 'revenue';
   // Reset tabs back to 月營收
   document.querySelectorAll('.fund-tab').forEach((b, i) => {
     b.classList.toggle('active', i === 0);
@@ -1060,12 +1075,13 @@ function loadFundamentals(stockId) {
     const el = document.getElementById('fund-' + t);
     if (el) {
       el.style.display = i === 0 ? '' : 'none';
-      if (i === 0) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
-      else el.innerHTML = '';
+      el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
     }
   });
   fetchJSON(`./fundamentals/${stockId}.json`)
-    .then(d => { _fundData = d; _fundLoaded = true; renderFundRevenue(d); })
+    // 補 render 目前選中的分頁：使用者可能在 fetch 回來前就切到 EPS/三率/產銷，
+    // 只 render revenue 會讓那些分頁永遠停在載入中
+    .then(d => { _fundData = d; _fundLoaded = true; renderFundTab(_fundTab); })
     .catch(() => {
       ['revenue','eps','margins','product-mix'].forEach(t => {
         const el = document.getElementById('fund-' + t);
@@ -1982,6 +1998,12 @@ async function init(){
     if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
       hideBtTooltip();
   });
+  // 導覽列的分頁切換是沒有 href 的 <a>，鍵盤按 Enter/Space 不會觸發 click
+  document.querySelectorAll('nav a[role="button"]').forEach(a=>{
+    a.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); a.click(); }
+    });
+  });
 }
 
 function buildDateSelect(){
@@ -2183,12 +2205,11 @@ async function loadDate(dateStr){
     try{
       CACHE[dateStr] = await fetchJSON(`./${dateStr}.json?v=${bust}`);
     }catch{
-      try{
-        CACHE[dateStr] = await fetchJSON(`./daily.json?v=${bust}`);
-      }catch{
-        showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
-        return;
-      }
+      // 原本會退回 daily.json 並存進 CACHE[dateStr]，等於把「最新資料」
+      // 冒充成該日期的資料且永久快取，使用者無從察覺日期與內容不符。
+      // 寧可明確報錯。
+      showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
+      return;
     }
   }
   renderDaily(CACHE[dateStr]);
