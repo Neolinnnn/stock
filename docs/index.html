@@ -504,35 +504,32 @@ function showToast(msg) {
 }
 
 // ── ⚙ 手動觸發 GitHub Actions 每日掃描 ──────────────────────────────────────
-// token 僅存於瀏覽器 localStorage，不會上傳；需 fine-grained PAT 對 Neolinnnn/stock 給 Actions: Read & Write
-const GH_REPO = 'Neolinnnn/stock';
+// 觸發改由 Apps Script 代理，PAT 存在它的指令碼屬性（伺服器端），瀏覽器不再持有。
+// 原因：neolinnnn.github.io 是所有 Pages 專案共用的單一 origin，token 放在
+// localStorage 等於同源任何頁面（含第三方 CDN 腳本）都讀得到，而 workflow
+// 執行時帶著 9 組 repo secrets。
 const GH_WORKFLOW = 'daily_scan.yml';
 const GH_WORKFLOW_ONE = 'scan_one.yml';
 
-// 共用：取得/驗證 gh_token 後 POST workflow_dispatch。回傳 true 表示成功觸發（204）。
+// 清掉舊版留在瀏覽器裡的 token（此頁已不再使用）
+try { localStorage.removeItem('gh_token'); } catch {}
+
+// 回傳 true 表示成功觸發。
 async function ghDispatch(workflow, inputs) {
-  let token = localStorage.getItem('gh_token');
-  if (!token) {
-    token = (prompt('貼上 GitHub fine-grained token\n（範圍：Neolinnnn/stock，權限 Actions: Read & Write）\n只會存在本機瀏覽器') || '').trim();
-    if (!token) return false;
-    localStorage.setItem('gh_token', token);
-  }
-  const body = { ref: 'main' };
-  if (inputs && Object.keys(inputs).length) body.inputs = inputs;
+  if (!APPS_SCRIPT_URL) { showToast('❌ 尚未設定 APPS_SCRIPT_URL'); return false; }
   try {
-    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${workflow}/dispatches`, {
+    const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ action: 'dispatch', workflow, inputs: inputs || {} }),
     });
-    if (res.status === 204) return true;
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem('gh_token');
-      showToast('❌ token 無效或權限不足，已清除，請再試一次重設');
-      return false;
-    }
-    const msg = await res.text();
-    showToast(`❌ 觸發失敗（${res.status}）：${msg.slice(0, 80)}`);
+    const data = await res.json();
+    if (data.ok) return true;
+    const msgs = {
+      token_not_configured: '代理未設定 GH_TOKEN，請到 Apps Script 指令碼屬性新增',
+      workflow_not_allowed: 'workflow 不在代理白名單內',
+      rate_limited: '剛剛才觸發過，請稍候再試',
+    };
+    showToast(`❌ 觸發失敗：${msgs[data.error] || data.error || '未知錯誤'}`);
   } catch (e) {
     showToast(`❌ 觸發失敗：${e.message}`);
   }
