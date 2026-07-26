@@ -357,23 +357,6 @@
         crossorigin="anonymous"></script>
 </head>
 <body>
-<script>
-/* 測試版偵測：檔名為 preview.html 才顯示標示；index.html 不受影響。
-   推正式流程＝直接把 preview.html 覆蓋 index.html，兩檔內容永遠相同。 */
-if (/preview\.html$/i.test(location.pathname)) {
-  document.title = '🧪 ' + document.title + '（測試版）';
-  document.addEventListener('DOMContentLoaded', function () {
-    var b = document.createElement('div');
-    b.textContent = '🧪 測試版 — 驗證後再推 index.html';
-    b.style.cssText = 'position:fixed;bottom:12px;left:12px;z-index:999;background:#f1b143;color:#0b0e14;'
-      + 'font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;'
-      + 'box-shadow:0 2px 10px rgba(0,0,0,.4);pointer-events:none;';
-    document.body.appendChild(b);
-    var h = document.querySelector('header');
-    if (h) h.style.borderTop = '3px solid #f1b143';
-  });
-}
-</script>
 <header>
   <h1>📊 台股族群掃描</h1>
   <nav>

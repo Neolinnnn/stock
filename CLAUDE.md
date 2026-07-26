@@ -95,14 +95,17 @@ stock_research/
 
 ---
 
-## 網頁上線流程（測試版 → 正式版）
+## 網頁上線流程
 
-**新功能或改動主站頁面時，一律先進測試版，驗證後才進正式版。**
+**改動 `docs/` 底下的頁面後，先在本機驗證，再開 PR 合併。**
 
-- **測試版**：`docs/preview.html`（index.html 的沙盒副本）。新分頁、新導覽入口、UI 改動先加在這裡。
-- **正式版**：`docs/index.html` 及其他正式頁面。只放已在測試版驗證過的功能。
-- 流程：改 preview.html → push 部署 → 使用者在線上測試版確認 OK → 才把改動搬進 index.html。
-- 新增獨立頁面（如 homework.html、backtest.html）本體可直接上，但**導覽入口**同樣先加 preview.html，驗證後再加 index.html。
+- 本機預覽：`python -m http.server 8766 --directory docs`，瀏覽器開 `http://localhost:8766`
+- 驗證範圍：改到的按鈕實際點過、圖表有正常渲染、console 無錯誤
+- 確認無誤後開 PR，合併到 main 即由 GitHub Pages 部署
+
+> 早期用 `docs/preview.html`（index.html 的線上沙盒副本）做測試版，
+> 已於 2026-07-26 廢除：兩檔需手動保持同步，容易發生只改其中一檔、
+> 另一檔把修正蓋回去的情形。改為本機驗證。
 
 # AI Behavior Guidelines (by Andrej Karpathy)
 
