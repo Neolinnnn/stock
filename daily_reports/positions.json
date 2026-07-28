@@ -1,19 +1,6 @@
 {
-  "updated": "20260727",
-  "open": [
-    {
-      "id": "2441",
-      "name": "超豐",
-      "signal_date": "20260623",
-      "signal_price": 136.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20260623",
-      "entry_price": 136.0,
-      "high_watermark": 136.0,
-      "days_since_high": 0
-    }
-  ],
+  "updated": "20260728",
+  "open": [],
   "closed": [
     {
       "id": "3535",
@@ -109,6 +96,22 @@
       "exit_date": "20260717",
       "exit_price": 203.0,
       "return_pct": -19.28,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2441",
+      "name": "超豐",
+      "signal_date": "20260623",
+      "signal_price": 136.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20260623",
+      "entry_price": 136.0,
+      "high_watermark": 136.0,
+      "days_since_high": 0,
+      "exit_date": "20260728",
+      "exit_price": 109.5,
+      "return_pct": -19.49,
       "exit_reason": "SL"
     }
   ]
