@@ -1,225 +1,203 @@
 {
   "meta": {
-    "date": "2026-07-24",
+    "date": "2026-07-31",
     "days": 5
   },
   "market": {
-    "taiex_close": 43654.84,
-    "taiex_week_pct": 2.3,
-    "otc_close": 377.63,
-    "otc_week_pct": -0.21,
+    "taiex_close": 43119.75,
+    "taiex_week_pct": -1.23,
+    "otc_close": 347.85,
+    "otc_week_pct": -7.89,
     "taiex_bull": false,
-    "taiex_ma60": 43964.31
+    "taiex_ma60": 44089.08
   },
   "changes": [
     {
-      "sector": "AI伺服器",
-      "change": 12.53,
-      "level": 0.51,
-      "prev_change": -4.99
-    },
-    {
-      "sector": "光通訊",
-      "change": 12.28,
-      "level": -18.16,
-      "prev_change": -23.15
-    },
-    {
-      "sector": "AI 散熱",
-      "change": 9.4,
-      "level": -11.17,
-      "prev_change": -10.38
-    },
-    {
-      "sector": "測試設備",
-      "change": 8.58,
-      "level": -8.65,
-      "prev_change": -6.87
+      "sector": "光學",
+      "change": 4.07,
+      "level": -15.68,
+      "prev_change": 0.85
     },
     {
       "sector": "顯示",
-      "change": 6.89,
-      "level": -2.83,
-      "prev_change": -6.9
-    },
-    {
-      "sector": "AI 電源",
-      "change": 6.22,
-      "level": -7.52,
-      "prev_change": -9.74
+      "change": -4.01,
+      "level": -6.99,
+      "prev_change": 6.89
     },
     {
       "sector": "記憶體",
-      "change": 5.88,
-      "level": -17.58,
-      "prev_change": -18.64
+      "change": -4.63,
+      "level": -16.54,
+      "prev_change": 5.88
     },
     {
-      "sector": "IC設計",
-      "change": 5.04,
-      "level": -10.49,
-      "prev_change": -16.94
+      "sector": "AI伺服器",
+      "change": -5.74,
+      "level": -1.93,
+      "prev_change": 12.53
     },
     {
-      "sector": "CoPoS封裝",
-      "change": 4.96,
-      "level": -12.38,
-      "prev_change": -13.42
+      "sector": "測試設備",
+      "change": -7.13,
+      "level": -8.53,
+      "prev_change": 8.58
     },
     {
       "sector": "PCB",
-      "change": 4.69,
-      "level": -23.5,
-      "prev_change": -19.22
+      "change": -8.62,
+      "level": -29.76,
+      "prev_change": 4.69
     },
     {
       "sector": "綠能環保",
-      "change": 3.97,
-      "level": -24.26,
-      "prev_change": -12.23
-    },
-    {
-      "sector": "AI ASIC/IP",
-      "change": 3.38,
-      "level": -15.09,
-      "prev_change": -17.61
-    },
-    {
-      "sector": "光學",
-      "change": 0.85,
-      "level": -28.65,
-      "prev_change": -21.19
-    },
-    {
-      "sector": "銅箔/CCL",
-      "change": 0.7,
-      "level": -24.02,
-      "prev_change": -22.97
+      "change": -9.14,
+      "level": -29.09,
+      "prev_change": 3.97
     },
     {
       "sector": "車用電子",
-      "change": 0.49,
-      "level": -7.87,
-      "prev_change": -17.25
+      "change": -10.42,
+      "level": -16.34,
+      "prev_change": 0.49
     },
     {
-      "sector": "封測",
-      "change": -1.41,
-      "level": -17.56,
-      "prev_change": -12.56
-    },
-    {
-      "sector": "被動元件",
-      "change": -2.45,
-      "level": -48.6,
-      "prev_change": -34.75
+      "sector": "AI 散熱",
+      "change": -11.04,
+      "level": -16.79,
+      "prev_change": 9.4
     },
     {
       "sector": "ABF載板",
-      "change": -7.22,
-      "level": -7.99,
-      "prev_change": -28.99
+      "change": -11.46,
+      "level": -20.92,
+      "prev_change": -7.22
+    },
+    {
+      "sector": "光通訊",
+      "change": -11.59,
+      "level": -22.98,
+      "prev_change": 12.28
+    },
+    {
+      "sector": "銅箔/CCL",
+      "change": -12.1,
+      "level": -32.11,
+      "prev_change": 0.7
+    },
+    {
+      "sector": "IC設計",
+      "change": -12.12,
+      "level": -16.72,
+      "prev_change": 5.04
+    },
+    {
+      "sector": "被動元件",
+      "change": -12.75,
+      "level": -56.78,
+      "prev_change": -2.45
+    },
+    {
+      "sector": "AI 電源",
+      "change": -12.79,
+      "level": -14.51,
+      "prev_change": 6.22
+    },
+    {
+      "sector": "AI ASIC/IP",
+      "change": -13.0,
+      "level": -21.16,
+      "prev_change": 3.38
+    },
+    {
+      "sector": "封測",
+      "change": -16.01,
+      "level": -29.72,
+      "prev_change": -1.41
+    },
+    {
+      "sector": "CoPoS封裝",
+      "change": -18.5,
+      "level": -24.63,
+      "prev_change": 4.96
     }
   ],
   "buys": [
     {
-      "stock": "7734 印能",
-      "days": 3,
+      "stock": "2451 創見",
+      "days": 4,
       "tier": null,
       "gate": false
     },
     {
       "stock": "2360 致茂",
-      "days": 1,
+      "days": 3,
+      "tier": null,
+      "gate": false
+    },
+    {
+      "stock": "7734 印能",
+      "days": 2,
       "tier": null,
       "gate": false
     }
   ],
   "positions": {
     "entries": [],
-    "exits": [],
-    "holding": [
+    "exits": [
       {
         "id": "2441",
         "name": "超豐",
-        "entry_price": 136.0,
-        "price": 118.0,
-        "pnl_pct": -13.24,
-        "phase": 1,
-        "days_since_high": 0
+        "exit_price": 109.5,
+        "return_pct": -19.49,
+        "exit_reason": "SL",
+        "holding_days": 35,
+        "date": "20260728"
       }
-    ]
+    ],
+    "holding": []
   },
   "alerts": [
     {
-      "id": "2357",
-      "name": "華碩",
-      "type": "RSI過熱",
-      "days": 4,
-      "detail": "RSI=80.5"
-    },
-    {
-      "id": "3231",
-      "name": "緯創",
-      "type": "RSI過熱",
-      "days": 3,
-      "detail": "RSI=87.1"
-    },
-    {
-      "id": "2317",
-      "name": "鴻海",
-      "type": "RSI過熱",
-      "days": 2,
-      "detail": "RSI=79.8"
-    },
-    {
-      "id": "3665",
-      "name": "貿聯-KY",
-      "type": "RSI過熱",
-      "days": 2,
-      "detail": "RSI=79.2"
-    },
-    {
-      "id": "2376",
-      "name": "技嘉",
-      "type": "RSI過熱",
-      "days": 2,
-      "detail": "RSI=73.5"
-    },
-    {
-      "id": "4938",
-      "name": "和碩",
+      "id": "2451",
+      "name": "創見",
       "type": "RSI過熱",
       "days": 2,
       "detail": "RSI=78.7"
     },
     {
+      "id": "4979",
+      "name": "華星光",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=74.6"
+    },
+    {
+      "id": "3231",
+      "name": "緯創",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=80.9"
+    },
+    {
+      "id": "3034",
+      "name": "聯詠",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=74.3"
+    },
+    {
       "id": "7734",
       "name": "印能",
       "type": "RSI過熱",
-      "days": 2,
-      "detail": "RSI=78.2"
+      "days": 1,
+      "detail": "RSI=74.3"
     },
     {
-      "id": "2455",
-      "name": "全新",
+      "id": "2357",
+      "name": "華碩",
       "type": "RSI過熱",
       "days": 1,
-      "detail": "RSI=70.3"
-    },
-    {
-      "id": "3653",
-      "name": "健策",
-      "type": "RSI過熱",
-      "days": 1,
-      "detail": "RSI=76.8"
-    },
-    {
-      "id": "2360",
-      "name": "致茂",
-      "type": "RSI過熱",
-      "days": 1,
-      "detail": "RSI=71.4"
+      "detail": "RSI=72.6"
     }
   ],
   "narrative": ""
