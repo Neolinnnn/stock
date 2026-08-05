@@ -45,30 +45,30 @@ def test_pass_strong_sector():
 
 
 def test_reject_chasing_high():
-    """乖離 MA10 超過上限（追高）→ 擋下。price=106, ma10=100 → 乖離 +6% > 2%"""
+    """乖離 MA20 超過上限（追高）→ 擋下。price=106, ma20=98 → 乖離 +8.2% > 5%"""
     assert passes_gate(_stock(price=106.0, ma5=104.0), taiex_bull=True,
-                       max_bias_ma10=2.0) is False
+                       max_bias_ma20=5.0) is False
 
 
-def test_pass_near_ma10():
-    """乖離 MA10 在上限內（貼均線）→ 通過。price=101, ma10=100 → 乖離 +1% ≤ 2%"""
-    assert passes_gate(_stock(), taiex_bull=True, max_bias_ma10=2.0) is True
+def test_pass_near_ma20():
+    """乖離 MA20 在上限內（貼均線）→ 通過。price=101, ma20=98 → 乖離 +3.1% ≤ 5%"""
+    assert passes_gate(_stock(), taiex_bull=True, max_bias_ma20=5.0) is True
 
 
-def test_reject_missing_ma10_when_bias_checked():
-    """要檢查乖離但缺 ma10 → 保守擋下"""
-    s = _stock(); s['ma10'] = None
-    assert passes_gate(s, taiex_bull=True, max_bias_ma10=2.0) is False
+def test_reject_missing_ma20_when_bias_checked():
+    """要檢查乖離但缺 ma20 → 保守擋下"""
+    s = _stock(); s['ma20'] = None
+    assert passes_gate(s, taiex_bull=True, max_bias_ma20=5.0) is False
 
 
 def test_combined_gate():
     """族群強勢 + 貼均線同時成立 → 通過；任一不成立 → 擋下"""
     assert passes_gate(_stock(), taiex_bull=True,
-                       sector_strong=True, max_bias_ma10=2.0) is True
+                       sector_strong=True, max_bias_ma20=5.0) is True
     assert passes_gate(_stock(price=106.0, ma5=104.0), taiex_bull=True,
-                       sector_strong=True, max_bias_ma10=2.0) is False
+                       sector_strong=True, max_bias_ma20=5.0) is False
     assert passes_gate(_stock(), taiex_bull=True,
-                       sector_strong=False, max_bias_ma10=2.0) is False
+                       sector_strong=False, max_bias_ma20=5.0) is False
 
 
 # ── update_positions：同日同檔跨族群重複 gate_buys 只建一筆 ──────────────────

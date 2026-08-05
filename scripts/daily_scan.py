@@ -38,10 +38,15 @@ from datafeed import finmind_fetch as _finmind_fetch
 from cjk_font import setup_cjk_font
 setup_cjk_font()
 
-# 進場乖離率上限：qualified 推薦只取「貼近 MA10」的個股，避免追高。
-# 依據 2026 全市場回測（136 筆訊號）：乖離 MA10 ≤2% 勝率 27% / 平均 +0.1%，
-# 對照全收 19% / -2.5%；乖離 2~6% 區間勝率僅 9~10%（追高重災區）。
-MAX_BIAS_MA10 = 2.0
+# 進場乖離率上限：qualified 推薦只取「貼近 MA20」的個股，避免追高。
+# 依 gate_variants 回測（2025/01~2026/06、929 筆訊號）由 MA10≤2% 改為 MA20≤5%：
+#   MA10 ≤2%（原）  23 筆 1.5 筆/月 勝率 83% Wilson 62.9% 均報酬 +9.96%
+#   MA20 ≤5%（現）  95 筆 5.9 筆/月 勝率 73% Wilson 62.9% 均報酬 +10.75%
+# 原門檻的高勝率來自 n=23 的小樣本，Wilson 下界與 MA20≤5% 相同，但出手量僅四分之一，
+# 且 2026/6/26~8/4 連續 29 個交易日 0 進場。走查驗證 MA20≤5% 前後兩段皆優於基準線
+# （前段 76% / 後段 71%，基準線 45% / 73%），是唯一不依賴多頭順風的變體。
+# 完整數據見 docs/gate_variants.json。
+MAX_BIAS_MA20 = 5.0
 
 # 族群 regime 閘門：qualified 推薦只取「所屬族群正強勢」（avg_ret > 3，與
 # strong_sectors 同一定義）的個股。2026 回測顯示大盤 regime 無效（指數全程
@@ -683,7 +688,7 @@ def run_daily_scan():
                     'ma60': st.get('ma60'),
                 }
                 if passes_gate(st, taiex_bull, sector_strong=sector_strong,
-                               max_bias_ma10=MAX_BIAS_MA10):
+                               max_bias_ma20=MAX_BIAS_MA20):
                     gate_buys.append({'id': st['id'], 'name': st['name'],
                                       'price': st.get('price'), 'sector': sector})
         track = update_positions(today, scan_lookup, taiex_bull, gate_buys)
@@ -962,12 +967,16 @@ def build_summary(date, market, all_results, chart_path):
             all_weak.append(sector)
 
         # 推薦名單
-        # 乖離率閘門：(price - MA10) / MA10；ma10 缺值→NaN→比較為 False，保守剔除。
+        # 乖離率閘門：(price - MA20) / MA20；ma20 缺值→NaN→比較為 False，保守剔除。
+        _ma20 = pd.to_numeric(df['ma20'], errors='coerce')
+        _price = pd.to_numeric(df['price'], errors='coerce')
+        _bias_ma20 = (_price - _ma20) / _ma20 * 100
+        # 前端沿用中的 MA10 乖離徽章，待正式版切換後可移除
         _ma10 = pd.to_numeric(df['ma10'], errors='coerce')
-        _bias_ma10 = (pd.to_numeric(df['price'], errors='coerce') - _ma10) / _ma10 * 100
+        _bias_ma10 = (_price - _ma10) / _ma10 * 100
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
                    (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
-                   (_bias_ma10 <= MAX_BIAS_MA10)]
+                   (_bias_ma20 <= MAX_BIAS_MA20)]
         # 族群非強勢時，整族群不納入推薦（regime 閘門）
         sector_strong = bool(avg_ret > 3)
         if REQUIRE_STRONG_SECTOR and not sector_strong:
@@ -980,6 +989,7 @@ def build_summary(date, market, all_results, chart_path):
                 'sector': sector, 'id': r['id'], 'name': r['name'],
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
+                'bias_ma20': round(float(_bias_ma20.loc[r.name]), 1),
                 'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
             })
 
@@ -991,13 +1001,14 @@ def build_summary(date, market, all_results, chart_path):
             if r['id'] in _dual_filter_seen:
                 continue
             _dual_filter_seen.add(r['id'])
-            bias_v = round(float(_bias_ma10.loc[r.name]), 1)
-            passes_bias = bias_v <= MAX_BIAS_MA10
+            bias_v = round(float(_bias_ma20.loc[r.name]), 1)
+            passes_bias = bias_v <= MAX_BIAS_MA20
             all_dual_filter.append({
                 'sector': sector, 'id': r['id'], 'name': r['name'],
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
-                'bias_ma10': bias_v,
+                'bias_ma20': bias_v,
+                'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
                 'sector_strong': sector_strong,
                 'passes_bias': passes_bias,
                 'passes_all': passes_bias and (sector_strong if REQUIRE_STRONG_SECTOR else True),

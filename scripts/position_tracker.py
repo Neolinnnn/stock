@@ -41,14 +41,15 @@ PHASE2_TIMEOUT = 25     # Phase 2 未創新高的時間停損（交易日）
 
 def passes_gate(stock: dict, taiex_bull: bool, *,
                 sector_strong: bool = True,
-                max_bias_ma10: float | None = None) -> bool:
+                max_bias_ma20: float | None = None) -> bool:
     """判斷個股是否通過進場閘門。
 
-    stock 需含：signal, price, ma5, ma20, ma60；檢查乖離時另需 ma10。
+    stock 需含：signal, price, ma5, ma20, ma60。
     taiex_bull：TAIEX 收盤 > MA60。
     sector_strong：個股所屬族群是否強勢（avg_ret>3）。daily_scan 依
         strong_sectors 傳入；REQUIRE_STRONG_SECTOR=False 時恆傳 True（不過濾）。
-    max_bias_ma10：進場乖離 MA10 上限（%）；None 表示不檢查。
+    max_bias_ma20：進場乖離 MA20 上限（%）；None 表示不檢查。
+        多頭排列已隱含 收盤>MA20，故此乖離恆為正，不需下界。
 
     族群強勢 + 乖離兩道閘門依 2025/1~2026/6 回測加入：套在現有閘門上，
     HYBRID 自適應出場勝率 63%→71%、PF 2.56→3.05（代價：訊號數大幅縮減）。
@@ -70,12 +71,9 @@ def passes_gate(stock: dict, taiex_bull: bool, *,
     # 族群強勢閘門
     if not sector_strong:
         return False
-    # 乖離率閘門：進場貼近 MA10，避免追高
-    if max_bias_ma10 is not None:
-        ma10 = stock.get('ma10')
-        if ma10 is None or ma10 == 0:
-            return False
-        if (c - ma10) / ma10 * 100 > max_bias_ma10:
+    # 乖離率閘門：進場貼近 MA20，避免追高
+    if max_bias_ma20 is not None:
+        if (c - ma20) / ma20 * 100 > max_bias_ma20:
             return False
     return True
 

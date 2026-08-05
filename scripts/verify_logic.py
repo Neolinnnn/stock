@@ -52,12 +52,12 @@ GATE_CASES = [
     ("族群不強勢且要求強勢 → 擋掉",
      dict(stock={"signal": "BUY", "price": 100, "ma5": 99, "ma20": 98, "ma60": 97},
           taiex_bull=True, sector_strong=False), False),
-    ("乖離 MA10 超過上限 → 擋掉",
+    ("乖離 MA20 超過上限 → 擋掉",
      dict(stock={"signal": "BUY", "price": 105, "ma5": 99, "ma20": 98, "ma60": 97, "ma10": 100},
-          taiex_bull=True, max_bias_ma10=2.0), False),
-    ("乖離 MA10 在上限內 → 通過",
+          taiex_bull=True, max_bias_ma20=5.0), False),
+    ("乖離 MA20 在上限內 → 通過",
      dict(stock={"signal": "BUY", "price": 101, "ma5": 99, "ma20": 98, "ma60": 97, "ma10": 100},
-          taiex_bull=True, max_bias_ma10=2.0), True),
+          taiex_bull=True, max_bias_ma20=5.0), True),
 ]
 
 for name, kwargs, expected in GATE_CASES:
