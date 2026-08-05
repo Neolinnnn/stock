@@ -1,0 +1,1317 @@
+{
+ "generated_at": "2026-08-05 06:54",
+ "period": {
+  "start": "20250102",
+  "end": "20260610",
+  "months": 17.2,
+  "signals": 929,
+  "wf_split": "20250909"
+ },
+ "baseline": {
+  "全 BUY（無任何閘門）": {
+   "full": {
+    "n": 898,
+    "open": 31,
+    "per_mo": 54.0,
+    "win_rate": 0.5857,
+    "wilson": 0.5532,
+    "avg_ret": 8.26,
+    "pf": 2.3,
+    "avg_days": 29.7,
+    "sum_ret": 7421.5
+   },
+   "front": {
+    "n": 468,
+    "open": 0,
+    "per_mo": 54.4,
+    "win_rate": 0.453,
+    "wilson": 0.4085,
+    "avg_ret": 0.31,
+    "pf": 1.04,
+    "avg_days": 31.9,
+    "sum_ret": 144.9
+   },
+   "back": {
+    "n": 430,
+    "open": 31,
+    "per_mo": 53.6,
+    "win_rate": 0.7302,
+    "wilson": 0.6864,
+    "avg_ret": 16.92,
+    "pf": 5.45,
+    "avg_days": 27.3,
+    "sum_ret": 7276.6
+   }
+  },
+  "僅多頭排列": {
+   "full": {
+    "n": 325,
+    "open": 20,
+    "per_mo": 20.0,
+    "win_rate": 0.6123,
+    "wilson": 0.5583,
+    "avg_ret": 8.62,
+    "pf": 2.47,
+    "avg_days": 27.1,
+    "sum_ret": 2801.6
+   },
+   "front": {
+    "n": 129,
+    "open": 0,
+    "per_mo": 15.0,
+    "win_rate": 0.4574,
+    "wilson": 0.3739,
+    "avg_ret": -0.33,
+    "pf": 0.96,
+    "avg_days": 38.1,
+    "sum_ret": -42.5
+   },
+   "back": {
+    "n": 196,
+    "open": 20,
+    "per_mo": 25.1,
+    "win_rate": 0.7143,
+    "wilson": 0.6474,
+    "avg_ret": 14.51,
+    "pf": 4.08,
+    "avg_days": 19.9,
+    "sum_ret": 2844.1
+   }
+  },
+  "現行 production（M1+S1+B1）": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  }
+ },
+ "bias": {
+  "B0 乖離不限": {
+   "full": {
+    "n": 210,
+    "open": 17,
+    "per_mo": 13.2,
+    "win_rate": 0.6667,
+    "wilson": 0.6004,
+    "avg_ret": 7.69,
+    "pf": 2.51,
+    "avg_days": 24.4,
+    "sum_ret": 1614.0
+   },
+   "front": {
+    "n": 59,
+    "open": 0,
+    "per_mo": 6.9,
+    "win_rate": 0.6441,
+    "wilson": 0.5166,
+    "avg_ret": 5.89,
+    "pf": 2.39,
+    "avg_days": 41.6,
+    "sum_ret": 347.4
+   },
+   "back": {
+    "n": 151,
+    "open": 17,
+    "per_mo": 19.5,
+    "win_rate": 0.6755,
+    "wilson": 0.5973,
+    "avg_ret": 8.39,
+    "pf": 2.55,
+    "avg_days": 17.7,
+    "sum_ret": 1266.5
+   }
+  },
+  "B1 MA10 ≤2%（現行）": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "B2 MA20 ≤8%": {
+   "full": {
+    "n": 135,
+    "open": 10,
+    "per_mo": 8.4,
+    "win_rate": 0.6741,
+    "wilson": 0.5911,
+    "avg_ret": 9.47,
+    "pf": 3.01,
+    "avg_days": 28.0,
+    "sum_ret": 1278.9
+   },
+   "front": {
+    "n": 49,
+    "open": 0,
+    "per_mo": 5.7,
+    "win_rate": 0.6531,
+    "wilson": 0.5131,
+    "avg_ret": 6.9,
+    "pf": 2.79,
+    "avg_days": 42.7,
+    "sum_ret": 338.0
+   },
+   "back": {
+    "n": 86,
+    "open": 10,
+    "per_mo": 11.2,
+    "win_rate": 0.686,
+    "wilson": 0.5818,
+    "avg_ret": 10.94,
+    "pf": 3.1,
+    "avg_days": 19.6,
+    "sum_ret": 940.8
+   }
+  },
+  "B3 MA20 ≤5%": {
+   "full": {
+    "n": 95,
+    "open": 7,
+    "per_mo": 5.9,
+    "win_rate": 0.7263,
+    "wilson": 0.6292,
+    "avg_ret": 10.75,
+    "pf": 3.63,
+    "avg_days": 28.9,
+    "sum_ret": 1021.6
+   },
+   "front": {
+    "n": 37,
+    "open": 0,
+    "per_mo": 4.3,
+    "win_rate": 0.7568,
+    "wilson": 0.5988,
+    "avg_ret": 8.67,
+    "pf": 3.76,
+    "avg_days": 40.1,
+    "sum_ret": 320.7
+   },
+   "back": {
+    "n": 58,
+    "open": 7,
+    "per_mo": 7.6,
+    "win_rate": 0.7069,
+    "wilson": 0.5799,
+    "avg_ret": 12.09,
+    "pf": 3.57,
+    "avg_days": 21.8,
+    "sum_ret": 700.9
+   }
+  },
+  "B4 ATR：≤1.0 ATR": {
+   "full": {
+    "n": 76,
+    "open": 9,
+    "per_mo": 4.9,
+    "win_rate": 0.6447,
+    "wilson": 0.5326,
+    "avg_ret": 9.46,
+    "pf": 2.72,
+    "avg_days": 23.3,
+    "sum_ret": 719.3
+   },
+   "front": {
+    "n": 23,
+    "open": 0,
+    "per_mo": 2.7,
+    "win_rate": 0.7391,
+    "wilson": 0.5353,
+    "avg_ret": 9.54,
+    "pf": 4.28,
+    "avg_days": 36.3,
+    "sum_ret": 219.3
+   },
+   "back": {
+    "n": 53,
+    "open": 9,
+    "per_mo": 7.2,
+    "win_rate": 0.6038,
+    "wilson": 0.4694,
+    "avg_ret": 9.43,
+    "pf": 2.42,
+    "avg_days": 17.6,
+    "sum_ret": 499.9
+   }
+  },
+  "B5 ATR：≤1.5 ATR": {
+   "full": {
+    "n": 128,
+    "open": 12,
+    "per_mo": 8.1,
+    "win_rate": 0.6484,
+    "wilson": 0.5625,
+    "avg_ret": 8.67,
+    "pf": 2.64,
+    "avg_days": 26.0,
+    "sum_ret": 1110.1
+   },
+   "front": {
+    "n": 42,
+    "open": 0,
+    "per_mo": 4.9,
+    "win_rate": 0.6905,
+    "wilson": 0.5397,
+    "avg_ret": 8.27,
+    "pf": 3.43,
+    "avg_days": 41.5,
+    "sum_ret": 347.5
+   },
+   "back": {
+    "n": 86,
+    "open": 12,
+    "per_mo": 11.4,
+    "win_rate": 0.6279,
+    "wilson": 0.5223,
+    "avg_ret": 8.87,
+    "pf": 2.43,
+    "avg_days": 18.5,
+    "sum_ret": 762.6
+   }
+  },
+  "B6 ATR：≤2.0 ATR": {
+   "full": {
+    "n": 168,
+    "open": 12,
+    "per_mo": 10.5,
+    "win_rate": 0.6726,
+    "wilson": 0.5985,
+    "avg_ret": 8.35,
+    "pf": 2.67,
+    "avg_days": 25.3,
+    "sum_ret": 1403.2
+   },
+   "front": {
+    "n": 51,
+    "open": 0,
+    "per_mo": 5.9,
+    "win_rate": 0.6667,
+    "wilson": 0.5297,
+    "avg_ret": 6.79,
+    "pf": 2.71,
+    "avg_days": 42.0,
+    "sum_ret": 346.3
+   },
+   "back": {
+    "n": 117,
+    "open": 12,
+    "per_mo": 15.0,
+    "win_rate": 0.6752,
+    "wilson": 0.586,
+    "avg_ret": 9.03,
+    "pf": 2.66,
+    "avg_days": 18.1,
+    "sum_ret": 1056.8
+   }
+  }
+ },
+ "market": {
+  "M0 大盤不限": {
+   "full": {
+    "n": 26,
+    "open": 2,
+    "per_mo": 1.6,
+    "win_rate": 0.7308,
+    "wilson": 0.5392,
+    "avg_ret": 6.85,
+    "pf": 2.52,
+    "avg_days": 28.3,
+    "sum_ret": 178.0
+   },
+   "front": {
+    "n": 17,
+    "open": 0,
+    "per_mo": 2.0,
+    "win_rate": 0.7647,
+    "wilson": 0.5274,
+    "avg_ret": 7.01,
+    "pf": 2.75,
+    "avg_days": 33.0,
+    "sum_ret": 119.2
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "M1 TAIEX >MA60（現行）": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "M2 TAIEX >MA20": {
+   "full": {
+    "n": 22,
+    "open": 2,
+    "per_mo": 1.4,
+    "win_rate": 0.8182,
+    "wilson": 0.6148,
+    "avg_ret": 9.87,
+    "pf": 4.3,
+    "avg_days": 31.1,
+    "sum_ret": 217.2
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 8,
+    "open": 2,
+    "per_mo": 1.2,
+    "win_rate": 0.625,
+    "wilson": 0.3057,
+    "avg_ret": 5.87,
+    "pf": 1.96,
+    "avg_days": 18.6,
+    "sum_ret": 46.9
+   }
+  },
+  "M3 TAIEX MA20 斜率>0": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "M4 廣度 >50%": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "M0 大盤不限（乖離不限）": {
+   "full": {
+    "n": 217,
+    "open": 17,
+    "per_mo": 13.6,
+    "win_rate": 0.6452,
+    "wilson": 0.5795,
+    "avg_ret": 6.86,
+    "pf": 2.24,
+    "avg_days": 24.0,
+    "sum_ret": 1488.0
+   },
+   "front": {
+    "n": 66,
+    "open": 0,
+    "per_mo": 7.7,
+    "win_rate": 0.5758,
+    "wilson": 0.4556,
+    "avg_ret": 3.36,
+    "pf": 1.59,
+    "avg_days": 38.3,
+    "sum_ret": 221.5
+   },
+   "back": {
+    "n": 151,
+    "open": 17,
+    "per_mo": 19.5,
+    "win_rate": 0.6755,
+    "wilson": 0.5973,
+    "avg_ret": 8.39,
+    "pf": 2.55,
+    "avg_days": 17.7,
+    "sum_ret": 1266.5
+   }
+  },
+  "M1 TAIEX >MA60（現行）（乖離不限）": {
+   "full": {
+    "n": 210,
+    "open": 17,
+    "per_mo": 13.2,
+    "win_rate": 0.6667,
+    "wilson": 0.6004,
+    "avg_ret": 7.69,
+    "pf": 2.51,
+    "avg_days": 24.4,
+    "sum_ret": 1614.0
+   },
+   "front": {
+    "n": 59,
+    "open": 0,
+    "per_mo": 6.9,
+    "win_rate": 0.6441,
+    "wilson": 0.5166,
+    "avg_ret": 5.89,
+    "pf": 2.39,
+    "avg_days": 41.6,
+    "sum_ret": 347.4
+   },
+   "back": {
+    "n": 151,
+    "open": 17,
+    "per_mo": 19.5,
+    "win_rate": 0.6755,
+    "wilson": 0.5973,
+    "avg_ret": 8.39,
+    "pf": 2.55,
+    "avg_days": 17.7,
+    "sum_ret": 1266.5
+   }
+  },
+  "M2 TAIEX >MA20（乖離不限）": {
+   "full": {
+    "n": 191,
+    "open": 16,
+    "per_mo": 12.0,
+    "win_rate": 0.6649,
+    "wilson": 0.5953,
+    "avg_ret": 7.64,
+    "pf": 2.52,
+    "avg_days": 25.3,
+    "sum_ret": 1460.1
+   },
+   "front": {
+    "n": 58,
+    "open": 0,
+    "per_mo": 6.7,
+    "win_rate": 0.6552,
+    "wilson": 0.5267,
+    "avg_ret": 6.19,
+    "pf": 2.5,
+    "avg_days": 41.3,
+    "sum_ret": 359.2
+   },
+   "back": {
+    "n": 133,
+    "open": 16,
+    "per_mo": 17.3,
+    "win_rate": 0.6692,
+    "wilson": 0.5854,
+    "avg_ret": 8.28,
+    "pf": 2.53,
+    "avg_days": 18.4,
+    "sum_ret": 1100.9
+   }
+  },
+  "M3 TAIEX MA20 斜率>0（乖離不限）": {
+   "full": {
+    "n": 207,
+    "open": 16,
+    "per_mo": 13.0,
+    "win_rate": 0.6618,
+    "wilson": 0.595,
+    "avg_ret": 7.37,
+    "pf": 2.42,
+    "avg_days": 24.5,
+    "sum_ret": 1524.6
+   },
+   "front": {
+    "n": 59,
+    "open": 0,
+    "per_mo": 6.9,
+    "win_rate": 0.6441,
+    "wilson": 0.5166,
+    "avg_ret": 5.89,
+    "pf": 2.39,
+    "avg_days": 41.6,
+    "sum_ret": 347.4
+   },
+   "back": {
+    "n": 148,
+    "open": 16,
+    "per_mo": 19.1,
+    "win_rate": 0.6689,
+    "wilson": 0.5897,
+    "avg_ret": 7.95,
+    "pf": 2.44,
+    "avg_days": 17.7,
+    "sum_ret": 1177.2
+   }
+  },
+  "M4 廣度 >50%（乖離不限）": {
+   "full": {
+    "n": 194,
+    "open": 14,
+    "per_mo": 12.1,
+    "win_rate": 0.6443,
+    "wilson": 0.5748,
+    "avg_ret": 6.87,
+    "pf": 2.27,
+    "avg_days": 24.5,
+    "sum_ret": 1333.2
+   },
+   "front": {
+    "n": 57,
+    "open": 0,
+    "per_mo": 6.6,
+    "win_rate": 0.6316,
+    "wilson": 0.5018,
+    "avg_ret": 5.79,
+    "pf": 2.32,
+    "avg_days": 42.0,
+    "sum_ret": 329.9
+   },
+   "back": {
+    "n": 137,
+    "open": 14,
+    "per_mo": 17.5,
+    "win_rate": 0.6496,
+    "wilson": 0.5667,
+    "avg_ret": 7.32,
+    "pf": 2.25,
+    "avg_days": 17.2,
+    "sum_ret": 1003.3
+   }
+  }
+ },
+ "sector": {
+  "S0 族群不限": {
+   "full": {
+    "n": 46,
+    "open": 3,
+    "per_mo": 2.8,
+    "win_rate": 0.7174,
+    "wilson": 0.5745,
+    "avg_ret": 12.67,
+    "pf": 4.26,
+    "avg_days": 37.7,
+    "sum_ret": 582.7
+   },
+   "front": {
+    "n": 31,
+    "open": 0,
+    "per_mo": 3.6,
+    "win_rate": 0.6774,
+    "wilson": 0.5014,
+    "avg_ret": 5.11,
+    "pf": 2.22,
+    "avg_days": 44.3,
+    "sum_ret": 158.3
+   },
+   "back": {
+    "n": 15,
+    "open": 3,
+    "per_mo": 2.1,
+    "win_rate": 0.8,
+    "wilson": 0.5481,
+    "avg_ret": 28.3,
+    "pf": 9.69,
+    "avg_days": 24.1,
+    "sum_ret": 424.5
+   }
+  },
+  "S1 avg_ret>3（現行）": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "S2 族群排名前 1/3": {
+   "full": {
+    "n": 10,
+    "open": 0,
+    "per_mo": 0.6,
+    "win_rate": 0.9,
+    "wilson": 0.5958,
+    "avg_ret": 12.1,
+    "pf": 8.17,
+    "avg_days": 32.1,
+    "sum_ret": 121.0
+   },
+   "front": {
+    "n": 9,
+    "open": 0,
+    "per_mo": 1.0,
+    "win_rate": 0.8889,
+    "wilson": 0.565,
+    "avg_ret": 11.35,
+    "pf": 7.05,
+    "avg_days": 32.9,
+    "sum_ret": 102.1
+   },
+   "back": {
+    "n": 1,
+    "open": 0,
+    "per_mo": 0.1,
+    "win_rate": 1.0,
+    "wilson": 0.2065,
+    "avg_ret": 18.87,
+    "pf": 99.0,
+    "avg_days": 25.0,
+    "sum_ret": 18.9
+   }
+  },
+  "S3 族群排名前 1/2": {
+   "full": {
+    "n": 26,
+    "open": 0,
+    "per_mo": 1.5,
+    "win_rate": 0.8077,
+    "wilson": 0.6212,
+    "avg_ret": 8.61,
+    "pf": 3.57,
+    "avg_days": 34.5,
+    "sum_ret": 223.8
+   },
+   "front": {
+    "n": 18,
+    "open": 0,
+    "per_mo": 2.1,
+    "win_rate": 0.8333,
+    "wilson": 0.6078,
+    "avg_ret": 8.03,
+    "pf": 3.6,
+    "avg_days": 41.3,
+    "sum_ret": 144.5
+   },
+   "back": {
+    "n": 8,
+    "open": 0,
+    "per_mo": 0.9,
+    "win_rate": 0.75,
+    "wilson": 0.4093,
+    "avg_ret": 9.92,
+    "pf": 3.53,
+    "avg_days": 19.2,
+    "sum_ret": 79.4
+   }
+  }
+ },
+ "combos": {
+  "現行 production": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.8261,
+    "wilson": 0.6286,
+    "avg_ret": 9.96,
+    "pf": 4.49,
+    "avg_days": 30.9,
+    "sum_ret": 229.1
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.9286,
+    "wilson": 0.6853,
+    "avg_ret": 12.16,
+    "pf": 11.09,
+    "avg_days": 38.2,
+    "sum_ret": 170.3
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.6667,
+    "wilson": 0.3542,
+    "avg_ret": 6.54,
+    "pf": 2.2,
+    "avg_days": 19.4,
+    "sum_ret": 58.8
+   }
+  },
+  "放寬乖離 MA20≤8%": {
+   "full": {
+    "n": 135,
+    "open": 10,
+    "per_mo": 8.4,
+    "win_rate": 0.6741,
+    "wilson": 0.5911,
+    "avg_ret": 9.47,
+    "pf": 3.01,
+    "avg_days": 28.0,
+    "sum_ret": 1278.9
+   },
+   "front": {
+    "n": 49,
+    "open": 0,
+    "per_mo": 5.7,
+    "win_rate": 0.6531,
+    "wilson": 0.5131,
+    "avg_ret": 6.9,
+    "pf": 2.79,
+    "avg_days": 42.7,
+    "sum_ret": 338.0
+   },
+   "back": {
+    "n": 86,
+    "open": 10,
+    "per_mo": 11.2,
+    "win_rate": 0.686,
+    "wilson": 0.5818,
+    "avg_ret": 10.94,
+    "pf": 3.1,
+    "avg_days": 19.6,
+    "sum_ret": 940.8
+   }
+  },
+  "乖離ATR≤1.5 + 族群前1/3": {
+   "full": {
+    "n": 61,
+    "open": 3,
+    "per_mo": 3.7,
+    "win_rate": 0.6885,
+    "wilson": 0.5641,
+    "avg_ret": 10.41,
+    "pf": 3.01,
+    "avg_days": 24.5,
+    "sum_ret": 634.9
+   },
+   "front": {
+    "n": 30,
+    "open": 0,
+    "per_mo": 3.5,
+    "win_rate": 0.7667,
+    "wilson": 0.5907,
+    "avg_ret": 10.5,
+    "pf": 4.07,
+    "avg_days": 32.8,
+    "sum_ret": 315.1
+   },
+   "back": {
+    "n": 31,
+    "open": 3,
+    "per_mo": 4.0,
+    "win_rate": 0.6129,
+    "wilson": 0.4382,
+    "avg_ret": 10.32,
+    "pf": 2.5,
+    "avg_days": 16.5,
+    "sum_ret": 319.9
+   }
+  },
+  "乖離ATR≤1.5 + 族群不限": {
+   "full": {
+    "n": 184,
+    "open": 15,
+    "per_mo": 11.6,
+    "win_rate": 0.6522,
+    "wilson": 0.5809,
+    "avg_ret": 12.91,
+    "pf": 3.52,
+    "avg_days": 29.2,
+    "sum_ret": 2376.0
+   },
+   "front": {
+    "n": 72,
+    "open": 0,
+    "per_mo": 8.4,
+    "win_rate": 0.5833,
+    "wilson": 0.4681,
+    "avg_ret": 4.5,
+    "pf": 1.84,
+    "avg_days": 42.1,
+    "sum_ret": 324.3
+   },
+   "back": {
+    "n": 112,
+    "open": 15,
+    "per_mo": 14.8,
+    "win_rate": 0.6964,
+    "wilson": 0.6059,
+    "avg_ret": 18.32,
+    "pf": 4.68,
+    "avg_days": 20.8,
+    "sum_ret": 2051.8
+   }
+  },
+  "乖離MA20≤8% + 族群前1/2": {
+   "full": {
+    "n": 129,
+    "open": 5,
+    "per_mo": 7.8,
+    "win_rate": 0.6512,
+    "wilson": 0.5656,
+    "avg_ret": 10.06,
+    "pf": 2.95,
+    "avg_days": 30.8,
+    "sum_ret": 1297.2
+   },
+   "front": {
+    "n": 61,
+    "open": 0,
+    "per_mo": 7.1,
+    "win_rate": 0.623,
+    "wilson": 0.4975,
+    "avg_ret": 5.42,
+    "pf": 2.11,
+    "avg_days": 42.8,
+    "sum_ret": 330.7
+   },
+   "back": {
+    "n": 68,
+    "open": 5,
+    "per_mo": 8.5,
+    "win_rate": 0.6765,
+    "wilson": 0.5584,
+    "avg_ret": 14.21,
+    "pf": 3.64,
+    "avg_days": 20.1,
+    "sum_ret": 966.5
+   }
+  },
+  "乖離MA20≤8% + 動能A1": {
+   "full": {
+    "n": 88,
+    "open": 7,
+    "per_mo": 5.5,
+    "win_rate": 0.6477,
+    "wilson": 0.5437,
+    "avg_ret": 12.82,
+    "pf": 3.64,
+    "avg_days": 34.1,
+    "sum_ret": 1128.1
+   },
+   "front": {
+    "n": 42,
+    "open": 0,
+    "per_mo": 4.9,
+    "win_rate": 0.4762,
+    "wilson": 0.3336,
+    "avg_ret": -0.69,
+    "pf": 0.9,
+    "avg_days": 46.2,
+    "sum_ret": -29.0
+   },
+   "back": {
+    "n": 46,
+    "open": 7,
+    "per_mo": 6.2,
+    "win_rate": 0.8043,
+    "wilson": 0.6683,
+    "avg_ret": 25.15,
+    "pf": 8.9,
+    "avg_days": 23.1,
+    "sum_ret": 1157.0
+   }
+  },
+  "動能A1 + 大盤MA60（無乖離無族群）": {
+   "full": {
+    "n": 173,
+    "open": 13,
+    "per_mo": 10.8,
+    "win_rate": 0.6763,
+    "wilson": 0.6034,
+    "avg_ret": 10.34,
+    "pf": 3.14,
+    "avg_days": 26.5,
+    "sum_ret": 1789.3
+   },
+   "front": {
+    "n": 54,
+    "open": 0,
+    "per_mo": 6.3,
+    "win_rate": 0.5185,
+    "wilson": 0.3885,
+    "avg_ret": 0.32,
+    "pf": 1.05,
+    "avg_days": 43.3,
+    "sum_ret": 17.5
+   },
+   "back": {
+    "n": 119,
+    "open": 13,
+    "per_mo": 15.3,
+    "win_rate": 0.7479,
+    "wilson": 0.663,
+    "avg_ret": 14.89,
+    "pf": 4.58,
+    "avg_days": 18.9,
+    "sum_ret": 1771.8
+   }
+  },
+  "動能A2 + 大盤MA60（無乖離無族群）": {
+   "full": {
+    "n": 282,
+    "open": 20,
+    "per_mo": 17.5,
+    "win_rate": 0.6525,
+    "wilson": 0.5952,
+    "avg_ret": 10.39,
+    "pf": 2.99,
+    "avg_days": 27.4,
+    "sum_ret": 2931.2
+   },
+   "front": {
+    "n": 97,
+    "open": 0,
+    "per_mo": 11.3,
+    "win_rate": 0.5258,
+    "wilson": 0.4273,
+    "avg_ret": 1.82,
+    "pf": 1.3,
+    "avg_days": 42.3,
+    "sum_ret": 176.1
+   },
+   "back": {
+    "n": 185,
+    "open": 20,
+    "per_mo": 23.8,
+    "win_rate": 0.7189,
+    "wilson": 0.6502,
+    "avg_ret": 14.89,
+    "pf": 4.13,
+    "avg_days": 19.6,
+    "sum_ret": 2755.1
+   }
+  },
+  "動能A1 + 乖離ATR≤2.0 + 大盤MA20": {
+   "full": {
+    "n": 109,
+    "open": 7,
+    "per_mo": 6.7,
+    "win_rate": 0.6697,
+    "wilson": 0.577,
+    "avg_ret": 11.32,
+    "pf": 3.35,
+    "avg_days": 29.7,
+    "sum_ret": 1233.5
+   },
+   "front": {
+    "n": 44,
+    "open": 0,
+    "per_mo": 5.1,
+    "win_rate": 0.5227,
+    "wilson": 0.3794,
+    "avg_ret": 0.41,
+    "pf": 1.07,
+    "avg_days": 44.6,
+    "sum_ret": 18.1
+   },
+   "back": {
+    "n": 65,
+    "open": 7,
+    "per_mo": 8.4,
+    "win_rate": 0.7692,
+    "wilson": 0.6536,
+    "avg_ret": 18.7,
+    "pf": 5.89,
+    "avg_days": 19.6,
+    "sum_ret": 1215.4
+   }
+  },
+  "動能A1 + 廣度>50%": {
+   "full": {
+    "n": 154,
+    "open": 9,
+    "per_mo": 9.5,
+    "win_rate": 0.6558,
+    "wilson": 0.5778,
+    "avg_ret": 9.92,
+    "pf": 2.9,
+    "avg_days": 26.1,
+    "sum_ret": 1527.7
+   },
+   "front": {
+    "n": 50,
+    "open": 0,
+    "per_mo": 5.8,
+    "win_rate": 0.5,
+    "wilson": 0.3664,
+    "avg_ret": 0.12,
+    "pf": 1.02,
+    "avg_days": 42.3,
+    "sum_ret": 5.9
+   },
+   "back": {
+    "n": 104,
+    "open": 9,
+    "per_mo": 13.1,
+    "win_rate": 0.7308,
+    "wilson": 0.6384,
+    "avg_ret": 14.63,
+    "pf": 4.29,
+    "avg_days": 18.3,
+    "sum_ret": 1521.8
+   }
+  }
+ },
+ "trail_exit": {
+  "現行 production": {
+   "full": {
+    "n": 23,
+    "open": 2,
+    "per_mo": 1.5,
+    "win_rate": 0.5652,
+    "wilson": 0.3681,
+    "avg_ret": 11.49,
+    "pf": 4.97,
+    "avg_days": 42.0,
+    "sum_ret": 264.3
+   },
+   "front": {
+    "n": 14,
+    "open": 0,
+    "per_mo": 1.6,
+    "win_rate": 0.7857,
+    "wilson": 0.5241,
+    "avg_ret": 16.59,
+    "pf": 15.86,
+    "avg_days": 51.7,
+    "sum_ret": 232.2
+   },
+   "back": {
+    "n": 9,
+    "open": 2,
+    "per_mo": 1.3,
+    "win_rate": 0.2222,
+    "wilson": 0.0632,
+    "avg_ret": 3.56,
+    "pf": 1.63,
+    "avg_days": 26.8,
+    "sum_ret": 32.0
+   }
+  },
+  "乖離ATR≤1.5 + 族群前1/3": {
+   "full": {
+    "n": 62,
+    "open": 2,
+    "per_mo": 3.7,
+    "win_rate": 0.5,
+    "wilson": 0.3792,
+    "avg_ret": 12.92,
+    "pf": 3.55,
+    "avg_days": 29.9,
+    "sum_ret": 800.8
+   },
+   "front": {
+    "n": 30,
+    "open": 0,
+    "per_mo": 3.5,
+    "win_rate": 0.4667,
+    "wilson": 0.3023,
+    "avg_ret": 14.45,
+    "pf": 5.21,
+    "avg_days": 39.9,
+    "sum_ret": 433.6
+   },
+   "back": {
+    "n": 32,
+    "open": 2,
+    "per_mo": 4.0,
+    "win_rate": 0.5312,
+    "wilson": 0.3645,
+    "avg_ret": 11.47,
+    "pf": 2.74,
+    "avg_days": 20.4,
+    "sum_ret": 367.2
+   }
+  },
+  "動能A1 + 大盤MA60": {
+   "full": {
+    "n": 174,
+    "open": 12,
+    "per_mo": 10.8,
+    "win_rate": 0.5172,
+    "wilson": 0.4434,
+    "avg_ret": 11.64,
+    "pf": 3.36,
+    "avg_days": 29.6,
+    "sum_ret": 2025.7
+   },
+   "front": {
+    "n": 54,
+    "open": 0,
+    "per_mo": 6.3,
+    "win_rate": 0.3704,
+    "wilson": 0.2542,
+    "avg_ret": 1.18,
+    "pf": 1.22,
+    "avg_days": 41.6,
+    "sum_ret": 63.5
+   },
+   "back": {
+    "n": 120,
+    "open": 12,
+    "per_mo": 15.3,
+    "win_rate": 0.5833,
+    "wilson": 0.4939,
+    "avg_ret": 16.35,
+    "pf": 4.44,
+    "avg_days": 24.2,
+    "sum_ret": 1962.2
+   }
+  }
+ }
+}
