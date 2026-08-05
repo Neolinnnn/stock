@@ -141,7 +141,7 @@ jobs:
         run: |
           # 即時 regime（國際指標 + 川普/總經 grounding）+ Gemini 敘述；失敗自動降級
           python agents/pipeline.py --macro --gemini || python agents/pipeline.py
-          # 產生靜態頁 docs/agents/index.html（每日覆寫為最新）
+          # 產生靜態頁：docs/agents/<date>.html（永久網址）+ index.html（指向最新）
           python agents/build_preview.py --docs
 
       - name: Audit static content (健檢報告)

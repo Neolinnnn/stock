@@ -5,13 +5,21 @@
 介面：左欄族群排行 → 個股清單；右欄個股詳情（4 分析師 / 多空辯論 / 決策）。
 
 用法：
-    python agents/build_preview.py                 # 取最新 analysis_*.json
+    python agents/build_preview.py                 # 取最新 analysis_*.json → preview/
     python agents/build_preview.py --date 20260605
-輸出：preview/族群分析台_<date>.html（不接入 docs/，不影響靜態網址）
+    python agents/build_preview.py --docs          # → docs/agents/（靜態網址）
+
+輸出：
+    preview/族群分析台_<date>.html   單檔自包含（走勢圖內嵌，file:// 可直接開）
+    docs/agents/<date>.html          每日永久網址
+    docs/agents/index.html           指向最新一日（內容同上）
+    docs/agents/charts/<date>.json   走勢圖資料（非同步載入，減少首屏體積）
+    docs/agents/dates.json           歷史日期索引
 """
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 import json
 from pathlib import Path
 
@@ -19,11 +27,19 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT / "agents" / "output"
 PREVIEW_DIR = ROOT / "preview"
 DOCS_DIR = ROOT / "docs" / "agents"
+_KEEP_DAYS = 90        # docs/agents 歷史頁保留天數（每天約 300KB HTML + 360KB 圖表）
 
 _HTML = r"""<!DOCTYPE html>
 <html lang="zh-Hant"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>台股族群分析台 __DATE__</title>
+<meta name="description" content="__DATE__ 台股族群多代理分析：18 族群逐檔技術／基本／籌碼面評分與部位建議。改寫自 TradingAgents。">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:type" content="website">
+<meta property="og:title" content="台股族群分析台 __DATE__">
+<meta property="og:description" content="多代理（技術／基本／總經／籌碼）逐檔評分與部位建議。">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🤖</text></svg>">
 <style>
 :root{--bg:#0b0e14;--panel:#161a22;--panel2:#1b2029;--border:#272c37;--txt:#e8eaed;
 --dim:#8b93a3;--accent:#3d8bfd;--accent2:#7c5cff;--bull:#2ecc71;--bear:#e74c3c;--warn:#f1b143;--chip:#21262d}
@@ -112,6 +128,19 @@ background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-backgroun
 .ev-impact{font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px}
 .imp-bull{background:rgba(63,185,80,.15);color:var(--bull)}.imp-bear{background:rgba(248,81,73,.15);color:var(--bear)}.imp-neu{background:var(--chip);color:var(--dim)}
 .note{font-size:11px;color:var(--dim);padding:14px 26px;border-top:1px solid var(--border)}
+.note b{color:var(--warn)}
+.hsearch{background:var(--chip);border:1px solid var(--border);color:var(--txt);border-radius:8px;
+  padding:5px 10px;font-size:13px;width:180px;font-family:inherit}
+.hsearch:focus{outline:none;border-color:var(--accent)}
+.hsel{background:var(--chip);border:1px solid var(--border);color:var(--txt);border-radius:8px;
+  padding:4px 8px;font-size:12px;font-family:inherit}
+.filters{display:flex;gap:5px;flex-wrap:wrap;margin:0 8px 8px}
+.fchip{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--chip);border:1px solid var(--border);
+  color:var(--dim);cursor:pointer;user-select:none}
+.fchip.on{background:rgba(61,139,253,.18);border-color:var(--accent);color:var(--accent)}
+.row:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.empty{color:var(--dim);font-size:13px;padding:24px;text-align:center}
+.cov{font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--chip);color:var(--dim)}
 /* ── 手機 RWD：3 欄改為「族群橫向條 + 個股清單 + 全寬詳情」直向堆疊 ── */
 @media (max-width:820px){
   header{padding:12px 16px;gap:10px}
@@ -140,11 +169,13 @@ background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-backgroun
 </style></head><body>
 <header>
   <div class="title"><span class="dot"></span>台股族群分析台</div>
+  <input class="hsearch" id="h-search" list="stk-list" placeholder="搜尋代號／名稱…"
+         aria-label="搜尋個股" autocomplete="off">
+  <datalist id="stk-list"></datalist>
   <div class="hmeta">
-    <span>日期 <b id="h-date"></b></span>
+    <span>日期 <select class="hsel" id="h-datesel" aria-label="切換日期"></select></span>
     <span>大盤 <b id="h-regime"></b></span>
     <span>族群 <b id="h-sec"></b>｜個股 <b id="h-cnt"></b></span>
-    <span style="color:var(--dim)">改寫自 TradingAgents</span>
   </div>
 </header>
 <div class="layout">
@@ -152,18 +183,30 @@ background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-backgroun
   <div class="col" id="col-stocks"><h4>個股（族群內排行）</h4></div>
   <div class="detail" id="detail"></div>
 </div>
-<div class="note">※ 評分／決策由 Claude 程式邏輯（agents/analysts.py）產生；文字敘述可選 Gemini。資料源：daily_reports + macro 模組。本檔在 preview/，不影響靜態網址。</div>
+<div class="note"><b>※ 本頁為程式化研究輸出，非投資建議。</b>
+所列進場區、停損、目標價與部位比例皆由規則運算產生，未考慮個人財務狀況，投資決策與風險請自行承擔。
+評分／決策由 agents/analysts.py 產生；文字敘述可選 Gemini 改寫。
+資料源：daily_reports（技術／籌碼）+ docs/fundamentals（月營收／EPS／毛利率）+ macro 模組（大盤 regime）。
+分析基準日 <span id="n-date"></span>，頁面產生於 <span id="n-built"></span>。</div>
 <script>
 const DATA = __DATA__;
-let curSec=0, curStk=0, CURSTK=null;
+const CHART_URL = __CHART_URL__;   // null = 走勢圖已內嵌；字串 = 另外非同步載入
+const DATES = __DATES__;
+const BUILT_AT = "__BUILT_AT__";
+let curSec=0, curStk=0, CURSTK=null, CHARTS=null, filterAction='';
 
-// 指標簡寫 → 看得懂的中文名（解決「max_yoy_pct 是什麼」）
+// 指標簡寫 → 看得懂的中文名
 const LABELS={
   ret_20d:'20日報酬', rsi:'RSI(14)', cv_sharpe:'回測夏普值', signal:'技術訊號',
-  max_yoy_pct:'營收年增率(最高)', news_count:'新聞則數',
+  rev_month:'營收月份', rev_yoy:'月營收年增', rev_yoy_3m:'近三月年增均值',
+  cum_yoy:'累計營收年增', eps_yoy:'最新季EPS年增', gross_margin:'毛利率',
+  gm_delta:'毛利率季變動', news_count:'新聞則數',
   regime_score:'大盤情緒分數', regime:'大盤狀態', stock_news:'個股新聞數',
   '外資':'外資買賣超', '投信':'投信買賣超', '合計':'三大法人合計'};
-const UNITS={ret_20d:'%', max_yoy_pct:'%', '外資':' 張', '投信':' 張', '合計':' 張'};
+const UNITS={ret_20d:'%', rev_yoy:'%', rev_yoy_3m:'%', cum_yoy:'%', eps_yoy:'%',
+  gross_margin:'%', gm_delta:'pp', '外資':' 張', '投信':' 張', '合計':' 張'};
+const COV_LABEL={financials:'財報資料', news:'僅新聞推估', none:'查無資料',
+  indicators:'完整指標', basic:'基本價量', chip:'法人籌碼', regime:'大盤 regime'};
 const LOTS=new Set(['外資','投信','合計']);
 function fmtVal(k,v){
   if(v===null||v===undefined||v==='') return '—';
@@ -201,13 +244,21 @@ function sparkSVG(ch){
   s+=`<path d="${path(c)}" fill="none" stroke="${col}" stroke-width="2"/></svg>`;
   return s;
 }
+// 走勢圖資料：--docs 版本抽到外部 JSON 非同步載入（省掉首屏 ~65% 的傳輸量）
+function chartOf(st){ return (st&&st.chart) || (CHARTS&&CHARTS[st.id]) || null; }
+async function ensureCharts(){
+  if(CHARTS||!CHART_URL) return;
+  try{ const r=await fetch(CHART_URL); CHARTS=await r.json(); }
+  catch(e){ CHARTS={}; }
+}
 function chartBlock(st){
-  if(!st||!st.chart) return '<div class="chart" style="color:var(--dim);font-size:12px;text-align:center;padding:30px">（無走勢圖資料）</div>';
-  const ch=st.chart, ds=ch.dates||[];
+  const ch0=chartOf(st);
+  if(!ch0) return `<div class="chart" style="color:var(--dim);font-size:12px;text-align:center;padding:30px">${CHART_URL&&!CHARTS?'走勢圖載入中…':'（無走勢圖資料）'}</div>`;
+  const ch=ch0, ds=ch.dates||[];
   const span=ds.length?`${ds[0]} ~ ${ds[ds.length-1]}`:'';
   return `<div class="chart">${sparkSVG(ch)}
     <div class="lg">
-      <span style="color:${st.chart.close[st.chart.close.length-1]>=st.chart.close[0]?'var(--bull)':'var(--bear)'}">收盤 <b>$${st.price}</b></span>
+      <span style="color:${ch.close[ch.close.length-1]>=ch.close[0]?'var(--bull)':'var(--bear)'}">收盤 <b>$${st.price}</b></span>
       <span style="color:#39c5cf">— 5MA</span>
       <span style="color:var(--warn)">— 20MA</span>
       <span style="color:#a371f7">— 60MA</span>
@@ -236,10 +287,33 @@ function regimeBadge(r){const m={risk_on:'r-on',mild_risk_on:'r-on',neutral:'r-n
 function actionClass(a){return a==='買進'?'a-buy':(a==='分批布局'?'a-part':(a==='觀望'?'a-wait':'a-cut'))}
 
 function renderHeader(){
-  document.getElementById('h-date').textContent=DATA.date;
   document.getElementById('h-regime').innerHTML=regimeBadge(DATA.regime);
   document.getElementById('h-sec').textContent=DATA.sectors.length;
   document.getElementById('h-cnt').textContent=DATA.stock_count;
+  document.getElementById('n-date').textContent=DATA.date;
+  document.getElementById('n-built').textContent=BUILT_AT;
+
+  // 日期切換：DATES 為歷史頁清單（新→舊）
+  const sel=document.getElementById('h-datesel');
+  const opts=(DATES&&DATES.length?DATES:[DATA.date]);
+  sel.innerHTML=opts.map(d=>`<option value="${d}" ${d===DATA.date?'selected':''}>${d}</option>`).join('');
+  sel.onchange=()=>{ location.href=`./${sel.value}.html${location.hash}`; };
+
+  // 全站個股搜尋（代號或名稱）
+  const all=[];
+  DATA.sectors.forEach((s,si)=>s.stocks.forEach((st,ki)=>all.push({si,ki,st})));
+  document.getElementById('stk-list').innerHTML=
+    all.map(x=>`<option value="${x.st.id} ${x.st.name}">${DATA.sectors[x.si].name}</option>`).join('');
+  const box=document.getElementById('h-search');
+  const jump=()=>{
+    const q=box.value.trim().toLowerCase();
+    if(!q) return;
+    const hit=all.find(x=>`${x.st.id} ${x.st.name}`.toLowerCase()===q)
+           || all.find(x=>x.st.id.includes(q)||x.st.name.toLowerCase().includes(q));
+    if(hit){ select(hit.si,hit.ki); box.blur(); }
+  };
+  box.addEventListener('change',jump);
+  box.addEventListener('keydown',e=>{ if(e.key==='Enter') jump(); });
 }
 function scoreBar(v){
   const w=Math.min(Math.abs(v),100);
@@ -249,7 +323,8 @@ function scoreBar(v){
 function renderSectors(){
   const el=document.getElementById('col-sectors');
   el.innerHTML='<h4>族群排行</h4>'+DATA.sectors.map((s,i)=>
-    `<div class="row ${i===curSec?'active':''}" onclick="selSec(${i})">
+    `<div class="row ${i===curSec?'active':''}" tabindex="0" role="button"
+          aria-pressed="${i===curSec}" onclick="selSec(${i})">
        <div class="rtop"><span>${s.name}</span><span class="sc ${scoreClass(s.sector_score)}">${s.sector_score}</span></div>
        ${scoreBar(s.sector_score)}</div>`).join('');
 }
@@ -265,27 +340,52 @@ function sectorCard(sec){
     <div class="mini"><span class="br">🐻 ${sy.bear.join(' ')}</span></div>
   </div>`;
 }
+const ACTIONS=['買進','分批布局','觀望','減碼/避開'];
 function renderStocks(){
   const sec=DATA.sectors[curSec];
   const el=document.getElementById('col-stocks');
-  el.innerHTML=`<h4>${sec.name}（${sec.stocks.length} 檔）</h4>`+sectorCard(sec)+sec.stocks.map((st,i)=>
-    `<div class="row ${i===curStk?'active':''}" onclick="selStk(${i})">
+  const chips=['全部'].concat(ACTIONS).map(a=>{
+    const key=a==='全部'?'':a;
+    return `<span class="fchip ${filterAction===key?'on':''}" onclick="setFilter('${key}')">${a}</span>`;
+  }).join('');
+  const rows=sec.stocks.map((st,i)=>({st,i}))
+    .filter(x=>!filterAction||x.st.decision.action===filterAction)
+    .map(({st,i})=>
+    `<div class="row ${i===curStk?'active':''}" tabindex="0" role="button"
+          aria-pressed="${i===curStk}" onclick="selStk(${i})">
        <div class="rtop"><span>${st.name} <span style="color:var(--dim)">${st.id}</span></span>
        <span class="sc ${scoreClass(st.decision.composite)}">${st.decision.composite}</span></div>
        ${scoreBar(st.decision.composite)}</div>`).join('');
+  el.innerHTML=`<h4>${sec.name}（${sec.stocks.length} 檔）</h4>`+sectorCard(sec)
+    +`<div class="filters">${chips}</div>`
+    +(rows||'<div class="empty">此族群沒有符合篩選的個股</div>');
 }
+function setFilter(a){ filterAction=a; renderStocks(); }
 function analystCard(key,label,a){
   const v=a.verdict, vc=scoreClass(a.score);
+  const w=(CURSTK.decision.weights_used||{})[key];
+  const wtxt=key==='macro'
+    ? '<span class="cov">不計入個股加權（只調部位上限）</span>'
+    : (w?`<span class="cov">加權 ${Math.round(w*100)}%</span>`
+        :'<span class="cov">缺資料 · 已排除於加權外</span>');
+  const cov=a.coverage?`<span class="cov">${COV_LABEL[a.coverage]||a.coverage}</span>`:'';
   const sig=Object.entries(a.signals).map(([k,val])=>
     `<div class="c"><div class="k">${LABELS[k]||k}</div><div class="v">${fmtVal(k,val)}</div></div>`).join('');
-  const chart=key==='technical'?chartBlock(CURSTK):'';
+  const chart=key==='technical'?`<div id="chart-slot">${chartBlock(CURSTK)}</div>`:'';
   const tr=key==='technical'?techReportTable(a):'';
   return `<div class="acard ${key==='technical'?'active':''}" id="ac-${key}">
-    <div class="ah"><b>${label}</b><span class="v ${vc}" style="background:var(--chip)">${v} · ${a.score}</span></div>
+    <div class="ah"><b>${label}</b>${cov}${wtxt}
+      <span class="v ${vc}" style="background:var(--chip)">${v} · ${a.score}</span></div>
     ${chart}<div class="kv">${sig}</div>${tr}</div>`;
 }
 function renderDetail(){
-  const st=DATA.sectors[curSec].stocks[curStk], d=st.decision, A=st.analysts;
+  const sec=DATA.sectors[curSec];
+  if(!sec||!sec.stocks.length){
+    document.getElementById('detail').innerHTML=
+      '<div class="empty">本日無分析資料（daily_reports 可能尚未產出，或掃描結果為空）</div>';
+    return;
+  }
+  const st=sec.stocks[curStk], d=st.decision, A=st.analysts;
   CURSTK=st;
   const labels={technical:'📈 技術面',fundamental:'💰 基本面',macro:'🌐 新聞總經',sentiment:'🔥 情緒籌碼'};
   const tabs=Object.keys(labels).map((k,i)=>
@@ -308,7 +408,8 @@ function renderDetail(){
     <div class="sumtxt">${st.summary_text}</div>
     <div class="sec-h">🎯 最終決策（交易員 → 風控 → 投組經理）</div>
     <div class="dec">
-      <div style="font-size:13px;color:var(--dim)">綜合評分 <b style="color:var(--txt)">${d.composite}</b>｜信心度 <b style="color:var(--txt)">${d.confidence}%</b></div>
+      <div style="font-size:13px;color:var(--dim)">綜合評分 <b style="color:var(--txt)">${d.composite}</b>｜信心度 <b style="color:var(--txt)">${d.confidence}%</b>
+        <span style="margin-left:8px">＝ ${weightsText(d)}</span></div>
       <div class="rg">
         <div class="rc"><div class="k">建議行動</div><div class="v ${actionClass(d.action).replace('a-','').replace('buy','pos').replace('part','')}">${d.action}</div></div>
         <div class="rc"><div class="k">部位上限(regime)</div><div class="v">${d.exposure_pct}%</div></div>
@@ -323,8 +424,11 @@ function renderDetail(){
     <div class="sec-h">🧑‍💼 分析師團隊</div>
     <div class="glossary">
       <b>指標說明</b>：20日報酬=近20交易日漲跌幅｜RSI(14)=相對強弱，&gt;70過熱、&lt;30超賣｜
-      回測夏普值=每單位風險的報酬，越高越穩｜營收年增率=最新月營收 YoY｜
-      大盤情緒分數=國際指標+外電綜合(-100~+100)｜買賣超單位為「張」</div>
+      回測夏普值=每單位風險的報酬，越高越穩｜月營收年增=最新月營收 YoY（FinMind）｜
+      毛利率季變動=最新季較上季增減，單位為百分點｜
+      大盤情緒分數=國際指標+外電綜合(-100~+100)｜買賣超單位為「張」<br>
+      <b>綜合評分</b>只用「有資料」的面向加權（缺料面向排除後重新歸一化，不當 0 分計），
+      大盤總經不進個股加權，只調整部位上限與行動門檻。</div>
     <div class="tabs">${tabs}</div>${cards}
     <div class="sec-h">⚔️ 多空研究員辯論</div>
     <div class="debate">
@@ -332,6 +436,18 @@ function renderDetail(){
       <div class="side bear"><h3>🐻 空方</h3><ul>${bear}</ul></div></div>
     <div class="sec-h">📰 個股近期新聞</div>
     <div class="news-list">${newsHtml}</div>`;
+  // 走勢圖若尚未載入，載完後只換掉圖表區塊（避免整頁重繪）
+  ensureCharts().then(()=>{
+    if(CURSTK!==st) return;
+    const slot=document.getElementById('chart-slot');
+    if(slot) slot.innerHTML=chartBlock(st);
+  });
+}
+function weightsText(d){
+  const w=d.weights_used||{};
+  const nm={technical:'技術',fundamental:'基本',sentiment:'籌碼'};
+  const parts=Object.keys(nm).filter(k=>w[k]).map(k=>`${nm[k]} ${Math.round(w[k]*100)}%`);
+  return parts.length?parts.join(' + '):'無可用面向';
 }
 function renderEvents(){
   const head='<div class="sec-h">🌐 今日外電／總經事件（影響全市場）</div>';
@@ -351,11 +467,112 @@ function renderEvents(){
 function selTab(k,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.acard').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');document.getElementById('ac-'+k).classList.add('active')}
-function selSec(i){curSec=i;curStk=0;renderSectors();renderStocks();renderDetail()}
-function selStk(i){curStk=i;renderStocks();renderDetail()}
-renderHeader();renderSectors();renderStocks();renderDetail();
+function selSec(i){select(i,0)}
+function selStk(i){select(curSec,i)}
+
+// ── 選取狀態 ⇄ 網址 hash（可分享、可重整、可上一頁）────────────────
+function select(si,ki,skipHash){
+  const sec=DATA.sectors[si]; if(!sec) return;
+  curSec=si; curStk=Math.max(0,Math.min(ki,sec.stocks.length-1));
+  renderSectors();renderStocks();renderDetail();
+  if(!skipHash){
+    const h=`#${encodeURIComponent(sec.name)}/${sec.stocks[curStk]?sec.stocks[curStk].id:''}`;
+    if(location.hash!==h) history.replaceState(null,'',h);
+  }
+  document.querySelector('.detail').scrollTop=0;
+}
+function applyHash(){
+  const raw=decodeURIComponent(location.hash.replace(/^#/,''));
+  if(!raw) return false;
+  const [secName,stkId]=raw.split('/');
+  const si=DATA.sectors.findIndex(s=>s.name===secName);
+  if(si<0) return false;
+  const ki=Math.max(0,DATA.sectors[si].stocks.findIndex(s=>String(s.id)===stkId));
+  select(si,ki,true);
+  return true;
+}
+window.addEventListener('hashchange',applyHash);
+
+// ── 鍵盤操作：↑↓ 換個股、←→ 換族群（輸入框中不攔截）──────────────
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT') return;
+  const sec=DATA.sectors[curSec]; if(!sec) return;
+  const move={ArrowDown:()=>select(curSec,curStk+1),
+              ArrowUp:()=>select(curSec,curStk-1),
+              ArrowRight:()=>select(Math.min(curSec+1,DATA.sectors.length-1),0),
+              ArrowLeft:()=>select(Math.max(curSec-1,0),0)}[e.key];
+  if(move){ e.preventDefault(); move(); }
+  if(e.key==='/'){ e.preventDefault(); document.getElementById('h-search').focus(); }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('row')) e.target.click();
+});
+
+renderHeader();
+if(!DATA.sectors.length){ renderDetail(); }
+else if(!applyHash()){ select(0,0); }
 </script></body></html>
 """
+
+
+def _round_floats(obj, nd: int = 2):
+    """遞迴把浮點數收斂到小數 nd 位。
+
+    走勢圖與指標都是雙精度尾數（如 123.45000000000002），對顯示毫無意義，
+    卻佔了 JSON 相當比例的體積。
+    """
+    if isinstance(obj, float):
+        return round(obj, nd)
+    if isinstance(obj, dict):
+        return {k: _round_floats(v, nd) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_round_floats(v, nd) for v in obj]
+    return obj
+
+
+def _split_charts(data: dict) -> dict[str, dict]:
+    """把每檔的 chart 從主資料抽出（就地移除），回傳 {股票代號: chart}。"""
+    charts: dict[str, dict] = {}
+    for sec in data.get("sectors", []):
+        for st in sec.get("stocks", []):
+            ch = st.pop("chart", None)
+            if ch:
+                charts[str(st["id"])] = ch
+    return charts
+
+
+def _prune(keep: int = _KEEP_DAYS) -> None:
+    """只保留最近 keep 天的歷史頁與圖表，避免 repo 每年長 70MB+。"""
+    pages = sorted(DOCS_DIR.glob("2*.html"), reverse=True)
+    for p in pages[keep:]:
+        p.unlink(missing_ok=True)
+        (DOCS_DIR / "charts" / f"{p.stem}.json").unlink(missing_ok=True)
+
+
+def _dates_index(latest: str) -> list[str]:
+    """docs/agents/ 已存在的分析日期清單（新→舊），供頁面日期下拉使用。"""
+    dates = {p.stem for p in DOCS_DIR.glob("2*.html")}
+    dates.add(latest)
+    return sorted(dates, reverse=True)
+
+
+def _render(data: dict, chart_url: str | None, dates: list[str],
+            back_link: bool) -> str:
+    embedded = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    html = (_HTML
+            .replace("__DATE__", data["date"])
+            .replace("__CHART_URL__", json.dumps(chart_url))
+            .replace("__DATES__", json.dumps(dates, ensure_ascii=False))
+            .replace("__BUILT_AT__",
+                     _dt.datetime.now().strftime("%Y-%m-%d %H:%M"))
+            .replace("__DATA__", embedded))
+    if back_link:
+        html = html.replace(
+            '<div class="title"><span class="dot"></span>台股族群分析台</div>',
+            '<div class="title"><span class="dot"></span>台股族群分析台'
+            '<a href="../" style="font-size:12px;color:var(--accent);text-decoration:none;'
+            'margin-left:10px">← 返回主站</a></div>')
+    return html
 
 
 def build(date: str | None, to_docs: bool = False) -> Path:
@@ -367,24 +584,32 @@ def build(date: str | None, to_docs: bool = False) -> Path:
             raise FileNotFoundError("找不到 analysis_*.json，請先跑 pipeline.py")
         src = cands[-1]
 
-    data = json.loads(src.read_text(encoding="utf-8"))
-    embedded = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
-    html = _HTML.replace("__DATE__", data["date"]).replace("__DATA__", embedded)
+    data = _round_floats(json.loads(src.read_text(encoding="utf-8")))
+    d = data["date"]
 
-    if to_docs:
-        # 靜態網址版：固定檔名 docs/agents/index.html（每日覆寫為最新），加返回連結
-        html = html.replace(
-            '<div class="title"><span class="dot"></span>台股族群分析台</div>',
-            '<div class="title"><span class="dot"></span>台股族群分析台'
-            '<a href="../" style="font-size:12px;color:var(--accent);text-decoration:none;'
-            'margin-left:10px">← 返回主站</a></div>')
-        DOCS_DIR.mkdir(parents=True, exist_ok=True)
-        out = DOCS_DIR / "index.html"
-    else:
+    if not to_docs:
+        # preview：單檔自包含（file:// 直接開，fetch 會被 CORS 擋，故圖表內嵌）
         PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
-        out = PREVIEW_DIR / f"族群分析台_{data['date']}.html"
-    out.write_text(html, encoding="utf-8")
-    return out
+        out = PREVIEW_DIR / f"族群分析台_{d}.html"
+        out.write_text(_render(data, None, [d], back_link=False), encoding="utf-8")
+        return out
+
+    # 靜態網址版：每天一份永久網址 docs/agents/<date>.html，index.html 指向最新
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    charts = _split_charts(data)
+    (DOCS_DIR / "charts").mkdir(exist_ok=True)
+    (DOCS_DIR / "charts" / f"{d}.json").write_text(
+        json.dumps(charts, ensure_ascii=False), encoding="utf-8")
+
+    (DOCS_DIR / f"{d}.html").touch()   # 先建檔，讓 _prune/_dates_index 看得到今天
+    _prune()
+    dates = _dates_index(d)
+    html = _render(data, f"./charts/{d}.json", dates, back_link=True)
+    (DOCS_DIR / f"{d}.html").write_text(html, encoding="utf-8")
+    (DOCS_DIR / "index.html").write_text(html, encoding="utf-8")
+    (DOCS_DIR / "dates.json").write_text(
+        json.dumps(dates, ensure_ascii=False), encoding="utf-8")
+    return DOCS_DIR / "index.html"
 
 
 def main() -> None:
