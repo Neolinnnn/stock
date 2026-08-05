@@ -20,9 +20,13 @@
 出場沿用 production 自適應（上漲期→HYBRID，其餘→TP15SL15），另附 TRAIL15 對照。
 資料一律取 ≤ 訊號日，進場為訊號日次日開盤，無前視偏差。
 
-用法：python scripts/backtest_gate_variants.py
+用法：python scripts/backtest_gate_variants.py [--refresh]
+      回測區間的終點由「價格快取的最後一根 K 棒」決定，不是由 daily_reports 決定：
+      沒有次日開盤價的訊號無法進場，會被略過。快取過舊時務必加 --refresh 重抓，
+      否則即使 daily_reports 已更新到今天，統計仍停在舊快取的日期。
 輸出：docs/gate_variants.json + console 報告
 """
+import argparse
 import json
 import math
 import sys
@@ -42,14 +46,16 @@ from backtest_combo_search import sim_tpsl, sim_trailing
 SIGNAL_START = '20250101'
 
 
-def load_ohlcv(sid: str) -> pd.DataFrame:
-    """優先讀 backtest_cache；無快取才連線抓取（離線環境則略過該檔）。"""
-    if not (CACHE_DIR / f'{sid}_ohlcv.csv').exists():
+def load_ohlcv(sid: str, refresh: bool = False) -> pd.DataFrame:
+    """優先讀 backtest_cache；無快取或 refresh 時連線抓取（離線環境則略過該檔）。"""
+    cached = (CACHE_DIR / f'{sid}_ohlcv.csv').exists()
+    if refresh or not cached:
         try:
-            return fetch_ohlcv(sid)
+            return fetch_ohlcv(sid, refresh=True)
         except Exception as e:
-            print(f'  略過 {sid}：無快取且無法取數（{e}）')
-            return pd.DataFrame()
+            # 額度用盡／斷線時退回舊快取，避免整檔被剔除而讓樣本結構失真
+            print(f'  {sid} 取數失敗（{e}）→ {"沿用舊快取" if cached else "略過"}')
+            return fetch_ohlcv(sid) if cached else pd.DataFrame()
     return fetch_ohlcv(sid)
 
 
@@ -229,16 +235,25 @@ HDR = (f'{"變體":<30}{"n":>5}{"未結":>5}{"筆/月":>7}{"勝率":>7}'
        f'{"Wil.":>7}{"avg%":>8}{"PF":>6}{"天數":>6}{"總報酬%":>9}')
 
 
-def main():
+def main(refresh: bool = False):
     signals = load_signals()
     sids = sorted({s['stock_id'] for s in signals})
-    print(f'訊號 {len(signals)} 筆（{signals[0]["date"]}~{signals[-1]["date"]}），個股 {len(sids)} 檔')
+    sig_end = signals[-1]['date']
+    print(f'訊號 {len(signals)} 筆（{signals[0]["date"]}~{sig_end}），個股 {len(sids)} 檔')
 
     ohlcv_map = {}
     for sid in sids:
-        df = clean_ohlcv(load_ohlcv(sid))
+        df = clean_ohlcv(load_ohlcv(sid, refresh))
         ohlcv_map[sid] = compute_indicators(df) if not df.empty else pd.DataFrame()
-    taiex = clean_ohlcv(load_ohlcv('TAIEX'))
+    taiex = clean_ohlcv(load_ohlcv('TAIEX', refresh))
+
+    # 快取終點就是回測終點：落後於 daily_reports 時，最新的訊號會無聲消失
+    px_end = max((df['date'].iloc[-1] for df in ohlcv_map.values() if not df.empty),
+                 default='—')
+    print(f'價格快取涵蓋至 {px_end}；daily_reports 涵蓋至 {sig_end}')
+    if px_end < sig_end and not refresh:
+        print(f'  ⚠ 快取落後 daily_reports，{px_end} 之後的訊號不會被計入。'
+              f'加 --refresh 重抓可延伸到 {sig_end}。')
     regimes = classify_regimes(taiex)
     breadth = compute_breadth(ohlcv_map)
 
@@ -363,4 +378,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--refresh', action='store_true',
+                    help='強制重抓 FinMind 價格，把回測終點推進到最新交易日')
+    main(ap.parse_args().refresh)
