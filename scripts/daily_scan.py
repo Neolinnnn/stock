@@ -300,10 +300,61 @@ def fetch_taiex_ma60():
         return None, None, True
 
 
+# 新聞抓取健檢：整場掃描累計，結束時印出。
+# 新聞曾整批靜默歸零（下游多代理分析的基本面因此空轉一個月無人察覺），
+# 故區分「API 掛了」與「API 正常但標題過濾後沒東西」兩種空手而歸。
+# _scan_one 在 ThreadPoolExecutor 中並行，dict 的 += 非原子操作，需上鎖
+import threading as _threading
+_NEWS_LOCK = _threading.Lock()
+NEWS_STATS = {
+    'attempted': 0,      # 呼叫次數
+    'with_news': 0,      # 至少抓到 1 則
+    'api_items': 0,      # API 實際回傳的原始則數（未過濾）
+    'api_failed': 0,     # 兩個端點都拋錯
+    'filtered_out': 0,   # API 有回東西，但時效／標題比對後全數濾掉
+}
+
+
+_NEWS_ERR_SEEN = set()
+
+
+def _news_err(stock_id, endpoint, exc):
+    """同類錯誤只印第一次，避免 100+ 檔洗版，但不再讓失敗完全無聲。"""
+    key = (endpoint, type(exc).__name__, str(exc)[:80])
+    with _NEWS_LOCK:
+        if key in _NEWS_ERR_SEEN:
+            return
+        _NEWS_ERR_SEEN.add(key)
+    print(f"  ⚠ 新聞 API（{endpoint}）失敗，首見於 {stock_id}：{type(exc).__name__}: {exc}")
+
+
+def news_health_line():
+    """回傳一行新聞抓取健檢摘要（供掃描結束時輸出）。"""
+    s = NEWS_STATS
+    n = s['attempted']
+    if not n:
+        return "📰 新聞：本次未抓取"
+    line = (f"📰 新聞抓取：{s['with_news']}/{n} 檔有新聞"
+            f"｜API 原始回傳 {s['api_items']} 則"
+            f"｜API 失敗 {s['api_failed']} 檔"
+            f"｜過濾後歸零 {s['filtered_out']} 檔")
+    if s['with_news'] == 0:
+        line += ("\n   ⚠ 全數為空。"
+                 + ("API 兩個端點皆失敗，疑似端點變更或網路封鎖。"
+                    if s['api_failed'] >= n
+                    else "API 有回應但全被時效/標題比對濾掉，檢查 days 與標題比對條件。")
+                 + " 影響：agents 多代理分析的個股新聞面板與新聞情緒微調。")
+    return line
+
+
 def fetch_news(stock_id, stock_name, days=3):
     """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
     import urllib.request, json as _json
     cutoff = datetime.now() - timedelta(days=days)
+    with _NEWS_LOCK:
+        NEWS_STATS['attempted'] += 1
+    raw_seen = 0
+    api_ok = False
 
     def _parse_items(items):
         result = []
@@ -329,6 +380,18 @@ def fetch_news(stock_id, stock_name, days=3):
                 break
         return result
 
+    def _record(result):
+        """收尾統計：把「API 掛了」與「抓到了但被濾光」分開記。"""
+        with _NEWS_LOCK:
+            NEWS_STATS['api_items'] += raw_seen
+            if result:
+                NEWS_STATS['with_news'] += 1
+            elif not api_ok:
+                NEWS_STATS['api_failed'] += 1
+            elif raw_seen:
+                NEWS_STATS['filtered_out'] += 1
+        return result
+
     # 主要：用個股專屬 tag 端點（cnyes 標準做法）
     try:
         url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock_id'
@@ -337,11 +400,13 @@ def fetch_news(stock_id, stock_name, days=3):
         with urllib.request.urlopen(req, timeout=8) as r:
             data = _json.loads(r.read())
         items = data.get('items', {}).get('data', [])
+        api_ok = True
+        raw_seen += len(items)
         result = _parse_items(items)
         if result:
-            return result
-    except Exception:
-        pass
+            return _record(result)
+    except Exception as e:
+        _news_err(stock_id, 'tag', e)
 
     # 備援：關鍵字搜尋
     try:
@@ -352,9 +417,12 @@ def fetch_news(stock_id, stock_name, days=3):
         with urllib.request.urlopen(req, timeout=8) as r:
             data = _json.loads(r.read())
         items = data.get('items', {}).get('data', [])
-        return _parse_items(items)
-    except Exception:
-        return []
+        api_ok = True
+        raw_seen += len(items)
+        return _record(_parse_items(items))
+    except Exception as e:
+        _news_err(stock_id, 'search', e)
+        return _record([])
 
 
 _CHIP_MAP = {
@@ -651,6 +719,7 @@ def run_daily_scan():
     if partial:
         items = ', '.join(f"{k}({v}檔)" for k, v in partial.items())
         print(f"⚠ 部分失敗族群：{items}")
+    print(f"\n{news_health_line()}")
     print(f"\n✅ 完成（掃描涵蓋率 {coverage}%）")
     print(f"   JSON：{json_path}")
     print(f"   MD：  {md_path}")
