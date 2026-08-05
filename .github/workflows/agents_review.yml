@@ -1,0 +1,73 @@
+name: 多代理決策覆核（手動）
+
+# 獨立於每日掃描：只在你按下 Run workflow 時才跑，不進 daily_scan.yml。
+# 產出不進 docs/、不影響靜態網址，以 artifact 下載。
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: '分析日期 YYYYMMDD（留空＝最新一日）'
+        required: false
+        default: ''
+      top:
+        description: '覆核綜合分數前 N 檔'
+        required: false
+        default: '10'
+      dry_run:
+        description: '只跑規則檢查，不呼叫 Gemini'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install -q -r requirements.txt
+
+      - name: Rebuild analysis for the target date
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: |
+          # agents/output/ 已 gitignore，checkout 後不存在，需先重建
+          if [ -n "${{ inputs.date }}" ]; then
+            python agents/pipeline.py --date "${{ inputs.date }}"
+          else
+            python agents/pipeline.py
+          fi
+
+      - name: Run LLM review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+        run: |
+          ARGS="--top ${{ inputs.top }}"
+          [ -n "${{ inputs.date }}" ] && ARGS="$ARGS --date ${{ inputs.date }}"
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          python agents/llm_review.py $ARGS
+
+      - name: Show markdown in job summary
+        if: always()
+        run: |
+          for f in agents/output/review_*.md; do
+            [ -e "$f" ] && cat "$f" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+      - name: Upload review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-review
+          path: agents/output/review_*
+          if-no-files-found: warn

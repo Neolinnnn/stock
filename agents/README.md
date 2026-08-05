@@ -72,6 +72,48 @@ python agents/build_preview.py --date 20260605
 python agents/build_preview.py --docs          # 手動產生靜態頁
 ```
 
+## LLM 覆核層（`llm_review.py`，獨立執行）
+
+確定性主幹算完後，挑少數幾檔請 LLM 當魔鬼代言人。**不接入每日掃描**，
+由 `.github/workflows/agents_review.yml` 手動觸發，產物不進 `docs/`。
+
+```bash
+python agents/llm_review.py                    # 最新一日，Top 10
+python agents/llm_review.py --date 20260804 --top 15
+python agents/llm_review.py --dry-run          # 不呼叫 API，只跑規則檢查
+```
+
+設計上的三條線：
+
+- **LLM 不覆寫任何欄位。** 輸出獨立的 `review_<date>.json`／`.md`，`analysis_<date>.json`
+  原封不動。回測基礎設施因此不受影響，也才能事後比對「LLM 的異議當時對不對」。
+- **算術歸規則、判斷歸 LLM。** 風報比、停損距離、覆蓋率這些先由 `risk_reward()` 算好
+  再餵進 prompt，不讓 LLM 自己算數字。
+- **只送該送的。** 覆核名單＝綜合分數 Top-N ＋ 被規則判定 error 級的個股，
+  一次呼叫涵蓋全部（約 12 檔／次），送出前剔除 chart 與新聞全文。
+
+規則檢查分兩級，避免「例外變常態」：
+
+| 級別 | 意義 | 處理 |
+|------|------|------|
+| `error` | 邏輯上說不通（如目標價 ≤ 進場價、單一面向卻報高信心） | 逐檔列出，強制納入覆核 |
+| `warn` | 值得留意但普遍存在（如風報比偏低） | 由 `structural_summary()` 彙總成一則結論 |
+
+分級是實測逼出來的：初版把風報比不足也當個案標記，20260804 一天就標了 56/102 檔。
+限縮到「建議進場」的個股後仍有 21/22 檔不足——那是進場區固定 -3%、停損卻是 2×ATR
+造成的結構性偏差，不是 21 個獨立問題，喊 21 次只會淹掉真正說不通的那 5 檔。
+
+## 為什麼不整包導入 TradingAgents
+
+評估過 `TauricResearch/TradingAgents`（Apache 2.0，可用），結論是只借角色分工概念：
+
+1. **資料層不對盤**：其 `dataflows/` 是 Alpha Vantage / yfinance / FRED / Reddit /
+   StockTwits / Polymarket，拿不到台股三大法人、分點與月營收——那正是本專案的資料優勢。
+2. **規模不符**：`propagate()` 每檔跑完整 graph（4 分析師＋多空辯論＋交易員＋3 風控＋經理，
+   約 12–15 次 LLM 呼叫）。102 檔／天 ≈ 1,300 次呼叫，且預設走付費模型。
+3. **可回測性**：本專案的 `backtest_results_*.json` 成立前提是同輸入同輸出；
+   LLM 決策無法用既有基礎設施回測。
+
 ## Gemini 文字生成
 
 以**族群為單位批次呼叫**（`gemini_text.attach_summaries`）：18 次／日，而非逐檔 102 次，
