@@ -352,17 +352,19 @@
     border-top:1px solid #1e2128;font-size:11px;color:var(--sub);line-height:1.7;}
   #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"
+        integrity="sha384-OK7vELvjHdhUFi31JYioPIcRHTROLdcDa6ZsNWgvgLaKj+9JqhU0Ad8g4wz3CXjA"
+        crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
   <h1>📊 台股族群掃描</h1>
   <nav>
-    <a id="nav-daily"     onclick="setPage('daily')">今日掃描</a>
-    <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
-    <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
-    <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
-    <a id="nav-lab" onclick="setPage('lab')">⚗️ 策略實驗室</a>
+    <a id="nav-daily"     role="button" tabindex="0" onclick="setPage('daily')">今日掃描</a>
+    <a id="nav-weekly"    role="button" tabindex="0" onclick="setPage('weekly')">週報</a>
+    <a id="nav-stock"     role="button" tabindex="0" onclick="setPage('stock')">🔍 個股分析</a>
+    <a id="nav-watchlist" role="button" tabindex="0" onclick="setPage('watchlist')">⭐ 自選清單</a>
+    <a id="nav-lab"       role="button" tabindex="0" onclick="setPage('lab')">⚗️ 策略實驗室</a>
     <a id="nav-backtest" href="./backtest.html">📊 策略回測</a>
     <a href="./homework.html">📚 基本面功課</a>
     <a href="./radar.html">🛰️ 動能雷達</a>
@@ -381,7 +383,6 @@
   <div id="loading">載入中…</div>
   <div id="page-daily"     class="page-section"></div>
   <div id="page-weekly"    class="page-section"></div>
-  <div id="page-mainforce" class="page-section"></div>
   <div id="page-stock"     class="page-section"></div>
   <div id="page-watchlist" class="page-section"></div>
 
@@ -414,7 +415,6 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw14G5uB-Aic9KA
 let WL_DATA = null;
 let BT_RESULTS = null;
 let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
-let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector}
 let DAILY_DATA = null; // daily.json 完整選股清單（最新掃描，64 支），供回測選股 Tab 使用
 
 // ── lightweight-charts 管理 ───────────────────────────────────────────────────
@@ -487,35 +487,32 @@ function showToast(msg) {
 }
 
 // ── ⚙ 手動觸發 GitHub Actions 每日掃描 ──────────────────────────────────────
-// token 僅存於瀏覽器 localStorage，不會上傳；需 fine-grained PAT 對 Neolinnnn/stock 給 Actions: Read & Write
-const GH_REPO = 'Neolinnnn/stock';
+// 觸發改由 Apps Script 代理，PAT 存在它的指令碼屬性（伺服器端），瀏覽器不再持有。
+// 原因：neolinnnn.github.io 是所有 Pages 專案共用的單一 origin，token 放在
+// localStorage 等於同源任何頁面（含第三方 CDN 腳本）都讀得到，而 workflow
+// 執行時帶著 9 組 repo secrets。
 const GH_WORKFLOW = 'daily_scan.yml';
 const GH_WORKFLOW_ONE = 'scan_one.yml';
 
-// 共用：取得/驗證 gh_token 後 POST workflow_dispatch。回傳 true 表示成功觸發（204）。
+// 清掉舊版留在瀏覽器裡的 token（此頁已不再使用）
+try { localStorage.removeItem('gh_token'); } catch {}
+
+// 回傳 true 表示成功觸發。
 async function ghDispatch(workflow, inputs) {
-  let token = localStorage.getItem('gh_token');
-  if (!token) {
-    token = (prompt('貼上 GitHub fine-grained token\n（範圍：Neolinnnn/stock，權限 Actions: Read & Write）\n只會存在本機瀏覽器') || '').trim();
-    if (!token) return false;
-    localStorage.setItem('gh_token', token);
-  }
-  const body = { ref: 'main' };
-  if (inputs && Object.keys(inputs).length) body.inputs = inputs;
+  if (!APPS_SCRIPT_URL) { showToast('❌ 尚未設定 APPS_SCRIPT_URL'); return false; }
   try {
-    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${workflow}/dispatches`, {
+    const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ action: 'dispatch', workflow, inputs: inputs || {} }),
     });
-    if (res.status === 204) return true;
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem('gh_token');
-      showToast('❌ token 無效或權限不足，已清除，請再試一次重設');
-      return false;
-    }
-    const msg = await res.text();
-    showToast(`❌ 觸發失敗（${res.status}）：${msg.slice(0, 80)}`);
+    const data = await res.json();
+    if (data.ok) return true;
+    const msgs = {
+      token_not_configured: '代理未設定 GH_TOKEN，請到 Apps Script 指令碼屬性新增',
+      workflow_not_allowed: 'workflow 不在代理白名單內',
+      rate_limited: '剛剛才觸發過，請稍候再試',
+    };
+    showToast(`❌ 觸發失敗：${msgs[data.error] || data.error || '未知錯誤'}`);
   } catch (e) {
     showToast(`❌ 觸發失敗：${e.message}`);
   }
@@ -695,10 +692,12 @@ function buildBtMap(results){
     if(!lastRb.holdings) return;
     lastRb.holdings.forEach(h=>{
       if(!map.has(h.stock_id)){
-        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector});
+        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector, asof:lastRb.date});
       }
       const entry = map.get(h.stock_id);
       entry.count++;
+      // 各 variant 的最後調倉日可能不同（週調/月調），取最新的那個顯示
+      if(lastRb.date && (!entry.asof || lastRb.date > entry.asof)) entry.asof = lastRb.date;
       entry.strategies.push({id:variant.id, label:variant.label, sharpe:results.ranking.find(r=>r.id===id)?.sharpe||0});
     });
   });
@@ -717,42 +716,8 @@ function buildDailyMap(){
   return m;
 }
 
-function computeTodayPicks(variantId, data){
-  if(!data || !data.sectors || !data.stocks) return [];
-  const parts = variantId.split('_');
-  const sectorRule = parts[0];
-  const stockRule  = parts[parts.length - 1];
-  const SECTORS_N = 3, STOCKS_N = 3;
-
-  let ranked;
-  if(sectorRule === 'composite'){
-    const get = f => data.sectors.map(s => s[f] || 0);
-    const norm = arr => {
-      const mn = Math.min(...arr), mx = Math.max(...arr);
-      return arr.map(v => mx > mn ? (v - mn) / (mx - mn) : 0);
-    };
-    const nR = norm(get('ret20')), nH = norm(get('hot')), nB = norm(get('buy'));
-    ranked = data.sectors.map((s, i) => ({
-      ...s, _score: 0.5 * nR[i] + 0.3 * nH[i] + 0.2 * nB[i]
-    })).sort((a, b) => b._score - a._score);
-  } else {
-    ranked = [...data.sectors].sort((a, b) => (b.ret20 || 0) - (a.ret20 || 0));
-  }
-
-  const topSectors = ranked.slice(0, SECTORS_N).map(s => s.sector);
-  const picks = [];
-  topSectors.forEach(sector => {
-    const inSec = data.stocks.filter(s => s.sector === sector);
-    const sorted = stockRule === 'chip'
-      ? [...inSec].sort((a, b) => (b.chipTotal || 0) - (a.chipTotal || 0))
-      : [...inSec].sort((a, b) => (b.ret20    || 0) - (a.ret20    || 0));
-    sorted.slice(0, STOCKS_N).forEach(s => picks.push(s));
-  });
-  return picks;
-}
-
 function showBtTooltip(sid, event){
-  const bt = BT_MAP.get(sid) || TODAY_BT_MAP.get(sid);
+  const bt = BT_MAP.get(sid);
   if(!bt) return;
   const daily = buildDailyMap().get(sid);
 
@@ -763,7 +728,10 @@ function showBtTooltip(sid, event){
   document.getElementById('bt-tt-signal').innerHTML    = daily && daily.signal ? badge(daily.signal) : '—';
   document.getElementById('bt-tt-sharpe').textContent  = daily ? fmt(daily.sharpe,2)  : '—';
   document.getElementById('bt-tt-stop').textContent    = daily && daily.stopLoss!=null ? fmt(daily.stopLoss,1) : '—';
-  document.getElementById('bt-tt-count').textContent   = `⭐ 出現 ${bt.count}/5 策略`;
+  // 持股來自回測最後一次調倉，不是今日選股 — 必須標日期，否則會被誤讀成
+  // 「今天有 N 個策略選中它」（旁邊並排的現價/RSI 是今日資料）
+  document.getElementById('bt-tt-count').textContent   =
+    `⭐ ${bt.asof ? fmtDate(bt.asof) + ' 調倉時' : '回測期末'}由 ${bt.count}/5 策略持有`;
   document.getElementById('bt-tt-strat-names').textContent = bt.strategies.map(s=>s.label).join('、');
 
   const tt = document.getElementById('bt-tooltip');
@@ -1018,23 +986,31 @@ function spRender(d){
 let _fundData = null;
 let _fundLoaded = false;
 
+let _fundTab = 'revenue';   // 目前選中的分頁，資料稍後到達時要補 render
+
+function renderFundTab(tab) {
+  if (!_fundLoaded || !_fundData) return;
+  if (tab === 'revenue')     renderFundRevenue(_fundData);
+  if (tab === 'eps')         renderFundEps(_fundData);
+  if (tab === 'margins')     renderFundMargins(_fundData);
+  if (tab === 'product_mix') renderFundProductMix(_fundData);
+}
+
 function switchFundTab(tab, btn) {
   document.querySelectorAll('.fund-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _fundTab = tab;
   ['revenue', 'eps', 'margins', 'product_mix'].forEach(t => {
     const el = document.getElementById('fund-' + t.replace('_','-'));
     if (el) el.style.display = t === tab ? '' : 'none';
   });
-  if (_fundLoaded && _fundData) {
-    if (tab === 'eps')         renderFundEps(_fundData);
-    if (tab === 'margins')     renderFundMargins(_fundData);
-    if (tab === 'product_mix') renderFundProductMix(_fundData);
-  }
+  renderFundTab(tab);
 }
 
 function loadFundamentals(stockId) {
   _fundData = null;
   _fundLoaded = false;
+  _fundTab = 'revenue';
   // Reset tabs back to 月營收
   document.querySelectorAll('.fund-tab').forEach((b, i) => {
     b.classList.toggle('active', i === 0);
@@ -1043,12 +1019,13 @@ function loadFundamentals(stockId) {
     const el = document.getElementById('fund-' + t);
     if (el) {
       el.style.display = i === 0 ? '' : 'none';
-      if (i === 0) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
-      else el.innerHTML = '';
+      el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
     }
   });
   fetchJSON(`./fundamentals/${stockId}.json`)
-    .then(d => { _fundData = d; _fundLoaded = true; renderFundRevenue(d); })
+    // 補 render 目前選中的分頁：使用者可能在 fetch 回來前就切到 EPS/三率/產銷，
+    // 只 render revenue 會讓那些分頁永遠停在載入中
+    .then(d => { _fundData = d; _fundLoaded = true; renderFundTab(_fundTab); })
     .catch(() => {
       ['revenue','eps','margins','product-mix'].forEach(t => {
         const el = document.getElementById('fund-' + t);
@@ -1965,6 +1942,12 @@ async function init(){
     if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
       hideBtTooltip();
   });
+  // 導覽列的分頁切換是沒有 href 的 <a>，鍵盤按 Enter/Space 不會觸發 click
+  document.querySelectorAll('nav a[role="button"]').forEach(a=>{
+    a.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); a.click(); }
+    });
+  });
 }
 
 function buildDateSelect(){
@@ -2137,19 +2120,17 @@ async function _renderLabBreakout(){
 
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','mainforce','stock','watchlist','lab'].forEach(p=>{
+  ['daily','weekly','stock','watchlist','lab'].forEach(p=>{
     const navEl = document.getElementById(`nav-${p}`);
     if(navEl) navEl.classList.toggle('active', p===page);
     const pageEl = document.getElementById(`page-${p}`);
     if(pageEl) pageEl.classList.toggle('active', p===page);
   });
-  // 主力觀察與今日掃描共用同一份 daily payload，所以也需要日期選擇器
   document.getElementById('date-picker-wrap').style.display =
-    (page==='daily' || page==='mainforce') ? '' : 'none';
+    page==='daily' ? '' : 'none';
   if(page==='weekly')    renderWeekly();
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
-  if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
   if(page==='lab')       renderLabPage();
   hideBtTooltip();
 }
@@ -2166,16 +2147,14 @@ async function loadDate(dateStr){
     try{
       CACHE[dateStr] = await fetchJSON(`./${dateStr}.json?v=${bust}`);
     }catch{
-      try{
-        CACHE[dateStr] = await fetchJSON(`./daily.json?v=${bust}`);
-      }catch{
-        showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
-        return;
-      }
+      // 原本會退回 daily.json 並存進 CACHE[dateStr]，等於把「最新資料」
+      // 冒充成該日期的資料且永久快取，使用者無從察覺日期與內容不符。
+      // 寧可明確報錯。
+      showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
+      return;
     }
   }
   renderDaily(CACHE[dateStr]);
-  if(CUR_PAGE==='mainforce') renderMainForce(CACHE[dateStr]);
   document.getElementById('loading').style.display='none';
 }
 
@@ -2711,146 +2690,6 @@ async function _renderBreakoutSection(){
       </div>`).join('')+`</div>`;
   }
   el.innerHTML=html;
-}
-
-// ── 主力觀察 ─────────────────────────────────────────────────────────────────
-function mfScoreColor(s){
-  if(s==null) return 'var(--sub)';
-  if(s>=70) return 'var(--green)';
-  if(s>=55) return '#5cb85c';
-  if(s>=45) return 'var(--yellow)';
-  if(s>=30) return '#e67e22';
-  return 'var(--red)';
-}
-
-function renderMainForce(data){
-  const el = document.getElementById('page-mainforce');
-  if(!data){
-    el.innerHTML = `<div class="error-box"><span>📭</span>尚未載入資料</div>`;
-    return;
-  }
-  const list = data.mainForce || [];
-  if(!list.length){
-    el.innerHTML = `
-    <div class="info-box" style="margin-bottom:16px;">
-      <b style="color:var(--text);">🎯 主力觀察（觀察期）</b><br>
-      本分頁顯示「ATR(14)×2 動態停損」與「分點主力強度分數」。<br>
-      <span style="color:var(--yellow)">⚠ 此日期尚無主力觀察資料 — 待 daily_scan 在啟用後重新跑一次才會出現。</span>
-    </div>`;
-    return;
-  }
-
-  const date = (data.meta && data.meta['掃描日期']) || '—';
-
-  // 統計區
-  const scored = list.filter(x=>x.mainForceScore!=null);
-  const avgScore = scored.length ? Math.round(scored.reduce((a,b)=>a+b.mainForceScore,0)/scored.length*10)/10 : null;
-  const strong = scored.filter(x=>x.mainForceScore>=70).length;
-  const weak   = scored.filter(x=>x.mainForceScore<30).length;
-  const netBuyTotal = list.reduce((a,b)=>a+(b.brokerNet||0),0);
-
-  let html = `
-  <div class="info-box" style="margin-bottom:14px;">
-    <b style="color:var(--text);">🎯 主力觀察分頁說明</b><br>
-    <b>主力分</b>：依分點 top15 計算 (40% 淨買超 + 35% 前 5 大集中度 + 25% 單一主力主導性) — ≥70 強力吸籌、≥55 偏多、≥45 中性、≥30 偏空、<30 大幅出脫<br>
-    <b>停損價</b>：當日收盤 − 2 × ATR(14)，依個股波動動態調整<br>
-    <b>主力淨</b>：分點 top15 買超合計減去 top15 賣超合計（張）— 來源：histock.tw
-  </div>
-
-  <div class="grid-4">
-    <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
-    <div class="card"><div class="card-title">主力分平均</div>
-      <div class="card-value" style="color:${mfScoreColor(avgScore)}">${avgScore!=null?avgScore.toFixed(1):'—'}</div>
-      <div class="card-sub">${scored.length} 檔有資料</div></div>
-    <div class="card"><div class="card-title">強力吸籌</div>
-      <div class="card-value" style="color:var(--green)">${strong}</div>
-      <div class="card-sub">主力分 ≥ 70</div></div>
-    <div class="card"><div class="card-title">大幅出脫</div>
-      <div class="card-value" style="color:var(--red)">${weak}</div>
-      <div class="card-sub">主力分 < 30</div></div>
-  </div>
-
-  <div class="section-title">📊 主力強度排行（${list.length} 檔）</div>
-  <div class="card" style="overflow-x:auto"><table>
-    <tr>
-      <th>代碼</th><th>名稱</th><th>族群</th><th>現價</th>
-      <th>訊號</th><th>主力分</th><th>標籤</th>
-      <th>Top1 買進</th><th>分點淨超</th><th>ATR</th><th>停損價</th><th></th>
-    </tr>
-    ${list.map((s,i)=>{
-      const score = s.mainForceScore;
-      const scoreCol = mfScoreColor(score);
-      const netClass = (s.brokerNet||0)>=0?'chip-pos':'chip-neg';
-      const top1 = s.top1Broker ? `${escHtml(s.top1Broker)} ${s.top1Lots? '+'+s.top1Lots+'張':''}` : '—';
-      return `<tr>
-        <td><b>${escHtml(s.id)}</b></td>
-        <td>${escHtml(s.name)}</td>
-        <td><span class="tag">${escHtml(s.sector||'')}</span></td>
-        <td>${fmt(s.price,1)}</td>
-        <td>${s.signal?badge(s.signal):'—'}</td>
-        <td><b style="color:${scoreCol}">${score!=null?fmt(score,1):'—'}</b></td>
-        <td style="font-size:12px;color:${scoreCol}">${escHtml(s.mainForceLabel||'—')}</td>
-        <td style="font-size:12px">${top1}</td>
-        <td class="${netClass}">${s.brokerNet!=null?sign(s.brokerNet)+(s.brokerNet).toLocaleString():'—'}</td>
-        <td>${s.atr14!=null?fmt(s.atr14,2):'—'}</td>
-        <td class="dn">${s.stopLoss!=null?fmt(s.stopLoss,1):'—'}</td>
-        <td><button class="btn-add-inline" onclick="mfToggle(${i})" id="mf-btn-${i}">▼</button></td>
-      </tr>
-      <tr id="mf-detail-${i}" style="display:none;background:#13161d">
-        <td colspan="12" style="padding:12px 16px">${renderMfDetail(s)}</td>
-      </tr>`;
-    }).join('')}
-  </table></div>`;
-
-  el.innerHTML = html;
-}
-
-function renderMfDetail(s){
-  const buyers = s.topBuyers || [];
-  const sellers = s.topSellers || [];
-  const err = s.brokerError;
-  if(err && !buyers.length && !sellers.length){
-    return `<div style="color:var(--sub);font-size:12px">⚠ 分點資料抓取失敗：${escHtml(err)}（${escHtml(s.brokerSource||'unknown')}）</div>`;
-  }
-  const tb = buyers.map(b=>`<tr>
-    <td>${escHtml(b.name)}</td><td>${b.buy}</td><td>${b.sell}</td>
-    <td class="chip-pos"><b>+${b.net}</b></td><td>${b.avg_price||'—'}</td>
-  </tr>`).join('');
-  const ts = sellers.map(s=>`<tr>
-    <td>${escHtml(s.name)}</td><td>${s.buy}</td><td>${s.sell}</td>
-    <td class="chip-neg"><b>${s.net}</b></td><td>${s.avg_price||'—'}</td>
-  </tr>`).join('');
-  return `
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div>
-      <div style="color:var(--green);font-size:12px;margin-bottom:6px">▲ Top 買超分點 (近 5 日)</div>
-      <table class="chip-table" style="font-size:12px">
-        <tr><th>分點</th><th>買張</th><th>賣張</th><th>淨</th><th>均價</th></tr>
-        ${tb||'<tr><td colspan="5" style="color:var(--sub)">無資料</td></tr>'}
-      </table>
-    </div>
-    <div>
-      <div style="color:var(--red);font-size:12px;margin-bottom:6px">▼ Top 賣超分點 (近 5 日)</div>
-      <table class="chip-table" style="font-size:12px">
-        <tr><th>分點</th><th>買張</th><th>賣張</th><th>淨</th><th>均價</th></tr>
-        ${ts||'<tr><td colspan="5" style="color:var(--sub)">無資料</td></tr>'}
-      </table>
-    </div>
-  </div>
-  <div style="margin-top:8px;font-size:11px;color:var(--sub)">
-    來源：${escHtml(s.brokerSource||'—')}
-    前 5 大買超合計：${s.top5BuyLots!=null?'+'+s.top5BuyLots+' 張':'—'}
-    集中度：${s.concentration!=null?(s.concentration*100).toFixed(1)+'%':'—'}
-  </div>`;
-}
-
-function mfToggle(i){
-  const row = document.getElementById(`mf-detail-${i}`);
-  const btn = document.getElementById(`mf-btn-${i}`);
-  if(!row) return;
-  const open = row.style.display !== 'none';
-  row.style.display = open ? 'none' : '';
-  if(btn) btn.textContent = open ? '▼' : '▲';
 }
 
 // ── 週報 ──────────────────────────────────────────────────────────────────────

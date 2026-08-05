@@ -164,7 +164,17 @@ const DATES = ["20260805", "20260804"];
 const BUILT_AT = "2026-08-05 10:20";
 let curSec=0, curStk=0, CURSTK=null, CHARTS=null, filterAction='';
 
-// 指標簡寫 → 看得懂的中文名
+// 這份頁面的資料含外部新聞（headline/link）與 Gemini 產生的敘述（summary_text、
+// debate、rationale），全部直接進 innerHTML，故一律經過 esc()；
+// href 另外限定 http(s) scheme，避免 javascript: 之類的內容被當成連結。
+function esc(v){ return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function safeUrl(u){
+  const t=String(u ?? '').trim();
+  return /^https?:\/\//i.test(t) ? esc(t) : '';
+}
+function escList(a, sep){ return (a||[]).map(esc).join(sep); }
+
+// 指標簡寫 → 看得懂的中文名（解決「max_yoy_pct 是什麼」）
 const LABELS={
   ret_20d:'20日報酬', rsi:'RSI(14)', cv_sharpe:'回測夏普值', signal:'技術訊號',
   rev_month:'營收月份', rev_yoy:'月營收年增', rev_yoy_3m:'近三月年增均值',
@@ -227,12 +237,12 @@ function chartBlock(st){
   const span=ds.length?`${ds[0]} ~ ${ds[ds.length-1]}`:'';
   return `<div class="chart">${sparkSVG(ch)}
     <div class="lg">
-      <span style="color:${ch.close[ch.close.length-1]>=ch.close[0]?'var(--bull)':'var(--bear)'}">收盤 <b>$${st.price}</b></span>
+      <span style="color:${ch.close[ch.close.length-1]>=ch.close[0]?'var(--bull)':'var(--bear)'}">收盤 <b>$${esc(st.price)}</b></span>
       <span style="color:#39c5cf">— 5MA</span>
       <span style="color:var(--warn)">— 20MA</span>
       <span style="color:#a371f7">— 60MA</span>
       <span style="color:var(--accent)">┄ 布林帶</span>
-      <span style="margin-left:auto">${span}（近 ${ch.close.length} 日）</span></div></div>`;
+      <span style="margin-left:auto">${esc(span)}（近 ${ch.close.length} 日）</span></div></div>`;
 }
 // TradingAgents 風格技術分析師：跨類別判讀表
 function techReportTable(a){
@@ -241,9 +251,9 @@ function techReportTable(a){
   const bc={bullish:'imp-bull',bearish:'imp-bear'};
   const bl={bullish:'偏多',bearish:'偏空',neutral:'中性'};
   const rows=rep.map(r=>`<tr>
-    <td style="color:var(--dim);white-space:nowrap">${r.category}</td>
-    <td style="white-space:nowrap"><b>${r.indicator}</b></td>
-    <td>${r.reading}</td>
+    <td style="color:var(--dim);white-space:nowrap">${esc(r.category)}</td>
+    <td style="white-space:nowrap"><b>${esc(r.indicator)}</b></td>
+    <td>${esc(r.reading)}</td>
     <td style="text-align:right"><span class="ev-impact ${bc[r.bias]||'imp-neu'}">${bl[r.bias]||'中性'}</span></td></tr>`).join('');
   return `<div style="margin-top:14px">
     <div style="font-size:12px;color:var(--accent);margin-bottom:6px">🧠 技術分析師判讀（改寫自 TradingAgents · 跨趨勢/動能/擺盪/波動）</div>
@@ -252,7 +262,7 @@ function techReportTable(a){
 
 function scoreClass(v){return v>10?'pos':(v<-10?'neg':'neu')}
 function regimeBadge(r){const m={risk_on:'r-on',mild_risk_on:'r-on',neutral:'r-neu',mild_risk_off:'r-off',risk_off:'r-off'};
-  return `<span class="regime ${m[r.regime]||'r-neu'}">${r.regime} · ${r.regime_score}</span>`}
+  return `<span class="regime ${m[r.regime]||'r-neu'}">${esc(r.regime)} · ${esc(r.regime_score)}</span>`}
 function actionClass(a){return a==='買進'?'a-buy':(a==='分批布局'?'a-part':(a==='觀望'?'a-wait':'a-cut'))}
 
 function renderHeader(){
@@ -294,19 +304,19 @@ function renderSectors(){
   el.innerHTML='<h4>族群排行</h4>'+DATA.sectors.map((s,i)=>
     `<div class="row ${i===curSec?'active':''}" tabindex="0" role="button"
           aria-pressed="${i===curSec}" onclick="selSec(${i})">
-       <div class="rtop"><span>${s.name}</span><span class="sc ${scoreClass(s.sector_score)}">${s.sector_score}</span></div>
+       <div class="rtop"><span>${esc(s.name)}</span><span class="sc ${scoreClass(s.sector_score)}">${esc(s.sector_score)}</span></div>
        ${scoreBar(s.sector_score)}</div>`).join('');
 }
 function sectorCard(sec){
   const sy=sec.synthesis;
   const acts=Object.entries(sy.actions).map(([k,v])=>`${k}×${v}`).join('、');
   return `<div class="seccard">
-    <div class="st"><b>${sec.name} 族群綜述</b>
-      <span class="vd ${scoreClass(sec.sector_score)}" style="background:var(--chip)">${sec.verdict} · ${sec.sector_score}</span></div>
-    <div class="mini">首選：${sy.top_picks.join('、')}</div>
-    <div class="mini">行動分布：${acts}</div>
-    <div class="mini"><span class="bp">🐂 ${sy.bull.join(' ')}</span></div>
-    <div class="mini"><span class="br">🐻 ${sy.bear.join(' ')}</span></div>
+    <div class="st"><b>${esc(sec.name)} 族群綜述</b>
+      <span class="vd ${scoreClass(sec.sector_score)}" style="background:var(--chip)">${esc(sec.verdict)} · ${esc(sec.sector_score)}</span></div>
+    <div class="mini">首選：${escList(sy.top_picks,'、')}</div>
+    <div class="mini">行動分布：${esc(acts)}</div>
+    <div class="mini"><span class="bp">🐂 ${escList(sy.bull,' ')}</span></div>
+    <div class="mini"><span class="br">🐻 ${escList(sy.bear,' ')}</span></div>
   </div>`;
 }
 const ACTIONS=['買進','分批布局','觀望','減碼/避開'];
@@ -322,8 +332,8 @@ function renderStocks(){
     .map(({st,i})=>
     `<div class="row ${i===curStk?'active':''}" tabindex="0" role="button"
           aria-pressed="${i===curStk}" onclick="selStk(${i})">
-       <div class="rtop"><span>${st.name} <span style="color:var(--dim)">${st.id}</span></span>
-       <span class="sc ${scoreClass(st.decision.composite)}">${st.decision.composite}</span></div>
+       <div class="rtop"><span>${esc(st.name)} <span style="color:var(--dim)">${esc(st.id)}</span></span>
+       <span class="sc ${scoreClass(st.decision.composite)}">${esc(st.decision.composite)}</span></div>
        ${scoreBar(st.decision.composite)}</div>`).join('');
   el.innerHTML=`<h4>${sec.name}（${sec.stocks.length} 檔）</h4>`+sectorCard(sec)
     +`<div class="filters">${chips}</div>`
@@ -339,12 +349,12 @@ function analystCard(key,label,a){
         :'<span class="cov">缺資料 · 已排除於加權外</span>');
   const cov=a.coverage?`<span class="cov">${COV_LABEL[a.coverage]||a.coverage}</span>`:'';
   const sig=Object.entries(a.signals).map(([k,val])=>
-    `<div class="c"><div class="k">${LABELS[k]||k}</div><div class="v">${fmtVal(k,val)}</div></div>`).join('');
+    `<div class="c"><div class="k">${esc(LABELS[k]||k)}</div><div class="v">${esc(fmtVal(k,val))}</div></div>`).join('');
   const chart=key==='technical'?`<div id="chart-slot">${chartBlock(CURSTK)}</div>`:'';
   const tr=key==='technical'?techReportTable(a):'';
   return `<div class="acard ${key==='technical'?'active':''}" id="ac-${key}">
     <div class="ah"><b>${label}</b>${cov}${wtxt}
-      <span class="v ${vc}" style="background:var(--chip)">${v} · ${a.score}</span></div>
+      <span class="v ${vc}" style="background:var(--chip)">${esc(v)} · ${esc(a.score)}</span></div>
     ${chart}<div class="kv">${sig}</div>${tr}</div>`;
 }
 function renderDetail(){
@@ -360,32 +370,33 @@ function renderDetail(){
   const tabs=Object.keys(labels).map((k,i)=>
     `<div class="tab ${i===0?'active':''}" onclick="selTab('${k}',this)">${labels[k]}</div>`).join('');
   const cards=Object.keys(labels).map(k=>analystCard(k,labels[k],A[k])).join('');
-  const bull=st.debate.bull.map(x=>`<li>${x}</li>`).join('');
-  const bear=st.debate.bear.map(x=>`<li>${x}</li>`).join('');
-  const flags=d.flags.map(f=>`<span class="flag">${f}</span>`).join('');
+  const bull=st.debate.bull.map(x=>`<li>${esc(x)}</li>`).join('');
+  const bear=st.debate.bear.map(x=>`<li>${esc(x)}</li>`).join('');
+  const flags=d.flags.map(f=>`<span class="flag">${esc(f)}</span>`).join('');
   // 個股新聞
   const newsHtml=(st.news&&st.news.length)?st.news.map(n=>{
-    const rc=n.recency?`<span class="rec ${n.recency==='今日'?'today':''}">${n.recency}</span>`:'';
-    const t=n.link?`<a href="${n.link}" target="_blank" rel="noopener">${n.title}</a>`:n.title;
-    return `<div class="news-item">${t}<div class="news-meta">${rc}<span>${n.source}</span><span>${n.datetime||''}</span></div></div>`;
+    const rc=n.recency?`<span class="rec ${n.recency==='今日'?'today':''}">${esc(n.recency)}</span>`:'';
+    const u=safeUrl(n.link);
+    const t=u?`<a href="${u}" target="_blank" rel="noopener noreferrer">${esc(n.title)}</a>`:esc(n.title);
+    return `<div class="news-item">${t}<div class="news-meta">${rc}<span>${esc(n.source)}</span><span>${esc(n.datetime||'')}</span></div></div>`;
   }).join(''):'<div style="color:var(--dim);font-size:13px">無近期新聞</div>';
   document.getElementById('detail').innerHTML=`
-    <div class="dhead"><span class="nm">${st.name}</span><span class="id">${st.id}</span>
-      <a class="stocklink" href="../?stock=${st.id}" target="_blank" rel="noopener">完整個股分析 ↗</a>
-      <span class="action ${actionClass(d.action)}">${d.action}</span>
-      <span class="pr">$${st.price}</span></div>
-    <div class="sumtxt">${st.summary_text}</div>
+    <div class="dhead"><span class="nm">${esc(st.name)}</span><span class="id">${esc(st.id)}</span>
+      <a class="stocklink" href="../?stock=${encodeURIComponent(st.id)}" target="_blank" rel="noopener">完整個股分析 ↗</a>
+      <span class="action ${actionClass(d.action)}">${esc(d.action)}</span>
+      <span class="pr">$${esc(st.price)}</span></div>
+    <div class="sumtxt">${esc(st.summary_text)}</div>
     <div class="sec-h">🎯 最終決策（交易員 → 風控 → 投組經理）</div>
     <div class="dec">
-      <div style="font-size:13px;color:var(--dim)">綜合評分 <b style="color:var(--txt)">${d.composite}</b>｜信心度 <b style="color:var(--txt)">${d.confidence}%</b>
+      <div style="font-size:13px;color:var(--dim)">綜合評分 <b style="color:var(--txt)">${esc(d.composite)}</b>｜信心度 <b style="color:var(--txt)">${esc(d.confidence)}%</b>
         <span style="margin-left:8px">＝ ${weightsText(d)}</span></div>
       <div class="rg">
-        <div class="rc"><div class="k">建議行動</div><div class="v ${actionClass(d.action).replace('a-','').replace('buy','pos').replace('part','')}">${d.action}</div></div>
-        <div class="rc"><div class="k">部位上限(regime)</div><div class="v">${d.exposure_pct}%</div></div>
-        <div class="rc"><div class="k">進場區</div><div class="v">${d.entry_zone?d.entry_zone.join('–'):'-'}</div></div>
-        <div class="rc"><div class="k">停損</div><div class="v neg">${d.stop_loss??'-'}</div></div>
-        <div class="rc"><div class="k">短期目標</div><div class="v pos">${d.target_short??'-'}</div></div>
-        <div class="rc"><div class="k">ATR14</div><div class="v">${d.atr14??'-'}</div></div>
+        <div class="rc"><div class="k">建議行動</div><div class="v ${actionClass(d.action).replace('a-','').replace('buy','pos').replace('part','')}">${esc(d.action)}</div></div>
+        <div class="rc"><div class="k">部位上限(regime)</div><div class="v">${esc(d.exposure_pct)}%</div></div>
+        <div class="rc"><div class="k">進場區</div><div class="v">${d.entry_zone?escList(d.entry_zone,'–'):'-'}</div></div>
+        <div class="rc"><div class="k">停損</div><div class="v neg">${esc(d.stop_loss??'-')}</div></div>
+        <div class="rc"><div class="k">短期目標</div><div class="v pos">${esc(d.target_short??'-')}</div></div>
+        <div class="rc"><div class="k">ATR14</div><div class="v">${esc(d.atr14??'-')}</div></div>
       </div>
       <div style="margin-top:12px">風控旗標：${flags}</div>
     </div>
@@ -425,11 +436,12 @@ function renderEvents(){
   const items=DATA.events.map(e=>{
     const ic={bullish:'imp-bull',bearish:'imp-bear'}[e.impact]||'imp-neu';
     const lbl={bullish:'利多',bearish:'利空'}[e.impact]||'中性';
-    const h=e.link?`<a href="${e.link}" target="_blank" rel="noopener">${e.headline}</a>`:e.headline;
-    const rc=e.recency?`<span class="rec ${e.recency==='今日'?'today':''}">${e.recency}</span>`:'';
+    const eu=safeUrl(e.link);
+    const h=eu?`<a href="${eu}" target="_blank" rel="noopener noreferrer">${esc(e.headline)}</a>`:esc(e.headline);
+    const rc=e.recency?`<span class="rec ${e.recency==='今日'?'today':''}">${esc(e.recency)}</span>`:'';
     return `<div class="ev-item">${h}
-      <div class="news-meta">${rc}<span class="ev-impact ${ic}">${lbl}·強度${e.severity}</span>
-      <span>${e.category}</span><span>${e.rationale}</span><span>${e.source||''}</span>${e.date?`<span>${e.date}</span>`:''}</div></div>`;
+      <div class="news-meta">${rc}<span class="ev-impact ${ic}">${lbl}·強度${esc(e.severity)}</span>
+      <span>${esc(e.category)}</span><span>${esc(e.rationale)}</span><span>${esc(e.source||'')}</span>${e.date?`<span>${esc(e.date)}</span>`:''}</div></div>`;
   }).join('');
   return head+`<div class="ev-list">${items}</div>`;
 }

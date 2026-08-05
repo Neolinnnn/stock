@@ -97,11 +97,15 @@ stock_research/
 
 ## 網頁上線流程
 
-**改動直接進 `docs/index.html`。** `docs/preview.html` 測試版機制已於 2026-08 廢除
-（沙盒副本與正式版長期需手動同步，反而成為兩份會漂移的檔案）。
+**改動 `docs/` 底下的頁面後，先在本機驗證，再開 PR 合併。**
 
-- 正式頁面：`docs/index.html` 及其他 `docs/*.html`。
-- 改完在本機起 server 實測（分頁有內容、無 console 錯誤）再 push。
+- 本機預覽：`python -m http.server 8766 --directory docs`，瀏覽器開 `http://localhost:8766`
+- 驗證範圍：改到的按鈕實際點過、圖表有正常渲染、console 無錯誤
+- 確認無誤後開 PR，合併到 main 即由 GitHub Pages 部署
+
+> 早期用 `docs/preview.html`（index.html 的線上沙盒副本）做測試版，
+> 已於 2026-07-26 廢除：兩檔需手動保持同步，容易發生只改其中一檔、
+> 另一檔把修正蓋回去的情形。改為本機驗證。
 
 # AI Behavior Guidelines (by Andrej Karpathy)
 
