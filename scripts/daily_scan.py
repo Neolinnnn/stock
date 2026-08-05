@@ -971,9 +971,6 @@ def build_summary(date, market, all_results, chart_path):
         _ma20 = pd.to_numeric(df['ma20'], errors='coerce')
         _price = pd.to_numeric(df['price'], errors='coerce')
         _bias_ma20 = (_price - _ma20) / _ma20 * 100
-        # 前端沿用中的 MA10 乖離徽章，待正式版切換後可移除
-        _ma10 = pd.to_numeric(df['ma10'], errors='coerce')
-        _bias_ma10 = (_price - _ma10) / _ma10 * 100
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
                    (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
                    (_bias_ma20 <= MAX_BIAS_MA20)]
@@ -990,7 +987,6 @@ def build_summary(date, market, all_results, chart_path):
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
                 'bias_ma20': round(float(_bias_ma20.loc[r.name]), 1),
-                'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
             })
 
         # 雙篩選命中（舊邏輯：BUY + cv_sharpe/cv_win_rate/cv_max_dd，不含乖離率與族群強勢閘門）
@@ -1008,7 +1004,6 @@ def build_summary(date, market, all_results, chart_path):
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
                 'bias_ma20': bias_v,
-                'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
                 'sector_strong': sector_strong,
                 'passes_bias': passes_bias,
                 'passes_all': passes_bias and (sector_strong if REQUIRE_STRONG_SECTOR else True),

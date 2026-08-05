@@ -95,14 +95,13 @@ stock_research/
 
 ---
 
-## 網頁上線流程（測試版 → 正式版）
+## 網頁上線流程
 
-**新功能或改動主站頁面時，一律先進測試版，驗證後才進正式版。**
+**改動直接進 `docs/index.html`。** `docs/preview.html` 測試版機制已於 2026-08 廢除
+（沙盒副本與正式版長期需手動同步，反而成為兩份會漂移的檔案）。
 
-- **測試版**：`docs/preview.html`（index.html 的沙盒副本）。新分頁、新導覽入口、UI 改動先加在這裡。
-- **正式版**：`docs/index.html` 及其他正式頁面。只放已在測試版驗證過的功能。
-- 流程：改 preview.html → push 部署 → 使用者在線上測試版確認 OK → 才把改動搬進 index.html。
-- 新增獨立頁面（如 homework.html、backtest.html）本體可直接上，但**導覽入口**同樣先加 preview.html，驗證後再加 index.html。
+- 正式頁面：`docs/index.html` 及其他 `docs/*.html`。
+- 改完在本機起 server 實測（分頁有內容、無 console 錯誤）再 push。
 
 # AI Behavior Guidelines (by Andrej Karpathy)
 

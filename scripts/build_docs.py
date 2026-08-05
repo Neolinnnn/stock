@@ -428,7 +428,7 @@ def build_daily_payload(summary):
             'price':     q.get('price', ''),
             'rsi':       q.get('rsi', ''),
             'cv_sharpe': q.get('cv_sharpe', ''),
-            'bias_ma10': q.get('bias_ma10'),
+            'bias_ma20': q.get('bias_ma20'),
         }
         for q in summary.get('qualified', [])
     ]
@@ -442,7 +442,7 @@ def build_daily_payload(summary):
             'price':        d.get('price', ''),
             'rsi':          d.get('rsi', ''),
             'cv_sharpe':    d.get('cv_sharpe', ''),
-            'bias_ma10':    d.get('bias_ma10'),
+            'bias_ma20':    d.get('bias_ma20'),
             'sector_strong': d.get('sector_strong'),
             'passes_bias':  d.get('passes_bias'),
         }
