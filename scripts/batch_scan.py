@@ -301,6 +301,11 @@ def analyze_stock(stock_id, name, days=DATA_DAYS, hist=None):
     if (current_signal == 'BUY' and latest_short is not None
             and latest_long is not None and latest_short <= latest_long):
         current_signal = 'HOLD'
+    # SELL 對稱處理：若最新 MA5 已回升到 MA20 之上（趨勢仍偏多），
+    # 視死叉為短暫雜訊，SELL 降為 HOLD，避免主升段股票被洗出假減碼訊號
+    if (current_signal == 'SELL' and latest_short is not None
+            and latest_long is not None and latest_short > latest_long):
+        current_signal = 'HOLD'
 
     # Walk-Forward CV
     cv_results = walk_forward_cv(prices, dates, CV_FOLDS)
@@ -315,6 +320,9 @@ def analyze_stock(stock_id, name, days=DATA_DAYS, hist=None):
 
     # CV 夏普 < 0 時降為 HOLD：技術訊號需歷史績效支撐才算有效 BUY
     if current_signal == 'BUY' and avg_sharpe < 0:
+        current_signal = 'HOLD'
+    # SELL 對稱處理：CV 夏普 > 0（策略近期仍賺錢）時降為 HOLD，避免過早出場
+    if current_signal == 'SELL' and avg_sharpe > 0:
         current_signal = 'HOLD'
 
     return {
