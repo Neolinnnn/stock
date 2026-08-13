@@ -1,8 +1,19 @@
 {
- "date": "20260812",
- "generated_at": "2026-08-12 08:53",
+ "date": "20260813",
+ "generated_at": "2026-08-13 08:58",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "4938",
+   "close": 94.8,
+   "vol_ratio": 4.24,
+   "dist_ma20": 9.8,
+   "ret20": 13.94,
+   "last_date": "2026-08-13",
+   "chip5": 36454875.0,
+   "name": "和碩"
+  }
+ ],
  "backtest_ref": {
   "n": 183,
   "tp18sl15_win": 0.65,
