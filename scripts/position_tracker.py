@@ -41,14 +41,17 @@ PHASE2_TIMEOUT = 25     # Phase 2 未創新高的時間停損（交易日）
 
 def passes_gate(stock: dict, taiex_bull: bool, *,
                 sector_strong: bool = True,
-                max_bias_ma10: float | None = None) -> bool:
+                max_bias_ma10: float | None = None,
+                min_avg_volume: float | None = None) -> bool:
     """判斷個股是否通過進場閘門。
 
-    stock 需含：signal, price, ma5, ma20, ma60；檢查乖離時另需 ma10。
+    stock 需含：signal, price, ma5, ma20, ma60；檢查乖離時另需 ma10；
+        檢查流動性時另需 avg_volume_20d（張）。
     taiex_bull：TAIEX 收盤 > MA60。
     sector_strong：個股所屬族群是否強勢（avg_ret>3）。daily_scan 依
         strong_sectors 傳入；REQUIRE_STRONG_SECTOR=False 時恆傳 True（不過濾）。
     max_bias_ma10：進場乖離 MA10 上限（%）；None 表示不檢查。
+    min_avg_volume：近20日均量下限（張）；None 表示不檢查。
 
     族群強勢 + 乖離兩道閘門依 2025/1~2026/6 回測加入：套在現有閘門上，
     HYBRID 自適應出場勝率 63%→71%、PF 2.56→3.05（代價：訊號數大幅縮減）。
@@ -76,6 +79,11 @@ def passes_gate(stock: dict, taiex_bull: bool, *,
         if ma10 is None or ma10 == 0:
             return False
         if (c - ma10) / ma10 * 100 > max_bias_ma10:
+            return False
+    # 流動性閘門：低量股排除
+    if min_avg_volume is not None:
+        avg_vol = stock.get('avg_volume_20d')
+        if avg_vol is None or avg_vol < min_avg_volume:
             return False
     return True
 

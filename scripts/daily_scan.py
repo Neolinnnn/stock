@@ -43,6 +43,10 @@ setup_cjk_font()
 # 對照全收 19% / -2.5%；乖離 2~6% 區間勝率僅 9~10%（追高重災區）。
 MAX_BIAS_MA10 = 2.0
 
+# 最低日均量門檻（近20日均量，張）：低於此值視為低流動性，排除出推薦名單
+# （不影響族群清單顯示與風險警示，只過濾 qualified/dual_filter）
+MIN_AVG_VOLUME = 500
+
 # 族群 regime 閘門：qualified 推薦只取「所屬族群正強勢」（avg_ret > 3，與
 # strong_sectors 同一定義）的個股。2026 回測顯示大盤 regime 無效（指數全程
 # 站上 MA60、127/128 筆皆多頭），真正有效的是族群強弱疊加乖離率：
@@ -516,6 +520,12 @@ def scan_sector(sector_name, stocks):
             except Exception:
                 r['ma10'] = r.get('ma10')
                 r['ma60'] = None
+            # 近20日均量（張）：流動性門檻用，避免低量股入選推薦名單
+            try:
+                _v20 = [v for v in list(hist.volume)[-20:] if v] if hist is not None else []
+                r['avg_volume_20d'] = round(sum(_v20) / len(_v20) / 1000, 0) if _v20 else None
+            except Exception:
+                r['avg_volume_20d'] = None
             ret_20d, t_short, t_mid, t_long, atr_val, stop_price = fetch_price_stats(sid, hist=hist)
             r['ret_20d'] = ret_20d
             r['target_short'] = t_short
@@ -681,9 +691,11 @@ def run_daily_scan():
                     'price': st.get('price'), 'ma5': st.get('ma5'),
                     'ma10': st.get('ma10'), 'ma20': st.get('ma20'),
                     'ma60': st.get('ma60'),
+                    'avg_volume_20d': st.get('avg_volume_20d'),
                 }
                 if passes_gate(st, taiex_bull, sector_strong=sector_strong,
-                               max_bias_ma10=MAX_BIAS_MA10):
+                               max_bias_ma10=MAX_BIAS_MA10,
+                               min_avg_volume=MIN_AVG_VOLUME):
                     gate_buys.append({'id': st['id'], 'name': st['name'],
                                       'price': st.get('price'), 'sector': sector})
         track = update_positions(today, scan_lookup, taiex_bull, gate_buys)
@@ -937,6 +949,7 @@ def build_summary(date, market, all_results, chart_path):
                     'ma60': r.get('ma60'),
                     'cv_sharpe': round(r['cv_sharpe'], 2),
                     'cv_win_rate': round(r['cv_win_rate'], 2),
+                    'avg_volume_20d': r.get('avg_volume_20d'),
                     'news': r.get('news', []),
                     'chip': r.get('chip', {}),
                     'chip_tier': r.get('chip_tier'),
@@ -965,9 +978,12 @@ def build_summary(date, market, all_results, chart_path):
         # 乖離率閘門：(price - MA10) / MA10；ma10 缺值→NaN→比較為 False，保守剔除。
         _ma10 = pd.to_numeric(df['ma10'], errors='coerce')
         _bias_ma10 = (pd.to_numeric(df['price'], errors='coerce') - _ma10) / _ma10 * 100
+        # 流動性閘門：近20日均量 < MIN_AVG_VOLUME（張）視為低量，缺值→NaN→比較為 False，保守剔除。
+        _avg_vol = pd.to_numeric(df.get('avg_volume_20d'), errors='coerce')
+        _liquid = _avg_vol >= MIN_AVG_VOLUME
         final = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
                    (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) &
-                   (_bias_ma10 <= MAX_BIAS_MA10)]
+                   (_bias_ma10 <= MAX_BIAS_MA10) & _liquid]
         # 族群非強勢時，整族群不納入推薦（regime 閘門）
         sector_strong = bool(avg_ret > 3)
         if REQUIRE_STRONG_SECTOR and not sector_strong:
@@ -981,12 +997,13 @@ def build_summary(date, market, all_results, chart_path):
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
                 'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
+                'avg_volume_20d': r.get('avg_volume_20d'),
             })
 
         # 雙篩選命中（舊邏輯：BUY + cv_sharpe/cv_win_rate/cv_max_dd，不含乖離率與族群強勢閘門）
-        # 用來讓前端分層顯示「加乖離率篩選前 vs 後」剩下哪些
+        # 用來讓前端分層顯示「加乖離率篩選前 vs 後」剩下哪些；流動性閘門仍套用（低量股一律不推薦）
         dual_hit = df[(df['signal'] == 'BUY') & (df['cv_sharpe'] >= 0.3) &
-                      (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2)]
+                      (df['cv_win_rate'] >= 0.4) & (df['cv_max_dd'] <= 0.2) & _liquid]
         for _, r in dual_hit.iterrows():
             if r['id'] in _dual_filter_seen:
                 continue
@@ -998,6 +1015,7 @@ def build_summary(date, market, all_results, chart_path):
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
                 'bias_ma10': bias_v,
+                'avg_volume_20d': r.get('avg_volume_20d'),
                 'sector_strong': sector_strong,
                 'passes_bias': passes_bias,
                 'passes_all': passes_bias and (sector_strong if REQUIRE_STRONG_SECTOR else True),

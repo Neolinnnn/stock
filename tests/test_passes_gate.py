@@ -9,7 +9,8 @@ from position_tracker import passes_gate
 def _stock(**kw):
     """多頭排列、貼均線的基準個股，可用 kw 覆寫欄位。"""
     base = {'signal': 'BUY', 'price': 101.0,
-            'ma5': 100.0, 'ma10': 100.0, 'ma20': 98.0, 'ma60': 95.0}
+            'ma5': 100.0, 'ma10': 100.0, 'ma20': 98.0, 'ma60': 95.0,
+            'avg_volume_20d': 1000.0}
     base.update(kw)
     return base
 
@@ -69,6 +70,24 @@ def test_combined_gate():
                        sector_strong=True, max_bias_ma10=2.0) is False
     assert passes_gate(_stock(), taiex_bull=True,
                        sector_strong=False, max_bias_ma10=2.0) is False
+
+
+def test_reject_low_volume():
+    """近20日均量低於門檻（低流動性）→ 擋下"""
+    assert passes_gate(_stock(avg_volume_20d=300.0), taiex_bull=True,
+                       min_avg_volume=500) is False
+
+
+def test_pass_sufficient_volume():
+    """近20日均量達門檻 → 通過"""
+    assert passes_gate(_stock(avg_volume_20d=500.0), taiex_bull=True,
+                       min_avg_volume=500) is True
+
+
+def test_reject_missing_volume_when_checked():
+    """要檢查流動性但缺 avg_volume_20d → 保守擋下"""
+    s = _stock(); s['avg_volume_20d'] = None
+    assert passes_gate(s, taiex_bull=True, min_avg_volume=500) is False
 
 
 # ── update_positions：同日同檔跨族群重複 gate_buys 只建一筆 ──────────────────
