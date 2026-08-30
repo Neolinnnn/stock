@@ -444,7 +444,7 @@ def fetch_chip_data(stock_id, days=5):
     回傳欄位（單位：股）：
       date/外資/投信/自營/合計 — 最新一日明細
       近5日/近5日外資/近5日投信 — N 日累計
-      連買日/投信連買日 — 自最新一日起連續買超天數
+      連買日/外資連買日/投信連買日 — 自最新一日起連續買超天數
     累計與連買欄位供籌碼分層顯示用，不影響訊號與進場閘門。
     """
     try:
@@ -484,8 +484,41 @@ def fetch_chip_data(stock_id, days=5):
             '近5日外資': sum(d['外資'] for d in daily),
             '近5日投信': sum(d['投信'] for d in daily),
             '連買日':     _streak('合計'),
+            '外資連買日': _streak('外資'),
             '投信連買日': _streak('投信'),
         }
+    except Exception:
+        return {}
+
+
+def fetch_margin_data(stock_id, days=15):
+    """抓取融資融券餘額（FinMind）→ indicators.chip.parse_margin。
+
+    days 需涵蓋 >5 個交易日以計算近5日增減；失敗時回傳 {} 優雅降級。
+    """
+    try:
+        from indicators.chip import parse_margin
+        end = datetime.now().strftime('%Y-%m-%d')
+        start = (datetime.now() - timedelta(days=days + 10)).strftime('%Y-%m-%d')
+        df = _finmind_fetch('taiwan_stock_margin_purchase_short_sale',
+                            stock_id=stock_id, start_date=start, end_date=end)
+        return parse_margin(df)
+    except Exception:
+        return {}
+
+
+def fetch_major_holders(stock_id, weeks=6):
+    """抓取股權持股分級表（FinMind，集保每週更新）→ indicators.chip.parse_major_holders。
+
+    weeks 決定回溯週數（供週增減／四週增減計算）；失敗時回傳 {} 優雅降級。
+    """
+    try:
+        from indicators.chip import parse_major_holders
+        end = datetime.now().strftime('%Y-%m-%d')
+        start = (datetime.now() - timedelta(weeks=weeks + 1)).strftime('%Y-%m-%d')
+        df = _finmind_fetch('taiwan_stock_holding_shares_per',
+                            stock_id=stock_id, start_date=start, end_date=end)
+        return parse_major_holders(df)
     except Exception:
         return {}
 
@@ -550,7 +583,7 @@ def scan_sector(sector_name, stocks):
                 _c['土洋同買'] = bool(_c.get('近5日外資', 0) > 0
                                     and _c.get('近5日投信', 0) > 0)
 
-            # 分點資料：只對「值得關注」的個股抓取，避免過度頻繁請求
+            # 分點／融資券／大戶：只對「值得關注」的個股抓取，避免過度頻繁請求
             #   條件：BUY 訊號 或 RSI 落於 50~75 趨勢中段 或 三大法人淨買 > 0
             chip_total = (r.get('chip') or {}).get('合計', 0)
             worth_chip = (
@@ -558,6 +591,9 @@ def scan_sector(sector_name, stocks):
                 or (50 <= (r.get('rsi') or 0) <= 75)
                 or chip_total > 0
             )
+            # 融資融券 + 千張大戶（顯示用，不影響訊號與 passes_gate）
+            r['margin'] = fetch_margin_data(sid) if worth_chip else {}
+            r['major_holders'] = fetch_major_holders(sid) if worth_chip else {}
             if worth_chip and fetch_broker_top15 is not None:
                 br = fetch_broker_top15(sid, period='5')
                 total_buyer_net = sum(b['net'] for b in br.get('top_buyers', [])) or 1
@@ -789,6 +825,8 @@ def build_daily_payload(summary):
         })
         for st in data.get('stocks', []):
             chip = st.get('chip', {})
+            margin = st.get('margin') or {}
+            holders = st.get('major_holders') or {}
             stocks.append({
                 'date': summary['date'],
                 'sector': sector,
@@ -808,8 +846,18 @@ def build_daily_payload(summary):
                 'chipDays': chip.get('連買日'),
                 'chipConc': chip.get('集中度'),
                 'chipDualBuy': chip.get('土洋同買'),
+                'foreignDays': chip.get('外資連買日'),
                 'trustDays': chip.get('投信連買日'),
                 'chipTier': st.get('chip_tier'),
+                'marginBal': margin.get('融資餘額'),
+                'marginChg': margin.get('融資增減'),
+                'margin5d': margin.get('融資5日增減'),
+                'shortBal': margin.get('融券餘額'),
+                'shortChg': margin.get('融券增減'),
+                'shortMarginRatio': margin.get('券資比'),
+                'bigHolderPct': holders.get('千張大戶比例'),
+                'bigHolderChg': holders.get('週增減'),
+                'bigHolderChg4w': holders.get('四週增減'),
                 'news': ' / '.join(n['title'] for n in st.get('news', [])[:2]),
             })
             # 主力觀察資料（含 ATR 停損、分點、主力分）— 獨立給新分頁用
@@ -953,6 +1001,8 @@ def build_summary(date, market, all_results, chart_path):
                     'news': r.get('news', []),
                     'chip': r.get('chip', {}),
                     'chip_tier': r.get('chip_tier'),
+                    'margin': r.get('margin', {}),
+                    'major_holders': r.get('major_holders', {}),
                     'target_short': r.get('target_short'),
                     'target_mid':   r.get('target_mid'),
                     'target_long':  r.get('target_long'),

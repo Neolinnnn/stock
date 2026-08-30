@@ -2367,8 +2367,32 @@ function renderDaily(data){
         const cParts=[];
         if(stk.chipConc!=null)cParts.push(`集中度${Number(stk.chipConc)>=0?'+':''}${fmt(stk.chipConc,1)}%`);
         if(stk.chipDualBuy)cParts.push('土洋同買');
+        if(Number(stk.foreignDays)>=2)cParts.push(`外資連買${stk.foreignDays}日`);
         if(Number(stk.trustDays)>=2)cParts.push(`投信連買${stk.trustDays}日`);
         chipBadge=`<span style="background:rgba(0,0,0,.25);border:1px solid ${cCol};border-radius:4px;padding:2px 8px;font-size:11px;color:${cCol};white-space:nowrap" title="集中度＝法人近5日買賣超÷近5日成交量（+10%≈前15%、-10%≈後15%，依101檔×86日校準）；土洋同買＝外資投信5日皆買超。分層僅供參考，不影響訊號與入選">${isS?'🟢 籌碼加持':'🔴 籌碼背離'}${cParts.length?' '+cParts.join('・'):''}</span>`;
+      }
+
+      // 千張大戶徽章（集保每週更新；大戶比例上升＝籌碼向大戶集中，僅供觀察不影響入選）
+      let holderBadge='';
+      if(stk.bigHolderPct!=null){
+        const hc=stk.bigHolderChg;
+        const hCol=hc==null?'var(--sub)':(Number(hc)>0?'var(--green)':Number(hc)<0?'var(--red)':'var(--sub)');
+        const hParts=[`${fmt(stk.bigHolderPct,2)}%`];
+        if(hc!=null)hParts.push(`週${Number(hc)>=0?'+':''}${fmt(hc,2)}pp`);
+        if(stk.bigHolderChg4w!=null)hParts.push(`4週${Number(stk.bigHolderChg4w)>=0?'+':''}${fmt(stk.bigHolderChg4w,2)}pp`);
+        holderBadge=`<span style="background:rgba(0,0,0,.25);border:1px solid ${hCol};border-radius:4px;padding:2px 8px;font-size:11px;color:${hCol};white-space:nowrap" title="千張大戶＝持股 1,000 張（1,000,000 股）以上股東的持股比例，資料來自集保股權分散表，每週更新一次。比例上升代表籌碼向大戶集中（偏多），連續下降代表大戶調節。僅供觀察，不影響訊號與入選">🏦 千張大戶 ${hParts.join('・')}</span>`;
+      }
+
+      // 融資融券徽章（融資增＝散戶加碼偏警訊；融資減而股價漲＝籌碼換手健康）
+      let marginBadge='';
+      if(stk.marginBal!=null){
+        const mc=stk.marginChg==null?null:Number(stk.marginChg);
+        const mCol=mc==null?'var(--sub)':(mc>0?'var(--yellow)':mc<0?'var(--green)':'var(--sub)');
+        const mParts=[`餘額${fmt(stk.marginBal,0)}張`];
+        if(mc!=null)mParts.push(`日${mc>=0?'+':''}${fmt(mc,0)}`);
+        if(stk.margin5d!=null)mParts.push(`5日${Number(stk.margin5d)>=0?'+':''}${fmt(stk.margin5d,0)}`);
+        if(stk.shortMarginRatio!=null)mParts.push(`券資比${fmt(stk.shortMarginRatio,1)}%`);
+        marginBadge=`<span style="background:rgba(0,0,0,.25);border:1px solid ${mCol};border-radius:4px;padding:2px 8px;font-size:11px;color:${mCol};white-space:nowrap" title="融資餘額上升代表散戶加碼，追高時偏警訊；融資減少而股價續漲代表籌碼換手健康。券資比＝融券餘額÷融資餘額，偏高時具軋空題材。僅供觀察，不影響訊號與入選">💰 融資 ${mParts.join('・')}</span>`;
       }
 
       // 乖離 MA10 分層徽章（入選門檻已固定 ≤2%；此處僅將通過者細分貼近程度供參考）
@@ -2393,6 +2417,8 @@ function renderDaily(data){
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
           ${gradeBadge}
           ${chipBadge}
+          ${holderBadge}
+          ${marginBadge}
           ${biasBadge}
           ${indBadge(kdjV,'KDJ')}
           ${indBadge(macdV,'MACD')}

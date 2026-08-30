@@ -357,6 +357,8 @@ def build_daily_payload(summary):
         })
         for st in data.get('stocks', []):
             chip = st.get('chip', {})
+            margin = st.get('margin') or {}
+            holders = st.get('major_holders') or {}
             stocks.append({
                 'date':      summary['date'],
                 'sector':    sector,
@@ -376,8 +378,18 @@ def build_daily_payload(summary):
                 'chipDays':  chip.get('連買日'),
                 'chipConc':  chip.get('集中度'),
                 'chipDualBuy': chip.get('土洋同買'),
+                'foreignDays': chip.get('外資連買日'),
                 'trustDays': chip.get('投信連買日'),
                 'chipTier':  st.get('chip_tier'),
+                'marginBal':   margin.get('融資餘額'),
+                'marginChg':   margin.get('融資增減'),
+                'margin5d':    margin.get('融資5日增減'),
+                'shortBal':    margin.get('融券餘額'),
+                'shortChg':    margin.get('融券增減'),
+                'shortMarginRatio': margin.get('券資比'),
+                'bigHolderPct':   holders.get('千張大戶比例'),
+                'bigHolderChg':   holders.get('週增減'),
+                'bigHolderChg4w': holders.get('四週增減'),
                 'news': ' / '.join(
                     n['title'] for n in st.get('news', [])[:2]
                 ),

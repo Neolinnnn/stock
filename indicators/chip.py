@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 
 _CHIP_MAP = {
@@ -71,6 +73,122 @@ def chip_tier(conc, dual_buy, mf_score) -> str:
     if mf_score < 45 and conc <= CONC_WEAK:
         return 'weak'
     return 'neutral'
+
+
+def parse_margin(df: pd.DataFrame) -> dict:
+    """解析融資融券表（FinMind TaiwanStockMarginPurchaseShortSale），取最新一日 + 近5日變化。
+
+    Args:
+        df: 需含 date / MarginPurchaseTodayBalance / MarginPurchaseYesterdayBalance /
+            ShortSaleTodayBalance / ShortSaleYesterdayBalance 欄位；單位為張。
+
+    Returns:
+        date/融資餘額/融資增減/融資5日增減/融券餘額/融券增減/券資比（%）；
+        資料不足時回傳 {}。融資增減為正代表散戶加碼（追高風險），
+        融資減少而股價續漲代表籌碼換手健康。券資比高代表軋空題材。
+    """
+    if df is None or df.empty or 'date' not in df.columns:
+        return {}
+    d = df.sort_values('date')
+
+    def _col(name):
+        return pd.to_numeric(d.get(name), errors='coerce') if name in d.columns else None
+
+    mp_today = _col('MarginPurchaseTodayBalance')
+    ss_today = _col('ShortSaleTodayBalance')
+    if mp_today is None or mp_today.dropna().empty:
+        return {}
+
+    mp_yest = _col('MarginPurchaseYesterdayBalance')
+    ss_yest = _col('ShortSaleYesterdayBalance')
+
+    margin_bal = int(mp_today.iloc[-1])
+    # 今日增減優先用昨餘額欄位；缺漏時退回與前一列相減
+    if mp_yest is not None and pd.notna(mp_yest.iloc[-1]):
+        margin_chg = margin_bal - int(mp_yest.iloc[-1])
+    elif len(mp_today) >= 2:
+        margin_chg = margin_bal - int(mp_today.iloc[-2])
+    else:
+        margin_chg = 0
+
+    # 近5日增減＝最新餘額 − 5個交易日前餘額（不足5日則取最早一筆）
+    prev5 = mp_today.iloc[-6] if len(mp_today) >= 6 else mp_today.iloc[0]
+    margin_5d = margin_bal - int(prev5)
+
+    short_bal = int(ss_today.iloc[-1]) if ss_today is not None and pd.notna(ss_today.iloc[-1]) else 0
+    if ss_today is None:
+        short_chg = 0
+    elif ss_yest is not None and pd.notna(ss_yest.iloc[-1]):
+        short_chg = short_bal - int(ss_yest.iloc[-1])
+    elif len(ss_today) >= 2:
+        short_chg = short_bal - int(ss_today.iloc[-2])
+    else:
+        short_chg = 0
+
+    return {
+        'date': str(d['date'].iloc[-1])[:10],
+        '融資餘額': margin_bal,
+        '融資增減': margin_chg,
+        '融資5日增減': margin_5d,
+        '融券餘額': short_bal,
+        '融券增減': short_chg,
+        '券資比': round(short_bal / margin_bal * 100, 2) if margin_bal else None,
+    }
+
+
+def _level_lower_bound(level: str):
+    """由持股分級字串取下界股數；'total'／無數字者回傳 None。
+
+    例：'1,000-5,000'→1000、'more than 1,000,001'→1000001、'total'→None。
+    """
+    s = str(level)
+    if 'total' in s.lower() or '合計' in s:
+        return None
+    nums = [int(n.replace(',', '')) for n in re.findall(r'\d[\d,]*', s)]
+    return min(nums) if nums else None
+
+
+def parse_major_holders(df: pd.DataFrame) -> dict:
+    """解析股權持股分級表（FinMind TaiwanStockHoldingSharesPer），計算千張大戶持股比例。
+
+    集保每週更新一次。千張＝1,000,000 股，故取下界 >= 1,000,000 股的分級加總。
+
+    Args:
+        df: 需含 date / HoldingSharesLevel / percent 欄位。
+
+    Returns:
+        date/千張大戶比例（%）/週增減（百分點）/四週增減（百分點）；資料不足時回傳 {}。
+        大戶比例上升代表籌碼向大戶集中（偏多），連續下降代表大戶調節。
+    """
+    if df is None or df.empty:
+        return {}
+    if not {'date', 'HoldingSharesLevel', 'percent'}.issubset(df.columns):
+        return {}
+
+    d = df.copy()
+    d['percent'] = pd.to_numeric(d['percent'], errors='coerce')
+    d['_lb'] = d['HoldingSharesLevel'].map(_level_lower_bound)
+    big = d[(d['_lb'].notna()) & (d['_lb'] >= 1_000_000)]
+    if big.empty:
+        return {}
+
+    # 每個統計日的千張大戶比例（多個分級加總），日期由舊到新
+    weekly = big.groupby('date')['percent'].sum().sort_index()
+    weekly = weekly.dropna()
+    if weekly.empty:
+        return {}
+
+    latest = float(weekly.iloc[-1])
+    wk_chg = round(latest - float(weekly.iloc[-2]), 2) if len(weekly) >= 2 else None
+    ref4 = weekly.iloc[-5] if len(weekly) >= 5 else weekly.iloc[0]
+    m4_chg = round(latest - float(ref4), 2) if len(weekly) >= 2 else None
+
+    return {
+        'date': str(weekly.index[-1])[:10],
+        '千張大戶比例': round(latest, 2),
+        '週增減': wk_chg,
+        '四週增減': m4_chg,
+    }
 
 
 def main_force_signal(chip_df: pd.DataFrame, df_price: pd.DataFrame) -> dict:
