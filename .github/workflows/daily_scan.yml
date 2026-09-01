@@ -2,20 +2,65 @@ name: 台股每日掃描
 
 on:
   schedule:
-    # 15:30 台灣時間 = 07:30 UTC，週一至週五
-    # （15:00 後 FinMind 三大法人籌碼資料才齊全；GitHub Actions cron 常延遲 1-4 小時）
-    - cron: '30 7 * * 1-5'
-    # 週報：週五 15:45 = 07:45 UTC
-    - cron: '45 7 * * 5'
+    # GitHub 的 schedule 事件是 best-effort：整點與半點（:00 / :30）是全平台
+    # 最壅塞的時段，事件會被延遲數小時甚至直接丟棄。故一律避開整點/半點。
+    # 主排程：15:23 台灣時間 = 07:23 UTC，週一至週五
+    # （15:00 後 FinMind 三大法人籌碼資料才齊全）
+    - cron: '23 7 * * 1-5'
+    # 週報：週五 15:38 = 07:38 UTC
+    - cron: '38 7 * * 5'
+    # 備援排程：20:13 台灣時間 = 12:13 UTC。主排程被 GitHub 丟棄時補跑；
+    # 當日報告已存在則由 check job 直接跳過，不會重複消耗 Gemini 額度。
+    - cron: '13 12 * * 1-5'
   workflow_dispatch:   # 允許手動觸發
 
-# 防止同日多次 run 並發衝突：同一 group 的舊 run 會被取消
+# 防止同日多次 run 並發衝突。cancel-in-progress 設 false：週五 07:23 的日掃描
+# 會被 07:38 的週報事件攔腰砍掉，且 GitHub 補送積壓的 cron 事件時也會誤殺
+# 執行中的 run（2026-08-07 / 08-14 / 08-28 皆發生過），改為排隊等待。
 concurrency:
   group: daily-scan-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
+  # 決定本次是否該跑、以及是否要跑週五專屬步驟。
+  # 把排程判斷集中在這裡，scan job 內就不必到處比對 cron 字串。
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.decide.outputs.run }}
+      weekly: ${{ steps.decide.outputs.weekly }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: decide
+        run: |
+          SCHED="${{ github.event.schedule }}"
+          # daily_scan.py 以 datetime.now()（runner 為 UTC）命名輸出目錄，
+          # 這裡的比對日期必須同樣用 UTC，否則備援判斷會錯開一天。
+          TODAY=$(date -u +%Y%m%d)
+          DOW=$(date -u +%u)
+          RUN=true
+          WEEKLY=false
+          case "$SCHED" in
+            '38 7 * * 5')
+              WEEKLY=true ;;
+            '13 12 * * 1-5')
+              # 備援：主排程已產出當日報告就跳過
+              # 註：GitHub 預設 shell 帶 -e，不可用 `[ ... ] && RUN=false`
+              # （判斷為偽時整段 script 會中止）
+              if [ -d "daily_reports/$TODAY" ]; then RUN=false; fi
+              # 週五另外檢查週報：日報有、週報缺（07:38 事件被丟）時仍要補跑
+              if [ "$DOW" = "5" ] && [ ! -d "daily_reports/weekly_$TODAY" ]; then
+                RUN=true
+                WEEKLY=true
+              fi ;;
+          esac
+          echo "排程=${SCHED:-手動} 日期=$TODAY 週幾=$DOW → run=$RUN weekly=$WEEKLY"
+          echo "run=$RUN" >> "$GITHUB_OUTPUT"
+          echo "weekly=$WEEKLY" >> "$GITHUB_OUTPUT"
+
   scan:
+    needs: check
+    if: needs.check.outputs.run == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -108,12 +153,12 @@ jobs:
         run: python scripts/rotation_radar.py --collect
 
       - name: Rotation radar report (Fridays only)
-        if: github.event.schedule == '45 7 * * 5'
+        if: needs.check.outputs.weekly == 'true'
         continue-on-error: true
         run: python scripts/rotation_radar.py --report
 
       - name: Run weekly summary (Fridays only)
-        if: github.event.schedule == '45 7 * * 5'
+        if: needs.check.outputs.weekly == 'true'
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
@@ -125,7 +170,7 @@ jobs:
         run: python scripts/weekly_summary.py
 
       - name: Run sector rotation backtest (Fridays only)
-        if: github.event.schedule == '45 7 * * 5'
+        if: needs.check.outputs.weekly == 'true'
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
