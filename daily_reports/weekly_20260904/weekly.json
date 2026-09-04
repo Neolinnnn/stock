@@ -1,8 +1,6 @@
 {
-  "meta": {
-    "date": "2026-09-04",
-    "days": 5
-  },
+  "week_ending": "2026-09-04",
+  "days_covered": 5,
   "market": {
     "taiex_close": 46551.13,
     "taiex_week_pct": 0.47,
@@ -11,7 +9,7 @@
     "taiex_bull": true,
     "taiex_ma60": 45048.51
   },
-  "changes": [
+  "sector_changes": [
     {
       "sector": "車用電子",
       "change": 5.53,
@@ -121,44 +119,170 @@
       "prev_change": 38.35
     }
   ],
-  "buys": [
+  "rotation_matrix": {
+    "leading": [
+      {
+        "sector": "車用電子",
+        "change": 5.53,
+        "level": 1.56,
+        "prev_change": 7.17
+      },
+      {
+        "sector": "被動元件",
+        "change": 0.55,
+        "level": 11.5,
+        "prev_change": 38.58
+      }
+    ],
+    "turning": [
+      {
+        "sector": "測試設備",
+        "change": 1.71,
+        "level": -2.69,
+        "prev_change": -0.1
+      },
+      {
+        "sector": "IC設計",
+        "change": 0.73,
+        "level": -0.36,
+        "prev_change": 8.91
+      }
+    ],
+    "cooling": [
+      {
+        "sector": "AI伺服器",
+        "change": -0.27,
+        "level": 10.97,
+        "prev_change": 8.57
+      },
+      {
+        "sector": "CoPoS封裝",
+        "change": -2.28,
+        "level": 9.44,
+        "prev_change": 21.94
+      },
+      {
+        "sector": "封測",
+        "change": -3.1,
+        "level": 7.96,
+        "prev_change": 23.31
+      },
+      {
+        "sector": "AI 電源",
+        "change": -5.15,
+        "level": 11.43,
+        "prev_change": 12.64
+      },
+      {
+        "sector": "AI 散熱",
+        "change": -5.27,
+        "level": 23.16,
+        "prev_change": 20.29
+      },
+      {
+        "sector": "綠能環保",
+        "change": -8.14,
+        "level": 28.2,
+        "prev_change": 14.6
+      },
+      {
+        "sector": "AI ASIC/IP",
+        "change": -9.97,
+        "level": 4.78,
+        "prev_change": 15.89
+      },
+      {
+        "sector": "光通訊",
+        "change": -10.92,
+        "level": 17.54,
+        "prev_change": 31.27
+      },
+      {
+        "sector": "PCB",
+        "change": -16.46,
+        "level": 7.23,
+        "prev_change": 25.82
+      },
+      {
+        "sector": "光學",
+        "change": -18.57,
+        "level": 80.99,
+        "prev_change": 53.5
+      },
+      {
+        "sector": "記憶體",
+        "change": -19.25,
+        "level": 0.44,
+        "prev_change": 11.0
+      },
+      {
+        "sector": "銅箔/CCL",
+        "change": -27.27,
+        "level": 15.9,
+        "prev_change": 38.35
+      }
+    ],
+    "weak": [
+      {
+        "sector": "顯示",
+        "change": -0.57,
+        "level": -7.35,
+        "prev_change": -4.51
+      },
+      {
+        "sector": "ABF載板",
+        "change": -23.41,
+        "level": -2.78,
+        "prev_change": 24.4
+      }
+    ],
+    "v_turn": [
+      {
+        "sector": "測試設備",
+        "change": 1.71,
+        "level": -2.69,
+        "prev_change": -0.1
+      }
+    ]
+  },
+  "top_buys": [
     {
       "stock": "8086 宏捷科",
-      "days": 5,
-      "tier": null,
+      "buy_days": 5,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2243 怡利電",
-      "days": 4,
-      "tier": null,
+      "buy_days": 4,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "3665 貿聯-KY",
-      "days": 3,
-      "tier": null,
+      "buy_days": 3,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "3535 晶彩科",
-      "days": 2,
-      "tier": null,
+      "buy_days": 2,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2376 技嘉",
-      "days": 1,
-      "tier": null,
+      "buy_days": 1,
+      "chip_tier": null,
       "gate": false
     }
   ],
-  "positions": {
+  "positions_week": {
     "entries": [],
     "exits": [],
     "holding": []
   },
-  "alerts": [
+  "alerts_week": [
     {
       "id": "2455",
       "name": "全新",
@@ -230,5 +354,6 @@
       "detail": "RSI=91.8"
     }
   ],
+  "chart_path": "daily_reports/weekly_20260904/01_weekly_sector_trend.png",
   "narrative": ""
 }
