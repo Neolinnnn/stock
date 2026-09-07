@@ -21,7 +21,7 @@
 import argparse
 import json
 import statistics
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 
@@ -81,8 +81,12 @@ def simulate(prices: list[float], tp: float, sl: float) -> dict:
     return {'result': 'FLAT', 'ret': r * 100, 'days': len(prices) - 1}
 
 
-def collect_signals(dates, panel, taiex, horizon, tp, sl):
-    """逐日重建三層訊號，並計算每筆訊號的前瞻報酬與 TP/SL 結果。"""
+def collect_signals(dates, panel, taiex, horizon, tp, sl, require_full=True, since=None):
+    """逐日重建三層訊號，並計算每筆訊號的前瞻報酬與 TP/SL 結果。
+
+    require_full=False 時保留前瞻期不足的訊號（用於近期個股明細），
+    此時 retH 以最後一個可得交易日計，TP/SL 結果可能為 OPEN。
+    """
     idx = {d: i for i, d in enumerate(dates)}
     by_date = defaultdict(list)
     for sid, series in panel.items():
@@ -91,11 +95,13 @@ def collect_signals(dates, panel, taiex, horizon, tp, sl):
 
     signals = []
     for i, d in enumerate(dates):
-        if i + horizon >= len(dates):
+        if require_full and i + horizon >= len(dates):
             break  # 前瞻期不足，不納入統計
+        if since and d < since:
+            continue
         strong = strong_sectors(by_date[d])
         fwd_dates = dates[i + 1:i + 1 + horizon]
-        end_d = dates[i + horizon]
+        end_d = dates[min(i + horizon, len(dates) - 1)]
         # 基準：當日掃描池等權前瞻報酬（歷史 meta 多數缺加權指數，改用掃描池自身為基準）
         pool = [(panel[r['id']][end_d]['price'] / r['price'] - 1) * 100
                 for r in by_date[d] if end_d in panel[r['id']] and r['price']]
@@ -106,9 +112,12 @@ def collect_signals(dates, panel, taiex, horizon, tp, sl):
             if rec.get('signal') != 'BUY':
                 continue
             sid = rec['id']
-            prices = [rec['price']] + [panel[sid][x]['price'] for x in fwd_dates if x in panel[sid]]
-            if len(prices) < horizon + 1:
+            fwd = [(x, panel[sid][x]['price']) for x in fwd_dates if x in panel[sid]]
+            if require_full and len(fwd) < horizon:
                 continue  # 個股在前瞻期內資料不完整
+            if not fwd:
+                continue
+            prices = [rec['price']] + [px for _, px in fwd]
             sharpe = rec.get('sharpe')
             bias = bias_ma10(panel[sid], dates, i)
             tier = 1
@@ -117,13 +126,16 @@ def collect_signals(dates, panel, taiex, horizon, tp, sl):
                 if bias is not None and bias <= MAX_BIAS_MA10 and rec['sector'] in strong:
                     tier = 3
             sim = simulate(prices, tp, sl)
+            if len(fwd) < horizon and sim['result'] == 'FLAT':
+                sim['result'] = 'OPEN'   # 前瞻期未滿，尚未觸及 TP/SL
             signals.append({
                 'date': d, 'id': sid, 'name': rec['name'], 'sector': rec['sector'],
                 'tier': tier, 'price': rec['price'], 'rsi': rec.get('rsi'),
                 'sharpe': sharpe, 'bias': None if bias is None else round(bias, 1),
                 'ret5': (prices[5] / prices[0] - 1) * 100 if len(prices) > 5 else None,
                 'ret10': (prices[10] / prices[0] - 1) * 100 if len(prices) > 10 else None,
-                'retH': (prices[horizon] / prices[0] - 1) * 100,
+                'retH': (prices[-1] / prices[0] - 1) * 100,
+                'held': len(fwd), 'last_date': fwd[-1][0], 'last_price': fwd[-1][1],
                 'bench': bench, 'taiex': taiex_ret,
                 'sim_result': sim['result'], 'sim_ret': sim['ret'], 'sim_days': sim['days'],
             })
@@ -162,6 +174,8 @@ def main() -> None:
     ap.add_argument('--horizon', type=int, default=20, help='前瞻交易日數（預設 20 ≈ 一個月）')
     ap.add_argument('--tp', type=float, default=0.15)
     ap.add_argument('--sl', type=float, default=0.10)
+    ap.add_argument('--tag', default='', help='輸出檔名後綴，用於保留不同參數的結果')
+    ap.add_argument('--detail-from', default='', help='YYYYMMDD；額外輸出該日之後的個股訊號明細')
     args = ap.parse_args()
 
     dates, panel, taiex = load_panel(args.start)
@@ -236,9 +250,51 @@ def main() -> None:
         weekly_json.append({'week': wk, 'start': ds[0], 'end': ds[-1],
                             'L1': a1, 'L2': a2, 'L3': a3, 'bench': bench})
 
-    dest_md = ROOT / 'notes' / f'weekly_backtest_{dates[-1]}.md'
+    if args.detail_from:
+        detail = collect_signals(dates, panel, taiex, h, args.tp, args.sl,
+                                 require_full=False, since=args.detail_from)
+        detail.sort(key=lambda r: (-r['retH']))
+        out += ['', f'## 個股訊號明細（{args.detail_from} 起，含前瞻期未滿者）', '',
+                '| 訊號日 | 股號 | 名稱 | 族群 | 層級 | 進場價 | 最新日 | 最新價 | 報酬 | 持有日 | TP/SL 結果 | RSI | sharpe | 乖離 |',
+                '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|']
+        for r in detail:
+            bias_s = '—' if r['bias'] is None else f"{r['bias']:+.1f}%"
+            out.append(
+                f"| {r['date']} | {r['id']} | {r['name']} | {r['sector']} | L{r['tier']} | "
+                f"{r['price']:.2f} | {r['last_date']} | {r['last_price']:.2f} | {r['retH']:+.2f}% | "
+                f"{r['held']} | {r['sim_result']} ({r['sim_ret']:+.2f}%/{r['sim_days']}d) | "
+                f"{r['rsi']} | {r['sharpe']} | {bias_s} |")
+        # 個股彙總：同一檔多日重複觸發，合併看整體表現
+        per_stock = defaultdict(list)
+        for r in detail:
+            per_stock[(r['id'], r['name'], r['sector'])].append(r)
+        out += ['', f'### 個股彙總（{args.detail_from} 起）', '',
+                '| 股號 | 名稱 | 族群 | 訊號數 | 平均報酬 | 最佳 | 最差 | 勝率 | 層級 | TP/SL 分布 | 訊號期間 |',
+                '|---|---|---|---|---|---|---|---|---|---|---|']
+        summary = sorted(per_stock.items(),
+                         key=lambda kv: -statistics.mean([r['retH'] for r in kv[1]]))
+        for (sid, name, sector), rs in summary:
+            rets = [r['retH'] for r in rs]
+            cnt = Counter(r['sim_result'] for r in rs)
+            tiers_seen = sorted({r['tier'] for r in rs})
+            out.append(
+                f"| {sid} | {name} | {sector} | {len(rs)} | {statistics.mean(rets):+.2f}% | "
+                f"{max(rets):+.2f}% | {min(rets):+.2f}% | "
+                f"{sum(1 for x in rets if x > 0) / len(rets) * 100:.0f}% | "
+                f"{'/'.join('L%d' % t for t in tiers_seen)} | "
+                f"WIN {cnt['WIN']} / LOSS {cnt['LOSS']} / FLAT {cnt['FLAT']} / OPEN {cnt['OPEN']} | "
+                f"{min(r['date'] for r in rs)[4:]}~{max(r['date'] for r in rs)[4:]} |")
+
+        for label, sel in (('全部訊號', detail), ('L3 行動清單', [r for r in detail if r['tier'] == 3])):
+            a = agg(sel)
+            if a['n']:
+                out += ['', f"**{label} 小結**：{a['n']} 筆，平均 {a['avg']:+.2f}%、中位數 {a['median']:+.2f}%、"
+                            f"勝率 {a['win_rate']:.1f}%、最佳 {a['best']:+.2f}%、最差 {a['worst']:+.2f}%"]
+
+    suffix = f'_{args.tag}' if args.tag else ''
+    dest_md = ROOT / 'notes' / f'weekly_backtest_{dates[-1]}{suffix}.md'
     dest_md.write_text('\n'.join(out) + '\n', encoding='utf-8')
-    (ROOT / 'notes' / f'weekly_backtest_{dates[-1]}.json').write_text(
+    (ROOT / 'notes' / f'weekly_backtest_{dates[-1]}{suffix}.json').write_text(
         json.dumps({'params': vars(args), 'weeks': weekly_json,
                     'overall': {k: agg(v) for k, v in tiers.items()}},
                    ensure_ascii=False, indent=2), encoding='utf-8')
