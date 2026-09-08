@@ -69,13 +69,16 @@ def bias_ma10(panel_id: dict, dates: list[str], i: int) -> float | None:
 
 
 def simulate(prices: list[float], tp: float, sl: float) -> dict:
-    """以收盤價逐日判斷 TP/SL，最長持有至 prices 末端。prices[0] 為進場價。"""
+    """以收盤價逐日判斷 TP/SL，最長持有至 prices 末端。prices[0] 為進場價。
+
+    tp <= 0 表示不設停利（只留停損），sl <= 0 表示不設停損。
+    """
     entry = prices[0]
     for k, px in enumerate(prices[1:], start=1):
         r = px / entry - 1
-        if r >= tp:
+        if tp > 0 and r >= tp:
             return {'result': 'WIN', 'ret': r * 100, 'days': k}
-        if r <= -sl:
+        if sl > 0 and r <= -sl:
             return {'result': 'LOSS', 'ret': r * 100, 'days': k}
     r = prices[-1] / entry - 1
     return {'result': 'FLAT', 'ret': r * 100, 'days': len(prices) - 1}
@@ -175,6 +178,8 @@ def main() -> None:
     ap.add_argument('--tp', type=float, default=0.15)
     ap.add_argument('--sl', type=float, default=0.10)
     ap.add_argument('--tag', default='', help='輸出檔名後綴，用於保留不同參數的結果')
+    ap.add_argument('--compare-exits', action='store_true',
+                    help='額外輸出 L3 出場策略比較（純持有 / 各種 SL / TP+SL）')
     ap.add_argument('--detail-from', default='', help='YYYYMMDD；額外輸出該日之後的個股訊號明細')
     args = ap.parse_args()
 
@@ -187,7 +192,9 @@ def main() -> None:
         weeks[week_of(s['date'])].append(s)
 
     out = [f'# 逐週走查回測（{dates[0]} → {dates[-1]}）', '',
-           f'- 前瞻期：{h} 個交易日；TP {args.tp:.0%} / SL {args.sl:.0%}（收盤價判斷，最長持有 {h} 日）',
+           f"- 前瞻期：{h} 個交易日；"
+           f"TP {args.tp:.0%} / SL {args.sl:.0%}（收盤價判斷，最長持有 {h} 日）"
+           .replace('TP 0%', 'TP 不設').replace('SL 0%', 'SL 不設'),
            f'- 訊號樣本：{len(signals)} 筆（前瞻期不足的最後 {h} 個交易日不納入）',
            f'- 基準：當日掃描池等權 {h} 日報酬（歷史 meta 多數無加權指數）\n- L1 = BUY；L2 = L1 + sharpe ≥ {MIN_SHARPE}；L3 = L2 + 乖離 ≤ {MAX_BIAS_MA10}% 且族群強勢', '']
 
@@ -249,6 +256,24 @@ def main() -> None:
                    f"{fmt(a1,'avg')} | {fmt(a2,'avg')} | {fmt(a3,'avg')} | {fmt(a3,'win_rate',False)} | — | — |")
         weekly_json.append({'week': wk, 'start': ds[0], 'end': ds[-1],
                             'L1': a1, 'L2': a2, 'L3': a3, 'bench': bench})
+
+    if args.compare_exits:
+        # L3 出場策略比較：報酬與尾端風險（CVaR10 = 最差 10% 的平均）
+        out += ['', '## L3 出場策略比較', '',
+                '| 出場方式 | 平均報酬 | 中位數 | 勝率 | 標準差 | CVaR10 | 最差 | 虧損>15% | 平均持有日 |',
+                '|---|---|---|---|---|---|---|---|---|']
+        for label, e_tp, e_sl in (('純持有 %d 日' % h, 0.0, 0.0), ('SL 12% 不設 TP', 0.0, 0.12),
+                                  ('SL 15% 不設 TP', 0.0, 0.15), ('SL 20% 不設 TP', 0.0, 0.20),
+                                  ('TP 20% / SL 15%', 0.20, 0.15), ('TP 15% / SL 10%', 0.15, 0.10)):
+            l3 = [x for x in collect_signals(dates, panel, taiex, h, e_tp, e_sl) if x['tier'] == 3]
+            rets = sorted(x['sim_ret'] for x in l3)
+            k = max(1, int(len(rets) * 0.1))
+            out.append(
+                f"| {label} | {statistics.mean(rets):+.2f}% | {statistics.median(rets):+.2f}% | "
+                f"{sum(1 for x in rets if x > 0) / len(rets) * 100:.1f}% | {statistics.pstdev(rets):.2f}% | "
+                f"{statistics.mean(rets[:k]):+.2f}% | {min(rets):+.2f}% | "
+                f"{sum(1 for x in rets if x < -15)} | "
+                f"{statistics.mean([x['sim_days'] for x in l3]):.1f} |")
 
     if args.detail_from:
         detail = collect_signals(dates, panel, taiex, h, args.tp, args.sl,
