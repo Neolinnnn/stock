@@ -1,8 +1,19 @@
 {
- "date": "20260907",
- "generated_at": "2026-09-07 17:11",
+ "date": "20260908",
+ "generated_at": "2026-09-08 12:20",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "3131",
+   "close": 2635.0,
+   "vol_ratio": 1.73,
+   "dist_ma20": 7.63,
+   "ret20": 10.25,
+   "last_date": "2026-09-08",
+   "chip5": 307667.0,
+   "name": "弘塑"
+  }
+ ],
  "backtest_ref": {
   "n": 183,
   "tp18sl15_win": 0.65,
