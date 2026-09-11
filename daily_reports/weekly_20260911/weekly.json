@@ -1,8 +1,6 @@
 {
-  "meta": {
-    "date": "2026-09-11",
-    "days": 5
-  },
+  "week_ending": "2026-09-11",
+  "days_covered": 5,
   "market": {
     "taiex_close": 46184.85,
     "taiex_week_pct": -0.79,
@@ -11,7 +9,7 @@
     "taiex_bull": true,
     "taiex_ma60": 45220.82
   },
-  "changes": [
+  "sector_changes": [
     {
       "sector": "車用電子",
       "change": 5.3,
@@ -121,74 +119,200 @@
       "prev_change": -27.27
     }
   ],
-  "buys": [
+  "rotation_matrix": {
+    "leading": [
+      {
+        "sector": "車用電子",
+        "change": 5.3,
+        "level": 5.39,
+        "prev_change": 5.53
+      }
+    ],
+    "turning": [
+      {
+        "sector": "顯示",
+        "change": 0.12,
+        "level": -3.35,
+        "prev_change": -0.57
+      }
+    ],
+    "cooling": [
+      {
+        "sector": "封測",
+        "change": -2.53,
+        "level": 1.85,
+        "prev_change": -3.1
+      },
+      {
+        "sector": "PCB",
+        "change": -3.5,
+        "level": 0.8,
+        "prev_change": -16.46
+      },
+      {
+        "sector": "光通訊",
+        "change": -5.28,
+        "level": 3.91,
+        "prev_change": -10.92
+      },
+      {
+        "sector": "光學",
+        "change": -7.66,
+        "level": 58.41,
+        "prev_change": -18.57
+      },
+      {
+        "sector": "AI 散熱",
+        "change": -9.35,
+        "level": 10.69,
+        "prev_change": -5.27
+      },
+      {
+        "sector": "綠能環保",
+        "change": -10.81,
+        "level": 12.44,
+        "prev_change": -8.14
+      }
+    ],
+    "weak": [
+      {
+        "sector": "IC設計",
+        "change": -2.23,
+        "level": -3.95,
+        "prev_change": 0.73
+      },
+      {
+        "sector": "ABF載板",
+        "change": -3.98,
+        "level": -8.7,
+        "prev_change": -23.41
+      },
+      {
+        "sector": "記憶體",
+        "change": -5.61,
+        "level": -5.37,
+        "prev_change": -19.25
+      },
+      {
+        "sector": "AI ASIC/IP",
+        "change": -7.16,
+        "level": -2.25,
+        "prev_change": -9.97
+      },
+      {
+        "sector": "CoPoS封裝",
+        "change": -8.71,
+        "level": -1.0,
+        "prev_change": -2.28
+      },
+      {
+        "sector": "AI 電源",
+        "change": -8.72,
+        "level": -5.71,
+        "prev_change": -5.15
+      },
+      {
+        "sector": "AI伺服器",
+        "change": -10.65,
+        "level": -4.53,
+        "prev_change": -0.27
+      },
+      {
+        "sector": "測試設備",
+        "change": -12.37,
+        "level": -5.17,
+        "prev_change": 1.71
+      },
+      {
+        "sector": "被動元件",
+        "change": -15.23,
+        "level": -4.78,
+        "prev_change": 0.55
+      },
+      {
+        "sector": "銅箔/CCL",
+        "change": -19.66,
+        "level": -2.16,
+        "prev_change": -27.27
+      }
+    ],
+    "v_turn": [
+      {
+        "sector": "顯示",
+        "change": 0.12,
+        "level": -3.35,
+        "prev_change": -0.57
+      }
+    ]
+  },
+  "top_buys": [
     {
       "stock": "8150 南茂",
-      "days": 5,
-      "tier": null,
+      "buy_days": 5,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2308 台達電",
-      "days": 2,
-      "tier": null,
+      "buy_days": 2,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2408 南亞科",
-      "days": 2,
-      "tier": null,
+      "buy_days": 2,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "3260 威剛",
-      "days": 2,
-      "tier": null,
+      "buy_days": 2,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2327 國巨",
-      "days": 2,
-      "tier": null,
+      "buy_days": 2,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2376 技嘉",
-      "days": 1,
-      "tier": null,
+      "buy_days": 1,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "3535 晶彩科",
-      "days": 1,
-      "tier": null,
+      "buy_days": 1,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "6269 台郡",
-      "days": 1,
-      "tier": null,
+      "buy_days": 1,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "6643 M31",
-      "days": 1,
-      "tier": null,
+      "buy_days": 1,
+      "chip_tier": null,
       "gate": false
     },
     {
       "stock": "2344 華邦電",
-      "days": 1,
-      "tier": null,
+      "buy_days": 1,
+      "chip_tier": null,
       "gate": false
     }
   ],
-  "positions": {
+  "positions_week": {
     "entries": [],
     "exits": [],
     "holding": []
   },
-  "alerts": [
+  "alerts_week": [
     {
       "id": "3006",
       "name": "晶豪科",
@@ -260,5 +384,6 @@
       "detail": "RSI=82.9"
     }
   ],
+  "chart_path": "daily_reports/weekly_20260911/01_weekly_sector_trend.png",
   "narrative": ""
 }
