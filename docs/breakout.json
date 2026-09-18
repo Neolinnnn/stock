@@ -1,27 +1,37 @@
 {
- "date": "20260917",
- "generated_at": "2026-09-17 12:46",
+ "date": "20260918",
+ "generated_at": "2026-09-18 12:26",
  "taiex_bull": true,
  "picks": [
   {
-   "id": "3264",
-   "close": 244.5,
-   "vol_ratio": 2.97,
-   "dist_ma20": 8.26,
-   "ret20": 17.27,
-   "last_date": "2026-09-17",
-   "chip5": 2873641.0,
-   "name": "欣銓"
+   "id": "6643",
+   "close": 458.0,
+   "vol_ratio": 2.2,
+   "dist_ma20": 8.39,
+   "ret20": 10.1,
+   "last_date": "2026-09-18",
+   "chip5": 354378.0,
+   "name": "M31"
   },
   {
-   "id": "6257",
-   "close": 222.5,
-   "vol_ratio": 2.38,
-   "dist_ma20": 5.9,
-   "ret20": 11.53,
-   "last_date": "2026-09-17",
-   "chip5": 6308384.0,
-   "name": "矽格"
+   "id": "2441",
+   "close": 123.5,
+   "vol_ratio": 1.64,
+   "dist_ma20": 6.44,
+   "ret20": 9.78,
+   "last_date": "2026-09-18",
+   "chip5": 6360844.0,
+   "name": "超豐"
+  },
+  {
+   "id": "5269",
+   "close": 1495.0,
+   "vol_ratio": 1.51,
+   "dist_ma20": 4.89,
+   "ret20": 5.65,
+   "last_date": "2026-09-18",
+   "chip5": 1257566.0,
+   "name": "祥碩"
   }
  ],
  "backtest_ref": {
