@@ -281,7 +281,7 @@
     ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
 
     // 軸標籤
-    ctx.fillStyle = '#8b93a3'; ctx.font = '12px sans-serif';
+    ctx.fillStyle = '#a8b2c1'; ctx.font = '14px sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     axes.forEach((a, i) => {
       const [x, y] = pt(i, R + 14);
@@ -313,7 +313,7 @@
     });
 
     // 價格刻度（上中下三點）
-    ctx.fillStyle = '#8b93a3'; ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#a8b2c1'; ctx.font = '13px sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     [[0, profile.hi], [h / 2, (profile.hi + profile.lo) / 2], [h - 6, profile.lo]]
       .forEach(([y, p]) => ctx.fillText(Math.round(p), 2, y + 4));
@@ -356,9 +356,9 @@
     ];
 
     let y = 14;
-    ctx.font = '12px sans-serif'; ctx.textBaseline = 'middle';
+    ctx.font = '14px sans-serif'; ctx.textBaseline = 'middle';
     segs.forEach(s => {
-      ctx.fillStyle = '#8b93a3'; ctx.textAlign = 'left';
+      ctx.fillStyle = '#a8b2c1'; ctx.textAlign = 'left';
       ctx.fillText(s.lab, 2, y);
       ctx.fillStyle = '#0f1319';
       ctx.fillRect(2, y + 10, w - 4, 12);
@@ -372,7 +372,7 @@
     // 現價 vs VWAP 偏離
     const dev = vwapPrice ? (curPrice - vwapPrice) / vwapPrice * 100 : 0;
     ctx.textAlign = 'left'; ctx.fillStyle = dev >= 0 ? '#e74c3c' : '#2ecc71';
-    ctx.font = '11px sans-serif';
+    ctx.font = '13px sans-serif';
     ctx.fillText(`現價偏離 VWAP ${dev >= 0 ? '+' : ''}${dev.toFixed(2)}%`, 2, y + 4);
   }
 
@@ -412,13 +412,13 @@
     const y = v => padT + (h - padT - padB) * (1 - (v - lo) / (hi - lo));
 
     // 刻度；0 軸加深，正負一眼可分
-    ctx.font = '11px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.font = '13px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     [-span, -span / 2, 0, span / 2, span].forEach(v => {
       const yy = y(v), zero = Math.abs(v) < 1e-9;
       ctx.strokeStyle = zero ? '#3a4150' : '#1e232c';
       ctx.lineWidth = zero ? 1.2 : 1;
       ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(w - padR, yy); ctx.stroke();
-      ctx.fillStyle = zero ? '#aeb6c4' : '#8b93a3';
+      ctx.fillStyle = zero ? '#c2cad6' : '#a8b2c1';
       ctx.fillText((v > 0 ? '+' : '') + v.toFixed(2), 2, yy);
     });
 
@@ -441,7 +441,7 @@
     });
 
     // X 軸端點日期與單位說明
-    ctx.fillStyle = '#8b93a3'; ctx.textBaseline = 'bottom';
+    ctx.fillStyle = '#a8b2c1'; ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';   ctx.fillText((holders.dates[0] || '').slice(5) + ' 起算', padL, h - 4);
     ctx.textAlign = 'right';  ctx.fillText((holders.dates[n - 1] || '').slice(5), w - padR, h - 4);
     ctx.textAlign = 'left';   ctx.textBaseline = 'top';
@@ -530,7 +530,7 @@
     }
     if (_mainChart) { _mainChart.remove(); _mainChart = null; }
     _mainChart = LightweightCharts.createChart(el, {
-      layout: { background: { color: '#161a22' }, textColor: '#8b93a3', fontSize: 10 },
+      layout: { background: { color: '#161a22' }, textColor: '#a8b2c1', fontSize: 10 },
       grid: { vertLines: { color: '#1e232c' }, horzLines: { color: '#1e232c' } },
       rightPriceScale: { borderColor: '#272c37' },
       timeScale: { borderColor: '#272c37' },
@@ -554,7 +554,7 @@
       [d.indicators?.ma5, '#f1b143', 'MA5'],
       [ma10, '#7c5cff', 'MA10'],
       [d.indicators?.ma20, '#4ea1f3', 'MA20'],
-      [d.indicators?.ma60, '#8b93a3', 'MA60'],
+      [d.indicators?.ma60, '#a8b2c1', 'MA60'],
     ];
     lines.forEach(([vals, color]) => {
       if (!vals) return;
