@@ -41,7 +41,7 @@
   }
 
     // 各 canvas 圖表的繪製高度（px）。主K線另由 .chartbox 的 CSS 高度決定。
-  const CANVAS_H = 220;
+  const CANVAS_H = 300;
 
   // 集保大戶級距，分層互斥，與 build_docs._HOLDER_LEVELS 對應
   const HOLDER_LEVELS = [
@@ -219,17 +219,17 @@
   // ════════════════════════════════════════════════════════════════
 
   /** 環形進度圖（SVG 字串）。 */
-  function ringSVG(pct, color, label, size = 62) {
-    const r = size / 2 - 5, cx = size / 2, circ = 2 * Math.PI * r;
+  function ringSVG(pct, color, label, size = 84) {
+    const r = size / 2 - 7, cx = size / 2, circ = 2 * Math.PI * r;
     const off = circ * (1 - clamp(pct, 0, 100) / 100);
     return `<div class="ring">
       <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-        <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="#0f1319" stroke-width="6"/>
-        <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${color}" stroke-width="6"
+        <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="#0f1319" stroke-width="8"/>
+        <circle cx="${cx}" cy="${cx}" r="${r}" fill="none" stroke="${color}" stroke-width="8"
           stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round"
           transform="rotate(-90 ${cx} ${cx})"/>
         <text x="${cx}" y="${cx + 4}" text-anchor="middle" fill="#e8eaed"
-          font-size="14" font-weight="700">${Math.round(pct)}%</text>
+          font-size="19" font-weight="700">${Math.round(pct)}%</text>
       </svg>
       <div class="rl">${label}</div></div>`;
   }
@@ -281,7 +281,7 @@
     ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
 
     // 軸標籤
-    ctx.fillStyle = '#8b93a3'; ctx.font = '10px sans-serif';
+    ctx.fillStyle = '#8b93a3'; ctx.font = '12px sans-serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     axes.forEach((a, i) => {
       const [x, y] = pt(i, R + 14);
@@ -313,7 +313,7 @@
     });
 
     // 價格刻度（上中下三點）
-    ctx.fillStyle = '#8b93a3'; ctx.font = '9px sans-serif';
+    ctx.fillStyle = '#8b93a3'; ctx.font = '11px sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     [[0, profile.hi], [h / 2, (profile.hi + profile.lo) / 2], [h - 6, profile.lo]]
       .forEach(([y, p]) => ctx.fillText(Math.round(p), 2, y + 4));
@@ -356,7 +356,7 @@
     ];
 
     let y = 14;
-    ctx.font = '10px sans-serif'; ctx.textBaseline = 'middle';
+    ctx.font = '12px sans-serif'; ctx.textBaseline = 'middle';
     segs.forEach(s => {
       ctx.fillStyle = '#8b93a3'; ctx.textAlign = 'left';
       ctx.fillText(s.lab, 2, y);
@@ -412,7 +412,7 @@
     const y = v => padT + (h - padT - padB) * (1 - (v - lo) / (hi - lo));
 
     // 刻度；0 軸加深，正負一眼可分
-    ctx.font = '9px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.font = '11px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     [-span, -span / 2, 0, span / 2, span].forEach(v => {
       const yy = y(v), zero = Math.abs(v) < 1e-9;
       ctx.strokeStyle = zero ? '#3a4150' : '#1e232c';
@@ -515,7 +515,7 @@
 
   /** 01 主K線圖：沿用 lightweight-charts，與站內其他頁面一致。 */
   function cardMainChart(d) {
-    return `<div class="card c8"><h3><span class="no">01</span>主K線圖
+    return `<div class="card c12"><h3><span class="no">01</span>主K線圖
       <span class="sub">K + MA5/10/20/60 + 量</span></h3>
       <div class="chartbox" id="kline"></div></div>`;
   }
@@ -591,7 +591,7 @@
       ['壓力區', `<b>${L.resistance || '—'}</b>`],
       ['風險等級', `<span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>`],
     ];
-    return `<div class="card c4"><h3><span class="no">02</span>AI 決策核心
+    return `<div class="card c6"><h3><span class="no">02</span>AI 決策核心
       <span class="sub">AI DECISION CORE</span></h3>
       <div class="warn">⚠ ${d.signal?.label || 'AI CAUTION'}</div>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}
@@ -600,7 +600,7 @@
 
   /** 03 多維度評分雷達 */
   function cardRadar(sc) {
-    return `<div class="card c4"><h3><span class="no">03</span>多維度評分
+    return `<div class="card c6"><h3><span class="no">03</span>多維度評分
       <span class="sub">綜合 ${sc.total} / 100</span></h3>
       <canvas id="radar-score"></canvas>
       <div style="text-align:center;margin-top:4px;">
@@ -611,7 +611,7 @@
 
   /** 04 籌碼熱區圖 */
   function cardHeatmap() {
-    return `<div class="card c4"><h3><span class="no">04</span>AI 籌碼熱區圖
+    return `<div class="card c6"><h3><span class="no">04</span>AI 籌碼熱區圖
       <span class="sub">近 60 日價量分佈</span></h3>
       <canvas id="heatmap"></canvas>
       <div class="note">橫條長度為該價格區間累計成交量；虛線為現價。</div></div>`;
@@ -619,7 +619,7 @@
 
   /** 05 風險管理雷達 */
   function cardRiskRadar(rk) {
-    return `<div class="card c4"><h3><span class="no">05</span>風險管理雷達</h3>
+    return `<div class="card c6"><h3><span class="no">05</span>風險管理雷達</h3>
       <canvas id="radar-risk"></canvas>
       <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
         <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
@@ -630,7 +630,7 @@
   /** 06 AI 預測路徑 */
   function cardPrediction(d) {
     const p = d.prediction || {};
-    return `<div class="card c4"><h3><span class="no">06</span>AI 預測路徑
+    return `<div class="card c6"><h3><span class="no">06</span>AI 預測路徑
       <span class="sub">後端模型輸出</span></h3>
       ${barRow('上漲', nz(p.up) * 100, '#e74c3c')}
       ${barRow('盤整', nz(p.sideways) * 100, '#f1b143')}
@@ -644,7 +644,7 @@
 
   /** 07 主力成本結構分布 */
   function cardCostStruct(vw, cur) {
-    return `<div class="card c4"><h3><span class="no">07</span>主力成本結構分布
+    return `<div class="card c6"><h3><span class="no">07</span>主力成本結構分布
       <span class="sub">20 日 VWAP ${fmt(vw, 2)}</span></h3>
       <canvas id="coststruct"></canvas></div>`;
   }
@@ -661,7 +661,7 @@
         自 <b class="${c.dealer[i] >= 0 ? 'up' : 'dn'}">${fmtInt(c.dealer[i])}</b></span></div>`);
     }
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c4"><h3><span class="no">08</span>法人行為計量
+    return `<div class="card c6"><h3><span class="no">08</span>法人行為計量
       <span class="sub">三大法人買賣超（張）</span></h3>
       <canvas id="chipbars"></canvas>
       ${rows.join('')}
@@ -673,7 +673,7 @@
 
   /** 09 隔日沖風險分析（全為估算值） */
   function cardDaytradeRisk(rk) {
-    return `<div class="card c3"><h3><span class="no">09</span>隔日沖風險分析
+    return `<div class="card c6"><h3><span class="no">09</span>隔日沖風險分析
       <span class="sub">估算值</span></h3>
       ${barRow('主力出貨壓力', rk.distribute, '#e74c3c')}
       ${barRow('籌碼換手率', rk.turnover, '#f1b143')}
@@ -685,7 +685,7 @@
 
   /** 10 AI 多空能量條 */
   function cardEnergy(en) {
-    return `<div class="card c3"><h3><span class="no">10</span>AI 多空能量條
+    return `<div class="card c6"><h3><span class="no">10</span>AI 多空能量條
       <span class="sub">近 20 日量能歸屬</span></h3>
       ${barRow('多方量能', en.bull, '#e74c3c')}
       ${barRow('空方量能', en.bear, '#2ecc71')}
@@ -704,7 +704,7 @@
       ['動能強度', sc.momentum, '#7c5cff'],
     ];
     const avg = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c3"><h3><span class="no">11</span>健康度綜合評估</h3>
+    return `<div class="card c6"><h3><span class="no">11</span>健康度綜合評估</h3>
       <div class="rings">${items.map(([l, v, c]) => ringSVG(v, c, l)).join('')}</div>
       <div class="row" style="margin-top:8px;"><span class="k">總評</span>
         <span class="v">${avg >= 70 ? '良好' : avg >= 50 ? '普通' : '偏弱'}（平均 ${avg} 分）</span></div></div>`;
@@ -720,7 +720,7 @@
     ];
     const reds = lights.filter(l => l[1] === 'r').length;
     const cur = reds >= 2 ? ['r', '紅燈（觀望）'] : reds === 1 ? ['y', '黃燈（注意）'] : ['g', '綠燈（可續抱）'];
-    return `<div class="card c3"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
+    return `<div class="card c6"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
       ${lights.map(([k, c, t]) =>
         `<div class="row"><span class="k"><i class="dot ${c === 'g' ? '' : c}"></i>${k}</span>
          <span class="v">${t}</span></div>`).join('')}
@@ -739,7 +739,7 @@
       ['策略適用度', clamp(sc.total, 0, 100), '#7c5cff'],
     ];
     const conf = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c3"><h3><span class="no">13</span>AI 信心維度
+    return `<div class="card c6"><h3><span class="no">13</span>AI 信心維度
       <span class="sub">AI CONFIDENCE ${conf}%</span></h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="note">資料截至 ${last(d.ohlcv?.date) || '—'}</div></div>`;
@@ -754,7 +754,7 @@
       ['自營商', c.dealer?.[n]],
       ['三大法人', c.total?.[n]],
     ];
-    return `<div class="card c3"><h3><span class="no">14</span>籌碼異動摘要
+    return `<div class="card c6"><h3><span class="no">14</span>籌碼異動摘要
       <span class="sub">${c.dates?.[n] || ''}</span></h3>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span>
         <span class="v ${nz(v) >= 0 ? 'up' : 'dn'}">${fmtInt(v)} 張</span></div>`).join('')}
@@ -773,7 +773,7 @@
     const instRatio = clamp(vol5 ? net5abs / vol5 * 100 : 0, 0, 100);
     const retailRatio = 100 - instRatio;
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c4"><h3><span class="no">15</span>買賣力分佈
+    return `<div class="card c6"><h3><span class="no">15</span>買賣力分佈
       <span class="sub">法人流向強度（推估）</span></h3>
       <div class="rings">
         ${ringSVG(instRatio, '#e74c3c', '法人主導度')}
@@ -788,7 +788,7 @@
 
   /** 16 多空強度分佈 */
   function cardStrength(sc, en) {
-    return `<div class="card c4"><h3><span class="no">16</span>多空強度分佈</h3>
+    return `<div class="card c6"><h3><span class="no">16</span>多空強度分佈</h3>
       <div class="rings">
         ${ringSVG(en.bull, '#e74c3c', '多方強度')}
         ${ringSVG(en.bear, '#2ecc71', '空方強度')}
@@ -811,7 +811,7 @@
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
-    return `<div class="card c4"><h3><span class="no">17</span>主力追蹤總評
+    return `<div class="card c6"><h3><span class="no">17</span>主力追蹤總評
       <span class="sub">規則引擎</span></h3>
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="verdict">${verdict}</span>
@@ -892,14 +892,15 @@
     }
     return `<div class="card c12"><h3><span class="no">19</span>原始資料表
       <span class="sub">近 10 個交易日</span></h3>
-      <table style="width:100%;border-collapse:collapse;font-size:11px;">
+      <div style="overflow-x:auto;">
+        <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:14px;">
         <thead><tr style="color:var(--sub);text-align:right;">
           <th style="text-align:left;">日期</th><th>開</th><th>高</th><th>低</th>
           <th>收</th><th>量(張)</th><th>法人(張)</th></tr></thead>
-        <tbody style="text-align:right;">${rows}</tbody></table>
-      <style>#grid td{padding:3px 4px;border-bottom:1px solid rgba(255,255,255,.04);}
+        <tbody style="text-align:right;">${rows}</tbody></table></div>
+      <style>#grid td{padding:6px 6px;border-bottom:1px solid rgba(255,255,255,.04);}
         #grid td:first-child{text-align:left;color:var(--sub);}
-        #grid th{padding:3px 4px;font-weight:500;}</style></div>`;
+        #grid th{padding:6px 6px;font-weight:500;}</style></div>`;
   }
 
   // ════════════════════════════════════════════════════════════════
