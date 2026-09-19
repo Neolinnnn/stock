@@ -253,10 +253,13 @@ function scoreDimensions(d) {
   if (hist !== null && hist !== undefined) momentum += hist > 0 ? 8 : -8;
   momentum = clamp(momentum, 0, 100);
 
-  // 籌碼：近 20 日三大法人累計買賣超相對股本流通量的強度
+  // 籌碼：近 20 日法人累計買賣超，換算成「相當於幾日均量」後評分。
+  // 以 tanh 平滑壓縮而非線性截斷 —— 線性映射會讓半數個股頂到 0 或 100，
+  // 使賣超 -1,000 張與 -9,000 張同為 0 分而失去鑑別度。
   const net20 = sum(tail(chip.total, 20));
   const avgLots = mean(tail(o.volume, 20)) / 1000;   // 股 → 張
-  const chipScore = clamp(50 + (avgLots ? net20 / avgLots * 50 : 0), 0, 100);
+  const chipRatio = avgLots ? net20 / avgLots : 0;   // 淨額相當於幾日均量
+  const chipScore = 50 + 50 * Math.tanh(chipRatio / 2);
 
   // 量能：近 5 日均量 / 近 20 日均量
   const v5 = mean(tail(o.volume, 5)), v20 = mean(tail(o.volume, 20));
@@ -290,7 +293,8 @@ function riskMetrics(d, sc) {
 
   const daytrade = clamp(amp * 8 + (volRatio - 1) * 40, 0, 100);   // 隔日沖熱度(估)
   const turnover = clamp(volRatio * 50, 0, 100);                    // 籌碼換手(估)
-  const distribute = clamp(50 + sc.net20 / (mean(tail(o.volume, 20)) / 1000 || 1) * 30, 0, 100);
+  const distRatio = sc.net20 / (mean(tail(o.volume, 20)) / 1000 || 1);
+  const distribute = 50 - 50 * Math.tanh(distRatio / 2);   // 法人賣超越重，出貨壓力越高
 
   // 追價意願：近 5 日收盤在當日 K 棒的相對位置，收高代表買方願意追價
   const cp5 = [];
@@ -302,8 +306,13 @@ function riskMetrics(d, sc) {
   const volRisk = clamp(sc.annualVol, 0, 100);
   const intraday = clamp(amp * 10, 0, 100);
 
-  const level = daytrade >= 70 ? '高' : daytrade >= 40 ? '中' : '低';
-  return { amp, volRatio, daytrade, turnover, chase, distribute, volRisk, intraday, level };
+  // 綜合風險等級。不可只看 daytrade —— 那衡量的是短線投機熱度，
+  // 一檔空頭走勢、法人連續賣超的弱勢股當日若平盤量縮，daytrade 會很低，
+  // 卻被標成「低風險」而誤導。故併入波動、出貨壓力與趨勢弱勢一起評。
+  const overall = mean([daytrade, volRisk, distribute, 100 - sc.trend]);
+  const level = overall >= 60 ? '高' : overall >= 35 ? '中' : '低';
+  return { amp, volRatio, daytrade, turnover, chase, distribute, volRisk,
+    intraday, overall, level };
 }
 
 /** 多空能量：以近 20 日紅 K / 黑 K 的成交量佔比切分。 */
@@ -651,9 +660,10 @@ function cardHeatmap() {
 function cardRiskRadar(rk) {
   return `<div class="card c3"><h3><span class="no">05</span>風險管理雷達</h3>
     <canvas id="radar-risk"></canvas>
-    <div class="row"><span class="k">主力風險指數 <span class="est">(估)</span></span>
+    <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
       <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
-      ${Math.round(rk.daytrade)}%</span></div></div>`;
+      ${Math.round(rk.overall)}%</span></div>
+    <div class="note">綜合隔日沖熱度、波動率、出貨壓力與趨勢弱勢四項。</div></div>`;
 }
 
 /** 06 AI 預測路徑 */
