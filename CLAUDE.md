@@ -79,6 +79,10 @@ Gemini 仍是預設供應商。Groq 僅在 Gemini 所有 Key 都耗盡或持續�
 清單定義於 `gemini_writer.GROUNDING_REQUIRED_TASKS`，由 `generate()` 強制套用，
 呼叫端無法以 `allow_fallback=True` 繞過。
 
+`GeminiWriter` 只要任一供應商有 Key 即可建構：Gemini Key 暫時缺失或被撤銷時，
+不需 grounding 的任務仍走得到 Groq 備援；需 grounding 的任務則在 `generate()`
+階段正確失敗，不會拿舊資料充數。兩邊皆無 Key 才拋 `ValueError`。
+
 ---
 
 ## 呼叫層結構

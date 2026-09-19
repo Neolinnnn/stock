@@ -295,7 +295,7 @@ def call_gemini(
 
     Raises:
         ValueError: 未設定任何 API Key
-        RuntimeError: 所有 Key 與重試都失敗
+        RuntimeError: 所有 Key 與重試都失敗，或連線層／回應格式錯誤
     """
     keys = keys if keys is not None else collect_api_keys()
     if not keys:
@@ -359,6 +359,15 @@ def call_gemini(
                     raise last_error from e
             else:
                 raise last_error from e
+        except OSError as e:
+            # URLError、TimeoutError 等連線層錯誤皆為 OSError 子類。
+            # 換 Key 無助於連線問題（同一端點），故不重試，直接正規化為
+            # RuntimeError 讓 call_llm 得以接手退往 Groq —— 這正是備援
+            # 最該發揮作用的情境。
+            raise RuntimeError(f"Gemini 連線失敗：{e}") from e
+        except (KeyError, IndexError) as e:
+            # 回應結構非預期（例如安全阻擋時沒有 candidates）。換 Key 同樣無用。
+            raise RuntimeError(f"Gemini 回應格式非預期：{type(e).__name__} {e}") from e
 
     raise last_error  # type: ignore
 
@@ -434,9 +443,13 @@ def call_llm(
 
 class GeminiWriter:
     def __init__(self, model: str = DEFAULT_MODEL):
+        # 只要任一供應商可用即可建構。Gemini Key 暫時缺失或被撤銷時，
+        # 不需 grounding 的任務仍能經 call_llm 走 Groq 備援；若在此就
+        # 拒絕建構，備援等於形同虛設。需 grounding 的任務仍會在
+        # generate() 階段因 allow_fallback=False 而正確失敗。
         keys = collect_api_keys()
-        if not keys:
-            raise ValueError("GEMINI_API_KEY 未設定")
+        if not keys and not collect_groq_keys():
+            raise ValueError("GEMINI_API_KEY 與 GROQ_API_KEY 皆未設定")
 
         self._keys = keys
         self.model = model
