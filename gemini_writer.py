@@ -128,23 +128,127 @@ key 為股票代號字串：
 # 503/429 可重試的狀態碼
 _RETRYABLE_CODES = {429, 503}
 
+# 單次請求逾時（秒）。未設上限時 CI 會整個卡死等不到回應。
+DEFAULT_TIMEOUT = 90
+
+
+def collect_api_keys() -> list[str]:
+    """依序收集所有可用 key：GEMINI_API_KEY, GEMINI_API_KEY_1, GEMINI_API_KEY_2, ..."""
+    keys: list[str] = []
+    primary = os.environ.get("GEMINI_API_KEY", "")
+    if primary:
+        keys.append(primary)
+    i = 1
+    while True:
+        k = os.environ.get(f"GEMINI_API_KEY_{i}", "")
+        if not k:
+            break
+        if k not in keys:
+            keys.append(k)
+        i += 1
+    return keys
+
+
+def call_gemini(
+    prompt: str,
+    *,
+    model: str = DEFAULT_MODEL,
+    use_grounding: bool = False,
+    temperature: float | None = None,
+    json_output: bool = False,
+    timeout: int = DEFAULT_TIMEOUT,
+    keys: list[str] | None = None,
+) -> str:
+    """送出單次 Gemini 請求，內含多 Key 輪替與 429/503 重試。
+
+    這是全專案唯一的 Gemini HTTP 出口；agents/gemini_text.py 亦委派至此，
+    以免重試與輪替邏輯散落兩處各修一次。
+
+    Args:
+        prompt: 已組好的完整提示詞
+        model: 模型名稱
+        use_grounding: 是否啟用 Google Search grounding
+        temperature: 取樣溫度，None 表示用 API 預設
+        json_output: 要求回傳 application/json
+        timeout: 單次請求逾時秒數
+        keys: 自訂 Key 清單，預設由環境變數收集
+
+    Returns:
+        模型回覆的純文字
+
+    Raises:
+        ValueError: 未設定任何 API Key
+        RuntimeError: 所有 Key 與重試都失敗
+    """
+    keys = keys if keys is not None else collect_api_keys()
+    if not keys:
+        raise ValueError("GEMINI_API_KEY 未設定")
+
+    body: dict[str, Any] = {"contents": [{"parts": [{"text": prompt}]}]}
+    if use_grounding:
+        body["tools"] = [{"google_search": {}}]
+
+    gen_cfg: dict[str, Any] = {}
+    if temperature is not None:
+        gen_cfg["temperature"] = temperature
+    if json_output:
+        gen_cfg["responseMimeType"] = "application/json"
+    if gen_cfg:
+        body["generationConfig"] = gen_cfg
+
+    payload = json.dumps(body).encode("utf-8")
+    last_error: Exception | None = None
+
+    # 429 → 換 key（不同 project 配額）；503 → 等待後同 key 重試，最多 3 次
+    _503_retries = 3
+    attempt = 0
+    while attempt < len(keys):
+        key = keys[attempt]
+        url = GEMINI_API_URL.format(model=model, key=key)
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                result = json.loads(resp.read().decode("utf-8"))
+                return result["candidates"][0]["content"]["parts"][0]["text"]
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", "replace")
+            last_error = RuntimeError(f"Gemini API 錯誤 {e.code}: {err_body}")
+            if e.code == 429:
+                # 配額耗盡 → 換下一組 key
+                if attempt < len(keys) - 1:
+                    wait = 3 * (attempt + 1)
+                    print(f"  [gemini] key[{attempt}] 回傳 429，{wait}s 後換下一組 key…")
+                    time.sleep(wait)
+                    attempt += 1
+                    _503_retries = 3  # 新 key 重置 503 重試次數
+                else:
+                    raise last_error from e
+            elif e.code == 503:
+                # 伺服器繁忙 → 等 30s 後重試同一 key（最多 3 次再換 key）
+                if _503_retries > 0:
+                    _503_retries -= 1
+                    print(f"  [gemini] key[{attempt}] 回傳 503，等 30s 後重試（剩 {_503_retries} 次）…")
+                    time.sleep(30)
+                elif attempt < len(keys) - 1:
+                    print(f"  [gemini] key[{attempt}] 503 重試耗盡，換下一組 key…")
+                    attempt += 1
+                    _503_retries = 3
+                else:
+                    raise last_error from e
+            else:
+                raise last_error from e
+
+    raise last_error  # type: ignore
+
 
 class GeminiWriter:
     def __init__(self, model: str = DEFAULT_MODEL):
-        # 依序收集所有可用 key：GEMINI_API_KEY, GEMINI_API_KEY_1, GEMINI_API_KEY_2, ...
-        keys = []
-        primary = os.environ.get("GEMINI_API_KEY", "")
-        if primary:
-            keys.append(primary)
-        i = 1
-        while True:
-            k = os.environ.get(f"GEMINI_API_KEY_{i}", "")
-            if not k:
-                break
-            if k not in keys:
-                keys.append(k)
-            i += 1
-
+        keys = collect_api_keys()
         if not keys:
             raise ValueError("GEMINI_API_KEY 未設定")
 
@@ -153,7 +257,7 @@ class GeminiWriter:
 
     def generate(self, task: str, context: dict[str, Any], use_grounding: bool = False) -> str:
         """
-        呼叫 Gemini 生成文字。503/429 時自動輪替備用 Key，每組 Key 最多重試一次。
+        呼叫 Gemini 生成文字。503/429 時自動輪替備用 Key（實作見 call_gemini）。
 
         Args:
             task: PROMPTS 中定義的任務類型
@@ -173,60 +277,12 @@ class GeminiWriter:
             extra=context.get("extra", ""),
         )
 
-        body: dict[str, Any] = {
-            "contents": [{"parts": [{"text": prompt}]}]
-        }
-        if use_grounding:
-            body["tools"] = [{"google_search": {}}]
-
-        payload = json.dumps(body).encode("utf-8")
-        last_error: Exception | None = None
-
-        # 429 → 換 key（不同 project 配額）；503 → 等待後同 key 重試，最多 3 次
-        _503_retries = 3
-        attempt = 0
-        while attempt < len(self._keys):
-            key = self._keys[attempt]
-            url = GEMINI_API_URL.format(model=self.model, key=key)
-            req = urllib.request.Request(
-                url,
-                data=payload,
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-            try:
-                with urllib.request.urlopen(req) as resp:
-                    result = json.loads(resp.read().decode("utf-8"))
-                    return result["candidates"][0]["content"]["parts"][0]["text"]
-            except urllib.error.HTTPError as e:
-                err_body = e.read().decode("utf-8")
-                last_error = RuntimeError(f"Gemini API 錯誤 {e.code}: {err_body}")
-                if e.code == 429:
-                    # 配額耗盡 → 換下一組 key
-                    if attempt < len(self._keys) - 1:
-                        wait = 3 * (attempt + 1)
-                        print(f"  [GeminiWriter] key[{attempt}] 回傳 429，{wait}s 後換下一組 key…")
-                        time.sleep(wait)
-                        attempt += 1
-                        _503_retries = 3  # 新 key 重置 503 重試次數
-                    else:
-                        raise last_error from e
-                elif e.code == 503:
-                    # 伺服器繁忙 → 等 30s 後重試同一 key（最多 3 次再換 key）
-                    if _503_retries > 0:
-                        _503_retries -= 1
-                        print(f"  [GeminiWriter] key[{attempt}] 回傳 503，等 30s 後重試（剩 {_503_retries} 次）…")
-                        time.sleep(30)
-                    elif attempt < len(self._keys) - 1:
-                        print(f"  [GeminiWriter] key[{attempt}] 503 重試耗盡，換下一組 key…")
-                        attempt += 1
-                        _503_retries = 3
-                    else:
-                        raise last_error from e
-                else:
-                    raise last_error from e
-
-        raise last_error  # type: ignore
+        return call_gemini(
+            prompt,
+            model=self.model,
+            use_grounding=use_grounding,
+            keys=self._keys,
+        )
 
 
 if __name__ == "__main__":
