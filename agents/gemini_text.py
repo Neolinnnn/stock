@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from gemini_writer import call_gemini  # noqa: E402
+from gemini_writer import call_llm  # noqa: E402
 
 # CLAUDE.md 指定的預設模型（GA、免費額度、原生 grounding）
 GEMINI_MODEL = os.environ.get("AGENTS_GEMINI_MODEL", "gemini-2.5-flash")
@@ -79,13 +79,16 @@ def _compact(r: dict[str, Any]) -> dict[str, Any]:
 
 
 def _call_gemini(prompt: str) -> str | None:
-    """委派至 gemini_writer.call_gemini（共用多 Key 輪替與 429/503 重試）。
+    """委派至 gemini_writer.call_llm（共用多 Key 輪替、429/503 重試與 Groq 備援）。
+
+    此任務只是「把數字寫成人話」，不需即時資料，故允許退回 Groq；
+    兩邊都失敗才降級模板。
 
     與 GeminiWriter 的差異只在失敗處理：此處一律吞掉例外回傳 None，
     由呼叫端降級為確定性模板，不讓 pipeline 因 API 問題中斷。
     """
     try:
-        return call_gemini(
+        return call_llm(
             prompt,
             model=GEMINI_MODEL,
             temperature=0.4,

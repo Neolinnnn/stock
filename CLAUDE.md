@@ -61,6 +61,40 @@ result = writer.generate(task="daily_summary", context={...})
 - **備用模型**：`gemini-2.0-flash`（穩定，高量低成本）
 - Pro 系列需付費，**不使用**
 
+### Groq 備援
+
+Gemini 仍是預設供應商。Groq 僅在 Gemini 所有 Key 都耗盡或持續失敗時接手，
+不主動取代。模型由 `GROQ_MODEL` 環境變數指定（Groq 的模型上下架頻繁，
+使用前請以 `GET https://api.groq.com/openai/v1/models` 確認當下可用者）。
+
+**以下任務永不退回 Groq**，因其提示詞要求搜尋最新法說會、年報與新聞稿，
+依賴 Gemini 的 Google Search grounding；Groq 無內建搜尋，只會拿訓練截止前
+的舊資料編出看似合理的數字：
+
+| task | 呼叫者 |
+|------|--------|
+| `product_mix` | `scripts/enrich_product_mix.py`、`scripts/scan_one_stock.py` |
+| `fundamental_homework` | `scripts/fundamental_homework.py` |
+
+清單定義於 `gemini_writer.GROUNDING_REQUIRED_TASKS`，由 `generate()` 強制套用，
+呼叫端無法以 `allow_fallback=True` 繞過。
+
+---
+
+## 呼叫層結構
+
+所有 LLM 請求都經由 `gemini_writer.py`，不得自行組 HTTP 請求：
+
+```
+call_llm()      分派層：先 Gemini，失敗且允許時退 Groq
+├── call_gemini()   Gemini HTTP 出口（多 Key 輪替、429 換 Key、503 重試）
+└── call_groq()     Groq HTTP 出口（OpenAI 相容，多 Key 輪替、429 換 Key）
+```
+
+- `GeminiWriter.generate()` — 走 `PROMPTS` 模板的任務，失敗時拋出例外
+- `agents/gemini_text._call_gemini()` — 族群敘述，失敗時回 `None` 由呼叫端
+  降級為確定性模板，pipeline 不中斷
+
 ---
 
 ## 環境變數
@@ -69,7 +103,13 @@ result = writer.generate(task="daily_summary", context={...})
 GEMINI_API_KEY=# your api key  # KEY2，支援最多模型
 GEMINI_API_KEY_1=# your api key
 GEMINI_API_KEY_2=# your api key
+
+GROQ_API_KEY=# your api key    # 選填；未設定則無備援，行為同以往
+GROQ_MODEL=# 選填，預設 llama-3.3-70b-versatile
 ```
+
+Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序號中斷即停止**
+（設了 `_1` 未設 `_2`，則 `_3` 不會被讀取）。
 
 ---
 

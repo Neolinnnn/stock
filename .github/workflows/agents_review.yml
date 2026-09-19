@@ -51,6 +51,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          # llm_debate 不需即時搜尋，Gemini 配額耗盡時可退 Groq
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           ARGS="--top ${{ inputs.top }}"
           [ -n "${{ inputs.date }}" ] && ARGS="$ARGS --date ${{ inputs.date }}"
