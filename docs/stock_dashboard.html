@@ -99,6 +99,8 @@ a{color:var(--accent);}
 
 /* ── 圖表容器 ───────────────────────────────── */
 .chartbox{width:100%;height:190px;}
+.holderwrap{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start;}
+@media(max-width:820px){ .holderwrap{grid-template-columns:1fr;} }
 canvas{display:block;width:100%;}
 
 /* ── 大字結論 ───────────────────────────────── */
@@ -161,6 +163,13 @@ function stdev(arr) {
   const m = mean(arr);
   return Math.sqrt(mean(arr.map(v => (v - m) ** 2)));
 }
+
+// 集保大戶級距，分層互斥，與 build_docs._HOLDER_LEVELS 對應
+const HOLDER_LEVELS = [
+  { key: 'lv1000_up',  label: '1000 張以上', color: '#e74c3c' },
+  { key: 'lv800_1000', label: '800~1000 張', color: '#f1b143' },
+  { key: 'lv600_800',  label: '600~800 張',  color: '#4ea1f3' },
+];
 
 // ════════════════════════════════════════════════════════════════
 //  衍生指標計算
@@ -487,6 +496,79 @@ function drawCostStruct(canvas, profile, vwapPrice, curPrice) {
   ctx.font = '11px sans-serif';
   ctx.fillText(`現價偏離 VWAP ${dev >= 0 ? '+' : ''}${dev.toFixed(2)}%`, 2, y + 4);
 }
+
+/**
+ * 大戶持股比例變化圖：三個級距各一條，週頻。
+ *
+ * 畫的是「相對首期的變化（百分點）」而非絕對比例 —— 1000 張以上常佔六成以上，
+ * 另兩級距僅約 2%，同一個 Y 軸畫絕對值會被大的那條壓平，三條線全成直線。
+ * 絕對比例改由右側數值面板呈現。
+ */
+function drawHolders(canvas, holders) {
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth || 300, h = 170;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+
+  // 各級距轉為相對首個有效值的變化量
+  const series = HOLDER_LEVELS.map(lv => {
+    const vals = (holders.levels || {})[lv.key] || [];
+    const base = vals.find(v => v !== null && v !== undefined);
+    return {
+      ...lv,
+      deltas: vals.map(v => (v === null || v === undefined) ? null : v - base),
+    };
+  }).filter(s => s.deltas.some(v => v !== null));
+  if (!series.length) return;
+
+  const all = series.flatMap(s => s.deltas).filter(v => v !== null);
+  const span = Math.max(Math.abs(Math.min(...all)), Math.abs(Math.max(...all)), 0.05);
+  const lo = -span * 1.2, hi = span * 1.2;   // 以 0 為中心，正負對稱
+  const n = holders.dates.length;
+  const padL = 40, padR = 6, padT = 10, padB = 18;
+  const x = i => padL + (w - padL - padR) * (n > 1 ? i / (n - 1) : 0.5);
+  const y = v => padT + (h - padT - padB) * (1 - (v - lo) / (hi - lo));
+
+  // 刻度；0 軸加深，正負一眼可分
+  ctx.font = '9px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  [-span, -span / 2, 0, span / 2, span].forEach(v => {
+    const yy = y(v), zero = Math.abs(v) < 1e-9;
+    ctx.strokeStyle = zero ? '#3a4150' : '#1e232c';
+    ctx.lineWidth = zero ? 1.2 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(w - padR, yy); ctx.stroke();
+    ctx.fillStyle = zero ? '#aeb6c4' : '#8b93a3';
+    ctx.fillText((v > 0 ? '+' : '') + v.toFixed(2), 2, yy);
+  });
+
+  // 折線；null 值斷線而非補零
+  series.forEach(s => {
+    ctx.strokeStyle = s.color; ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    let drawing = false;
+    s.deltas.forEach((v, i) => {
+      if (v === null) { drawing = false; return; }
+      drawing ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v));
+      drawing = true;
+    });
+    ctx.stroke();
+    const li = s.deltas.length - 1;
+    if (s.deltas[li] !== null) {
+      ctx.fillStyle = s.color;
+      ctx.beginPath(); ctx.arc(x(li), y(s.deltas[li]), 3, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+
+  // X 軸端點日期與單位說明
+  ctx.fillStyle = '#8b93a3'; ctx.textBaseline = 'bottom';
+  ctx.textAlign = 'left';   ctx.fillText((holders.dates[0] || '').slice(5) + ' 起算', padL, h - 4);
+  ctx.textAlign = 'right';  ctx.fillText((holders.dates[n - 1] || '').slice(5), w - padR, h - 4);
+  ctx.textAlign = 'left';   ctx.textBaseline = 'top';
+  ctx.fillText('累積變化 (pp)', padL + 2, 2);
+}
+
 
 /** 法人買賣超柱狀圖（近 20 日三大法人合計）。 */
 function drawChipBars(canvas, chip) {
@@ -859,7 +941,66 @@ function cardVerdict(d, sc, rk, vw) {
     <div class="note" style="font-size:11px;line-height:1.7;">${text}</div></div>`;
 }
 
-/** 18 原始資料表（近 10 日） */
+/**
+ * 18 大戶持股分布（集保股權分散表，週頻）。
+ * 三個級距分層互斥，追蹤持股比例的週變化：比例上升代表籌碼向大戶集中。
+ */
+function cardHolders(d) {
+  const hd = d.holders;
+  const has = hd && hd.dates && hd.dates.length;
+  if (!has) {
+    return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
+      <span class="sub">集保股權分散表</span></h3>
+      <div class="note" style="padding:14px 0;">
+        尚無資料。此欄位需後端重跑 <code>build_docs.py</code> 取得集保股權分散表
+        （<code>taiwan_stock_holding_shares_per</code>）後才會出現。</div></div>`;
+  }
+
+  const n = hd.dates.length;
+  const rows = HOLDER_LEVELS.map(lv => {
+    const vals = (hd.levels || {})[lv.key] || [];
+    const cur = vals[n - 1], prev = vals[n - 2];
+    const diff = (cur != null && prev != null) ? cur - prev : null;
+    const dCls = diff == null ? 'flat' : diff > 0 ? 'up' : diff < 0 ? 'dn' : 'flat';
+    const dTxt = diff == null ? '—'
+      : `${diff > 0 ? '+' : ''}${diff.toFixed(3)} pp`;
+    return `<div class="row">
+      <span class="k"><i style="display:inline-block;width:9px;height:3px;
+        background:${lv.color};border-radius:2px;"></i>${lv.label}</span>
+      <span class="v">${cur == null ? '—' : cur.toFixed(2) + '%'}
+        <span class="${dCls}" style="font-size:11px;margin-left:6px;">${dTxt}</span></span>
+    </div>`;
+  }).join('');
+
+  // 三級距合計：600 張以上的整體集中度
+  const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => {
+    const v = ((hd.levels || {})[lv.key] || [])[i];
+    return a + (v == null ? 0 : v);
+  }, 0);
+  const tCur = sumAt(n - 1), tPrev = n > 1 ? sumAt(n - 2) : null;
+  const tDiff = tPrev == null ? null : tCur - tPrev;
+  const tCls = tDiff == null ? 'flat' : tDiff > 0 ? 'up' : tDiff < 0 ? 'dn' : 'flat';
+
+  return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
+    <span class="sub">集保股權分散表 · 週頻 · 截至 ${hd.dates[n - 1]}</span></h3>
+    <div class="holderwrap">
+      <div><canvas id="holders"></canvas></div>
+      <div>
+        ${rows}
+        <div class="row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">
+          <span class="k">600 張以上合計</span>
+          <span class="v">${tCur.toFixed(2)}%
+            <span class="${tCls}" style="font-size:11px;margin-left:6px;">${
+              tDiff == null ? '—' : (tDiff > 0 ? '+' : '') + tDiff.toFixed(3) + ' pp'}</span></span>
+        </div>
+        <div class="note">分層互斥，不累積。pp = 百分點。比例上升代表籌碼向該級距集中；
+          集保每週五結算、次週初公布，與日 K 無法逐日對齊。</div>
+      </div>
+    </div></div>`;
+}
+
+
+/** 19 原始資料表（近 10 日） */
 function cardRawTable(d) {
   const o = d.ohlcv, c = d.chip || {}, n = o.close.length;
   let rows = '';
@@ -870,7 +1011,7 @@ function cardRawTable(d) {
       <td>${fmtInt(o.volume[i] / 1000)}</td>
       <td class="${nz(c.total?.[i]) >= 0 ? 'up' : 'dn'}">${fmtInt(c.total?.[i])}</td></tr>`;
   }
-  return `<div class="card c12"><h3><span class="no">18</span>原始資料表
+  return `<div class="card c12"><h3><span class="no">19</span>原始資料表
     <span class="sub">近 10 個交易日</span></h3>
     <table style="width:100%;border-collapse:collapse;font-size:11px;">
       <thead><tr style="color:var(--sub);text-align:right;">
@@ -902,7 +1043,7 @@ function render(d) {
     cardChipFlow(d, sc), cardDaytradeRisk(rk), cardEnergy(en), cardHealth(sc),
     cardSignalLight(d, sc, rk), cardConfidence(d, sc), cardChipSummary(d, sc),
     cardPowerSplit(d, sc), cardStrength(sc, en), cardVerdict(d, sc, rk, vw),
-    cardRawTable(d),
+    cardHolders(d), cardRawTable(d),
   ].join('');
 
   $('status').style.display = 'none';
@@ -926,6 +1067,9 @@ function render(d) {
   safe('heatmap', () => drawHeatmap($('heatmap'), vp, cur));
   safe('coststruct', () => drawCostStruct($('coststruct'), vp, vw, cur));
   safe('chipbars', () => drawChipBars($('chipbars'), d.chip || {}));
+  if (d.holders && d.holders.dates && d.holders.dates.length) {
+    safe('holders', () => drawHolders($('holders'), d.holders));
+  }
 }
 
 async function loadStock(sid) {
