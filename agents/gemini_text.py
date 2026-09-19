@@ -14,16 +14,17 @@ import json
 import os
 import re
 import sys
-import urllib.error
-import urllib.request
+from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from gemini_writer import call_llm  # noqa: E402
 
 # CLAUDE.md 指定的預設模型（GA、免費額度、原生 grounding）
 GEMINI_MODEL = os.environ.get("AGENTS_GEMINI_MODEL", "gemini-2.5-flash")
-_URL = (
-    "https://generativelanguage.googleapis.com/v1beta/models/"
-    "{model}:generateContent?key={key}"
-)
 
 
 def _log(msg: str) -> None:
@@ -78,29 +79,25 @@ def _compact(r: dict[str, Any]) -> dict[str, Any]:
 
 
 def _call_gemini(prompt: str) -> str | None:
-    key = os.environ.get("GEMINI_API_KEY", "")
-    if not key:
-        _log("GEMINI_API_KEY 未設定 → 使用模板敘述")
-        return None
-    payload = json.dumps({
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": 0.4, "responseMimeType": "application/json"},
-    }).encode("utf-8")
-    req = urllib.request.Request(
-        _URL.format(model=GEMINI_MODEL, key=key),
-        data=payload, headers={"Content-Type": "application/json"}, method="POST",
-    )
+    """委派至 gemini_writer.call_llm（共用多 Key 輪替、429/503 重試與 Groq 備援）。
+
+    此任務只是「把數字寫成人話」，不需即時資料，故允許退回 Groq；
+    兩邊都失敗才降級模板。
+
+    與 GeminiWriter 的差異只在失敗處理：此處一律吞掉例外回傳 None，
+    由呼叫端降級為確定性模板，不讓 pipeline 因 API 問題中斷。
+    """
     try:
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            res = json.loads(resp.read().decode("utf-8"))
-        return res["candidates"][0]["content"]["parts"][0]["text"].strip()
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", "replace")[:300]
-        _log(f"HTTP {e.code}（model={GEMINI_MODEL}）→ 降級模板：{body}")
-    except (urllib.error.URLError, TimeoutError) as e:
-        _log(f"連線失敗 → 降級模板：{e}")
-    except (KeyError, IndexError, json.JSONDecodeError) as e:
-        _log(f"回應格式非預期 → 降級模板：{type(e).__name__}")
+        return call_llm(
+            prompt,
+            model=GEMINI_MODEL,
+            temperature=0.4,
+            json_output=True,
+        ).strip()
+    except ValueError:
+        _log("GEMINI_API_KEY 未設定 → 使用模板敘述")
+    except Exception as e:  # noqa: BLE001 — 任何 API 問題都不該中斷 pipeline
+        _log(f"呼叫失敗（model={GEMINI_MODEL}）→ 降級模板：{str(e)[:300]}")
     return None
 
 

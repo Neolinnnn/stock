@@ -181,6 +181,11 @@ jobs:
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # 統一呼叫路徑後 agents 也會輪替備用 Key，故補齊 _1/_2
+          GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          # 族群敘述不需即時搜尋，Gemini 配額耗盡時可退 Groq
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: |

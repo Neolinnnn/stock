@@ -61,6 +61,44 @@ result = writer.generate(task="daily_summary", context={...})
 - **備用模型**：`gemini-2.0-flash`（穩定，高量低成本）
 - Pro 系列需付費，**不使用**
 
+### Groq 備援
+
+Gemini 仍是預設供應商。Groq 僅在 Gemini 所有 Key 都耗盡或持續失敗時接手，
+不主動取代。模型由 `GROQ_MODEL` 環境變數指定（Groq 的模型上下架頻繁，
+使用前請以 `GET https://api.groq.com/openai/v1/models` 確認當下可用者）。
+
+**以下任務永不退回 Groq**，因其提示詞要求搜尋最新法說會、年報與新聞稿，
+依賴 Gemini 的 Google Search grounding；Groq 無內建搜尋，只會拿訓練截止前
+的舊資料編出看似合理的數字：
+
+| task | 呼叫者 |
+|------|--------|
+| `product_mix` | `scripts/enrich_product_mix.py`、`scripts/scan_one_stock.py` |
+| `fundamental_homework` | `scripts/fundamental_homework.py` |
+
+清單定義於 `gemini_writer.GROUNDING_REQUIRED_TASKS`，由 `generate()` 強制套用，
+呼叫端無法以 `allow_fallback=True` 繞過。
+
+`GeminiWriter` 只要任一供應商有 Key 即可建構：Gemini Key 暫時缺失或被撤銷時，
+不需 grounding 的任務仍走得到 Groq 備援；需 grounding 的任務則在 `generate()`
+階段正確失敗，不會拿舊資料充數。兩邊皆無 Key 才拋 `ValueError`。
+
+---
+
+## 呼叫層結構
+
+所有 LLM 請求都經由 `gemini_writer.py`，不得自行組 HTTP 請求：
+
+```
+call_llm()      分派層：先 Gemini，失敗且允許時退 Groq
+├── call_gemini()   Gemini HTTP 出口（多 Key 輪替、429 換 Key、503 重試）
+└── call_groq()     Groq HTTP 出口（OpenAI 相容，多 Key 輪替、429 換 Key）
+```
+
+- `GeminiWriter.generate()` — 走 `PROMPTS` 模板的任務，失敗時拋出例外
+- `agents/gemini_text._call_gemini()` — 族群敘述，失敗時回 `None` 由呼叫端
+  降級為確定性模板，pipeline 不中斷
+
 ---
 
 ## 環境變數
@@ -69,7 +107,33 @@ result = writer.generate(task="daily_summary", context={...})
 GEMINI_API_KEY=# your api key  # KEY2，支援最多模型
 GEMINI_API_KEY_1=# your api key
 GEMINI_API_KEY_2=# your api key
+
+GROQ_API_KEY=# your api key    # 選填；未設定則無備援，行為同以往
+GROQ_MODEL=# 選填，預設 llama-3.3-70b-versatile
 ```
+
+Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序號中斷即停止**
+（設了 `_1` 未設 `_2`，則 `_3` 不會被讀取）。
+
+---
+
+## 大戶定義
+
+「大戶」一律指集保股權分散表（TDCC）的持股張數級距，**分層互斥、不累積**：
+
+| 級距 | 集保原始級距（股） | JSON key |
+|------|-------------------|----------|
+| 600~800 張 | 600,001 ~ 800,000 | `lv600_800` |
+| 800~1000 張 | 800,001 ~ 1,000,000 | `lv800_1000` |
+| 1000 張以上 | 1,000,001 以上 | `lv1000_up` |
+
+- 資料源：FinMind `taiwan_stock_holding_shares_per`
+- 追蹤指標：各級距**持股比例的週變化**（百分點）
+- **週頻**：集保每週五結算、次週初公布，與日 K 無法逐日對齊
+- 級距標籤格式未必穩定，解析以數字下界為準（見 `build_docs._level_lower_bound`）
+
+與三大法人買賣超的區別：法人是**流量**（這幾日買賣多少），大戶是**存量**
+（目前握有多少），兩者可互相印證但不可混用。
 
 ---
 
