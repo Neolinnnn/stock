@@ -40,6 +40,9 @@
     return Math.sqrt(mean(arr.map(v => (v - m) ** 2)));
   }
 
+    // 各 canvas 圖表的繪製高度（px）。主K線另由 .chartbox 的 CSS 高度決定。
+  const CANVAS_H = 220;
+
   // 集保大戶級距，分層互斥，與 build_docs._HOLDER_LEVELS 對應
   const HOLDER_LEVELS = [
     { key: 'lv1000_up',  label: '1000 張以上', color: '#e74c3c' },
@@ -241,7 +244,7 @@
   /** 多邊形雷達圖，畫在 canvas 上。axes = [{label, value 0~100}] */
   function drawRadar(canvas, axes, color) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = 170;
+    const w = canvas.clientWidth || 200, h = CANVAS_H;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -289,7 +292,7 @@
   /** 籌碼熱區圖：價格軸上的成交量分佈橫條。 */
   function drawHeatmap(canvas, profile, curPrice) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = 170;
+    const w = canvas.clientWidth || 200, h = CANVAS_H;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -328,7 +331,7 @@
   /** 主力成本結構分布：籌碼集中度的堆疊橫條。 */
   function drawCostStruct(canvas, profile, vwapPrice, curPrice) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = 170;
+    const w = canvas.clientWidth || 200, h = CANVAS_H;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -382,7 +385,7 @@
    */
   function drawHolders(canvas, holders) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 300, h = 170;
+    const w = canvas.clientWidth || 300, h = CANVAS_H;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -449,7 +452,7 @@
   /** 法人買賣超柱狀圖（近 20 日三大法人合計）。 */
   function drawChipBars(canvas, chip) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = 170;
+    const w = canvas.clientWidth || 200, h = CANVAS_H;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -512,7 +515,7 @@
 
   /** 01 主K線圖：沿用 lightweight-charts，與站內其他頁面一致。 */
   function cardMainChart(d) {
-    return `<div class="card c7"><h3><span class="no">01</span>主K線圖
+    return `<div class="card c8"><h3><span class="no">01</span>主K線圖
       <span class="sub">K + MA5/10/20/60 + 量</span></h3>
       <div class="chartbox" id="kline"></div></div>`;
   }
@@ -588,7 +591,7 @@
       ['壓力區', `<b>${L.resistance || '—'}</b>`],
       ['風險等級', `<span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>`],
     ];
-    return `<div class="card c3"><h3><span class="no">02</span>AI 決策核心
+    return `<div class="card c4"><h3><span class="no">02</span>AI 決策核心
       <span class="sub">AI DECISION CORE</span></h3>
       <div class="warn">⚠ ${d.signal?.label || 'AI CAUTION'}</div>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}
@@ -597,7 +600,7 @@
 
   /** 03 多維度評分雷達 */
   function cardRadar(sc) {
-    return `<div class="card c3"><h3><span class="no">03</span>多維度評分
+    return `<div class="card c4"><h3><span class="no">03</span>多維度評分
       <span class="sub">綜合 ${sc.total} / 100</span></h3>
       <canvas id="radar-score"></canvas>
       <div style="text-align:center;margin-top:4px;">
@@ -608,7 +611,7 @@
 
   /** 04 籌碼熱區圖 */
   function cardHeatmap() {
-    return `<div class="card c3"><h3><span class="no">04</span>AI 籌碼熱區圖
+    return `<div class="card c4"><h3><span class="no">04</span>AI 籌碼熱區圖
       <span class="sub">近 60 日價量分佈</span></h3>
       <canvas id="heatmap"></canvas>
       <div class="note">橫條長度為該價格區間累計成交量；虛線為現價。</div></div>`;
@@ -616,7 +619,7 @@
 
   /** 05 風險管理雷達 */
   function cardRiskRadar(rk) {
-    return `<div class="card c3"><h3><span class="no">05</span>風險管理雷達</h3>
+    return `<div class="card c4"><h3><span class="no">05</span>風險管理雷達</h3>
       <canvas id="radar-risk"></canvas>
       <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
         <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
