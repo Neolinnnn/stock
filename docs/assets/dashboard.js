@@ -40,7 +40,8 @@
     return Math.sqrt(mean(arr.map(v => (v - m) ** 2)));
   }
 
-    // 各 canvas 圖表的繪製高度（px）。主K線另由 .chartbox 的 CSS 高度決定。
+    // 雷達圖、熱區圖、大戶持股圖的繪製高度（px）。主K線由 .chartbox 的 CSS
+  // 高度決定；成本結構圖與法人柱狀圖依內容另訂高度，見各自的繪製函式。
   const CANVAS_H = 300;
 
   // 集保大戶級距，分層互斥，與 build_docs._HOLDER_LEVELS 對應
@@ -287,6 +288,16 @@
       const [x, y] = pt(i, R + 14);
       ctx.fillText(a.label, x, y);
     });
+
+    // 命中區以資料頂點為中心，取 44px 見方（觸控最小目標）
+    attachTooltip(canvas, axes.map((a, i) => {
+      const [x, y] = pt(i, R * clamp(a.value, 0, 100) / 100);
+      return {
+        x: x - 22, y: y - 22, w: 44, h: 44,
+        title: a.label,
+        rows: [{ label: '分數', value: Math.round(a.value) + ' / 100', color }],
+      };
+    }), { label: '雷達圖：' + axes.map(a => `${a.label} ${Math.round(a.value)} 分`).join('、') });
   }
 
   /** 籌碼熱區圖：價格軸上的成交量分佈橫條。 */
@@ -303,11 +314,11 @@
     const padL = 34, barW = w - padL - 6;
     bs.forEach((b, i) => {
       const y = h - (i + 1) * bh;
-      // 熱度：低量藍、中量黃、高量紅
+      // 成交量已由橫條長度表達，顏色再分三段（藍/黃/紅）等於同一個量編碼三次，
+      // 且紅色在台股語境代表上漲，用在「量大」上語意衝突。改為單一色相以明度表強弱。
       const t = b.ratio;
-      const col = t > 0.66 ? '#e74c3c' : t > 0.33 ? '#f1b143' : '#3d6ea8';
-      ctx.fillStyle = col;
-      ctx.globalAlpha = 0.35 + t * 0.65;
+      ctx.fillStyle = '#4ea1f3';
+      ctx.globalAlpha = 0.25 + t * 0.7;
       ctx.fillRect(padL, y + 0.5, Math.max(2, barW * t), bh - 1);
       ctx.globalAlpha = 1;
     });
@@ -315,8 +326,9 @@
     // 價格刻度（上中下三點）
     ctx.fillStyle = '#a8b2c1'; ctx.font = '13px sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    [[0, profile.hi], [h / 2, (profile.hi + profile.lo) / 2], [h - 6, profile.lo]]
-      .forEach(([y, p]) => ctx.fillText(Math.round(p), 2, y + 4));
+    // y 取 8 與 h-8：textBaseline 為 middle，貼齊 0 或 h 會讓字被畫布邊緣切掉一半
+    [[8, profile.hi], [h / 2, (profile.hi + profile.lo) / 2], [h - 8, profile.lo]]
+      .forEach(([y, p]) => ctx.fillText(Math.round(p), 2, y));
 
     // 現價線
     const span = profile.hi - profile.lo || 1;
@@ -326,12 +338,26 @@
       ctx.beginPath(); ctx.moveTo(padL, cy); ctx.lineTo(w, cy); ctx.stroke();
       ctx.setLineDash([]);
     }
+
+    // 命中區取整列寬度，游標不必壓在短橫條上
+    attachTooltip(canvas, bs.map((b, i) => ({
+      x: 0, y: h - (i + 1) * bh, w: w, h: bh,
+      title: `${fmt(b.lo, 1)} ~ ${fmt(b.hi, 1)} 元`,
+      rows: [
+        { label: '累計成交量', value: fmtInt(b.vol / 1000) + ' 張', color: '#4ea1f3' },
+        { label: '佔最大量', value: Math.round(b.ratio * 100) + '%' },
+        { label: '佔總量', value: (profile.total ? b.vol / profile.total * 100 : 0).toFixed(1) + '%' },
+      ],
+    })), { label: `籌碼熱區圖：近 60 日成交量分佈於 ${Math.round(profile.lo)} 至 `
+      + `${Math.round(profile.hi)} 元，共 ${bs.length} 個價格區間，可用方向鍵逐格讀值` });
   }
 
   /** 主力成本結構分布：籌碼集中度的堆疊橫條。 */
   function drawCostStruct(canvas, profile, vwapPrice, curPrice) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = CANVAS_H;
+    // 內容僅 3 段橫條加一行偏離說明，沿用 CANVAS_H 會留下約 140px 空白，
+    // 故高度依實際列數計算：3 段 × 42px + 起始 14px + 末行 26px。
+    const w = canvas.clientWidth || 200, h = 3 * 42 + 40;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -350,10 +376,11 @@
     });
     const t = profit + near + trapped || 1;
     const segs = [
-      { lab: '獲利區（成本低於現價 5%）', v: profit / t * 100, c: '#e74c3c' },
-      { lab: '成本區（現價 ±5%）', v: near / t * 100, c: '#f1b143' },
-      { lab: '套牢區（成本高於現價 5%）', v: trapped / t * 100, c: '#3d8bfd' },
+      { lab: '獲利區（成本低於現價 5%）', v: profit / t * 100, c: '#e74c3c', vol: profit },
+      { lab: '成本區（現價 ±5%）', v: near / t * 100, c: '#f1b143', vol: near },
+      { lab: '套牢區（成本高於現價 5%）', v: trapped / t * 100, c: '#3d8bfd', vol: trapped },
     ];
+    const marks = [];
 
     let y = 14;
     ctx.font = '14px sans-serif'; ctx.textBaseline = 'middle';
@@ -366,6 +393,14 @@
       ctx.fillRect(2, y + 10, (w - 4) * s.v / 100, 12);
       ctx.fillStyle = '#e8eaed'; ctx.textAlign = 'right';
       ctx.fillText(s.v.toFixed(1) + '%', w - 6, y + 16);
+      marks.push({
+        x: 0, y: y - 12, w: w, h: 40,
+        title: s.lab,
+        rows: [
+          { label: '佔比', value: s.v.toFixed(1) + '%', color: s.c },
+          { label: '成交量', value: fmtInt(s.vol / 1000) + ' 張' },
+        ],
+      });
       y += 42;
     });
 
@@ -374,6 +409,9 @@
     ctx.textAlign = 'left'; ctx.fillStyle = dev >= 0 ? '#e74c3c' : '#2ecc71';
     ctx.font = '13px sans-serif';
     ctx.fillText(`現價偏離 VWAP ${dev >= 0 ? '+' : ''}${dev.toFixed(2)}%`, 2, y + 4);
+
+    attachTooltip(canvas, marks, { label: '主力成本結構：'
+      + segs.map(x => `${x.lab} ${x.v.toFixed(1)}%`).join('、') });
   }
 
   /**
@@ -446,43 +484,269 @@
     ctx.textAlign = 'right';  ctx.fillText((holders.dates[n - 1] || '').slice(5), w - padR, h - 4);
     ctx.textAlign = 'left';   ctx.textBaseline = 'top';
     ctx.fillText('累積變化 (pp)', padL + 2, 2);
+
+    // 折線圖一次列出同一期的三個級距，游標不必落在任何一條線上
+    const half = n > 1 ? (w - padL - padR) / (n - 1) / 2 : w / 2;
+    attachTooltip(canvas, holders.dates.map((dt, i) => ({
+      x: x(i) - half, y: 0, w: half * 2, h: h,
+      title: dt,
+      rows: series.map(sr => ({
+        label: sr.label,
+        value: sr.deltas[i] === null ? '—'
+          : (sr.deltas[i] > 0 ? '+' : '') + sr.deltas[i].toFixed(3) + ' pp',
+        color: sr.color,
+      })),
+    })), { label: `大戶持股變化折線圖：${holders.dates[0]} 至 ${holders.dates[n - 1]}，`
+      + `共 ${n} 期，三個級距的累積變化，可用方向鍵逐期讀值`, nearestX: true });
   }
 
 
-  /** 法人買賣超柱狀圖（近 20 日三大法人合計）。 */
+  /**
+   * 法人買賣超柱狀圖：外資／投信／自營商各一格，共用 x 軸。
+   *
+   * 三者量級差距很大（外資的單日買賣超常是投信的 20 倍以上），疊在同一格
+   * 共用 y 軸的話投信與自營商會被壓成貼著零軸的一條線，等於看不到。故拆成
+   * 三格、各自以自身最大值歸一化，並在每格標題列印出該格的 ±最大值——
+   * 這是小倍數（small multiples），不是把兩個尺度疊在同一張圖的雙軸圖；
+   * 標出各自尺度就是為了讓讀者知道跨格的柱高不能直接比。
+   */
   function drawChipBars(canvas, chip) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = CANVAS_H;
+    const PANELS = [
+      { key: 'foreign', label: '外資' },
+      { key: 'trust',   label: '投信' },
+      { key: 'dealer',  label: '自營商' },
+    ];
+    const PANEL_H = 76, TITLE_H = 15;
+    const w = canvas.clientWidth || 200, h = PANEL_H * PANELS.length;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
 
-    const vals = tail(chip.total, 20);
-    if (!vals.length) return;
-    const mx = Math.max(...vals.map(Math.abs)) || 1;
-    const zero = h / 2, bw = w / vals.length;
-    ctx.strokeStyle = '#272c37';
-    ctx.beginPath(); ctx.moveTo(0, zero); ctx.lineTo(w, zero); ctx.stroke();
+    // tail() 會濾掉 null，直接用索引對 dates 會錯位；改為成對取用
+    const pairs = [];
+    for (let i = (chip.total || []).length - 1; i >= 0 && pairs.length < 20; i--) {
+      const v = chip.total[i];
+      if (v === null || v === undefined) continue;
+      pairs.unshift({ i, d: (chip.dates || [])[i] || '', v });
+    }
+    if (!pairs.length) return;
+    const bw = w / pairs.length;
+    const at = (arr, i) => nz((arr || [])[i]);
 
-    vals.forEach((v, i) => {
-      const bh = Math.abs(v) / mx * (h / 2 - 12);
-      ctx.fillStyle = v >= 0 ? '#e74c3c' : '#2ecc71';
-      ctx.fillRect(i * bw + 1, v >= 0 ? zero - bh : zero, bw - 2, bh);
+    const maxes = {};
+    PANELS.forEach((p, pi) => {
+      const top = pi * PANEL_H;
+      const vals = pairs.map(q => at(chip[p.key], q.i));
+      const mx = Math.max(...vals.map(Math.abs), 1);
+      maxes[p.key] = mx;
+      const plotH = PANEL_H - TITLE_H - 3;
+      const zero = top + TITLE_H + plotH / 2;
+      const half = plotH / 2 - 2;
+
+      // 標題列：格名 + 該格的尺度。柱高只在同一格內可比
+      ctx.font = '13px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = '#e8eaed'; ctx.fillText(p.label, 2, top + 1);
+      ctx.fillStyle = '#a8b2c1'; ctx.textAlign = 'right';
+      ctx.fillText('±' + fmtInt(mx) + ' 張', w - 2, top + 1);
+
+      ctx.strokeStyle = '#272c37'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, zero + .5); ctx.lineTo(w, zero + .5); ctx.stroke();
+
+      vals.forEach((v, k) => {
+        const bh = Math.abs(v) / mx * half;
+        ctx.fillStyle = v >= 0 ? '#e74c3c' : '#2ecc71';
+        ctx.fillRect(k * bw + 1, v >= 0 ? zero - bh : zero, bw - 2, bh);
+      });
     });
 
-    // 累計線
-    ctx.strokeStyle = '#f1b143'; ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    let acc = 0;
-    const accs = vals.map(v => (acc += v));
-    const amx = Math.max(...accs.map(Math.abs)) || 1;
-    accs.forEach((a, i) => {
-      const x = i * bw + bw / 2, y = zero - a / amx * (h / 2 - 12);
-      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    // 命中區跨三格取整條日期欄，一次列出當日三者與合計
+    attachTooltip(canvas, pairs.map((p, k) => ({
+      x: k * bw, y: 0, w: bw, h: h,
+      title: p.d,
+      rows: PANELS.map(pn => {
+        const v = at(chip[pn.key], p.i);
+        return { label: pn.label, value: fmtInt(v) + ' 張',
+                 color: v >= 0 ? '#e74c3c' : '#2ecc71' };
+      }).concat([{ label: '三大法人合計', value: fmtInt(p.v) + ' 張' }]),
+    })), { label: `法人買賣超：近 ${pairs.length} 個交易日，外資／投信／自營商各一格，`
+      + PANELS.map(pn => `${pn.label}單日最大 ${fmtInt(maxes[pn.key])} 張`).join('、')
+      + '，可用方向鍵逐日讀值' });
+  }
+
+
+  /**
+   * 集保大戶三級距的最新一期比例與週變化。
+   * 卡 17（總評）與卡 18（折線圖）共用，避免同一份計算寫兩次。
+   *
+   * 級距分層互斥、不累積；total 為三者相加，即「600 張以上」的累計集中度。
+   *
+   * @returns {null|{date, rows, total, totalDiff}} 無資料時回傳 null
+   */
+  function holderTiers(hd) {
+    if (!hd || !hd.dates || !hd.dates.length) return null;
+    const n = hd.dates.length;
+    const valAt = (key, i) => {
+      const v = ((hd.levels || {})[key] || [])[i];
+      return (v === null || v === undefined) ? null : v;
+    };
+    const rows = HOLDER_LEVELS.map(lv => {
+      const cur = valAt(lv.key, n - 1), prev = valAt(lv.key, n - 2);
+      return { ...lv, cur, diff: (cur !== null && prev !== null) ? cur - prev : null };
     });
-    ctx.stroke();
+    const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => a + (valAt(lv.key, i) || 0), 0);
+    const total = sumAt(n - 1);
+    return { date: hd.dates[n - 1], rows, total,
+             totalDiff: n > 1 ? total - sumAt(n - 2) : null };
+  }
+
+  /** 級距週變化的文字與漲跌色。pp = 百分點。 */
+  const ppText = diff =>
+    diff === null ? '—' : (diff > 0 ? '+' : '') + diff.toFixed(3) + ' pp';
+  const ppCls = diff =>
+    diff === null ? 'flat' : diff > 0 ? 'up' : diff < 0 ? 'dn' : 'flat';
+
+  /** 級距列：色標 + 名稱 + 最新比例 + 週變化。 */
+  const tierRow = r => `<div class="row"><span class="k">
+      <i style="display:inline-block;width:9px;height:3px;background:${r.color};
+        border-radius:2px;"></i>${r.label}</span>
+    <span class="v">${r.cur === null ? '—' : r.cur.toFixed(2) + '%'}
+      <span class="${ppCls(r.diff)}" style="font-size:11px;margin-left:6px;"
+        >${ppText(r.diff)}</span></span></div>`;
+
+  // ════════════════════════════════════════════════════════════════
+  //  互動層：canvas 圖表的 hover 與鍵盤讀值
+  // ════════════════════════════════════════════════════════════════
+  // canvas 畫完只是一張點陣圖，沒有可供瀏覽器命中的節點。各繪圖函式在畫完
+  // 後回報一份「標記矩形」清單（座標為 canvas 內的 CSS px），由這裡統一做
+  // 命中測試、浮層定位與鍵盤逐格瀏覽。
+  // 浮層掛在 document.body 以 position:fixed 定位 —— 卡片若有 overflow 或
+  // transform 的祖先，相對定位會被裁切或位移。
+
+  let _tip = null, _tipMark = null;
+
+  function ensureOverlay() {
+    if (_tip) return;
+    _tip = document.createElement('div');
+    _tip.className = 'sdash-tip';
+    _tip.setAttribute('role', 'tooltip');
+    _tipMark = document.createElement('div');
+    _tipMark.className = 'sdash-tipmark';
+    document.body.append(_tip, _tipMark);
+  }
+
+  function hideTip() {
+    if (!_tip) return;
+    _tip.style.display = 'none';
+    _tipMark.style.display = 'none';
+  }
+
+  /**
+   * 顯示單一標記的數值浮層。
+   * 文字一律以 textContent 寫入：標籤含個股名稱等外部資料，
+   * 用 innerHTML 串接等於開出注入面。
+   */
+  function showTip(canvas, m) {
+    if (!m) return;
+    ensureOverlay();
+    _tip.textContent = '';
+    const head = document.createElement('div');
+    head.className = 'tip-h';
+    head.textContent = m.title;
+    _tip.appendChild(head);
+    m.rows.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'tip-r';
+      const k = document.createElement('span');
+      k.className = 'tip-k';
+      if (r.color) { k.classList.add('keyed'); k.style.setProperty('--key', r.color); }
+      k.textContent = r.label;
+      const v = document.createElement('span');
+      v.className = 'tip-v';
+      v.textContent = r.value;
+      row.append(k, v);
+      _tip.appendChild(row);
+    });
+    _tip.style.display = 'block';
+
+    const b = canvas.getBoundingClientRect();
+    const mx = b.left + m.x, my = b.top + m.y;
+    const tw = _tip.offsetWidth, th = _tip.offsetHeight;
+    let left = mx + m.w + 10;
+    if (left + tw > window.innerWidth - 8) left = mx - tw - 10;   // 右邊放不下就翻左
+    const top = my + m.h / 2 - th / 2;
+    _tip.style.left = clamp(left, 8, Math.max(8, window.innerWidth - tw - 8)) + 'px';
+    _tip.style.top = clamp(top, 8, Math.max(8, window.innerHeight - th - 8)) + 'px';
+
+    _tipMark.style.display = 'block';
+    _tipMark.style.left = mx + 'px';
+    _tipMark.style.top = my + 'px';
+    _tipMark.style.width = m.w + 'px';
+    _tipMark.style.height = m.h + 'px';
+  }
+
+  /**
+   * 掛上讀值互動。
+   *
+   * @param {HTMLCanvasElement} canvas
+   * @param {Array} marks  [{x, y, w, h, title, rows:[{label, value, color?}]}]
+   * @param {object} opt   label：給螢幕閱讀器的整張圖摘要；
+   *                       nearestX：游標未落在任何標記上時，取 x 軸最近者（折線圖用）
+   */
+  function attachTooltip(canvas, marks, opt) {
+    if (!canvas || !marks.length) return;
+    opt = opt || {};
+    canvas._marks = marks;
+    canvas._idx = 0;
+    canvas.setAttribute('role', 'img');
+    if (opt.label) canvas.setAttribute('aria-label', opt.label);
+    if (canvas._tipBound) return;     // 重繪時只換資料，事件不重複掛
+    canvas._tipBound = true;
+    canvas.tabIndex = 0;
+
+    const hit = ev => {
+      const b = canvas.getBoundingClientRect();
+      const px = ev.clientX - b.left, py = ev.clientY - b.top;
+      const ms = canvas._marks;
+      const inside = ms.find(m =>
+        px >= m.x && px <= m.x + m.w && py >= m.y && py <= m.y + m.h);
+      if (inside || !opt.nearestX) return inside;
+      // 折線圖：游標只要「最接近」即可，不必壓在 2px 的線上
+      return ms.reduce((a, m) =>
+        Math.abs(px - (m.x + m.w / 2)) < Math.abs(px - (a.x + a.w / 2)) ? m : a);
+    };
+
+    const point = ev => {
+      const m = hit(ev);
+      if (!m) { hideTip(); return; }
+      canvas._idx = canvas._marks.indexOf(m);
+      showTip(canvas, m);
+    };
+
+    // 觸控只在點擊時顯示：在 canvas 上攔 pointermove 會讓手指無法捲動頁面
+    canvas.addEventListener('pointermove', ev => {
+      if (ev.pointerType === 'mouse') point(ev);
+    });
+    canvas.addEventListener('pointerdown', point);
+    canvas.addEventListener('pointerleave', hideTip);
+    canvas.addEventListener('blur', hideTip);
+    canvas.addEventListener('focus', () =>
+      showTip(canvas, canvas._marks[clamp(canvas._idx, 0, canvas._marks.length - 1)]));
+    canvas.addEventListener('keydown', ev => {
+      const n = canvas._marks.length;
+      let i = canvas._idx;
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') i = Math.min(i + 1, n - 1);
+      else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') i = Math.max(i - 1, 0);
+      else if (ev.key === 'Home') i = 0;
+      else if (ev.key === 'End') i = n - 1;
+      else if (ev.key === 'Escape') { hideTip(); return; }
+      else return;
+      ev.preventDefault();
+      canvas._idx = i;
+      showTip(canvas, canvas._marks[i]);
+    });
   }
 
   // ════════════════════════════════════════════════════════════════
@@ -517,7 +781,7 @@
   function cardMainChart(d) {
     return `<div class="card c12"><h3><span class="no">01</span>主K線圖
       <span class="sub">K + MA5/10/20/60 + 量</span></h3>
-      <div class="chartbox" id="kline"></div></div>`;
+      <div class="chartbox" id="kline"><div class="klegend" id="klegend"></div></div></div>`;
   }
 
   function mountMainChart(d) {
@@ -542,11 +806,12 @@
     const candles = o.date.map((t, i) => ({
       time: t, open: o.open[i], high: o.high[i], low: o.low[i], close: o.close[i]
     }));
-    _mainChart.addCandlestickSeries({
+    const candleSeries = _mainChart.addCandlestickSeries({
       upColor: '#e74c3c', downColor: '#2ecc71',
       borderUpColor: '#e74c3c', borderDownColor: '#2ecc71',
       wickUpColor: '#e74c3c', wickDownColor: '#2ecc71',
-    }).setData(candles);
+    });
+    candleSeries.setData(candles);
 
     // MA10 後端未提供，於此補算
     const ma10 = sma(o.close, 10);
@@ -572,6 +837,41 @@
       color: o.close[i] >= o.open[i] ? 'rgba(231,76,60,.45)' : 'rgba(46,204,113,.45)'
     })));
     _mainChart.timeScale().fitContent();
+
+    // lightweight-charts 的十字游標只標出軸值，OHLC 需自行組讀值列。
+    // 未指向任何一根時顯示最後一根，讀值列不會忽隱忽現造成版面跳動。
+    const lg = $('klegend');
+    const volAt = new Map(o.date.map((t, i) => [t, o.volume[i]]));
+    const lastBar = candles[candles.length - 1];
+    const setLegend = bar => {
+      if (!lg || !bar) return;
+      lg.textContent = '';
+      const up = bar.close >= bar.open;
+      const cells = [
+        ['', bar.time], ['開', fmt(bar.open, 1)], ['高', fmt(bar.high, 1)],
+        ['低', fmt(bar.low, 1)], ['收', fmt(bar.close, 1)],
+        ['量', fmtInt(nz(volAt.get(bar.time)) / 1000) + ' 張'],
+      ];
+      cells.forEach(([k, v]) => {
+        const sp = document.createElement('span');
+        if (k) {
+          const kk = document.createElement('i');
+          kk.textContent = k;
+          sp.appendChild(kk);
+        }
+        sp.appendChild(document.createTextNode(v));
+        if (k === '收' || k === '開' || k === '高' || k === '低') {
+          sp.className = up ? 'up' : 'dn';
+        }
+        lg.appendChild(sp);
+      });
+    };
+    setLegend(lastBar);
+    _mainChart.subscribeCrosshairMove(param => {
+      const bar = param.time && param.seriesData
+        ? param.seriesData.get(candleSeries) : null;
+      setLegend(bar ? { ...bar, time: param.time } : lastBar);
+    });
   }
 
   /** 02 AI 決策核心：彙整後端 summary + 前端衍生風險值。 */
@@ -591,7 +891,7 @@
       ['壓力區', `<b>${L.resistance || '—'}</b>`],
       ['風險等級', `<span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>`],
     ];
-    return `<div class="card c6"><h3><span class="no">02</span>AI 決策核心
+    return `<div class="card c4"><h3><span class="no">02</span>AI 決策核心
       <span class="sub">AI DECISION CORE</span></h3>
       <div class="warn">⚠ ${d.signal?.label || 'AI CAUTION'}</div>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}
@@ -600,7 +900,7 @@
 
   /** 03 多維度評分雷達 */
   function cardRadar(sc) {
-    return `<div class="card c6"><h3><span class="no">03</span>多維度評分
+    return `<div class="card c4"><h3><span class="no">03</span>多維度評分
       <span class="sub">綜合 ${sc.total} / 100</span></h3>
       <canvas id="radar-score"></canvas>
       <div style="text-align:center;margin-top:4px;">
@@ -611,7 +911,7 @@
 
   /** 04 籌碼熱區圖 */
   function cardHeatmap() {
-    return `<div class="card c6"><h3><span class="no">04</span>AI 籌碼熱區圖
+    return `<div class="card c4"><h3><span class="no">04</span>AI 籌碼熱區圖
       <span class="sub">近 60 日價量分佈</span></h3>
       <canvas id="heatmap"></canvas>
       <div class="note">橫條長度為該價格區間累計成交量；虛線為現價。</div></div>`;
@@ -619,7 +919,7 @@
 
   /** 05 風險管理雷達 */
   function cardRiskRadar(rk) {
-    return `<div class="card c6"><h3><span class="no">05</span>風險管理雷達</h3>
+    return `<div class="card c4"><h3><span class="no">05</span>風險管理雷達</h3>
       <canvas id="radar-risk"></canvas>
       <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
         <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
@@ -630,7 +930,7 @@
   /** 06 AI 預測路徑 */
   function cardPrediction(d) {
     const p = d.prediction || {};
-    return `<div class="card c6"><h3><span class="no">06</span>AI 預測路徑
+    return `<div class="card c4"><h3><span class="no">06</span>AI 預測路徑
       <span class="sub">後端模型輸出</span></h3>
       ${barRow('上漲', nz(p.up) * 100, '#e74c3c')}
       ${barRow('盤整', nz(p.sideways) * 100, '#f1b143')}
@@ -644,7 +944,7 @@
 
   /** 07 主力成本結構分布 */
   function cardCostStruct(vw, cur) {
-    return `<div class="card c6"><h3><span class="no">07</span>主力成本結構分布
+    return `<div class="card c4"><h3><span class="no">07</span>主力成本結構分布
       <span class="sub">20 日 VWAP ${fmt(vw, 2)}</span></h3>
       <canvas id="coststruct"></canvas></div>`;
   }
@@ -661,8 +961,8 @@
         自 <b class="${c.dealer[i] >= 0 ? 'up' : 'dn'}">${fmtInt(c.dealer[i])}</b></span></div>`);
     }
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c6"><h3><span class="no">08</span>法人行為計量
-      <span class="sub">三大法人買賣超（張）</span></h3>
+    return `<div class="card c4"><h3><span class="no">08</span>法人行為計量
+      <span class="sub">外資／投信／自營商（張）</span></h3>
       <canvas id="chipbars"></canvas>
       ${rows.join('')}
       <div class="row"><span class="k">近 20 日累計</span>
@@ -673,7 +973,7 @@
 
   /** 09 隔日沖風險分析（全為估算值） */
   function cardDaytradeRisk(rk) {
-    return `<div class="card c6"><h3><span class="no">09</span>隔日沖風險分析
+    return `<div class="card c4"><h3><span class="no">09</span>隔日沖風險分析
       <span class="sub">估算值</span></h3>
       ${barRow('主力出貨壓力', rk.distribute, '#e74c3c')}
       ${barRow('籌碼換手率', rk.turnover, '#f1b143')}
@@ -685,7 +985,7 @@
 
   /** 10 AI 多空能量條 */
   function cardEnergy(en) {
-    return `<div class="card c6"><h3><span class="no">10</span>AI 多空能量條
+    return `<div class="card c4"><h3><span class="no">10</span>AI 多空能量條
       <span class="sub">近 20 日量能歸屬</span></h3>
       ${barRow('多方量能', en.bull, '#e74c3c')}
       ${barRow('空方量能', en.bear, '#2ecc71')}
@@ -696,6 +996,8 @@
 
   /** 11 健康度綜合評估 */
   function cardHealth(sc) {
+    // 五項同為 0~100 的分數：環形圖比較相近數值的辨識度最差，且五種顏色
+    // 編碼的是「項目身分」而非量值。改橫條後可直接比長短，與卡 09/13 一致。
     const items = [
       ['籌碼健康度', sc.chip, '#4ea1f3'],
       ['技術面健康', sc.trend, '#e74c3c'],
@@ -704,8 +1006,8 @@
       ['動能強度', sc.momentum, '#7c5cff'],
     ];
     const avg = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c6"><h3><span class="no">11</span>健康度綜合評估</h3>
-      <div class="rings">${items.map(([l, v, c]) => ringSVG(v, c, l)).join('')}</div>
+    return `<div class="card c4"><h3><span class="no">11</span>健康度綜合評估</h3>
+      ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="row" style="margin-top:8px;"><span class="k">總評</span>
         <span class="v">${avg >= 70 ? '良好' : avg >= 50 ? '普通' : '偏弱'}（平均 ${avg} 分）</span></div></div>`;
   }
@@ -720,7 +1022,7 @@
     ];
     const reds = lights.filter(l => l[1] === 'r').length;
     const cur = reds >= 2 ? ['r', '紅燈（觀望）'] : reds === 1 ? ['y', '黃燈（注意）'] : ['g', '綠燈（可續抱）'];
-    return `<div class="card c6"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
+    return `<div class="card c4"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
       ${lights.map(([k, c, t]) =>
         `<div class="row"><span class="k"><i class="dot ${c === 'g' ? '' : c}"></i>${k}</span>
          <span class="v">${t}</span></div>`).join('')}
@@ -739,7 +1041,7 @@
       ['策略適用度', clamp(sc.total, 0, 100), '#7c5cff'],
     ];
     const conf = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c6"><h3><span class="no">13</span>AI 信心維度
+    return `<div class="card c4"><h3><span class="no">13</span>AI 信心維度
       <span class="sub">AI CONFIDENCE ${conf}%</span></h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="note">資料截至 ${last(d.ohlcv?.date) || '—'}</div></div>`;
@@ -754,7 +1056,7 @@
       ['自營商', c.dealer?.[n]],
       ['三大法人', c.total?.[n]],
     ];
-    return `<div class="card c6"><h3><span class="no">14</span>籌碼異動摘要
+    return `<div class="card c4"><h3><span class="no">14</span>籌碼異動摘要
       <span class="sub">${c.dates?.[n] || ''}</span></h3>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span>
         <span class="v ${nz(v) >= 0 ? 'up' : 'dn'}">${fmtInt(v)} 張</span></div>`).join('')}
@@ -773,7 +1075,7 @@
     const instRatio = clamp(vol5 ? net5abs / vol5 * 100 : 0, 0, 100);
     const retailRatio = 100 - instRatio;
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c6"><h3><span class="no">15</span>買賣力分佈
+    return `<div class="card c4"><h3><span class="no">15</span>買賣力分佈
       <span class="sub">法人流向強度（推估）</span></h3>
       <div class="rings">
         ${ringSVG(instRatio, '#e74c3c', '法人主導度')}
@@ -788,7 +1090,7 @@
 
   /** 16 多空強度分佈 */
   function cardStrength(sc, en) {
-    return `<div class="card c6"><h3><span class="no">16</span>多空強度分佈</h3>
+    return `<div class="card c4"><h3><span class="no">16</span>多空強度分佈</h3>
       <div class="rings">
         ${ringSVG(en.bull, '#e74c3c', '多方強度')}
         ${ringSVG(en.bear, '#2ecc71', '空方強度')}
@@ -807,17 +1109,33 @@
     const cur = last(d.ohlcv.close);
     const dev = vw ? (cur - vw) / vw * 100 : 0;
     const verdict = sc.total >= 70 ? '偏多加碼' : sc.total >= 50 ? '調節減碼' : '保守觀望';
+    // 法人是流量（這幾日買賣多少），大戶是存量（目前握有多少），
+    // 「主力追蹤」兩者都要看，故總評在法人淨額之外拆出集保三級距。
+    const ht = holderTiers(d.holders);
     const text = `經 ${d.ohlcv.close.length} 日行為綜合研判：法人近 20 日合計 `
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
+      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%，週變化 ${ppText(ht.totalDiff)}。` : '')
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
-    return `<div class="card c6"><h3><span class="no">17</span>主力追蹤總評
+    const tiers = ht
+      ? `<div class="row" style="border-top:1px solid var(--border);
+           margin-top:8px;padding-top:7px;">
+           <span class="k">大戶持股 <span class="est">集保 ${ht.date}</span></span>
+           <span class="v">600 張以上 ${ht.total.toFixed(2)}%
+             <span class="${ppCls(ht.totalDiff)}" style="font-size:11px;margin-left:6px;"
+               >${ppText(ht.totalDiff)}</span></span></div>
+         ${ht.rows.map(tierRow).join('')}`
+      : `<div class="note" style="border-top:1px solid var(--border);
+           margin-top:8px;padding-top:7px;">大戶三級距（1000 張以上／800~1000 張／
+           600~800 張）待集保資料就緒後顯示，來源同卡 18。</div>`;
+    return `<div class="card c4"><h3><span class="no">17</span>主力追蹤總評
       <span class="sub">規則引擎</span></h3>
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="verdict">${verdict}</span>
         <span class="pill" style="margin-left:auto;">${rk.level}風險</span>
       </div>
-      <div class="note" style="font-size:11px;line-height:1.7;">${text}</div></div>`;
+      <div class="note" style="line-height:1.7;">${text}</div>
+      ${tiers}</div>`;
   }
 
   /**
@@ -828,49 +1146,26 @@
     const hd = d.holders;
     const has = hd && hd.dates && hd.dates.length;
     if (!has) {
-      return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
+      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
         <span class="sub">集保股權分散表</span></h3>
         <div class="note" style="padding:14px 0;">
           尚無資料。此欄位需後端重跑 <code>build_docs.py</code> 取得集保股權分散表
           （<code>taiwan_stock_holding_shares_per</code>）後才會出現。</div></div>`;
     }
 
-    const n = hd.dates.length;
-    const rows = HOLDER_LEVELS.map(lv => {
-      const vals = (hd.levels || {})[lv.key] || [];
-      const cur = vals[n - 1], prev = vals[n - 2];
-      const diff = (cur != null && prev != null) ? cur - prev : null;
-      const dCls = diff == null ? 'flat' : diff > 0 ? 'up' : diff < 0 ? 'dn' : 'flat';
-      const dTxt = diff == null ? '—'
-        : `${diff > 0 ? '+' : ''}${diff.toFixed(3)} pp`;
-      return `<div class="row">
-        <span class="k"><i style="display:inline-block;width:9px;height:3px;
-          background:${lv.color};border-radius:2px;"></i>${lv.label}</span>
-        <span class="v">${cur == null ? '—' : cur.toFixed(2) + '%'}
-          <span class="${dCls}" style="font-size:11px;margin-left:6px;">${dTxt}</span></span>
-      </div>`;
-    }).join('');
-
-    // 三級距合計：600 張以上的整體集中度
-    const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => {
-      const v = ((hd.levels || {})[lv.key] || [])[i];
-      return a + (v == null ? 0 : v);
-    }, 0);
-    const tCur = sumAt(n - 1), tPrev = n > 1 ? sumAt(n - 2) : null;
-    const tDiff = tPrev == null ? null : tCur - tPrev;
-    const tCls = tDiff == null ? 'flat' : tDiff > 0 ? 'up' : tDiff < 0 ? 'dn' : 'flat';
+    const ht = holderTiers(hd);
 
     return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
-      <span class="sub">集保股權分散表 · 週頻 · 截至 ${hd.dates[n - 1]}</span></h3>
+      <span class="sub">集保股權分散表 · 週頻 · 截至 ${ht.date}</span></h3>
       <div class="holderwrap">
         <div><canvas id="holders"></canvas></div>
         <div>
-          ${rows}
+          ${ht.rows.map(tierRow).join('')}
           <div class="row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">
             <span class="k">600 張以上合計</span>
-            <span class="v">${tCur.toFixed(2)}%
-              <span class="${tCls}" style="font-size:11px;margin-left:6px;">${
-                tDiff == null ? '—' : (tDiff > 0 ? '+' : '') + tDiff.toFixed(3) + ' pp'}</span></span>
+            <span class="v">${ht.total.toFixed(2)}%
+              <span class="${ppCls(ht.totalDiff)}" style="font-size:11px;margin-left:6px;"
+                >${ppText(ht.totalDiff)}</span></span>
           </div>
           <div class="note">分層互斥，不累積。pp = 百分點。比例上升代表籌碼向該級距集中；
             集保每週五結算、次週初公布，與日 K 無法逐日對齊。</div>
@@ -924,6 +1219,7 @@
       cardHolders(d), cardRawTable(d),
     ].join('');
 
+    hideTip();
     const stEl = $('status');
     if (stEl) stEl.style.display = 'none';
     $('grid').style.display = 'grid';
@@ -977,6 +1273,7 @@
 
   /** 釋放主K線圖表實例。切換個股或離開分頁前呼叫。 */
   function destroyDashboard() {
+    hideTip();
     if (_mainChart) { _mainChart.remove(); _mainChart = null; }
   }
 
