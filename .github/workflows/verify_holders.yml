@@ -1,7 +1,7 @@
 name: 驗證集保大戶資料
 
-# 開發環境無法連線 FinMind，此 workflow 讓 runner 代跑 scripts/verify_holders.py，
-# 以確認 taiwan_stock_holding_shares_per 的實際回應格式與解析結果。
+# 確認集保（TDCC）open data 的端點、欄位與分級對照仍如預期。
+# 集保端點免認證、只用標準庫，所以不需要 token 也不需要安裝相依套件。
 on:
   workflow_dispatch:
     inputs:
@@ -11,7 +11,7 @@ on:
         default: '2330'
         type: string
       weeks:
-        description: '取最近幾期'
+        description: '時間序列取最近幾期'
         required: false
         default: '12'
         type: string
@@ -27,18 +27,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
-          pip install "setuptools<68" -q
-          pip install -r requirements.txt -q
 
       - name: Verify holders dataset
-        env:
-          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: |
           python scripts/verify_holders.py \
             "${{ github.event.inputs.stock_id }}" \

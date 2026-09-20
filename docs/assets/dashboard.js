@@ -598,8 +598,20 @@
     });
     const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => a + (valAt(lv.key, i) || 0), 0);
     const total = sumAt(n - 1);
-    return { date: hd.dates[n - 1], rows, total,
-             totalDiff: n > 1 ? total - sumAt(n - 2) : null };
+    // 快照每期一份，正常相隔一週。但掃描的 cron 事件被 GitHub 丟棄是實際
+    // 發生過的事（見 daily_scan.yml 的註解），連續漏一週就會少掉一期快照，
+    // 此時差值跨越兩期以上，不能再稱為「週變化」。
+    const gap = n > 1 ? _dayGap(hd.dates[n - 2], hd.dates[n - 1]) : null;
+    return { date: hd.dates[n - 1], prevDate: n > 1 ? hd.dates[n - 2] : null,
+             rows, total,
+             totalDiff: n > 1 ? total - sumAt(n - 2) : null,
+             weekly: gap !== null && gap <= 10 };
+  }
+
+  /** 兩個 YYYY-MM-DD 相距幾天；無法解析時回 null。 */
+  function _dayGap(a, b) {
+    const t1 = Date.parse(a), t2 = Date.parse(b);
+    return (isNaN(t1) || isNaN(t2)) ? null : Math.round((t2 - t1) / 86400000);
   }
 
   /** 級距週變化的文字與漲跌色。pp = 百分點。 */
@@ -1115,7 +1127,10 @@
     const text = `經 ${d.ohlcv.close.length} 日行為綜合研判：法人近 20 日合計 `
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
-      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%，週變化 ${ppText(ht.totalDiff)}。` : '')
+      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%`
+        + (ht.totalDiff === null ? '（集保首期，尚無週變化）。'
+           : ht.weekly ? `，週變化 ${ppText(ht.totalDiff)}。`
+           : `，較前期 ${ht.prevDate} 變化 ${ppText(ht.totalDiff)}。`) : '')
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
     const tiers = ht
       ? `<div class="row" style="border-top:1px solid var(--border);
@@ -1154,6 +1169,20 @@
     }
 
     const ht = holderTiers(hd);
+
+    // 只有一期時折線圖畫不出任何變化（三條線各只有一個點），
+    // 與其給一張看似故障的空圖，不如直接呈現數值並說明歷史如何累積。
+    if (hd.dates.length < 2) {
+      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
+        <span class="sub">集保股權分散表 · ${ht.date}</span></h3>
+        ${ht.rows.map(tierRow).join('')}
+        <div class="row" style="border-top:1px solid var(--border);
+          margin-top:4px;padding-top:6px;">
+          <span class="k">600 張以上合計</span>
+          <span class="v">${ht.total.toFixed(2)}%</span></div>
+        <div class="note">分層互斥，不累積。集保每週五結算、次週初公布，
+          目前只有這一期，累積到兩期以上才畫得出週變化趨勢。</div></div>`;
+    }
 
     return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
       <span class="sub">集保股權分散表 · 週頻 · 截至 ${ht.date}</span></h3>
@@ -1242,7 +1271,8 @@
     safe('heatmap', () => drawHeatmap($('heatmap'), vp, cur));
     safe('coststruct', () => drawCostStruct($('coststruct'), vp, vw, cur));
     safe('chipbars', () => drawChipBars($('chipbars'), d.chip || {}));
-    if (d.holders && d.holders.dates && d.holders.dates.length) {
+    // 一期畫不出折線，cardHolders 該情況下不會放 canvas
+    if (d.holders && d.holders.dates && d.holders.dates.length > 1) {
       safe('holders', () => drawHolders($('holders'), d.holders));
     }
   }

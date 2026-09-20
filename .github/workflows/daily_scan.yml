@@ -211,6 +211,9 @@ jobs:
           git add daily_reports/ docs/
           # 動能雷達快取（若當日 collect 失敗目錄可能不存在）
           [ -d data/radar_cache ] && git add data/radar_cache/ || true
+          # 集保大戶快照：集保端點只給最新一期，歷史靠每期快照累積。
+          # 漏掉這行的話 runner 寫的快照會隨 runner 銷毀，卡 18 永遠停在一期。
+          [ -d data/holders ] && git add data/holders/ || true
           # 強制重新產生 dates.json（從 docs/ 現有 JSON 掃描），確保即使 build_docs
           # 中途失敗也不會漏掉新日期
           python3 -c "
