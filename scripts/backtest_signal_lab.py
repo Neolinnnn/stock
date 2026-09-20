@@ -47,7 +47,8 @@ PROFIT_FLOOR = 0.07
 PHASE1_SL = 0.15
 PHASE2_TIMEOUT = 25
 
-MAX_BIAS_MA10 = 2.0             # 與 daily_scan 同值
+MAX_BIAS_MA10 = 2.0             # 與 daily_scan 同值（BIAS_GRID 的基準點）
+BIAS_GRID = [1.0, 1.5, 2.0, 2.5, 3.0, 4.0]   # 乖離 MA10 上限掃描格點（%）
 SECTOR_STRONG_RET = 3.0         # 族群 avg_ret_20d > 3% 視為強勢
 
 
@@ -395,6 +396,7 @@ def main():
                             if sum(v) / len(v) * 100 > SECTOR_STRONG_RET}
 
     results: dict[str, dict] = {}
+    mid = all_dates[len(all_dates) // 2]
     for key, (label, fn) in VARIANTS.items():
         raw_hits: list[tuple[str, Series, int]] = []      # (date, series, t)
         for d in all_dates:
@@ -405,7 +407,8 @@ def main():
                 if fn(s, t):
                     raw_hits.append((d, s, t))
 
-        picks = {'qualified': [], 'gate': []}
+        # 閘門判定一次算完，乖離門檻留到掃描時才比較
+        passed: list[tuple] = []   # (date, series, t, bias, qualified_ok, gate_ok)
         for d, s, t in raw_hits:
             sharpe, win, dd = s.cv(t)
             if sharpe < 0:                                  # analyze_stock：CV 夏普<0 降 HOLD
@@ -413,48 +416,56 @@ def main():
             ma5, ma10, ma20, ma60, c = s.ma5[t], s.ma10[t], s.ma20[t], s.ma60[t], s.close[t]
             if None in (ma5, ma10, ma20, ma60) or ma10 == 0:
                 continue
-            bias = (c - ma10) / ma10 * 100
             strong = s.sector in sector_strong[d]
-            if sharpe >= 0.3 and win >= 0.4 and dd <= 0.2 and bias <= MAX_BIAS_MA10 and strong:
-                picks['qualified'].append((d, s, t))
-            if taiex_bull.get(d) and c > ma5 > ma20 > ma60 and strong and bias <= MAX_BIAS_MA10:
-                picks['gate'].append((d, s, t))
+            passed.append((d, s, t, (c - ma10) / ma10 * 100,
+                           sharpe >= 0.3 and win >= 0.4 and dd <= 0.2 and strong,
+                           bool(taiex_bull.get(d)) and c > ma5 > ma20 > ma60 and strong))
 
-        results[key] = {'label': label, 'raw_signals': len(raw_hits), 'tracks': {}}
-        for track, hits in picks.items():
-            for exit_name, sim in EXITS.items():
-                trades, busy = [], {}       # busy[sid] = 出場前不得重複進場
-                for d, s, t in sorted(hits, key=lambda x: (x[0], x[1].id)):
-                    if busy.get(s.id, -1) >= t:
-                        continue
-                    r = sim(s, t)
-                    busy[s.id] = r['exit_i'] if r else len(s.close)
-                    trades.append({'date': d, 'id': s.id, 'name': s.name, 'sector': s.sector,
-                                   'ret': r['ret'] if r else None,
-                                   'days': r['days'] if r else None,
-                                   'why': r['why'] if r else 'OPEN'})
-                mid = all_dates[len(all_dates) // 2]
-                results[key]['tracks'][f'{track}/{exit_name}'] = {
-                    'all': summarize(trades),
-                    'first_half': summarize([t for t in trades if t['date'] < mid]),
-                    'second_half': summarize([t for t in trades if t['date'] >= mid]),
-                    'trades': trades,
-                }
-        q = results[key]['tracks']['qualified/HYBRID']['all']
-        g = results[key]['tracks']['gate/HYBRID']['all']
-        print(f"  {key:8s} 原始訊號 {len(raw_hits):5d}｜qualified {q.get('n', 0):3d} 筆"
-              f"｜gate {g.get('n', 0):3d} 筆")
+        results[key] = {'label': label, 'raw_signals': len(raw_hits), 'bias': {}}
+        for bias_cap in BIAS_GRID:
+            picks = {
+                'qualified': [(d, s, t) for d, s, t, b, q, g in passed if q and b <= bias_cap],
+                'gate':      [(d, s, t) for d, s, t, b, q, g in passed if g and b <= bias_cap],
+            }
+            tracks = {}
+            for track, hits in picks.items():
+                for exit_name, sim in EXITS.items():
+                    trades, busy = [], {}   # busy[sid] = 出場前不得重複進場
+                    for d, s, t in sorted(hits, key=lambda x: (x[0], x[1].id)):
+                        if busy.get(s.id, -1) >= t:
+                            continue
+                        r = sim(s, t)
+                        busy[s.id] = r['exit_i'] if r else len(s.close)
+                        trades.append({'date': d, 'id': s.id, 'name': s.name, 'sector': s.sector,
+                                       'ret': r['ret'] if r else None,
+                                       'days': r['days'] if r else None,
+                                       'why': r['why'] if r else 'OPEN'})
+                    tracks[f'{track}/{exit_name}'] = {
+                        'all': summarize(trades),
+                        'first_half': summarize([x for x in trades if x['date'] < mid]),
+                        'second_half': summarize([x for x in trades if x['date'] >= mid]),
+                        'trades': trades,
+                    }
+            results[key]['bias'][f'{bias_cap:g}'] = tracks
+            g = tracks['gate/HYBRID']['all']
+            q = tracks['qualified/HYBRID']['all']
+            print(f"  {key:8s} 乖離≤{bias_cap:>3g}%｜qualified {q.get('n', 0):3d} 筆 "
+                  f"勝率 {q.get('win_rate', 0):4.1f}% PF {q.get('profit_factor', 0):4.2f}"
+                  f"｜gate {g.get('n', 0):3d} 筆 勝率 {g.get('win_rate', 0):4.1f}% "
+                  f"PF {g.get('profit_factor', 0):4.2f}")
 
     out = ROOT / 'docs' / 'signal_lab.json'
     out.write_text(json.dumps({
         'generated_at': time.strftime('%Y-%m-%d %H:%M'),
         'period': [all_dates[0], all_dates[-1]],
         'universe': len(stocks),
+        'bias_grid': BIAS_GRID,
+        # 交易明細只留正式乖離門檻（2%）的 gate/HYBRID 軌，其餘僅存統計
         'variants': {k: {'label': v['label'], 'raw_signals': v['raw_signals'],
-                         # 交易明細只留正式流程對應的 gate/HYBRID 軌，其餘僅存統計
-                         'tracks': {tk: (tv if tk == 'gate/HYBRID'
-                                         else {kk: vv for kk, vv in tv.items() if kk != 'trades'})
-                                    for tk, tv in v['tracks'].items()}}
+                         'bias': {bk: {tk: (tv if (bk == '2' and tk == 'gate/HYBRID')
+                                            else {kk: vv for kk, vv in tv.items() if kk != 'trades'})
+                                       for tk, tv in bv.items()}
+                                  for bk, bv in v['bias'].items()}}
                      for k, v in results.items()},
     }, ensure_ascii=False, indent=1), encoding='utf-8')
     print(f'\n已寫出 {out}')
