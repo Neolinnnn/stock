@@ -1115,7 +1115,9 @@
     const text = `經 ${d.ohlcv.close.length} 日行為綜合研判：法人近 20 日合計 `
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
-      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%，週變化 ${ppText(ht.totalDiff)}。` : '')
+      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%`
+        + (ht.totalDiff === null ? '（集保首期，尚無週變化）。'
+                                 : `，週變化 ${ppText(ht.totalDiff)}。`) : '')
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
     const tiers = ht
       ? `<div class="row" style="border-top:1px solid var(--border);
