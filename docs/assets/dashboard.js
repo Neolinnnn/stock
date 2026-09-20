@@ -288,6 +288,16 @@
       const [x, y] = pt(i, R + 14);
       ctx.fillText(a.label, x, y);
     });
+
+    // 命中區以資料頂點為中心，取 44px 見方（觸控最小目標）
+    attachTooltip(canvas, axes.map((a, i) => {
+      const [x, y] = pt(i, R * clamp(a.value, 0, 100) / 100);
+      return {
+        x: x - 22, y: y - 22, w: 44, h: 44,
+        title: a.label,
+        rows: [{ label: '分數', value: Math.round(a.value) + ' / 100', color }],
+      };
+    }), { label: '雷達圖：' + axes.map(a => `${a.label} ${Math.round(a.value)} 分`).join('、') });
   }
 
   /** 籌碼熱區圖：價格軸上的成交量分佈橫條。 */
@@ -328,6 +338,18 @@
       ctx.beginPath(); ctx.moveTo(padL, cy); ctx.lineTo(w, cy); ctx.stroke();
       ctx.setLineDash([]);
     }
+
+    // 命中區取整列寬度，游標不必壓在短橫條上
+    attachTooltip(canvas, bs.map((b, i) => ({
+      x: 0, y: h - (i + 1) * bh, w: w, h: bh,
+      title: `${fmt(b.lo, 1)} ~ ${fmt(b.hi, 1)} 元`,
+      rows: [
+        { label: '累計成交量', value: fmtInt(b.vol / 1000) + ' 張', color: '#4ea1f3' },
+        { label: '佔最大量', value: Math.round(b.ratio * 100) + '%' },
+        { label: '佔總量', value: (profile.total ? b.vol / profile.total * 100 : 0).toFixed(1) + '%' },
+      ],
+    })), { label: `籌碼熱區圖：近 60 日成交量分佈於 ${Math.round(profile.lo)} 至 `
+      + `${Math.round(profile.hi)} 元，共 ${bs.length} 個價格區間，可用方向鍵逐格讀值` });
   }
 
   /** 主力成本結構分布：籌碼集中度的堆疊橫條。 */
@@ -354,10 +376,11 @@
     });
     const t = profit + near + trapped || 1;
     const segs = [
-      { lab: '獲利區（成本低於現價 5%）', v: profit / t * 100, c: '#e74c3c' },
-      { lab: '成本區（現價 ±5%）', v: near / t * 100, c: '#f1b143' },
-      { lab: '套牢區（成本高於現價 5%）', v: trapped / t * 100, c: '#3d8bfd' },
+      { lab: '獲利區（成本低於現價 5%）', v: profit / t * 100, c: '#e74c3c', vol: profit },
+      { lab: '成本區（現價 ±5%）', v: near / t * 100, c: '#f1b143', vol: near },
+      { lab: '套牢區（成本高於現價 5%）', v: trapped / t * 100, c: '#3d8bfd', vol: trapped },
     ];
+    const marks = [];
 
     let y = 14;
     ctx.font = '14px sans-serif'; ctx.textBaseline = 'middle';
@@ -370,6 +393,14 @@
       ctx.fillRect(2, y + 10, (w - 4) * s.v / 100, 12);
       ctx.fillStyle = '#e8eaed'; ctx.textAlign = 'right';
       ctx.fillText(s.v.toFixed(1) + '%', w - 6, y + 16);
+      marks.push({
+        x: 0, y: y - 12, w: w, h: 40,
+        title: s.lab,
+        rows: [
+          { label: '佔比', value: s.v.toFixed(1) + '%', color: s.c },
+          { label: '成交量', value: fmtInt(s.vol / 1000) + ' 張' },
+        ],
+      });
       y += 42;
     });
 
@@ -378,6 +409,9 @@
     ctx.textAlign = 'left'; ctx.fillStyle = dev >= 0 ? '#e74c3c' : '#2ecc71';
     ctx.font = '13px sans-serif';
     ctx.fillText(`現價偏離 VWAP ${dev >= 0 ? '+' : ''}${dev.toFixed(2)}%`, 2, y + 4);
+
+    attachTooltip(canvas, marks, { label: '主力成本結構：'
+      + segs.map(x => `${x.lab} ${x.v.toFixed(1)}%`).join('、') });
   }
 
   /**
@@ -450,6 +484,20 @@
     ctx.textAlign = 'right';  ctx.fillText((holders.dates[n - 1] || '').slice(5), w - padR, h - 4);
     ctx.textAlign = 'left';   ctx.textBaseline = 'top';
     ctx.fillText('累積變化 (pp)', padL + 2, 2);
+
+    // 折線圖一次列出同一期的三個級距，游標不必落在任何一條線上
+    const half = n > 1 ? (w - padL - padR) / (n - 1) / 2 : w / 2;
+    attachTooltip(canvas, holders.dates.map((dt, i) => ({
+      x: x(i) - half, y: 0, w: half * 2, h: h,
+      title: dt,
+      rows: series.map(sr => ({
+        label: sr.label,
+        value: sr.deltas[i] === null ? '—'
+          : (sr.deltas[i] > 0 ? '+' : '') + sr.deltas[i].toFixed(3) + ' pp',
+        color: sr.color,
+      })),
+    })), { label: `大戶持股變化折線圖：${holders.dates[0]} 至 ${holders.dates[n - 1]}，`
+      + `共 ${n} 期，三個級距的累積變化，可用方向鍵逐期讀值`, nearestX: true });
   }
 
 
@@ -465,7 +513,14 @@
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
 
-    const vals = tail(chip.total, 20);
+    // tail() 會濾掉 null，直接用索引對 dates 會錯位；改為成對取用
+    const pairs = [];
+    for (let i = (chip.total || []).length - 1; i >= 0 && pairs.length < 20; i--) {
+      const v = chip.total[i];
+      if (v === null || v === undefined) continue;
+      pairs.unshift({ i, d: (chip.dates || [])[i] || '', v });
+    }
+    const vals = pairs.map(p => p.v);
     if (!vals.length) return;
     const mx = Math.max(...vals.map(Math.abs)) || 1;
     const zero = h / 2, bw = w / vals.length;
@@ -488,6 +543,153 @@
     ctx.fillText('+' + fmtInt(mx), 2, 2);
     ctx.textBaseline = 'bottom';
     ctx.fillText('-' + fmtInt(mx), 2, h - 2);
+
+    // 命中區取整根柱位的高度，細柱也好點
+    const at = (arr, i) => (arr || [])[i];
+    attachTooltip(canvas, pairs.map((p, k) => ({
+      x: k * bw, y: 0, w: bw, h: h,
+      title: p.d,
+      rows: [
+        { label: '三大法人', value: fmtInt(p.v) + ' 張', color: p.v >= 0 ? '#e74c3c' : '#2ecc71' },
+        { label: '外資', value: fmtInt(at(chip.foreign, p.i)) + ' 張' },
+        { label: '投信', value: fmtInt(at(chip.trust, p.i)) + ' 張' },
+        { label: '自營商', value: fmtInt(at(chip.dealer, p.i)) + ' 張' },
+      ],
+    })), { label: `三大法人買賣超柱狀圖：近 ${vals.length} 個交易日，`
+      + `單日最大 ${fmtInt(mx)} 張，可用方向鍵逐日讀值` });
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  //  互動層：canvas 圖表的 hover 與鍵盤讀值
+  // ════════════════════════════════════════════════════════════════
+  // canvas 畫完只是一張點陣圖，沒有可供瀏覽器命中的節點。各繪圖函式在畫完
+  // 後回報一份「標記矩形」清單（座標為 canvas 內的 CSS px），由這裡統一做
+  // 命中測試、浮層定位與鍵盤逐格瀏覽。
+  // 浮層掛在 document.body 以 position:fixed 定位 —— 卡片若有 overflow 或
+  // transform 的祖先，相對定位會被裁切或位移。
+
+  let _tip = null, _tipMark = null;
+
+  function ensureOverlay() {
+    if (_tip) return;
+    _tip = document.createElement('div');
+    _tip.className = 'sdash-tip';
+    _tip.setAttribute('role', 'tooltip');
+    _tipMark = document.createElement('div');
+    _tipMark.className = 'sdash-tipmark';
+    document.body.append(_tip, _tipMark);
+  }
+
+  function hideTip() {
+    if (!_tip) return;
+    _tip.style.display = 'none';
+    _tipMark.style.display = 'none';
+  }
+
+  /**
+   * 顯示單一標記的數值浮層。
+   * 文字一律以 textContent 寫入：標籤含個股名稱等外部資料，
+   * 用 innerHTML 串接等於開出注入面。
+   */
+  function showTip(canvas, m) {
+    if (!m) return;
+    ensureOverlay();
+    _tip.textContent = '';
+    const head = document.createElement('div');
+    head.className = 'tip-h';
+    head.textContent = m.title;
+    _tip.appendChild(head);
+    m.rows.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'tip-r';
+      const k = document.createElement('span');
+      k.className = 'tip-k';
+      if (r.color) { k.classList.add('keyed'); k.style.setProperty('--key', r.color); }
+      k.textContent = r.label;
+      const v = document.createElement('span');
+      v.className = 'tip-v';
+      v.textContent = r.value;
+      row.append(k, v);
+      _tip.appendChild(row);
+    });
+    _tip.style.display = 'block';
+
+    const b = canvas.getBoundingClientRect();
+    const mx = b.left + m.x, my = b.top + m.y;
+    const tw = _tip.offsetWidth, th = _tip.offsetHeight;
+    let left = mx + m.w + 10;
+    if (left + tw > window.innerWidth - 8) left = mx - tw - 10;   // 右邊放不下就翻左
+    const top = my + m.h / 2 - th / 2;
+    _tip.style.left = clamp(left, 8, Math.max(8, window.innerWidth - tw - 8)) + 'px';
+    _tip.style.top = clamp(top, 8, Math.max(8, window.innerHeight - th - 8)) + 'px';
+
+    _tipMark.style.display = 'block';
+    _tipMark.style.left = mx + 'px';
+    _tipMark.style.top = my + 'px';
+    _tipMark.style.width = m.w + 'px';
+    _tipMark.style.height = m.h + 'px';
+  }
+
+  /**
+   * 掛上讀值互動。
+   *
+   * @param {HTMLCanvasElement} canvas
+   * @param {Array} marks  [{x, y, w, h, title, rows:[{label, value, color?}]}]
+   * @param {object} opt   label：給螢幕閱讀器的整張圖摘要；
+   *                       nearestX：游標未落在任何標記上時，取 x 軸最近者（折線圖用）
+   */
+  function attachTooltip(canvas, marks, opt) {
+    if (!canvas || !marks.length) return;
+    opt = opt || {};
+    canvas._marks = marks;
+    canvas._idx = 0;
+    canvas.setAttribute('role', 'img');
+    if (opt.label) canvas.setAttribute('aria-label', opt.label);
+    if (canvas._tipBound) return;     // 重繪時只換資料，事件不重複掛
+    canvas._tipBound = true;
+    canvas.tabIndex = 0;
+
+    const hit = ev => {
+      const b = canvas.getBoundingClientRect();
+      const px = ev.clientX - b.left, py = ev.clientY - b.top;
+      const ms = canvas._marks;
+      const inside = ms.find(m =>
+        px >= m.x && px <= m.x + m.w && py >= m.y && py <= m.y + m.h);
+      if (inside || !opt.nearestX) return inside;
+      // 折線圖：游標只要「最接近」即可，不必壓在 2px 的線上
+      return ms.reduce((a, m) =>
+        Math.abs(px - (m.x + m.w / 2)) < Math.abs(px - (a.x + a.w / 2)) ? m : a);
+    };
+
+    const point = ev => {
+      const m = hit(ev);
+      if (!m) { hideTip(); return; }
+      canvas._idx = canvas._marks.indexOf(m);
+      showTip(canvas, m);
+    };
+
+    // 觸控只在點擊時顯示：在 canvas 上攔 pointermove 會讓手指無法捲動頁面
+    canvas.addEventListener('pointermove', ev => {
+      if (ev.pointerType === 'mouse') point(ev);
+    });
+    canvas.addEventListener('pointerdown', point);
+    canvas.addEventListener('pointerleave', hideTip);
+    canvas.addEventListener('blur', hideTip);
+    canvas.addEventListener('focus', () =>
+      showTip(canvas, canvas._marks[clamp(canvas._idx, 0, canvas._marks.length - 1)]));
+    canvas.addEventListener('keydown', ev => {
+      const n = canvas._marks.length;
+      let i = canvas._idx;
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') i = Math.min(i + 1, n - 1);
+      else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') i = Math.max(i - 1, 0);
+      else if (ev.key === 'Home') i = 0;
+      else if (ev.key === 'End') i = n - 1;
+      else if (ev.key === 'Escape') { hideTip(); return; }
+      else return;
+      ev.preventDefault();
+      canvas._idx = i;
+      showTip(canvas, canvas._marks[i]);
+    });
   }
 
   // ════════════════════════════════════════════════════════════════
@@ -522,7 +724,7 @@
   function cardMainChart(d) {
     return `<div class="card c12"><h3><span class="no">01</span>主K線圖
       <span class="sub">K + MA5/10/20/60 + 量</span></h3>
-      <div class="chartbox" id="kline"></div></div>`;
+      <div class="chartbox" id="kline"><div class="klegend" id="klegend"></div></div></div>`;
   }
 
   function mountMainChart(d) {
@@ -547,11 +749,12 @@
     const candles = o.date.map((t, i) => ({
       time: t, open: o.open[i], high: o.high[i], low: o.low[i], close: o.close[i]
     }));
-    _mainChart.addCandlestickSeries({
+    const candleSeries = _mainChart.addCandlestickSeries({
       upColor: '#e74c3c', downColor: '#2ecc71',
       borderUpColor: '#e74c3c', borderDownColor: '#2ecc71',
       wickUpColor: '#e74c3c', wickDownColor: '#2ecc71',
-    }).setData(candles);
+    });
+    candleSeries.setData(candles);
 
     // MA10 後端未提供，於此補算
     const ma10 = sma(o.close, 10);
@@ -577,6 +780,41 @@
       color: o.close[i] >= o.open[i] ? 'rgba(231,76,60,.45)' : 'rgba(46,204,113,.45)'
     })));
     _mainChart.timeScale().fitContent();
+
+    // lightweight-charts 的十字游標只標出軸值，OHLC 需自行組讀值列。
+    // 未指向任何一根時顯示最後一根，讀值列不會忽隱忽現造成版面跳動。
+    const lg = $('klegend');
+    const volAt = new Map(o.date.map((t, i) => [t, o.volume[i]]));
+    const lastBar = candles[candles.length - 1];
+    const setLegend = bar => {
+      if (!lg || !bar) return;
+      lg.textContent = '';
+      const up = bar.close >= bar.open;
+      const cells = [
+        ['', bar.time], ['開', fmt(bar.open, 1)], ['高', fmt(bar.high, 1)],
+        ['低', fmt(bar.low, 1)], ['收', fmt(bar.close, 1)],
+        ['量', fmtInt(nz(volAt.get(bar.time)) / 1000) + ' 張'],
+      ];
+      cells.forEach(([k, v]) => {
+        const sp = document.createElement('span');
+        if (k) {
+          const kk = document.createElement('i');
+          kk.textContent = k;
+          sp.appendChild(kk);
+        }
+        sp.appendChild(document.createTextNode(v));
+        if (k === '收' || k === '開' || k === '高' || k === '低') {
+          sp.className = up ? 'up' : 'dn';
+        }
+        lg.appendChild(sp);
+      });
+    };
+    setLegend(lastBar);
+    _mainChart.subscribeCrosshairMove(param => {
+      const bar = param.time && param.seriesData
+        ? param.seriesData.get(candleSeries) : null;
+      setLegend(bar ? { ...bar, time: param.time } : lastBar);
+    });
   }
 
   /** 02 AI 決策核心：彙整後端 summary + 前端衍生風險值。 */
@@ -931,6 +1169,7 @@
       cardHolders(d), cardRawTable(d),
     ].join('');
 
+    hideTip();
     const stEl = $('status');
     if (stEl) stEl.style.display = 'none';
     $('grid').style.display = 'grid';
@@ -984,6 +1223,7 @@
 
   /** 釋放主K線圖表實例。切換個股或離開分頁前呼叫。 */
   function destroyDashboard() {
+    hideTip();
     if (_mainChart) { _mainChart.remove(); _mainChart = null; }
   }
 
