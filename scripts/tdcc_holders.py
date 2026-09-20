@@ -155,3 +155,116 @@ def _fmt_date(raw: str) -> str:
     """YYYYMMDD → YYYY-MM-DD；前端直接顯示這個字串。"""
     s = str(raw)
     return f'{s[:4]}-{s[4:6]}-{s[6:8]}' if len(s) == 8 and s.isdigit() else s
+
+
+# ════════════════════════════════════════════════════════════════════════
+#  歷史回補
+# ════════════════════════════════════════════════════════════════════════
+# open data 端點只給最新一期，但集保的查詢頁保留約一年的週資料。首次接上
+# 或清單新增個股時，用這裡把歷史補起來，卡 18 的折線圖才不必等好幾週。
+# 這是表單爬取，比 open data 脆弱（集保改版就會壞），所以只在回補時用，
+# 日常累積仍走 fetch()／update()。
+
+QUERY_URL = 'https://www.tdcc.com.tw/portal/zh/smWeb/qryStock'
+
+
+class _Session:
+    """帶 cookie 與 CSRF token 的查詢連線。
+
+    集保的表單有 SYNCHRONIZER_TOKEN，且每次回應會帶新的 token，
+    故沿用同一個 session 並逐次更新 token，避免每查一次就重開一次表單頁。
+    """
+
+    def __init__(self):
+        import http.cookiejar
+        import urllib.request
+        self._ua = urllib.request.build_opener(
+            urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+        self._ua.addheaders = [('User-Agent', 'Mozilla/5.0'), ('Referer', QUERY_URL)]
+        self._token = self._uri = ''
+        self.dates: list = []
+        self._load_form()
+
+    def _load_form(self):
+        html = self._ua.open(QUERY_URL, timeout=60).read().decode('utf-8', 'replace')
+        self._absorb(html)
+        self.dates = sorted(set(_re().findall(r'<option value="(\d{8})"', html)), reverse=True)
+
+    def _absorb(self, html: str):
+        """從頁面取出下一次 POST 要用的 token。"""
+        t = _re().search(r'name="SYNCHRONIZER_TOKEN"\s+value="([^"]*)"', html)
+        u = _re().search(r'name="SYNCHRONIZER_URI"\s+value="([^"]*)"', html)
+        if t:
+            self._token = t.group(1)
+        if u:
+            self._uri = u.group(1)
+
+    def query(self, sid: str, date: str) -> dict:
+        """查單一個股單一期，回傳 {lv600_800: 比例, ...}；查無資料回 {}。"""
+        import urllib.parse
+        import urllib.request
+        body = urllib.parse.urlencode({
+            'SYNCHRONIZER_TOKEN': self._token,
+            'SYNCHRONIZER_URI': self._uri or '/portal/zh/smWeb/qryStock',
+            'method': 'submit', 'sqlMethod': 'StockNo',
+            'firDate': self.dates[0] if self.dates else date, 'scaDate': date,
+            'stockNo': sid, 'stockName': '',
+        }).encode()
+        html = self._ua.open(urllib.request.Request(QUERY_URL, data=body),
+                             timeout=60).read().decode('utf-8', 'replace')
+        self._absorb(html)
+        out = {}
+        for tr in _re().findall(r'<tr[^>]*>(.*?)</tr>', html, _re().S):
+            tds = [_re().sub(r'<[^>]+>', '', c).strip()
+                   for c in _re().findall(r'<td[^>]*>(.*?)</td>', tr, _re().S)]
+            if len(tds) < 5 or not tds[0].isdigit():
+                continue
+            key = LEVELS.get(tds[0])
+            if not key:
+                continue
+            try:
+                out[key] = round(float(tds[4]), 3)
+            except ValueError:
+                continue
+        return out
+
+
+def _re():
+    import re
+    return re
+
+
+def backfill(stock_ids, weeks: int = 12, delay: float = 0.3) -> list:
+    """把缺少的期別補成快照。
+
+    已存在的期別直接跳過，所以中斷後重跑可以接續。對集保伺服器客氣一點：
+    每次查詢之間隔 delay 秒。
+
+    Returns:
+        本次新增的資料日期清單。
+    """
+    import time
+    ids = list(stock_ids)
+    sess = _Session()
+    want = sess.dates[:weeks]
+    added = []
+    for date in sorted(want):
+        if (SNAPSHOT_DIR / f'{date}.json').exists():
+            continue
+        levels = {}
+        for sid in ids:
+            try:
+                row = sess.query(sid, date)
+            except Exception as e:
+                print(f'    [backfill] {date} {sid} 失敗：{str(e)[:60]}')
+                continue
+            if row:
+                levels[sid] = row
+            time.sleep(delay)
+        if not levels:
+            print(f'  [backfill] {date} 查無任何資料，略過')
+            continue
+        _, stored = save_snapshot(date, levels)
+        added.append(date)
+        print(f'  [backfill] {date} 已存（{stored} 檔）')
+    return added
