@@ -501,12 +501,24 @@
   }
 
 
-  /** 法人買賣超柱狀圖（近 20 日三大法人合計）。 */
+  /**
+   * 法人買賣超柱狀圖：外資／投信／自營商各一格，共用 x 軸。
+   *
+   * 三者量級差距很大（外資的單日買賣超常是投信的 20 倍以上），疊在同一格
+   * 共用 y 軸的話投信與自營商會被壓成貼著零軸的一條線，等於看不到。故拆成
+   * 三格、各自以自身最大值歸一化，並在每格標題列印出該格的 ±最大值——
+   * 這是小倍數（small multiples），不是把兩個尺度疊在同一張圖的雙軸圖；
+   * 標出各自尺度就是為了讓讀者知道跨格的柱高不能直接比。
+   */
   function drawChipBars(canvas, chip) {
     const dpr = window.devicePixelRatio || 1;
-    // 雷達圖受高度限制、熱區圖有 24 個價格桶，兩者需要 CANVAS_H；
-    // 這裡只需讀出 ± 幅度，用 220px 以免卡片比同列鄰居高出一截。
-    const w = canvas.clientWidth || 200, h = 220;
+    const PANELS = [
+      { key: 'foreign', label: '外資' },
+      { key: 'trust',   label: '投信' },
+      { key: 'dealer',  label: '自營商' },
+    ];
+    const PANEL_H = 76, TITLE_H = 15;
+    const w = canvas.clientWidth || 200, h = PANEL_H * PANELS.length;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -520,44 +532,89 @@
       if (v === null || v === undefined) continue;
       pairs.unshift({ i, d: (chip.dates || [])[i] || '', v });
     }
-    const vals = pairs.map(p => p.v);
-    if (!vals.length) return;
-    const mx = Math.max(...vals.map(Math.abs)) || 1;
-    const zero = h / 2, bw = w / vals.length;
-    ctx.strokeStyle = '#272c37';
-    ctx.beginPath(); ctx.moveTo(0, zero); ctx.lineTo(w, zero); ctx.stroke();
+    if (!pairs.length) return;
+    const bw = w / pairs.length;
+    const at = (arr, i) => nz((arr || [])[i]);
 
-    vals.forEach((v, i) => {
-      const bh = Math.abs(v) / mx * (h / 2 - 12);
-      ctx.fillStyle = v >= 0 ? '#e74c3c' : '#2ecc71';
-      ctx.fillRect(i * bw + 1, v >= 0 ? zero - bh : zero, bw - 2, bh);
+    const maxes = {};
+    PANELS.forEach((p, pi) => {
+      const top = pi * PANEL_H;
+      const vals = pairs.map(q => at(chip[p.key], q.i));
+      const mx = Math.max(...vals.map(Math.abs), 1);
+      maxes[p.key] = mx;
+      const plotH = PANEL_H - TITLE_H - 3;
+      const zero = top + TITLE_H + plotH / 2;
+      const half = plotH / 2 - 2;
+
+      // 標題列：格名 + 該格的尺度。柱高只在同一格內可比
+      ctx.font = '13px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = '#e8eaed'; ctx.fillText(p.label, 2, top + 1);
+      ctx.fillStyle = '#a8b2c1'; ctx.textAlign = 'right';
+      ctx.fillText('±' + fmtInt(mx) + ' 張', w - 2, top + 1);
+
+      ctx.strokeStyle = '#272c37'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, zero + .5); ctx.lineTo(w, zero + .5); ctx.stroke();
+
+      vals.forEach((v, k) => {
+        const bh = Math.abs(v) / mx * half;
+        ctx.fillStyle = v >= 0 ? '#e74c3c' : '#2ecc71';
+        ctx.fillRect(k * bw + 1, v >= 0 ? zero - bh : zero, bw - 2, bh);
+      });
     });
 
-    // 註：原本疊在柱上的「累計線」已移除。它以自己的最大值歸一化，與柱的
-    // 尺度不同卻共用同一張圖且無軸標，讀者無從判讀，等同雙軸圖的誤導。
-    // 累計值改由卡片下方「近 20 日／近 5 日累計」數值列呈現。
-
-    // Y 軸：標出單日最大絕對值，讓柱高有可讀的尺度
-    ctx.fillStyle = '#a8b2c1'; ctx.font = '13px sans-serif';
-    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-    ctx.fillText('+' + fmtInt(mx), 2, 2);
-    ctx.textBaseline = 'bottom';
-    ctx.fillText('-' + fmtInt(mx), 2, h - 2);
-
-    // 命中區取整根柱位的高度，細柱也好點
-    const at = (arr, i) => (arr || [])[i];
+    // 命中區跨三格取整條日期欄，一次列出當日三者與合計
     attachTooltip(canvas, pairs.map((p, k) => ({
       x: k * bw, y: 0, w: bw, h: h,
       title: p.d,
-      rows: [
-        { label: '三大法人', value: fmtInt(p.v) + ' 張', color: p.v >= 0 ? '#e74c3c' : '#2ecc71' },
-        { label: '外資', value: fmtInt(at(chip.foreign, p.i)) + ' 張' },
-        { label: '投信', value: fmtInt(at(chip.trust, p.i)) + ' 張' },
-        { label: '自營商', value: fmtInt(at(chip.dealer, p.i)) + ' 張' },
-      ],
-    })), { label: `三大法人買賣超柱狀圖：近 ${vals.length} 個交易日，`
-      + `單日最大 ${fmtInt(mx)} 張，可用方向鍵逐日讀值` });
+      rows: PANELS.map(pn => {
+        const v = at(chip[pn.key], p.i);
+        return { label: pn.label, value: fmtInt(v) + ' 張',
+                 color: v >= 0 ? '#e74c3c' : '#2ecc71' };
+      }).concat([{ label: '三大法人合計', value: fmtInt(p.v) + ' 張' }]),
+    })), { label: `法人買賣超：近 ${pairs.length} 個交易日，外資／投信／自營商各一格，`
+      + PANELS.map(pn => `${pn.label}單日最大 ${fmtInt(maxes[pn.key])} 張`).join('、')
+      + '，可用方向鍵逐日讀值' });
   }
+
+
+  /**
+   * 集保大戶三級距的最新一期比例與週變化。
+   * 卡 17（總評）與卡 18（折線圖）共用，避免同一份計算寫兩次。
+   *
+   * 級距分層互斥、不累積；total 為三者相加，即「600 張以上」的累計集中度。
+   *
+   * @returns {null|{date, rows, total, totalDiff}} 無資料時回傳 null
+   */
+  function holderTiers(hd) {
+    if (!hd || !hd.dates || !hd.dates.length) return null;
+    const n = hd.dates.length;
+    const valAt = (key, i) => {
+      const v = ((hd.levels || {})[key] || [])[i];
+      return (v === null || v === undefined) ? null : v;
+    };
+    const rows = HOLDER_LEVELS.map(lv => {
+      const cur = valAt(lv.key, n - 1), prev = valAt(lv.key, n - 2);
+      return { ...lv, cur, diff: (cur !== null && prev !== null) ? cur - prev : null };
+    });
+    const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => a + (valAt(lv.key, i) || 0), 0);
+    const total = sumAt(n - 1);
+    return { date: hd.dates[n - 1], rows, total,
+             totalDiff: n > 1 ? total - sumAt(n - 2) : null };
+  }
+
+  /** 級距週變化的文字與漲跌色。pp = 百分點。 */
+  const ppText = diff =>
+    diff === null ? '—' : (diff > 0 ? '+' : '') + diff.toFixed(3) + ' pp';
+  const ppCls = diff =>
+    diff === null ? 'flat' : diff > 0 ? 'up' : diff < 0 ? 'dn' : 'flat';
+
+  /** 級距列：色標 + 名稱 + 最新比例 + 週變化。 */
+  const tierRow = r => `<div class="row"><span class="k">
+      <i style="display:inline-block;width:9px;height:3px;background:${r.color};
+        border-radius:2px;"></i>${r.label}</span>
+    <span class="v">${r.cur === null ? '—' : r.cur.toFixed(2) + '%'}
+      <span class="${ppCls(r.diff)}" style="font-size:11px;margin-left:6px;"
+        >${ppText(r.diff)}</span></span></div>`;
 
   // ════════════════════════════════════════════════════════════════
   //  互動層：canvas 圖表的 hover 與鍵盤讀值
@@ -905,7 +962,7 @@
     }
     const net5 = sum(tail(c.total, 5));
     return `<div class="card c4"><h3><span class="no">08</span>法人行為計量
-      <span class="sub">三大法人買賣超（張）</span></h3>
+      <span class="sub">外資／投信／自營商（張）</span></h3>
       <canvas id="chipbars"></canvas>
       ${rows.join('')}
       <div class="row"><span class="k">近 20 日累計</span>
@@ -1052,17 +1109,33 @@
     const cur = last(d.ohlcv.close);
     const dev = vw ? (cur - vw) / vw * 100 : 0;
     const verdict = sc.total >= 70 ? '偏多加碼' : sc.total >= 50 ? '調節減碼' : '保守觀望';
+    // 法人是流量（這幾日買賣多少），大戶是存量（目前握有多少），
+    // 「主力追蹤」兩者都要看，故總評在法人淨額之外拆出集保三級距。
+    const ht = holderTiers(d.holders);
     const text = `經 ${d.ohlcv.close.length} 日行為綜合研判：法人近 20 日合計 `
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
+      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%，週變化 ${ppText(ht.totalDiff)}。` : '')
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
+    const tiers = ht
+      ? `<div class="row" style="border-top:1px solid var(--border);
+           margin-top:8px;padding-top:7px;">
+           <span class="k">大戶持股 <span class="est">集保 ${ht.date}</span></span>
+           <span class="v">600 張以上 ${ht.total.toFixed(2)}%
+             <span class="${ppCls(ht.totalDiff)}" style="font-size:11px;margin-left:6px;"
+               >${ppText(ht.totalDiff)}</span></span></div>
+         ${ht.rows.map(tierRow).join('')}`
+      : `<div class="note" style="border-top:1px solid var(--border);
+           margin-top:8px;padding-top:7px;">大戶三級距（1000 張以上／800~1000 張／
+           600~800 張）待集保資料就緒後顯示，來源同卡 18。</div>`;
     return `<div class="card c4"><h3><span class="no">17</span>主力追蹤總評
       <span class="sub">規則引擎</span></h3>
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="verdict">${verdict}</span>
         <span class="pill" style="margin-left:auto;">${rk.level}風險</span>
       </div>
-      <div class="note" style="line-height:1.7;">${text}</div></div>`;
+      <div class="note" style="line-height:1.7;">${text}</div>
+      ${tiers}</div>`;
   }
 
   /**
@@ -1080,42 +1153,19 @@
           （<code>taiwan_stock_holding_shares_per</code>）後才會出現。</div></div>`;
     }
 
-    const n = hd.dates.length;
-    const rows = HOLDER_LEVELS.map(lv => {
-      const vals = (hd.levels || {})[lv.key] || [];
-      const cur = vals[n - 1], prev = vals[n - 2];
-      const diff = (cur != null && prev != null) ? cur - prev : null;
-      const dCls = diff == null ? 'flat' : diff > 0 ? 'up' : diff < 0 ? 'dn' : 'flat';
-      const dTxt = diff == null ? '—'
-        : `${diff > 0 ? '+' : ''}${diff.toFixed(3)} pp`;
-      return `<div class="row">
-        <span class="k"><i style="display:inline-block;width:9px;height:3px;
-          background:${lv.color};border-radius:2px;"></i>${lv.label}</span>
-        <span class="v">${cur == null ? '—' : cur.toFixed(2) + '%'}
-          <span class="${dCls}" style="font-size:11px;margin-left:6px;">${dTxt}</span></span>
-      </div>`;
-    }).join('');
-
-    // 三級距合計：600 張以上的整體集中度
-    const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => {
-      const v = ((hd.levels || {})[lv.key] || [])[i];
-      return a + (v == null ? 0 : v);
-    }, 0);
-    const tCur = sumAt(n - 1), tPrev = n > 1 ? sumAt(n - 2) : null;
-    const tDiff = tPrev == null ? null : tCur - tPrev;
-    const tCls = tDiff == null ? 'flat' : tDiff > 0 ? 'up' : tDiff < 0 ? 'dn' : 'flat';
+    const ht = holderTiers(hd);
 
     return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
-      <span class="sub">集保股權分散表 · 週頻 · 截至 ${hd.dates[n - 1]}</span></h3>
+      <span class="sub">集保股權分散表 · 週頻 · 截至 ${ht.date}</span></h3>
       <div class="holderwrap">
         <div><canvas id="holders"></canvas></div>
         <div>
-          ${rows}
+          ${ht.rows.map(tierRow).join('')}
           <div class="row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">
             <span class="k">600 張以上合計</span>
-            <span class="v">${tCur.toFixed(2)}%
-              <span class="${tCls}" style="font-size:11px;margin-left:6px;">${
-                tDiff == null ? '—' : (tDiff > 0 ? '+' : '') + tDiff.toFixed(3) + ' pp'}</span></span>
+            <span class="v">${ht.total.toFixed(2)}%
+              <span class="${ppCls(ht.totalDiff)}" style="font-size:11px;margin-left:6px;"
+                >${ppText(ht.totalDiff)}</span></span>
           </div>
           <div class="note">分層互斥，不累積。pp = 百分點。比例上升代表籌碼向該級距集中；
             集保每週五結算、次週初公布，與日 K 無法逐日對齊。</div>
