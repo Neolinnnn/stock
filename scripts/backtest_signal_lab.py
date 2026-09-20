@@ -314,6 +314,39 @@ def sim_tpsl(s: Series, t: int, tp=0.18, sl=0.15) -> dict | None:
 
 EXITS = {'HYBRID': sim_hybrid, 'TP18SL15': sim_tpsl}
 
+CAP_GRID = [6, 8, 10, 12, 15, 20, None]   # 同時持倉上限掃描格點（None=不設限）
+
+
+def simulate_capped(hits, cap: int | None, sim=sim_hybrid) -> tuple[list[dict], float]:
+    """逐日推進、受同時持倉上限約束的模擬。回傳 (交易明細, 平均同時持倉數)。
+
+    同日多檔候選時依 CV 夏普由高到低搶占剩餘倉位（夏普已是正式流程的排序依據）。
+    """
+    by_date: dict[str, list] = {}
+    for d, s, t, sharpe in hits:
+        by_date.setdefault(d, []).append((sharpe, s, t))
+    trades, open_pos = [], []      # open_pos: [(出場日, 個股代號)]
+    daily_open = []
+    for d in sorted(by_date):
+        open_pos = [x for x in open_pos if x[0] > d]
+        held = {sid for _, sid in open_pos}
+        for _, s, t in sorted(by_date[d], key=lambda x: -x[0]):
+            if s.id in held:
+                continue
+            if cap is not None and len(open_pos) >= cap:
+                break
+            r = sim(s, t)
+            exit_date = s.dates[r['exit_i']] if r else '99999999'
+            open_pos.append((exit_date, s.id))
+            held.add(s.id)
+            trades.append({'date': d, 'id': s.id, 'name': s.name, 'sector': s.sector,
+                           'ret': r['ret'] if r else None,
+                           'days': r['days'] if r else None,
+                           'why': r['why'] if r else 'OPEN'})
+        daily_open.append(len(open_pos))
+    avg_open = sum(daily_open) / len(daily_open) if daily_open else 0.0
+    return trades, round(avg_open, 1)
+
 
 # ── 統計 ─────────────────────────────────────────────────────────────────────
 
@@ -419,13 +452,14 @@ def main():
             strong = s.sector in sector_strong[d]
             passed.append((d, s, t, (c - ma10) / ma10 * 100,
                            sharpe >= 0.3 and win >= 0.4 and dd <= 0.2 and strong,
-                           bool(taiex_bull.get(d)) and c > ma5 > ma20 > ma60 and strong))
+                           bool(taiex_bull.get(d)) and c > ma5 > ma20 > ma60 and strong,
+                           sharpe))
 
         results[key] = {'label': label, 'raw_signals': len(raw_hits), 'bias': {}}
         for bias_cap in BIAS_GRID:
             picks = {
-                'qualified': [(d, s, t) for d, s, t, b, q, g in passed if q and b <= bias_cap],
-                'gate':      [(d, s, t) for d, s, t, b, q, g in passed if g and b <= bias_cap],
+                'qualified': [(d, s, t) for d, s, t, b, q, g, sh in passed if q and b <= bias_cap],
+                'gate':      [(d, s, t) for d, s, t, b, q, g, sh in passed if g and b <= bias_cap],
             }
             tracks = {}
             for track, hits in picks.items():
@@ -447,6 +481,17 @@ def main():
                         'trades': trades,
                     }
             results[key]['bias'][f'{bias_cap:g}'] = tracks
+            if bias_cap == MAX_BIAS_MA10:
+                gate_hits = [(d, s, t, sh) for d, s, t, b, q, g, sh in passed
+                             if g and b <= bias_cap]
+                results[key]['cap'] = {}
+                for cap in CAP_GRID:
+                    tr, avg_open = simulate_capped(gate_hits, cap)
+                    results[key]['cap'][str(cap)] = {
+                        **summarize(tr), 'avg_open': avg_open,
+                        'first_half': summarize([x for x in tr if x['date'] < mid]),
+                        'second_half': summarize([x for x in tr if x['date'] >= mid]),
+                    }
             g = tracks['gate/HYBRID']['all']
             q = tracks['qualified/HYBRID']['all']
             print(f"  {key:8s} 乖離≤{bias_cap:>3g}%｜qualified {q.get('n', 0):3d} 筆 "
@@ -461,7 +506,9 @@ def main():
         'universe': len(stocks),
         'bias_grid': BIAS_GRID,
         # 交易明細只留正式乖離門檻（2%）的 gate/HYBRID 軌，其餘僅存統計
+        'cap_grid': [str(c) for c in CAP_GRID],
         'variants': {k: {'label': v['label'], 'raw_signals': v['raw_signals'],
+                         'cap': v.get('cap', {}),
                          'bias': {bk: {tk: (tv if (bk == '2' and tk == 'gate/HYBRID')
                                             else {kk: vv for kk, vv in tv.items() if kk != 'trades'})
                                        for tk, tv in bv.items()}

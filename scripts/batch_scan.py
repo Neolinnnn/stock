@@ -62,6 +62,15 @@ RSI_PERIOD  = 5        # 短線 RSI（與主流 5T 一致）
 RSI_PERIOD2 = 10       # 中線 RSI
 RSI_OVERSOLD   = 35
 RSI_OVERBOUGHT = 65
+# 趨勢延續 BUY：原規則只認「MA5 上穿 MA20 的那一根」，交叉當日 RSI5 恰好過熱
+# 被擋、之後卻沿 MA20 一路續攻的個股（6271 同欣電 2026-08-10 交叉、RSI5=72.2）
+# 此後 MA5 未再跌破 MA20，就再也拿不到 BUY。改判「當下狀態」後解除此死角。
+# 依 scripts/backtest_signal_lab.py（100 檔族群股、2024-01~2026-09、658 個交易
+# 日）：HYBRID 進場閘門軌 33 筆／勝率 63.6%／PF 1.78 → 380 筆／61.6%／PF 2.11；
+# 搭配 position_tracker.MAX_CONCURRENT=12 後為 171 筆／64.3%／PF 2.36。
+# 追高防線仍由 daily_scan 的乖離 MA10 ≤2% 閘門負責。設 False 即回到原規則。
+ENABLE_TREND_CONTINUATION_BUY = True
+
 CV_FOLDS    = 3      # 折數減少，每折測試期更長（更多訊號機會）
 DATA_DAYS   = 500    # 取 ~2年資料
 INITIAL_CAPITAL = 1_000_000   # 100萬，搭配 5% position sizing 即可交易所有價位
@@ -306,6 +315,15 @@ def analyze_stock(stock_id, name, days=DATA_DAYS, hist=None):
     if (current_signal == 'SELL' and latest_short is not None
             and latest_long is not None and latest_short > latest_long):
         current_signal = 'HOLD'
+    # 趨勢延續 BUY：多頭延續中（MA5>MA20）、未過熱（RSI5<65）、且收盤仍站上 MA5。
+    # 不要求近期有黃金交叉——回測驗證此式與「交叉後 MA5 未跌破 MA20」完全等價
+    # （65,412 個 bar-day 零差異），因為 MA5>MA20 的區間本來就始於一次黃金交叉。
+    if (ENABLE_TREND_CONTINUATION_BUY and current_signal != 'BUY'
+            and None not in (latest_short, latest_long, latest_rsi5)
+            and latest_short > latest_long
+            and latest_rsi5 < RSI_OVERBOUGHT
+            and latest_price > latest_short):
+        current_signal = 'BUY'
 
     # Walk-Forward CV
     cv_results = walk_forward_cv(prices, dates, CV_FOLDS)

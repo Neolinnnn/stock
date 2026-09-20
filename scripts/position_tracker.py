@@ -36,6 +36,14 @@ PROFIT_FLOOR   = 0.07   # Phase 2 利潤地板 +7%
 PHASE1_SL      = 0.15   # Phase 1 停損 -15%
 PHASE2_TIMEOUT = 25     # Phase 2 未創新高的時間停損（交易日）
 
+# 同時持倉上限。batch_scan 啟用趨勢延續 BUY 後，閘門候選由平均 3.6 檔暴增到
+# 25.5 檔，不設限等於全倉押注。依 scripts/backtest_signal_lab.py 的上限掃描
+# （6/8/10/12/15/20/不設限）：12 檔時 PF 2.36、勝率 64.3%、平均在倉 11.2 檔為
+# 最佳，不設限則為 PF 2.11、平均在倉 25.5 檔。10~20 檔間表現平坦（PF 2.13~2.36），
+# 取中間值。設上限也讓弱勢前半段（2024-01~2025-05）平均報酬由 -0.85% 轉正
+# （8~15 檔皆在 +1.6~+2.6%），因為名額有限時夏普排序會濾掉邊緣候選。
+MAX_CONCURRENT = 12
+
 
 # ── 進場閘門 ──────────────────────────────────────────────────────────────────
 
@@ -202,10 +210,15 @@ def update_positions(today: str, scan_lookup: dict, taiex_bull: bool,
             still_open.append(pos)
 
     # 3) 新閘門 BUY → 加入 pending_entry（排除已持倉；同檔跨族群重複入選只計一次）
-    for b in gate_buys:
+    #    倉位有限，候選超過剩餘名額時依 CV 夏普由高到低取足（與回測的排序一致）
+    slots = MAX_CONCURRENT - len(still_open)
+    for b in sorted(gate_buys, key=lambda x: -(x.get('sharpe') or 0)):
+        if slots <= 0:
+            break
         if b['id'] in held_ids:
             continue
         held_ids.add(b['id'])
+        slots -= 1
         still_open.append({
             'id':     b['id'],
             'name':   b.get('name', b['id']),

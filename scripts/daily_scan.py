@@ -685,7 +685,8 @@ def run_daily_scan():
                 if passes_gate(st, taiex_bull, sector_strong=sector_strong,
                                max_bias_ma10=MAX_BIAS_MA10):
                     gate_buys.append({'id': st['id'], 'name': st['name'],
-                                      'price': st.get('price'), 'sector': sector})
+                                      'price': st.get('price'), 'sector': sector,
+                                      'sharpe': st.get('cv_sharpe')})
         track = update_positions(today, scan_lookup, taiex_bull, gate_buys)
         summary['positions'] = {
             'taiex_bull': taiex_bull, 'taiex_close': taiex_close, 'taiex_ma60': taiex_ma60,
