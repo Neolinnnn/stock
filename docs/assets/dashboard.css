@@ -30,12 +30,12 @@
 .sdash .dn{color:var(--green);}
 .sdash .flat{color:var(--sub);}
 /* ── 卡片網格 ───────────────────────────────── */
-.sdash .grid{display:grid;gap:10px;padding:12px 16px;
+.sdash .grid{display:grid;gap:12px;padding:12px 16px;
   grid-template-columns:repeat(12,1fr);
   /* 卡片高度依內容，不被同列最高者拉伸出空白 */
   align-items:start;}
 .sdash .card{background:var(--card);border:1px solid var(--border);border-radius:8px;
-  padding:10px 12px;min-width:0;}
+  padding:12px 14px;min-width:0;}
 .sdash .card h3{margin:0 0 10px;font-size:15px;font-weight:600;
   display:flex;align-items:center;gap:6px;}
 .sdash .no{background:var(--accent);color:#fff;font-size:12px;font-weight:700;
@@ -58,14 +58,15 @@
   padding:5px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.04);}
 .sdash .row:last-child{border-bottom:none;}
 .sdash .row .k{color:var(--sub);display:flex;align-items:center;gap:5px;}
-.sdash .row .v{font-weight:600;}
+.sdash .row .v{font-weight:600;font-variant-numeric:tabular-nums;}
 /* ── 進度條 ─────────────────────────────────── */
 .sdash .bar{height:9px;border-radius:4px;background:#0f1319;overflow:hidden;
   flex:1;min-width:50px;}
 .sdash .bar > i{display:block;height:100%;border-radius:4px;transition:width .4s;}
 .sdash .barrow{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;}
 .sdash .barrow .lab{color:var(--sub);width:96px;flex-shrink:0;}
-.sdash .barrow .pct{width:46px;text-align:right;font-weight:600;flex-shrink:0;}
+.sdash .barrow .pct{width:46px;text-align:right;font-weight:600;flex-shrink:0;
+  font-variant-numeric:tabular-nums;}
 /* ── 環形圖 ─────────────────────────────────── */
 .sdash .rings{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;}
 .sdash .ring{text-align:center;}
@@ -88,6 +89,7 @@
 .sdash .holderwrap{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start;}
 @media(max-width:820px){.sdash .holderwrap{grid-template-columns:1fr;} }
 .sdash canvas{display:block;width:100%;}
+.sdash table{font-variant-numeric:tabular-nums;}
 /* ── 大字結論 ───────────────────────────────── */
 .sdash .verdict{font-size:32px;font-weight:700;margin:6px 0 10px;}
 .sdash .pill{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;

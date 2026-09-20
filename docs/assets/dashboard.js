@@ -40,7 +40,8 @@
     return Math.sqrt(mean(arr.map(v => (v - m) ** 2)));
   }
 
-    // 各 canvas 圖表的繪製高度（px）。主K線另由 .chartbox 的 CSS 高度決定。
+    // 雷達圖、熱區圖、大戶持股圖的繪製高度（px）。主K線由 .chartbox 的 CSS
+  // 高度決定；成本結構圖與法人柱狀圖依內容另訂高度，見各自的繪製函式。
   const CANVAS_H = 300;
 
   // 集保大戶級距，分層互斥，與 build_docs._HOLDER_LEVELS 對應
@@ -303,11 +304,11 @@
     const padL = 34, barW = w - padL - 6;
     bs.forEach((b, i) => {
       const y = h - (i + 1) * bh;
-      // 熱度：低量藍、中量黃、高量紅
+      // 成交量已由橫條長度表達，顏色再分三段（藍/黃/紅）等於同一個量編碼三次，
+      // 且紅色在台股語境代表上漲，用在「量大」上語意衝突。改為單一色相以明度表強弱。
       const t = b.ratio;
-      const col = t > 0.66 ? '#e74c3c' : t > 0.33 ? '#f1b143' : '#3d6ea8';
-      ctx.fillStyle = col;
-      ctx.globalAlpha = 0.35 + t * 0.65;
+      ctx.fillStyle = '#4ea1f3';
+      ctx.globalAlpha = 0.25 + t * 0.7;
       ctx.fillRect(padL, y + 0.5, Math.max(2, barW * t), bh - 1);
       ctx.globalAlpha = 1;
     });
@@ -315,8 +316,9 @@
     // 價格刻度（上中下三點）
     ctx.fillStyle = '#a8b2c1'; ctx.font = '13px sans-serif';
     ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    [[0, profile.hi], [h / 2, (profile.hi + profile.lo) / 2], [h - 6, profile.lo]]
-      .forEach(([y, p]) => ctx.fillText(Math.round(p), 2, y + 4));
+    // y 取 8 與 h-8：textBaseline 為 middle，貼齊 0 或 h 會讓字被畫布邊緣切掉一半
+    [[8, profile.hi], [h / 2, (profile.hi + profile.lo) / 2], [h - 8, profile.lo]]
+      .forEach(([y, p]) => ctx.fillText(Math.round(p), 2, y));
 
     // 現價線
     const span = profile.hi - profile.lo || 1;
@@ -331,7 +333,9 @@
   /** 主力成本結構分布：籌碼集中度的堆疊橫條。 */
   function drawCostStruct(canvas, profile, vwapPrice, curPrice) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = CANVAS_H;
+    // 內容僅 3 段橫條加一行偏離說明，沿用 CANVAS_H 會留下約 140px 空白，
+    // 故高度依實際列數計算：3 段 × 42px + 起始 14px + 末行 26px。
+    const w = canvas.clientWidth || 200, h = 3 * 42 + 40;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -452,7 +456,9 @@
   /** 法人買賣超柱狀圖（近 20 日三大法人合計）。 */
   function drawChipBars(canvas, chip) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 200, h = CANVAS_H;
+    // 雷達圖受高度限制、熱區圖有 24 個價格桶，兩者需要 CANVAS_H；
+    // 這裡只需讀出 ± 幅度，用 220px 以免卡片比同列鄰居高出一截。
+    const w = canvas.clientWidth || 200, h = 220;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
@@ -472,17 +478,16 @@
       ctx.fillRect(i * bw + 1, v >= 0 ? zero - bh : zero, bw - 2, bh);
     });
 
-    // 累計線
-    ctx.strokeStyle = '#f1b143'; ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    let acc = 0;
-    const accs = vals.map(v => (acc += v));
-    const amx = Math.max(...accs.map(Math.abs)) || 1;
-    accs.forEach((a, i) => {
-      const x = i * bw + bw / 2, y = zero - a / amx * (h / 2 - 12);
-      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-    });
-    ctx.stroke();
+    // 註：原本疊在柱上的「累計線」已移除。它以自己的最大值歸一化，與柱的
+    // 尺度不同卻共用同一張圖且無軸標，讀者無從判讀，等同雙軸圖的誤導。
+    // 累計值改由卡片下方「近 20 日／近 5 日累計」數值列呈現。
+
+    // Y 軸：標出單日最大絕對值，讓柱高有可讀的尺度
+    ctx.fillStyle = '#a8b2c1'; ctx.font = '13px sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText('+' + fmtInt(mx), 2, 2);
+    ctx.textBaseline = 'bottom';
+    ctx.fillText('-' + fmtInt(mx), 2, h - 2);
   }
 
   // ════════════════════════════════════════════════════════════════
@@ -591,7 +596,7 @@
       ['壓力區', `<b>${L.resistance || '—'}</b>`],
       ['風險等級', `<span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>`],
     ];
-    return `<div class="card c6"><h3><span class="no">02</span>AI 決策核心
+    return `<div class="card c4"><h3><span class="no">02</span>AI 決策核心
       <span class="sub">AI DECISION CORE</span></h3>
       <div class="warn">⚠ ${d.signal?.label || 'AI CAUTION'}</div>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}
@@ -600,7 +605,7 @@
 
   /** 03 多維度評分雷達 */
   function cardRadar(sc) {
-    return `<div class="card c6"><h3><span class="no">03</span>多維度評分
+    return `<div class="card c4"><h3><span class="no">03</span>多維度評分
       <span class="sub">綜合 ${sc.total} / 100</span></h3>
       <canvas id="radar-score"></canvas>
       <div style="text-align:center;margin-top:4px;">
@@ -611,7 +616,7 @@
 
   /** 04 籌碼熱區圖 */
   function cardHeatmap() {
-    return `<div class="card c6"><h3><span class="no">04</span>AI 籌碼熱區圖
+    return `<div class="card c4"><h3><span class="no">04</span>AI 籌碼熱區圖
       <span class="sub">近 60 日價量分佈</span></h3>
       <canvas id="heatmap"></canvas>
       <div class="note">橫條長度為該價格區間累計成交量；虛線為現價。</div></div>`;
@@ -619,7 +624,7 @@
 
   /** 05 風險管理雷達 */
   function cardRiskRadar(rk) {
-    return `<div class="card c6"><h3><span class="no">05</span>風險管理雷達</h3>
+    return `<div class="card c4"><h3><span class="no">05</span>風險管理雷達</h3>
       <canvas id="radar-risk"></canvas>
       <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
         <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
@@ -630,7 +635,7 @@
   /** 06 AI 預測路徑 */
   function cardPrediction(d) {
     const p = d.prediction || {};
-    return `<div class="card c6"><h3><span class="no">06</span>AI 預測路徑
+    return `<div class="card c4"><h3><span class="no">06</span>AI 預測路徑
       <span class="sub">後端模型輸出</span></h3>
       ${barRow('上漲', nz(p.up) * 100, '#e74c3c')}
       ${barRow('盤整', nz(p.sideways) * 100, '#f1b143')}
@@ -644,7 +649,7 @@
 
   /** 07 主力成本結構分布 */
   function cardCostStruct(vw, cur) {
-    return `<div class="card c6"><h3><span class="no">07</span>主力成本結構分布
+    return `<div class="card c4"><h3><span class="no">07</span>主力成本結構分布
       <span class="sub">20 日 VWAP ${fmt(vw, 2)}</span></h3>
       <canvas id="coststruct"></canvas></div>`;
   }
@@ -661,7 +666,7 @@
         自 <b class="${c.dealer[i] >= 0 ? 'up' : 'dn'}">${fmtInt(c.dealer[i])}</b></span></div>`);
     }
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c6"><h3><span class="no">08</span>法人行為計量
+    return `<div class="card c4"><h3><span class="no">08</span>法人行為計量
       <span class="sub">三大法人買賣超（張）</span></h3>
       <canvas id="chipbars"></canvas>
       ${rows.join('')}
@@ -673,7 +678,7 @@
 
   /** 09 隔日沖風險分析（全為估算值） */
   function cardDaytradeRisk(rk) {
-    return `<div class="card c6"><h3><span class="no">09</span>隔日沖風險分析
+    return `<div class="card c4"><h3><span class="no">09</span>隔日沖風險分析
       <span class="sub">估算值</span></h3>
       ${barRow('主力出貨壓力', rk.distribute, '#e74c3c')}
       ${barRow('籌碼換手率', rk.turnover, '#f1b143')}
@@ -685,7 +690,7 @@
 
   /** 10 AI 多空能量條 */
   function cardEnergy(en) {
-    return `<div class="card c6"><h3><span class="no">10</span>AI 多空能量條
+    return `<div class="card c4"><h3><span class="no">10</span>AI 多空能量條
       <span class="sub">近 20 日量能歸屬</span></h3>
       ${barRow('多方量能', en.bull, '#e74c3c')}
       ${barRow('空方量能', en.bear, '#2ecc71')}
@@ -696,6 +701,8 @@
 
   /** 11 健康度綜合評估 */
   function cardHealth(sc) {
+    // 五項同為 0~100 的分數：環形圖比較相近數值的辨識度最差，且五種顏色
+    // 編碼的是「項目身分」而非量值。改橫條後可直接比長短，與卡 09/13 一致。
     const items = [
       ['籌碼健康度', sc.chip, '#4ea1f3'],
       ['技術面健康', sc.trend, '#e74c3c'],
@@ -704,8 +711,8 @@
       ['動能強度', sc.momentum, '#7c5cff'],
     ];
     const avg = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c6"><h3><span class="no">11</span>健康度綜合評估</h3>
-      <div class="rings">${items.map(([l, v, c]) => ringSVG(v, c, l)).join('')}</div>
+    return `<div class="card c4"><h3><span class="no">11</span>健康度綜合評估</h3>
+      ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="row" style="margin-top:8px;"><span class="k">總評</span>
         <span class="v">${avg >= 70 ? '良好' : avg >= 50 ? '普通' : '偏弱'}（平均 ${avg} 分）</span></div></div>`;
   }
@@ -720,7 +727,7 @@
     ];
     const reds = lights.filter(l => l[1] === 'r').length;
     const cur = reds >= 2 ? ['r', '紅燈（觀望）'] : reds === 1 ? ['y', '黃燈（注意）'] : ['g', '綠燈（可續抱）'];
-    return `<div class="card c6"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
+    return `<div class="card c4"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
       ${lights.map(([k, c, t]) =>
         `<div class="row"><span class="k"><i class="dot ${c === 'g' ? '' : c}"></i>${k}</span>
          <span class="v">${t}</span></div>`).join('')}
@@ -739,7 +746,7 @@
       ['策略適用度', clamp(sc.total, 0, 100), '#7c5cff'],
     ];
     const conf = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c6"><h3><span class="no">13</span>AI 信心維度
+    return `<div class="card c4"><h3><span class="no">13</span>AI 信心維度
       <span class="sub">AI CONFIDENCE ${conf}%</span></h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="note">資料截至 ${last(d.ohlcv?.date) || '—'}</div></div>`;
@@ -754,7 +761,7 @@
       ['自營商', c.dealer?.[n]],
       ['三大法人', c.total?.[n]],
     ];
-    return `<div class="card c6"><h3><span class="no">14</span>籌碼異動摘要
+    return `<div class="card c4"><h3><span class="no">14</span>籌碼異動摘要
       <span class="sub">${c.dates?.[n] || ''}</span></h3>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span>
         <span class="v ${nz(v) >= 0 ? 'up' : 'dn'}">${fmtInt(v)} 張</span></div>`).join('')}
@@ -773,7 +780,7 @@
     const instRatio = clamp(vol5 ? net5abs / vol5 * 100 : 0, 0, 100);
     const retailRatio = 100 - instRatio;
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c6"><h3><span class="no">15</span>買賣力分佈
+    return `<div class="card c4"><h3><span class="no">15</span>買賣力分佈
       <span class="sub">法人流向強度（推估）</span></h3>
       <div class="rings">
         ${ringSVG(instRatio, '#e74c3c', '法人主導度')}
@@ -788,7 +795,7 @@
 
   /** 16 多空強度分佈 */
   function cardStrength(sc, en) {
-    return `<div class="card c6"><h3><span class="no">16</span>多空強度分佈</h3>
+    return `<div class="card c4"><h3><span class="no">16</span>多空強度分佈</h3>
       <div class="rings">
         ${ringSVG(en.bull, '#e74c3c', '多方強度')}
         ${ringSVG(en.bear, '#2ecc71', '空方強度')}
@@ -811,13 +818,13 @@
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
-    return `<div class="card c6"><h3><span class="no">17</span>主力追蹤總評
+    return `<div class="card c4"><h3><span class="no">17</span>主力追蹤總評
       <span class="sub">規則引擎</span></h3>
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="verdict">${verdict}</span>
         <span class="pill" style="margin-left:auto;">${rk.level}風險</span>
       </div>
-      <div class="note" style="font-size:11px;line-height:1.7;">${text}</div></div>`;
+      <div class="note" style="line-height:1.7;">${text}</div></div>`;
   }
 
   /**
@@ -828,7 +835,7 @@
     const hd = d.holders;
     const has = hd && hd.dates && hd.dates.length;
     if (!has) {
-      return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
+      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
         <span class="sub">集保股權分散表</span></h3>
         <div class="note" style="padding:14px 0;">
           尚無資料。此欄位需後端重跑 <code>build_docs.py</code> 取得集保股權分散表
