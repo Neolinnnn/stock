@@ -1155,6 +1155,20 @@
 
     const ht = holderTiers(hd);
 
+    // 只有一期時折線圖畫不出任何變化（三條線各只有一個點），
+    // 與其給一張看似故障的空圖，不如直接呈現數值並說明歷史如何累積。
+    if (hd.dates.length < 2) {
+      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
+        <span class="sub">集保股權分散表 · ${ht.date}</span></h3>
+        ${ht.rows.map(tierRow).join('')}
+        <div class="row" style="border-top:1px solid var(--border);
+          margin-top:4px;padding-top:6px;">
+          <span class="k">600 張以上合計</span>
+          <span class="v">${ht.total.toFixed(2)}%</span></div>
+        <div class="note">分層互斥，不累積。集保每週五結算、次週初公布，
+          目前只有這一期，累積到兩期以上才畫得出週變化趨勢。</div></div>`;
+    }
+
     return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
       <span class="sub">集保股權分散表 · 週頻 · 截至 ${ht.date}</span></h3>
       <div class="holderwrap">
@@ -1242,7 +1256,8 @@
     safe('heatmap', () => drawHeatmap($('heatmap'), vp, cur));
     safe('coststruct', () => drawCostStruct($('coststruct'), vp, vw, cur));
     safe('chipbars', () => drawChipBars($('chipbars'), d.chip || {}));
-    if (d.holders && d.holders.dates && d.holders.dates.length) {
+    // 一期畫不出折線，cardHolders 該情況下不會放 canvas
+    if (d.holders && d.holders.dates && d.holders.dates.length > 1) {
       safe('holders', () => drawHolders($('holders'), d.holders));
     }
   }

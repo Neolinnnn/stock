@@ -18,6 +18,7 @@ import time
 from pathlib import Path
 
 from datafeed import finmind_fetch
+import tdcc_holders
 
 try:
     import pandas as pd
@@ -310,68 +311,6 @@ def _chip_aggregate(df: 'pd.DataFrame') -> dict:
         'dealer':  [r['自營']  for r in rows],
         'total':   [r['合計']  for r in rows],
     }
-
-
-# 集保股權分散表的大戶級距（單位為股，1 張 = 1000 股）。
-# 分層互斥，不累積：600-800 張、800-1000 張、1000 張以上。
-_HOLDER_LEVELS = {
-    600001:  'lv600_800',
-    800001:  'lv800_1000',
-    1000001: 'lv1000_up',
-}
-
-
-def _level_lower_bound(level) -> int | None:
-    """從級距標籤取出下界股數。
-
-    FinMind 的 HoldingSharesLevel 可能是 '600,001-800,000'、'600001-800000'
-    或帶尾註的字串，格式未必穩定，故以第一個數字為準而非整串比對。
-    合計列（total 等非數字標籤）回傳 None 由呼叫端略過。
-    """
-    import re
-    m = re.search(r'[\d,]+', str(level))
-    if not m:
-        return None
-    try:
-        return int(m.group(0).replace(',', ''))
-    except ValueError:
-        return None
-
-
-def _holders_aggregate(raw: 'pd.DataFrame', weeks: int = 12) -> dict:
-    """彙整集保大戶持股比例（週頻）。
-
-    集保每週五結算、次週初公布，與日頻 K 線無法逐日對齊，因此獨立成欄位
-    並附上各期日期，由前端標示資料截止日。
-
-    Returns:
-        {'dates': [...], 'levels': {'lv600_800': [...], ...}}；無資料時回傳 {}
-    """
-    if raw is None or raw.empty:
-        return {}
-    if 'HoldingSharesLevel' not in raw.columns or 'percent' not in raw.columns:
-        print('  [holders] 欄位與預期不符，略過：', list(raw.columns)[:6])
-        return {}
-
-    df = raw.copy()
-    df['_lower'] = df['HoldingSharesLevel'].map(_level_lower_bound)
-    df = df[df['_lower'].isin(_HOLDER_LEVELS.keys())]
-    if df.empty:
-        return {}
-
-    df['_key'] = df['_lower'].map(_HOLDER_LEVELS)
-    df['percent'] = pd.to_numeric(df['percent'], errors='coerce')
-    dates = sorted(df['date'].astype(str).unique())[-weeks:]
-    df = df[df['date'].astype(str).isin(dates)]
-
-    levels = {}
-    for key in _HOLDER_LEVELS.values():
-        sub = df[df['_key'] == key].set_index(df[df['_key'] == key]['date'].astype(str))
-        levels[key] = [
-            (None if pd.isna(sub['percent'].get(d)) else round(float(sub['percent'].get(d)), 3))
-            for d in dates
-        ]
-    return {'dates': dates, 'levels': levels}
 
 
 def _main_force_signal(chip: dict, df: 'pd.DataFrame') -> dict:
@@ -770,6 +709,13 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
     # 籌碼只取 tail(90)，不需暖機，維持 180 日
     chip_start = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
 
+    # 集保股權分散表一次回全市場，抓一次供所有個股共用；只給最新一期，
+    # 故每期存一份快照累積成歷史。抓不到時沿用既有快照，不影響其餘欄位。
+    try:
+        tdcc_holders.update(stock_info_map.keys())
+    except Exception as e:
+        print(f'  [holders] 集保資料更新失敗，沿用既有快照：{str(e)[:90]}')
+
     ok_count = 0
     for sid, info in stock_info_map.items():
         try:
@@ -821,14 +767,10 @@ def _build_single_stock(sid, info, stocks_dir, start_date, end_date, chip_start)
     except Exception:
         pass
 
-    # ── 抓集保大戶持股（週頻，失敗不影響其餘欄位）────────────────────────────
-    holders_data = {}
-    try:
-        holders_raw = finmind_fetch('taiwan_stock_holding_shares_per',
-                                    stock_id=sid, start_date=chip_start, end_date=end_date)
-        holders_data = _holders_aggregate(holders_raw)
-    except Exception as e:
-        print(f'  [holders] {sid} 取得失敗：{str(e)[:80]}')
+    # ── 集保大戶持股（週頻）────────────────────────────────────────────────
+    # 不在這裡連外：集保端點一次給全市場，已由 build_stock_pages 抓好存成快照，
+    # 這裡只讀本地累積的快照組時間序列。詳見 scripts/tdcc_holders.py
+    holders_data = tdcc_holders.load_series(sid)
 
     # ── 分析 ──────────────────────────────────────────────────────────────────
     df_valid = df.dropna(subset=['ma60']).reset_index(drop=True)

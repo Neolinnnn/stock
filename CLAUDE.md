@@ -127,10 +127,17 @@ Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序
 | 800~1000 張 | 800,001 ~ 1,000,000 | `lv800_1000` |
 | 1000 張以上 | 1,000,001 以上 | `lv1000_up` |
 
-- 資料源：FinMind `taiwan_stock_holding_shares_per`
+- 資料源：集保 open data `https://opendata.tdcc.com.tw/getOD.ashx?id=1-5`
+  （免認證。FinMind 的 `taiwan_stock_holding_shares_per` 需贊助等級帳號，
+  register 等級會被擋，且該資料集本來就是轉賣這份公開資料）
 - 追蹤指標：各級距**持股比例的週變化**（百分點）
 - **週頻**：集保每週五結算、次週初公布，與日 K 無法逐日對齊
-- 級距標籤格式未必穩定，解析以數字下界為準（見 `build_docs._level_lower_bound`）
+- 集保 CSV 只給分級編號不給級距文字，13/14/15 依序對應上表三個級距，
+  對照表見 `scripts/tdcc_holders.LEVELS` 的 docstring
+- 集保端點**只給最新一期**，故每期存一份快照於 `data/holders/YYYYMMDD.json`，
+  時間序列由累積的快照組出（`tdcc_holders.load_series`）。歷史深度隨時間增加
+- 驗證工具：`python scripts/verify_holders.py 2330`，或 Actions 的
+  「驗證集保大戶資料」workflow（免 token，任何環境都能跑）
 
 與三大法人買賣超的區別：法人是**流量**（這幾日買賣多少），大戶是**存量**
 （目前握有多少），兩者可互相印證但不可混用。
