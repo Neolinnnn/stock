@@ -598,8 +598,20 @@
     });
     const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => a + (valAt(lv.key, i) || 0), 0);
     const total = sumAt(n - 1);
-    return { date: hd.dates[n - 1], rows, total,
-             totalDiff: n > 1 ? total - sumAt(n - 2) : null };
+    // 快照每期一份，正常相隔一週。但掃描的 cron 事件被 GitHub 丟棄是實際
+    // 發生過的事（見 daily_scan.yml 的註解），連續漏一週就會少掉一期快照，
+    // 此時差值跨越兩期以上，不能再稱為「週變化」。
+    const gap = n > 1 ? _dayGap(hd.dates[n - 2], hd.dates[n - 1]) : null;
+    return { date: hd.dates[n - 1], prevDate: n > 1 ? hd.dates[n - 2] : null,
+             rows, total,
+             totalDiff: n > 1 ? total - sumAt(n - 2) : null,
+             weekly: gap !== null && gap <= 10 };
+  }
+
+  /** 兩個 YYYY-MM-DD 相距幾天；無法解析時回 null。 */
+  function _dayGap(a, b) {
+    const t1 = Date.parse(a), t2 = Date.parse(b);
+    return (isNaN(t1) || isNaN(t2)) ? null : Math.round((t2 - t1) / 86400000);
   }
 
   /** 級距週變化的文字與漲跌色。pp = 百分點。 */
@@ -1117,7 +1129,8 @@
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
       + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%`
         + (ht.totalDiff === null ? '（集保首期，尚無週變化）。'
-                                 : `，週變化 ${ppText(ht.totalDiff)}。`) : '')
+           : ht.weekly ? `，週變化 ${ppText(ht.totalDiff)}。`
+           : `，較前期 ${ht.prevDate} 變化 ${ppText(ht.totalDiff)}。`) : '')
       + `綜合評分 ${sc.total}/100（${sc.grade} 級），風險等級${rk.level}。`;
     const tiers = ht
       ? `<div class="row" style="border-top:1px solid var(--border);
