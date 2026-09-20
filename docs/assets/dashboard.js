@@ -44,12 +44,38 @@
   // 高度決定；成本結構圖與法人柱狀圖依內容另訂高度，見各自的繪製函式。
   const CANVAS_H = 300;
 
-  // 集保大戶級距，分層互斥，與 build_docs._HOLDER_LEVELS 對應
+  // 集保大戶級距。資料源給的是分層互斥的區間（600~800、800~1000、
+  // 1000 以上），但判讀大戶動向時要看的是「持股 N 張以上的人共握有多少」，
+  // 故顯示前累加成門檻級距。key 仍是原始區間，累加由 cumulativeHolders()
+  // 處理；順序必須由大到小，累加才對。
   const HOLDER_LEVELS = [
     { key: 'lv1000_up',  label: '1000 張以上', color: '#e74c3c' },
-    { key: 'lv800_1000', label: '800~1000 張', color: '#f1b143' },
-    { key: 'lv600_800',  label: '600~800 張',  color: '#4ea1f3' },
+    { key: 'lv800_1000', label: '800 張以上',  color: '#f1b143' },
+    { key: 'lv600_800',  label: '600 張以上',  color: '#4ea1f3' },
   ];
+
+  /**
+   * 把分層互斥的區間轉為累計門檻：每一層加上所有比它更大的層。
+   * 例：1000 以上 84.70% + 800~1000 的 0.76% = 800 張以上 85.46%。
+   * 任一層缺值就讓該期之後的累計值為 null，不以 0 充數。
+   */
+  function cumulativeHolders(hd) {
+    if (!hd || !hd.dates) return hd;
+    const out = {};
+    let running = null;
+    HOLDER_LEVELS.forEach(lv => {
+      const vals = (hd.levels || {})[lv.key] || [];
+      const prev = running;
+      running = hd.dates.map((_, i) => {
+        const base = prev ? prev[i] : 0;
+        const v = vals[i];
+        return (v === null || v === undefined || base === null || base === undefined)
+          ? null : Math.round((base + v) * 1000) / 1000;
+      });
+      out[lv.key] = running;
+    });
+    return { dates: hd.dates, levels: out };
+  }
 
   // ════════════════════════════════════════════════════════════════
   //  衍生指標計算
@@ -430,9 +456,10 @@
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
 
-    // 各級距轉為相對首個有效值的變化量
+    // 與卡片數值一致，畫的是累計門檻（>1000 / >800 / >600）的變化
+    const cum = cumulativeHolders(holders);
     const series = HOLDER_LEVELS.map(lv => {
-      const vals = (holders.levels || {})[lv.key] || [];
+      const vals = (cum.levels || {})[lv.key] || [];
       const base = vals.find(v => v !== null && v !== undefined);
       return {
         ...lv,
@@ -585,7 +612,8 @@
    *
    * @returns {null|{date, rows, total, totalDiff}} 無資料時回傳 null
    */
-  function holderTiers(hd) {
+  function holderTiers(raw) {
+    const hd = cumulativeHolders(raw);
     if (!hd || !hd.dates || !hd.dates.length) return null;
     const n = hd.dates.length;
     const valAt = (key, i) => {
@@ -596,15 +624,15 @@
       const cur = valAt(lv.key, n - 1), prev = valAt(lv.key, n - 2);
       return { ...lv, cur, diff: (cur !== null && prev !== null) ? cur - prev : null };
     });
-    const sumAt = i => HOLDER_LEVELS.reduce((a, lv) => a + (valAt(lv.key, i) || 0), 0);
-    const total = sumAt(n - 1);
+    // 門檻最低的那層已涵蓋其餘各層，本身就是「600 張以上」的總量；
+    // 累計值再相加會重複計算。
+    const widest = rows[rows.length - 1];
     // 快照每期一份，正常相隔一週。但掃描的 cron 事件被 GitHub 丟棄是實際
     // 發生過的事（見 daily_scan.yml 的註解），連續漏一週就會少掉一期快照，
     // 此時差值跨越兩期以上，不能再稱為「週變化」。
     const gap = n > 1 ? _dayGap(hd.dates[n - 2], hd.dates[n - 1]) : null;
     return { date: hd.dates[n - 1], prevDate: n > 1 ? hd.dates[n - 2] : null,
-             rows, total,
-             totalDiff: n > 1 ? total - sumAt(n - 2) : null,
+             rows, total: widest.cur, totalDiff: widest.diff,
              weekly: gap !== null && gap <= 10 };
   }
 
@@ -1127,7 +1155,7 @@
     const text = `經 ${d.ohlcv.close.length} 日行為綜合研判：法人近 20 日合計 `
       + `${fmtInt(sc.net20)} 張，收盤相對 20 日 VWAP ${dev >= 0 ? '+' : ''}${fmt(dev, 1)}%，`
       + `RSI ${fmt(sc.rsi, 0)}、年化波動率 ${fmt(sc.annualVol, 1)}%。`
-      + (ht ? `大戶 600 張以上合計 ${ht.total.toFixed(2)}%`
+      + (ht ? `大戶持股 600 張以上 ${ht.total.toFixed(2)}%`
         + (ht.totalDiff === null ? '（集保首期，尚無週變化）。'
            : ht.weekly ? `，週變化 ${ppText(ht.totalDiff)}。`
            : `，較前期 ${ht.prevDate} 變化 ${ppText(ht.totalDiff)}。`) : '')
@@ -1135,10 +1163,8 @@
     const tiers = ht
       ? `<div class="row" style="border-top:1px solid var(--border);
            margin-top:8px;padding-top:7px;">
-           <span class="k">大戶持股 <span class="est">集保 ${ht.date}</span></span>
-           <span class="v">600 張以上 ${ht.total.toFixed(2)}%
-             <span class="${ppCls(ht.totalDiff)}" style="font-size:11px;margin-left:6px;"
-               >${ppText(ht.totalDiff)}</span></span></div>
+           <span class="k">大戶持股（累計門檻）</span>
+           <span class="v"><span class="est">集保 ${ht.date}</span></span></div>
          ${ht.rows.map(tierRow).join('')}`
       : `<div class="note" style="border-top:1px solid var(--border);
            margin-top:8px;padding-top:7px;">大戶三級距（1000 張以上／800~1000 張／
@@ -1176,12 +1202,9 @@
       return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
         <span class="sub">集保股權分散表 · ${ht.date}</span></h3>
         ${ht.rows.map(tierRow).join('')}
-        <div class="row" style="border-top:1px solid var(--border);
-          margin-top:4px;padding-top:6px;">
-          <span class="k">600 張以上合計</span>
-          <span class="v">${ht.total.toFixed(2)}%</span></div>
-        <div class="note">分層互斥，不累積。集保每週五結算、次週初公布，
-          目前只有這一期，累積到兩期以上才畫得出週變化趨勢。</div></div>`;
+        <div class="note">累計門檻：600 張以上已涵蓋 800 與 1000 張以上，三者不相加。
+          集保每週五結算、次週初公布，目前只有這一期，
+          累積到兩期以上才畫得出變化趨勢。</div></div>`;
     }
 
     return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
@@ -1190,14 +1213,9 @@
         <div><canvas id="holders"></canvas></div>
         <div>
           ${ht.rows.map(tierRow).join('')}
-          <div class="row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:6px;">
-            <span class="k">600 張以上合計</span>
-            <span class="v">${ht.total.toFixed(2)}%
-              <span class="${ppCls(ht.totalDiff)}" style="font-size:11px;margin-left:6px;"
-                >${ppText(ht.totalDiff)}</span></span>
-          </div>
-          <div class="note">分層互斥，不累積。pp = 百分點。比例上升代表籌碼向該級距集中；
-            集保每週五結算、次週初公布，與日 K 無法逐日對齊。</div>
+          <div class="note">累計門檻：600 張以上已涵蓋 800 與 1000 張以上，三者不相加。
+            pp = 百分點，比例上升代表籌碼向大戶集中。集保每週五結算、次週初公布，
+            與日 K 無法逐日對齊。</div>
         </div>
       </div></div>`;
   }
