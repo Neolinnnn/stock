@@ -18,6 +18,7 @@ import time
 from pathlib import Path
 
 from datafeed import finmind_fetch
+import tdcc_holders
 
 try:
     import pandas as pd
@@ -698,8 +699,22 @@ def build_stock_pages(date_dirs, docs_dir, keep_days=90):
 
     from datetime import datetime, timedelta
     end_date   = datetime.now().strftime('%Y-%m-%d')
-    start_date = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
+    # 行情視窗要放得下「顯示的 90 根 K 棒 + MA60 的 60 根暖機」= 150 個交易日。
+    # 台股一年約 245 個交易日，150 個交易日約 224 個日曆日，原本的 180 日
+    # 只有約 123 個交易日，暖機不足：tail(90) 最前面幾根的 MA60 會是 null，
+    # 且會隨著執行當天落在哪一天而時有時無（180 日視窗每天往前滑一天）。
+    # 連帶影響 _detect_patterns —— 它吃的是 dropna(ma60) 後的資料，
+    # 暖機不足時型態偵測的輸入長度也跟著晃動。放到 400 日留足長假的餘裕。
+    start_date = (datetime.now() - timedelta(days=400)).strftime('%Y-%m-%d')
+    # 籌碼只取 tail(90)，不需暖機，維持 180 日
     chip_start = (datetime.now() - timedelta(days=180)).strftime('%Y-%m-%d')
+
+    # 集保股權分散表一次回全市場，抓一次供所有個股共用；只給最新一期，
+    # 故每期存一份快照累積成歷史。抓不到時沿用既有快照，不影響其餘欄位。
+    try:
+        tdcc_holders.update(stock_info_map.keys())
+    except Exception as e:
+        print(f'  [holders] 集保資料更新失敗，沿用既有快照：{str(e)[:90]}')
 
     ok_count = 0
     for sid, info in stock_info_map.items():
@@ -752,6 +767,11 @@ def _build_single_stock(sid, info, stocks_dir, start_date, end_date, chip_start)
     except Exception:
         pass
 
+    # ── 集保大戶持股（週頻）────────────────────────────────────────────────
+    # 不在這裡連外：集保端點一次給全市場，已由 build_stock_pages 抓好存成快照，
+    # 這裡只讀本地累積的快照組時間序列。詳見 scripts/tdcc_holders.py
+    holders_data = tdcc_holders.load_series(sid)
+
     # ── 分析 ──────────────────────────────────────────────────────────────────
     df_valid = df.dropna(subset=['ma60']).reset_index(drop=True)
     if df_valid.empty:
@@ -762,7 +782,9 @@ def _build_single_stock(sid, info, stocks_dir, start_date, end_date, chip_start)
     summary_items = _technical_summary(df_valid)
     levels        = _key_levels(df_valid)
     patterns      = _detect_patterns(df_valid)
-    mj_signals    = _detect_mj_signals(df_valid)
+    # 與 ohlcv 的 tail(90) 對齊：訊號若落在 K 線圖顯示範圍外，前端無從標示。
+    # （不限縮的話，行情視窗一拉長訊號數就跟著暴增，與顯示內容脫節。）
+    mj_signals    = _detect_mj_signals(df_valid.tail(90))
     signal        = _main_force_signal(chip_data, df_valid)
     prediction    = _simple_prediction(summary_items)
 
@@ -809,6 +831,7 @@ def _build_single_stock(sid, info, stocks_dir, start_date, end_date, chip_start)
             'kd_j':        _round_list(df_ind['kd_j']),
         },
         'chip':       chip_data,
+        'holders':    holders_data,
         'mj_signals': mj_signals,
         'signal':     signal,
         'summary':  summary_items,
@@ -842,6 +865,13 @@ def build_all():
         print('找不到任何 daily_reports/YYYYMMDD/summary.json')
         return []
 
+    # 順序很重要：build_daily_payload() 會讀 docs/stocks/{id}.json 取現價與
+    # KD/乖離，替每日報告補上 trend_analysis。若先產每日報告，讀到的是上一輪
+    # 留下的個股檔，整份行動清單會慢一個交易日——2026-09-18 的報告裡
+    # 3450 聯鈞的 current_price 是 09-17 的 525，而非當日的 538，
+    # 連帶 KD、乖離與進場評等（B/C）都是用前一天的價位算的。
+    build_stock_pages(date_dirs, docs_dir)
+
     dates = []
     for d in date_dirs:
         summary = json.loads((d / 'summary.json').read_text(encoding='utf-8'))
@@ -867,8 +897,6 @@ def build_all():
     )
 
     print(f'docs/ 已更新：{len(dates)} 個交易日  最新={dates[0]}')
-
-    build_stock_pages(date_dirs, docs_dir)
 
     # 回測摘要 JSON（供 backtest.html 用）
     try:

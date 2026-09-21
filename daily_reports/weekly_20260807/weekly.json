@@ -1,0 +1,399 @@
+{
+  "week_ending": "2026-08-07",
+  "days_covered": 5,
+  "market": {
+    "taiex_close": 44225.91,
+    "taiex_week_pct": 2.57,
+    "otc_close": 384.19,
+    "otc_week_pct": 10.45,
+    "taiex_bull": false,
+    "taiex_ma60": 44278.76
+  },
+  "sector_changes": [
+    {
+      "sector": "銅箔/CCL",
+      "change": 20.67,
+      "level": -10.18,
+      "prev_change": -12.1
+    },
+    {
+      "sector": "AI 散熱",
+      "change": 18.81,
+      "level": 8.61,
+      "prev_change": -11.04
+    },
+    {
+      "sector": "綠能環保",
+      "change": 18.42,
+      "level": -10.65,
+      "prev_change": -9.14
+    },
+    {
+      "sector": "ABF載板",
+      "change": 16.03,
+      "level": 0.52,
+      "prev_change": -11.46
+    },
+    {
+      "sector": "AI ASIC/IP",
+      "change": 15.7,
+      "level": -1.08,
+      "prev_change": -13.0
+    },
+    {
+      "sector": "光學",
+      "change": 15.03,
+      "level": 0.2,
+      "prev_change": 4.07
+    },
+    {
+      "sector": "PCB",
+      "change": 14.82,
+      "level": -12.41,
+      "prev_change": -8.62
+    },
+    {
+      "sector": "光通訊",
+      "change": 13.5,
+      "level": -5.02,
+      "prev_change": -11.59
+    },
+    {
+      "sector": "測試設備",
+      "change": 13.16,
+      "level": 3.22,
+      "prev_change": -7.13
+    },
+    {
+      "sector": "記憶體",
+      "change": 11.21,
+      "level": -1.52,
+      "prev_change": -4.63
+    },
+    {
+      "sector": "AI 電源",
+      "change": 10.09,
+      "level": -2.83,
+      "prev_change": -12.79
+    },
+    {
+      "sector": "被動元件",
+      "change": 9.28,
+      "level": -43.04,
+      "prev_change": -12.75
+    },
+    {
+      "sector": "CoPoS封裝",
+      "change": 8.08,
+      "level": -11.33,
+      "prev_change": -18.5
+    },
+    {
+      "sector": "封測",
+      "change": 6.29,
+      "level": -18.83,
+      "prev_change": -16.01
+    },
+    {
+      "sector": "AI伺服器",
+      "change": 5.89,
+      "level": 4.93,
+      "prev_change": -5.74
+    },
+    {
+      "sector": "車用電子",
+      "change": 5.42,
+      "level": -12.55,
+      "prev_change": -10.42
+    },
+    {
+      "sector": "IC設計",
+      "change": 2.89,
+      "level": -9.76,
+      "prev_change": -12.12
+    },
+    {
+      "sector": "顯示",
+      "change": 2.7,
+      "level": -5.1,
+      "prev_change": -4.01
+    }
+  ],
+  "rotation_matrix": {
+    "leading": [
+      {
+        "sector": "AI 散熱",
+        "change": 18.81,
+        "level": 8.61,
+        "prev_change": -11.04
+      },
+      {
+        "sector": "ABF載板",
+        "change": 16.03,
+        "level": 0.52,
+        "prev_change": -11.46
+      },
+      {
+        "sector": "光學",
+        "change": 15.03,
+        "level": 0.2,
+        "prev_change": 4.07
+      },
+      {
+        "sector": "測試設備",
+        "change": 13.16,
+        "level": 3.22,
+        "prev_change": -7.13
+      },
+      {
+        "sector": "AI伺服器",
+        "change": 5.89,
+        "level": 4.93,
+        "prev_change": -5.74
+      }
+    ],
+    "turning": [
+      {
+        "sector": "銅箔/CCL",
+        "change": 20.67,
+        "level": -10.18,
+        "prev_change": -12.1
+      },
+      {
+        "sector": "綠能環保",
+        "change": 18.42,
+        "level": -10.65,
+        "prev_change": -9.14
+      },
+      {
+        "sector": "AI ASIC/IP",
+        "change": 15.7,
+        "level": -1.08,
+        "prev_change": -13.0
+      },
+      {
+        "sector": "PCB",
+        "change": 14.82,
+        "level": -12.41,
+        "prev_change": -8.62
+      },
+      {
+        "sector": "光通訊",
+        "change": 13.5,
+        "level": -5.02,
+        "prev_change": -11.59
+      },
+      {
+        "sector": "記憶體",
+        "change": 11.21,
+        "level": -1.52,
+        "prev_change": -4.63
+      },
+      {
+        "sector": "AI 電源",
+        "change": 10.09,
+        "level": -2.83,
+        "prev_change": -12.79
+      },
+      {
+        "sector": "被動元件",
+        "change": 9.28,
+        "level": -43.04,
+        "prev_change": -12.75
+      },
+      {
+        "sector": "CoPoS封裝",
+        "change": 8.08,
+        "level": -11.33,
+        "prev_change": -18.5
+      },
+      {
+        "sector": "封測",
+        "change": 6.29,
+        "level": -18.83,
+        "prev_change": -16.01
+      },
+      {
+        "sector": "車用電子",
+        "change": 5.42,
+        "level": -12.55,
+        "prev_change": -10.42
+      },
+      {
+        "sector": "IC設計",
+        "change": 2.89,
+        "level": -9.76,
+        "prev_change": -12.12
+      },
+      {
+        "sector": "顯示",
+        "change": 2.7,
+        "level": -5.1,
+        "prev_change": -4.01
+      }
+    ],
+    "cooling": [],
+    "weak": [],
+    "v_turn": [
+      {
+        "sector": "銅箔/CCL",
+        "change": 20.67,
+        "level": -10.18,
+        "prev_change": -12.1
+      },
+      {
+        "sector": "AI 散熱",
+        "change": 18.81,
+        "level": 8.61,
+        "prev_change": -11.04
+      },
+      {
+        "sector": "AI ASIC/IP",
+        "change": 15.7,
+        "level": -1.08,
+        "prev_change": -13.0
+      }
+    ]
+  },
+  "top_buys": [
+    {
+      "stock": "3260 威剛",
+      "buy_days": 4,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "2317 鴻海",
+      "buy_days": 3,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "2360 致茂",
+      "buy_days": 2,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "2330 台積電",
+      "buy_days": 2,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "7769 鴻勤",
+      "buy_days": 2,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "2451 創見",
+      "buy_days": 1,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "3105 穩懋",
+      "buy_days": 1,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "4906 正文",
+      "buy_days": 1,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "2344 華邦電",
+      "buy_days": 1,
+      "chip_tier": null,
+      "gate": false
+    },
+    {
+      "stock": "2379 瑞昱",
+      "buy_days": 1,
+      "chip_tier": null,
+      "gate": false
+    }
+  ],
+  "positions_week": {
+    "entries": [],
+    "exits": [],
+    "holding": []
+  },
+  "alerts_week": [
+    {
+      "id": "3017",
+      "name": "奇鋐",
+      "type": "RSI過熱",
+      "days": 4,
+      "detail": "RSI=85.8"
+    },
+    {
+      "id": "2301",
+      "name": "光寶科",
+      "type": "RSI過熱",
+      "days": 4,
+      "detail": "RSI=78.6"
+    },
+    {
+      "id": "3653",
+      "name": "健策",
+      "type": "RSI過熱",
+      "days": 4,
+      "detail": "RSI=77.9"
+    },
+    {
+      "id": "3231",
+      "name": "緯創",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=74.7"
+    },
+    {
+      "id": "4979",
+      "name": "華星光",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=73.8"
+    },
+    {
+      "id": "3006",
+      "name": "晶豪科",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=79.2"
+    },
+    {
+      "id": "6213",
+      "name": "聯茂",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=81.6"
+    },
+    {
+      "id": "6269",
+      "name": "台郡",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=83.0"
+    },
+    {
+      "id": "2421",
+      "name": "建準",
+      "type": "RSI過熱",
+      "days": 3,
+      "detail": "RSI=75.3"
+    },
+    {
+      "id": "7734",
+      "name": "印能",
+      "type": "RSI過熱",
+      "days": 2,
+      "detail": "RSI=77.4"
+    }
+  ],
+  "chart_path": "daily_reports/weekly_20260807/01_weekly_sector_trend.png",
+  "narrative": ""
+}

@@ -24,6 +24,7 @@ from agents import analysts, gemini_text, news  # noqa: E402
 OUT_DIR = Path(__file__).resolve().parent / "output"
 REPORTS = ROOT / "daily_reports"
 STOCKS_DIR = ROOT / "docs" / "stocks"   # analyzer_daily.py 產出的個股 OHLCV/指標
+FUND_DIR = ROOT / "docs" / "fundamentals"   # fundamentals_fetcher.py 產出的月營收/EPS/毛利率
 
 _CHART_POINTS = 60   # 迷你走勢圖取最近 N 個交易日，控制 HTML 體積
 
@@ -79,6 +80,17 @@ def _load_tech(stock_id: str) -> dict | None:
         return None
 
 
+def _load_fund(stock_id: str) -> dict | None:
+    """讀 docs/fundamentals/<id>.json（月營收 / EPS / 毛利率），供基本面分析師使用。"""
+    fp = FUND_DIR / f"{stock_id}.json"
+    if not fp.exists():
+        return None
+    try:
+        return json.loads(fp.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
 def _latest_report() -> Path:
     days = sorted(
         p for p in REPORTS.iterdir()
@@ -117,14 +129,17 @@ def run(date: str | None, use_gemini: bool, use_macro: bool) -> dict:
     for sec_name, sec in summary.get("sectors", {}).items():
         stocks_out = []
         for s in sec.get("stocks", []):
-            tech = _load_tech(str(s.get("id", "")))
-            r = analysts.analyze_stock(s, regime, tech=(tech or {}).get("snap"))
+            sid = str(s.get("id", ""))
+            tech = _load_tech(sid)
+            r = analysts.analyze_stock(s, regime, tech=(tech or {}).get("snap"),
+                                       fund=_load_fund(sid))
             r["news"] = news.prepare_news(s, report_dir.name)
             r["chart"] = (tech or {}).get("chart")
-            r["summary_text"] = gemini_text.summarize(r, use_gemini=use_gemini)
             stocks_out.append(r)
         if not stocks_out:
             continue
+        # 文字敘述：整個族群一次呼叫（102 檔逐檔呼叫會打爆免費額度）
+        gemini_text.attach_summaries(stocks_out, sec_name, use_gemini=use_gemini)
         sec_score = round(sum(x["decision"]["composite"] for x in stocks_out) / len(stocks_out), 1)
         stocks_out.sort(key=lambda x: x["decision"]["composite"], reverse=True)
         sectors_out.append({
@@ -157,8 +172,9 @@ def _sector_synthesis(stocks: list[dict]) -> dict:
     bull, bear = [], []
     n_tech_pos = sum(x["analysts"]["technical"]["score"] > 10 for x in stocks)
     n_buy = sum(x["analysts"]["sentiment"]["signals"]["合計"] > 20000 for x in stocks)
-    n_yoy = sum(bool((x["analysts"]["fundamental"]["signals"].get("max_yoy_pct") or 0) > 50)
+    n_yoy = sum(bool((x["analysts"]["fundamental"]["signals"].get("rev_yoy") or 0) > 50)
                 for x in stocks)
+    n_nofund = sum(x["analysts"]["fundamental"].get("coverage") == "none" for x in stocks)
     if n_tech_pos:
         bull.append(f"{n_tech_pos}/{len(stocks)} 檔技術面偏多。")
     if n_yoy:
@@ -171,6 +187,8 @@ def _sector_synthesis(stocks: list[dict]) -> dict:
         bear.append(f"{n_overbought} 檔 RSI 過熱，留意追高。")
     if n_sell:
         bear.append(f"{n_sell} 檔法人賣超，籌碼鬆動。")
+    if n_nofund:
+        bear.append(f"{n_nofund} 檔無財報資料，基本面未納入評分。")
     if not bull:
         bull.append("族群多方訊號有限。")
     if not bear:

@@ -25,14 +25,28 @@ _FINMIND_TOKENS: list = []
 _finmind_token_idx = 0
 
 
+# FinMind 對「帳號等級不足」回的是永久性拒絕，不是暫時性失敗。
+# 重試只是白等退避時間、白燒 API 次數，結果一定一樣。
+_PERMANENT_ERR = ('your level is', 'please update your user level')
+
+
+def _is_permanent(e) -> bool:
+    """判斷是否為重試也不會變的錯誤。"""
+    s = str(e).lower()
+    return any(k in s for k in _PERMANENT_ERR)
+
+
 def retry(fn, *args, max_retries: int = 3, base_delay: float = 3.0, **kwargs):
     """對 fn(*args, **kwargs) 執行最多 max_retries 次重試，
-    每次等待 base_delay * 2^attempt 秒（指數退避）。"""
+    每次等待 base_delay * 2^attempt 秒（指數退避）。
+
+    永久性錯誤直接拋出不重試——例如集保資料需要贊助等級帳號，
+    免費帳號重試三次還是三次拒絕，只是讓每檔個股多花 10 秒、多燒 2 次呼叫。"""
     for attempt in range(max_retries + 1):
         try:
             return fn(*args, **kwargs)
         except Exception as e:
-            if attempt == max_retries:
+            if attempt == max_retries or _is_permanent(e):
                 raise
             wait = base_delay * (2 ** attempt)
             print(f'    [retry {attempt+1}/{max_retries}] {fn.__name__ if hasattr(fn,"__name__") else "call"} 失敗，{wait:.0f}s 後重試…（{e}）')

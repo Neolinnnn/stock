@@ -1,0 +1,44 @@
+name: 驗證集保大戶資料
+
+# 確認集保（TDCC）open data 的端點、欄位與分級對照仍如預期。
+# 集保端點免認證、只用標準庫，所以不需要 token 也不需要安裝相依套件。
+on:
+  workflow_dispatch:
+    inputs:
+      stock_id:
+        description: '股票代碼（例 2330）'
+        required: false
+        default: '2330'
+        type: string
+      weeks:
+        description: '時間序列取最近幾期'
+        required: false
+        default: '12'
+        type: string
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify holders dataset
+        run: |
+          python scripts/verify_holders.py \
+            "${{ github.event.inputs.stock_id }}" \
+            --weeks "${{ github.event.inputs.weeks }}" \
+            --dump holders_raw.csv
+
+      - name: Upload raw response
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: holders-raw
+          path: holders_raw.csv
+          if-no-files-found: warn

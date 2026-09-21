@@ -1,8 +1,49 @@
 {
- "date": "20260724",
- "generated_at": "2026-07-24 10:11",
- "taiex_bull": false,
- "picks": [],
+ "date": "20260921",
+ "generated_at": "2026-09-21 11:37",
+ "taiex_bull": true,
+ "picks": [
+  {
+   "id": "4906",
+   "close": 38.5,
+   "vol_ratio": 1.65,
+   "dist_ma20": 5.67,
+   "ret20": 13.24,
+   "last_date": "2026-09-21",
+   "chip5": 2728398.0,
+   "name": "正文"
+  },
+  {
+   "id": "2441",
+   "close": 127.5,
+   "vol_ratio": 1.71,
+   "dist_ma20": 9.23,
+   "ret20": 12.33,
+   "last_date": "2026-09-21",
+   "chip5": 6257839.0,
+   "name": "超豐"
+  },
+  {
+   "id": "6239",
+   "close": 292.5,
+   "vol_ratio": 1.96,
+   "dist_ma20": 4.99,
+   "ret20": 8.53,
+   "last_date": "2026-09-21",
+   "chip5": 4267470.0,
+   "name": "力成"
+  },
+  {
+   "id": "2376",
+   "close": 368.0,
+   "vol_ratio": 2.19,
+   "dist_ma20": 4.09,
+   "ret20": 7.92,
+   "last_date": "2026-09-21",
+   "chip5": 968624.0,
+   "name": "技嘉"
+  }
+ ],
  "backtest_ref": {
   "n": 183,
   "tp18sl15_win": 0.65,
