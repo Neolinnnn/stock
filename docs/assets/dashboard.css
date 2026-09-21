@@ -1,0 +1,121 @@
+/* AI 個股戰情儀表板樣式。
+   由 docs/stock_dashboard.html（全螢幕版）與個股分析分頁共用。
+   所有規則限縮於 .sdash 作用域 —— .card/.row/.tag 等通用名稱
+   與宿主頁面既有樣式重名，不加作用域會互相覆蓋。 */
+:root{
+  --bg:#0b0e14; --card:#161a22; --border:#272c37;
+  --text:#e8eaed; --sub:#8b93a3; --green:#2ecc71;
+  --red:#e74c3c; --yellow:#f1b143; --blue:#4ea1f3;
+  --accent:#3d8bfd; --accent2:#7c5cff; --card-hover:#1b2029;
+}
+/* 次要文字提亮：原 #8b93a3 在卡片底色上對比約 5.4:1，勉強過 AA，
+   但 11~13px 的小字讀起來吃力。#a8b2c1 約 7.9:1，達 AAA。
+   僅覆蓋 .sdash 作用域，避免影響宿主頁面其他分頁。 */
+.sdash{--sub:#a8b2c1;}
+
+/* ── 頂部狀態列 ─────────────────────────────── */
+.sdash .dot{width:8px;height:8px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 6px var(--green);}
+.sdash .dot.y{background:var(--yellow);box-shadow:0 0 6px var(--yellow);}
+.sdash .dot.r{background:var(--red);box-shadow:0 0 6px var(--red);}
+.sdash .dot.b{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+/* ── 報價列 ─────────────────────────────────── */
+.sdash .quotebar{display:flex;gap:2px;flex-wrap:wrap;padding:8px 16px;
+  background:#10141b;border-bottom:1px solid var(--border);}
+.sdash .qcell{flex:1 1 90px;padding:4px 10px;border-right:1px solid var(--border);}
+.sdash .qcell:last-child{border-right:none;}
+.sdash .qlab{font-size:12px;color:var(--sub);white-space:nowrap;}
+.sdash .qval{font-size:22px;font-weight:700;margin-top:2px;}
+.sdash .up{color:var(--red);}
+.sdash .dn{color:var(--green);}
+.sdash .flat{color:var(--sub);}
+/* ── 卡片網格 ───────────────────────────────── */
+.sdash .grid{display:grid;gap:12px;padding:12px 16px;
+  grid-template-columns:repeat(12,1fr);
+  /* 卡片高度依內容，不被同列最高者拉伸出空白 */
+  align-items:start;}
+.sdash .card{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;min-width:0;}
+.sdash .card h3{margin:0 0 10px;font-size:15px;font-weight:600;
+  display:flex;align-items:center;gap:6px;}
+.sdash .no{background:var(--accent);color:#fff;font-size:12px;font-weight:700;
+  padding:1px 5px;border-radius:3px;letter-spacing:.5px;}
+.sdash .sub{font-size:13px;color:var(--sub);font-weight:400;margin-left:auto;}
+/* 欄寬工具 */
+.sdash .c3{grid-column:span 3;}
+.sdash .c4{grid-column:span 4;}
+.sdash .c5{grid-column:span 5;}
+.sdash .c6{grid-column:span 6;}
+.sdash .c7{grid-column:span 7;}
+.sdash .c8{grid-column:span 8;}
+.sdash .c12{grid-column:span 12;}
+@media(max-width:1100px){.sdash .c3, .sdash .c4, .sdash .c5{grid-column:span 6;}
+.sdash .c6, .sdash .c7, .sdash .c8{grid-column:span 12;}
+}
+@media(max-width:680px){.sdash .c3, .sdash .c4, .sdash .c5, .sdash .c6, .sdash .c7, .sdash .c8{grid-column:span 12;} }
+/* ── 指標列 ─────────────────────────────────── */
+.sdash .row{display:flex;align-items:center;justify-content:space-between;
+  padding:5px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.04);}
+.sdash .row:last-child{border-bottom:none;}
+.sdash .row .k{color:var(--sub);display:flex;align-items:center;gap:5px;}
+.sdash .row .v{font-weight:600;font-variant-numeric:tabular-nums;}
+/* ── 進度條 ─────────────────────────────────── */
+.sdash .bar{height:9px;border-radius:4px;background:#0f1319;overflow:hidden;
+  flex:1;min-width:50px;}
+.sdash .bar > i{display:block;height:100%;border-radius:4px;transition:width .4s;}
+.sdash .barrow{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;}
+.sdash .barrow .lab{color:var(--sub);width:96px;flex-shrink:0;}
+.sdash .barrow .pct{width:46px;text-align:right;font-weight:600;flex-shrink:0;
+  font-variant-numeric:tabular-nums;}
+/* ── 環形圖 ─────────────────────────────────── */
+.sdash .rings{display:flex;justify-content:space-around;flex-wrap:wrap;gap:8px;}
+.sdash .ring{text-align:center;}
+.sdash .ring svg{display:block;}
+.sdash .ring .rl{font-size:12px;color:var(--sub);margin-top:3px;}
+/* ── 狀態標籤 ───────────────────────────────── */
+.sdash .tag{font-size:13px;padding:1px 7px;border-radius:10px;font-weight:600;}
+.sdash .tag.g{background:rgba(46,204,113,.15);color:var(--green);}
+.sdash .tag.r{background:rgba(231,76,60,.15);color:var(--red);}
+.sdash .tag.y{background:rgba(241,177,67,.15);color:var(--yellow);}
+.sdash .tag.b{background:rgba(78,161,243,.15);color:var(--blue);}
+.sdash .tag.n{background:rgba(139,147,163,.15);color:var(--sub);}
+.sdash .warn{background:rgba(241,177,67,.1);border:1px solid rgba(241,177,67,.3);
+  border-radius:5px;padding:7px 11px;font-size:13px;color:var(--yellow);
+  margin-bottom:7px;font-weight:600;}
+.sdash .note{font-size:13px;color:var(--sub);margin-top:7px;line-height:1.5;}
+.sdash .est{font-size:11px;color:var(--sub);opacity:.75;}
+/* ── 圖表容器 ───────────────────────────────── */
+.sdash .chartbox{width:100%;height:460px;position:relative;}
+/* 主K線讀值列：疊在圖上，不佔版面高度，游標未指向任何一根時顯示最後一根 */
+.sdash .klegend{position:absolute;top:4px;left:8px;z-index:3;pointer-events:none;
+  display:flex;flex-wrap:wrap;gap:12px;font-size:13px;font-weight:600;
+  font-variant-numeric:tabular-nums;text-shadow:0 1px 3px rgba(11,14,20,.95);}
+.sdash .klegend i{color:var(--sub);font-style:normal;font-weight:400;margin-right:4px;}
+.sdash .holderwrap{display:grid;grid-template-columns:2fr 1fr;gap:16px;align-items:start;}
+@media(max-width:820px){.sdash .holderwrap{grid-template-columns:1fr;} }
+.sdash canvas{display:block;width:100%;}
+.sdash table{font-variant-numeric:tabular-nums;}
+/* ── 讀值浮層 ───────────────────────────────── */
+/* 浮層掛在 body 而非卡片內，故不套 .sdash 作用域；類名自帶前綴避免與宿主頁面撞名 */
+.sdash-tip{position:fixed;z-index:9999;display:none;pointer-events:none;
+  background:#1b2029;border:1px solid #39414f;border-radius:6px;padding:7px 10px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
+  font-size:13px;line-height:1.5;color:#e8eaed;max-width:280px;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);}
+.sdash-tip .tip-h{font-weight:700;margin-bottom:4px;white-space:nowrap;}
+.sdash-tip .tip-r{display:flex;align-items:center;justify-content:space-between;gap:14px;}
+/* 色標用線段不用色塊：浮層這個密度下，實心方塊是多餘的資料重量 */
+.sdash-tip .tip-k{color:#a8b2c1;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.sdash-tip .tip-k::before{content:"";width:10px;flex-shrink:0;}
+.sdash-tip .tip-k.keyed::before{height:2px;border-radius:1px;background:var(--key);}
+/* 數值是讀者要的，字重與對比都高於標籤 */
+.sdash-tip .tip-v{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.sdash-tipmark{position:fixed;z-index:9998;display:none;pointer-events:none;
+  border:1px solid rgba(232,234,237,.5);border-radius:3px;
+  background:rgba(232,234,237,.07);}
+/* 鍵盤操作時看得出焦點落在哪張圖 */
+.sdash canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+/* ── 大字結論 ───────────────────────────────── */
+.sdash .verdict{font-size:32px;font-weight:700;margin:6px 0 10px;}
+.sdash .pill{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;
+  border-radius:12px;background:rgba(241,177,67,.15);color:var(--yellow);}

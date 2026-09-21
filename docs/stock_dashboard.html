@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 個股戰情儀表板</title>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="stylesheet" href="./assets/dashboard.css">
+<style>
+/* 全螢幕版專屬：頂部狀態列與個股選單。卡片樣式見 assets/dashboard.css */
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;
+  font-size:13px;}
+.topbar{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  padding:10px 16px;background:var(--card);border-bottom:1px solid var(--border);}
+.badge{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--sub);
+  letter-spacing:.5px;}
+.sid{font-size:22px;font-weight:700;letter-spacing:1px;}
+.sname{font-size:15px;color:var(--sub);}
+#picker{background:#0f1319;color:var(--text);border:1px solid var(--border);
+  border-radius:6px;padding:5px 10px;font-size:13px;min-width:150px;}
+#status{padding:40px 16px;text-align:center;color:var(--sub);}
+</style>
+</head>
+<body class="sdash">
+
+<div class="topbar">
+  <span class="badge"><i class="dot"></i>AI SCAN ACTIVE</span>
+  <span class="badge"><i class="dot b"></i>MAIN FORCE TRACKING</span>
+  <span class="badge"><i class="dot y"></i>MARKET STATUS</span>
+  <span class="badge"><i class="dot r"></i>VOLATILITY ALERT</span>
+  <span class="sid" id="t-id">—</span>
+  <span class="sname" id="t-name"></span>
+  <select id="picker"><option>載入中…</option></select>
+</div>
+
+<div id="dash-root">
+  <div class="quotebar" data-dash="quotebar"></div>
+  <div id="status">請選擇個股</div>
+  <div class="grid" data-dash="grid" style="display:none"></div>
+</div>
+
+<script src="./assets/dashboard.js"></script>
+<script>
+'use strict';
+
+const root = document.getElementById('dash-root');
+
+async function loadStock(sid) {
+  if (!sid) return;
+  const grid = root.querySelector('[data-dash="grid"]');
+  const st = document.getElementById('status');
+  grid.style.display = 'none';
+  st.style.display = '';
+  st.textContent = '載入中…';
+  try {
+    const bust = Math.floor(Date.now() / 86400000);
+    const r = await fetch(`./stocks/${sid}.json?v=${bust}`, { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    window.StockDashboard.destroy();
+    window.StockDashboard.render(root, data);
+    // 標題列屬本頁，不在儀表板容器內，故由此填入
+    document.getElementById('t-id').textContent = data.stock_id || sid;
+    document.getElementById('t-name').textContent =
+      `${data.name || ''}　${data.industry || ''}`;
+    location.hash = sid;
+  } catch (e) {
+    st.textContent = `⚠ 找不到 ${sid} 的資料（${e.message}）`;
+  }
+}
+
+async function init() {
+  let list = [];
+  try {
+    list = await (await fetch('./stocks_index.json', { cache: 'no-store' })).json();
+  } catch {
+    document.getElementById('status').textContent = '⚠ 無法載入 stocks_index.json';
+    return;
+  }
+  const sel = document.getElementById('picker');
+  sel.innerHTML = list.map(s =>
+    `<option value="${s.id}">${s.id} ${s.name}${s.sector ? '｜' + s.sector : ''}</option>`).join('');
+  sel.onchange = () => loadStock(sel.value);
+
+  const hash = location.hash.replace('#', '');
+  const initial = list.some(s => s.id === hash) ? hash : (list[0] && list[0].id);
+  if (initial) { sel.value = initial; loadStock(initial); }
+}
+
+// 視窗尺寸改變時重繪（canvas 以 clientWidth 決定解析度）
+let _rt;
+window.addEventListener('resize', () => {
+  clearTimeout(_rt);
+  _rt = setTimeout(() => {
+    const v = document.getElementById('picker').value;
+    if (v) loadStock(v);
+  }, 250);
+});
+
+init();
+</script>
+</body>
+</html>
