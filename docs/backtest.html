@@ -194,13 +194,12 @@ let CUR_PERIOD = '1m';
 let CUR_COMBO = null;
 let CUR_FILTER = 'all';
 
-const PERIOD_LABELS = {
-  '1m':'近1個月','6m':'近6個月','9m':'近9個月','12m':'近12個月',
-  '6m_tr':'近6個月\n追蹤停損','9m_tr':'近9個月\n追蹤停損','12m_tr':'近12個月\n追蹤停損',
-};
-
 function fmtDate(d){ return d ? d.slice(0,4)+'/'+d.slice(4,6)+'/'+d.slice(6,8) : '—'; }
 function sign(v){ return v > 0 ? '+' : ''; }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+// 報酬率：自帶正負號並依正負上色，不可硬寫 '+' 與綠色
+function fmtRet(v, digits=1){ return (v >= 0 ? '+' : '') + v.toFixed(digits) + '%'; }
+function retColor(v){ return v >= 0 ? 'var(--green)' : 'var(--red)'; }
 
 function signalClass(sig){
   if(!sig) return 'signal-wait';
@@ -230,6 +229,7 @@ async function init(){
     const pd = DATA.periods[key];
     const btn = document.createElement('button');
     btn.className = 'period-tab' + (key === CUR_PERIOD ? ' active' : '');
+    btn.dataset.period = key;
     btn.textContent = pd.label;
     btn.onclick = () => { CUR_PERIOD = key; CUR_COMBO = null; CUR_FILTER = 'all'; setPeriod(); };
     tabsEl.appendChild(btn);
@@ -239,9 +239,9 @@ async function init(){
 }
 
 function setPeriod(){
-  // Update tab styles
-  document.querySelectorAll('.period-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', btn.textContent === DATA.periods[CUR_PERIOD]?.label);
+  // Update tab styles（以 period key 比對，用 label 文字比對會在標籤重複時同時亮起）
+  document.querySelectorAll('.period-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.period === CUR_PERIOD);
   });
 
   const pd = DATA.periods[CUR_PERIOD];
@@ -286,7 +286,7 @@ function renderHero(pd){
       </div>
       <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
         <div class="hero-stat">
-          <div class="val" style="color:var(--green)">+${s.avg_return.toFixed(1)}%</div>
+          <div class="val" style="color:${retColor(s.avg_return)}">${fmtRet(s.avg_return)}</div>
           <div class="lbl">已結算平均報酬</div>
         </div>
         <div class="hero-stat">
@@ -327,14 +327,14 @@ function renderComboGrid(pd){
     const isActive = combo.id === CUR_COMBO;
     const wrS = (s.win_rate_settled*100).toFixed(0);
     const wrP = (s.win_rate_pessimistic*100).toFixed(0);
-    html += `<tr onclick="selectCombo('${combo.id}')" style="cursor:pointer;
+    html += `<tr onclick="selectCombo('${esc(combo.id)}')" style="cursor:pointer;
         ${isActive?'background:rgba(31,119,180,.12);':''}${isBest&&!isActive?'background:rgba(39,174,96,.06);':''}">
-      <td style="font-weight:600;">${isActive?'▶ ':''}${combo.label}
+      <td style="font-weight:600;">${isActive?'▶ ':''}${esc(combo.label)}
         ${isBest?'<span class="combo-badge badge-best">最佳</span>':''}</td>
       <td style="color:var(--green);font-weight:700;">${wrS}%</td>
       <td><div class="win-bar-wrap" style="margin:0;"><div class="win-bar" style="width:${wrS}%"></div></div></td>
       <td style="color:var(--sub);">${wrP}%</td>
-      <td style="color:var(--green);font-weight:600;">+${s.avg_return.toFixed(1)}%</td>
+      <td style="color:${retColor(s.avg_return)};font-weight:600;">${fmtRet(s.avg_return)}</td>
       <td style="font-size:12px;">${s.wins}✅ ${s.losses}❌ ${s.open_count}⏳</td>
       <td style="color:var(--sub);">${s.avg_holding_days.toFixed(0)}天</td>
     </tr>`;
@@ -416,7 +416,7 @@ function renderTrades(pd){
     return `<div class="trade-item">
       <div class="trade-badge ${badgeCls}">${badgeText}</div>
       <div>
-        <div class="trade-name">${t.stock_id} ${t.stock_name}</div>
+        <div class="trade-name">${esc(t.stock_id)} ${esc(t.stock_name)}</div>
         <div class="trade-meta">進場 ${fmtDate(t.entry_date)} @ ${t.entry_price} &nbsp;|&nbsp; ${exitText} &nbsp;|&nbsp; ${holdText}</div>
       </div>
       <div class="trade-ret ${retColor}">${retText}</div>
@@ -470,26 +470,26 @@ function renderOpenAnalysis(pd){
     return `<div class="open-card">
       <div class="open-header">
         <div>
-          <span class="open-name">${sid}</span>
+          <span class="open-name">${esc(sid)}</span>
           <span class="open-price" style="margin-left:8px">現價 ${curPrice.toFixed(1)}</span>
           ${entryPrice ? `<span class="open-price"> | 成本 ${entryPrice}</span>` : ''}
         </div>
-        <span class="signal-pill ${signalClass(sig)}" style="margin-left:auto">${sig}</span>
+        <span class="signal-pill ${signalClass(sig)}" style="margin-left:auto">${esc(sig)}</span>
         <span style="margin-left:10px;font-size:12px;color:${scoreC};font-weight:700">${score}/100</span>
         <div class="score-bar-wrap"><div class="score-bar" style="width:${scoreW}%;background:${scoreC}"></div></div>
       </div>
       <div class="open-indicators">
-        <div class="ind-item"><div class="ind-label">趨勢</div><div class="ind-val">${a.trend_status||'—'}</div></div>
-        <div class="ind-item"><div class="ind-label">均線排列</div><div class="ind-val" style="font-size:11px">${a.ma_alignment||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">趨勢</div><div class="ind-val">${esc(a.trend_status||'—')}</div></div>
+        <div class="ind-item"><div class="ind-label">均線排列</div><div class="ind-val" style="font-size:11px">${esc(a.ma_alignment||'—')}</div></div>
         <div class="ind-item"><div class="ind-label">MA5</div><div class="ind-val">${a.ma5?.toFixed(1)||'—'}</div></div>
         <div class="ind-item"><div class="ind-label">乖離MA5</div><div class="ind-val" style="color:${(a.bias_ma5||0)>5?'var(--red)':'var(--text)'}">${a.bias_ma5!=null?(a.bias_ma5>=0?'+':'')+a.bias_ma5.toFixed(1)+'%':'—'}</div></div>
-        <div class="ind-item"><div class="ind-label">MACD</div><div class="ind-val" style="font-size:11px">${a.macd_signal||'—'}</div></div>
-        <div class="ind-item"><div class="ind-label">量能</div><div class="ind-val" style="font-size:11px">${a.volume_trend||'—'}</div></div>
+        <div class="ind-item"><div class="ind-label">MACD</div><div class="ind-val" style="font-size:11px">${esc(a.macd_signal||'—')}</div></div>
+        <div class="ind-item"><div class="ind-label">量能</div><div class="ind-val" style="font-size:11px">${esc(a.volume_trend||'—')}</div></div>
         <div class="ind-item"><div class="ind-label">RSI(12)</div><div class="ind-val">${a.rsi_12?.toFixed(1)||'—'}</div></div>
         ${unrealizedHtml}
       </div>
-      ${reasons.length ? `<div class="reasons-list">${reasons.map(r=>`<span class="reason-chip">✓ ${r}</span>`).join('')}</div>` : ''}
-      ${risks.length   ? `<div class="reasons-list">${risks.map(r=>`<span class="risk-chip">⚠ ${r}</span>`).join('')}</div>` : ''}
+      ${reasons.length ? `<div class="reasons-list">${reasons.map(r=>`<span class="reason-chip">✓ ${esc(r)}</span>`).join('')}</div>` : ''}
+      ${risks.length   ? `<div class="reasons-list">${risks.map(r=>`<span class="risk-chip">⚠ ${esc(r)}</span>`).join('')}</div>` : ''}
     </div>`;
   }).join('');
 }
