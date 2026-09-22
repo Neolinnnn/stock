@@ -2218,16 +2218,20 @@ function renderDaily(data){
     <summary>訊號與目標價說明</summary>
     <table>
       <tr><th>訊號</th><th>判斷條件</th><th>操作建議</th></tr>
-      <tr><td><span class="badge buy">BUY</span></td><td>RSI5 40–65 且 20日漲幅 > 3%，CV夏普 > 0.5</td><td>可考慮建倉或加碼</td></tr>
-      <tr><td><span class="badge hold">HOLD</span></td><td>技術面中性或整理，無明顯買賣訊號</td><td>持有觀望，等待方向確認</td></tr>
-      <tr><td><span class="badge sell">SELL</span></td><td>RSI5 > 70 或 20日漲幅 < −5%，CV夏普 < −0.3</td><td>考慮減碼或停損</td></tr>
+      <tr><td><span class="badge buy">BUY</span></td><td>多頭結構（MA5 &gt; MA20）且 RSI5 &lt; 65、收盤站上 MA5；或 5 日內 MA5 上穿 MA20 且交叉當日 RSI5 &lt; 65。兩者皆須 CV夏普 ≥ 0</td><td>可考慮建倉或加碼</td></tr>
+      <tr><td><span class="badge hold">HOLD</span></td><td>不符 BUY／SELL 條件者，含過熱（RSI5 ≥ 65）與跌破 MA5 的整理</td><td>持有觀望，等待方向確認</td></tr>
+      <tr><td><span class="badge sell">SELL</span></td><td>5 日內 MA5 下穿 MA20 且交叉當日 RSI5 &gt; 35，當下仍 MA5 ≤ MA20，且 CV夏普 ≤ 0</td><td>考慮減碼或停損</td></tr>
     </table>
     <div style="margin-top:10px">
       <b>目標價計算方式：</b><br>
       <span class="tp">短期</span> — 布林通道上軌（20日均線 + 2 倍標準差）<br>
       <span class="tp">中期</span> — P/E 均值回歸（現值 vs 一年中位數，上下限 ±50%/−15%；無 PE 改用 P/B）<br>
       <span class="tp">長期</span> — 40% P/E 目標 + 40% PEG 目標 + 20% 短期技術 加權<br>
-      目標價僅供參考，不構成買賣建議。
+      目標價僅供參考，不構成買賣建議。<br><br>
+      <b>BUY 不等於進入推薦清單：</b>BUY 只是個股訊號。要進「雙條件達標推薦」還須
+      CV夏普 ≥ 0.3、CV勝率 ≥ 0.4、CV最大回檔 ≤ 0.2、乖離 MA10 ≤ 2%、且所屬族群強勢；
+      要進「HYBRID 進場閘門」另須大盤站上 MA60、個股多頭排列（收盤 &gt; MA5 &gt; MA20 &gt; MA60），
+      同時持倉上限 12 檔（超額時取 CV夏普 較高者）。
     </div>
   </details>`;
 
