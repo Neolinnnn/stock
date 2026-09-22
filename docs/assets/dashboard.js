@@ -441,90 +441,74 @@
   }
 
   /**
-   * 大戶持股比例變化圖：三個級距各一條，週頻。
+   * 大戶持股比例柱狀圖：累計門檻 >1000 / >800 / >600 各一格，週頻，每期一根柱。
    *
-   * 畫的是「相對首期的變化（百分點）」而非絕對比例 —— 1000 張以上常佔六成以上，
-   * 另兩級距僅約 2%，同一個 Y 軸畫絕對值會被大的那條壓平，三條線全成直線。
-   * 絕對比例改由右側數值面板呈現。
+   * 柱高是該期的持股比例（%）。比例的週變化常只有零點幾個百分點，從 0 起畫
+   * 每根柱都一樣高，故各格 Y 軸只取該格資料的上下緣（左側標出軸的起訖值），
+   * 柱高差異即增減。柱色依較前期增減：紅增綠減，首期或前期缺值為灰。
    */
   function drawHolders(canvas, holders) {
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth || 300, h = CANVAS_H;
+    const PANEL_H = 100, TITLE_H = 15, AXIS_W = 44;
+    const w = canvas.clientWidth || 300, h = PANEL_H * HOLDER_LEVELS.length;
     canvas.width = w * dpr; canvas.height = h * dpr;
     canvas.style.height = h + 'px';
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
 
-    // 與卡片數值一致，畫的是累計門檻（>1000 / >800 / >600）的變化
     const cum = cumulativeHolders(holders);
-    const series = HOLDER_LEVELS.map(lv => {
-      const vals = (cum.levels || {})[lv.key] || [];
-      const base = vals.find(v => v !== null && v !== undefined);
-      return {
-        ...lv,
-        deltas: vals.map(v => (v === null || v === undefined) ? null : v - base),
-      };
-    }).filter(s => s.deltas.some(v => v !== null));
-    if (!series.length) return;
+    const dates = holders.dates;
+    const ok = v => v !== null && v !== undefined;
+    const panels = HOLDER_LEVELS.map(lv => {
+      const vals = dates.map((_, i) => ((cum.levels || {})[lv.key] || [])[i]);
+      const nums = vals.filter(ok);
+      const lo = Math.min(...nums), hi = Math.max(...nums);
+      const pad = Math.max((hi - lo) * 0.25, 0.05);
+      return { ...lv, vals, lo: lo - pad, hi: hi + pad,
+               diff: i => i > 0 && ok(vals[i]) && ok(vals[i - 1]) ? vals[i] - vals[i - 1] : null };
+    }).filter(p => p.vals.some(ok));
+    if (!panels.length) return;
+    const bw = (w - AXIS_W) / dates.length;
+    const barColor = d => d === null ? '#5b6472' : d >= 0 ? '#e74c3c' : '#2ecc71';
 
-    const all = series.flatMap(s => s.deltas).filter(v => v !== null);
-    const span = Math.max(Math.abs(Math.min(...all)), Math.abs(Math.max(...all)), 0.05);
-    const lo = -span * 1.2, hi = span * 1.2;   // 以 0 為中心，正負對稱
-    const n = holders.dates.length;
-    const padL = 40, padR = 6, padT = 10, padB = 18;
-    const x = i => padL + (w - padL - padR) * (n > 1 ? i / (n - 1) : 0.5);
-    const y = v => padT + (h - padT - padB) * (1 - (v - lo) / (hi - lo));
+    panels.forEach((p, pi) => {
+      const top = pi * PANEL_H;
+      const plotTop = top + TITLE_H + 2, plotBot = top + PANEL_H - 14;
+      const y = v => plotBot - (v - p.lo) / (p.hi - p.lo) * (plotBot - plotTop);
+      const cur = p.vals[p.vals.length - 1];
 
-    // 刻度；0 軸加深，正負一眼可分
-    ctx.font = '13px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    [-span, -span / 2, 0, span / 2, span].forEach(v => {
-      const yy = y(v), zero = Math.abs(v) < 1e-9;
-      ctx.strokeStyle = zero ? '#3a4150' : '#1e232c';
-      ctx.lineWidth = zero ? 1.2 : 1;
-      ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(w - padR, yy); ctx.stroke();
-      ctx.fillStyle = zero ? '#c2cad6' : '#a8b2c1';
-      ctx.fillText((v > 0 ? '+' : '') + v.toFixed(2), 2, yy);
-    });
+      // 標題列：色標 + 級距 + 最新比例
+      ctx.font = '13px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = p.color; ctx.fillRect(2, top + 6, 9, 3);
+      ctx.fillStyle = '#e8eaed';
+      ctx.fillText(p.label + (ok(cur) ? '  ' + cur.toFixed(2) + '%' : ''), 15, top + 1);
 
-    // 折線；null 值斷線而非補零
-    series.forEach(s => {
-      ctx.strokeStyle = s.color; ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      let drawing = false;
-      s.deltas.forEach((v, i) => {
-        if (v === null) { drawing = false; return; }
-        drawing ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v));
-        drawing = true;
+      // 左側軸：起訖值，提醒此軸非從 0 起算
+      ctx.font = '11px sans-serif'; ctx.fillStyle = '#a8b2c1';
+      ctx.textBaseline = 'top';    ctx.fillText(p.hi.toFixed(2), 2, plotTop);
+      ctx.textBaseline = 'bottom'; ctx.fillText(p.lo.toFixed(2), 2, plotBot);
+      ctx.strokeStyle = '#272c37'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(AXIS_W, plotBot + .5); ctx.lineTo(w, plotBot + .5); ctx.stroke();
+
+      p.vals.forEach((v, i) => {
+        if (!ok(v)) return;
+        ctx.fillStyle = barColor(p.diff(i));
+        ctx.fillRect(AXIS_W + i * bw + 1, y(v), Math.max(bw - 2, 1), plotBot - y(v));
       });
-      ctx.stroke();
-      const li = s.deltas.length - 1;
-      if (s.deltas[li] !== null) {
-        ctx.fillStyle = s.color;
-        ctx.beginPath(); ctx.arc(x(li), y(s.deltas[li]), 3, 0, Math.PI * 2); ctx.fill();
-      }
     });
 
-    // X 軸端點日期與單位說明
-    ctx.fillStyle = '#a8b2c1'; ctx.textBaseline = 'bottom';
-    ctx.textAlign = 'left';   ctx.fillText((holders.dates[0] || '').slice(5) + ' 起算', padL, h - 4);
-    ctx.textAlign = 'right';  ctx.fillText((holders.dates[n - 1] || '').slice(5), w - padR, h - 4);
-    ctx.textAlign = 'left';   ctx.textBaseline = 'top';
-    ctx.fillText('累積變化 (pp)', padL + 2, 2);
-
-    // 折線圖一次列出同一期的三個級距，游標不必落在任何一條線上
-    const half = n > 1 ? (w - padL - padR) / (n - 1) / 2 : w / 2;
-    attachTooltip(canvas, holders.dates.map((dt, i) => ({
-      x: x(i) - half, y: 0, w: half * 2, h: h,
+    // 命中區跨三格取整條日期欄，一次列出該期三個級距的比例與增減
+    attachTooltip(canvas, dates.map((dt, i) => ({
+      x: AXIS_W + i * bw, y: 0, w: bw, h: h,
       title: dt,
-      rows: series.map(sr => ({
-        label: sr.label,
-        value: sr.deltas[i] === null ? '—'
-          : (sr.deltas[i] > 0 ? '+' : '') + sr.deltas[i].toFixed(3) + ' pp',
-        color: sr.color,
+      rows: panels.map(p => ({
+        label: p.label,
+        value: ok(p.vals[i]) ? `${p.vals[i].toFixed(2)}%（${ppText(p.diff(i))}）` : '—',
+        color: barColor(p.diff(i)),
       })),
-    })), { label: `大戶持股變化折線圖：${holders.dates[0]} 至 ${holders.dates[n - 1]}，`
-      + `共 ${n} 期，三個級距的累積變化，可用方向鍵逐期讀值`, nearestX: true });
+    })), { label: `大戶持股比例柱狀圖：${dates[0]} 至 ${dates[dates.length - 1]}，`
+      + `共 ${dates.length} 期，1000／800／600 張以上各一格，可用方向鍵逐期讀值` });
   }
 
 
@@ -693,7 +677,7 @@
 
   /**
    * 集保大戶三級距的最新一期比例與週變化。
-   * 卡 17（總評）與卡 18（折線圖）共用，避免同一份計算寫兩次。
+   * 卡 17（總評）與卡 18（柱狀圖）共用，避免同一份計算寫兩次。
    *
    * 級距分層互斥、不累積；total 為三者相加，即「600 張以上」的累計集中度。
    *
@@ -1302,7 +1286,7 @@
 
     const ht = holderTiers(hd);
 
-    // 只有一期時折線圖畫不出任何變化（三條線各只有一個點），
+    // 只有一期時算不出期變化，柱狀圖一根柱都沒有，
     // 與其給一張看似故障的空圖，不如直接呈現數值並說明歷史如何累積。
     if (hd.dates.length < 2) {
       return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
@@ -1404,7 +1388,7 @@
     safe('coststruct', () => drawCostStruct($('coststruct'), vp, vw, cur));
     safe('chipbars', () => drawChipBars($('chipbars'), d.chip || {}));
     safe('techchart', () => drawTechChart($('techchart'), d.ohlcv.date, d.indicators || {}));
-    // 一期畫不出折線，cardHolders 該情況下不會放 canvas
+    // 一期算不出期變化，cardHolders 該情況下不會放 canvas
     if (d.holders && d.holders.dates && d.holders.dates.length > 1) {
       safe('holders', () => drawHolders($('holders'), d.holders));
     }
