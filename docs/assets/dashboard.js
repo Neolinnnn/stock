@@ -868,10 +868,13 @@
         .filter(p => p.value !== null && p.value !== undefined));
     });
 
+    // v4 的 scaleMargins 屬於價格軸而非 series：疊加軸（priceScaleId ''）要用 priceScale().applyOptions 設，
+    // 寫在 series options 會被忽略，量柱就蓋在 K 線上。主軸下緣同步讓出 25% 給量柱。
+    _mainChart.priceScale('right').applyOptions({ scaleMargins: { top: 0.06, bottom: 0.25 } });
     const volSeries = _mainChart.addHistogramSeries({
       priceFormat: { type: 'volume' }, priceScaleId: '',
-      scaleMargins: { top: 0.82, bottom: 0 },
     });
+    _mainChart.priceScale('').applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
     volSeries.setData(o.date.map((t, i) => ({
       time: t, value: o.volume[i] / 1000,
       color: o.close[i] >= o.open[i] ? 'rgba(231,76,60,.45)' : 'rgba(46,204,113,.45)'
