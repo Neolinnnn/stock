@@ -792,7 +792,7 @@
   // ════════════════════════════════════════════════════════════════
   //  卡片渲染
   // ════════════════════════════════════════════════════════════════
-  let _mainChart = null;
+  let _mainChart = null, _kdChart = null, _macdChart = null;
 
   /** 報價列。成交筆數非 JSON 提供欄位，顯示為 —。 */
   function renderQuote(d) {
@@ -868,6 +868,21 @@
         .filter(p => p.value !== null && p.value !== undefined));
     });
 
+    // 布林通道：上下軌虛線、中軌細實線，三者皆不進圖例（避免與 MA 擠在一起）
+    const I = d.indicators || {};
+    const bbOpt = { color: 'rgba(255,165,0,.5)', lineWidth: 1, lineStyle: 2,
+      priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false };
+    [I.bb_upper, I.bb_lower].forEach(vals => {
+      if (!vals) return;
+      _mainChart.addLineSeries(bbOpt).setData(o.date.map((t, i) => ({ time: t, value: vals[i] }))
+        .filter(p => p.value !== null && p.value !== undefined));
+    });
+    if (I.bb_mid) {
+      _mainChart.addLineSeries({ ...bbOpt, color: 'rgba(255,165,0,.25)', lineStyle: 0 })
+        .setData(o.date.map((t, i) => ({ time: t, value: I.bb_mid[i] }))
+          .filter(p => p.value !== null && p.value !== undefined));
+    }
+
     const volSeries = _mainChart.addHistogramSeries({
       priceFormat: { type: 'volume' }, priceScaleId: '',
       scaleMargins: { top: 0.82, bottom: 0 },
@@ -914,7 +929,130 @@
     });
   }
 
-  /** 02 AI 決策核心：彙整後端 summary + 前端衍生風險值。 */
+  /** 02 KD 指標：獨立日期軸，不與主K線連動（沿用舊版個股分析頁設計）。 */
+  function cardKD(d) {
+    return `<div class="card c6"><h3><span class="no">02</span>KD 指標
+      <span class="sub">KDJ，20/80 參考線</span></h3>
+      <div class="chartbox chartbox-sm" id="kdchart"><div class="klegend" id="kdlegend"></div></div></div>`;
+  }
+
+  function mountKDChart(d) {
+    const el = $('kdchart');
+    if (typeof LightweightCharts === 'undefined') {
+      el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;'
+        + 'height:100%;color:var(--sub);font-size:12px;">⚠ 圖表元件載入失敗（CDN 無法連線）</div>';
+      return;
+    }
+    if (_kdChart) { _kdChart.remove(); _kdChart = null; }
+    const I = d.indicators || {}, o = d.ohlcv;
+    if (!I.kd_k) { el.innerHTML = '<div style="color:var(--sub);font-size:12px;padding:12px;">無 KD 資料</div>'; return; }
+    _kdChart = LightweightCharts.createChart(el, {
+      layout: { background: { color: '#161a22' }, textColor: '#a8b2c1', fontSize: 10 },
+      grid: { vertLines: { color: '#1e232c' }, horzLines: { color: '#1e232c' } },
+      rightPriceScale: { borderColor: '#272c37' },
+      timeScale: { borderColor: '#272c37' },
+      crosshair: { mode: 0 },
+      height: el.clientHeight,
+    });
+    const refOpt = { lineWidth: 1, lineStyle: 2, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false };
+    _kdChart.addLineSeries({ ...refOpt, color: 'rgba(231,76,60,.5)' }).setData(o.date.map(t => ({ time: t, value: 80 })));
+    _kdChart.addLineSeries({ ...refOpt, color: 'rgba(46,204,113,.5)' }).setData(o.date.map(t => ({ time: t, value: 20 })));
+
+    const line = (vals, color, width) => {
+      const s = _kdChart.addLineSeries({ color, lineWidth: width, priceLineVisible: false, lastValueVisible: false });
+      s.setData(o.date.map((t, i) => ({ time: t, value: vals[i] })).filter(p => p.value !== null && p.value !== undefined));
+      return s;
+    };
+    const sK = I.kd_k ? line(I.kd_k, '#f1b143', 1.5) : null;
+    const sD = I.kd_d ? line(I.kd_d, '#4ea1f3', 1.5) : null;
+    const sJ = I.kd_j ? line(I.kd_j, '#ff6b6b', 1) : null;
+    _kdChart.timeScale().fitContent();
+
+    const lg = $('kdlegend');
+    const at = (arr, t) => { const i = o.date.indexOf(t); return i < 0 ? null : arr[i]; };
+    const setLegend = t => {
+      if (!lg) return;
+      lg.textContent = '';
+      [[sK, 'K', I.kd_k, '#f1b143'], [sD, 'D', I.kd_d, '#4ea1f3'], [sJ, 'J', I.kd_j, '#ff6b6b']]
+        .forEach(([s, k, vals, color]) => {
+          if (!s) return;
+          const v = t ? at(vals, t) : last(vals);
+          const sp = document.createElement('span');
+          sp.style.color = color;
+          sp.textContent = `${k} ${v === null || v === undefined ? '—' : fmt(v, 1)}`;
+          lg.appendChild(sp);
+        });
+    };
+    setLegend(null);
+    _kdChart.subscribeCrosshairMove(param => setLegend(param.time || null));
+  }
+
+  /** 03 MACD 指標：獨立日期軸，柱狀體為 OSC，DIF/DEA 為折線。 */
+  function cardMACD(d) {
+    return `<div class="card c6"><h3><span class="no">03</span>MACD 指標
+      <span class="sub">DIF / DEA / OSC</span></h3>
+      <div class="chartbox chartbox-sm" id="macdchart"><div class="klegend" id="macdlegend"></div></div></div>`;
+  }
+
+  function mountMACDChart(d) {
+    const el = $('macdchart');
+    if (typeof LightweightCharts === 'undefined') {
+      el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;'
+        + 'height:100%;color:var(--sub);font-size:12px;">⚠ 圖表元件載入失敗（CDN 無法連線）</div>';
+      return;
+    }
+    if (_macdChart) { _macdChart.remove(); _macdChart = null; }
+    const I = d.indicators || {}, o = d.ohlcv;
+    if (!I.macd_hist && !I.macd) { el.innerHTML = '<div style="color:var(--sub);font-size:12px;padding:12px;">無 MACD 資料</div>'; return; }
+    _macdChart = LightweightCharts.createChart(el, {
+      layout: { background: { color: '#161a22' }, textColor: '#a8b2c1', fontSize: 10 },
+      grid: { vertLines: { color: '#1e232c' }, horzLines: { color: '#1e232c' } },
+      rightPriceScale: { borderColor: '#272c37' },
+      timeScale: { borderColor: '#272c37' },
+      crosshair: { mode: 0 },
+      height: el.clientHeight,
+    });
+
+    let histSeries = null, difSeries = null, deaSeries = null;
+    if (I.macd_hist) {
+      histSeries = _macdChart.addHistogramSeries({
+        priceFormat: { type: 'price', precision: 2, minMove: 0.01 },
+        priceLineVisible: false, lastValueVisible: false,
+      });
+      histSeries.setData(o.date.map((t, i) => ({
+        time: t, value: I.macd_hist[i], color: (I.macd_hist[i] ?? 0) >= 0 ? '#e74c3c' : '#2ecc71',
+      })).filter(p => p.value !== null && p.value !== undefined && isFinite(p.value)));
+    }
+    if (I.macd) {
+      difSeries = _macdChart.addLineSeries({ color: '#e74c3c', lineWidth: 1, priceFormat: { type: 'price', precision: 2, minMove: 0.01 }, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+      difSeries.setData(o.date.map((t, i) => ({ time: t, value: I.macd[i] })).filter(p => p.value !== null && p.value !== undefined));
+    }
+    if (I.macd_signal) {
+      deaSeries = _macdChart.addLineSeries({ color: '#4ea1f3', lineWidth: 1, priceFormat: { type: 'price', precision: 2, minMove: 0.01 }, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false });
+      deaSeries.setData(o.date.map((t, i) => ({ time: t, value: I.macd_signal[i] })).filter(p => p.value !== null && p.value !== undefined));
+    }
+    _macdChart.timeScale().fitContent();
+
+    const lg = $('macdlegend');
+    const at = (arr, t) => { const i = o.date.indexOf(t); return i < 0 ? null : arr[i]; };
+    const setLegend = t => {
+      if (!lg) return;
+      lg.textContent = '';
+      [[difSeries, 'DIF', I.macd, '#e74c3c'], [deaSeries, 'DEA', I.macd_signal, '#4ea1f3'],
+       [histSeries, 'OSC', I.macd_hist, '#a8b2c1']].forEach(([s, k, vals, color]) => {
+        if (!s) return;
+        const v = t ? at(vals, t) : last(vals);
+        const sp = document.createElement('span');
+        sp.style.color = color;
+        sp.textContent = `${k} ${v === null || v === undefined ? '—' : fmt(v, 2)}`;
+        lg.appendChild(sp);
+      });
+    };
+    setLegend(null);
+    _macdChart.subscribeCrosshairMove(param => setLegend(param.time || null));
+  }
+
+  /** 04 AI 決策核心：彙整後端 summary + 前端衍生風險值。 */
   function cardDecision(d, sc, rk) {
     const s = Object.fromEntries((d.summary || []).map(x => [x.label, x]));
     const dirTag = x => !x ? '<span class="tag n">—</span>'
@@ -931,16 +1069,16 @@
       ['壓力區', `<b>${L.resistance || '—'}</b>`],
       ['風險等級', `<span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>`],
     ];
-    return `<div class="card c4"><h3><span class="no">02</span>AI 決策核心
+    return `<div class="card c4"><h3><span class="no">04</span>AI 決策核心
       <span class="sub">AI DECISION CORE</span></h3>
       <div class="warn">⚠ ${d.signal?.label || 'AI CAUTION'}</div>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}
     </div>`;
   }
 
-  /** 03 多維度評分雷達 */
+  /** 05 多維度評分雷達 */
   function cardRadar(sc) {
-    return `<div class="card c4"><h3><span class="no">03</span>多維度評分
+    return `<div class="card c4"><h3><span class="no">05</span>多維度評分
       <span class="sub">綜合 ${sc.total} / 100</span></h3>
       <canvas id="radar-score"></canvas>
       <div style="text-align:center;margin-top:4px;">
@@ -949,17 +1087,17 @@
     </div>`;
   }
 
-  /** 04 籌碼熱區圖 */
+  /** 06 籌碼熱區圖 */
   function cardHeatmap() {
-    return `<div class="card c4"><h3><span class="no">04</span>AI 籌碼熱區圖
+    return `<div class="card c4"><h3><span class="no">06</span>AI 籌碼熱區圖
       <span class="sub">近 60 日價量分佈</span></h3>
       <canvas id="heatmap"></canvas>
       <div class="note">橫條長度為該價格區間累計成交量；虛線為現價。</div></div>`;
   }
 
-  /** 05 風險管理雷達 */
+  /** 07 風險管理雷達 */
   function cardRiskRadar(rk) {
-    return `<div class="card c4"><h3><span class="no">05</span>風險管理雷達</h3>
+    return `<div class="card c4"><h3><span class="no">07</span>風險管理雷達</h3>
       <canvas id="radar-risk"></canvas>
       <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
         <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
@@ -967,10 +1105,10 @@
       <div class="note">綜合隔日沖熱度、波動率、出貨壓力與趨勢弱勢四項。</div></div>`;
   }
 
-  /** 06 AI 預測路徑 */
+  /** 08 AI 預測路徑 */
   function cardPrediction(d) {
     const p = d.prediction || {};
-    return `<div class="card c4"><h3><span class="no">06</span>AI 預測路徑
+    return `<div class="card c4"><h3><span class="no">08</span>AI 預測路徑
       <span class="sub">後端模型輸出</span></h3>
       ${barRow('上漲', nz(p.up) * 100, '#e74c3c')}
       ${barRow('盤整', nz(p.sideways) * 100, '#f1b143')}
@@ -984,12 +1122,12 @@
 
   /** 07 主力成本結構分布 */
   function cardCostStruct(vw, cur) {
-    return `<div class="card c4"><h3><span class="no">07</span>主力成本結構分布
+    return `<div class="card c4"><h3><span class="no">09</span>主力成本結構分布
       <span class="sub">20 日 VWAP ${fmt(vw, 2)}</span></h3>
       <canvas id="coststruct"></canvas></div>`;
   }
 
-  /** 08 法人行為計量 */
+  /** 10 法人行為計量 */
   function cardChipFlow(d, sc) {
     const c = d.chip || {}, n = (c.dates || []).length;
     const rows = [];
@@ -1001,7 +1139,7 @@
         自 <b class="${c.dealer[i] >= 0 ? 'up' : 'dn'}">${fmtInt(c.dealer[i])}</b></span></div>`);
     }
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c4"><h3><span class="no">08</span>法人行為計量
+    return `<div class="card c4"><h3><span class="no">10</span>法人行為計量
       <span class="sub">外資／投信／自營商（張）</span></h3>
       <canvas id="chipbars"></canvas>
       ${rows.join('')}
@@ -1011,9 +1149,9 @@
         <span class="v ${net5 >= 0 ? 'up' : 'dn'}">${fmtInt(net5)} 張</span></div></div>`;
   }
 
-  /** 09 隔日沖風險分析（全為估算值） */
+  /** 11 隔日沖風險分析（全為估算值） */
   function cardDaytradeRisk(rk) {
-    return `<div class="card c4"><h3><span class="no">09</span>隔日沖風險分析
+    return `<div class="card c4"><h3><span class="no">11</span>隔日沖風險分析
       <span class="sub">估算值</span></h3>
       ${barRow('主力出貨壓力', rk.distribute, '#e74c3c')}
       ${barRow('籌碼換手率', rk.turnover, '#f1b143')}
@@ -1023,9 +1161,9 @@
       <div class="note">⚠ 台股當沖／隔日沖明細無免費資料源，本卡以振幅與量能倍數推估，僅供相對比較。</div></div>`;
   }
 
-  /** 10 AI 多空能量條 */
+  /** 12 AI 多空能量條 */
   function cardEnergy(en) {
-    return `<div class="card c4"><h3><span class="no">10</span>AI 多空能量條
+    return `<div class="card c4"><h3><span class="no">12</span>AI 多空能量條
       <span class="sub">近 20 日量能歸屬</span></h3>
       ${barRow('多方量能', en.bull, '#e74c3c')}
       ${barRow('空方量能', en.bear, '#2ecc71')}
@@ -1046,7 +1184,7 @@
       ['動能強度', sc.momentum, '#7c5cff'],
     ];
     const avg = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c4"><h3><span class="no">11</span>健康度綜合評估</h3>
+    return `<div class="card c4"><h3><span class="no">13</span>健康度綜合評估</h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="row" style="margin-top:8px;"><span class="k">總評</span>
         <span class="v">${avg >= 70 ? '良好' : avg >= 50 ? '普通' : '偏弱'}（平均 ${avg} 分）</span></div></div>`;
@@ -1062,7 +1200,7 @@
     ];
     const reds = lights.filter(l => l[1] === 'r').length;
     const cur = reds >= 2 ? ['r', '紅燈（觀望）'] : reds === 1 ? ['y', '黃燈（注意）'] : ['g', '綠燈（可續抱）'];
-    return `<div class="card c4"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
+    return `<div class="card c4"><h3><span class="no">14</span>AI 主力動態信號燈</h3>
       ${lights.map(([k, c, t]) =>
         `<div class="row"><span class="k"><i class="dot ${c === 'g' ? '' : c}"></i>${k}</span>
          <span class="v">${t}</span></div>`).join('')}
@@ -1081,7 +1219,7 @@
       ['策略適用度', clamp(sc.total, 0, 100), '#7c5cff'],
     ];
     const conf = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c4"><h3><span class="no">13</span>AI 信心維度
+    return `<div class="card c4"><h3><span class="no">15</span>AI 信心維度
       <span class="sub">AI CONFIDENCE ${conf}%</span></h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="note">資料截至 ${last(d.ohlcv?.date) || '—'}</div></div>`;
@@ -1096,7 +1234,7 @@
       ['自營商', c.dealer?.[n]],
       ['三大法人', c.total?.[n]],
     ];
-    return `<div class="card c4"><h3><span class="no">14</span>籌碼異動摘要
+    return `<div class="card c4"><h3><span class="no">16</span>籌碼異動摘要
       <span class="sub">${c.dates?.[n] || ''}</span></h3>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span>
         <span class="v ${nz(v) >= 0 ? 'up' : 'dn'}">${fmtInt(v)} 張</span></div>`).join('')}
@@ -1115,7 +1253,7 @@
     const instRatio = clamp(vol5 ? net5abs / vol5 * 100 : 0, 0, 100);
     const retailRatio = 100 - instRatio;
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c4"><h3><span class="no">15</span>買賣力分佈
+    return `<div class="card c4"><h3><span class="no">17</span>買賣力分佈
       <span class="sub">法人流向強度（推估）</span></h3>
       <div class="rings">
         ${ringSVG(instRatio, '#e74c3c', '法人主導度')}
@@ -1130,7 +1268,7 @@
 
   /** 16 多空強度分佈 */
   function cardStrength(sc, en) {
-    return `<div class="card c4"><h3><span class="no">16</span>多空強度分佈</h3>
+    return `<div class="card c4"><h3><span class="no">18</span>多空強度分佈</h3>
       <div class="rings">
         ${ringSVG(en.bull, '#e74c3c', '多方強度')}
         ${ringSVG(en.bear, '#2ecc71', '空方強度')}
@@ -1141,7 +1279,7 @@
   }
 
   /**
-   * 17 主力追蹤總評。
+   * 19 主力追蹤總評。
    * 註：依專案規範，報告內文應由 Gemini 產生；此處為前端規則模板，
    * 後續可由 gemini_writer.py 預產文字寫回 JSON 再讀取。
    */
@@ -1169,7 +1307,7 @@
       : `<div class="note" style="border-top:1px solid var(--border);
            margin-top:8px;padding-top:7px;">大戶三級距（1000 張以上／800~1000 張／
            600~800 張）待集保資料就緒後顯示，來源同卡 18。</div>`;
-    return `<div class="card c4"><h3><span class="no">17</span>主力追蹤總評
+    return `<div class="card c4"><h3><span class="no">19</span>主力追蹤總評
       <span class="sub">規則引擎</span></h3>
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="verdict">${verdict}</span>
@@ -1180,14 +1318,14 @@
   }
 
   /**
-   * 18 大戶持股分布（集保股權分散表，週頻）。
+   * 20 大戶持股分布（集保股權分散表，週頻）。
    * 三個級距分層互斥，追蹤持股比例的週變化：比例上升代表籌碼向大戶集中。
    */
   function cardHolders(d) {
     const hd = d.holders;
     const has = hd && hd.dates && hd.dates.length;
     if (!has) {
-      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
+      return `<div class="card c4"><h3><span class="no">20</span>大戶持股分布
         <span class="sub">集保股權分散表</span></h3>
         <div class="note" style="padding:14px 0;">
           尚無資料。此欄位需後端重跑 <code>build_docs.py</code> 取得集保股權分散表
@@ -1199,7 +1337,7 @@
     // 只有一期時折線圖畫不出任何變化（三條線各只有一個點），
     // 與其給一張看似故障的空圖，不如直接呈現數值並說明歷史如何累積。
     if (hd.dates.length < 2) {
-      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
+      return `<div class="card c4"><h3><span class="no">20</span>大戶持股分布
         <span class="sub">集保股權分散表 · ${ht.date}</span></h3>
         ${ht.rows.map(tierRow).join('')}
         <div class="note">累計門檻：600 張以上已涵蓋 800 與 1000 張以上，三者不相加。
@@ -1207,7 +1345,7 @@
           累積到兩期以上才畫得出變化趨勢。</div></div>`;
     }
 
-    return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
+    return `<div class="card c12"><h3><span class="no">20</span>大戶持股分布
       <span class="sub">集保股權分散表 · 週頻 · 截至 ${ht.date}</span></h3>
       <div class="holderwrap">
         <div><canvas id="holders"></canvas></div>
@@ -1221,7 +1359,7 @@
   }
 
 
-  /** 19 原始資料表（近 10 日） */
+  /** 21 原始資料表（近 10 日） */
   function cardRawTable(d) {
     const o = d.ohlcv, c = d.chip || {}, n = o.close.length;
     let rows = '';
@@ -1232,7 +1370,7 @@
         <td>${fmtInt(o.volume[i] / 1000)}</td>
         <td class="${nz(c.total?.[i]) >= 0 ? 'up' : 'dn'}">${fmtInt(c.total?.[i])}</td></tr>`;
     }
-    return `<div class="card c12"><h3><span class="no">19</span>原始資料表
+    return `<div class="card c12"><h3><span class="no">21</span>原始資料表
       <span class="sub">近 10 個交易日</span></h3>
       <div style="overflow-x:auto;">
         <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:14px;">
@@ -1258,7 +1396,8 @@
     renderQuote(d);
 
     $('grid').innerHTML = [
-      cardMainChart(d), cardDecision(d, sc, rk), cardRadar(sc), cardHeatmap(),
+      cardMainChart(d), cardKD(d), cardMACD(d),
+      cardDecision(d, sc, rk), cardRadar(sc), cardHeatmap(),
       cardRiskRadar(rk), cardPrediction(d), cardCostStruct(vw, cur),
       cardChipFlow(d, sc), cardDaytradeRisk(rk), cardEnergy(en), cardHealth(sc),
       cardSignalLight(d, sc, rk), cardConfidence(d, sc), cardChipSummary(d, sc),
@@ -1275,6 +1414,8 @@
     // 各繪圖步驟獨立保護：單一元件失敗不應讓整頁報「找不到資料」。
     const safe = (label, fn) => { try { fn(); } catch (e) { console.warn('[draw] ' + label, e); } };
     safe('kline', () => mountMainChart(d));
+    safe('kdchart', () => mountKDChart(d));
+    safe('macdchart', () => mountMACDChart(d));
     safe('radar-score', () => drawRadar($('radar-score'), [
       { label: '趨勢', value: sc.trend }, { label: '動能', value: sc.momentum },
       { label: '籌碼', value: sc.chip }, { label: '量能', value: sc.volume },
@@ -1323,6 +1464,8 @@
   function destroyDashboard() {
     hideTip();
     if (_mainChart) { _mainChart.remove(); _mainChart = null; }
+    if (_kdChart) { _kdChart.remove(); _kdChart = null; }
+    if (_macdChart) { _macdChart.remove(); _macdChart = null; }
   }
 
   window.StockDashboard = { render: renderDashboard, destroy: destroyDashboard };
