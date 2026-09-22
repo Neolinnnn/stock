@@ -50,12 +50,27 @@
 
 <script>
 const fmtPct = v => v == null ? '—' : `<span class="${v >= 0 ? 'pos' : 'neg'}">${v > 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
-const fmtVal = v => v == null ? '—' : (v >= 100000 ? (v / 100000).toFixed(1) + ' 億' : Math.round(v / 100) / 10 + ' 千萬');
+// avg_value 單位是千元：1 億 = 1e5 千元、1 千萬 = 1e4 千元
+const fmtVal = v => v == null ? '—' : (v >= 100000 ? (v / 100000).toFixed(1) + ' 億' : (v / 10000).toFixed(1) + ' 千萬');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const stockLink = (id, name) => `<a class="sid" href="index.html" title="至主站個股分析查詢">${esc(id)} ${esc(name)}</a>`;
+// 主站支援 ?stock= 深連結（index.html 的 init 會讀這個參數直接開個股分析），
+// 但只有掃描名單內的個股才有 docs/stocks/<id>.json。進場候選定義上就是名單外
+// 個股，連過去只會看到「找不到資料」，所以沒有頁面的就不給連結。
+let PAGED_IDS = new Set();
+const stockLink = (id, name) => {
+  const label = `${esc(id)} ${esc(name)}`;
+  return PAGED_IDS.has(String(id))
+    ? `<a class="sid" href="index.html?stock=${encodeURIComponent(id)}" title="開啟個股分析">${label}</a>`
+    : `<span title="尚未納入掃描名單，無個股分析頁">${label}</span>`;
+};
 
 async function load() {
   let d;
+  // stocks_index.json 即「有個股分析頁」的權威清單，用來決定哪些代號可連結
+  try {
+    const idx = await (await fetch('stocks_index.json?ts=' + Date.now())).json();
+    PAGED_IDS = new Set((idx || []).map(s => String(s.id)));
+  } catch (e) { /* 取不到就一律不連結，只顯示文字 */ }
   try {
     d = await (await fetch('rotation_radar.json?ts=' + Date.now())).json();
   } catch (e) {

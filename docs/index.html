@@ -226,26 +226,12 @@
   .chip-table th:first-child{text-align:left;}
   .chip-table td{text-align:right;padding:3px 6px;}
   .chip-table td:first-child{text-align:left;color:var(--sub);}
-  .chart-box{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 
   /* ── 指標判斷面板 ─────────────────────────────────────────── */
-  .sp-chart-row{display:flex;gap:8px;align-items:flex-start;margin-top:8px;}
-  .sp-chart-row .chart-box{flex:3;min-width:0;}
-  .sp-judge-panel{flex:1.4;min-width:130px;max-width:195px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7;display:flex;flex-direction:column;gap:3px;align-self:stretch;}
-  .sp-judge-panel h4{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
   .sp-judge-verdict{font-size:13px;font-weight:700;margin-bottom:2px;}
   .sp-judge-detail{color:var(--sub);font-size:11px;}
   .sp-judge-action{margin-top:auto;padding:5px 8px;border-radius:5px;font-size:11px;font-weight:600;line-height:1.5;border:1px solid currentColor;}
-  .sp-macd-strip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;margin-top:8px;display:flex;gap:20px;font-size:12px;align-items:flex-start;flex-wrap:wrap;}
-  .sp-macd-strip .mst-block{display:flex;flex-direction:column;gap:2px;}
-  .sp-macd-strip .mst-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px;}
-  .sp-macd-strip .mst-verdict{font-size:13px;font-weight:700;}
-  .sp-macd-strip .mst-detail{font-size:11px;color:var(--sub);}
-  .sp-macd-strip .mst-action{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;border:1px solid currentColor;}
   @media(max-width:640px){
-    .sp-chart-row{flex-direction:column;align-items:stretch;}
-    .sp-chart-row .chart-box{width:100%;}
-    .sp-judge-panel{max-width:none;min-width:0;align-self:auto;}
   }
 
   /* ── 今日行動清單 ──────────────────────────────────────────── */
@@ -352,37 +338,25 @@
     border-top:1px solid #1e2128;font-size:11px;color:var(--sub);line-height:1.7;}
   #bt-tooltip .bt-tt-strats strong{color:#f1c40f;}
 </style>
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"
+        integrity="sha384-OK7vELvjHdhUFi31JYioPIcRHTROLdcDa6ZsNWgvgLaKj+9JqhU0Ad8g4wz3CXjA"
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="./assets/dashboard.css">
+<script src="./assets/dashboard.js"></script>
 </head>
 <body>
-<script>
-/* 測試版偵測：檔名為 preview.html 才顯示標示；index.html 不受影響。
-   推正式流程＝直接把 preview.html 覆蓋 index.html，兩檔內容永遠相同。 */
-if (/preview\.html$/i.test(location.pathname)) {
-  document.title = '🧪 ' + document.title + '（測試版）';
-  document.addEventListener('DOMContentLoaded', function () {
-    var b = document.createElement('div');
-    b.textContent = '🧪 測試版 — 驗證後再推 index.html';
-    b.style.cssText = 'position:fixed;bottom:12px;left:12px;z-index:999;background:#f1b143;color:#0b0e14;'
-      + 'font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;'
-      + 'box-shadow:0 2px 10px rgba(0,0,0,.4);pointer-events:none;';
-    document.body.appendChild(b);
-    var h = document.querySelector('header');
-    if (h) h.style.borderTop = '3px solid #f1b143';
-  });
-}
-</script>
 <header>
   <h1>📊 台股族群掃描</h1>
   <nav>
-    <a id="nav-daily"     onclick="setPage('daily')">今日掃描</a>
-    <a id="nav-weekly"    onclick="setPage('weekly')">週報</a>
-    <a id="nav-stock"     onclick="setPage('stock')">🔍 個股分析</a>
-    <a id="nav-watchlist" onclick="setPage('watchlist')">⭐ 自選清單</a>
-    <a id="nav-lab" onclick="setPage('lab')">⚗️ 策略實驗室</a>
+    <a id="nav-daily"     role="button" tabindex="0" onclick="setPage('daily')">今日掃描</a>
+    <a id="nav-weekly"    role="button" tabindex="0" onclick="setPage('weekly')">週報</a>
+    <a id="nav-stock"     role="button" tabindex="0" onclick="setPage('stock')">🔍 個股分析</a>
+    <a id="nav-watchlist" role="button" tabindex="0" onclick="setPage('watchlist')">⭐ 自選清單</a>
+    <a id="nav-lab"       role="button" tabindex="0" onclick="setPage('lab')">⚗️ 策略實驗室</a>
     <a id="nav-backtest" href="./backtest.html">📊 策略回測</a>
     <a href="./homework.html">📚 基本面功課</a>
     <a href="./radar.html">🛰️ 動能雷達</a>
+    <a href="./stock_dashboard.html">🎯 AI 戰情儀表板</a>
     <a href="./agents/">🤖 多代理分析</a>
   </nav>
   <div class="date-picker" id="date-picker-wrap">
@@ -398,7 +372,6 @@ if (/preview\.html$/i.test(location.pathname)) {
   <div id="loading">載入中…</div>
   <div id="page-daily"     class="page-section"></div>
   <div id="page-weekly"    class="page-section"></div>
-  <div id="page-mainforce" class="page-section"></div>
   <div id="page-stock"     class="page-section"></div>
   <div id="page-watchlist" class="page-section"></div>
 
@@ -431,19 +404,12 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw14G5uB-Aic9KA
 let WL_DATA = null;
 let BT_RESULTS = null;
 let BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label,sharpe}], name, sector}
-let TODAY_BT_MAP = new Map(); // stock_id -> {count, strategies:[{id,label}], name, sector}
 let DAILY_DATA = null; // daily.json 完整選股清單（最新掃描，64 支），供回測選股 Tab 使用
 
 // ── lightweight-charts 管理 ───────────────────────────────────────────────────
 let _spCh = {};
 let _syncGroup = [];   // 只有「價＋量」互相連動，其餘各圖日期獨立
 let _spSync = false;
-
-function _destroySpCharts() {
-  Object.values(_spCh).forEach(c => { try { c.remove(); } catch {} });
-  _spCh = {};
-  _syncGroup = [];
-}
 
 function _onRange(src, r) {
   if (_spSync || !r || !_syncGroup.includes(src)) return;
@@ -504,35 +470,32 @@ function showToast(msg) {
 }
 
 // ── ⚙ 手動觸發 GitHub Actions 每日掃描 ──────────────────────────────────────
-// token 僅存於瀏覽器 localStorage，不會上傳；需 fine-grained PAT 對 Neolinnnn/stock 給 Actions: Read & Write
-const GH_REPO = 'Neolinnnn/stock';
+// 觸發改由 Apps Script 代理，PAT 存在它的指令碼屬性（伺服器端），瀏覽器不再持有。
+// 原因：neolinnnn.github.io 是所有 Pages 專案共用的單一 origin，token 放在
+// localStorage 等於同源任何頁面（含第三方 CDN 腳本）都讀得到，而 workflow
+// 執行時帶著 9 組 repo secrets。
 const GH_WORKFLOW = 'daily_scan.yml';
 const GH_WORKFLOW_ONE = 'scan_one.yml';
 
-// 共用：取得/驗證 gh_token 後 POST workflow_dispatch。回傳 true 表示成功觸發（204）。
+// 清掉舊版留在瀏覽器裡的 token（此頁已不再使用）
+try { localStorage.removeItem('gh_token'); } catch {}
+
+// 回傳 true 表示成功觸發。
 async function ghDispatch(workflow, inputs) {
-  let token = localStorage.getItem('gh_token');
-  if (!token) {
-    token = (prompt('貼上 GitHub fine-grained token\n（範圍：Neolinnnn/stock，權限 Actions: Read & Write）\n只會存在本機瀏覽器') || '').trim();
-    if (!token) return false;
-    localStorage.setItem('gh_token', token);
-  }
-  const body = { ref: 'main' };
-  if (inputs && Object.keys(inputs).length) body.inputs = inputs;
+  if (!APPS_SCRIPT_URL) { showToast('❌ 尚未設定 APPS_SCRIPT_URL'); return false; }
   try {
-    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/actions/workflows/${workflow}/dispatches`, {
+    const res = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Accept': 'application/vnd.github+json', 'Authorization': `Bearer ${token}`, 'X-GitHub-Api-Version': '2022-11-28' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ action: 'dispatch', workflow, inputs: inputs || {} }),
     });
-    if (res.status === 204) return true;
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem('gh_token');
-      showToast('❌ token 無效或權限不足，已清除，請再試一次重設');
-      return false;
-    }
-    const msg = await res.text();
-    showToast(`❌ 觸發失敗（${res.status}）：${msg.slice(0, 80)}`);
+    const data = await res.json();
+    if (data.ok) return true;
+    const msgs = {
+      token_not_configured: '代理未設定 GH_TOKEN，請到 Apps Script 指令碼屬性新增',
+      workflow_not_allowed: 'workflow 不在代理白名單內',
+      rate_limited: '剛剛才觸發過，請稍候再試',
+    };
+    showToast(`❌ 觸發失敗：${msgs[data.error] || data.error || '未知錯誤'}`);
   } catch (e) {
     showToast(`❌ 觸發失敗：${e.message}`);
   }
@@ -712,10 +675,12 @@ function buildBtMap(results){
     if(!lastRb.holdings) return;
     lastRb.holdings.forEach(h=>{
       if(!map.has(h.stock_id)){
-        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector});
+        map.set(h.stock_id, {count:0, strategies:[], name:h.name, sector:h.sector, asof:lastRb.date});
       }
       const entry = map.get(h.stock_id);
       entry.count++;
+      // 各 variant 的最後調倉日可能不同（週調/月調），取最新的那個顯示
+      if(lastRb.date && (!entry.asof || lastRb.date > entry.asof)) entry.asof = lastRb.date;
       entry.strategies.push({id:variant.id, label:variant.label, sharpe:results.ranking.find(r=>r.id===id)?.sharpe||0});
     });
   });
@@ -734,42 +699,8 @@ function buildDailyMap(){
   return m;
 }
 
-function computeTodayPicks(variantId, data){
-  if(!data || !data.sectors || !data.stocks) return [];
-  const parts = variantId.split('_');
-  const sectorRule = parts[0];
-  const stockRule  = parts[parts.length - 1];
-  const SECTORS_N = 3, STOCKS_N = 3;
-
-  let ranked;
-  if(sectorRule === 'composite'){
-    const get = f => data.sectors.map(s => s[f] || 0);
-    const norm = arr => {
-      const mn = Math.min(...arr), mx = Math.max(...arr);
-      return arr.map(v => mx > mn ? (v - mn) / (mx - mn) : 0);
-    };
-    const nR = norm(get('ret20')), nH = norm(get('hot')), nB = norm(get('buy'));
-    ranked = data.sectors.map((s, i) => ({
-      ...s, _score: 0.5 * nR[i] + 0.3 * nH[i] + 0.2 * nB[i]
-    })).sort((a, b) => b._score - a._score);
-  } else {
-    ranked = [...data.sectors].sort((a, b) => (b.ret20 || 0) - (a.ret20 || 0));
-  }
-
-  const topSectors = ranked.slice(0, SECTORS_N).map(s => s.sector);
-  const picks = [];
-  topSectors.forEach(sector => {
-    const inSec = data.stocks.filter(s => s.sector === sector);
-    const sorted = stockRule === 'chip'
-      ? [...inSec].sort((a, b) => (b.chipTotal || 0) - (a.chipTotal || 0))
-      : [...inSec].sort((a, b) => (b.ret20    || 0) - (a.ret20    || 0));
-    sorted.slice(0, STOCKS_N).forEach(s => picks.push(s));
-  });
-  return picks;
-}
-
 function showBtTooltip(sid, event){
-  const bt = BT_MAP.get(sid) || TODAY_BT_MAP.get(sid);
+  const bt = BT_MAP.get(sid);
   if(!bt) return;
   const daily = buildDailyMap().get(sid);
 
@@ -780,7 +711,10 @@ function showBtTooltip(sid, event){
   document.getElementById('bt-tt-signal').innerHTML    = daily && daily.signal ? badge(daily.signal) : '—';
   document.getElementById('bt-tt-sharpe').textContent  = daily ? fmt(daily.sharpe,2)  : '—';
   document.getElementById('bt-tt-stop').textContent    = daily && daily.stopLoss!=null ? fmt(daily.stopLoss,1) : '—';
-  document.getElementById('bt-tt-count').textContent   = `⭐ 出現 ${bt.count}/5 策略`;
+  // 持股來自回測最後一次調倉，不是今日選股 — 必須標日期，否則會被誤讀成
+  // 「今天有 N 個策略選中它」（旁邊並排的現價/RSI 是今日資料）
+  document.getElementById('bt-tt-count').textContent   =
+    `⭐ ${bt.asof ? fmtDate(bt.asof) + ' 調倉時' : '回測期末'}由 ${bt.count}/5 策略持有`;
   document.getElementById('bt-tt-strat-names').textContent = bt.strategies.map(s=>s.label).join('、');
 
   const tt = document.getElementById('bt-tooltip');
@@ -902,39 +836,14 @@ async function initStockPage(){
       <span id="sp-status" style="font-size:12px;color:var(--sub);"></span>
     </div>
     <div id="sp-header"></div>
-    <div id="sp-main" style="display:none;gap:10px;align-items:flex-start;">
-      <div id="sp-left" style="flex:7;min-width:0;">
-        <div class="chart-box" id="sp-main-chart"></div>
-        <div id="sp-macd-strip" class="sp-macd-strip" style="display:none"></div>
-        <div id="sp-mini-row" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
-          <div class="sp-chart-row">
-            <div class="chart-box" id="sp-kd-chart"></div>
-            <div id="sp-kd-judge" class="sp-judge-panel"><h4>KDJ 判斷</h4><div style="color:var(--sub);font-size:11px">載入中…</div></div>
-          </div>
-          <div class="sp-chart-row">
-            <div class="chart-box" id="sp-chip-chart"></div>
-            <div id="sp-chip-judge" class="sp-judge-panel"><h4>籌碼判斷</h4><div style="color:var(--sub);font-size:11px">載入中…</div></div>
-          </div>
-        </div>
-      </div>
-      <div id="sp-right" style="flex:3;display:flex;flex-direction:column;gap:8px;">
-        <div class="sp-card">
-          <h3>主力燈號</h3>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div id="sp-signal-dot" style="width:14px;height:14px;border-radius:50%;flex-shrink:0;"></div>
-            <div><div id="sp-signal-label" style="font-size:16px;font-weight:700;"></div>
-                 <div id="sp-signal-desc" style="font-size:12px;color:var(--sub);margin-top:3px;"></div></div>
-          </div>
-        </div>
-        <div class="sp-card"><h3>技術面摘要</h3><div id="sp-summary-rows"></div></div>
-        <div class="sp-card"><h3>近期法人籌碼</h3><div id="sp-chip-summary"></div></div>
-        <div class="sp-card"><h3>歷史勝率參考</h3><div id="sp-pred-content"></div></div>
-      </div>
+    <!-- 戰情儀表板：與 stock_dashboard.html 共用 assets/dashboard.js -->
+    <div id="sp-dash" class="sdash" style="display:none;">
+      <div class="quotebar" data-dash="quotebar"></div>
+      <div class="grid" data-dash="grid"></div>
     </div>
-    <div id="sp-bottom" style="display:none;gap:10px;flex-wrap:wrap;margin-top:10px;">
-      <div class="sp-card" style="flex:1;min-width:200px;"><h3>型態分析</h3><div id="sp-pattern-list"></div></div>
-      <div class="sp-card" style="flex:1;min-width:200px;"><h3>關鍵價位</h3><div id="sp-levels-rows"></div></div>
-      <div class="sp-card" style="flex:1;min-width:200px;"><h3>操作建議</h3><div id="sp-suggest" style="font-size:13px;line-height:1.7;color:var(--sub);"></div></div>
+    <div id="sp-suggest-wrap" class="sp-card" style="display:none;margin-top:10px;">
+      <h3>操作建議</h3>
+      <div id="sp-suggest" style="font-size:13px;line-height:1.7;color:var(--sub);"></div>
     </div>
     <div id="sp-mj-signals" style="display:none;"></div>
     <!-- 基本面 -->
@@ -975,7 +884,7 @@ async function loadStock(sid){
   document.getElementById('stock-dd').classList.remove('show');
   const st = document.getElementById('sp-status');
   st.textContent = '載入中…';
-  ['sp-main','sp-bottom'].forEach(id=>document.getElementById(id).style.display='none');
+  ['sp-dash','sp-suggest-wrap'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('sp-header').innerHTML='';
   ['fund-revenue','fund-eps','fund-margins'].forEach(id=>{
     const el=document.getElementById(id);
@@ -995,7 +904,7 @@ async function loadStock(sid){
 
 // ── Render ──────────────────────────────────────────────────────────────────
 function spRender(d){
-  _destroySpCharts();
+  window.StockDashboard.destroy();
   // Header
   const hEl = document.getElementById('sp-header');
   const cp = d.quote?.change_pct ?? 0;
@@ -1013,20 +922,11 @@ function spRender(d){
       </div>
     </div>`;
 
-  document.getElementById('sp-main').style.display='flex';
-  document.getElementById('sp-bottom').style.display='flex';
+  const dash = document.getElementById('sp-dash');
+  dash.style.display = '';
+  window.StockDashboard.render(dash, d);
 
-  spRenderMainChart(d);
-  spRenderKDChart(d);
-  spRenderChipChart(d);
-  // 初始範圍已在 spRenderMainChart 設定，此處不覆蓋
-  spRenderIndicatorJudges(d);
-  spRenderSignal(d.signal);
-  spRenderSummary(d.summary);
-  spRenderChipSummary(d.chip);
-  spRenderPrediction(d.prediction, d.summary);
-  spRenderPatterns(d.patterns);
-  spRenderLevels(d.levels);
+  document.getElementById('sp-suggest-wrap').style.display = '';
   spRenderSuggestion(d);
   loadFundamentals(d.stock_id);
 }
@@ -1035,23 +935,31 @@ function spRender(d){
 let _fundData = null;
 let _fundLoaded = false;
 
+let _fundTab = 'revenue';   // 目前選中的分頁，資料稍後到達時要補 render
+
+function renderFundTab(tab) {
+  if (!_fundLoaded || !_fundData) return;
+  if (tab === 'revenue')     renderFundRevenue(_fundData);
+  if (tab === 'eps')         renderFundEps(_fundData);
+  if (tab === 'margins')     renderFundMargins(_fundData);
+  if (tab === 'product_mix') renderFundProductMix(_fundData);
+}
+
 function switchFundTab(tab, btn) {
   document.querySelectorAll('.fund-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _fundTab = tab;
   ['revenue', 'eps', 'margins', 'product_mix'].forEach(t => {
     const el = document.getElementById('fund-' + t.replace('_','-'));
     if (el) el.style.display = t === tab ? '' : 'none';
   });
-  if (_fundLoaded && _fundData) {
-    if (tab === 'eps')         renderFundEps(_fundData);
-    if (tab === 'margins')     renderFundMargins(_fundData);
-    if (tab === 'product_mix') renderFundProductMix(_fundData);
-  }
+  renderFundTab(tab);
 }
 
 function loadFundamentals(stockId) {
   _fundData = null;
   _fundLoaded = false;
+  _fundTab = 'revenue';
   // Reset tabs back to 月營收
   document.querySelectorAll('.fund-tab').forEach((b, i) => {
     b.classList.toggle('active', i === 0);
@@ -1060,12 +968,13 @@ function loadFundamentals(stockId) {
     const el = document.getElementById('fund-' + t);
     if (el) {
       el.style.display = i === 0 ? '' : 'none';
-      if (i === 0) el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
-      else el.innerHTML = '';
+      el.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px;">載入中…</div>';
     }
   });
   fetchJSON(`./fundamentals/${stockId}.json`)
-    .then(d => { _fundData = d; _fundLoaded = true; renderFundRevenue(d); })
+    // 補 render 目前選中的分頁：使用者可能在 fetch 回來前就切到 EPS/三率/產銷，
+    // 只 render revenue 會讓那些分頁永遠停在載入中
+    .then(d => { _fundData = d; _fundLoaded = true; renderFundTab(_fundTab); })
     .catch(() => {
       ['revenue','eps','margins','product-mix'].forEach(t => {
         const el = document.getElementById('fund-' + t);
@@ -1392,209 +1301,6 @@ const _PLY = {
   bg:'#161b22', plot:'#161b22', font:{color:'#e6edf3',size:11},
   grid:'#30363d', up:'#26a641', dn:'#f85149', neu:'#58a6ff', acc:'#bc8cff',
 };
-function spRenderMainChart(d) {
-  const wrap = document.getElementById('sp-main-chart');
-  wrap.innerHTML =
-    '<div id="_lwc-k"></div>' +
-    '<div id="_lwc-v" style="margin-top:1px"></div>' +
-    '<div id="_lwc-m" style="margin-top:6px"></div>';
-
-  const dates = d.ohlcv.date, I = d.indicators;
-
-  // ── K線 + BB + MA（上方主圖，無日期軸；與成交量共用底部日期）
-  const kC = _lwc(document.getElementById('_lwc-k'), 300);
-  _spCh.candle = kC;
-  const candle = kC.addCandlestickSeries({
-    upColor:'#26a641', downColor:'#f85149',
-    borderUpColor:'#26a641', borderDownColor:'#f85149',
-    wickUpColor:'#26a641', wickDownColor:'#f85149',
-    priceFormat:{type:'price', precision:1, minMove:0.1},
-  });
-  candle.setData(dates.map((t,i) => ({
-    time:t, open:d.ohlcv.open[i], high:d.ohlcv.high[i],
-    low:d.ohlcv.low[i], close:d.ohlcv.close[i],
-  })));
-  const maRefs = [];
-  [['ma5','MA5','#f0b429'],['ma20','MA20','#58a6ff'],['ma60','MA60','#bc8cff']].forEach(([k,lbl,clr]) => {
-    if (!I[k]) return;
-    const s = kC.addLineSeries({color:clr,lineWidth:1,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
-    s.setData(_ld(dates, I[k]));
-    maRefs.push({series:s, label:lbl, color:clr, vals:I[k]});
-  });
-  if (I.bb_upper) {
-    const bbO = {color:'rgba(255,165,0,0.5)',lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false};
-    kC.addLineSeries(bbO).setData(_ld(dates, I.bb_upper));
-    kC.addLineSeries(bbO).setData(_ld(dates, I.bb_lower));
-    if (I.bb_mid) kC.addLineSeries({...bbO,color:'rgba(255,165,0,0.25)',lineStyle:0}).setData(_ld(dates, I.bb_mid));
-  }
-  if (d.mj_signals && d.mj_signals.length) {
-    candle.setMarkers(
-      [...d.mj_signals].sort((a,b)=>a.date<b.date?-1:1).map(s => ({
-        time: s.date,
-        position: s.signal==='LONG' ? 'belowBar' : 'aboveBar',
-        shape: s.signal==='LONG' ? 'arrowUp' : 'arrowDown',
-        color: s.signal==='LONG' ? '#26a641' : '#f85149',
-        text: s.signal==='LONG' ? '▲MJ' : '▼MJ',
-        size: 1,
-      }))
-    );
-  }
-  _legend(kC, document.getElementById('_lwc-k'), p => {
-    const bar = p && p.seriesData ? p.seriesData.get(candle) : null;
-    let o,h,l,c;
-    if (bar && bar.open!=null){ o=bar.open; h=bar.high; l=bar.low; c=bar.close; }
-    else { o=_last(d.ohlcv.open); h=_last(d.ohlcv.high); l=_last(d.ohlcv.low); c=_last(d.ohlcv.close); }
-    const cl = (c>=o) ? '#26a641' : '#f85149';
-    const ohlc = `<span style="color:${cl}">開 ${_f1(o)}　高 ${_f1(h)}　低 ${_f1(l)}　收 ${_f1(c)}</span>`;
-    const mas = maRefs.map(m=>`<span style="color:${m.color}">${m.label} ${_f1(_at(p,m.series,m.vals))}</span>`).join('　');
-    return ohlc + (mas ? '<br>'+mas : '');
-  });
-
-  // ── 成交量（價量組共用日期軸，與 K線連動）
-  const vC = _lwc(document.getElementById('_lwc-v'), 80, true);
-  _spCh.vol = vC;
-  const vol = vC.addHistogramSeries({priceFormat:{type:'volume'}, priceLineVisible:false, lastValueVisible:false});
-  vol.priceScale().applyOptions({scaleMargins:{top:0.18,bottom:0}});
-  vol.setData(dates.map((t,i) => ({
-    time:t, value:d.ohlcv.volume[i],
-    color: d.ohlcv.close[i] >= d.ohlcv.open[i] ? '#26a641' : '#f85149',
-  })));
-  _legend(vC, document.getElementById('_lwc-v'), p => {
-    const v = _at(p, vol, d.ohlcv.volume);
-    return `<span style="color:var(--sub)">量 </span><span style="color:#e6edf3">${v==null?'—':(v/1000).toLocaleString(undefined,{maximumFractionDigits:0})} 張</span>`;
-  });
-
-  // 價＋量 連動
-  _syncGroup = [kC, vC];
-
-  // 預設顯示最後 42 根（約 2 個月）
-  const _initRange = {from: Math.max(0, dates.length - 42), to: dates.length - 1};
-  kC.timeScale().setVisibleLogicalRange(_initRange);
-  vC.timeScale().setVisibleLogicalRange(_initRange);
-
-  // ── MACD（獨立日期軸，不與價量連動）
-  const mC = _lwc(document.getElementById('_lwc-m'), 110, true);
-  _spCh.macd = mC;
-  let macdHist=null, macdDif=null, macdSig=null;
-  if (I.macd_hist) {
-    macdHist = mC.addHistogramSeries({priceFormat:{type:'price',precision:2,minMove:0.01}, priceLineVisible:false, lastValueVisible:false});
-    macdHist.setData(dates.map((t,i) => ({
-      time:t, value:I.macd_hist[i],
-      color:(I.macd_hist[i]??0)>=0 ? '#26a641' : '#f85149',
-    })).filter(p=>p.value!=null&&isFinite(p.value)));
-  }
-  if (I.macd) {
-    macdDif = mC.addLineSeries({color:'#f85149',lineWidth:1,priceFormat:{type:'price',precision:2,minMove:0.01},priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
-    macdDif.setData(_ld(dates, I.macd));
-  }
-  if (I.macd_signal) {
-    macdSig = mC.addLineSeries({color:'#58a6ff',lineWidth:1,priceFormat:{type:'price',precision:2,minMove:0.01},priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
-    macdSig.setData(_ld(dates, I.macd_signal));
-  }
-  _legend(mC, document.getElementById('_lwc-m'), p => [
-    macdDif  && `<span style="color:#f85149">DIF ${_f2(_at(p,macdDif,I.macd))}</span>`,
-    macdSig  && `<span style="color:#58a6ff">DEA ${_f2(_at(p,macdSig,I.macd_signal))}</span>`,
-    macdHist && `<span style="color:var(--sub)">OSC ${_f2(_at(p,macdHist,I.macd_hist))}</span>`,
-  ].filter(Boolean).join('　'));
-}
-
-function spRenderKDChart(d) {
-  const el = document.getElementById('sp-kd-chart');
-  el.innerHTML = '';
-  const dates = d.ohlcv.date, I = d.indicators;
-
-  const kC = _lwc(el, 180, true);   // 獨立日期軸
-  _spCh.kd = kC;
-
-  // 參考線（80 / 20 / 0）
-  const refL = (v, clr) => kC.addLineSeries({color:clr,lineWidth:1,lineStyle:2,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false})
-    .setData(dates.map(t=>({time:t, value:v})));
-  refL(80, 'rgba(231,76,60,0.5)');
-  refL(20, 'rgba(39,174,96,0.5)');
-  if (I.kd_j) refL(0, 'rgba(255,255,255,0.2)');
-
-  const pf = {type:'price',precision:1,minMove:0.1};
-  let sK,sD,sJ;
-  if (I.kd_k){ sK=kC.addLineSeries({color:'#f0b429',lineWidth:1.5,priceFormat:pf,priceLineVisible:false,lastValueVisible:false}); sK.setData(_ld(dates,I.kd_k)); }
-  if (I.kd_d){ sD=kC.addLineSeries({color:'#58a6ff',lineWidth:1.5,priceFormat:pf,priceLineVisible:false,lastValueVisible:false}); sD.setData(_ld(dates,I.kd_d)); }
-  if (I.kd_j){ sJ=kC.addLineSeries({color:'#ff6b6b',lineWidth:1,lineStyle:1,priceFormat:pf,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false}); sJ.setData(_ld(dates,I.kd_j)); }
-  kC.priceScale('right').applyOptions({scaleMargins:{top:0.12,bottom:0.05}});
-  _legend(kC, el, p => [
-    sK && `<span style="color:#f0b429">K ${_f1(_at(p,sK,I.kd_k))}</span>`,
-    sD && `<span style="color:#58a6ff">D ${_f1(_at(p,sD,I.kd_d))}</span>`,
-    sJ && `<span style="color:#ff6b6b">J ${_f1(_at(p,sJ,I.kd_j))}</span>`,
-  ].filter(Boolean).join('　'));
-}
-
-function spRenderChipChart(d) {
-  const el = document.getElementById('sp-chip-chart');
-  const chip = d.chip;
-  if (!chip || !chip.dates || !chip.dates.length) {
-    el.innerHTML = '<div style="color:var(--sub);font-size:12px;padding:12px;">無法人籌碼資料</div>';
-    return;
-  }
-  el.innerHTML = '';
-  const cC = _lwc(el, 180, true);   // 獨立日期軸
-  _spCh.chip = cC;
-  const pf = {type:'price',precision:0,minMove:1};
-
-  // 合計柱狀（紅/綠）
-  let sTot;
-  if (chip.total) {
-    sTot = cC.addHistogramSeries({priceFormat:pf, priceLineVisible:false, lastValueVisible:false});
-    sTot.setData(chip.dates.map((t,i)=>({
-      time:t, value:chip.total[i]??0,
-      color:(chip.total[i]??0)>=0?'#26a641':'#f85149',
-    })));
-  }
-  // 三大法人折線
-  const refs = [];
-  [['foreign','外資','#58a6ff'],['trust','投信','#26a641'],['dealer','自營','#bc8cff']].forEach(([k,lbl,clr])=>{
-    if (!chip[k]) return;
-    const s = cC.addLineSeries({color:clr,lineWidth:1,priceFormat:pf,priceLineVisible:false,lastValueVisible:false,crosshairMarkerVisible:false});
-    s.setData(chip.dates.map((t,i)=>({time:t,value:chip[k][i]})).filter(p=>p.value!=null));
-    refs.push({series:s, label:lbl, color:clr, vals:chip[k]});
-  });
-  _legend(cC, el, p => {
-    const tot = sTot ? `<span style="color:var(--sub)">合計 </span><span style="color:#e6edf3">${_fInt(_at(p,sTot,chip.total))}</span>` : '';
-    const lines = refs.map(r=>`<span style="color:${r.color}">${r.label} ${_fInt(_at(p,r.series,r.vals))}</span>`).join('　');
-    return tot + (lines ? '　'+lines : '');
-  });
-}
-
-function spRenderSignal(sig){
-  if(!sig) return;
-  document.getElementById('sp-signal-dot').style.background = sig.color||'#95a5a6';
-  document.getElementById('sp-signal-label').textContent = sig.label||'—';
-  document.getElementById('sp-signal-desc').textContent  = sig.desc||'';
-}
-
-function spRenderSummary(summary){
-  const el=document.getElementById('sp-summary-rows');
-  el.innerHTML=(summary||[]).map(r=>{
-    const cls=r.direction==='up'?'up':r.direction==='down'?'dn':'flat';
-    return `<div class="sp-row"><span class="lbl">${r.label}</span><span class="val ${cls}">${r.value}</span></div>`;
-  }).join('');
-}
-
-function spRenderChipSummary(chip){
-  const el=document.getElementById('sp-chip-summary');
-  if(!chip||!chip.dates||!chip.dates.length){
-    el.innerHTML='<div style="color:var(--sub);font-size:12px;">無資料</div>'; return;
-  }
-  const sumN=(arr,n)=>arr.slice(-n).filter(v=>v!=null).reduce((a,b)=>a+b,0);
-  [
-    {label:'外資 5日',  val:sumN(chip.foreign,5)},
-    {label:'投信 5日',  val:sumN(chip.trust,5)},
-    {label:'自營 5日',  val:sumN(chip.dealer,5)},
-    {label:'合計 10日', val:sumN(chip.total,10)},
-  ].forEach(r=>{
-    const cls=r.val>0?'up':r.val<0?'dn':'flat';
-    const sgn=r.val>0?'+':'';
-    el.innerHTML+=`<div class="sp-row"><span class="lbl">${r.label}</span><span class="val ${cls}">${sgn}${r.val.toFixed(0)} 張</span></div>`;
-  });
-}
-
 // ── 行動清單：KDJ / MACD 判斷（從 trend_analysis 欄位） ─────────────────────
 function _kdFromTA(ta){
   // Returns {state, color, detail} using kd_k/d/j and prev values in trend_analysis
@@ -1800,32 +1506,6 @@ function _renderJudge(el, judge, title){
     <div class="sp-judge-action" style="color:${color};background:${actionBg};margin-top:8px">${escHtml(action)}</div>`;
 }
 
-function spRenderIndicatorJudges(d){
-  const I=d.indicators||{};
-  _renderJudge(document.getElementById('sp-kd-judge'), _buildKDJudge(I), 'KDJ 判斷');
-  _renderJudge(document.getElementById('sp-chip-judge'), _buildChipJudge(d.chip), '籌碼判斷');
-  // MACD strip below main chart
-  const strip=document.getElementById('sp-macd-strip');
-  if(!strip) return;
-  const mj=_buildMACDJudge(I);
-  if(!mj){ strip.style.display='none'; return; }
-  const {state,color,details,action,dif,dea}=mj;
-  const actionBg=color==='var(--green)'?'rgba(39,174,96,.12)':color==='var(--red)'?'rgba(231,76,60,.12)':'rgba(243,156,18,.12)';
-  strip.style.display='flex';
-  strip.innerHTML=`
-    <div class="mst-block">
-      <span class="mst-label">MACD 判斷</span>
-      <span class="mst-verdict" style="color:${color}">${escHtml(state)}</span>
-    </div>
-    <div class="mst-block" style="flex:1">
-      ${details.map(d=>`<div class="mst-detail">${escHtml(d)}</div>`).join('')}
-      ${dif!=null?`<div class="mst-detail" style="margin-top:2px">DIF ${dif?.toFixed(2)} / DEA ${dea?.toFixed(2)}</div>`:''}
-    </div>
-    <div class="mst-block">
-      <span class="mst-action" style="color:${color};background:${actionBg}">${escHtml(action)}</span>
-    </div>`;
-}
-
 // ── 歷史勝率參考（取代假 AI 預測）───────────────────────────────────────────
 // 數據來源：回測_進出場策略比較_20250601~20260601 指標準確度分析
 const _CALIB = {
@@ -1841,61 +1521,6 @@ const _CALIB = {
     '觀望':       {wr:50, n:8,  note:'勝率偏低，謹慎'},
   }
 };
-function spRenderPrediction(pred, summary){
-  const el=document.getElementById('sp-pred-content');
-  if(!el) return;
-  const maItem=(summary||[]).find(s=>s.label==='均線排列');
-  const evalItem=(summary||[]).find(s=>s.label==='綜合評估');
-  const maVal=maItem?.value||'';
-  let maKey=null;
-  if(maVal.includes('強勢多頭')) maKey='強勢多頭';
-  else if(maVal.includes('多頭排列')) maKey='多頭排列';
-  else if(maVal.includes('弱勢多頭')) maKey='弱勢多頭';
-  const calib=maKey?_CALIB.ma[maKey]:null;
-  const evalVal=evalItem?.value||'—';
-  if(!calib){
-    el.innerHTML=`
-      <div style="color:var(--sub);font-size:12px">目前均線非多頭排列，無法對應歷史勝率參考資料。</div>
-      <div style="margin-top:8px;font-size:12px">綜合評估：<b>${escHtml(evalVal)}</b></div>
-      <div style="margin-top:6px;font-size:11px;color:var(--sub)">數據來源：一年回測（2025/06~2026/06）</div>`;
-    return;
-  }
-  const wrColor=calib.wr>=70?'var(--green)':calib.wr>=58?'var(--yellow)':'var(--red)';
-  el.innerHTML=`
-    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px">
-      <span style="font-size:26px;font-weight:700;color:${wrColor}">${calib.wr}%</span>
-      <span style="font-size:12px;color:var(--sub)">歷史同型態勝率</span>
-    </div>
-    <div style="font-size:12px;margin-bottom:4px">均線型態：<b style="color:${wrColor}">${escHtml(maKey)}</b></div>
-    <div style="font-size:11px;color:var(--sub);margin-bottom:6px">${escHtml(calib.note)}</div>
-    <div style="font-size:12px">綜合評估：<b>${escHtml(evalVal)}</b></div>
-    <div style="width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:8px;overflow:hidden">
-      <div style="height:100%;width:${calib.wr}%;background:${wrColor};border-radius:3px"></div>
-    </div>
-    <div style="margin-top:6px;font-size:10px;color:var(--sub)">樣本 ${calib.n} 筆 · 2025/06~2026/06 回測</div>`;
-}
-
-function spRenderPatterns(patterns){
-  const el=document.getElementById('sp-pattern-list');
-  if(!patterns||!patterns.length){
-    el.innerHTML='<div style="color:var(--sub);font-size:12px;">未偵測到明顯型態</div>'; return;
-  }
-  el.innerHTML=patterns.map(p=>
-    `<div class="sp-pattern-item"><div class="pt">${p.label}</div><div class="pd">${p.desc} · ${p.date}</div></div>`
-  ).join('');
-}
-
-function spRenderLevels(levels){
-  const el=document.getElementById('sp-levels-rows');
-  if(!levels){el.innerHTML='—';return;}
-  const map={resistance:['壓力區間','dn'],pullback:['回調區間','flat'],support:['支撐區間','up'],
-             breakout:['突破點','dn'],breakdown:['跌破點','up']};
-  el.innerHTML=Object.entries(map).map(([k,[label,cls]])=>{
-    const v=levels[k]; if(v==null) return '';
-    return `<div class="sp-row"><span class="lbl">${label}</span><span class="val ${cls}">${typeof v==='number'?v.toFixed(1):v}</span></div>`;
-  }).join('');
-}
-
 function spRenderSuggestion(d){
   const el=document.getElementById('sp-suggest');
   const pred=d.prediction, sig=d.signal, summary=d.summary||[];
@@ -1981,6 +1606,12 @@ async function init(){
   document.addEventListener('click', e=>{
     if(!e.target.closest('#bt-tooltip') && !e.target.closest('.bt-chip') && !e.target.closest('.bt-badge'))
       hideBtTooltip();
+  });
+  // 導覽列的分頁切換是沒有 href 的 <a>，鍵盤按 Enter/Space 不會觸發 click
+  document.querySelectorAll('nav a[role="button"]').forEach(a=>{
+    a.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); a.click(); }
+    });
   });
 }
 
@@ -2154,19 +1785,17 @@ async function _renderLabBreakout(){
 
 function setPage(page){
   CUR_PAGE = page;
-  ['daily','weekly','mainforce','stock','watchlist','lab'].forEach(p=>{
+  ['daily','weekly','stock','watchlist','lab'].forEach(p=>{
     const navEl = document.getElementById(`nav-${p}`);
     if(navEl) navEl.classList.toggle('active', p===page);
     const pageEl = document.getElementById(`page-${p}`);
     if(pageEl) pageEl.classList.toggle('active', p===page);
   });
-  // 主力觀察與今日掃描共用同一份 daily payload，所以也需要日期選擇器
   document.getElementById('date-picker-wrap').style.display =
-    (page==='daily' || page==='mainforce') ? '' : 'none';
+    page==='daily' ? '' : 'none';
   if(page==='weekly')    renderWeekly();
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
-  if(page==='mainforce') renderMainForce(CACHE[CUR_DATE]);
   if(page==='lab')       renderLabPage();
   hideBtTooltip();
 }
@@ -2183,16 +1812,14 @@ async function loadDate(dateStr){
     try{
       CACHE[dateStr] = await fetchJSON(`./${dateStr}.json?v=${bust}`);
     }catch{
-      try{
-        CACHE[dateStr] = await fetchJSON(`./daily.json?v=${bust}`);
-      }catch{
-        showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
-        return;
-      }
+      // 原本會退回 daily.json 並存進 CACHE[dateStr]，等於把「最新資料」
+      // 冒充成該日期的資料且永久快取，使用者無從察覺日期與內容不符。
+      // 寧可明確報錯。
+      showError(`無法載入 ${fmtDate(dateStr)} 的資料`);
+      return;
     }
   }
   renderDaily(CACHE[dateStr]);
-  if(CUR_PAGE==='mainforce') renderMainForce(CACHE[dateStr]);
   document.getElementById('loading').style.display='none';
 }
 
@@ -2732,146 +2359,6 @@ async function _renderBreakoutSection(){
       </div>`).join('')+`</div>`;
   }
   el.innerHTML=html;
-}
-
-// ── 主力觀察 ─────────────────────────────────────────────────────────────────
-function mfScoreColor(s){
-  if(s==null) return 'var(--sub)';
-  if(s>=70) return 'var(--green)';
-  if(s>=55) return '#5cb85c';
-  if(s>=45) return 'var(--yellow)';
-  if(s>=30) return '#e67e22';
-  return 'var(--red)';
-}
-
-function renderMainForce(data){
-  const el = document.getElementById('page-mainforce');
-  if(!data){
-    el.innerHTML = `<div class="error-box"><span>📭</span>尚未載入資料</div>`;
-    return;
-  }
-  const list = data.mainForce || [];
-  if(!list.length){
-    el.innerHTML = `
-    <div class="info-box" style="margin-bottom:16px;">
-      <b style="color:var(--text);">🎯 主力觀察（觀察期）</b><br>
-      本分頁顯示「ATR(14)×2 動態停損」與「分點主力強度分數」。<br>
-      <span style="color:var(--yellow)">⚠ 此日期尚無主力觀察資料 — 待 daily_scan 在啟用後重新跑一次才會出現。</span>
-    </div>`;
-    return;
-  }
-
-  const date = (data.meta && data.meta['掃描日期']) || '—';
-
-  // 統計區
-  const scored = list.filter(x=>x.mainForceScore!=null);
-  const avgScore = scored.length ? Math.round(scored.reduce((a,b)=>a+b.mainForceScore,0)/scored.length*10)/10 : null;
-  const strong = scored.filter(x=>x.mainForceScore>=70).length;
-  const weak   = scored.filter(x=>x.mainForceScore<30).length;
-  const netBuyTotal = list.reduce((a,b)=>a+(b.brokerNet||0),0);
-
-  let html = `
-  <div class="info-box" style="margin-bottom:14px;">
-    <b style="color:var(--text);">🎯 主力觀察分頁說明</b><br>
-    <b>主力分</b>：依分點 top15 計算 (40% 淨買超 + 35% 前 5 大集中度 + 25% 單一主力主導性) — ≥70 強力吸籌、≥55 偏多、≥45 中性、≥30 偏空、<30 大幅出脫<br>
-    <b>停損價</b>：當日收盤 − 2 × ATR(14)，依個股波動動態調整<br>
-    <b>主力淨</b>：分點 top15 買超合計減去 top15 賣超合計（張）— 來源：histock.tw
-  </div>
-
-  <div class="grid-4">
-    <div class="card"><div class="card-title">掃描日期</div><div class="card-value" style="font-size:18px">${fmtDate(date)}</div></div>
-    <div class="card"><div class="card-title">主力分平均</div>
-      <div class="card-value" style="color:${mfScoreColor(avgScore)}">${avgScore!=null?avgScore.toFixed(1):'—'}</div>
-      <div class="card-sub">${scored.length} 檔有資料</div></div>
-    <div class="card"><div class="card-title">強力吸籌</div>
-      <div class="card-value" style="color:var(--green)">${strong}</div>
-      <div class="card-sub">主力分 ≥ 70</div></div>
-    <div class="card"><div class="card-title">大幅出脫</div>
-      <div class="card-value" style="color:var(--red)">${weak}</div>
-      <div class="card-sub">主力分 < 30</div></div>
-  </div>
-
-  <div class="section-title">📊 主力強度排行（${list.length} 檔）</div>
-  <div class="card" style="overflow-x:auto"><table>
-    <tr>
-      <th>代碼</th><th>名稱</th><th>族群</th><th>現價</th>
-      <th>訊號</th><th>主力分</th><th>標籤</th>
-      <th>Top1 買進</th><th>分點淨超</th><th>ATR</th><th>停損價</th><th></th>
-    </tr>
-    ${list.map((s,i)=>{
-      const score = s.mainForceScore;
-      const scoreCol = mfScoreColor(score);
-      const netClass = (s.brokerNet||0)>=0?'chip-pos':'chip-neg';
-      const top1 = s.top1Broker ? `${escHtml(s.top1Broker)} ${s.top1Lots? '+'+s.top1Lots+'張':''}` : '—';
-      return `<tr>
-        <td><b>${escHtml(s.id)}</b></td>
-        <td>${escHtml(s.name)}</td>
-        <td><span class="tag">${escHtml(s.sector||'')}</span></td>
-        <td>${fmt(s.price,1)}</td>
-        <td>${s.signal?badge(s.signal):'—'}</td>
-        <td><b style="color:${scoreCol}">${score!=null?fmt(score,1):'—'}</b></td>
-        <td style="font-size:12px;color:${scoreCol}">${escHtml(s.mainForceLabel||'—')}</td>
-        <td style="font-size:12px">${top1}</td>
-        <td class="${netClass}">${s.brokerNet!=null?sign(s.brokerNet)+(s.brokerNet).toLocaleString():'—'}</td>
-        <td>${s.atr14!=null?fmt(s.atr14,2):'—'}</td>
-        <td class="dn">${s.stopLoss!=null?fmt(s.stopLoss,1):'—'}</td>
-        <td><button class="btn-add-inline" onclick="mfToggle(${i})" id="mf-btn-${i}">▼</button></td>
-      </tr>
-      <tr id="mf-detail-${i}" style="display:none;background:#13161d">
-        <td colspan="12" style="padding:12px 16px">${renderMfDetail(s)}</td>
-      </tr>`;
-    }).join('')}
-  </table></div>`;
-
-  el.innerHTML = html;
-}
-
-function renderMfDetail(s){
-  const buyers = s.topBuyers || [];
-  const sellers = s.topSellers || [];
-  const err = s.brokerError;
-  if(err && !buyers.length && !sellers.length){
-    return `<div style="color:var(--sub);font-size:12px">⚠ 分點資料抓取失敗：${escHtml(err)}（${escHtml(s.brokerSource||'unknown')}）</div>`;
-  }
-  const tb = buyers.map(b=>`<tr>
-    <td>${escHtml(b.name)}</td><td>${b.buy}</td><td>${b.sell}</td>
-    <td class="chip-pos"><b>+${b.net}</b></td><td>${b.avg_price||'—'}</td>
-  </tr>`).join('');
-  const ts = sellers.map(s=>`<tr>
-    <td>${escHtml(s.name)}</td><td>${s.buy}</td><td>${s.sell}</td>
-    <td class="chip-neg"><b>${s.net}</b></td><td>${s.avg_price||'—'}</td>
-  </tr>`).join('');
-  return `
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-    <div>
-      <div style="color:var(--green);font-size:12px;margin-bottom:6px">▲ Top 買超分點 (近 5 日)</div>
-      <table class="chip-table" style="font-size:12px">
-        <tr><th>分點</th><th>買張</th><th>賣張</th><th>淨</th><th>均價</th></tr>
-        ${tb||'<tr><td colspan="5" style="color:var(--sub)">無資料</td></tr>'}
-      </table>
-    </div>
-    <div>
-      <div style="color:var(--red);font-size:12px;margin-bottom:6px">▼ Top 賣超分點 (近 5 日)</div>
-      <table class="chip-table" style="font-size:12px">
-        <tr><th>分點</th><th>買張</th><th>賣張</th><th>淨</th><th>均價</th></tr>
-        ${ts||'<tr><td colspan="5" style="color:var(--sub)">無資料</td></tr>'}
-      </table>
-    </div>
-  </div>
-  <div style="margin-top:8px;font-size:11px;color:var(--sub)">
-    來源：${escHtml(s.brokerSource||'—')}
-    前 5 大買超合計：${s.top5BuyLots!=null?'+'+s.top5BuyLots+' 張':'—'}
-    集中度：${s.concentration!=null?(s.concentration*100).toFixed(1)+'%':'—'}
-  </div>`;
-}
-
-function mfToggle(i){
-  const row = document.getElementById(`mf-detail-${i}`);
-  const btn = document.getElementById(`mf-btn-${i}`);
-  if(!row) return;
-  const open = row.style.display !== 'none';
-  row.style.display = open ? 'none' : '';
-  if(btn) btn.textContent = open ? '▼' : '▲';
 }
 
 // ── 週報 ──────────────────────────────────────────────────────────────────────

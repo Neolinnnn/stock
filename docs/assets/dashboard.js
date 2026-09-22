@@ -603,6 +603,93 @@
       + '，可用方向鍵逐日讀值' });
   }
 
+  /**
+   * 技術指標雙面板：MACD（DIF／DEA／柱）與 KD(J)。與主K線同資料來源，
+   * 各自獨立量尺；近 60 個交易日，缺值的交易日整列跳過（沿用 drawChipBars 的作法）。
+   */
+  function drawTechChart(canvas, dates, ind) {
+    const dpr = window.devicePixelRatio || 1;
+    const MACD_H = 96, KD_H = 84, TITLE_H = 15;
+    const w = canvas.clientWidth || 200, h = MACD_H + KD_H;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.height = h + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, w, h);
+    const at = (arr, i) => (arr && arr[i] !== null && arr[i] !== undefined) ? arr[i] : null;
+
+    const pairs = [];
+    for (let i = dates.length - 1; i >= 0 && pairs.length < 60; i--) {
+      if (at(ind.macd_hist, i) === null && at(ind.kd_k, i) === null) continue;
+      pairs.unshift({ i, d: dates[i] || '' });
+    }
+    if (!pairs.length) return;
+    const bw = w / pairs.length;
+
+    const title = (label, sub, top) => {
+      ctx.font = '13px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillStyle = '#e8eaed'; ctx.fillText(label, 2, top + 1);
+      ctx.fillStyle = '#a8b2c1'; ctx.textAlign = 'right'; ctx.fillText(sub, w - 2, top + 1);
+    };
+    const zeroLine = y => {
+      ctx.strokeStyle = '#272c37'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, y + .5); ctx.lineTo(w, y + .5); ctx.stroke();
+    };
+    const linePath = (top, valToY, key, color) => {
+      ctx.strokeStyle = color; ctx.lineWidth = 1.3; ctx.beginPath();
+      let started = false;
+      pairs.forEach((p, k) => {
+        const v = at(ind[key], p.i);
+        if (v === null) { started = false; return; }
+        const x = k * bw + bw / 2, y = valToY(v);
+        if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    };
+
+    // ── MACD：零軸柱狀 + DIF/DEA 折線 ──
+    const macdVals = pairs.map(p => at(ind.macd_hist, p.i)).filter(v => v !== null);
+    const macdMax = Math.max(...macdVals.map(Math.abs), 0.01);
+    const plotH1 = MACD_H - TITLE_H - 3, zero1 = TITLE_H + plotH1 / 2, half1 = plotH1 / 2 - 2;
+    title('MACD', `DIF ${fmt(last(ind.macd), 2)}　DEA ${fmt(last(ind.macd_signal), 2)}`, 0);
+    zeroLine(zero1);
+    pairs.forEach((p, k) => {
+      const v = at(ind.macd_hist, p.i);
+      if (v === null) return;
+      const bh = Math.abs(v) / macdMax * half1;
+      ctx.fillStyle = v >= 0 ? '#e74c3c' : '#2ecc71';
+      ctx.fillRect(k * bw + 1, v >= 0 ? zero1 - bh : zero1, Math.max(bw - 2, 1), bh);
+    });
+    linePath(0, v => zero1 - (v / macdMax) * half1, 'macd', '#f1b143');
+    linePath(0, v => zero1 - (v / macdMax) * half1, 'macd_signal', '#4ea1f3');
+
+    // ── KD(J)：0/100 參考帶 + K/D/J 折線。J 可能衝出 0~100，量尺放寬到 -30~130 ──
+    const kdTop = MACD_H, plotH2 = KD_H - TITLE_H - 3;
+    const rMin = -30, rMax = 130, span = rMax - rMin;
+    const kdY = v => kdTop + TITLE_H + (rMax - clamp(v, rMin, rMax)) / span * plotH2;
+    title('KD(J)', `K ${fmt(last(ind.kd_k), 1)}　D ${fmt(last(ind.kd_d), 1)}　J ${fmt(last(ind.kd_j), 1)}`, kdTop);
+    ctx.strokeStyle = 'rgba(231,76,60,.4)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, kdY(80) + .5); ctx.lineTo(w, kdY(80) + .5); ctx.stroke();
+    ctx.strokeStyle = 'rgba(46,204,113,.4)';
+    ctx.beginPath(); ctx.moveTo(0, kdY(20) + .5); ctx.lineTo(w, kdY(20) + .5); ctx.stroke();
+    linePath(kdTop, kdY, 'kd_k', '#f1b143');
+    linePath(kdTop, kdY, 'kd_d', '#4ea1f3');
+    linePath(kdTop, kdY, 'kd_j', '#ff6b6b');
+
+    attachTooltip(canvas, pairs.map((p, k) => ({
+      x: k * bw, y: 0, w: bw, h,
+      title: p.d,
+      rows: [
+        { label: 'DIF', value: fmt(at(ind.macd, p.i), 2), color: '#f1b143' },
+        { label: 'DEA', value: fmt(at(ind.macd_signal, p.i), 2), color: '#4ea1f3' },
+        { label: 'OSC', value: fmt(at(ind.macd_hist, p.i), 2),
+          color: nz(at(ind.macd_hist, p.i)) >= 0 ? '#e74c3c' : '#2ecc71' },
+        { label: 'K', value: fmt(at(ind.kd_k, p.i), 1), color: '#f1b143' },
+        { label: 'D', value: fmt(at(ind.kd_d, p.i), 1), color: '#4ea1f3' },
+        { label: 'J', value: fmt(at(ind.kd_j, p.i), 1), color: '#ff6b6b' },
+      ],
+    })), { label: `技術指標：近 ${pairs.length} 個交易日的 MACD 與 KD(J)，可用方向鍵逐日讀值` });
+  }
 
   /**
    * 集保大戶三級距的最新一期比例與週變化。
@@ -820,7 +907,7 @@
   /** 01 主K線圖：沿用 lightweight-charts，與站內其他頁面一致。 */
   function cardMainChart(d) {
     return `<div class="card c12"><h3><span class="no">01</span>主K線圖
-      <span class="sub">K + MA5/10/20/60 + 量</span></h3>
+      <span class="sub">K + 布林通道 + MA5/10/20/60 + 量</span></h3>
       <div class="chartbox" id="kline"><div class="klegend" id="klegend"></div></div></div>`;
   }
 
@@ -868,10 +955,29 @@
         .filter(p => p.value !== null && p.value !== undefined));
     });
 
+    // 布林通道：虛線上下軌 + 淡色中軌，與 MA 同一價格軸疊加
+    const ind = d.indicators || {};
+    if (ind.bb_upper && ind.bb_lower) {
+      const bbLine = (vals, opts) => {
+        const s = _mainChart.addLineSeries({
+          lineWidth: 1, priceLineVisible: false, lastValueVisible: false,
+          crosshairMarkerVisible: false, ...opts,
+        });
+        s.setData(o.date.map((t, i) => ({ time: t, value: vals[i] }))
+          .filter(p => p.value !== null && p.value !== undefined));
+      };
+      bbLine(ind.bb_upper, { color: 'rgba(241,177,67,.55)', lineStyle: 2 });
+      bbLine(ind.bb_lower, { color: 'rgba(241,177,67,.55)', lineStyle: 2 });
+      if (ind.bb_mid) bbLine(ind.bb_mid, { color: 'rgba(241,177,67,.25)' });
+    }
+
+    // v4 的 scaleMargins 屬於價格軸而非 series：疊加軸（priceScaleId ''）要用 priceScale().applyOptions 設，
+    // 寫在 series options 會被忽略，量柱就蓋在 K 線上。主軸下緣同步讓出 25% 給量柱。
+    _mainChart.priceScale('right').applyOptions({ scaleMargins: { top: 0.06, bottom: 0.25 } });
     const volSeries = _mainChart.addHistogramSeries({
       priceFormat: { type: 'volume' }, priceScaleId: '',
-      scaleMargins: { top: 0.82, bottom: 0 },
     });
+    _mainChart.priceScale('').applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
     volSeries.setData(o.date.map((t, i) => ({
       time: t, value: o.volume[i] / 1000,
       color: o.close[i] >= o.open[i] ? 'rgba(231,76,60,.45)' : 'rgba(46,204,113,.45)'
@@ -1220,8 +1326,16 @@
       </div></div>`;
   }
 
+  /** 19 技術指標（MACD + KD(J)），資料不足時整卡不顯示 */
+  function cardTechChart(d) {
+    const ind = d.indicators || {};
+    if (!ind.macd_hist && !ind.kd_k) return '';
+    return `<div class="card c12"><h3><span class="no">19</span>技術指標
+      <span class="sub">MACD + KD(J)</span></h3>
+      <canvas id="techchart"></canvas></div>`;
+  }
 
-  /** 19 原始資料表（近 10 日） */
+  /** 20 原始資料表（近 10 日） */
   function cardRawTable(d) {
     const o = d.ohlcv, c = d.chip || {}, n = o.close.length;
     let rows = '';
@@ -1232,7 +1346,7 @@
         <td>${fmtInt(o.volume[i] / 1000)}</td>
         <td class="${nz(c.total?.[i]) >= 0 ? 'up' : 'dn'}">${fmtInt(c.total?.[i])}</td></tr>`;
     }
-    return `<div class="card c12"><h3><span class="no">19</span>原始資料表
+    return `<div class="card c12"><h3><span class="no">20</span>原始資料表
       <span class="sub">近 10 個交易日</span></h3>
       <div style="overflow-x:auto;">
         <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:14px;">
@@ -1263,7 +1377,7 @@
       cardChipFlow(d, sc), cardDaytradeRisk(rk), cardEnergy(en), cardHealth(sc),
       cardSignalLight(d, sc, rk), cardConfidence(d, sc), cardChipSummary(d, sc),
       cardPowerSplit(d, sc), cardStrength(sc, en), cardVerdict(d, sc, rk, vw),
-      cardHolders(d), cardRawTable(d),
+      cardHolders(d), cardTechChart(d), cardRawTable(d),
     ].join('');
 
     hideTip();
@@ -1289,6 +1403,7 @@
     safe('heatmap', () => drawHeatmap($('heatmap'), vp, cur));
     safe('coststruct', () => drawCostStruct($('coststruct'), vp, vw, cur));
     safe('chipbars', () => drawChipBars($('chipbars'), d.chip || {}));
+    safe('techchart', () => drawTechChart($('techchart'), d.ohlcv.date, d.indicators || {}));
     // 一期畫不出折線，cardHolders 該情況下不會放 canvas
     if (d.holders && d.holders.dates && d.holders.dates.length > 1) {
       safe('holders', () => drawHolders($('holders'), d.holders));
