@@ -1634,6 +1634,17 @@ function goToStock(sid){
 
 // ── 切換頁面 ──────────────────────────────────────────────────────────────────
 // ── 策略實驗室 ────────────────────────────────────────────────────────────────
+// Walk-forward 判讀：各段都跟同期基準比，才分得出「策略失效」與「整體市況轉差」。
+// 與 backtest.html 的同名函式保持一致。
+function wfVerdict(s, base){
+  const f=s.wf_front, b=s.wf_back, bf=base.wf_front, bb=base.wf_back;
+  const pp=v=>(v>0?'+':'')+Math.round(v*100)+'pp';
+  const decay=f.win_rate-b.win_rate, edgeF=f.win_rate-bf.win_rate, edgeB=b.win_rate-bb.win_rate;
+  const ctx=`同期基準 ${Math.round(bf.win_rate*100)}% → ${Math.round(bb.win_rate*100)}%，相對基準優勢 ${pp(edgeF)} → ${pp(edgeB)}。`;
+  if(edgeB<=0) return {label:'後段失效',color:'var(--red)',text:`⚠️ 後段勝率 ${Math.round(b.win_rate*100)}% 未勝過基準，過濾器在後段失效。${ctx}`};
+  if(decay>0.10||edgeB<0.05) return {label:'優勢縮小',color:'var(--yellow)',text:`⚠️ 前後段勝率 ${Math.round(f.win_rate*100)}% → ${Math.round(b.win_rate*100)}%（衰退 ${Math.round(decay*100)}pp）；${ctx}`};
+  return {label:'無明顯衰減',color:'var(--green)',text:`前後段表現一致（非過擬合）。${ctx}`};
+}
 let _LAB_CACHE=null;
 async function renderLabPage(){
   const el=document.getElementById('page-lab');
@@ -1646,6 +1657,10 @@ async function renderLabPage(){
   const win=d.filters.VOL_OR_MACD;
   const winS=win.exits.TP18SL15, winT=win.exits.TRAIL15;
   const pct=v=>(v*100).toFixed(0)+'%';
+  const sgn=v=>(v>0?'+':'')+v+'%';
+  const wf=wfVerdict(winS, base);
+  const tierRows=['A(5-7分)','B(3-4分)','C(0-2分)'].map(t=>d.tiers[t]?.TP18SL15).filter(s=>s?.n);
+  const monotone=tierRows.every((s,i)=>i===0||(s.win_rate<tierRows[i-1].win_rate&&s.avg_ret<tierRows[i-1].avg_ret));
 
   let html=`<div class="section-title">⚗️ 進場策略實驗室</div>
   <div style="font-size:12px;color:var(--sub);margin-bottom:14px;">
@@ -1664,19 +1679,19 @@ async function renderLabPage(){
       <div><div class="card-title">勝率（基準 ${pct(base.win_rate)}）</div>
         <div class="card-value up">${pct(winS.win_rate)}</div>
         <div class="card-sub">n=${winS.n}・Wilson下界 ${pct(winS.wilson_lb)}</div></div>
-      <div><div class="card-title">平均報酬（基準 ${base.avg_ret}%）</div>
-        <div class="card-value up">+${winS.avg_ret}%</div>
+      <div><div class="card-title">平均報酬（基準 ${sgn(base.avg_ret)}）</div>
+        <div class="card-value ${winS.avg_ret>0?'up':'down'}">${sgn(winS.avg_ret)}</div>
         <div class="card-sub">獲利因子 ${winS.profit_factor}（基準 ${base.profit_factor}）</div></div>
       <div><div class="card-title">搭配追蹤停損15%</div>
-        <div class="card-value up">+${winT.avg_ret}%</div>
+        <div class="card-value ${winT.avg_ret>0?'up':'down'}">${sgn(winT.avg_ret)}</div>
         <div class="card-sub">勝率 ${pct(winT.win_rate)}・PF ${winT.profit_factor}</div></div>
       <div><div class="card-title">Walk-Forward 驗證</div>
         <div class="card-value">${pct(winS.wf_front.win_rate)} → ${pct(winS.wf_back.win_rate)}</div>
-        <div class="card-sub">前段(n=${winS.wf_front.n}) / 後段(n=${winS.wf_back.n})</div></div>
+        <div class="card-sub">前段(n=${winS.wf_front.n}) / 後段(n=${winS.wf_back.n})・<b style="color:${wf.color}">${wf.label}</b></div></div>
     </div>
     <div style="font-size:12px;color:var(--sub);line-height:1.7;">
       📌 解讀：訊號日「當日成交量 ≥ 20日均量的1.2倍」或「MACD 柱由弱轉強」代表資金進駐確認。
-      此過濾把勝率從 ${pct(base.win_rate)} 提升至 ${pct(winS.win_rate)}，平均報酬提升 ${(winS.avg_ret/base.avg_ret).toFixed(1)} 倍，且前後段表現一致（非過擬合）。
+      全期勝率 ${pct(base.win_rate)} → ${pct(winS.win_rate)}、平均報酬 ${sgn(base.avg_ret)} → ${sgn(winS.avg_ret)}。${wf.text}
     </div>
   </div>
 
@@ -1697,7 +1712,7 @@ async function renderLabPage(){
         勝率 ${pct(s.win_rate)}・平均 ${s.avg_ret>0?'+':''}${s.avg_ret}%・n=${s.n}</span>
     </div>`;
   });
-  html+=`<div style="font-size:11px;color:var(--sub);margin-top:6px;">評分愈高→勝率與報酬愈高，呈完美單調遞增，證明評分系統有判別力。</div></div>
+  html+=`<div style="font-size:11px;color:var(--sub);margin-top:6px;">${monotone?'評分愈高→勝率與報酬愈高，呈單調遞增，評分系統有判別力。':'⚠️ 分層未呈單調遞增，評分系統的判別力存疑。'}</div></div>
 
   <!-- 過濾器全表 -->
   <div class="section-title">🧪 全部過濾器比較（依勝率排序）</div>
@@ -1829,6 +1844,44 @@ function stepDate(dir){
   if(next>=0 && next<DATES.length) loadDate(DATES[next]);
 }
 
+// ── 市場溫度：大盤離季線(MA60)距離 + 同日入選擁擠度 ───────────────────────────
+// 門檻依 entry_lab / breakout_lab 回測（2025/01~2026/09）按訊號日大盤乖離分組：
+// 離季線 ≥15% 時兩種選股方法平均報酬都趨近 0 或為負（2026/5~6 即屬此區）；
+// 同日雙篩選 ≥3 檔入選時勝率僅約 20%（1~2 檔約 61%）。過熱段僅 2~3 次，屬警示非硬規則。
+let _MKT_TEMP=null;   // 今日掃描渲染時設定，供行動清單／領頭羊卡片掛提示徽章
+function marketTemp(p, qualified){
+  if(!p||!p.taiexClose||!p.taiexMa60) return null;
+  const ext=(p.taiexClose/p.taiexMa60-1)*100, n=(qualified||[]).length;
+  const lv = ext<0  ? {t:'偏冷',c:'var(--blue)',  msg:'大盤在季線下：領頭羊系統自動關閉；雙篩選在此區的歷史結果分歧，不宜放大部位。'}
+           : ext<10 ? {t:'正常',c:'var(--green)', msg:'正常進場，出場以追蹤停損15%為主。'}
+           : ext<15 ? {t:'偏熱',c:'var(--yellow)',msg:'訊號仍有效，但已接近過熱區；嚴守追蹤停損。'}
+           :          {t:'過熱',c:'var(--red)',   msg:'歷史上兩種選股方法在此區平均報酬都趨近 0 或為負（2026/5~6 即屬此區）：暫停新進場或部位減半。'};
+  return {ext, n, lv, hot:ext>=15, crowded:n>=3};
+}
+// 個股卡片提示徽章：不擋訊號，只提醒。crowd 只對雙篩選有意義（擁擠度以雙篩選同日入選數回測）
+function tempBadge(crowd){
+  const m=_MKT_TEMP; if(!m) return '';
+  let b='';
+  if(m.hot) b+=`<span class="entry-grade" style="background:rgba(231,76,60,.15);color:var(--red);border:1px solid rgba(231,76,60,.45);" title="大盤離季線 +${m.ext.toFixed(1)}%，歷史上此區進場平均報酬趨近 0 或為負；訊號照常顯示，建議減碼">🌡️ 過熱期進場</span>`;
+  if(crowd&&m.crowded) b+=`<span class="entry-grade" style="background:rgba(241,177,67,.14);color:var(--yellow);border:1px solid rgba(241,177,67,.45);" title="今日雙篩選 ${m.n} 檔同時入選，歷史上同日 ≥3 檔勝率約 20%">👥 擁擠 ${m.n} 檔</span>`;
+  return b;
+}
+function marketTempCard(m){
+  if(!m) return '';
+  const {ext, n, lv}=m;
+  const crowd = m.crowded ? `<div style="margin-top:4px;color:var(--yellow);">⚠️ 今日雙篩選 ${n} 檔同時入選（擁擠）：歷史上同日 ≥3 檔入選勝率約 20%，1~2 檔約 61%。</div>` : '';
+  return `<div class="card" style="margin-bottom:12px;border-left:3px solid ${lv.c};padding:10px 14px;">
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+      <b style="font-size:14px;">🌡️ 市場溫度</b>
+      <span style="font-size:15px;font-weight:800;color:${lv.c}">${lv.t}</span>
+      <span style="font-size:12px;color:var(--sub);font-variant-numeric:tabular-nums;">大盤離季線 ${ext>=0?'+':''}${ext.toFixed(1)}%・今日雙篩選 ${n} 檔</span>
+      <span style="font-size:11px;color:var(--sub);">適用：行動清單＋領頭羊突破</span>
+    </div>
+    <div style="font-size:12px;margin-top:6px;line-height:1.6;">${lv.msg}</div>${crowd}
+    <div style="font-size:11px;color:var(--sub);margin-top:4px;">分級：&lt;0% 偏冷・0~10% 正常・10~15% 偏熱・≥15% 過熱（過熱段歷史樣本少，屬警示非硬規則）</div>
+  </div>`;
+}
+
 // ── 今日掃描 ──────────────────────────────────────────────────────────────────
 // HYBRID 策略卡片：進場閘門 BUY / 出場訊號 / 持有中（回測勝率63%、avg+8.6%、PF2.83）
 function hybridCard(p){
@@ -1901,6 +1954,7 @@ function renderDaily(data){
     <div class="card"><div class="card-title">強勢族群（前5）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--green)">${top5Strong}</div></div>
     <div class="card"><div class="card-title">弱勢族群（後2）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--red)">${top2Weak||'無'}</div></div>
   </div>
+  ${marketTempCard(_MKT_TEMP=marketTemp(positions, qualified))}
   ${hybridCard(positions)}
   ${coverage<100?`<div class="card" style="margin-bottom:8px;border-left:3px solid var(--yellow);padding:8px 14px">
     <span style="color:var(--yellow);font-weight:bold">⚠ 掃描涵蓋率 ${coverage}%</span>
@@ -2019,6 +2073,7 @@ function renderDaily(data){
         <!-- 指標訊號列 -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
           ${gradeBadge}
+          ${tempBadge(true)}
           ${chipBadge}
           ${biasBadge}
           ${indBadge(kdjV,'KDJ')}
@@ -2346,6 +2401,7 @@ async function _renderBreakoutSection(){
           <span style="font-weight:600;cursor:pointer;" onclick="goToStock('${escHtml(p.id)}')">${escHtml(p.name||'')}</span>
           <span style="margin-left:auto;color:var(--yellow);font-size:11px;font-weight:700;">⚡ 突破20日高</span>
         </div>
+        ${tempBadge(false)?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">${tempBadge(false)}</div>`:''}
         <div style="display:flex;gap:14px;flex-wrap:wrap;">
           <div class="bo-stat"><span class="l">收盤</span><span class="v">${fmt(p.close,1)}</span></div>
           <div class="bo-stat"><span class="l">量比</span><span class="v" style="color:var(--green)">${p.vol_ratio}</span></div>

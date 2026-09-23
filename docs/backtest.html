@@ -351,6 +351,16 @@ window.selectCombo = function(id){
 };
 
 // ── ⚡ 動能確認進場（entry_lab.json） ──────────────────────────────────────
+// 與 index.html 的同名函式保持一致。
+function wfVerdict(s, base){
+  const f=s.wf_front, b=s.wf_back, bf=base.wf_front, bb=base.wf_back;
+  const pp=v=>(v>0?'+':'')+Math.round(v*100)+'pp';
+  const decay=f.win_rate-b.win_rate, edgeF=f.win_rate-bf.win_rate, edgeB=b.win_rate-bb.win_rate;
+  const ctx=`同期基準 ${Math.round(bf.win_rate*100)}% → ${Math.round(bb.win_rate*100)}%，相對基準優勢 ${pp(edgeF)} → ${pp(edgeB)}。`;
+  if(edgeB<=0) return {label:'後段失效',color:'var(--red)',text:`⚠️ 後段勝率 ${Math.round(b.win_rate*100)}% 未勝過基準，過濾器在後段失效。${ctx}`};
+  if(decay>0.10||edgeB<0.05) return {label:'優勢縮小',color:'var(--yellow)',text:`⚠️ 前後段勝率 ${Math.round(f.win_rate*100)}% → ${Math.round(b.win_rate*100)}%（衰退 ${Math.round(decay*100)}pp）；${ctx}`};
+  return {label:'無明顯衰減',color:'var(--green)',text:`前後段表現一致（非過擬合）。${ctx}`};
+}
 async function renderMomentum(){
   const el = document.getElementById('momentum-card');
   let lab;
@@ -360,6 +370,8 @@ async function renderMomentum(){
   const momS = lab.filters.VOL_OR_MACD.exits.TP18SL15;
   const momT = lab.filters.VOL_OR_MACD.exits.TRAIL15;
   const pct = v => (v*100).toFixed(0)+'%';
+  const sgn = v => (v>0?'+':'')+v+'%';
+  const wf = wfVerdict(momS, base);
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
       <span style="font-size:15px;font-weight:800;">進場加一道動能過濾：量比≥1.2 或 MACD柱&gt;0且增長</span>
@@ -367,14 +379,14 @@ async function renderMomentum(){
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px;">
       <div class="metric"><div class="val" style="color:var(--green)">${pct(base.win_rate)} → ${pct(momS.win_rate)}</div><div class="lbl">勝率（基準 → 動能進場）</div></div>
-      <div class="metric"><div class="val" style="color:var(--green)">+${base.avg_ret}% → +${momS.avg_ret}%</div><div class="lbl">平均報酬</div></div>
+      <div class="metric"><div class="val" style="color:var(--green)">${sgn(base.avg_ret)} → ${sgn(momS.avg_ret)}</div><div class="lbl">平均報酬</div></div>
       <div class="metric"><div class="val" style="color:var(--blue)">${base.profit_factor} → ${momS.profit_factor}</div><div class="lbl">獲利因子</div></div>
-      <div class="metric"><div class="val" style="color:var(--green)">+${momT.avg_ret}%</div><div class="lbl">搭配追蹤停損15%（勝率 ${pct(momT.win_rate)}）</div></div>
+      <div class="metric"><div class="val" style="color:var(--green)">${sgn(momT.avg_ret)}</div><div class="lbl">搭配追蹤停損15%（勝率 ${pct(momT.win_rate)}）</div></div>
     </div>
     <div style="font-size:12px;color:var(--sub);line-height:1.8;">
       回測 ${lab.period.start}~${lab.period.end}・${lab.period.signals} 筆訊號・出場 TP18/SL15・
-      Walk-forward 前段 ${pct(momS.wf_front.win_rate)} / 後段 ${pct(momS.wf_back.win_rate)}（無衰減）・
-      Wilson 95% 下界 ${pct(momS.wilson_lb)}<br>
+      Walk-forward 前段 ${pct(momS.wf_front.win_rate)} / 後段 ${pct(momS.wf_back.win_rate)}（<b style="color:${wf.color}">${wf.label}</b>）・
+      Wilson 95% 下界 ${pct(momS.wilson_lb)}<br>${wf.text}<br>
       完整證據（25 種過濾器比較、評分分層、方法論）👉 <a href="./index.html#lab">主站「⚗️ 策略實驗室」</a>
     </div>`;
 }
