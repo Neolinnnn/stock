@@ -92,23 +92,12 @@ main{padding:20px 24px;max-width:1300px;margin:0 auto;}
 .ret-open{color:var(--blue);}
 
 /* 持倉分析 */
-.open-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
-.open-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.open-name{font-size:15px;font-weight:700;}
-.open-price{font-size:13px;color:var(--sub);}
 .signal-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;}
 .signal-strong-buy{background:rgba(39,174,96,.2);color:var(--green);}
 .signal-buy{background:rgba(92,184,92,.2);color:#5cb85c;}
 .signal-hold{background:rgba(243,156,18,.15);color:var(--yellow);}
 .signal-wait{background:rgba(136,136,136,.15);color:var(--sub);}
 .signal-sell{background:rgba(231,76,60,.15);color:var(--red);}
-.open-indicators{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;}
-.ind-item{display:flex;flex-direction:column;gap:2px;}
-.ind-label{color:var(--sub);font-size:10px;text-transform:uppercase;}
-.ind-val{font-weight:600;}
-.score-bar-wrap{height:4px;background:#1e2128;border-radius:2px;overflow:hidden;width:60px;display:inline-block;vertical-align:middle;margin-left:6px;}
-.score-bar{height:100%;border-radius:2px;}
-.reasons-list{margin-top:8px;font-size:11px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px;}
 .reason-chip{background:#1e2330;border-radius:4px;padding:2px 8px;}
 .risk-chip{background:rgba(231,76,60,.1);color:#e98080;border-radius:4px;padding:2px 8px;}
 
@@ -130,6 +119,14 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
 <main>
   <div id="loading">載入中…</div>
   <div id="content" style="display:none">
+
+    <!-- 訊號來源切換 -->
+    <div class="period-tabs" id="source-tabs" style="margin-bottom:8px;align-items:center;">
+      <span style="font-size:12px;color:var(--sub);">訊號來源：</span>
+      <button class="period-tab active" data-src="all" onclick="setSource('all')">全部 BUY 訊號</button>
+      <button class="period-tab" data-src="al" onclick="setSource('al')">只進今日行動清單</button>
+    </div>
+    <div id="source-note" style="font-size:12px;color:var(--sub);margin-bottom:12px;"></div>
 
     <!-- 期間切換 -->
     <div class="period-tabs" id="period-tabs"></div>
@@ -193,6 +190,11 @@ let DATA = null;
 let CUR_PERIOD = '1m';
 let CUR_COMBO = null;
 let CUR_FILTER = 'all';
+let CUR_SOURCE = 'all';   // 'all' = 當日全部 BUY；'al' = 只進今日行動清單（backtest.py --action-list）
+const SOURCES = {
+  all: {file: './backtest_summary.json',    note: '每日掃描中所有 BUY 訊號都進場（含「雙篩選命中、未進今日行動清單」的個股）。'},
+  al:  {file: './backtest_summary_al.json', note: '只在個股符合「今日行動清單」規則當天進場：BUY＋雙篩選＋乖離MA10≤2%＋所屬族群強勢。歷史清單以現行規則重建（2026-07 前存檔的清單是加閘門前的舊定義，不直接使用）。'},
+};
 
 function fmtDate(d){ return d ? d.slice(0,4)+'/'+d.slice(4,6)+'/'+d.slice(6,8) : '—'; }
 function sign(v){ return v > 0 ? '+' : ''; }
@@ -213,18 +215,24 @@ function scoreColor(s){ return s>=75?'var(--green)':s>=60?'#5cb85c':s>=45?'var(-
 
 async function init(){
   try{
-    const r = await fetch('./backtest_summary.json?v='+Math.floor(Date.now()/3600000));
+    const src = SOURCES[CUR_SOURCE];
+    const r = await fetch(src.file+'?v='+Math.floor(Date.now()/3600000));
     if(!r.ok) throw new Error('HTTP '+r.status);
     DATA = await r.json();
   } catch(e){
-    document.getElementById('loading').textContent = '無法載入 backtest_summary.json：'+e.message;
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').textContent = '無法載入 '+SOURCES[CUR_SOURCE].file+'：'+e.message;
     return;
   }
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = 'block';
+  document.getElementById('source-note').textContent = SOURCES[CUR_SOURCE].note;
+  document.querySelectorAll('#source-tabs .period-tab').forEach(b => b.classList.toggle('active', b.dataset.src === CUR_SOURCE));
+  if(!DATA.periods[CUR_PERIOD]) CUR_PERIOD = Object.keys(DATA.periods)[0];
 
   // Build period tabs
   const tabsEl = document.getElementById('period-tabs');
+  tabsEl.innerHTML = '';
   Object.keys(DATA.periods).forEach(key => {
     const pd = DATA.periods[key];
     const btn = document.createElement('button');
@@ -238,9 +246,15 @@ async function init(){
   setPeriod();
 }
 
+window.setSource = function(src){
+  if(src === CUR_SOURCE) return;
+  CUR_SOURCE = src; CUR_COMBO = null; CUR_FILTER = 'all';
+  init();
+};
+
 function setPeriod(){
   // Update tab styles（以 period key 比對，用 label 文字比對會在標籤重複時同時亮起）
-  document.querySelectorAll('.period-tab').forEach(btn => {
+  document.querySelectorAll('#period-tabs .period-tab').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.period === CUR_PERIOD);
   });
 
@@ -284,6 +298,8 @@ function renderHero(pd){
       <div style="font-size:12px;color:var(--sub);margin-bottom:10px">
         回測期間 ${fmtDate(dr.start)} ～ ${fmtDate(dr.end)}
       </div>
+      ${Object.values(pd.combos).every(c => c.stats.avg_return < 0)
+        ? `<div style="font-size:12px;color:var(--yellow);margin-bottom:10px">⚠️ 本期間所有組合平均報酬皆為負，此為「虧損最少」的組合，不代表可獲利</div>` : ''}
       <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
         <div class="hero-stat">
           <div class="val" style="color:${retColor(s.avg_return)}">${fmtRet(s.avg_return)}</div>
@@ -348,6 +364,7 @@ window.selectCombo = function(id){
   const pd = DATA.periods[CUR_PERIOD];
   renderComboGrid(pd);
   renderTrades(pd);
+  renderOpenAnalysis(pd);
 };
 
 // ── ⚡ 動能確認進場（entry_lab.json） ──────────────────────────────────────
@@ -452,58 +469,55 @@ function renderOpenAnalysis(pd){
   if(!ids.length){ openSec.style.display = 'none'; return; }
   openSec.style.display = 'block';
 
-  // Collect open trades for current combo to cross-ref entry price
+  // 股名：分析資料不含名稱，從本期間各組合的交易紀錄對照
+  const names = {};
+  Object.values(pd.combos).forEach(c => (c.trades||[]).forEach(t => { if(t.stock_name) names[t.stock_id] = t.stock_name; }));
+  // 成本：取目前所選組合中該股仍持倉的最新一筆進場
   const combo = pd.combos[CUR_COMBO] || {};
-  const openTrades = (combo.trades || []).filter(t => t.result === 'OPEN');
   const entryMap = {};
-  openTrades.forEach(t => {
-    if(!entryMap[t.stock_id]) entryMap[t.stock_id] = [];
-    entryMap[t.stock_id].push({ date: t.entry_date, price: t.entry_price });
+  (combo.trades || []).filter(t => t.result === 'OPEN').forEach(t => {
+    (entryMap[t.stock_id] = entryMap[t.stock_id] || []).push({ date: t.entry_date, price: t.entry_price });
   });
+  // 目前組合持倉中的排前面，其次依訊號分數
+  ids.sort((x,y) => (!!entryMap[y] - !!entryMap[x]) || ((analysis[y].signal_score||0) - (analysis[x].signal_score||0)));
 
-  listEl.innerHTML = ids.map(sid => {
+  const pctCell = v => v==null ? '—' : `${v>=0?'+':''}${v.toFixed(1)}%`;
+  const rows = ids.map(sid => {
     const a = analysis[sid];
-    const entries = entryMap[sid] || [];
-    const latestEntry = entries[entries.length-1];
-    const curPrice = a.current_price || 0;
-    const entryPrice = latestEntry ? latestEntry.price : null;
-    const unrealized = entryPrice && curPrice ? ((curPrice - entryPrice) / entryPrice * 100) : null;
-    const sig   = a.buy_signal || '—';
-    const score = a.signal_score || 0;
-    const reasons = (a.signal_reasons || []);
-    const risks   = (a.risk_factors   || []);
-    const scoreW  = Math.min(score, 100);
-    const scoreC  = scoreColor(score);
-    const unrealizedHtml = unrealized != null
-      ? `<div class="ind-item"><div class="ind-label">未實現損益</div><div class="ind-val ${unrealized>=0?'':''}` +
-        `" style="color:${unrealized>=0?'var(--green)':'var(--red)'}">${unrealized>=0?'+':''}${unrealized.toFixed(1)}%</div></div>`
-      : '';
-
-    return `<div class="open-card">
-      <div class="open-header">
-        <div>
-          <span class="open-name">${esc(sid)}</span>
-          <span class="open-price" style="margin-left:8px">現價 ${curPrice.toFixed(1)}</span>
-          ${entryPrice ? `<span class="open-price"> | 成本 ${entryPrice}</span>` : ''}
-        </div>
-        <span class="signal-pill ${signalClass(sig)}" style="margin-left:auto">${esc(sig)}</span>
-        <span style="margin-left:10px;font-size:12px;color:${scoreC};font-weight:700">${score}/100</span>
-        <div class="score-bar-wrap"><div class="score-bar" style="width:${scoreW}%;background:${scoreC}"></div></div>
-      </div>
-      <div class="open-indicators">
-        <div class="ind-item"><div class="ind-label">趨勢</div><div class="ind-val">${esc(a.trend_status||'—')}</div></div>
-        <div class="ind-item"><div class="ind-label">均線排列</div><div class="ind-val" style="font-size:11px">${esc(a.ma_alignment||'—')}</div></div>
-        <div class="ind-item"><div class="ind-label">MA5</div><div class="ind-val">${a.ma5?.toFixed(1)||'—'}</div></div>
-        <div class="ind-item"><div class="ind-label">乖離MA5</div><div class="ind-val" style="color:${(a.bias_ma5||0)>5?'var(--red)':'var(--text)'}">${a.bias_ma5!=null?(a.bias_ma5>=0?'+':'')+a.bias_ma5.toFixed(1)+'%':'—'}</div></div>
-        <div class="ind-item"><div class="ind-label">MACD</div><div class="ind-val" style="font-size:11px">${esc(a.macd_signal||'—')}</div></div>
-        <div class="ind-item"><div class="ind-label">量能</div><div class="ind-val" style="font-size:11px">${esc(a.volume_trend||'—')}</div></div>
-        <div class="ind-item"><div class="ind-label">RSI(12)</div><div class="ind-val">${a.rsi_12?.toFixed(1)||'—'}</div></div>
-        ${unrealizedHtml}
-      </div>
-      ${reasons.length ? `<div class="reasons-list">${reasons.map(r=>`<span class="reason-chip">✓ ${esc(r)}</span>`).join('')}</div>` : ''}
-      ${risks.length   ? `<div class="reasons-list">${risks.map(r=>`<span class="risk-chip">⚠ ${esc(r)}</span>`).join('')}</div>` : ''}
-    </div>`;
+    const entries = (entryMap[sid] || []).sort((p,q) => p.date < q.date ? -1 : 1);
+    const last = entries[entries.length-1];
+    const cur = a.current_price || 0;
+    const unr = last && cur ? (cur - last.price) / last.price * 100 : null;
+    const sig = a.buy_signal || '—', score = a.signal_score || 0;
+    const reasons = a.signal_reasons || [], risks = a.risk_factors || [];
+    return `<tr${last?'':' style="opacity:.6"'}>
+      <td style="white-space:nowrap;"><b>${esc(sid)}</b> ${esc(names[sid]||'')}</td>
+      <td style="font-variant-numeric:tabular-nums;">${cur ? cur.toFixed(1) : '—'}</td>
+      <td style="font-variant-numeric:tabular-nums;white-space:nowrap;">${last ? last.price + (entries.length>1 ? ` <span style="color:var(--sub);font-size:11px">(${entries.length}筆)</span>` : '') : '<span style="color:var(--sub);font-size:11px">本組合已出場</span>'}</td>
+      <td style="color:${unr==null?'var(--sub)':unr>=0?'var(--green)':'var(--red)'};font-weight:700;">${pctCell(unr)}</td>
+      <td style="white-space:nowrap;"><span class="signal-pill ${signalClass(sig)}">${esc(sig)}</span>
+        <b style="margin-left:6px;color:${scoreColor(score)}">${score}</b></td>
+      <td style="white-space:nowrap;">${esc(a.trend_status||'—')}</td>
+      <td style="font-size:11px;min-width:130px;">${esc(a.ma_alignment||'—')}</td>
+      <td style="font-variant-numeric:tabular-nums;">${a.ma5!=null ? a.ma5.toFixed(1) : '—'}</td>
+      <td style="color:${(a.bias_ma5||0)>5?'var(--red)':'var(--text)'};">${pctCell(a.bias_ma5)}</td>
+      <td style="font-size:11px;min-width:110px;">${esc(a.macd_signal||'—')}</td>
+      <td style="font-size:11px;min-width:130px;">${esc(a.volume_trend||'—')}</td>
+      <td style="font-variant-numeric:tabular-nums;">${a.rsi_12!=null ? a.rsi_12.toFixed(1) : '—'}</td>
+      <td style="font-size:11px;min-width:220px;line-height:1.7;">
+        ${reasons.map(r=>`<span class="reason-chip">✓ ${esc(r)}</span>`).join(' ')}
+        ${risks.map(r=>`<span class="risk-chip">⚠ ${esc(r)}</span>`).join(' ')}</td>
+    </tr>`;
   }).join('');
+
+  listEl.innerHTML = `<div class="card" style="overflow-x:auto;padding:0;">
+    <table class="ma10-tbl" style="border:none;">
+      <thead><tr>
+        <th>股票</th><th>現價</th><th>成本</th><th>未實現</th><th>訊號／分數</th><th>趨勢</th><th>均線排列</th>
+        <th>MA5</th><th>乖離MA5</th><th>MACD</th><th>量能</th><th>RSI(12)</th><th>理由／風險</th>
+      </tr></thead><tbody>${rows}</tbody>
+    </table></div>
+    <div style="font-size:11px;color:var(--sub);margin-top:6px;">成本與未實現損益依目前所選組合（${esc(combo.label||'—')}）；淡色列為本期間其他組合仍持倉、但此組合已出場的個股。</div>`;
 }
 
 init();
