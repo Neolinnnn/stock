@@ -6,7 +6,7 @@
 所有特徵計算嚴格使用 ≤ 訊號日的資料（無前視偏差），進場為訊號日次日開盤。
 
 訊號來源：daily_reports/*/summary.json 的 qualified 清單
-出場策略：TP18/SL15（現行最佳）、追蹤停損15%、MA10跌破
+出場策略：TP18/SL15（現行最佳）、追蹤停損15%、MA10跌破、MA5跌破賣半+MA10跌破清倉
 驗證：全期間統計 + 前後段 walk-forward 一致性
 
 用法：python scripts/backtest_entry_lab.py [--refresh]
@@ -247,6 +247,34 @@ def sim_ma10(ohlcv, entry_date, entry_price):
     return None
 
 
+def sim_ma5_ma10(ohlcv, entry_date, entry_price):
+    """收盤跌破 MA5 → 次日開盤賣一半；收盤跌破 MA10 → 次日開盤出清剩餘。
+    兩條件同日成立則次日全數出清。ret 為兩半部位的平均報酬。"""
+    df = ohlcv.copy()
+    df['ma5'] = df['close'].rolling(5).mean()
+    df['ma10'] = df['close'].rolling(10).mean()
+    rows = df[df['date'] > entry_date]
+    half_ret = None          # 已賣出那一半的報酬
+    pend_half = pend_all = False
+    for hold, (_, r) in enumerate(rows.iterrows(), 1):
+        if pend_all:
+            ret = r['open'] / entry_price - 1
+            return {'ret': ret if half_ret is None else (half_ret + ret) / 2,
+                    'days': hold, 'exit': r['date'], 'why': 'MA10'}
+        if pend_half:
+            half_ret, pend_half = r['open'] / entry_price - 1, False
+        cl = r['close']
+        rem = cl / entry_price - 1
+        if cl <= entry_price * (1 + HARD_STOP) or hold >= MAX_HOLD_DAYS:
+            return {'ret': rem if half_ret is None else (half_ret + rem) / 2, 'days': hold,
+                    'exit': r['date'], 'why': 'HARD' if hold < MAX_HOLD_DAYS else 'MAX'}
+        if not pd.isna(r['ma10']) and cl < r['ma10']:
+            pend_all = True
+        elif half_ret is None and not pd.isna(r['ma5']) and cl < r['ma5']:
+            pend_half = True
+    return None
+
+
 # ── 過濾器定義 ───────────────────────────────────────────────────────────────
 
 FILTERS = {
@@ -365,6 +393,7 @@ def main():
                 'TP18SL15': sim_tpsl(ohlcv, entry_date, entry_price, 0.18, 0.15),
                 'TRAIL15': sim_trailing(ohlcv, entry_date, entry_price, 0.15),
                 'MA10': sim_ma10(ohlcv, entry_date, entry_price),
+                'MA5HALF': sim_ma5_ma10(ohlcv, entry_date, entry_price),
             },
             'score': entry_score(feat, sig),
         })
@@ -378,7 +407,7 @@ def main():
     for fid, (label, fn) in FILTERS.items():
         picked = [e for e in enriched if fn(e['feat'], e['sig'])]
         row = {'label': label, 'picked': len(picked), 'exits': {}}
-        for ex in ['TP18SL15', 'TRAIL15', 'MA10']:
+        for ex in ['TP18SL15', 'TRAIL15', 'MA10', 'MA5HALF']:
             trades = [{'result': e['exits'][ex]} for e in picked]
             row['exits'][ex] = summarize(trades)
             # walk-forward
@@ -396,6 +425,7 @@ def main():
             'picked': len(picked),
             'TP18SL15': summarize([{'result': e['exits']['TP18SL15']} for e in picked]),
             'TRAIL15': summarize([{'result': e['exits']['TRAIL15']} for e in picked]),
+            'MA5HALF': summarize([{'result': e['exits']['MA5HALF']} for e in picked]),
         }
 
     # ── 報告 ──

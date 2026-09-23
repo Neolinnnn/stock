@@ -12,7 +12,7 @@
   4. 結構健康：收盤 > MA20、MA20 上揚、乖離 MA20 ≤ 10%
 
 倉位規則：同股有未出場倉位時不重複進場。
-出場：追蹤停損 15%（主）/ TP18SL15（對照），硬停損 -20%，最長 60 日。
+出場：追蹤停損 15%（主）/ TP18SL15、MA5賣半+MA10清倉（對照），硬停損 -20%，最長 60 日。
 
 範圍：84 檔追蹤池（docs/stocks/）、2024-10 起暖身、訊號期 2025-01 ~ 今。
 用法：python scripts/backtest_breakout_lab.py [--refresh]
@@ -30,7 +30,7 @@ import pandas as pd
 
 from backtest_entry_lab import (
     fetch_ohlcv, fetch_chip, compute_indicators,
-    sim_tpsl, sim_trailing, get_entry, summarize, wilson_lb,
+    sim_tpsl, sim_trailing, sim_ma5_ma10, get_entry, summarize, wilson_lb,
 )
 
 SIGNAL_START = '20250101'
@@ -135,7 +135,8 @@ def main():
         open_until[sid] = ex_trail['exit'] if ex_trail else '99999999'
         trades.append({
             'sig': sig, 'entry_date': entry_date, 'entry_price': entry_price,
-            'exits': {'TRAIL15': ex_trail, 'TP18SL15': ex_tpsl},
+            'exits': {'TRAIL15': ex_trail, 'TP18SL15': ex_tpsl,
+                      'MA5HALF': sim_ma5_ma10(ohlcv, entry_date, entry_price)},
         })
     print(f'實際進場 {len(trades)} 筆（同股不重複）')
 
@@ -143,7 +144,7 @@ def main():
     mid = sorted(dates)[len(dates) // 2] if dates else ''
 
     out_exits = {}
-    for ex in ['TRAIL15', 'TP18SL15']:
+    for ex in ['TRAIL15', 'TP18SL15', 'MA5HALF']:
         rows = [{'result': t['exits'][ex]} for t in trades]
         s = summarize(rows)
         s['wf_front'] = summarize([{'result': t['exits'][ex]} for t in trades if t['sig']['date'] <= mid])
