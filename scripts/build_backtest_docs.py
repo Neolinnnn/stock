@@ -1,5 +1,6 @@
 """
-將 backtest_results*.json 整合為 docs/backtest_summary.json
+將 backtest_results*.json 整合為 docs/backtest_summary.json，
+backtest_results*_al.json（只用今日行動清單進場）整合為 docs/backtest_summary_al.json，
 並用 indicators/stock_analyzer 對所有持倉中的股票補充趨勢分析。
 
 用法：
@@ -23,6 +24,7 @@ except Exception as e:
 
 PERIODS = [
     ('1m',  'backtest_results.json',       '近1個月'),
+    ('3m',  'backtest_results_3m.json',    '近3個月'),
     ('6m',  'backtest_results_6m.json',    '近6個月'),
     ('9m',  'backtest_results_9m.json',    '近9個月'),
     ('12m', 'backtest_results_12m.json',   '近12個月'),
@@ -45,6 +47,7 @@ COMBO_LABELS = {
     'TP20_SL10': '停利20% / 停損10%',
     'TP20_SL12': '停利20% / 停損12%',
     'TP20_SL15': '停利20% / 停損15%',
+    'MA5_MA10':  '跌破MA5賣半 / 跌破MA10清倉',
 }
 
 
@@ -199,11 +202,12 @@ def _process_period(fname: str, label: str) -> dict | None:
     }
 
 
-def build():
+def build(suffix: str = '', dest_name: str = 'backtest_summary.json'):
+    """suffix：回測結果檔名後綴（'_al' = 只用今日行動清單進場，見 backtest.py --action-list）。"""
     out = {'periods': {}}
 
     for key, fname, label in PERIODS + TRAILING:
-        result = _process_period(fname, label)
+        result = _process_period(fname.replace('.json', suffix + '.json'), label)
         if result:
             out['periods'][key] = result
             print(f'  [{key}] {label} — {len(result["combos"])} 組合, '
@@ -211,11 +215,12 @@ def build():
         else:
             print(f'  [{key}] 檔案不存在，跳過')
 
-    dest = ROOT / 'docs' / 'backtest_summary.json'
+    dest = ROOT / 'docs' / dest_name
     with open(dest, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
-    print(f'\ndocs/backtest_summary.json 已寫入（{dest.stat().st_size // 1024} KB）')
+    print(f'\ndocs/{dest_name} 已寫入（{dest.stat().st_size // 1024} KB）')
 
 
 if __name__ == '__main__':
     build()
+    build('_al', 'backtest_summary_al.json')
