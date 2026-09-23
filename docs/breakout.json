@@ -1,27 +1,37 @@
 {
- "date": "20260922",
- "generated_at": "2026-09-22 12:53",
+ "date": "20260923",
+ "generated_at": "2026-09-23 11:47",
  "taiex_bull": true,
  "picks": [
   {
-   "id": "6278",
-   "close": 213.5,
-   "vol_ratio": 2.77,
-   "dist_ma20": 9.78,
-   "ret20": 17.63,
-   "last_date": "2026-09-22",
-   "chip5": 1987657.0,
-   "name": "台表科"
+   "id": "8299",
+   "close": 2215.0,
+   "vol_ratio": 1.64,
+   "dist_ma20": 6.76,
+   "ret20": 4.24,
+   "last_date": "2026-09-23",
+   "chip5": 3830677.0,
+   "name": "群聯"
   },
   {
-   "id": "4906",
-   "close": 38.7,
-   "vol_ratio": 2.51,
-   "dist_ma20": 5.62,
-   "ret20": 12.01,
-   "last_date": "2026-09-22",
-   "chip5": 5365955.0,
-   "name": "正文"
+   "id": "2379",
+   "close": 761.0,
+   "vol_ratio": 1.75,
+   "dist_ma20": 5.39,
+   "ret20": 3.68,
+   "last_date": "2026-09-23",
+   "chip5": 7231421.0,
+   "name": "瑞昱"
+  },
+  {
+   "id": "2329",
+   "close": 44.35,
+   "vol_ratio": 2.02,
+   "dist_ma20": 3.06,
+   "ret20": 0.45,
+   "last_date": "2026-09-23",
+   "chip5": 723396.0,
+   "name": "華泰"
   }
  ],
  "backtest_ref": {
