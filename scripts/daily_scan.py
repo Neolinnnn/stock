@@ -49,7 +49,12 @@ MAX_BIAS_MA10 = 2.0
 #   乖離≤2% 單獨        → 45 筆 勝率 27% / 平均 +0.1%
 #   乖離≤2% + 族群強勢  → 21 筆 勝率 38% / 平均 +3.1%
 # 代價是訊號數大幅縮減（更挑）。設 False 可關閉此閘門。
-REQUIRE_STRONG_SECTOR = True
+#
+# 2026-09-24 改為 False（族群強弱只當標籤，不擋訊號）。以現行規則重建 2025-01~2026-06
+# 逐筆回測（雙篩選命中 670 筆）：族群閘門在 TP15/SL15 下無差別（留 71%/+7.4% vs 擋 69%/+7.3%），
+# 搭配建議出場「追蹤停損15%」反而扣分（留 +17.3% vs 被擋 +27.3%），且砍掉 84% 訊號；
+# 2026-07~09 樣本外亦未見加分（留 70% vs 擋 76%）。上述 21 筆為小樣本、同期資料。
+REQUIRE_STRONG_SECTOR = False
 
 # ── 7 大族群定義 ──────────────────────────────────────────────────────────────
 SECTORS = {
@@ -893,7 +898,7 @@ def build_summary(date, market, all_results, chart_path):
     sectors_summary = {}
     all_strong = []  # 強勢股
     all_weak = []    # 弱勢股
-    all_qualified = []  # 雙條件達標（含乖離率＋族群強勢閘門，目前行動清單使用）
+    all_qualified = []  # 雙條件達標（含乖離率閘門；族群強勢閘門依 REQUIRE_STRONG_SECTOR，目前行動清單使用）
     _qualified_seen = set()  # 去重：同一個股只列一次
     all_dual_filter = []  # 雙篩選命中（僅 BUY+cv_sharpe+cv_win_rate+cv_max_dd，未套乖離率/族群閘門）
     _dual_filter_seen = set()
@@ -983,6 +988,7 @@ def build_summary(date, market, all_results, chart_path):
                 'price': r['price'], 'rsi': round(r['rsi'], 1),
                 'cv_sharpe': round(r['cv_sharpe'], 2),
                 'bias_ma10': round(float(_bias_ma10.loc[r.name]), 1),
+                'sector_strong': sector_strong,   # 標籤用（閘門關閉時不擋）
             })
 
         # 雙篩選命中（舊邏輯：BUY + cv_sharpe/cv_win_rate/cv_max_dd，不含乖離率與族群強勢閘門）

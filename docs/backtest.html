@@ -193,7 +193,7 @@ let CUR_FILTER = 'all';
 let CUR_SOURCE = 'all';   // 'all' = 當日全部 BUY；'al' = 只進今日行動清單（backtest.py --action-list）
 const SOURCES = {
   all: {file: './backtest_summary.json',    note: '每日掃描中所有 BUY 訊號都進場（含「雙篩選命中、未進今日行動清單」的個股）。'},
-  al:  {file: './backtest_summary_al.json', note: '只在個股符合「今日行動清單」規則當天進場：BUY＋雙篩選＋乖離MA10≤2%＋所屬族群強勢。歷史清單以現行規則重建（2026-07 前存檔的清單是加閘門前的舊定義，不直接使用）。'},
+  al:  {file: './backtest_summary_al.json', note: '只在個股符合「今日行動清單」規則當天進場：BUY＋雙篩選＋乖離MA10≤2%（族群強弱自 2026-09-24 起只當標籤、不過濾）。歷史清單以現行規則重建，不直接使用存檔清單（各時期定義不同）。'},
 };
 
 function fmtDate(d){ return d ? d.slice(0,4)+'/'+d.slice(4,6)+'/'+d.slice(6,8) : '—'; }

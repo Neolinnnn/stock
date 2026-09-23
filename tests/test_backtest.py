@@ -179,4 +179,36 @@ def test_run_all_backtests_keys():
         'TP15_SL10','TP15_SL12','TP15_SL15',
         'TP18_SL10','TP18_SL12','TP18_SL15',
         'TP20_SL10','TP20_SL12','TP20_SL15',
+        'MA5_MA10',
     }
+
+
+def _ma_prices():
+    # 10 天 100 暖身 → 進場 → 漲到 120 → 跌破 MA5（賣半）→ 跌破 MA10（清倉）
+    closes = [100] * 10 + [105, 110, 115, 120, 118, 112, 108, 100, 95]
+    days = [f'2026{i:04d}' for i in range(1, len(closes) + 1)]
+    return days, {d: {'open': c, 'close': c} for d, c in zip(days, closes)}
+
+
+def test_simulate_position_ma_half_then_all():
+    from backtest import simulate_position_ma
+    days, px = _ma_prices()
+    r = simulate_position_ma('20260010', 100.0, 3000, px, days)
+    # 半倉於 d17 開盤 108 賣出，剩餘於 d18 開盤 100 出清 → 均價 104、+4%
+    assert (r['result'], r['exit_date'], r['exit_price'], r['return_pct']) == ('WIN', '20260018', 104.0, 4.0)
+
+
+def test_simulate_position_ma_half_sold_still_open():
+    from backtest import simulate_position_ma
+    days, px = _ma_prices()
+    r = simulate_position_ma('20260010', 100.0, 3000, px, days[:17])
+    assert r['result'] == 'OPEN' and r['exit_state'] == 'HALF_SOLD'
+
+
+def test_filter_bias_ma10():
+    from backtest import filter_bias_ma10
+    mk = lambda last: {f'202601{i:02d}': {'close': 100.0 if i < 11 else last} for i in range(1, 12)}
+    px = {'A': mk(101.0), 'B': mk(110.0),                      # 乖離 ~0.9% 留、~9% 剔除
+          'C': {f'202601{i:02d}': {'close': 100.0} for i in range(1, 6)}}  # MA10 資料不足剔除
+    out = filter_bias_ma10([{'stock_id': k, 'date': '20260111'} for k in 'ABC'], px)
+    assert [s['stock_id'] for s in out] == ['A']

@@ -430,11 +430,12 @@ def build_daily_payload(summary):
             'rsi':       q.get('rsi', ''),
             'cv_sharpe': q.get('cv_sharpe', ''),
             'bias_ma10': q.get('bias_ma10'),
+            'sector_strong': q.get('sector_strong'),
         }
         for q in summary.get('qualified', [])
     ]
     qualified_ids = {q['id'] for q in qualified}
-    # 雙篩選命中但未進今日行動清單者（乖離率或族群強勢閘門未過）─供前端分層顯示用
+    # 雙篩選命中但未進今日行動清單者（乖離率閘門未過；2026-09-24 前另含族群強勢閘門）─供前端分層顯示用
     dual_filter_excluded = [
         {
             'sector':       d.get('sector', ''),
