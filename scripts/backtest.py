@@ -269,18 +269,6 @@ def apply_position_limits(
 
 # ── 價格抓取 ──────────────────────────────────────────────────────────────────
 
-SECTORS_ALL_IDS = [
-    '4979','3450','3665','3105','8086','2455','4906','2345',  # 光通訊
-    '2408','2337','2344','3006','2451','5289','3205',          # 記憶體
-    '2317','2382','3231','2376','4938','2357',                 # AI伺服器
-    '3711','2449','6510','2441','6257','6239',                 # 封測
-    '3008','3406',                                            # 光學
-    '2454','3034','4966','4919','2388',                       # IC設計
-    '3552','1533','2243',                                     # 車用電子
-    '5292',                                                   # 綠能環保
-]
-
-
 def fetch_price_data(dl, stock_ids: list[str],
                      start: str, end: str) -> dict:
     """
@@ -329,9 +317,10 @@ def run_backtest_combo(
     trading_days: list[str],
     tp: float,
     sl: float,
+    fixed: bool = False,
 ) -> dict:
     """
-    執行單一 (TP, SL) 組合的完整回測。
+    執行單一 (TP, SL) 組合的完整回測。fixed=True 用固定停利停損（收盤判斷），否則追蹤止損。
     回傳 {'stats': {...}, 'trades': [...]}
     """
     trades = []
@@ -358,14 +347,22 @@ def run_backtest_combo(
         # 收集進場日之後的 OHLC 序列
         ohlc_prices = {d: v for d, v in stock_prices.items() if d > entry_date}
 
-        trade = simulate_position_v2(
-            entry_date=entry_date,
-            entry_price=entry_price,
-            amount=amount,
-            ohlc_prices=ohlc_prices,
-            trading_days=[d for d in trading_days if d >= entry_date],
-            tp=tp, sl=sl,
-        )
+        days = [d for d in trading_days if d >= entry_date]
+        if fixed:
+            trade = simulate_position(
+                entry_date=entry_date, entry_price=entry_price, amount=amount,
+                prices={d: v['close'] for d, v in ohlc_prices.items()},
+                trading_days=days, tp=tp, sl=sl,
+            )
+        else:
+            trade = simulate_position_v2(
+                entry_date=entry_date,
+                entry_price=entry_price,
+                amount=amount,
+                ohlc_prices=ohlc_prices,
+                trading_days=days,
+                tp=tp, sl=sl,
+            )
         trade['stock_id'] = sid
         trade['stock_name'] = sig['stock_name']
         trade['signal_date'] = signal_date
@@ -380,6 +377,7 @@ def run_all_backtests(
     signals_with_amount: list[dict],
     price_data: dict,
     trading_days: list[str],
+    fixed: bool = False,
 ) -> dict:
     """執行全部 9 組 TP×SL 組合，回傳結果字典。"""
     combinations = {}
@@ -387,7 +385,7 @@ def run_all_backtests(
         for sl in SL_LIST:
             key = f"TP{int(tp*100)}_SL{int(sl*100)}"
             print(f"  🔄 回測 {key} ...")
-            result = run_backtest_combo(signals_with_amount, price_data, trading_days, tp, sl)
+            result = run_backtest_combo(signals_with_amount, price_data, trading_days, tp, sl, fixed)
             combinations[key] = result
             s = result['stats']
             print(f"      勝率 {s['win_rate']:.1%}  交易數 {s['total']}  "
@@ -423,6 +421,7 @@ def main():
     parser.add_argument('--qualified-only',  action='store_true', help='只回測雙條件達標個股')
     parser.add_argument('--compare',         action='store_true', help='同時回測全BUY與雙條件，對比輸出')
     parser.add_argument('--start', default=BACKTEST_START, help='回測起始日 YYYYMMDD')
+    parser.add_argument('--fixed', action='store_true', help='固定停利停損（非追蹤止損）')
     parser.add_argument('--output', default='', help='結果輸出檔名（預設 backtest_results.json）')
     args = parser.parse_args()
 
@@ -458,7 +457,7 @@ def main():
     dl = get_dataloader()
     start_fmt = f"{args.start[:4]}-{args.start[4:6]}-{args.start[6:]}"
     end_fmt = dt_date.today().strftime('%Y-%m-%d')
-    price_data = fetch_price_data(dl, SECTORS_ALL_IDS, start_fmt, end_fmt)
+    price_data = fetch_price_data(dl, sorted({s['stock_id'] for s in signals_all}), start_fmt, end_fmt)
     trading_days = get_sorted_trading_days(price_data)
     print(f"  共 {len(trading_days)} 個交易日")
 
@@ -466,18 +465,18 @@ def main():
     if args.qualified_only:
         # 只跑雙條件
         print("\n【Step 4】執行 9 組回測（雙條件達標）")
-        combos_qual = run_all_backtests(swa_qual, price_data, trading_days)
+        combos_qual = run_all_backtests(swa_qual, price_data, trading_days, args.fixed)
         combos_all  = None
     elif args.compare:
         # 兩組都跑
         print("\n【Step 4a】執行 9 組回測（全 BUY）")
-        combos_all  = run_all_backtests(swa_all,  price_data, trading_days)
+        combos_all  = run_all_backtests(swa_all,  price_data, trading_days, args.fixed)
         print("\n【Step 4b】執行 9 組回測（雙條件達標）")
-        combos_qual = run_all_backtests(swa_qual, price_data, trading_days)
+        combos_qual = run_all_backtests(swa_qual, price_data, trading_days, args.fixed)
     else:
         # 預設只跑全 BUY
         print("\n【Step 4】執行 9 組回測（全 BUY）")
-        combos_all  = run_all_backtests(swa_all,  price_data, trading_days)
+        combos_all  = run_all_backtests(swa_all,  price_data, trading_days, args.fixed)
         combos_qual = None
 
     # Step 5: 存檔
