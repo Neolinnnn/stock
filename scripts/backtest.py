@@ -155,6 +155,55 @@ def simulate_position_v2(
             'entry_date': entry_date, 'entry_price': entry_price, 'amount': amount}
 
 
+def simulate_position_ma(
+    entry_date: str,
+    entry_price: float,
+    amount: float,
+    ohlc_prices: dict,       # {date_str: {'open','close',...}}，須含進場前資料供均線暖身
+    trading_days: list[str],
+) -> dict:
+    """
+    均線分批出場：收盤跌破 MA5 → 隔日開盤賣一半；收盤跌破 MA10 → 隔日開盤出清剩餘。
+    兩條件同日成立則隔日全數出清。return_pct 為兩半部位平均報酬，
+    exit_price 為兩半平均出場價。只賣出一半時仍視為 OPEN。
+    """
+    closes = []              # 至今收盤序列（含進場前），算均線用
+    half_px = None
+    pend_half = pend_all = False
+    holding = 0
+    for d in trading_days:
+        px = ohlc_prices.get(d)
+        if not px:
+            continue
+        o, c = px.get('open', 0), px.get('close', 0)
+        if not c or math.isnan(c):
+            continue
+        if d > entry_date:
+            holding += 1
+            if pend_all and o:
+                exit_px = o if half_px is None else (half_px + o) / 2
+                ret = round((exit_px - entry_price) / entry_price * 100, 2)
+                return {'result': 'WIN' if ret > 0 else 'LOSS', 'exit_date': d,
+                        'exit_price': round(exit_px, 2), 'return_pct': ret,
+                        'holding_days': holding, 'entry_date': entry_date,
+                        'entry_price': entry_price, 'amount': amount}
+            if pend_half and o:
+                half_px, pend_half = o, False
+        closes.append(c)
+        if d <= entry_date:
+            continue
+        ma5 = sum(closes[-5:]) / 5 if len(closes) >= 5 else None
+        ma10 = sum(closes[-10:]) / 10 if len(closes) >= 10 else None
+        if ma10 is not None and c < ma10:
+            pend_all = True
+        elif half_px is None and ma5 is not None and c < ma5:
+            pend_half = True
+    return {'result': 'OPEN', 'exit_date': None, 'exit_price': None,
+            'return_pct': None, 'holding_days': holding,
+            'exit_state': 'HALF_SOLD' if half_px is not None else 'HOLDING',
+            'entry_date': entry_date, 'entry_price': entry_price, 'amount': amount}
+
+
 def calc_stats(trades: list) -> dict:
     """計算已出場交易的勝率、平均報酬、平均持有天數。OPEN 不計入。"""
     closed = [t for t in trades if t['result'] != 'OPEN']
@@ -181,10 +230,15 @@ def calc_stats(trades: list) -> dict:
 
 def load_buy_signals(reports_dir: str = 'daily_reports',
                      start_date: str = BACKTEST_START,
-                     qualified_only: bool = False) -> list[dict]:
+                     qualified_only: bool = False,
+                     action_list: bool = False) -> list[dict]:
     """
     讀所有 daily_reports/*/summary.json，回傳 BUY 訊號清單（已去重）。
     qualified_only=True 時額外要求 cv_sharpe>=0.3 & cv_win_rate>=0.4。
+    action_list=True 以現行行動清單規則重建：雙篩選 + 所屬族群強勢（族群 avg_ret_20d > 3）；
+    乖離率閘門需股價，由 filter_bias_ma10() 於抓價後套用。
+    不直接讀 summary['qualified']：2026-07 前存下的清單是加閘門前的舊定義，前後不一致。
+    （歷史 summary 無 cv_max_dd，雙篩選僅用 cv_sharpe / cv_win_rate。）
     回傳格式：[{'date', 'stock_id', 'stock_name', 'signal_close', 'cv_sharpe', 'cv_win_rate'}, ...]
     """
     signals = []
@@ -213,35 +267,51 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
             print(f"  ⚠️  {date_str} 讀取失敗：{e}")
             continue
 
-        for sector_data in summary.get('sectors', {}).values():
-            for stock in sector_data.get('stocks', []):
-                if stock.get('signal') != 'BUY':
-                    continue
-                stock_id = stock.get('id')
-                stock_name = stock.get('name', '')
-                signal_close = stock.get('price')
-                cv_sharpe = stock.get('cv_sharpe', 0) or 0
-                cv_win_rate = stock.get('cv_win_rate', 0) or 0
-                if not stock_id or signal_close is None:
-                    continue
-                if qualified_only and (cv_sharpe < 0.3 or cv_win_rate < 0.4):
-                    continue
-                key = (date_str, stock_id)
-                if key in seen:
-                    continue
-                seen.add(key)
-                signals.append({
-                    'date': date_str,
-                    'stock_id': stock_id,
-                    'stock_name': stock_name,
-                    'signal_close': signal_close,
-                    'cv_sharpe': cv_sharpe,
-                    'cv_win_rate': cv_win_rate,
-                })
+        stocks = [st for sec in summary.get('sectors', {}).values()
+                  if not action_list or (sec.get('avg_ret_20d') or 0) > 3
+                  for st in sec.get('stocks', []) if st.get('signal') == 'BUY']
+        for stock in stocks:
+            stock_id = stock.get('id')
+            stock_name = stock.get('name', '')
+            signal_close = stock.get('price')
+            cv_sharpe = stock.get('cv_sharpe', 0) or 0
+            cv_win_rate = stock.get('cv_win_rate', 0) or 0
+            if not stock_id or signal_close is None:
+                continue
+            if (qualified_only or action_list) and (cv_sharpe < 0.3 or cv_win_rate < 0.4):
+                continue
+            key = (date_str, stock_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            signals.append({
+                'date': date_str,
+                'stock_id': stock_id,
+                'stock_name': stock_name,
+                'signal_close': signal_close,
+                'cv_sharpe': cv_sharpe,
+                'cv_win_rate': cv_win_rate,
+            })
 
-    label = '雙條件達標' if qualified_only else '全 BUY'
+    label = '行動清單（未套乖離）' if action_list else '雙條件達標' if qualified_only else '全 BUY'
     print(f"  📋 {label}：共 {len(signals)} 筆訊號（{start_date} 起）")
     return signals
+
+
+def filter_bias_ma10(signals: list[dict], price_data: dict, max_bias: float = 2.0) -> list[dict]:
+    """行動清單乖離率閘門：訊號日收盤相對 MA10 乖離 ≤ max_bias%（同 daily_scan.MAX_BIAS_MA10）。
+    MA10 資料不足者剔除（與 daily_scan 缺值保守剔除一致）。"""
+    out = []
+    for s in signals:
+        px = price_data.get(s['stock_id'], {})
+        closes = [px[d]['close'] for d in sorted(px) if d <= s['date']]
+        if s['date'] not in px or len(closes) < 10:
+            continue
+        ma10 = sum(closes[-10:]) / 10
+        if (closes[-1] - ma10) / ma10 * 100 <= max_bias:
+            out.append(s)
+    print(f"  📋 行動清單（套乖離≤{max_bias}%）：{len(out)} 筆")
+    return out
 
 
 def apply_position_limits(
@@ -318,9 +388,11 @@ def run_backtest_combo(
     tp: float,
     sl: float,
     fixed: bool = False,
+    ma_exit: bool = False,
 ) -> dict:
     """
     執行單一 (TP, SL) 組合的完整回測。fixed=True 用固定停利停損（收盤判斷），否則追蹤止損。
+    ma_exit=True 改用均線分批出場（忽略 tp/sl）。
     回傳 {'stats': {...}, 'trades': [...]}
     """
     trades = []
@@ -348,7 +420,10 @@ def run_backtest_combo(
         ohlc_prices = {d: v for d, v in stock_prices.items() if d > entry_date}
 
         days = [d for d in trading_days if d >= entry_date]
-        if fixed:
+        if ma_exit:
+            trade = simulate_position_ma(entry_date, entry_price, amount,
+                                         stock_prices, trading_days)
+        elif fixed:
             trade = simulate_position(
                 entry_date=entry_date, entry_price=entry_price, amount=amount,
                 prices={d: v['close'] for d, v in ohlc_prices.items()},
@@ -390,6 +465,9 @@ def run_all_backtests(
             s = result['stats']
             print(f"      勝率 {s['win_rate']:.1%}  交易數 {s['total']}  "
                   f"未實現 {s['open_count']}  avg報酬 {s['avg_return']:+.1f}%")
+    print("  🔄 回測 MA5_MA10（跌破MA5賣半、跌破MA10清倉）...")
+    combinations['MA5_MA10'] = run_backtest_combo(
+        signals_with_amount, price_data, trading_days, None, None, ma_exit=True)
     return combinations
 
 
@@ -421,6 +499,7 @@ def main():
     parser.add_argument('--qualified-only',  action='store_true', help='只回測雙條件達標個股')
     parser.add_argument('--compare',         action='store_true', help='同時回測全BUY與雙條件，對比輸出')
     parser.add_argument('--start', default=BACKTEST_START, help='回測起始日 YYYYMMDD')
+    parser.add_argument('--action-list', action='store_true', help='只用今日行動清單（summary qualified）進場')
     parser.add_argument('--fixed', action='store_true', help='固定停利停損（非追蹤止損）')
     parser.add_argument('--output', default='', help='結果輸出檔名（預設 backtest_results.json）')
     args = parser.parse_args()
@@ -440,26 +519,33 @@ def main():
     print("\n【Step 2】收集 BUY 訊號")
     from datetime import date as dt_date
 
-    signals_all  = load_buy_signals(start_date=args.start, qualified_only=False)
-    signals_qual = load_buy_signals(start_date=args.start, qualified_only=True)
-
-    swa_all  = apply_position_limits(signals_all)
-    swa_qual = apply_position_limits(signals_qual)
-    print(f"  全 BUY 投資上限後：{len(swa_all)} 筆　雙條件達標：{len(swa_qual)} 筆")
-
-    if not swa_all:
+    signals_all  = load_buy_signals(start_date=args.start, action_list=args.action_list)
+    signals_qual = (signals_all if args.action_list
+                    else load_buy_signals(start_date=args.start, qualified_only=True))
+    if not signals_all:
         print("  ❌ 無 BUY 訊號，終止")
         return
 
-    # Step 3: 抓開盤價（兩組共用同一份價格資料）
+    # Step 3: 抓開盤價（兩組共用同一份價格資料；行動清單的乖離閘門也需要）
     print("\n【Step 3】抓取開盤/收盤價")
     from finmind_client import get_dataloader
     dl = get_dataloader()
-    start_fmt = f"{args.start[:4]}-{args.start[4:6]}-{args.start[6:]}"
+    # 往前多抓 30 天供均線（出場 MA5/MA10、乖離閘門 MA10）暖身
+    start_fmt = (datetime.strptime(args.start, '%Y%m%d') - pd.Timedelta(days=30)).strftime('%Y-%m-%d')
     end_fmt = dt_date.today().strftime('%Y-%m-%d')
     price_data = fetch_price_data(dl, sorted({s['stock_id'] for s in signals_all}), start_fmt, end_fmt)
     trading_days = get_sorted_trading_days(price_data)
     print(f"  共 {len(trading_days)} 個交易日")
+
+    if args.action_list:
+        signals_all = signals_qual = filter_bias_ma10(signals_all, price_data)
+
+    swa_all  = apply_position_limits(signals_all)
+    swa_qual = apply_position_limits(signals_qual)
+    print(f"  全 BUY 投資上限後：{len(swa_all)} 筆　雙條件達標：{len(swa_qual)} 筆")
+    if not swa_all:
+        print("  ❌ 無訊號，終止")
+        return
 
     # Step 4: 執行回測
     if args.qualified_only:
