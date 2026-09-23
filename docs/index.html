@@ -2073,6 +2073,8 @@ function renderDaily(data){
         <!-- 指標訊號列 -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;">
           ${gradeBadge}
+          ${q.sector_strong===true?`<span class="entry-grade g-B" title="所屬族群 20 日平均漲幅 > 3%。族群強弱僅供參考、不擋訊號（回測：搭配追蹤停損時族群閘門反而扣分）">🔥 族群強勢</span>`
+            :q.sector_strong===false?`<span class="entry-grade g-C" title="所屬族群尚未轉強（20 日平均漲幅 ≤ 3%），可能是個股先行。族群強弱僅供參考、不擋訊號">🌱 族群未轉強</span>`:''}
           ${tempBadge(true)}
           ${chipBadge}
           ${biasBadge}
@@ -2109,7 +2111,7 @@ function renderDaily(data){
   }
 
   // ── 雙篩選分層：舊邏輯（BUY+cv_sharpe+cv_win_rate+cv_max_dd）命中、
-  //    但被乖離率/族群強勢閘門擋在今日行動清單外者 ──────────────────────────
+  //    但被乖離率閘門擋在今日行動清單外者（2026-09-24 前另含族群強勢閘門）─────
   const dfExcluded = data.dualFilterExcluded || [];
   if (dfExcluded.length) {
     html += `<details style="margin:14px 0;">
@@ -2118,7 +2120,7 @@ function renderDaily(data){
       </summary>
       <div style="font-size:11px;color:var(--sub);margin:6px 0 10px;">
         這些個股符合舊版雙篩選（BUY + CV夏普≥0.3 + CV勝率≥0.4 + 回撤≤20%），
-        但加上乖離率/族群強勢閘門後被排除，僅供參考，不建議進場。
+        但乖離率超過閘門（MA10 +2%）被排除，僅供參考，不建議進場。族群強弱自 2026-09-24 起改為標籤、不再排除。
       </div>
       <div class="action-grid">
         ${dfExcluded.map(d => {

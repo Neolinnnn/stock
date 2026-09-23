@@ -235,8 +235,8 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
     """
     讀所有 daily_reports/*/summary.json，回傳 BUY 訊號清單（已去重）。
     qualified_only=True 時額外要求 cv_sharpe>=0.3 & cv_win_rate>=0.4。
-    action_list=True 以現行行動清單規則重建：雙篩選 + 所屬族群強勢（族群 avg_ret_20d > 3）；
-    乖離率閘門需股價，由 filter_bias_ma10() 於抓價後套用。
+    action_list=True 以現行行動清單規則重建：雙篩選（族群強勢自 2026-09-24 起只當標籤、不過濾，
+    見 daily_scan.REQUIRE_STRONG_SECTOR）；乖離率閘門需股價，由 filter_bias_ma10() 於抓價後套用。
     不直接讀 summary['qualified']：2026-07 前存下的清單是加閘門前的舊定義，前後不一致。
     （歷史 summary 無 cv_max_dd，雙篩選僅用 cv_sharpe / cv_win_rate。）
     回傳格式：[{'date', 'stock_id', 'stock_name', 'signal_close', 'cv_sharpe', 'cv_win_rate'}, ...]
@@ -268,7 +268,6 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
             continue
 
         stocks = [st for sec in summary.get('sectors', {}).values()
-                  if not action_list or (sec.get('avg_ret_20d') or 0) > 3
                   for st in sec.get('stocks', []) if st.get('signal') == 'BUY']
         for stock in stocks:
             stock_id = stock.get('id')
