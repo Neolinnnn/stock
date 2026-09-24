@@ -214,7 +214,7 @@ def test_collect_alerts_week_accumulates_days():
     assert out[1]['days'] == 1
 
 
-def test_render_markdown_six_sections():
+def test_render_markdown_seven_sections():
     summary = {
         'week_ending': '2026-07-03', 'days_covered': 5,
         'market': {'taiex_close': 46780.62, 'taiex_week_pct': 1.5,
@@ -230,13 +230,52 @@ def test_render_markdown_six_sections():
                                         'days_since_high': 0}]},
         'alerts_week': [{'id': '2345', 'name': '智邦', 'type': 'RSI過熱',
                          'days': 3, 'detail': 'RSI=76.8'}],
+        'month_actions': [{'id': '1101', 'name': '甲', 'sector': 'A', 'first_date': '20260701',
+                           'entry_price': 100.0, 'last_price': 110.0, 'ret_pct': 10.0,
+                           'max_ret_pct': 12.0, 'days_listed': 2}],
         'narrative': '本週輪動回顧…',
     }
     md = render_markdown(summary)
-    for header in ('一、市場總覽', '二、族群輪動矩陣', '三、訊號榜',
-                   '四、持倉週記', '五、風險警示', '六、AI 週評'):
+    for header in ('一、市場總覽', '二、族群輪動矩陣', '三、訊號榜', '四、本月行動清單與漲幅追蹤',
+                   '五、持倉週記', '六、風險警示', '七、AI 週評'):
         assert header in md
     assert '🟢 多頭' in md
     assert '強' in md and '✅' in md
     assert '甲（+7.7%、距高點 0 天）' in md
     assert 'RSI過熱 × 3 天' in md
+    assert '本月共 1 檔入榜，1 檔上漲，平均漲幅 +10.00%' in md
+    assert '| 1101 甲 | A | 07/01 | 100.0 | 110.0 | +10.00% | +12.00% | 2 |' in md
+
+
+def test_render_markdown_month_actions_empty():
+    md = render_markdown({'week_ending': '2026-07-03', 'days_covered': 5, 'month_actions': []})
+    assert '本月尚無個股入榜' in md
+
+
+def _day(tmp_path, date, qualified, prices):
+    d = tmp_path / date
+    d.mkdir()
+    (d / 'summary.json').write_text(json.dumps({
+        'qualified': [{'id': i, 'name': n, 'sector': 'A', 'price': prices[i]} for i, n in qualified],
+        'sectors': {'A': {'stocks': [{'id': i, 'price': p} for i, p in prices.items()]}},
+    }), encoding='utf-8')
+
+
+def test_collect_month_actions_tracks_return_since_first_listing(tmp_path):
+    from weekly_summary import collect_month_actions, month_actions_stats
+    _day(tmp_path, '20260831', [('1101', '甲')], {'1101': 90.0})            # 上月：不計
+    _day(tmp_path, '20260901', [('1101', '甲')], {'1101': 100.0, '2202': 50.0})
+    _day(tmp_path, '20260902', [('1101', '甲'), ('2202', '乙')], {'1101': 120.0, '2202': 50.0})
+    _day(tmp_path, '20260903', [], {'1101': 105.0, '2202': 45.0})
+    _day(tmp_path, '20260904', [('1101', '甲')], {'1101': 999.0})           # 晚於 today：不計
+    acts = collect_month_actions('20260903', tmp_path)
+    a, b = acts
+    assert (a['id'], a['first_date'], a['entry_price'], a['last_price']) == ('1101', '20260901', 100.0, 105.0)
+    assert (a['ret_pct'], a['max_ret_pct'], a['days_listed']) == (5.0, 20.0, 2)
+    assert (b['id'], b['first_date'], b['ret_pct'], b['max_ret_pct']) == ('2202', '20260902', -10.0, 0.0)
+    assert month_actions_stats(acts) == {'count': 2, 'up': 1, 'avg_ret_pct': -2.5}
+
+
+def test_build_weekly_payload_carries_month_actions():
+    acts = [{'id': '1101'}]
+    assert build_weekly_payload({'month_actions': acts})['monthActions'] == acts

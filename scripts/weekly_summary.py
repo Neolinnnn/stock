@@ -1,8 +1,8 @@
 """
-週報生成（週五 14:45）
-彙整本週 5 個交易日的掃描結果，產生六節式週報：
-  一、市場總覽　二、族群輪動矩陣　三、訊號榜　四、持倉週記
-  五、風險警示　六、AI 週評（Gemini）
+週報生成（當週最後一個交易日，由 daily_scan workflow 觸發）
+彙整本週各交易日的掃描結果，產生七節式週報：
+  一、市場總覽　二、族群輪動矩陣　三、訊號榜　四、本月行動清單與漲幅追蹤
+  五、持倉週記　六、風險警示　七、AI 週評（Gemini）
 
 用法：
   python scripts/weekly_summary.py
@@ -199,8 +199,55 @@ def collect_alerts_week(week_reports, top_n=10):
     return ranked[:top_n]
 
 
+def collect_month_actions(today_str, base_dir=Path('daily_reports')):
+    """本月（1 日至 today）每日行動清單（qualified）彙整與入榜後漲幅追蹤。
+
+    入榜價＝首次入榜日收盤；最新價＝最近一份日報收盤；最高漲幅取入榜後各日收盤最高點。
+    股價取自日報各族群個股的 price，不打 API。回傳依首次入榜日排序的 list[dict]。
+    """
+    days = sorted(d for d in base_dir.iterdir()
+                  if d.is_dir() and d.name.isdigit() and d.name.startswith(today_str[:6])
+                  and d.name <= today_str and (d / 'summary.json').exists())
+    track = {}
+    for d in days:
+        rep = json.loads((d / 'summary.json').read_text(encoding='utf-8'))
+        for q in rep.get('qualified', []):
+            t = track.setdefault(q['id'], {
+                'id': q['id'], 'name': q['name'], 'sector': q.get('sector', ''),
+                'first_date': d.name, 'entry_price': q.get('price'),
+                'days_listed': 0, 'last_price': None, 'max_price': None,
+            })
+            t['days_listed'] += 1
+            t['last_listed'] = d.name
+        prices = {st['id']: st.get('price') for sec in rep['sectors'].values() for st in sec['stocks']}
+        for t in track.values():
+            p = prices.get(t['id'])
+            if isinstance(p, (int, float)) and p > 0:
+                t['last_price'] = p
+                t['max_price'] = max(t['max_price'] or p, p)
+    out = []
+    for t in track.values():
+        e = t['entry_price']
+        ok = isinstance(e, (int, float)) and e > 0
+        t['ret_pct'] = round((t['last_price'] / e - 1) * 100, 2) if ok and t['last_price'] else None
+        t['max_ret_pct'] = round((t['max_price'] / e - 1) * 100, 2) if ok and t['max_price'] else None
+        out.append(t)
+    return sorted(out, key=lambda t: (t['first_date'], t['id']))
+
+
+def month_actions_stats(actions):
+    """本月行動清單摘要：檔數、上漲檔數、平均漲幅（無報價者不計）。"""
+    rets = [a['ret_pct'] for a in actions if a.get('ret_pct') is not None]
+    return {
+        'count': len(actions),
+        'up': sum(r > 0 for r in rets),
+        'avg_ret_pct': round(sum(rets) / len(rets), 2) if rets else None,
+    }
+
+
 def build_narrative_context(sector_metrics, top_buys, market=None,
-                            rotation=None, positions_week=None, alerts_week=None):
+                            rotation=None, positions_week=None, alerts_week=None,
+                            month_actions=None):
     """組裝給 Gemini 的 weekly_report context.data。"""
     ctx = {
         'sector_metrics': sector_metrics,
@@ -216,16 +263,22 @@ def build_narrative_context(sector_metrics, top_buys, market=None,
         ctx['positions_week'] = positions_week
     if alerts_week is not None:
         ctx['alerts_week'] = alerts_week
+    if month_actions is not None:
+        ctx['month_actions'] = month_actions
+        ctx['month_actions_stats'] = month_actions_stats(month_actions)
     return ctx
 
 
 def generate_narrative(writer, context_data, date_str):
     """呼叫 Gemini 生成三段週報敘事；任何失敗回傳空字串（前端會隱藏敘事卡）。"""
-    extra = ('請輸出三段，第一段標題「本週輪動回顧」描述族群強弱輪動，'
-             '第二段標題「下週聚焦」點出值得追蹤的族群與個股，'
-             '第三段標題「風險提醒」根據 alerts_week 與 rotation_matrix.cooling '
-             '提示過熱與轉弱風險，繁體中文、各 200 字內。'
-             '直接輸出三段內容，不要任何開場白、前言或結語。')
+    extra = ('請輸出四段，第一段標題「本週輪動回顧」描述族群強弱輪動，'
+             '第二段標題「本月行動清單追蹤」根據 month_actions 與 month_actions_stats '
+             '說明本月入榜個股的整體表現（上漲檔數、平均漲幅），點名漲幅最大與回落最多者，'
+             '若 month_actions 為空則說明本月尚無入榜個股，'
+             '第三段標題「下週聚焦」點出值得追蹤的族群與個股，'
+             '第四段標題「風險提醒」根據 alerts_week 與 rotation_matrix.cooling '
+             '提示過熱與轉弱風險，繁體中文、各 120 字內（模板總長 500 字內）。'
+             '直接輸出四段內容，不要任何開場白、前言或結語。')
     try:
         return writer.generate(
             task='weekly_report',
@@ -241,7 +294,7 @@ def _fmt_sector(m):
 
 
 def render_markdown(summary):
-    """由 summary dict 產生六節式 weekly.md 內容。"""
+    """由 summary dict 產生七節式 weekly.md 內容。"""
     md = [f"# 週報 {summary['week_ending']}（涵蓋 {summary['days_covered']} 個交易日）\n"]
 
     # 一、市場總覽
@@ -285,9 +338,29 @@ def render_markdown(summary):
         gate = '✅' if b.get('gate') else '—'
         md.append(f"| {b['stock']} | {b['buy_days']} | {tier} | {gate} |\n")
 
-    # 四、持倉週記
+    # 四、本月行動清單與漲幅追蹤
+    acts = summary.get('month_actions') or []
+    md.append("\n## 四、本月行動清單與漲幅追蹤\n")
+    if acts:
+        st = month_actions_stats(acts)
+        avg = f"{st['avg_ret_pct']:+.2f}%" if st['avg_ret_pct'] is not None else '—'
+        md.append(f"本月共 {st['count']} 檔入榜，{st['up']} 檔上漲，平均漲幅 {avg}"
+                  "（入榜價＝首次入榜日收盤）\n\n")
+        md.append("| 股票 | 族群 | 首次入榜 | 入榜價 | 最新價 | 漲幅 | 入榜後最高 | 入榜天數 |\n"
+                  "|------|------|---------|-------|-------|------|-----------|---------|\n")
+        pct = lambda v: f"{v:+.2f}%" if v is not None else '—'   # noqa: E731
+        for a in acts:
+            fd = a['first_date']
+            md.append(f"| {a['id']} {a['name']} | {a['sector']} | {fd[4:6]}/{fd[6:]} | "
+                      f"{a['entry_price'] if a['entry_price'] is not None else '—'} | "
+                      f"{a['last_price'] if a['last_price'] is not None else '—'} | "
+                      f"{pct(a['ret_pct'])} | {pct(a['max_ret_pct'])} | {a['days_listed']} |\n")
+    else:
+        md.append("- 本月尚無個股入榜\n")
+
+    # 五、持倉週記
     pw = summary.get('positions_week') or {}
-    md.append("\n## 四、持倉週記\n")
+    md.append("\n## 五、持倉週記\n")
     ent = pw.get('entries', [])
     ext = pw.get('exits', [])
     ent_txt = '、'.join(f"{e['id']} {e['name']}" for e in ent) or '無'
@@ -307,18 +380,18 @@ def render_markdown(summary):
     else:
         md.append("- 持有中：無\n")
 
-    # 五、風險警示
+    # 六、風險警示
     alerts = summary.get('alerts_week', [])
-    md.append("\n## 五、風險警示（週內累計）\n")
+    md.append("\n## 六、風險警示（週內累計）\n")
     if alerts:
         for a in alerts:
             md.append(f"- {a['id']} {a['name']}：{a['type']} × {a['days']} 天（{a['detail']}）\n")
     else:
         md.append("- 無\n")
 
-    # 六、AI 週評
+    # 七、AI 週評
     if summary.get('narrative'):
-        md.append("\n## 六、AI 週評\n\n")
+        md.append("\n## 七、AI 週評\n\n")
         md.append(summary['narrative'] + "\n")
 
     return ''.join(md)
@@ -453,6 +526,7 @@ def run_weekly_summary(as_of=None, upload_notion=True):
     top_buys = collect_week_signals(week_reports)
     positions_week = collect_positions_week(week_reports)
     alerts_week = collect_alerts_week(week_reports)
+    month_actions = collect_month_actions(today.strftime('%Y%m%d'))
 
     summary = {
         'week_ending': today.strftime('%Y-%m-%d'),
@@ -463,6 +537,7 @@ def run_weekly_summary(as_of=None, upload_notion=True):
         'top_buys': top_buys,
         'positions_week': positions_week,
         'alerts_week': alerts_week,
+        'month_actions': month_actions,
         'chart_path': str(chart_path),
         'narrative': '',
     }
@@ -479,7 +554,8 @@ def run_weekly_summary(as_of=None, upload_notion=True):
         from gemini_writer import GeminiWriter
         narrative_ctx = build_narrative_context(
             sector_metrics, top_buys, market=market, rotation=rotation,
-            positions_week=positions_week, alerts_week=alerts_week)
+            positions_week=positions_week, alerts_week=alerts_week,
+            month_actions=month_actions)
         summary['narrative'] = generate_narrative(
             GeminiWriter(), narrative_ctx, today.strftime('%Y-%m-%d'))
     except Exception as e:
@@ -547,6 +623,7 @@ def build_weekly_payload(summary):
         ],
         'positions': summary.get('positions_week'),
         'alerts': summary.get('alerts_week', []),
+        'monthActions': summary.get('month_actions', []),
         'narrative': summary.get('narrative', ''),
     }
 

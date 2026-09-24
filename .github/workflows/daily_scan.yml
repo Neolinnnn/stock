@@ -7,22 +7,22 @@ on:
     # 主排程：15:23 台灣時間 = 07:23 UTC，週一至週五
     # （15:00 後 FinMind 三大法人籌碼資料才齊全）
     - cron: '23 7 * * 1-5'
-    # 週報：週五 15:38 = 07:38 UTC
-    - cron: '38 7 * * 5'
+    # 週報不另設排程：當週最後一個交易日（週五休市則提前，見 check job）
+    # 的日掃描直接接著跑週報與回測更新。
     # 備援排程：20:13 台灣時間 = 12:13 UTC。主排程被 GitHub 丟棄時補跑；
     # 當日報告已存在則由 check job 直接跳過，不會重複消耗 Gemini 額度。
     - cron: '13 12 * * 1-5'
   workflow_dispatch:   # 允許手動觸發
 
-# 防止同日多次 run 並發衝突。cancel-in-progress 設 false：週五 07:23 的日掃描
-# 會被 07:38 的週報事件攔腰砍掉，且 GitHub 補送積壓的 cron 事件時也會誤殺
+# 防止同日多次 run 並發衝突。cancel-in-progress 設 false：舊版週五 07:38 的週報
+# 事件曾攔腰砍掉 07:23 的日掃描，且 GitHub 補送積壓的 cron 事件時也會誤殺
 # 執行中的 run（2026-08-07 / 08-14 / 08-28 皆發生過），改為排隊等待。
 concurrency:
   group: daily-scan-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  # 決定本次是否該跑、以及是否要跑週五專屬步驟。
+  # 決定本次是否該跑、以及是否要跑週報與回測更新（當週最後交易日）。
   # 把排程判斷集中在這裡，scan job 內就不必到處比對 cron 字串。
   check:
     runs-on: ubuntu-latest
@@ -37,24 +37,20 @@ jobs:
           # daily_scan.py 以 datetime.now()（runner 為 UTC）命名輸出目錄，
           # 這裡的比對日期必須同樣用 UTC，否則備援判斷會錯開一天。
           TODAY=$(date -u +%Y%m%d)
-          DOW=$(date -u +%u)
+          # 證交所休市日判斷；取不到清單時退回「週五＝最後交易日」
+          read TRADING WEEKLY <<< "$(python3 scripts/trading_calendar.py "$TODAY")"
           RUN=true
-          WEEKLY=false
-          case "$SCHED" in
-            '38 7 * * 5')
-              WEEKLY=true ;;
-            '13 12 * * 1-5')
-              # 備援：主排程已產出當日報告就跳過
-              # 註：GitHub 預設 shell 帶 -e，不可用 `[ ... ] && RUN=false`
-              # （判斷為偽時整段 script 會中止）
-              if [ -d "daily_reports/$TODAY" ]; then RUN=false; fi
-              # 週五另外檢查週報：日報有、週報缺（07:38 事件被丟）時仍要補跑
-              if [ "$DOW" = "5" ] && [ ! -d "daily_reports/weekly_$TODAY" ]; then
-                RUN=true
-                WEEKLY=true
-              fi ;;
-          esac
-          echo "排程=${SCHED:-手動} 日期=$TODAY 週幾=$DOW → run=$RUN weekly=$WEEKLY"
+          # 註：GitHub 預設 shell 帶 -e，不可用 `[ ... ] && RUN=false`
+          # （判斷為偽時整段 script 會中止）
+          # 休市日不掃描（手動觸發除外）：否則會以前一日資料產出重複報告（5/1、6/19 曾發生）
+          if [ -n "$SCHED" ] && [ "$TRADING" = "false" ]; then RUN=false; fi
+          if [ "$SCHED" = '13 12 * * 1-5' ] && [ "$TRADING" = "true" ]; then
+            # 備援：主排程已產出當日報告就跳過；最後交易日另檢查週報，缺則補跑
+            if [ -d "daily_reports/$TODAY" ]; then RUN=false; fi
+            if [ "$WEEKLY" = "true" ] && [ ! -d "daily_reports/weekly_$TODAY" ]; then RUN=true; fi
+          fi
+          if [ "$RUN" = "false" ]; then WEEKLY=false; fi
+          echo "排程=${SCHED:-手動} 日期=$TODAY 交易日=$TRADING → run=$RUN weekly=$WEEKLY"
           echo "run=$RUN" >> "$GITHUB_OUTPUT"
           echo "weekly=$WEEKLY" >> "$GITHUB_OUTPUT"
 
@@ -152,12 +148,12 @@ jobs:
         continue-on-error: true
         run: python scripts/rotation_radar.py --collect
 
-      - name: Rotation radar report (Fridays only)
+      - name: Rotation radar report (最後交易日)
         if: needs.check.outputs.weekly == 'true'
         continue-on-error: true
         run: python scripts/rotation_radar.py --report
 
-      - name: Run weekly summary (Fridays only)
+      - name: Run weekly summary (最後交易日)
         if: needs.check.outputs.weekly == 'true'
         continue-on-error: true
         env:
@@ -167,15 +163,31 @@ jobs:
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          # AI 週評（Gemini）。原本漏傳，07-31 起週評全為空白
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_1: ${{ secrets.GEMINI_API_KEY_1 }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python scripts/weekly_summary.py
 
-      - name: Run sector rotation backtest (Fridays only)
+      - name: Run sector rotation backtest (最後交易日)
         if: needs.check.outputs.weekly == 'true'
         continue-on-error: true
         env:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/sector_rotation_backtest.py
+
+      - name: Update backtests (最後交易日)
+        # 回測頁 18 份結果更新到今天；任一訊號股抓不到股價即中止且不覆寫（見 backtest_all.py）
+        if: needs.check.outputs.weekly == 'true'
+        continue-on-error: true
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: |
+          python scripts/backtest_all.py
+          python scripts/build_backtest_docs.py
 
       - name: Build multi-agent analysis (agents)
         continue-on-error: true
@@ -209,6 +221,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git add daily_reports/ docs/
+          # 最後交易日的回測更新（backtest_all.py 寫在 repo 根目錄）
+          git add backtest_results*.json
           # 動能雷達快取（若當日 collect 失敗目錄可能不存在）
           [ -d data/radar_cache ] && git add data/radar_cache/ || true
           # 集保大戶快照：集保端點只給最新一期，歷史靠每期快照累積。
