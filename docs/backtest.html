@@ -74,32 +74,17 @@ main{padding:20px 24px;max-width:1300px;margin:0 auto;}
 .win-bar-wrap{height:6px;background:#1e2128;border-radius:3px;overflow:hidden;margin:8px 0;}
 .win-bar{height:100%;border-radius:3px;background:var(--green);}
 
-/* 交易記錄 */
-.trade-filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-.filter-btn{padding:4px 12px;border:1px solid var(--border);border-radius:16px;font-size:12px;cursor:pointer;color:var(--sub);}
-.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-.trades-list{display:flex;flex-direction:column;gap:8px;}
-.trade-item{background:#13161d;border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.trade-badge{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0;}
-.trade-badge.win{background:rgba(39,174,96,.2);color:var(--green);}
-.trade-badge.loss{background:rgba(231,76,60,.2);color:var(--red);}
-.trade-badge.open{background:rgba(52,152,219,.2);color:var(--blue);}
-.trade-name{font-weight:700;font-size:14px;}
-.trade-meta{font-size:11px;color:var(--sub);margin-top:2px;}
-.trade-ret{font-size:18px;font-weight:700;margin-left:auto;}
-.ret-pos{color:var(--green);}
-.ret-neg{color:var(--red);}
-.ret-open{color:var(--blue);}
-
-/* 持倉分析 */
-.signal-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;}
-.signal-strong-buy{background:rgba(39,174,96,.2);color:var(--green);}
-.signal-buy{background:rgba(92,184,92,.2);color:#5cb85c;}
-.signal-hold{background:rgba(243,156,18,.15);color:var(--yellow);}
-.signal-wait{background:rgba(136,136,136,.15);color:var(--sub);}
-.signal-sell{background:rgba(231,76,60,.15);color:var(--red);}
-.reason-chip{background:#1e2330;border-radius:4px;padding:2px 8px;}
-.risk-chip{background:rgba(231,76,60,.1);color:#e98080;border-radius:4px;padding:2px 8px;}
+/* 交易紀錄（三區） */
+.trade-group{margin-bottom:14px;}
+.trade-group summary{cursor:pointer;font-size:14px;font-weight:700;padding:8px 0;list-style:none;user-select:none;}
+.trade-group summary::before{content:'▾ ';color:var(--sub);}
+.trade-group:not([open]) summary::before{content:'▸ ';}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap;}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;margin:1px 2px;white-space:nowrap;}
+.tag-mom{background:rgba(39,174,96,.18);color:var(--green);}
+.tag-dual{background:rgba(52,152,219,.18);color:var(--blue);}
+.tag-al{background:rgba(243,156,18,.18);color:var(--yellow);}
+.tag-unk{background:#1e2330;color:var(--sub);}
 
 /* 說明框 */
 .explain-box{background:#13161d;border:1px solid var(--border);border-radius:8px;padding:14px 18px;font-size:12px;color:var(--sub);line-height:1.8;margin-bottom:20px;}
@@ -160,21 +145,10 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
     <div class="section-title">📋 停利停損組合比較（點擊列查看交易明細）</div>
     <div class="card" style="overflow-x:auto;padding:0;" id="combo-grid"></div>
 
-    <!-- 交易記錄 -->
-    <div class="section-title">📒 交易記錄</div>
-    <div class="trade-filters">
-      <button class="filter-btn active" data-filter="all"  onclick="filterTrades('all',this)">全部</button>
-      <button class="filter-btn"        data-filter="WIN"  onclick="filterTrades('WIN',this)">✅ 已獲利</button>
-      <button class="filter-btn"        data-filter="LOSS" onclick="filterTrades('LOSS',this)">❌ 已虧損</button>
-      <button class="filter-btn"        data-filter="OPEN" onclick="filterTrades('OPEN',this)">⏳ 持倉中</button>
-    </div>
-    <div class="trades-list" id="trades-list"></div>
-
-    <!-- 持倉中分析 -->
-    <div id="open-section" style="display:none">
-      <div class="section-title">🔍 持倉中股票分析（新分析引擎）</div>
-      <div id="open-analysis-list"></div>
-    </div>
+    <!-- 交易紀錄：依結果分三區，同股多次買入分列 -->
+    <div class="section-title">📒 交易紀錄</div>
+    <div id="trade-note" style="font-size:12px;color:var(--sub);margin-bottom:10px;line-height:1.7;"></div>
+    <div id="trade-sections"></div>
 
   </div>
 
@@ -189,7 +163,6 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
 let DATA = null;
 let CUR_PERIOD = '1m';
 let CUR_COMBO = null;
-let CUR_FILTER = 'all';
 let CUR_SOURCE = 'all';   // 'all' = 當日全部 BUY；'al' = 只進今日行動清單（backtest.py --action-list）
 const SOURCES = {
   all: {file: './backtest_summary.json',    note: '每日掃描中所有 BUY 訊號都進場（含「雙篩選命中、未進今日行動清單」的個股）。'},
@@ -202,16 +175,6 @@ function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','
 // 報酬率：自帶正負號並依正負上色，不可硬寫 '+' 與綠色
 function fmtRet(v, digits=1){ return (v >= 0 ? '+' : '') + v.toFixed(digits) + '%'; }
 function retColor(v){ return v >= 0 ? 'var(--green)' : 'var(--red)'; }
-
-function signalClass(sig){
-  if(!sig) return 'signal-wait';
-  if(sig==='強力買入') return 'signal-strong-buy';
-  if(sig==='買入')     return 'signal-buy';
-  if(sig==='持有')     return 'signal-hold';
-  if(sig==='觀望')     return 'signal-wait';
-  return 'signal-sell';
-}
-function scoreColor(s){ return s>=75?'var(--green)':s>=60?'#5cb85c':s>=45?'var(--yellow)':'var(--red)'; }
 
 async function init(){
   try{
@@ -239,7 +202,7 @@ async function init(){
     btn.className = 'period-tab' + (key === CUR_PERIOD ? ' active' : '');
     btn.dataset.period = key;
     btn.textContent = pd.label;
-    btn.onclick = () => { CUR_PERIOD = key; CUR_COMBO = null; CUR_FILTER = 'all'; setPeriod(); };
+    btn.onclick = () => { CUR_PERIOD = key; CUR_COMBO = null; setPeriod(); };
     tabsEl.appendChild(btn);
   });
 
@@ -248,7 +211,7 @@ async function init(){
 
 window.setSource = function(src){
   if(src === CUR_SOURCE) return;
-  CUR_SOURCE = src; CUR_COMBO = null; CUR_FILTER = 'all';
+  CUR_SOURCE = src; CUR_COMBO = null;
   init();
 };
 
@@ -265,12 +228,6 @@ function setPeriod(){
   renderHero(pd);
   renderComboGrid(pd);
   renderTrades(pd);
-  renderOpenAnalysis(pd);
-
-  // Reset filter buttons（限 TP/SL 區，避免影響 MA10 分頁）
-  document.querySelectorAll('#content .filter-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('#content .filter-btn').classList.add('active');
-  CUR_FILTER = 'all';
 }
 
 function renderHero(pd){
@@ -364,7 +321,6 @@ window.selectCombo = function(id){
   const pd = DATA.periods[CUR_PERIOD];
   renderComboGrid(pd);
   renderTrades(pd);
-  renderOpenAnalysis(pd);
 };
 
 // ── ⚡ 動能確認進場（entry_lab.json） ──────────────────────────────────────
@@ -408,116 +364,76 @@ async function renderMomentum(){
     </div>`;
 }
 
-function renderTrades(pd){
-  const combo = pd.combos[CUR_COMBO];
-  if(!combo){ document.getElementById('trades-list').innerHTML='<div style="color:var(--sub)">請選擇組合</div>'; return; }
-
-  const trades = combo.trades.slice().reverse(); // newest first
-  const wins  = trades.filter(t=>t.result==='WIN').length;
-  const losses= trades.filter(t=>t.result==='LOSS').length;
-  const opens = trades.filter(t=>t.result==='OPEN').length;
-
-  // Update filter button labels with counts
-  document.querySelectorAll('.filter-btn').forEach(btn=>{
-    const map={'all':`全部（${trades.length}）`,'WIN':`✅ 已獲利（${wins}）`,'LOSS':`❌ 已虧損（${losses}）`,'OPEN':`⏳ 持倉中（${opens}）`};
-    const key=btn.getAttribute('data-filter');
-    if(key && map[key]) btn.textContent=map[key];
-  });
-
-  const filtered = CUR_FILTER === 'all' ? trades : trades.filter(t => t.result === CUR_FILTER);
-  const el = document.getElementById('trades-list');
-
-  if(!filtered.length){
-    el.innerHTML='<div class="card" style="color:var(--sub);text-align:center;padding:24px;">此篩選條件無交易記錄</div>';
-    return;
-  }
-
-  el.innerHTML = filtered.map(t => {
-    const isWin  = t.result === 'WIN';
-    const isLoss = t.result === 'LOSS';
-    const isOpen = t.result === 'OPEN';
-    const retColor = isWin ? 'ret-pos' : isLoss ? 'ret-neg' : 'ret-open';
-    const retText  = t.return_pct != null ? (t.return_pct>=0?'+':'')+t.return_pct.toFixed(1)+'%' : '持倉中';
-    const badgeText = isWin ? '獲利' : isLoss ? '虧損' : '持有';
-    const badgeCls  = isWin ? 'win' : isLoss ? 'loss' : 'open';
-    const holdText  = t.holding_days ? `持股 ${t.holding_days} 天` : '';
-    const exitText  = t.exit_date ? `出場 ${fmtDate(t.exit_date)} @ ${t.exit_price}` : '尚未出場';
-    return `<div class="trade-item">
-      <div class="trade-badge ${badgeCls}">${badgeText}</div>
-      <div>
-        <div class="trade-name">${esc(t.stock_id)} ${esc(t.stock_name)}</div>
-        <div class="trade-meta">進場 ${fmtDate(t.entry_date)} @ ${t.entry_price} &nbsp;|&nbsp; ${exitText} &nbsp;|&nbsp; ${holdText}</div>
-      </div>
-      <div class="trade-ret ${retColor}">${retText}</div>
-    </div>`;
-  }).join('');
+// 參考訊號：true 亮標籤、null（訊號日前價格資料不足）顯示「?」、false 不顯示
+const SIGNAL_TAGS = [
+  ['momentum',    '動能進場',     'tag-mom'],
+  ['dual',        '雙篩選',       'tag-dual'],
+  ['action_list', '今日行動清單', 'tag-al'],
+];
+function tagCell(tags){
+  if(!tags) return '<span class="tag tag-unk" title="舊版資料無訊號日">?</span>';
+  const html = SIGNAL_TAGS.map(([k, label, cls]) =>
+    tags[k] === true ? `<span class="tag ${cls}">${label}</span>`
+    : tags[k] == null ? `<span class="tag tag-unk" title="訊號日前價格資料不足，無法判定">${label}?</span>` : ''
+  ).join('');
+  return html || '<span style="color:var(--sub)">—</span>';
 }
 
-window.filterTrades = function(type, btn){
-  CUR_FILTER = type;
-  document.querySelectorAll('#content .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderTrades(DATA.periods[CUR_PERIOD]);
-};
+const TRADE_GROUPS = [
+  {result: 'WIN',  title: '✅ 已獲利', color: 'var(--green)', pnl: '已實現損益'},
+  {result: 'OPEN', title: '⏳ 持倉中', color: 'var(--blue)',  pnl: '未實現損益'},
+  {result: 'LOSS', title: '❌ 已虧損', color: 'var(--red)',   pnl: '已實現損益'},
+];
 
-function renderOpenAnalysis(pd){
-  const openSec = document.getElementById('open-section');
-  const listEl  = document.getElementById('open-analysis-list');
-  const analysis = pd.open_analysis || {};
-  const ids = Object.keys(analysis);
+function renderTrades(pd){
+  const el = document.getElementById('trade-sections');
+  const combo = pd.combos[CUR_COMBO];
+  if(!combo){ el.innerHTML='<div style="color:var(--sub)">請選擇組合</div>'; return; }
 
-  if(!ids.length){ openSec.style.display = 'none'; return; }
-  openSec.style.display = 'block';
+  const prices = pd.prices || {}, analysis = pd.open_analysis || {}, tagMap = pd.signal_tags || {};
+  // 現價：優先 build 階段的最新收盤，舊版資料退回持倉分析的現價
+  const curPrice = sid => prices[sid]?.close ?? analysis[sid]?.current_price ?? null;
+  const pxDate = Object.values(prices).reduce((m, p) => p.date > m ? p.date : m, '');
+  document.getElementById('trade-note').innerHTML =
+    `依目前所選組合（${esc(combo.label)}）列出；同一檔重複買入分開列示。`
+    + (pxDate ? `現價為 ${fmtDate(pxDate)} 收盤。` : '')
+    + `<br>參考訊號為進場訊號日當天的狀態：<span class="tag tag-mom">動能進場</span>量比≥1.2 或 MACD柱&gt;0且增長；`
+    + `<span class="tag tag-dual">雙篩選</span>CV夏普≥0.3 且 CV勝率≥40%；`
+    + `<span class="tag tag-al">今日行動清單</span>雙篩選＋乖離MA10≤2%；帶「?」者為訊號日前價格資料不足。`;
 
-  // 股名：分析資料不含名稱，從本期間各組合的交易紀錄對照
-  const names = {};
-  Object.values(pd.combos).forEach(c => (c.trades||[]).forEach(t => { if(t.stock_name) names[t.stock_id] = t.stock_name; }));
-  // 成本：取目前所選組合中該股仍持倉的最新一筆進場
-  const combo = pd.combos[CUR_COMBO] || {};
-  const entryMap = {};
-  (combo.trades || []).filter(t => t.result === 'OPEN').forEach(t => {
-    (entryMap[t.stock_id] = entryMap[t.stock_id] || []).push({ date: t.entry_date, price: t.entry_price });
-  });
-  // 目前組合持倉中的排前面，其次依訊號分數
-  ids.sort((x,y) => (!!entryMap[y] - !!entryMap[x]) || ((analysis[y].signal_score||0) - (analysis[x].signal_score||0)));
+  // 新到舊；同日依代號
+  const trades = combo.trades.slice().sort((a,b) =>
+    (b.entry_date||'').localeCompare(a.entry_date||'') || a.stock_id.localeCompare(b.stock_id));
 
-  const pctCell = v => v==null ? '—' : `${v>=0?'+':''}${v.toFixed(1)}%`;
-  const rows = ids.map(sid => {
-    const a = analysis[sid];
-    const entries = (entryMap[sid] || []).sort((p,q) => p.date < q.date ? -1 : 1);
-    const last = entries[entries.length-1];
-    const cur = a.current_price || 0;
-    const unr = last && cur ? (cur - last.price) / last.price * 100 : null;
-    const sig = a.buy_signal || '—', score = a.signal_score || 0;
-    const reasons = a.signal_reasons || [], risks = a.risk_factors || [];
-    return `<tr${last?'':' style="opacity:.6"'}>
-      <td style="white-space:nowrap;"><b>${esc(sid)}</b> ${esc(names[sid]||'')}</td>
-      <td style="font-variant-numeric:tabular-nums;">${cur ? cur.toFixed(1) : '—'}</td>
-      <td style="font-variant-numeric:tabular-nums;white-space:nowrap;">${last ? last.price + (entries.length>1 ? ` <span style="color:var(--sub);font-size:11px">(${entries.length}筆)</span>` : '') : '<span style="color:var(--sub);font-size:11px">本組合已出場</span>'}</td>
-      <td style="color:${unr==null?'var(--sub)':unr>=0?'var(--green)':'var(--red)'};font-weight:700;">${pctCell(unr)}</td>
-      <td style="white-space:nowrap;"><span class="signal-pill ${signalClass(sig)}">${esc(sig)}</span>
-        <b style="margin-left:6px;color:${scoreColor(score)}">${score}</b></td>
-      <td style="white-space:nowrap;">${esc(a.trend_status||'—')}</td>
-      <td style="font-size:11px;min-width:130px;">${esc(a.ma_alignment||'—')}</td>
-      <td style="font-variant-numeric:tabular-nums;">${a.ma5!=null ? a.ma5.toFixed(1) : '—'}</td>
-      <td style="color:${(a.bias_ma5||0)>5?'var(--red)':'var(--text)'};">${pctCell(a.bias_ma5)}</td>
-      <td style="font-size:11px;min-width:110px;">${esc(a.macd_signal||'—')}</td>
-      <td style="font-size:11px;min-width:130px;">${esc(a.volume_trend||'—')}</td>
-      <td style="font-variant-numeric:tabular-nums;">${a.rsi_12!=null ? a.rsi_12.toFixed(1) : '—'}</td>
-      <td style="font-size:11px;min-width:220px;line-height:1.7;">
-        ${reasons.map(r=>`<span class="reason-chip">✓ ${esc(r)}</span>`).join(' ')}
-        ${risks.map(r=>`<span class="risk-chip">⚠ ${esc(r)}</span>`).join(' ')}</td>
-    </tr>`;
+  el.innerHTML = TRADE_GROUPS.map(g => {
+    const rows = trades.filter(t => t.result === g.result);
+    const body = rows.length ? rows.map(t => {
+      const cur = curPrice(t.stock_id);
+      const pnl = g.result === 'OPEN'
+        ? (cur != null && t.entry_price ? (cur - t.entry_price) / t.entry_price * 100 : null)
+        : t.return_pct;
+      const tags = t.signal_date ? tagMap[`${t.stock_id}_${t.signal_date}`] : null;
+      return `<tr>
+        <td style="white-space:nowrap;"><b>${esc(t.stock_id)}</b> ${esc(t.stock_name)}</td>
+        <td class="num">${cur != null ? cur : '—'}</td>
+        <td class="num">${t.entry_price}</td>
+        <td class="num" style="font-weight:700;color:${pnl == null ? 'var(--sub)' : retColor(pnl)}">${pnl == null ? '—' : fmtRet(pnl)}</td>
+        <td class="num">${fmtDate(t.entry_date)}</td>
+        <td class="num">${t.exit_date ? fmtDate(t.exit_date) : '<span style="color:var(--sub)">持有中</span>'}</td>
+        <td>${tagCell(tags)}</td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="7" style="color:var(--sub);text-align:center;padding:16px;">無交易</td></tr>`;
+    return `<details class="trade-group" open>
+      <summary style="color:${g.color}">${g.title}（${rows.length} 筆）</summary>
+      <div class="card" style="overflow-x:auto;padding:0;margin-bottom:0;">
+        <table class="ma10-tbl" style="border:none;">
+          <thead><tr>
+            <th>股票名稱</th><th>現價</th><th>買入成本</th><th>${g.pnl}</th>
+            <th>買入日期</th><th>賣出日期</th><th>參考訊號</th>
+          </tr></thead><tbody>${body}</tbody>
+        </table></div>
+    </details>`;
   }).join('');
-
-  listEl.innerHTML = `<div class="card" style="overflow-x:auto;padding:0;">
-    <table class="ma10-tbl" style="border:none;">
-      <thead><tr>
-        <th>股票</th><th>現價</th><th>成本</th><th>未實現</th><th>訊號／分數</th><th>趨勢</th><th>均線排列</th>
-        <th>MA5</th><th>乖離MA5</th><th>MACD</th><th>量能</th><th>RSI(12)</th><th>理由／風險</th>
-      </tr></thead><tbody>${rows}</tbody>
-    </table></div>
-    <div style="font-size:11px;color:var(--sub);margin-top:6px;">成本與未實現損益依目前所選組合（${esc(combo.label||'—')}）；淡色列為本期間其他組合仍持倉、但此組合已出場的個股。</div>`;
 }
 
 init();
