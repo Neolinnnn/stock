@@ -82,41 +82,39 @@
       "product_mix": {
         "product_lines": [
           {
-            "name": "消費型DRAM",
-            "share_pct": 70,
-            "yoy_growth": 582.9,
+            "name": "消費性DRAM",
+            "share_pct": 60,
+            "yoy_growth": null,
             "trend": "up"
           },
           {
-            "name": "標準型DRAM (PC/伺服器)",
-            "share_pct": 15,
-            "yoy_growth": 582.9,
+            "name": "AI/伺服器DRAM",
+            "share_pct": 25,
+            "yoy_growth": null,
             "trend": "up"
           },
           {
-            "name": "行動型DRAM",
+            "name": "其他標準型/利基型DRAM",
             "share_pct": 15,
-            "yoy_growth": 582.9,
+            "yoy_growth": null,
             "trend": "up"
           }
         ],
         "regions": [],
         "customers": [
-          "Kioxia (鎧俠)",
+          "Kioxia",
           "SanDisk",
           "Solidigm",
-          "Cisco (思科)",
-          "Kingston (金士頓)",
-          "大聯大 (WPG Holdings)",
-          "全球網通設備製造商",
-          "電腦品牌廠",
-          "消費性電子產品供應商"
+          "Cisco",
+          "Qualcomm",
+          "NVIDIA",
+          "WPG Holdings (大聯大)"
         ],
-        "biz_model": "南亞科為整合元件製造商 (IDM)，專注於DRAM記憶體的研發、設計、製造與銷售，並以自有品牌Nanya和Elixir行銷全球。公司亦提供晶圓製造服務，並透過私募與客戶簽訂長期供貨協議，深化策略合作關係。",
-        "moat": "南亞科的核心競爭優勢來自於台塑集團的雄厚資金與資源支持，持續投入10奈米級先進製程技術的自主研發與量產，並擁有逾8,600件全球專利。公司專注於多元化的DRAM產品組合，包括利基型DDR4/LPDDR4以及新興DDR5和客製化AI記憶體，以填補市場空缺並滿足不同應用需求，同時透過與主要客戶建立策略合作關係，確保產品穩定供應。",
-        "summary": "南亞科作為台灣DRAM龍頭企業，受惠於記憶體市場的強勁復甦與AI應用帶動的結構性需求，2026年第一季營收年增率高達582.9%。其產品線主要涵蓋消費型DRAM、標準型(PC/伺服器)DRAM及行動型DRAM，並積極推進DDR5和客製化AI UWIO記憶體的開發與貢獻營收。公司近期透過私募案引入四大客戶作為策略夥伴，並簽訂長期供貨協議，進一步鞏固其市場地位與供應穩定性。目前最新的財報數據未提供各產品線或地區的單獨年增率或佔比，產品線年增率為公司整體營收年增率。",
-        "data_period": "2026Q1",
-        "updated_at": "2026-06-23"
+        "biz_model": "南亞科主要為整合元件製造商 (IDM)，擁有自主研發與美光授權製程技術，產品涵蓋標準型DRAM、低功耗行動DRAM、裸晶與模組DRAM，並以自有品牌「Elixir」銷售。公司積極與客戶簽訂長期供貨協議（LTA），約佔營收5成，且近期透過私募案深化與主要客戶的策略合作關係。",
+        "moat": "核心競爭優勢包括：1. 專注於DRAM領域並具備10奈米級先進製程技術及EUV導入能力。2. 在三星、SK海力士、美光等大廠轉向HBM時，南亞科能填補標準型DRAM市場缺口，掌握定價權。3. 積極布局AI記憶體（高速DDR5、LPDDR5/5X、客製化超寬I/O記憶體），並成功打入NVIDIA AI供應鏈及高通AI資料中心夥伴。4. 透過私募案與主要客戶建立股權綁定，深化長期合作關係並確保訂單穩定。5. 充沛的現金流與高額資本支出用於新廠擴建，確保未來產能與技術領先。",
+        "summary": "南亞科作為全球DRAM製造商，受益於AI浪潮帶動的記憶體需求，2026年營運表現強勁。公司營收重心雖仍有六成以上來自消費性DRAM，但AI基礎設施與伺服器相關營收貢獻已突破兩成，顯示其產品組合正朝高價值應用轉型。透過與國際大廠的策略合作與長約模式，南亞科有效提升獲利穩定性，並持續投入先進製程與AI記憶體開發，鞏固其在記憶體產業的關鍵地位。",
+        "data_period": "2026Q2 & 2026Q3 Outlook",
+        "updated_at": "2026-09-24"
       }
     },
     {
@@ -886,6 +884,15 @@
       "dealer": 660
     },
     {
+      "id": "3105",
+      "name": "穩懋",
+      "sector": "光通訊",
+      "total": 3473,
+      "foreign": 3000,
+      "trust": 434,
+      "dealer": 39
+    },
+    {
       "id": "2492",
       "name": "華新科",
       "sector": "被動元件",
@@ -893,15 +900,6 @@
       "foreign": 3144,
       "trust": 1,
       "dealer": 251
-    },
-    {
-      "id": "3105",
-      "name": "穩懋",
-      "sector": "光通訊",
-      "total": 3047,
-      "foreign": 3000,
-      "trust": 8,
-      "dealer": 39
     },
     {
       "id": "2327",
@@ -958,15 +956,6 @@
       "dealer": -219
     },
     {
-      "id": "2454",
-      "name": "聯發科",
-      "sector": "IC設計",
-      "total": 702,
-      "foreign": 826,
-      "trust": -256,
-      "dealer": 132
-    },
-    {
       "id": "8358",
       "name": "金居",
       "sector": "銅箔/CCL",
@@ -976,13 +965,13 @@
       "dealer": 645
     },
     {
-      "id": "2360",
-      "name": "致茂",
-      "sector": "測試設備",
-      "total": 552,
-      "foreign": 680,
-      "trust": -195,
-      "dealer": 67
+      "id": "2454",
+      "name": "聯發科",
+      "sector": "IC設計",
+      "total": 669,
+      "foreign": 826,
+      "trust": -289,
+      "dealer": 132
     },
     {
       "id": "2455",
@@ -992,6 +981,15 @@
       "foreign": 201,
       "trust": -8,
       "dealer": 321
+    },
+    {
+      "id": "2360",
+      "name": "致茂",
+      "sector": "測試設備",
+      "total": 510,
+      "foreign": 680,
+      "trust": -237,
+      "dealer": 67
     },
     {
       "id": "2367",
@@ -1069,9 +1067,9 @@
       "id": "2308",
       "name": "台達電",
       "sector": "AI 電源",
-      "total": 243,
+      "total": 233,
       "foreign": -328,
-      "trust": 430,
+      "trust": 420,
       "dealer": 141
     },
     {
@@ -1141,9 +1139,9 @@
       "id": "7734",
       "name": "印能",
       "sector": "CoPoS封裝",
-      "total": 74,
+      "total": 66,
       "foreign": 64,
-      "trust": 0,
+      "trust": -8,
       "dealer": 10
     },
     {
@@ -1246,15 +1244,6 @@
       "dealer": -8
     },
     {
-      "id": "6510",
-      "name": "精測",
-      "sector": "封測",
-      "total": -16,
-      "foreign": 25,
-      "trust": -72,
-      "dealer": 31
-    },
-    {
       "id": "3406",
       "name": "玉晶光",
       "sector": "光學",
@@ -1318,15 +1307,6 @@
       "dealer": -14
     },
     {
-      "id": "6187",
-      "name": "萬潤",
-      "sector": "CoPoS封裝",
-      "total": -39,
-      "foreign": 136,
-      "trust": -175,
-      "dealer": 0
-    },
-    {
       "id": "3443",
       "name": "創意",
       "sector": "AI ASIC/IP",
@@ -1381,6 +1361,15 @@
       "dealer": -3
     },
     {
+      "id": "6510",
+      "name": "精測",
+      "sector": "封測",
+      "total": -75,
+      "foreign": 25,
+      "trust": -131,
+      "dealer": 31
+    },
+    {
       "id": "3044",
       "name": "健鼎",
       "sector": "PCB",
@@ -1390,6 +1379,24 @@
       "dealer": -15
     },
     {
+      "id": "3653",
+      "name": "健策",
+      "sector": "AI 散熱",
+      "total": -109,
+      "foreign": -339,
+      "trust": 247,
+      "dealer": -17
+    },
+    {
+      "id": "6187",
+      "name": "萬潤",
+      "sector": "CoPoS封裝",
+      "total": -115,
+      "foreign": 136,
+      "trust": -251,
+      "dealer": 0
+    },
+    {
       "id": "8210",
       "name": "勤誠",
       "sector": "AI 散熱",
@@ -1397,6 +1404,15 @@
       "foreign": -102,
       "trust": -20,
       "dealer": -2
+    },
+    {
+      "id": "3529",
+      "name": "力旺",
+      "sector": "AI ASIC/IP",
+      "total": -156,
+      "foreign": -586,
+      "trust": 416,
+      "dealer": 14
     },
     {
       "id": "3661",
@@ -1426,15 +1442,6 @@
       "dealer": -5
     },
     {
-      "id": "3529",
-      "name": "力旺",
-      "sector": "AI ASIC/IP",
-      "total": -228,
-      "foreign": -586,
-      "trust": 344,
-      "dealer": 14
-    },
-    {
       "id": "2458",
       "name": "義隆",
       "sector": "IC設計",
@@ -1455,7 +1462,7 @@
     {
       "id": "3711",
       "name": "日月光投控",
-      "sector": "CoPoS封裝",
+      "sector": "封測",
       "total": -246,
       "foreign": 1906,
       "trust": -2167,
@@ -1464,10 +1471,10 @@
     {
       "id": "3711",
       "name": "日月光投控",
-      "sector": "封測",
-      "total": -255,
+      "sector": "CoPoS封裝",
+      "total": -246,
       "foreign": 1906,
-      "trust": -2176,
+      "trust": -2167,
       "dealer": 15
     },
     {
@@ -1498,15 +1505,6 @@
       "dealer": -11
     },
     {
-      "id": "3653",
-      "name": "健策",
-      "sector": "AI 散熱",
-      "total": -312,
-      "foreign": -339,
-      "trust": 44,
-      "dealer": -17
-    },
-    {
       "id": "2379",
       "name": "瑞昱",
       "sector": "IC設計",
@@ -1534,15 +1532,6 @@
       "dealer": 6
     },
     {
-      "id": "7769",
-      "name": "鴻勤",
-      "sector": "測試設備",
-      "total": -421,
-      "foreign": -254,
-      "trust": -159,
-      "dealer": -8
-    },
-    {
       "id": "3552",
       "name": "同致",
       "sector": "車用電子",
@@ -1559,6 +1548,15 @@
       "foreign": -5,
       "trust": -486,
       "dealer": 8
+    },
+    {
+      "id": "7769",
+      "name": "鴻勤",
+      "sector": "測試設備",
+      "total": -540,
+      "foreign": -254,
+      "trust": -278,
+      "dealer": -8
     },
     {
       "id": "6274",
@@ -1714,15 +1712,6 @@
       "dealer": 413
     },
     {
-      "id": "2330",
-      "name": "台積電",
-      "sector": "AI ASIC/IP",
-      "total": -5440,
-      "foreign": -4668,
-      "trust": -1014,
-      "dealer": 242
-    },
-    {
       "id": "4958",
       "name": "臻鼎-KY",
       "sector": "PCB",
@@ -1730,6 +1719,15 @@
       "foreign": -5334,
       "trust": -275,
       "dealer": 74
+    },
+    {
+      "id": "2330",
+      "name": "台積電",
+      "sector": "AI ASIC/IP",
+      "total": -5714,
+      "foreign": -4668,
+      "trust": -1288,
+      "dealer": 242
     },
     {
       "id": "2337",
@@ -1753,9 +1751,9 @@
       "id": "2408",
       "name": "南亞科",
       "sector": "記憶體",
-      "total": -22654,
+      "total": -22681,
       "foreign": -19953,
-      "trust": -2362,
+      "trust": -2389,
       "dealer": -339
     },
     {
@@ -1836,10 +1834,10 @@
       "signal": "HOLD",
       "sharpe": -6.96,
       "foreign": 3000,
-      "trust": 8,
+      "trust": 434,
       "dealer": 39,
-      "chipTotal": 3047,
-      "chip5d": 14194,
+      "chipTotal": 3473,
+      "chip5d": 14620,
       "chipDays": 1,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -1951,10 +1949,10 @@
       "signal": "BUY",
       "sharpe": 7.77,
       "foreign": -19953,
-      "trust": -2362,
+      "trust": -2389,
       "dealer": -339,
-      "chipTotal": -22654,
-      "chip5d": 16249,
+      "chipTotal": -22681,
+      "chip5d": 16222,
       "chipDays": 0,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -2365,10 +2363,10 @@
       "signal": "HOLD",
       "sharpe": 9.16,
       "foreign": 1906,
-      "trust": -2176,
+      "trust": -2167,
       "dealer": 15,
-      "chipTotal": -255,
-      "chip5d": 26741,
+      "chipTotal": -246,
+      "chip5d": 26750,
       "chipDays": 0,
       "chipConc": 0.0,
       "chipDualBuy": false,
@@ -2411,10 +2409,10 @@
       "signal": "HOLD",
       "sharpe": 4.78,
       "foreign": 25,
-      "trust": -72,
+      "trust": -131,
       "dealer": 31,
-      "chipTotal": -16,
-      "chip5d": -776,
+      "chipTotal": -75,
+      "chip5d": -835,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -2687,10 +2685,10 @@
       "signal": "HOLD",
       "sharpe": 2.02,
       "foreign": 826,
-      "trust": -256,
+      "trust": -289,
       "dealer": 132,
-      "chipTotal": 702,
-      "chip5d": 10061,
+      "chipTotal": 669,
+      "chip5d": 10028,
       "chipDays": 5,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3124,10 +3122,10 @@
       "signal": "HOLD",
       "sharpe": -2.93,
       "foreign": 64,
-      "trust": 0,
+      "trust": -8,
       "dealer": 10,
-      "chipTotal": 74,
-      "chip5d": -2,
+      "chipTotal": 66,
+      "chip5d": -10,
       "chipDays": 1,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -3193,10 +3191,10 @@
       "signal": "HOLD",
       "sharpe": 4.18,
       "foreign": 136,
-      "trust": -175,
+      "trust": -251,
       "dealer": 0,
-      "chipTotal": -39,
-      "chip5d": -728,
+      "chipTotal": -115,
+      "chip5d": -804,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -3676,10 +3674,10 @@
       "signal": "HOLD",
       "sharpe": 8.02,
       "foreign": -4668,
-      "trust": -1014,
+      "trust": -1288,
       "dealer": 242,
-      "chipTotal": -5440,
-      "chip5d": 8509,
+      "chipTotal": -5714,
+      "chip5d": 8235,
       "chipDays": 0,
       "chipConc": 0.0,
       "chipDualBuy": false,
@@ -3745,10 +3743,10 @@
       "signal": "HOLD",
       "sharpe": -5.66,
       "foreign": -586,
-      "trust": 344,
+      "trust": 416,
       "dealer": 14,
-      "chipTotal": -228,
-      "chip5d": -239,
+      "chipTotal": -156,
+      "chip5d": -167,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -3837,10 +3835,10 @@
       "signal": "HOLD",
       "sharpe": 15.79,
       "foreign": -339,
-      "trust": 44,
+      "trust": 247,
       "dealer": -17,
-      "chipTotal": -312,
-      "chip5d": -288,
+      "chipTotal": -109,
+      "chip5d": -85,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -3929,10 +3927,10 @@
       "signal": "HOLD",
       "sharpe": 3.6,
       "foreign": -328,
-      "trust": 430,
+      "trust": 420,
       "dealer": 141,
-      "chipTotal": 243,
-      "chip5d": 10400,
+      "chipTotal": 233,
+      "chip5d": 10390,
       "chipDays": 5,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -4044,10 +4042,10 @@
       "signal": "HOLD",
       "sharpe": 9.86,
       "foreign": 680,
-      "trust": -195,
+      "trust": -237,
       "dealer": 67,
-      "chipTotal": 552,
-      "chip5d": 841,
+      "chipTotal": 510,
+      "chip5d": 799,
       "chipDays": 2,
       "chipConc": 0.0,
       "chipDualBuy": false,
@@ -4067,10 +4065,10 @@
       "signal": "HOLD",
       "sharpe": 6.93,
       "foreign": -254,
-      "trust": -159,
+      "trust": -278,
       "dealer": -8,
-      "chipTotal": -421,
-      "chip5d": -1192,
+      "chipTotal": -540,
+      "chip5d": -1311,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
