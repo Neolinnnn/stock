@@ -2519,6 +2519,33 @@ function renderWeekly(){
     </div>`;
   });
   html+=`</div>`;
+  // 本月行動清單與漲幅追蹤（舊版 weekly.json 無 monthActions 時隱藏）
+  const mActs=WEEKLY_DATA.monthActions;
+  if(mActs){
+    const rets=mActs.map(a=>a.ret_pct).filter(v=>v!=null);
+    const up=rets.filter(v=>v>0).length;
+    const avg=rets.length?rets.reduce((s,v)=>s+v,0)/rets.length:null;
+    html+=`<div class="section-title">📅 本月行動清單與漲幅追蹤</div>
+      <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">入榜價＝首次入榜日收盤；漲幅以最新一份日報收盤計算</div>
+      <div class="card">`;
+    if(mActs.length){
+      html+=`<div style="font-size:13px;margin-bottom:8px">本月共 <b>${mActs.length}</b> 檔入榜，<b>${up}</b> 檔上漲，平均漲幅 <b class="${signColor(avg)}">${avg!=null?sign(avg)+fmt(avg,2)+'%':'—'}</b></div>
+        <table><tr><th>股票</th><th>族群</th><th>首次入榜</th><th>入榜價</th><th>最新價</th><th>漲幅</th><th>入榜後最高</th><th>入榜天數</th></tr>`;
+      mActs.forEach(a=>{
+        const fd=String(a.first_date||'');
+        html+=`<tr><td style="cursor:pointer" onclick="goToStock('${escHtml(a.id)}')">${escHtml(a.id)} ${escHtml(a.name)}</td>
+          <td>${escHtml(a.sector||'')}</td><td>${fd.slice(4,6)}/${fd.slice(6)}</td>
+          <td>${a.entry_price!=null?fmt(a.entry_price,1):'—'}</td><td>${a.last_price!=null?fmt(a.last_price,1):'—'}</td>
+          <td class="${signColor(a.ret_pct)}">${a.ret_pct!=null?sign(a.ret_pct)+fmt(a.ret_pct,2)+'%':'—'}</td>
+          <td class="${signColor(a.max_ret_pct)}">${a.max_ret_pct!=null?sign(a.max_ret_pct)+fmt(a.max_ret_pct,2)+'%':'—'}</td>
+          <td>${a.days_listed} 天</td></tr>`;
+      });
+      html+=`</table>`;
+    }else{
+      html+=`<div style="font-size:13px">本月尚無個股入榜</div>`;
+    }
+    html+=`</div>`;
+  }
   // 持倉週記（舊版 weekly.json 無 positions 時隱藏）
   if(wkPos){
     const ent=wkPos.entries||[], ext=wkPos.exits||[], hold=wkPos.holding||[];
