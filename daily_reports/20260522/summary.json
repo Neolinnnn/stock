@@ -1149,9 +1149,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 34.94,
-      "avg_rsi": 72.5,
-      "avg_sharpe": -4.25,
+      "avg_ret_20d": 40.11,
+      "avg_rsi": 73.8,
+      "avg_sharpe": -3.94,
       "stocks": [
         {
           "id": "2454",
@@ -1486,48 +1486,6 @@
           "target_long": 164.7,
           "atr14": 6.75,
           "stop_loss": 148.5,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 8.42,
-          "rsi": 62.0,
-          "rsi10": 49.2,
-          "ret_20d": -6.4,
-          "signal": "HOLD",
-          "cv_sharpe": -6.74,
-          "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-05-22",
-              "title": "聚奕投資：凌巨股權交割準備就緒 與日方理性協商中",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-22",
-              "title": "塞港效應大擴散 台驊：近程航線甚至有船公司砍班運價飆3倍",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-22",
-              "title": "台驊總座：台股大漲財富僅聚集3%的人身上 憂台股網路泡沫歷史重演",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-22",
-            "外資": 410,
-            "投信": 0,
-            "自營": -1,
-            "合計": 409
-          },
-          "target_short": 8.9,
-          "target_mid": 9.3,
-          "target_long": 9.2,
-          "atr14": 0.3,
-          "stop_loss": 7.8,
           "broker": null,
           "main_force": null
         }

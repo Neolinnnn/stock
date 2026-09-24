@@ -1809,9 +1809,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 0.3,
-      "avg_rsi": 57.7,
-      "avg_sharpe": -2.62,
+      "avg_ret_20d": 1.32,
+      "avg_rsi": 58.5,
+      "avg_sharpe": -2.87,
       "stocks": [
         {
           "id": "2454",
@@ -2233,54 +2233,6 @@
             "score": null,
             "label": "資料不足",
             "reason": "no_data"
-          }
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 9.24,
-          "rsi": 50.5,
-          "rsi10": 50.0,
-          "ret_20d": -9.0,
-          "signal": "HOLD",
-          "ma5": 9.15,
-          "ma10": 9.28,
-          "ma20": 9.41,
-          "ma60": 8.95,
-          "cv_sharpe": -0.33,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {
-            "date": "2026-07-02",
-            "外資": 546,
-            "投信": 0,
-            "自營": 0,
-            "合計": 546,
-            "近5日": 513,
-            "近5日外資": 509,
-            "近5日投信": 0,
-            "連買日": 1,
-            "投信連買日": 0,
-            "集中度": 13.0,
-            "土洋同買": false
-          },
-          "chip_tier": "neutral",
-          "target_short": 10.1,
-          "target_mid": 9.4,
-          "target_long": 10.2,
-          "atr14": 0.35,
-          "stop_loss": 8.5,
-          "broker": {
-            "top_buyers": [],
-            "top_sellers": [],
-            "net_concentration": 0,
-            "source": null,
-            "error": "no_data"
-          },
-          "main_force": {
-            "score": 42.4,
-            "label": "（同日預覽補值）",
-            "reason": "histock_throttled"
           }
         }
       ],

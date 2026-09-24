@@ -1541,9 +1541,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 2.93,
-      "avg_rsi": 51.3,
-      "avg_sharpe": -2.54,
+      "avg_ret_20d": 3.53,
+      "avg_rsi": 49.3,
+      "avg_sharpe": -2.86,
       "stocks": [
         {
           "id": "2454",
@@ -1884,44 +1884,6 @@
           "target_long": 185.9,
           "atr14": 10.1,
           "stop_loss": 158.8,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 9.65,
-          "rsi": 69.4,
-          "rsi10": 59.7,
-          "ret_20d": -2.6,
-          "signal": "HOLD",
-          "ma5": 9.37,
-          "ma10": 9.31,
-          "ma20": 9.35,
-          "ma60": 8.96,
-          "cv_sharpe": 0.31,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {
-            "date": "2026-07-06",
-            "外資": -302,
-            "投信": 0,
-            "自營": 3,
-            "合計": -299,
-            "近5日": 1056,
-            "近5日外資": 1049,
-            "近5日投信": 0,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": 17.7,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 9.8,
-          "target_mid": 9.4,
-          "target_long": 10.5,
-          "atr14": 0.38,
-          "stop_loss": 8.9,
           "broker": null,
           "main_force": null
         }
@@ -4580,6 +4542,7 @@
   "strong_sectors": [
     "封測",
     "光學",
+    "IC設計",
     "車用電子",
     "綠能環保",
     "ABF載板",
@@ -4627,7 +4590,7 @@
       "rsi": 68.8,
       "cv_sharpe": 1.63,
       "bias_ma10": 3.9,
-      "sector_strong": false,
+      "sector_strong": true,
       "passes_bias": false,
       "passes_all": false
     },

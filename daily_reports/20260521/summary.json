@@ -1317,9 +1317,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 17.07,
-      "avg_rsi": 66.1,
-      "avg_sharpe": -4.28,
+      "avg_ret_20d": 20.11,
+      "avg_rsi": 67.9,
+      "avg_sharpe": -4.01,
       "stocks": [
         {
           "id": "2454",
@@ -1696,48 +1696,6 @@
           "target_long": 162.0,
           "atr14": 6.69,
           "stop_loss": 145.1,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 8.24,
-          "rsi": 49.7,
-          "rsi10": 42.1,
-          "ret_20d": -10.2,
-          "signal": "HOLD",
-          "cv_sharpe": -6.73,
-          "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-05-21",
-              "title": "總統指示加碼！龔明鑫：盤點170萬中小企需求 力拚轉型條例下會期送審",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-21",
-              "title": "潤隆總經理林暐鈞：房市去化雖慢但已非停滯 今年續推新案登場",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-21",
-              "title": "南寶看好上半年穩健成長無虞 全年維持營收成長目標",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-21",
-            "外資": 303,
-            "投信": 0,
-            "自營": 0,
-            "合計": 303
-          },
-          "target_short": 9.0,
-          "target_mid": 9.3,
-          "target_long": 9.1,
-          "atr14": 0.3,
-          "stop_loss": 7.6,
           "broker": null,
           "main_force": null
         }

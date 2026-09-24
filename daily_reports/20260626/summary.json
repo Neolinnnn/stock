@@ -1229,9 +1229,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": -1.91,
-      "avg_rsi": 34.9,
-      "avg_sharpe": -2.67,
+      "avg_ret_20d": -3.38,
+      "avg_rsi": 35.3,
+      "avg_sharpe": -2.5,
       "stocks": [
         {
           "id": "2454",
@@ -1500,36 +1500,6 @@
           "target_long": 176.6,
           "atr14": 9.04,
           "stop_loss": 153.9,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 9.05,
-          "rsi": 31.3,
-          "rsi10": 44.1,
-          "ret_20d": 11.5,
-          "signal": "SELL",
-          "ma5": 9.35,
-          "ma10": 9.36,
-          "ma20": 9.48,
-          "ma60": 8.96,
-          "cv_sharpe": -4.19,
-          "cv_win_rate": 0.22,
-          "news": [],
-          "chip": {
-            "date": "2026-06-26",
-            "外資": -42,
-            "投信": 0,
-            "自營": 0,
-            "合計": -42
-          },
-          "target_short": 10.3,
-          "target_mid": 9.4,
-          "target_long": 10.0,
-          "atr14": 0.39,
-          "stop_loss": 8.3,
           "broker": null,
           "main_force": null
         }
@@ -3642,6 +3612,7 @@
   "weak_sectors": [
     "光通訊",
     "封測",
+    "IC設計",
     "綠能環保",
     "CoPoS封裝",
     "AI ASIC/IP",

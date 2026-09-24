@@ -1695,9 +1695,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 25.64,
-      "avg_rsi": 73.1,
-      "avg_sharpe": -3.98,
+      "avg_ret_20d": 29.36,
+      "avg_rsi": 75.8,
+      "avg_sharpe": -3.86,
       "stocks": [
         {
           "id": "2454",
@@ -2074,48 +2074,6 @@
           "target_long": 166.2,
           "atr14": 6.76,
           "stop_loss": 150.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 8.26,
-          "rsi": 48.7,
-          "rsi10": 43.9,
-          "ret_20d": -7.9,
-          "signal": "HOLD",
-          "cv_sharpe": -5.04,
-          "cv_win_rate": 0.33,
-          "news": [
-            {
-              "date": "2026-05-25",
-              "title": "鉅亨速報 - Factset 最新調查：國巨(2327-TW)EPS預估上修至17.01元，預估目標價為384.5元",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-25",
-              "title": "鉅亨速報 - Factset 最新調查：新興(2605-TW)目標價調降至38元，幅度約15.56%",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-25",
-              "title": "〈台幣〉最強亞幣 股匯雙漲連4升收31.47元",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-25",
-            "外資": -319,
-            "投信": 0,
-            "自營": 2,
-            "合計": -317
-          },
-          "target_short": 8.8,
-          "target_mid": 9.3,
-          "target_long": 9.0,
-          "atr14": 0.31,
-          "stop_loss": 7.6,
           "broker": null,
           "main_force": null
         }
