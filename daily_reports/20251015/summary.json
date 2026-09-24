@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 27.34,
-      "avg_rsi": 56.5,
-      "avg_sharpe": -3.91,
+      "avg_ret_20d": 31.02,
+      "avg_rsi": 55.8,
+      "avg_sharpe": 3.58,
       "hot_count": 0,
       "buy_count": 1,
-      "qualified_count": 1,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "BUY",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2025-10-15",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 53.8,
-          "rsi": 60.3,
-          "ret_20d": 5.3,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2025-10-15",
@@ -577,12 +562,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -1.25,
-      "avg_rsi": 42.0,
-      "avg_sharpe": -7.25,
+      "avg_ret_20d": -4.4,
+      "avg_rsi": 32.3,
+      "avg_sharpe": -9.73,
       "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 1,
+      "buy_count": 0,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2025-10-15",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 12.5,
-          "rsi": 61.4,
-          "ret_20d": 5.0,
-          "signal": "BUY",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2025-10-15",
@@ -663,18 +633,10 @@
   ],
   "weak_sectors": [
     "IC設計",
+    "車用電子",
     "綠能環保"
   ],
-  "qualified": [
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "price": 12.5,
-      "rsi": 61.4,
-      "cv_sharpe": 1.62
-    }
-  ],
+  "qualified": [],
   "alerts": [],
   "chart_path": "daily_reports\\20251015\\01_sector_strength.png"
 }

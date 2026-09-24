@@ -323,9 +323,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": -9.26,
-      "avg_rsi": 39.6,
-      "avg_sharpe": 3.84,
+      "avg_ret_20d": -9.69,
+      "avg_rsi": 36.7,
+      "avg_sharpe": 4.47,
       "stocks": [
         {
           "id": "2408",
@@ -552,44 +552,6 @@
           "target_long": 2182.0,
           "atr14": 131.69,
           "stop_loss": 1371.6,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 53.2,
-          "rsi": 65.6,
-          "rsi10": 52.6,
-          "ret_20d": -5.3,
-          "signal": "HOLD",
-          "ma5": 52.44,
-          "ma10": 52.41,
-          "ma20": 53.13,
-          "ma60": 55.27,
-          "cv_sharpe": -1.84,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {
-            "date": "2026-07-03",
-            "外資": 34,
-            "投信": 0,
-            "自營": 0,
-            "合計": 34,
-            "近5日": 58,
-            "近5日外資": 59,
-            "近5日投信": 0,
-            "連買日": 3,
-            "投信連買日": 0,
-            "集中度": 11.8,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 55.6,
-          "target_mid": 50.9,
-          "target_long": 57.9,
-          "atr14": 1.58,
-          "stop_loss": 50.0,
           "broker": null,
           "main_force": null
         },
@@ -1880,9 +1842,9 @@
       "qualified_count": 2
     },
     "車用電子": {
-      "avg_ret_20d": 36.35,
-      "avg_rsi": 69.2,
-      "avg_sharpe": -3.19,
+      "avg_ret_20d": -6.6,
+      "avg_rsi": 59.2,
+      "avg_sharpe": -3.96,
       "stocks": [
         {
           "id": "3552",
@@ -1959,47 +1921,9 @@
           "stop_loss": 35.0,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 65.9,
-          "rsi": 89.0,
-          "rsi10": 84.3,
-          "ret_20d": 122.3,
-          "signal": "HOLD",
-          "ma5": 60.16,
-          "ma10": 55.34,
-          "ma20": 46.2,
-          "ma60": 31.53,
-          "cv_sharpe": -1.66,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {
-            "date": "2026-07-03",
-            "外資": -21,
-            "投信": 0,
-            "自營": -1,
-            "合計": -22,
-            "近5日": 21,
-            "近5日外資": 16,
-            "近5日投信": 0,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": 1.0,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 70.2,
-          "target_mid": 68.3,
-          "target_long": 74.7,
-          "atr14": 3.94,
-          "stop_loss": 58.0,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -3686,7 +3610,7 @@
         },
         {
           "id": "7769",
-          "name": "鴻勤",
+          "name": "鴻勁",
           "price": 6865.0,
           "rsi": 52.2,
           "rsi10": 49.0,
@@ -4529,7 +4453,6 @@
   "strong_sectors": [
     "封測",
     "光學",
-    "車用電子",
     "ABF載板",
     "銅箔/CCL",
     "被動元件",
@@ -4539,6 +4462,7 @@
     "光通訊",
     "記憶體",
     "AI伺服器",
+    "車用電子",
     "AI 電源"
   ],
   "qualified": [],
@@ -4570,13 +4494,6 @@
       "name": "祥碩",
       "type": "RSI過熱",
       "detail": "RSI=74.6"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=89.0"
     },
     {
       "sector": "ABF載板",

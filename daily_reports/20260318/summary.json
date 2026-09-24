@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 39.38,
-      "avg_rsi": 62.5,
-      "avg_sharpe": -1.56,
+      "avg_ret_20d": 44.72,
+      "avg_rsi": 66.9,
+      "avg_sharpe": 3.58,
       "hot_count": 2,
-      "buy_count": 4,
-      "qualified_count": 1,
+      "buy_count": 3,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2026-03-18",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 50.7,
-          "rsi": 36.4,
-          "ret_20d": 7.3,
-          "signal": "SELL",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2026-03-18",
@@ -577,11 +562,11 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 24.27,
-      "avg_rsi": 60.2,
-      "avg_sharpe": -9.61,
-      "hot_count": 1,
-      "buy_count": 1,
+      "avg_ret_20d": -1.95,
+      "avg_rsi": 44.3,
+      "avg_sharpe": -9.73,
+      "hot_count": 0,
+      "buy_count": 0,
       "qualified_count": 0,
       "stocks": [
         {
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2026-03-18",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 20.5,
-          "rsi": 92.0,
-          "ret_20d": 76.7,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2026-03-18",
@@ -662,8 +632,7 @@
     "記憶體",
     "AI伺服器",
     "封測",
-    "IC設計",
-    "車用電子"
+    "IC設計"
   ],
   "weak_sectors": [],
   "qualified": [
@@ -712,13 +681,6 @@
       "name": "華碩",
       "type": "RSI過熱",
       "detail": "RSI=71.7"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=92.0"
     }
   ],
   "chart_path": "daily_reports\\20260318\\01_sector_strength.png"

@@ -1243,9 +1243,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": -3.23,
-      "avg_rsi": 42.6,
-      "avg_sharpe": -1.68,
+      "avg_ret_20d": -3.6,
+      "avg_rsi": 46.2,
+      "avg_sharpe": -3.39,
       "stocks": [
         {
           "id": "3552",
@@ -1330,53 +1330,11 @@
           "stop_loss": 32.2,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 21.6,
-          "rsi": 35.2,
-          "rsi10": 40.5,
-          "ret_20d": -2.5,
-          "signal": "HOLD",
-          "cv_sharpe": 1.75,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-19",
-              "title": "美伊衝突曝AI供應鏈致命傷！斷料危機加上能源暴漲 恐吞噬硬體廠獲利 ",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-19",
-              "title": "水泥業上緊發條！空污標準新增13項有害物質、料源管控機制 最遲118年上路",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-19",
-              "title": "大同持續拓展北美市場 取得美國太陽能案場訂單",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-19",
-            "外資": -189,
-            "投信": -1,
-            "自營": 0,
-            "合計": -190
-          },
-          "target_short": 28.6,
-          "target_mid": 32.4,
-          "target_long": 28.1,
-          "atr14": 1.57,
-          "stop_loss": 18.5,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": -13.61,

@@ -285,9 +285,9 @@
       "qualified_count": 3
     },
     "記憶體": {
-      "avg_ret_20d": 24.07,
-      "avg_rsi": 51.1,
-      "avg_sharpe": 2.36,
+      "avg_ret_20d": 26.86,
+      "avg_rsi": 53.5,
+      "avg_sharpe": 2.82,
       "stocks": [
         {
           "id": "2408",
@@ -514,44 +514,6 @@
           "target_long": 1838.0,
           "atr14": 92.4,
           "stop_loss": 1285.2,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 47.1,
-          "rsi": 29.4,
-          "rsi10": 35.4,
-          "ret_20d": -1.1,
-          "signal": "HOLD",
-          "ma5": 47.79,
-          "ma10": 48.14,
-          "ma20": 48.42,
-          "ma60": 50.61,
-          "cv_sharpe": -1.79,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {
-            "date": "2026-08-28",
-            "外資": -11000,
-            "投信": 0,
-            "自營": -230,
-            "合計": -11230,
-            "近5日": -2849,
-            "近5日外資": -2000,
-            "近5日投信": 0,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": -2.8,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 50.0,
-          "target_mid": 49.3,
-          "target_long": 51.4,
-          "atr14": 1.19,
-          "stop_loss": 44.7,
           "broker": null,
           "main_force": null
         },
@@ -1893,9 +1855,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": -1.11,
-      "avg_rsi": 48.0,
-      "avg_sharpe": -2.73,
+      "avg_ret_20d": -1.45,
+      "avg_rsi": 45.1,
+      "avg_sharpe": -5.61,
       "stocks": [
         {
           "id": "3552",
@@ -1972,49 +1934,11 @@
           "stop_loss": 30.4,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 41.35,
-          "rsi": 53.9,
-          "rsi10": 47.0,
-          "ret_20d": -0.5,
-          "signal": "BUY",
-          "ma5": 41.24,
-          "ma10": 40.61,
-          "ma20": 41.02,
-          "ma60": 45.74,
-          "cv_sharpe": 3.05,
-          "cv_win_rate": 0.56,
-          "news": [],
-          "chip": {
-            "date": "2026-08-28",
-            "外資": -119000,
-            "投信": 0,
-            "自營": 0,
-            "合計": -119000,
-            "近5日": -242242,
-            "近5日外資": -240242,
-            "近5日投信": -1000,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": -24.8,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 43.7,
-          "target_mid": 62.0,
-          "target_long": 52.8,
-          "atr14": 2.51,
-          "stop_loss": 36.3,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 1
+      "buy_count": 0,
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": 41.03,
@@ -3873,7 +3797,7 @@
         },
         {
           "id": "7769",
-          "name": "鴻勤",
+          "name": "鴻勁",
           "price": 6490.0,
           "rsi": 61.8,
           "rsi10": 54.0,
@@ -4023,18 +3947,6 @@
   ],
   "qualified": [],
   "dual_filter": [
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "price": 41.35,
-      "rsi": 53.9,
-      "cv_sharpe": 3.05,
-      "bias_ma10": 1.8,
-      "sector_strong": false,
-      "passes_bias": true,
-      "passes_all": false
-    },
     {
       "sector": "CoPoS封裝",
       "id": "6664",

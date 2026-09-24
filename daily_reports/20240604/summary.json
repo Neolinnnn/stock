@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 0.88,
-      "avg_rsi": 48.4,
-      "avg_sharpe": -4.77,
+      "avg_ret_20d": 1.43,
+      "avg_rsi": 50.3,
+      "avg_sharpe": -4.28,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-06-04",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 40.2,
-          "rsi": 37.5,
-          "ret_20d": -2.7,
-          "signal": "HOLD",
-          "cv_sharpe": -7.69,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {
             "date": "2024-06-04",
@@ -568,10 +553,10 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 15.21,
-      "avg_rsi": 58.1,
-      "avg_sharpe": -10.33,
-      "hot_count": 1,
+      "avg_ret_20d": 1.45,
+      "avg_rsi": 50.8,
+      "avg_sharpe": -14.42,
+      "hot_count": 0,
       "buy_count": 1,
       "qualified_count": 0,
       "stocks": [
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -28.84,
           "cv_win_rate": 0.13,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 19.85,
-          "rsi": 72.7,
-          "ret_20d": 42.8,
-          "signal": "HOLD",
-          "cv_sharpe": -2.16,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
         }
@@ -828,7 +801,6 @@
     "AI伺服器",
     "封測",
     "光學",
-    "車用電子",
     "綠能環保",
     "CoPoS封裝"
   ],
@@ -869,13 +841,6 @@
       "name": "和碩",
       "type": "RSI過熱",
       "detail": "RSI=76.9"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=72.7"
     },
     {
       "sector": "CoPoS封裝",

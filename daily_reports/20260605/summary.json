@@ -353,9 +353,9 @@
       "qualified_count": 6
     },
     "記憶體": {
-      "avg_ret_20d": 12.11,
-      "avg_rsi": 42.0,
-      "avg_sharpe": 5.55,
+      "avg_ret_20d": 13.31,
+      "avg_rsi": 38.3,
+      "avg_sharpe": 7.44,
       "stocks": [
         {
           "id": "2408",
@@ -610,48 +610,6 @@
           "main_force": null
         },
         {
-          "id": "3205",
-          "name": "十銓",
-          "price": 57.1,
-          "rsi": 75.3,
-          "rsi10": 64.0,
-          "ret_20d": 1.2,
-          "signal": "HOLD",
-          "cv_sharpe": -11.41,
-          "cv_win_rate": 0.0,
-          "news": [
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 廣閎科(6693)5月營收2.14億元年增率高達115.16％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 宜鼎(5289)5月營收75.65億元年增率高達640.8％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-05",
-              "title": "臻鼎-KY 5月營收162億元創歷史同期新高 年增37%",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-05",
-            "外資": -274,
-            "投信": 0,
-            "自營": -1,
-            "合計": -275
-          },
-          "target_short": 56.7,
-          "target_mid": 50.8,
-          "target_long": 61.6,
-          "atr14": 1.89,
-          "stop_loss": 53.3,
-          "broker": null,
-          "main_force": null
-        },
-        {
           "id": "3260",
           "name": "威剛",
           "price": 421.5,
@@ -778,7 +736,7 @@
           "main_force": null
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 9
     },
@@ -2083,9 +2041,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 11.54,
-      "avg_rsi": 56.6,
-      "avg_sharpe": -3.97,
+      "avg_ret_20d": 8.4,
+      "avg_rsi": 55.9,
+      "avg_sharpe": -4.88,
       "stocks": [
         {
           "id": "3552",
@@ -2168,48 +2126,6 @@
           "target_long": 52.2,
           "atr14": 1.69,
           "stop_loss": 36.5,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 28.05,
-          "rsi": 57.9,
-          "rsi10": 60.4,
-          "ret_20d": 17.9,
-          "signal": "HOLD",
-          "cv_sharpe": -2.13,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 中探針(6217)5月營收4.06億元年增率高達51.18％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 華固(2548)5月營收3.16億元年增率高達9203.56％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 廣閎科(6693)5月營收2.14億元年增率高達115.16％",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-05",
-            "外資": -229,
-            "投信": 0,
-            "自營": -9,
-            "合計": -238
-          },
-          "target_short": 30.2,
-          "target_mid": 42.1,
-          "target_long": 35.4,
-          "atr14": 1.79,
-          "stop_loss": 24.5,
           "broker": null,
           "main_force": null
         }
@@ -3832,13 +3748,6 @@
   ],
   "qualified": [],
   "alerts": [
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=75.3"
-    },
     {
       "sector": "AI伺服器",
       "id": "4938",

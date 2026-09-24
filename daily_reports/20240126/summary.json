@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -7.05,
-      "avg_rsi": 49.2,
-      "avg_sharpe": -2.38,
+      "avg_ret_20d": -6.12,
+      "avg_rsi": 52.6,
+      "avg_sharpe": -2.88,
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 3,
+      "qualified_count": 2,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-01-26",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 45.1,
-          "rsi": 28.7,
-          "ret_20d": -12.6,
-          "signal": "HOLD",
-          "cv_sharpe": 0.64,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {
             "date": "2024-01-26",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -2.6,
-      "avg_rsi": 41.2,
-      "avg_sharpe": -0.95,
+      "avg_ret_20d": -6.75,
+      "avg_rsi": 33.0,
+      "avg_sharpe": 1.56,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": 3.13,
           "cv_win_rate": 0.53,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 19.5,
-          "rsi": 57.7,
-          "ret_20d": 5.7,
-          "signal": "HOLD",
-          "cv_sharpe": -5.99,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {}
         }
@@ -819,7 +792,8 @@
     "光通訊",
     "記憶體",
     "光學",
-    "IC設計"
+    "IC設計",
+    "車用電子"
   ],
   "qualified": [
     {

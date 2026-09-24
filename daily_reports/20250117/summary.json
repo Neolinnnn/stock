@@ -137,11 +137,11 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -4.47,
-      "avg_rsi": 41.7,
-      "avg_sharpe": -6.8,
+      "avg_ret_20d": -6.37,
+      "avg_rsi": 38.6,
+      "avg_sharpe": -6.19,
       "hot_count": 0,
-      "buy_count": 1,
+      "buy_count": 0,
       "qualified_count": 1,
       "stocks": [
         {
@@ -227,21 +227,6 @@
           "ret_20d": -0.2,
           "signal": "HOLD",
           "cv_sharpe": 0.0,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2025-01-17",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 33.95,
-          "rsi": 60.2,
-          "ret_20d": 6.9,
-          "signal": "BUY",
-          "cv_sharpe": -10.46,
           "cv_win_rate": 0.0,
           "news": [],
           "chip": {
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -0.94,
-      "avg_rsi": 43.5,
-      "avg_sharpe": -0.92,
+      "avg_ret_20d": -3.25,
+      "avg_rsi": 38.9,
+      "avg_sharpe": -2.4,
       "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 1,
+      "buy_count": 0,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -0.31,
           "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 16.95,
-          "rsi": 52.6,
-          "ret_20d": 3.7,
-          "signal": "BUY",
-          "cv_sharpe": 2.06,
-          "cv_win_rate": 0.78,
           "news": [],
           "chip": {}
         }
@@ -827,19 +800,11 @@
   "weak_sectors": [
     "記憶體",
     "IC設計",
+    "車用電子",
     "綠能環保",
     "CoPoS封裝"
   ],
-  "qualified": [
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "price": 16.95,
-      "rsi": 52.6,
-      "cv_sharpe": 2.06
-    }
-  ],
+  "qualified": [],
   "alerts": [
     {
       "sector": "CoPoS封裝",

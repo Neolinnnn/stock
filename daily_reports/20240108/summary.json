@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 0.34,
-      "avg_rsi": 48.6,
-      "avg_sharpe": -2.27,
+      "avg_ret_20d": -0.12,
+      "avg_rsi": 46.7,
+      "avg_sharpe": -1.96,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 2,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-01-08",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 47.85,
-          "rsi": 59.5,
-          "ret_20d": 3.2,
-          "signal": "HOLD",
-          "cv_sharpe": -4.07,
-          "cv_win_rate": 0.33,
           "news": [],
           "chip": {
             "date": "2024-01-08",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -3.65,
-      "avg_rsi": 37.3,
-      "avg_sharpe": -2.43,
+      "avg_ret_20d": -4.4,
+      "avg_rsi": 31.0,
+      "avg_sharpe": -0.45,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -0.9,
           "cv_win_rate": 0.44,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.15,
-          "rsi": 50.0,
-          "ret_20d": -2.2,
-          "signal": "HOLD",
-          "cv_sharpe": -6.39,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {}
         }

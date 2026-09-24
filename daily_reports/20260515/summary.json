@@ -353,9 +353,9 @@
       "qualified_count": 4
     },
     "記憶體": {
-      "avg_ret_20d": 35.89,
-      "avg_rsi": 59.5,
-      "avg_sharpe": 4.44,
+      "avg_ret_20d": 44.23,
+      "avg_rsi": 67.0,
+      "avg_sharpe": 4.98,
       "stocks": [
         {
           "id": "2408",
@@ -608,53 +608,11 @@
           "stop_loss": 1525.3,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 53.1,
-          "rsi": 14.8,
-          "rsi10": 29.2,
-          "ret_20d": -14.2,
-          "signal": "HOLD",
-          "cv_sharpe": 1.18,
-          "cv_win_rate": 0.56,
-          "news": [
-            {
-              "date": "2026-05-15",
-              "title": "債市真金白銀，今年內降息循環的終止訊號響起!",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-15",
-              "title": "賣股票換鈔票、台積電、鴻海、強茂",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-15",
-              "title": "世界健身-KY全年新增12-15家 看好健身業成長",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-15",
-            "外資": -21,
-            "投信": 0,
-            "自營": 0,
-            "合計": -21
-          },
-          "target_short": 61.7,
-          "target_mid": 50.0,
-          "target_long": 59.1,
-          "atr14": 2.04,
-          "stop_loss": 49.0,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 2,
       "buy_count": 0,
-      "qualified_count": 6
+      "qualified_count": 5
     },
     "AI伺服器": {
       "avg_ret_20d": 8.36,
@@ -1411,9 +1369,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": -0.31,
-      "avg_rsi": 42.2,
-      "avg_sharpe": -2.29,
+      "avg_ret_20d": 3.85,
+      "avg_rsi": 49.9,
+      "avg_sharpe": -4.32,
       "stocks": [
         {
           "id": "3552",
@@ -1498,53 +1456,11 @@
           "stop_loss": 32.2,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 21.2,
-          "rsi": 26.9,
-          "rsi10": 37.5,
-          "ret_20d": -8.6,
-          "signal": "HOLD",
-          "cv_sharpe": 1.75,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-15",
-              "title": "迎戰AIPC換機潮 華碩全面部署六大電競新品與商用市場",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-15",
-              "title": "債市真金白銀，今年內降息循環的終止訊號響起!",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-15",
-              "title": "賣股票換鈔票、台積電、鴻海、強茂",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-15",
-            "外資": 172,
-            "投信": 0,
-            "自營": -3,
-            "合計": 169
-          },
-          "target_short": 28.6,
-          "target_mid": 31.8,
-          "target_long": 27.6,
-          "atr14": 1.62,
-          "stop_loss": 18.0,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "CoPoS封裝": {
       "avg_ret_20d": 13.99,
@@ -3000,6 +2916,7 @@
     "封測",
     "光學",
     "IC設計",
+    "車用電子",
     "CoPoS封裝",
     "銅箔/CCL",
     "AI ASIC/IP",

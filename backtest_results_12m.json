@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-09-23T23:46:06.430756",
+  "generated_at": "2026-09-24T22:44:26.273375",
   "date_range": {
     "start": "20250923",
     "end": "20260923"
   },
-  "total_signals": 678,
-  "signals_after_limit": 231,
-  "qualified_signals": 603,
-  "qualified_after_limit": 213,
+  "total_signals": 648,
+  "signals_after_limit": 227,
+  "qualified_signals": 573,
+  "qualified_after_limit": 209,
   "combinations": {
     "TP15_SL10": {
       "stats": {
-        "total": 195,
+        "total": 191,
         "wins": 84,
-        "losses": 111,
+        "losses": 107,
         "open_count": 35,
-        "win_rate": 0.4308,
-        "avg_return": 1.1091,
-        "avg_holding_days": 13.3
+        "win_rate": 0.4398,
+        "avg_return": 1.3564,
+        "avg_holding_days": 13.2
       },
       "trades": [
         {
@@ -261,21 +261,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251121",
-          "exit_price": 10.55,
-          "return_pct": -10.21,
-          "holding_days": 28,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251107",
           "exit_price": 148.5,
@@ -321,21 +306,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251111",
-          "exit_price": 11.7,
-          "return_pct": -10.0,
-          "holding_days": 19,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251022",
           "exit_price": 1320.0,
@@ -366,21 +336,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -12.11,
-          "holding_days": 20,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -391,21 +346,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251114",
-          "exit_price": 11.1,
-          "return_pct": -10.48,
-          "holding_days": 20,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.15,
           "sl": 0.1
@@ -2535,7 +2475,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.15,
           "sl": 0.1
@@ -2640,7 +2580,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.15,
           "sl": 0.1
@@ -2730,7 +2670,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.15,
           "sl": 0.1
@@ -2835,7 +2775,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.15,
           "sl": 0.1
@@ -3474,13 +3414,13 @@
     },
     "TP15_SL12": {
       "stats": {
-        "total": 185,
-        "wins": 89,
-        "losses": 96,
+        "total": 181,
+        "wins": 88,
+        "losses": 93,
         "open_count": 45,
-        "win_rate": 0.4811,
-        "avg_return": 1.5346,
-        "avg_holding_days": 15.3
+        "win_rate": 0.4862,
+        "avg_return": 1.6754,
+        "avg_holding_days": 14.8
       },
       "trades": [
         {
@@ -3725,21 +3665,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20260311",
-          "exit_price": 13.95,
-          "return_pct": 18.72,
-          "holding_days": 96,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251107",
           "exit_price": 148.5,
           "return_pct": 17.86,
@@ -3784,21 +3709,6 @@
           "sl": 0.12
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -13.46,
-          "holding_days": 21,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
           "result": "WIN",
           "exit_date": "20251022",
           "exit_price": 1320.0,
@@ -3829,21 +3739,6 @@
           "sl": 0.12
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -12.11,
-          "holding_days": 20,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -3854,21 +3749,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -12.5,
-          "holding_days": 21,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.15,
           "sl": 0.12
@@ -5998,7 +5878,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.15,
           "sl": 0.12
@@ -6103,7 +5983,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.15,
           "sl": 0.12
@@ -6193,7 +6073,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.15,
           "sl": 0.12
@@ -6298,7 +6178,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.15,
           "sl": 0.12
@@ -6937,13 +6817,13 @@
     },
     "TP15_SL15": {
       "stats": {
-        "total": 175,
-        "wins": 101,
-        "losses": 74,
+        "total": 171,
+        "wins": 99,
+        "losses": 72,
         "open_count": 55,
-        "win_rate": 0.5771,
-        "avg_return": 3.1874,
-        "avg_holding_days": 19.3
+        "win_rate": 0.5789,
+        "avg_return": 3.2015,
+        "avg_holding_days": 18.4
       },
       "trades": [
         {
@@ -7188,21 +7068,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20260311",
-          "exit_price": 13.95,
-          "return_pct": 18.72,
-          "holding_days": 96,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251107",
           "exit_price": 148.5,
           "return_pct": 17.86,
@@ -7247,21 +7112,6 @@
           "sl": 0.15
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -16.54,
-          "holding_days": 23,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
           "result": "WIN",
           "exit_date": "20251022",
           "exit_price": 1320.0,
@@ -7292,21 +7142,6 @@
           "sl": 0.15
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -15.23,
-          "holding_days": 22,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -7317,21 +7152,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20260312",
-          "exit_price": 15.3,
-          "return_pct": 23.39,
-          "holding_days": 94,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.15,
           "sl": 0.15
@@ -9461,7 +9281,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.15,
           "sl": 0.15
@@ -9566,7 +9386,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.15,
           "sl": 0.15
@@ -9656,7 +9476,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.15,
           "sl": 0.15
@@ -9761,7 +9581,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.15,
           "sl": 0.15
@@ -10400,13 +10220,13 @@
     },
     "TP18_SL10": {
       "stats": {
-        "total": 191,
+        "total": 187,
         "wins": 74,
-        "losses": 117,
+        "losses": 113,
         "open_count": 39,
-        "win_rate": 0.3874,
-        "avg_return": 0.8942,
-        "avg_holding_days": 14.4
+        "win_rate": 0.3957,
+        "avg_return": 1.1422,
+        "avg_holding_days": 14.2
       },
       "trades": [
         {
@@ -10650,21 +10470,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251121",
-          "exit_price": 10.55,
-          "return_pct": -10.21,
-          "holding_days": 28,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251110",
           "exit_price": 163.0,
@@ -10710,21 +10515,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251111",
-          "exit_price": 11.7,
-          "return_pct": -10.0,
-          "holding_days": 19,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251027",
           "exit_price": 1370.0,
@@ -10755,21 +10545,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -12.11,
-          "holding_days": 20,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -10780,21 +10555,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251114",
-          "exit_price": 11.1,
-          "return_pct": -10.48,
-          "holding_days": 20,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.18,
           "sl": 0.1
@@ -12924,7 +12684,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.18,
           "sl": 0.1
@@ -13029,7 +12789,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.18,
           "sl": 0.1
@@ -13119,7 +12879,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.18,
           "sl": 0.1
@@ -13224,7 +12984,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.18,
           "sl": 0.1
@@ -13863,13 +13623,13 @@
     },
     "TP18_SL12": {
       "stats": {
-        "total": 181,
-        "wins": 79,
-        "losses": 102,
+        "total": 177,
+        "wins": 78,
+        "losses": 99,
         "open_count": 49,
-        "win_rate": 0.4365,
-        "avg_return": 1.3212,
-        "avg_holding_days": 16.6
+        "win_rate": 0.4407,
+        "avg_return": 1.4604,
+        "avg_holding_days": 16.1
       },
       "trades": [
         {
@@ -14114,21 +13874,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20260311",
-          "exit_price": 13.95,
-          "return_pct": 18.72,
-          "holding_days": 96,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251110",
           "exit_price": 163.0,
           "return_pct": 29.37,
@@ -14173,21 +13918,6 @@
           "sl": 0.12
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -13.46,
-          "holding_days": 21,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
           "result": "WIN",
           "exit_date": "20251027",
           "exit_price": 1370.0,
@@ -14218,21 +13948,6 @@
           "sl": 0.12
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -12.11,
-          "holding_days": 20,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -14243,21 +13958,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -12.5,
-          "holding_days": 21,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.18,
           "sl": 0.12
@@ -16387,7 +16087,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.18,
           "sl": 0.12
@@ -16492,7 +16192,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.18,
           "sl": 0.12
@@ -16582,7 +16282,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.18,
           "sl": 0.12
@@ -16687,7 +16387,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.18,
           "sl": 0.12
@@ -17326,13 +17026,13 @@
     },
     "TP18_SL15": {
       "stats": {
-        "total": 170,
-        "wins": 90,
-        "losses": 80,
+        "total": 166,
+        "wins": 88,
+        "losses": 78,
         "open_count": 60,
-        "win_rate": 0.5294,
-        "avg_return": 3.1068,
-        "avg_holding_days": 21.1
+        "win_rate": 0.5301,
+        "avg_return": 3.1194,
+        "avg_holding_days": 20.2
       },
       "trades": [
         {
@@ -17577,21 +17277,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20260311",
-          "exit_price": 13.95,
-          "return_pct": 18.72,
-          "holding_days": 96,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251110",
           "exit_price": 163.0,
           "return_pct": 29.37,
@@ -17636,21 +17321,6 @@
           "sl": 0.15
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -16.54,
-          "holding_days": 23,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
           "result": "WIN",
           "exit_date": "20251027",
           "exit_price": 1370.0,
@@ -17681,21 +17351,6 @@
           "sl": 0.15
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -15.23,
-          "holding_days": 22,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -17706,21 +17361,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20260312",
-          "exit_price": 15.3,
-          "return_pct": 23.39,
-          "holding_days": 94,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.18,
           "sl": 0.15
@@ -19850,7 +19490,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.18,
           "sl": 0.15
@@ -19955,7 +19595,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.18,
           "sl": 0.15
@@ -20045,7 +19685,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.18,
           "sl": 0.15
@@ -20150,7 +19790,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.18,
           "sl": 0.15
@@ -20789,13 +20429,13 @@
     },
     "TP20_SL10": {
       "stats": {
-        "total": 186,
+        "total": 182,
         "wins": 66,
-        "losses": 120,
+        "losses": 116,
         "open_count": 44,
-        "win_rate": 0.3548,
-        "avg_return": 0.7708,
-        "avg_holding_days": 15.4
+        "win_rate": 0.3626,
+        "avg_return": 1.0229,
+        "avg_holding_days": 15.3
       },
       "trades": [
         {
@@ -21039,21 +20679,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251121",
-          "exit_price": 10.55,
-          "return_pct": -10.21,
-          "holding_days": 28,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251110",
           "exit_price": 163.0,
@@ -21099,21 +20724,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251111",
-          "exit_price": 11.7,
-          "return_pct": -10.0,
-          "holding_days": 19,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -21144,21 +20754,6 @@
           "sl": 0.1
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -12.11,
-          "holding_days": 20,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -21169,21 +20764,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251114",
-          "exit_price": 11.1,
-          "return_pct": -10.48,
-          "holding_days": 20,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.2,
           "sl": 0.1
@@ -23313,7 +22893,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.2,
           "sl": 0.1
@@ -23418,7 +22998,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.2,
           "sl": 0.1
@@ -23508,7 +23088,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.2,
           "sl": 0.1
@@ -23613,7 +23193,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.2,
           "sl": 0.1
@@ -24252,13 +23832,13 @@
     },
     "TP20_SL12": {
       "stats": {
-        "total": 176,
-        "wins": 71,
-        "losses": 105,
+        "total": 172,
+        "wins": 70,
+        "losses": 102,
         "open_count": 54,
-        "win_rate": 0.4034,
-        "avg_return": 1.3031,
-        "avg_holding_days": 17.9
+        "win_rate": 0.407,
+        "avg_return": 1.3791,
+        "avg_holding_days": 17.4
       },
       "trades": [
         {
@@ -24503,21 +24083,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20260312",
-          "exit_price": 15.3,
-          "return_pct": 30.21,
-          "holding_days": 97,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251110",
           "exit_price": 163.0,
           "return_pct": 29.37,
@@ -24562,21 +24127,6 @@
           "sl": 0.12
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -13.46,
-          "holding_days": 21,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -24607,21 +24157,6 @@
           "sl": 0.12
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251113",
-          "exit_price": 11.25,
-          "return_pct": -12.11,
-          "holding_days": 20,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -24632,21 +24167,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -12.5,
-          "holding_days": 21,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.2,
           "sl": 0.12
@@ -26776,7 +26296,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.2,
           "sl": 0.12
@@ -26881,7 +26401,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.2,
           "sl": 0.12
@@ -26971,7 +26491,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.2,
           "sl": 0.12
@@ -27076,7 +26596,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.2,
           "sl": 0.12
@@ -27715,13 +27235,13 @@
     },
     "TP20_SL15": {
       "stats": {
-        "total": 165,
-        "wins": 82,
-        "losses": 83,
+        "total": 161,
+        "wins": 80,
+        "losses": 81,
         "open_count": 65,
-        "win_rate": 0.497,
-        "avg_return": 3.0221,
-        "avg_holding_days": 22.7
+        "win_rate": 0.4969,
+        "avg_return": 2.9616,
+        "avg_holding_days": 21.8
       },
       "trades": [
         {
@@ -27966,21 +27486,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20260312",
-          "exit_price": 15.3,
-          "return_pct": 30.21,
-          "holding_days": 97,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251110",
           "exit_price": 163.0,
           "return_pct": 29.37,
@@ -28025,21 +27530,6 @@
           "sl": 0.15
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -16.54,
-          "holding_days": 23,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -28070,21 +27560,6 @@
           "sl": 0.15
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251117",
-          "exit_price": 10.85,
-          "return_pct": -15.23,
-          "holding_days": 22,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
           "result": "WIN",
           "exit_date": "20251028",
           "exit_price": 1445.0,
@@ -28095,21 +27570,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20260312",
-          "exit_price": 15.3,
-          "return_pct": 23.39,
-          "holding_days": 94,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": 0.2,
           "sl": 0.15
@@ -30239,7 +29699,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": 0.2,
           "sl": 0.15
@@ -30344,7 +29804,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": 0.2,
           "sl": 0.15
@@ -30434,7 +29894,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": 0.2,
           "sl": 0.15
@@ -30539,7 +29999,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": 0.2,
           "sl": 0.15
@@ -31178,12 +30638,12 @@
     },
     "MA5_MA10": {
       "stats": {
-        "total": 226,
-        "wins": 80,
-        "losses": 146,
+        "total": 222,
+        "wins": 79,
+        "losses": 143,
         "open_count": 4,
-        "win_rate": 0.354,
-        "avg_return": -0.0584,
+        "win_rate": 0.3559,
+        "avg_return": -0.035,
         "avg_holding_days": 5.5
       },
       "trades": [
@@ -31429,21 +30889,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20251022",
-          "exit_price": 12.32,
-          "return_pct": 4.89,
-          "holding_days": 7,
-          "entry_date": "20251013",
-          "entry_price": 11.75,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251009",
-          "tp": null,
-          "sl": null
-        },
-        {
-          "result": "WIN",
           "exit_date": "20251103",
           "exit_price": 131.25,
           "return_pct": 4.17,
@@ -31488,21 +30933,6 @@
           "sl": null
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251022",
-          "exit_price": 12.32,
-          "return_pct": -5.19,
-          "holding_days": 6,
-          "entry_date": "20251014",
-          "entry_price": 13.0,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251013",
-          "tp": null,
-          "sl": null
-        },
-        {
           "result": "WIN",
           "exit_date": "20251105",
           "exit_price": 1367.5,
@@ -31533,21 +30963,6 @@
           "sl": null
         },
         {
-          "result": "LOSS",
-          "exit_date": "20251022",
-          "exit_price": 12.32,
-          "return_pct": -3.71,
-          "holding_days": 5,
-          "entry_date": "20251015",
-          "entry_price": 12.8,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20251014",
-          "tp": null,
-          "sl": null
-        },
-        {
           "result": "WIN",
           "exit_date": "20251105",
           "exit_price": 1367.5,
@@ -31558,21 +30973,6 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
-          "signal_date": "20251015",
-          "tp": null,
-          "sl": null
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20251022",
-          "exit_price": 12.23,
-          "return_pct": -1.41,
-          "holding_days": 4,
-          "entry_date": "20251016",
-          "entry_price": 12.4,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20251015",
           "tp": null,
           "sl": null
@@ -33702,7 +33102,7 @@
           "entry_price": 6635.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260806",
           "tp": null,
           "sl": null
@@ -33807,7 +33207,7 @@
           "entry_price": 6320.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260807",
           "tp": null,
           "sl": null
@@ -33897,7 +33297,7 @@
           "entry_price": 6160.0,
           "amount": 3000,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260810",
           "tp": null,
           "sl": null
@@ -34002,7 +33402,7 @@
           "entry_price": 6380.0,
           "amount": 1000.0,
           "stock_id": "7769",
-          "stock_name": "鴻勤",
+          "stock_name": "鴻勁",
           "signal_date": "20260811",
           "tp": null,
           "sl": null

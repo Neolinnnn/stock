@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -3.77,
-      "avg_rsi": 48.6,
-      "avg_sharpe": -3.3,
+      "avg_ret_20d": -6.17,
+      "avg_rsi": 46.6,
+      "avg_sharpe": -2.3,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-07-16",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 44.8,
-          "rsi": 60.5,
-          "ret_20d": 10.8,
-          "signal": "HOLD",
-          "cv_sharpe": -9.28,
-          "cv_win_rate": 0.08,
           "news": [],
           "chip": {
             "date": "2024-07-16",
@@ -568,10 +553,10 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 16.15,
-      "avg_rsi": 72.4,
+      "avg_ret_20d": 1.15,
+      "avg_rsi": 60.0,
       "avg_sharpe": -1.64,
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
       "stocks": [
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -3.28,
           "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 28.5,
-          "rsi": 97.2,
-          "ret_20d": 46.2,
-          "signal": "HOLD",
-          "cv_sharpe": -1.64,
-          "cv_win_rate": 0.44,
           "news": [],
           "chip": {}
         }
@@ -827,7 +800,6 @@
     "光通訊",
     "封測",
     "光學",
-    "車用電子",
     "CoPoS封裝"
   ],
   "weak_sectors": [
@@ -865,13 +837,6 @@
       "name": "大立光",
       "type": "RSI過熱",
       "detail": "RSI=72.0"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=97.2"
     },
     {
       "sector": "CoPoS封裝",

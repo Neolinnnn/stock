@@ -137,10 +137,10 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 3.56,
-      "avg_rsi": 59.8,
-      "avg_sharpe": -3.9,
-      "hot_count": 1,
+      "avg_ret_20d": 0.13,
+      "avg_rsi": 54.6,
+      "avg_sharpe": -3.11,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
       "stocks": [
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-07-02",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 49.75,
-          "rsi": 91.4,
-          "ret_20d": 24.1,
-          "signal": "HOLD",
-          "cv_sharpe": -8.59,
-          "cv_win_rate": 0.08,
           "news": [],
           "chip": {
             "date": "2024-07-02",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -8.49,
-      "avg_rsi": 32.8,
-      "avg_sharpe": -4.5,
+      "avg_ret_20d": -8.75,
+      "avg_rsi": 35.4,
+      "avg_sharpe": -1.64,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -595,18 +580,6 @@
           "ret_20d": -7.1,
           "signal": "HOLD",
           "cv_sharpe": -3.28,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 17.75,
-          "rsi": 27.6,
-          "ret_20d": -8.0,
-          "signal": "HOLD",
-          "cv_sharpe": -10.22,
           "cv_win_rate": 0.33,
           "news": [],
           "chip": {}
@@ -825,7 +798,6 @@
   },
   "strong_sectors": [
     "光通訊",
-    "記憶體",
     "光學",
     "綠能環保",
     "CoPoS封裝"
@@ -862,13 +834,6 @@
       "name": "宏捷科",
       "type": "RSI過熱",
       "detail": "RSI=71.4"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=91.4"
     },
     {
       "sector": "封測",

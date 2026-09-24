@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 11.08,
-      "avg_rsi": 66.3,
-      "avg_sharpe": -4.33,
+      "avg_ret_20d": 11.87,
+      "avg_rsi": 66.4,
+      "avg_sharpe": -3.27,
       "hot_count": 3,
       "buy_count": 0,
       "qualified_count": 0,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-06-07",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 47.15,
-          "rsi": 65.8,
-          "ret_20d": 6.4,
-          "signal": "HOLD",
-          "cv_sharpe": -10.73,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {
             "date": "2023-06-07",
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 1.99,
-      "avg_rsi": 57.6,
-      "avg_sharpe": -2.49,
+      "avg_ret_20d": 5.65,
+      "avg_rsi": 61.0,
+      "avg_sharpe": -4.41,
       "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 1,
+      "buy_count": 0,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.82,
           "cv_win_rate": 0.17,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.7,
-          "rsi": 50.6,
-          "ret_20d": -5.3,
-          "signal": "BUY",
-          "cv_sharpe": 1.36,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
         }
@@ -818,20 +791,12 @@
     "封測",
     "光學",
     "IC設計",
+    "車用電子",
     "綠能環保",
     "CoPoS封裝"
   ],
   "weak_sectors": [],
-  "qualified": [
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "price": 18.7,
-      "rsi": 50.6,
-      "cv_sharpe": 1.36
-    }
-  ],
+  "qualified": [],
   "alerts": [
     {
       "sector": "光通訊",

@@ -241,9 +241,9 @@
       "qualified_count": 0
     },
     "記憶體": {
-      "avg_ret_20d": 17.08,
-      "avg_rsi": 51.0,
-      "avg_sharpe": 0.24,
+      "avg_ret_20d": 22.52,
+      "avg_rsi": 53.6,
+      "avg_sharpe": 3.05,
       "stocks": [
         {
           "id": "2337",
@@ -384,39 +384,11 @@
             }
           ],
           "chip": {}
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 56.2,
-          "rsi": 38.0,
-          "ret_20d": -10.1,
-          "signal": "SELL",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
-          "news": [
-            {
-              "date": "2026-05-01",
-              "title": "〈熱門股〉宇隆擁散熱、機器人雙利多 周漲逾2成挑戰股價新高",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-01",
-              "title": "穩得AI伺服器檢測認證Q3底顯著貢獻營收 明年毛利率衝40%",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-01",
-              "title": "鉅亨速報 - Factset 最新調查：台達電(2308-TW)目標價調升至2308元，幅度約4.91%",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {}
         }
       ],
       "hot_count": 0,
-      "buy_count": 3,
-      "qualified_count": 2
+      "buy_count": 2,
+      "qualified_count": 4
     },
     "AI伺服器": {
       "avg_ret_20d": 12.18,
@@ -851,9 +823,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 10.36,
-      "avg_rsi": 61.9,
-      "avg_sharpe": -11.89,
+      "avg_ret_20d": 3.05,
+      "avg_rsi": 55.3,
+      "avg_sharpe": -9.73,
       "stocks": [
         {
           "id": "3552",
@@ -910,37 +882,9 @@
             }
           ],
           "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 27.25,
-          "rsi": 75.0,
-          "ret_20d": 25.0,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
-          "news": [
-            {
-              "date": "2026-05-01",
-              "title": "〈熱門股〉宇隆擁散熱、機器人雙利多 周漲逾2成挑戰股價新高",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-01",
-              "title": "穩得AI伺服器檢測認證Q3底顯著貢獻營收 明年毛利率衝40%",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-01",
-              "title": "鉅亨速報 - Factset 最新調查：台達電(2308-TW)目標價調升至2308元，幅度約4.91%",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {}
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -1045,13 +989,6 @@
       "name": "威盛",
       "type": "RSI過熱",
       "detail": "RSI=76.0"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=75.0"
     }
   ],
   "chart_path": "daily_reports/20260501/01_sector_strength.png"

@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -9.29,
-      "avg_rsi": 61.7,
-      "avg_sharpe": -7.08,
+      "avg_ret_20d": -7.88,
+      "avg_rsi": 60.4,
+      "avg_sharpe": 3.58,
       "hot_count": 0,
       "buy_count": 1,
-      "qualified_count": 0,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2025-05-02",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 24.9,
-          "rsi": 68.9,
-          "ret_20d": -17.7,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2025-05-02",
@@ -577,12 +562,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -6.2,
-      "avg_rsi": 77.6,
-      "avg_sharpe": -4.46,
-      "hot_count": 3,
-      "buy_count": 1,
-      "qualified_count": 1,
+      "avg_ret_20d": -8.05,
+      "avg_rsi": 77.5,
+      "avg_sharpe": -9.73,
+      "hot_count": 2,
+      "buy_count": 0,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2025-05-02",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 13.45,
-          "rsi": 77.6,
-          "ret_20d": -2.5,
-          "signal": "BUY",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2025-05-02",
@@ -666,16 +636,7 @@
     "IC設計",
     "車用電子"
   ],
-  "qualified": [
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "price": 13.45,
-      "rsi": 77.6,
-      "cv_sharpe": 3.74
-    }
-  ],
+  "qualified": [],
   "alerts": [
     {
       "sector": "光通訊",
@@ -739,13 +700,6 @@
       "name": "車王電",
       "type": "RSI過熱",
       "detail": "RSI=80.5"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=77.6"
     }
   ],
   "chart_path": "daily_reports\\20250502\\01_sector_strength.png"

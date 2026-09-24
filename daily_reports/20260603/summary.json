@@ -1579,9 +1579,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 7.89,
-      "avg_rsi": 52.9,
-      "avg_sharpe": -4.6,
+      "avg_ret_20d": 13.5,
+      "avg_rsi": 47.0,
+      "avg_sharpe": -3.8,
       "stocks": [
         {
           "id": "1533",
@@ -1622,48 +1622,6 @@
           "target_long": 50.2,
           "atr14": 1.64,
           "stop_loss": 35.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 27.0,
-          "rsi": 58.8,
-          "rsi10": 60.7,
-          "ret_20d": 2.3,
-          "signal": "HOLD",
-          "cv_sharpe": -5.41,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-03",
-              "title": "亞洲創新籌資平台專屬網站正式上線 助力打造台灣成為亞洲那斯達克",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-03",
-              "title": "旅館業Q1平均房價3101元較去年漲1.5% 住用率連3年達5成",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-03",
-              "title": "台灣碳定價寫歷史！首期碳費入帳49.7億240家企業全繳清 護國群山扛22億最「多金」",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-03",
-            "外資": -92,
-            "投信": 0,
-            "自營": -4,
-            "合計": -96
-          },
-          "target_short": 29.1,
-          "target_mid": 40.5,
-          "target_long": 34.0,
-          "atr14": 1.69,
-          "stop_loss": 23.6,
           "broker": null,
           "main_force": null
         }

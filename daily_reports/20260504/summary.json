@@ -823,9 +823,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 11.43,
-      "avg_rsi": 61.8,
-      "avg_sharpe": -12.09,
+      "avg_ret_20d": 10.6,
+      "avg_rsi": 65.7,
+      "avg_sharpe": -8.58,
       "stocks": [
         {
           "id": "1533",
@@ -836,34 +836,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [
-            {
-              "date": "2026-05-04",
-              "title": "聯發科延攬台積電封裝老將強化AI ASIC與先進封裝布局",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-04",
-              "title": "Intel先進封裝技術EMIB良率傳達90%市場關注Google TPU訂單變化",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-04",
-              "title": "〈台幣〉股匯兩樣情 升貶互見量縮整理 收31.61元",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 24.75,
-          "rsi": 57.8,
-          "ret_20d": 12.2,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [
             {
               "date": "2026-05-04",

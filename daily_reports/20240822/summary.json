@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -3.22,
-      "avg_rsi": 54.1,
-      "avg_sharpe": -2.82,
+      "avg_ret_20d": -1.87,
+      "avg_rsi": 56.8,
+      "avg_sharpe": -2.23,
       "hot_count": 1,
       "buy_count": 2,
       "qualified_count": 1,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-08-22",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 39.0,
-          "rsi": 38.0,
-          "ret_20d": -11.4,
-          "signal": "HOLD",
-          "cv_sharpe": -6.33,
-          "cv_win_rate": 0.17,
           "news": [],
           "chip": {
             "date": "2024-08-22",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -12.41,
-      "avg_rsi": 39.8,
-      "avg_sharpe": -1.46,
+      "avg_ret_20d": -14.8,
+      "avg_rsi": 37.9,
+      "avg_sharpe": 0.23,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.47,
           "cv_win_rate": 0.58,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 25.4,
-          "rsi": 43.7,
-          "ret_20d": -7.6,
-          "signal": "HOLD",
-          "cv_sharpe": -4.84,
-          "cv_win_rate": 0.44,
           "news": [],
           "chip": {}
         }
@@ -828,7 +801,6 @@
   ],
   "weak_sectors": [
     "光通訊",
-    "記憶體",
     "封測",
     "IC設計",
     "車用電子",

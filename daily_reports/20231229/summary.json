@@ -137,10 +137,10 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 5.56,
-      "avg_rsi": 62.8,
-      "avg_sharpe": -2.63,
-      "hot_count": 3,
+      "avg_ret_20d": 4.78,
+      "avg_rsi": 58.3,
+      "avg_sharpe": -2.75,
+      "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 1,
       "stocks": [
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-12-29",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 52.2,
-          "rsi": 89.4,
-          "ret_20d": 10.1,
-          "signal": "HOLD",
-          "cv_sharpe": -1.91,
-          "cv_win_rate": 0.42,
           "news": [],
           "chip": {
             "date": "2023-12-29",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -3.06,
-      "avg_rsi": 44.3,
-      "avg_sharpe": -0.53,
+      "avg_ret_20d": -4.35,
+      "avg_rsi": 43.0,
+      "avg_sharpe": -0.12,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -0.23,
           "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.5,
-          "rsi": 47.0,
-          "ret_20d": -0.5,
-          "signal": "HOLD",
-          "cv_sharpe": -1.37,
-          "cv_win_rate": 0.28,
           "news": [],
           "chip": {}
         }
@@ -837,13 +810,6 @@
       "name": "華邦電",
       "type": "RSI過熱",
       "detail": "RSI=72.3"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=89.4"
     },
     {
       "sector": "AI伺服器",

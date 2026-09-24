@@ -137,10 +137,10 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 6.58,
-      "avg_rsi": 68.8,
-      "avg_sharpe": -4.71,
-      "hot_count": 3,
+      "avg_ret_20d": 5.23,
+      "avg_rsi": 66.8,
+      "avg_sharpe": -3.7,
+      "hot_count": 2,
       "buy_count": 4,
       "qualified_count": 0,
       "stocks": [
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-05-24",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 49.8,
-          "rsi": 81.3,
-          "ret_20d": 14.7,
-          "signal": "HOLD",
-          "cv_sharpe": -10.73,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {
             "date": "2023-05-24",
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 2.34,
-      "avg_rsi": 54.7,
-      "avg_sharpe": -0.89,
+      "avg_ret_20d": 6.95,
+      "avg_rsi": 61.2,
+      "avg_sharpe": -4.5,
       "hot_count": 0,
       "buy_count": 2,
-      "qualified_count": 1,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "BUY",
           "cv_sharpe": -8.99,
           "cv_win_rate": 0.17,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.85,
-          "rsi": 41.6,
-          "ret_20d": -6.9,
-          "signal": "HOLD",
-          "cv_sharpe": 6.32,
-          "cv_win_rate": 0.83,
           "news": [],
           "chip": {}
         }
@@ -816,6 +789,7 @@
     "AI伺服器",
     "封測",
     "光學",
+    "車用電子",
     "綠能環保"
   ],
   "weak_sectors": [],
@@ -850,13 +824,6 @@
       "name": "創見",
       "type": "RSI過熱",
       "detail": "RSI=71.8"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=81.3"
     },
     {
       "sector": "AI伺服器",

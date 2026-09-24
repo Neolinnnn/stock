@@ -1,0 +1,22 @@
+name: 驗證股票代號與名稱
+
+# 程式碼中寫死的「代號→名稱」須與證交所／櫃買官方簡稱一致（tests/test_stock_names.py）。
+# 代號寫錯時掃描會抓到別家公司的股價，網站卻顯示成目標公司（3058/2243/3205 皆曾發生）。
+# 只用標準庫，不需安裝相依套件。
+on:
+  pull_request:
+    paths: ['**.py', 'data/radar_cache/history.json']
+  push:
+    branches: [main]
+    paths: ['**.py']
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python tests/test_stock_names.py

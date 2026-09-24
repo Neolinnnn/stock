@@ -225,9 +225,9 @@
       "qualified_count": 3
     },
     "記憶體": {
-      "avg_ret_20d": 2.79,
-      "avg_rsi": 43.9,
-      "avg_sharpe": 5.49,
+      "avg_ret_20d": 3.2,
+      "avg_rsi": 43.2,
+      "avg_sharpe": 7.16,
       "stocks": [
         {
           "id": "2408",
@@ -382,32 +382,6 @@
           "target_long": 2378.1,
           "atr14": 136.07,
           "stop_loss": 1717.9,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 54.3,
-          "rsi": 50.5,
-          "rsi10": 49.7,
-          "ret_20d": -0.9,
-          "signal": "HOLD",
-          "cv_sharpe": -9.56,
-          "cv_win_rate": 0.11,
-          "news": [],
-          "chip": {
-            "date": "2026-06-09",
-            "外資": -100,
-            "投信": 0,
-            "自營": -1,
-            "合計": -101
-          },
-          "target_short": 56.3,
-          "target_mid": 50.7,
-          "target_long": 59.0,
-          "atr14": 2.09,
-          "stop_loss": 50.1,
           "broker": null,
           "main_force": null
         },
@@ -1315,9 +1289,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 10.2,
-      "avg_rsi": 47.3,
-      "avg_sharpe": -4.72,
+      "avg_ret_20d": 1.15,
+      "avg_rsi": 40.5,
+      "avg_sharpe": -4.25,
       "stocks": [
         {
           "id": "3552",
@@ -1368,32 +1342,6 @@
           "target_long": 50.5,
           "atr14": 1.86,
           "stop_loss": 34.8,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 28.5,
-          "rsi": 60.8,
-          "rsi10": 61.6,
-          "ret_20d": 28.4,
-          "signal": "HOLD",
-          "cv_sharpe": -5.67,
-          "cv_win_rate": 0.25,
-          "news": [],
-          "chip": {
-            "date": "2026-06-09",
-            "外資": -147,
-            "投信": -1,
-            "自營": 1,
-            "合計": -147
-          },
-          "target_short": 31.1,
-          "target_mid": 42.8,
-          "target_long": 36.0,
-          "atr14": 1.8,
-          "stop_loss": 24.9,
           "broker": null,
           "main_force": null
         }
@@ -2420,11 +2368,11 @@
     }
   },
   "strong_sectors": [
+    "記憶體",
     "AI伺服器",
     "封測",
     "光學",
     "IC設計",
-    "車用電子",
     "銅箔/CCL",
     "AI 散熱",
     "被動元件",

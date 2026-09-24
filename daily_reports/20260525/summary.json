@@ -353,9 +353,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": 29.86,
-      "avg_rsi": 51.3,
-      "avg_sharpe": 4.87,
+      "avg_ret_20d": 34.32,
+      "avg_rsi": 53.3,
+      "avg_sharpe": 5.78,
       "stocks": [
         {
           "id": "2408",
@@ -606,48 +606,6 @@
           "target_long": 2206.2,
           "atr14": 119.52,
           "stop_loss": 1446.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 53.3,
-          "rsi": 33.3,
-          "rsi10": 36.4,
-          "ret_20d": -10.3,
-          "signal": "HOLD",
-          "cv_sharpe": -3.32,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-25",
-              "title": "〈台幣〉最強亞幣 股匯雙漲連4升收31.47元",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-25",
-              "title": "高鐵苗栗段號誌異常延遲  交通部成立「台高鐵運具聯防機制」增班台鐵助旅客返家",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-25",
-              "title": "台股去年借券衝破11兆元 6/1起費用改「按月結算」接軌國際",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-25",
-            "外資": -46,
-            "投信": 0,
-            "自營": 0,
-            "合計": -46
-          },
-          "target_short": 58.3,
-          "target_mid": 50.3,
-          "target_long": 58.6,
-          "atr14": 1.78,
-          "stop_loss": 49.7,
           "broker": null,
           "main_force": null
         },
@@ -2083,9 +2041,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 5.16,
-      "avg_rsi": 64.1,
-      "avg_sharpe": -4.89,
+      "avg_ret_20d": 9.25,
+      "avg_rsi": 62.4,
+      "avg_sharpe": -5.43,
       "stocks": [
         {
           "id": "3552",
@@ -2168,48 +2126,6 @@
           "target_long": 50.5,
           "atr14": 1.49,
           "stop_loss": 35.9,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 23.5,
-          "rsi": 67.5,
-          "rsi10": 55.0,
-          "ret_20d": -3.1,
-          "signal": "HOLD",
-          "cv_sharpe": -3.81,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-05-25",
-              "title": "鉅亨速報 - Factset 最新調查：國巨(2327-TW)EPS預估上修至17.01元，預估目標價為384.5元",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-25",
-              "title": "鉅亨速報 - Factset 最新調查：新興(2605-TW)目標價調降至38元，幅度約15.56%",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-25",
-              "title": "〈台幣〉最強亞幣 股匯雙漲連4升收31.47元",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-25",
-            "外資": -29,
-            "投信": 0,
-            "自營": -26,
-            "合計": -55
-          },
-          "target_short": 28.6,
-          "target_mid": 35.2,
-          "target_long": 30.1,
-          "atr14": 1.45,
-          "stop_loss": 20.6,
           "broker": null,
           "main_force": null
         }

@@ -227,9 +227,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": 17.13,
-      "avg_rsi": 58.8,
-      "avg_sharpe": 4.29,
+      "avg_ret_20d": 19.2,
+      "avg_rsi": 61.2,
+      "avg_sharpe": 6.07,
       "stocks": [
         {
           "id": "2408",
@@ -384,32 +384,6 @@
           "target_long": 2362.1,
           "atr14": 138.18,
           "stop_loss": 1678.6,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 52.8,
-          "rsi": 37.2,
-          "rsi10": 43.0,
-          "ret_20d": -1.5,
-          "signal": "SELL",
-          "cv_sharpe": -11.77,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2026-06-16",
-            "外資": -19,
-            "投信": 0,
-            "自營": -1,
-            "合計": -20
-          },
-          "target_short": 56.3,
-          "target_mid": 50.7,
-          "target_long": 57.7,
-          "atr14": 2.03,
-          "stop_loss": 48.7,
           "broker": null,
           "main_force": null
         },
@@ -1317,9 +1291,9 @@
       "qualified_count": 2
     },
     "車用電子": {
-      "avg_ret_20d": 38.38,
-      "avg_rsi": 60.6,
-      "avg_sharpe": -4.58,
+      "avg_ret_20d": 3.5,
+      "avg_rsi": 43.8,
+      "avg_sharpe": -4.54,
       "stocks": [
         {
           "id": "3552",
@@ -1372,35 +1346,9 @@
           "stop_loss": 34.9,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 44.95,
-          "rsi": 94.2,
-          "rsi10": 87.2,
-          "ret_20d": 108.1,
-          "signal": "HOLD",
-          "cv_sharpe": -4.67,
-          "cv_win_rate": 0.25,
-          "news": [],
-          "chip": {
-            "date": "2026-06-16",
-            "外資": 657,
-            "投信": 0,
-            "自營": 6,
-            "合計": 663
-          },
-          "target_short": 41.4,
-          "target_mid": 67.4,
-          "target_long": 56.5,
-          "atr14": 2.35,
-          "stop_loss": 40.2,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -2490,13 +2438,6 @@
       "name": "玉晶光",
       "type": "RSI過熱",
       "detail": "RSI=71.5"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=94.2"
     },
     {
       "sector": "AI ASIC/IP",

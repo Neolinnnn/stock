@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 19.85,
-      "avg_rsi": 78.2,
-      "avg_sharpe": -4.74,
-      "hot_count": 6,
+      "avg_ret_20d": 18.6,
+      "avg_rsi": 78.3,
+      "avg_sharpe": 3.58,
+      "hot_count": 5,
       "buy_count": 0,
-      "qualified_count": 0,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2025-09-09",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 61.0,
-          "rsi": 77.5,
-          "ret_20d": 27.3,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2025-09-09",
@@ -577,9 +562,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 10.02,
-      "avg_rsi": 58.6,
-      "avg_sharpe": -7.77,
+      "avg_ret_20d": 3.1,
+      "avg_rsi": 58.5,
+      "avg_sharpe": -9.73,
       "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 0,
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2025-09-09",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 12.7,
-          "rsi": 59.0,
-          "ret_20d": 23.9,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2025-09-09",
@@ -720,13 +690,6 @@
       "name": "宜鼎",
       "type": "RSI過熱",
       "detail": "RSI=87.2"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=77.5"
     },
     {
       "sector": "AI伺服器",
