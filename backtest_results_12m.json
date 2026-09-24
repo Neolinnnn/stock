@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-09-24T22:44:26.273375",
+  "generated_at": "2026-09-24T18:46:10.468408",
   "date_range": {
-    "start": "20250923",
-    "end": "20260923"
+    "start": "20250924",
+    "end": "20260924"
   },
-  "total_signals": 648,
-  "signals_after_limit": 227,
-  "qualified_signals": 573,
-  "qualified_after_limit": 209,
+  "total_signals": 655,
+  "signals_after_limit": 229,
+  "qualified_signals": 580,
+  "qualified_after_limit": 212,
   "combinations": {
     "TP15_SL10": {
       "stats": {
-        "total": 191,
+        "total": 193,
         "wins": 84,
-        "losses": 107,
-        "open_count": 35,
-        "win_rate": 0.4398,
-        "avg_return": 1.3564,
-        "avg_holding_days": 13.2
+        "losses": 109,
+        "open_count": 34,
+        "win_rate": 0.4352,
+        "avg_return": 1.2362,
+        "avg_holding_days": 13.4
       },
       "trades": [
         {
@@ -2511,11 +2511,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 378.0,
+          "return_pct": -10.21,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 421.0,
           "amount": 1000.0,
@@ -2571,11 +2571,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 5670.0,
+          "return_pct": -10.28,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 6320.0,
           "amount": 3000,
@@ -3409,6 +3409,21 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.1
         }
       ]
     },
@@ -3417,7 +3432,7 @@
         "total": 181,
         "wins": 88,
         "losses": 93,
-        "open_count": 45,
+        "open_count": 46,
         "win_rate": 0.4862,
         "avg_return": 1.6754,
         "avg_holding_days": 14.8
@@ -6812,6 +6827,21 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.12
         }
       ]
     },
@@ -6820,7 +6850,7 @@
         "total": 171,
         "wins": 99,
         "losses": 72,
-        "open_count": 55,
+        "open_count": 56,
         "win_rate": 0.5789,
         "avg_return": 3.2015,
         "avg_holding_days": 18.4
@@ -10215,18 +10245,33 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.15
         }
       ]
     },
     "TP18_SL10": {
       "stats": {
-        "total": 187,
-        "wins": 74,
-        "losses": 113,
-        "open_count": 39,
-        "win_rate": 0.3957,
-        "avg_return": 1.1422,
-        "avg_holding_days": 14.2
+        "total": 191,
+        "wins": 76,
+        "losses": 115,
+        "open_count": 36,
+        "win_rate": 0.3979,
+        "avg_return": 1.2486,
+        "avg_holding_days": 14.4
       },
       "trades": [
         {
@@ -12720,11 +12765,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 378.0,
+          "return_pct": -10.21,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 421.0,
           "amount": 1000.0,
@@ -12780,11 +12825,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 5670.0,
+          "return_pct": -10.28,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 6320.0,
           "amount": 3000,
@@ -13485,11 +13530,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -13545,11 +13590,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -13618,18 +13663,33 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.1
         }
       ]
     },
     "TP18_SL12": {
       "stats": {
-        "total": 177,
-        "wins": 78,
+        "total": 179,
+        "wins": 80,
         "losses": 99,
-        "open_count": 49,
-        "win_rate": 0.4407,
-        "avg_return": 1.4604,
-        "avg_holding_days": 16.1
+        "open_count": 48,
+        "win_rate": 0.4469,
+        "avg_return": 1.6976,
+        "avg_holding_days": 16.0
       },
       "trades": [
         {
@@ -16888,11 +16948,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -16948,11 +17008,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -17021,18 +17081,33 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.12
         }
       ]
     },
     "TP18_SL15": {
       "stats": {
-        "total": 166,
-        "wins": 88,
+        "total": 168,
+        "wins": 90,
         "losses": 78,
-        "open_count": 60,
-        "win_rate": 0.5301,
-        "avg_return": 3.1194,
-        "avg_holding_days": 20.2
+        "open_count": 59,
+        "win_rate": 0.5357,
+        "avg_return": 3.3524,
+        "avg_holding_days": 20.0
       },
       "trades": [
         {
@@ -20291,11 +20366,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -20351,11 +20426,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -20424,18 +20499,33 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.15
         }
       ]
     },
     "TP20_SL10": {
       "stats": {
-        "total": 182,
-        "wins": 66,
-        "losses": 116,
-        "open_count": 44,
-        "win_rate": 0.3626,
-        "avg_return": 1.0229,
-        "avg_holding_days": 15.3
+        "total": 186,
+        "wins": 68,
+        "losses": 118,
+        "open_count": 41,
+        "win_rate": 0.3656,
+        "avg_return": 1.1347,
+        "avg_holding_days": 15.4
       },
       "trades": [
         {
@@ -22929,11 +23019,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 378.0,
+          "return_pct": -10.21,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 421.0,
           "amount": 1000.0,
@@ -22989,11 +23079,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 5670.0,
+          "return_pct": -10.28,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 6320.0,
           "amount": 3000,
@@ -23694,11 +23784,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -23754,11 +23844,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -23827,18 +23917,33 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.1
         }
       ]
     },
     "TP20_SL12": {
       "stats": {
-        "total": 172,
-        "wins": 70,
+        "total": 174,
+        "wins": 72,
         "losses": 102,
-        "open_count": 54,
-        "win_rate": 0.407,
-        "avg_return": 1.3791,
-        "avg_holding_days": 17.4
+        "open_count": 53,
+        "win_rate": 0.4138,
+        "avg_return": 1.6241,
+        "avg_holding_days": 17.3
       },
       "trades": [
         {
@@ -27097,11 +27202,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -27157,11 +27262,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -27230,18 +27335,33 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.12
         }
       ]
     },
     "TP20_SL15": {
       "stats": {
-        "total": 161,
-        "wins": 80,
+        "total": 163,
+        "wins": 82,
         "losses": 81,
-        "open_count": 65,
-        "win_rate": 0.4969,
-        "avg_return": 2.9616,
-        "avg_holding_days": 21.8
+        "open_count": 64,
+        "win_rate": 0.5031,
+        "avg_return": 3.2037,
+        "avg_holding_days": 21.6
       },
       "trades": [
         {
@@ -30500,11 +30620,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -30560,11 +30680,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -30633,17 +30753,32 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.15
         }
       ]
     },
     "MA5_MA10": {
       "stats": {
-        "total": 222,
+        "total": 223,
         "wins": 79,
-        "losses": 143,
+        "losses": 144,
         "open_count": 4,
-        "win_rate": 0.3559,
-        "avg_return": -0.035,
+        "win_rate": 0.3543,
+        "avg_return": -0.054,
         "avg_holding_days": 5.5
       },
       "trades": [
@@ -33967,7 +34102,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 6,
+          "holding_days": 7,
           "exit_state": "HOLDING",
           "entry_date": "20260915",
           "entry_price": 420.5,
@@ -33998,7 +34133,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 1,
+          "holding_days": 2,
           "exit_state": "HOLDING",
           "entry_date": "20260922",
           "entry_price": 73.9,
@@ -34010,12 +34145,11 @@
           "sl": null
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": 1,
-          "exit_state": "HOLDING",
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 180.0,
+          "return_pct": -4.26,
+          "holding_days": 2,
           "entry_date": "20260922",
           "entry_price": 188.0,
           "amount": 3000,
@@ -34030,7 +34164,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 0,
+          "holding_days": 1,
           "exit_state": "HOLDING",
           "entry_date": "20260923",
           "entry_price": 73.0,
@@ -34038,6 +34172,22 @@
           "stock_id": "6770",
           "stock_name": "力積電",
           "signal_date": "20260922",
+          "tp": null,
+          "sl": null
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": 0,
+          "exit_state": "HOLDING",
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
           "tp": null,
           "sl": null
         }

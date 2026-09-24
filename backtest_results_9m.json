@@ -1,40 +1,25 @@
 {
-  "generated_at": "2026-09-24T22:44:43.486943",
+  "generated_at": "2026-09-24T18:46:09.365883",
   "date_range": {
-    "start": "20251223",
-    "end": "20260923"
+    "start": "20251224",
+    "end": "20260924"
   },
-  "total_signals": 499,
-  "signals_after_limit": 227,
-  "qualified_signals": 440,
-  "qualified_after_limit": 209,
+  "total_signals": 505,
+  "signals_after_limit": 229,
+  "qualified_signals": 446,
+  "qualified_after_limit": 212,
   "combinations": {
     "TP15_SL10": {
       "stats": {
-        "total": 191,
+        "total": 193,
         "wins": 82,
-        "losses": 109,
-        "open_count": 35,
-        "win_rate": 0.4293,
-        "avg_return": 0.851,
-        "avg_holding_days": 11.1
+        "losses": 111,
+        "open_count": 34,
+        "win_rate": 0.4249,
+        "avg_return": 0.7475,
+        "avg_holding_days": 11.3
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260106",
-          "exit_price": 216.5,
-          "return_pct": 17.98,
-          "holding_days": 7,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.15,
-          "sl": 0.1
-        },
         {
           "result": "WIN",
           "exit_date": "20260106",
@@ -103,7 +88,7 @@
           "holding_days": 4,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -136,6 +121,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.15,
+          "sl": 0.1
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.15,
           "sl": 0.1
@@ -2511,11 +2511,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 378.0,
+          "return_pct": -10.21,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 421.0,
           "amount": 1000.0,
@@ -2571,11 +2571,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 5670.0,
+          "return_pct": -10.28,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 6320.0,
           "amount": 3000,
@@ -3409,6 +3409,21 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.1
         }
       ]
     },
@@ -3417,27 +3432,12 @@
         "total": 181,
         "wins": 91,
         "losses": 90,
-        "open_count": 45,
+        "open_count": 46,
         "win_rate": 0.5028,
-        "avg_return": 2.1557,
+        "avg_return": 2.168,
         "avg_holding_days": 12.8
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260106",
-          "exit_price": 216.5,
-          "return_pct": 17.98,
-          "holding_days": 7,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.15,
-          "sl": 0.12
-        },
         {
           "result": "WIN",
           "exit_date": "20260106",
@@ -3506,7 +3506,7 @@
           "holding_days": 4,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -3539,6 +3539,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.15,
+          "sl": 0.12
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.15,
           "sl": 0.12
@@ -6812,6 +6827,21 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.12
         }
       ]
     },
@@ -6820,27 +6850,12 @@
         "total": 171,
         "wins": 98,
         "losses": 73,
-        "open_count": 55,
+        "open_count": 56,
         "win_rate": 0.5731,
-        "avg_return": 2.8612,
+        "avg_return": 2.8742,
         "avg_holding_days": 15.1
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260106",
-          "exit_price": 216.5,
-          "return_pct": 17.98,
-          "holding_days": 7,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.15,
-          "sl": 0.15
-        },
         {
           "result": "WIN",
           "exit_date": "20260106",
@@ -6909,7 +6924,7 @@
           "holding_days": 4,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -6942,6 +6957,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.15,
+          "sl": 0.15
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.15,
           "sl": 0.15
@@ -10215,35 +10245,35 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.15
         }
       ]
     },
     "TP18_SL10": {
       "stats": {
-        "total": 187,
-        "wins": 71,
-        "losses": 116,
-        "open_count": 39,
-        "win_rate": 0.3797,
-        "avg_return": 0.5098,
-        "avg_holding_days": 12.3
+        "total": 191,
+        "wins": 73,
+        "losses": 118,
+        "open_count": 36,
+        "win_rate": 0.3822,
+        "avg_return": 0.5797,
+        "avg_holding_days": 12.4
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260107",
-          "exit_price": 238.0,
-          "return_pct": 29.7,
-          "holding_days": 8,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.18,
-          "sl": 0.1
-        },
         {
           "result": "WIN",
           "exit_date": "20260107",
@@ -10312,7 +10342,7 @@
           "holding_days": 4,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -10345,6 +10375,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.18,
+          "sl": 0.1
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.18,
           "sl": 0.1
@@ -12720,11 +12765,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 378.0,
+          "return_pct": -10.21,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 421.0,
           "amount": 1000.0,
@@ -12780,11 +12825,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 5670.0,
+          "return_pct": -10.28,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 6320.0,
           "amount": 3000,
@@ -13485,11 +13530,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -13545,11 +13590,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -13618,35 +13663,35 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.1
         }
       ]
     },
     "TP18_SL12": {
       "stats": {
-        "total": 177,
-        "wins": 80,
+        "total": 179,
+        "wins": 82,
         "losses": 97,
-        "open_count": 49,
-        "win_rate": 0.452,
-        "avg_return": 1.8969,
-        "avg_holding_days": 14.2
+        "open_count": 48,
+        "win_rate": 0.4581,
+        "avg_return": 2.0761,
+        "avg_holding_days": 14.1
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260107",
-          "exit_price": 238.0,
-          "return_pct": 29.7,
-          "holding_days": 8,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.18,
-          "sl": 0.12
-        },
         {
           "result": "WIN",
           "exit_date": "20260107",
@@ -13715,7 +13760,7 @@
           "holding_days": 4,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -13748,6 +13793,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.18,
+          "sl": 0.12
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.18,
           "sl": 0.12
@@ -16888,11 +16948,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -16948,11 +17008,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -17021,35 +17081,35 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.12
         }
       ]
     },
     "TP18_SL15": {
       "stats": {
-        "total": 166,
-        "wins": 86,
+        "total": 168,
+        "wins": 88,
         "losses": 80,
-        "open_count": 60,
-        "win_rate": 0.5181,
-        "avg_return": 2.7225,
-        "avg_holding_days": 16.7
+        "open_count": 59,
+        "win_rate": 0.5238,
+        "avg_return": 2.9036,
+        "avg_holding_days": 16.6
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260107",
-          "exit_price": 238.0,
-          "return_pct": 29.7,
-          "holding_days": 8,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.18,
-          "sl": 0.15
-        },
         {
           "result": "WIN",
           "exit_date": "20260107",
@@ -17118,7 +17178,7 @@
           "holding_days": 4,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -17151,6 +17211,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.18,
+          "sl": 0.15
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.18,
           "sl": 0.15
@@ -20291,11 +20366,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -20351,11 +20426,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -20424,35 +20499,35 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.15
         }
       ]
     },
     "TP20_SL10": {
       "stats": {
-        "total": 182,
-        "wins": 63,
-        "losses": 119,
-        "open_count": 44,
-        "win_rate": 0.3462,
-        "avg_return": 0.2641,
-        "avg_holding_days": 12.9
+        "total": 186,
+        "wins": 65,
+        "losses": 121,
+        "open_count": 41,
+        "win_rate": 0.3495,
+        "avg_return": 0.3412,
+        "avg_holding_days": 13.1
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260107",
-          "exit_price": 238.0,
-          "return_pct": 29.7,
-          "holding_days": 8,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.2,
-          "sl": 0.1
-        },
         {
           "result": "WIN",
           "exit_date": "20260107",
@@ -20521,7 +20596,7 @@
           "holding_days": 5,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -20554,6 +20629,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.2,
+          "sl": 0.1
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.2,
           "sl": 0.1
@@ -22929,11 +23019,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 378.0,
+          "return_pct": -10.21,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 421.0,
           "amount": 1000.0,
@@ -22989,11 +23079,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 5670.0,
+          "return_pct": -10.28,
+          "holding_days": 33,
           "entry_date": "20260810",
           "entry_price": 6320.0,
           "amount": 3000,
@@ -23694,11 +23784,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -23754,11 +23844,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -23827,35 +23917,35 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.1
         }
       ]
     },
     "TP20_SL12": {
       "stats": {
-        "total": 172,
-        "wins": 72,
+        "total": 174,
+        "wins": 74,
         "losses": 100,
-        "open_count": 54,
-        "win_rate": 0.4186,
-        "avg_return": 1.6608,
-        "avg_holding_days": 14.9
+        "open_count": 53,
+        "win_rate": 0.4253,
+        "avg_return": 1.8479,
+        "avg_holding_days": 14.8
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260107",
-          "exit_price": 238.0,
-          "return_pct": 29.7,
-          "holding_days": 8,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.2,
-          "sl": 0.12
-        },
         {
           "result": "WIN",
           "exit_date": "20260107",
@@ -23924,7 +24014,7 @@
           "holding_days": 5,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -23957,6 +24047,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.2,
+          "sl": 0.12
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.2,
           "sl": 0.12
@@ -27097,11 +27202,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -27157,11 +27262,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -27230,35 +27335,35 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.12
         }
       ]
     },
     "TP20_SL15": {
       "stats": {
-        "total": 161,
-        "wins": 78,
+        "total": 163,
+        "wins": 80,
         "losses": 83,
-        "open_count": 65,
-        "win_rate": 0.4845,
-        "avg_return": 2.3584,
-        "avg_holding_days": 17.7
+        "open_count": 64,
+        "win_rate": 0.4908,
+        "avg_return": 2.5496,
+        "avg_holding_days": 17.6
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260107",
-          "exit_price": 238.0,
-          "return_pct": 29.7,
-          "holding_days": 8,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": 0.2,
-          "sl": 0.15
-        },
         {
           "result": "WIN",
           "exit_date": "20260107",
@@ -27327,7 +27432,7 @@
           "holding_days": 5,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -27360,6 +27465,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": 0.2,
+          "sl": 0.15
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260107",
+          "exit_price": 238.0,
+          "return_pct": 20.2,
+          "holding_days": 4,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": 0.2,
           "sl": 0.15
@@ -30500,11 +30620,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -30560,11 +30680,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -30633,35 +30753,35 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.15
         }
       ]
     },
     "MA5_MA10": {
       "stats": {
-        "total": 222,
-        "wins": 70,
+        "total": 223,
+        "wins": 71,
         "losses": 152,
         "open_count": 4,
-        "win_rate": 0.3153,
-        "avg_return": 0.678,
+        "win_rate": 0.3184,
+        "avg_return": 0.7608,
         "avg_holding_days": 5.2
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20251229",
-          "exit_price": 179.5,
-          "return_pct": -2.18,
-          "holding_days": 2,
-          "entry_date": "20251224",
-          "entry_price": 183.5,
-          "amount": 3000,
-          "stock_id": "2451",
-          "stock_name": "創見",
-          "signal_date": "20251223",
-          "tp": null,
-          "sl": null
-        },
         {
           "result": "WIN",
           "exit_date": "20260122",
@@ -30730,7 +30850,7 @@
           "holding_days": 16,
           "entry_date": "20251230",
           "entry_price": 181.5,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2451",
           "stock_name": "創見",
           "signal_date": "20251229",
@@ -30763,6 +30883,21 @@
           "amount": 3000,
           "stock_id": "3665",
           "stock_name": "貿聯-KY",
+          "signal_date": "20251230",
+          "tp": null,
+          "sl": null
+        },
+        {
+          "result": "WIN",
+          "exit_date": "20260122",
+          "exit_price": 240.0,
+          "return_pct": 21.21,
+          "holding_days": 15,
+          "entry_date": "20251231",
+          "entry_price": 198.0,
+          "amount": 1000.0,
+          "stock_id": "2451",
+          "stock_name": "創見",
           "signal_date": "20251230",
           "tp": null,
           "sl": null
@@ -33967,7 +34102,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 6,
+          "holding_days": 7,
           "exit_state": "HOLDING",
           "entry_date": "20260915",
           "entry_price": 420.5,
@@ -33998,7 +34133,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 1,
+          "holding_days": 2,
           "exit_state": "HOLDING",
           "entry_date": "20260922",
           "entry_price": 73.9,
@@ -34010,12 +34145,11 @@
           "sl": null
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": 1,
-          "exit_state": "HOLDING",
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 180.0,
+          "return_pct": -4.26,
+          "holding_days": 2,
           "entry_date": "20260922",
           "entry_price": 188.0,
           "amount": 3000,
@@ -34030,7 +34164,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 0,
+          "holding_days": 1,
           "exit_state": "HOLDING",
           "entry_date": "20260923",
           "entry_price": 73.0,
@@ -34038,6 +34172,22 @@
           "stock_id": "6770",
           "stock_name": "力積電",
           "signal_date": "20260922",
+          "tp": null,
+          "sl": null
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": 0,
+          "exit_state": "HOLDING",
+          "entry_date": "20260924",
+          "entry_price": 72.0,
+          "amount": 3000,
+          "stock_id": "6770",
+          "stock_name": "力積電",
+          "signal_date": "20260923",
           "tp": null,
           "sl": null
         }

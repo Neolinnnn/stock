@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-09-24T22:44:27.465156",
+  "generated_at": "2026-09-24T18:46:22.088157",
   "date_range": {
-    "start": "20250923",
+    "start": "20250924",
     "end": "20260924"
   },
-  "total_signals": 196,
-  "signals_after_limit": 129,
-  "qualified_signals": 196,
-  "qualified_after_limit": 129,
+  "total_signals": 199,
+  "signals_after_limit": 131,
+  "qualified_signals": 199,
+  "qualified_after_limit": 131,
   "combinations": {
     "TP15_SL10": {
       "stats": {
         "total": 107,
         "wins": 50,
         "losses": 57,
-        "open_count": 21,
+        "open_count": 22,
         "win_rate": 0.4673,
         "avg_return": 1.9654,
         "avg_holding_days": 15.2
@@ -1939,6 +1939,21 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.1
         }
       ]
     },
@@ -1947,7 +1962,7 @@
         "total": 105,
         "wins": 56,
         "losses": 49,
-        "open_count": 23,
+        "open_count": 24,
         "win_rate": 0.5333,
         "avg_return": 3.2828,
         "avg_holding_days": 18.4
@@ -3872,6 +3887,21 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.12
         }
       ]
     },
@@ -3880,7 +3910,7 @@
         "total": 104,
         "wins": 68,
         "losses": 36,
-        "open_count": 24,
+        "open_count": 25,
         "win_rate": 0.6538,
         "avg_return": 5.5787,
         "avg_holding_days": 23.8
@@ -5805,18 +5835,33 @@
           "signal_date": "20260922",
           "tp": 0.15,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.15,
+          "sl": 0.15
         }
       ]
     },
     "TP18_SL10": {
       "stats": {
-        "total": 100,
-        "wins": 40,
+        "total": 105,
+        "wins": 45,
         "losses": 60,
-        "open_count": 28,
-        "win_rate": 0.4,
-        "avg_return": 0.8271,
-        "avg_holding_days": 16.1
+        "open_count": 24,
+        "win_rate": 0.4286,
+        "avg_return": 1.8602,
+        "avg_holding_days": 16.0
       },
       "trades": [
         {
@@ -7350,11 +7395,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 22.4,
+          "holding_days": 27,
           "entry_date": "20260818",
           "entry_price": 91.5,
           "amount": 3000,
@@ -7515,11 +7560,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 21.48,
+          "holding_days": 12,
           "entry_date": "20260908",
           "entry_price": 92.2,
           "amount": 3000,
@@ -7530,11 +7575,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 23.35,
+          "holding_days": 11,
           "entry_date": "20260909",
           "entry_price": 90.8,
           "amount": 1000.0,
@@ -7590,11 +7635,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -7665,11 +7710,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -7738,18 +7783,33 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.1
         }
       ]
     },
     "TP18_SL12": {
       "stats": {
-        "total": 98,
-        "wins": 45,
+        "total": 103,
+        "wins": 50,
         "losses": 53,
-        "open_count": 30,
-        "win_rate": 0.4592,
-        "avg_return": 1.8492,
-        "avg_holding_days": 19.8
+        "open_count": 26,
+        "win_rate": 0.4854,
+        "avg_return": 2.8527,
+        "avg_holding_days": 19.5
       },
       "trades": [
         {
@@ -9283,11 +9343,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 22.4,
+          "holding_days": 27,
           "entry_date": "20260818",
           "entry_price": 91.5,
           "amount": 3000,
@@ -9448,11 +9508,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 21.48,
+          "holding_days": 12,
           "entry_date": "20260908",
           "entry_price": 92.2,
           "amount": 3000,
@@ -9463,11 +9523,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 23.35,
+          "holding_days": 11,
           "entry_date": "20260909",
           "entry_price": 90.8,
           "amount": 1000.0,
@@ -9523,11 +9583,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -9598,11 +9658,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -9671,18 +9731,33 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.12
         }
       ]
     },
     "TP18_SL15": {
       "stats": {
-        "total": 97,
-        "wins": 56,
+        "total": 102,
+        "wins": 61,
         "losses": 41,
-        "open_count": 31,
-        "win_rate": 0.5773,
-        "avg_return": 4.5931,
-        "avg_holding_days": 27.3
+        "open_count": 27,
+        "win_rate": 0.598,
+        "avg_return": 5.472,
+        "avg_holding_days": 26.6
       },
       "trades": [
         {
@@ -11216,11 +11291,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 22.4,
+          "holding_days": 27,
           "entry_date": "20260818",
           "entry_price": 91.5,
           "amount": 3000,
@@ -11381,11 +11456,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 21.48,
+          "holding_days": 12,
           "entry_date": "20260908",
           "entry_price": 92.2,
           "amount": 3000,
@@ -11396,11 +11471,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 23.35,
+          "holding_days": 11,
           "entry_date": "20260909",
           "entry_price": 90.8,
           "amount": 1000.0,
@@ -11456,11 +11531,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -11531,11 +11606,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -11604,18 +11679,33 @@
           "signal_date": "20260922",
           "tp": 0.18,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.18,
+          "sl": 0.15
         }
       ]
     },
     "TP20_SL10": {
       "stats": {
-        "total": 99,
-        "wins": 39,
+        "total": 104,
+        "wins": 44,
         "losses": 60,
-        "open_count": 29,
-        "win_rate": 0.3939,
-        "avg_return": 1.5867,
-        "avg_holding_days": 17.0
+        "open_count": 25,
+        "win_rate": 0.4231,
+        "avg_return": 2.5932,
+        "avg_holding_days": 16.8
       },
       "trades": [
         {
@@ -13149,11 +13239,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 22.4,
+          "holding_days": 27,
           "entry_date": "20260818",
           "entry_price": 91.5,
           "amount": 3000,
@@ -13314,11 +13404,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 21.48,
+          "holding_days": 12,
           "entry_date": "20260908",
           "entry_price": 92.2,
           "amount": 3000,
@@ -13329,11 +13419,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 23.35,
+          "holding_days": 11,
           "entry_date": "20260909",
           "entry_price": 90.8,
           "amount": 1000.0,
@@ -13389,11 +13479,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -13464,11 +13554,11 @@
           "sl": 0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -13537,18 +13627,33 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.1
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.1
         }
       ]
     },
     "TP20_SL12": {
       "stats": {
-        "total": 96,
-        "wins": 43,
+        "total": 101,
+        "wins": 48,
         "losses": 53,
-        "open_count": 32,
-        "win_rate": 0.4479,
-        "avg_return": 2.5679,
-        "avg_holding_days": 20.9
+        "open_count": 28,
+        "win_rate": 0.4752,
+        "avg_return": 3.5557,
+        "avg_holding_days": 20.6
       },
       "trades": [
         {
@@ -15082,11 +15187,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 22.4,
+          "holding_days": 27,
           "entry_date": "20260818",
           "entry_price": 91.5,
           "amount": 3000,
@@ -15247,11 +15352,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 21.48,
+          "holding_days": 12,
           "entry_date": "20260908",
           "entry_price": 92.2,
           "amount": 3000,
@@ -15262,11 +15367,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 23.35,
+          "holding_days": 11,
           "entry_date": "20260909",
           "entry_price": 90.8,
           "amount": 1000.0,
@@ -15322,11 +15427,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -15397,11 +15502,11 @@
           "sl": 0.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -15470,18 +15575,33 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.12
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.12
         }
       ]
     },
     "TP20_SL15": {
       "stats": {
-        "total": 95,
-        "wins": 54,
+        "total": 100,
+        "wins": 59,
         "losses": 41,
-        "open_count": 33,
-        "win_rate": 0.5684,
-        "avg_return": 5.4276,
-        "avg_holding_days": 28.7
+        "open_count": 29,
+        "win_rate": 0.59,
+        "avg_return": 6.2823,
+        "avg_holding_days": 27.9
       },
       "trades": [
         {
@@ -17015,11 +17135,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 22.4,
+          "holding_days": 27,
           "entry_date": "20260818",
           "entry_price": 91.5,
           "amount": 3000,
@@ -17180,11 +17300,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 21.48,
+          "holding_days": 12,
           "entry_date": "20260908",
           "entry_price": 92.2,
           "amount": 3000,
@@ -17195,11 +17315,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 112.0,
+          "return_pct": 23.35,
+          "holding_days": 11,
           "entry_date": "20260909",
           "entry_price": 90.8,
           "amount": 1000.0,
@@ -17255,11 +17375,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.91,
+          "holding_days": 9,
           "entry_date": "20260911",
           "entry_price": 419.0,
           "amount": 3000,
@@ -17330,11 +17450,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "WIN",
+          "exit_date": "20260924",
+          "exit_price": 515.0,
+          "return_pct": 22.47,
+          "holding_days": 7,
           "entry_date": "20260915",
           "entry_price": 420.5,
           "amount": 3000,
@@ -17403,17 +17523,32 @@
           "signal_date": "20260922",
           "tp": 0.2,
           "sl": 0.15
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
+          "tp": 0.2,
+          "sl": 0.15
         }
       ]
     },
     "MA5_MA10": {
       "stats": {
-        "total": 124,
+        "total": 125,
         "wins": 48,
-        "losses": 76,
+        "losses": 77,
         "open_count": 4,
-        "win_rate": 0.3871,
-        "avg_return": 0.8123,
+        "win_rate": 0.384,
+        "avg_return": 0.7717,
         "avg_holding_days": 4.4
       },
       "trades": [
@@ -19267,7 +19402,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 6,
+          "holding_days": 7,
           "exit_state": "HOLDING",
           "entry_date": "20260915",
           "entry_price": 420.5,
@@ -19298,7 +19433,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 1,
+          "holding_days": 2,
           "exit_state": "HOLDING",
           "entry_date": "20260922",
           "entry_price": 73.9,
@@ -19310,12 +19445,11 @@
           "sl": null
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": 1,
-          "exit_state": "HOLDING",
+          "result": "LOSS",
+          "exit_date": "20260924",
+          "exit_price": 180.0,
+          "return_pct": -4.26,
+          "holding_days": 2,
           "entry_date": "20260922",
           "entry_price": 188.0,
           "amount": 3000,
@@ -19330,7 +19464,7 @@
           "exit_date": null,
           "exit_price": null,
           "return_pct": null,
-          "holding_days": 0,
+          "holding_days": 1,
           "exit_state": "HOLDING",
           "entry_date": "20260923",
           "entry_price": 73.0,
@@ -19338,6 +19472,22 @@
           "stock_id": "6770",
           "stock_name": "力積電",
           "signal_date": "20260922",
+          "tp": null,
+          "sl": null
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": 0,
+          "exit_state": "HOLDING",
+          "entry_date": "20260924",
+          "entry_price": 226.5,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20260923",
           "tp": null,
           "sl": null
         }
