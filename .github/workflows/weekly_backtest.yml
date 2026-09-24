@@ -1,0 +1,81 @@
+name: 每週回測更新
+
+# 回測頁 18 份結果更新到最新（scripts/backtest_all.py）。
+# 只在當週最後一個交易日執行（週五休市則提前，見 scripts/trading_calendar.py）。
+# 與日掃描分開、排在晚間：FinMind 額度以小時計，日掃描會用盡當下額度，
+# 接在同一個 job 跑會抓價失敗（2026-09-24 實測 15 檔被拒，由安全閥中止未發佈）。
+on:
+  schedule:
+    # 21:43 台灣時間 = 13:43 UTC，週一至週五；避開整點／半點（排程壅塞）
+    - cron: '43 13 * * 1-5'
+  workflow_dispatch:   # 手動觸發不檢查是否為最後交易日
+
+# 與日掃描同一群組排隊，避免兩者同時 commit／push
+concurrency:
+  group: daily-scan-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: decide
+        run: |
+          read TRADING LAST <<< "$(python3 scripts/trading_calendar.py "$(date -u +%Y%m%d)")"
+          RUN=true
+          if [ -n "${{ github.event.schedule }}" ] && [ "$LAST" != "true" ]; then RUN=false; fi
+          echo "交易日=$TRADING 最後交易日=$LAST → run=$RUN"
+          echo "run=$RUN" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.decide.outputs.run == 'true'
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        if: steps.decide.outputs.run == 'true'
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt
+
+      - name: Update backtests
+        if: steps.decide.outputs.run == 'true'
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: |
+          python scripts/backtest_all.py
+          python scripts/build_backtest_docs.py
+
+      - name: Commit
+        id: commit
+        if: steps.decide.outputs.run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backtest_results*.json docs/backtest_summary*.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "auto: 每週回測更新 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin main && git push && break
+            echo "Push 失敗，第 ${i} 次重試..."
+            sleep $((i * 5))
+          done
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Pages deploy
+        # GITHUB_TOKEN push 不會觸發 deploy_pages.yml，須顯式呼叫
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy_pages.yml --ref main

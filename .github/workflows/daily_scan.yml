@@ -8,7 +8,7 @@ on:
     # （15:00 後 FinMind 三大法人籌碼資料才齊全）
     - cron: '23 7 * * 1-5'
     # 週報不另設排程：當週最後一個交易日（週五休市則提前，見 check job）
-    # 的日掃描直接接著跑週報與回測更新。
+    # 的日掃描直接接著跑週報。回測更新另見 weekly_backtest.yml（晚間，避開 FinMind 額度）。
     # 備援排程：20:13 台灣時間 = 12:13 UTC。主排程被 GitHub 丟棄時補跑；
     # 當日報告已存在則由 check job 直接跳過，不會重複消耗 Gemini 額度。
     - cron: '13 12 * * 1-5'
@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # 決定本次是否該跑、以及是否要跑週報與回測更新（當週最後交易日）。
+  # 決定本次是否該跑、以及是否要跑週報（當週最後交易日）。
   # 把排程判斷集中在這裡，scan job 內就不必到處比對 cron 字串。
   check:
     runs-on: ubuntu-latest
@@ -178,17 +178,6 @@ jobs:
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: python scripts/sector_rotation_backtest.py
 
-      - name: Update backtests (最後交易日)
-        # 回測頁 18 份結果更新到今天；任一訊號股抓不到股價即中止且不覆寫（見 backtest_all.py）
-        if: needs.check.outputs.weekly == 'true'
-        continue-on-error: true
-        env:
-          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
-          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
-        run: |
-          python scripts/backtest_all.py
-          python scripts/build_backtest_docs.py
-
       - name: Build multi-agent analysis (agents)
         continue-on-error: true
         env:
@@ -221,8 +210,6 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git add daily_reports/ docs/
-          # 最後交易日的回測更新（backtest_all.py 寫在 repo 根目錄）
-          git add backtest_results*.json
           # 動能雷達快取（若當日 collect 失敗目錄可能不存在）
           [ -d data/radar_cache ] && git add data/radar_cache/ || true
           # 集保大戶快照：集保端點只給最新一期，歷史靠每期快照累積。
