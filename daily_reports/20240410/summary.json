@@ -137,10 +137,10 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 4.16,
-      "avg_rsi": 69.3,
-      "avg_sharpe": -1.11,
-      "hot_count": 4,
+      "avg_ret_20d": 5.03,
+      "avg_rsi": 68.6,
+      "avg_sharpe": -0.36,
+      "hot_count": 3,
       "buy_count": 1,
       "qualified_count": 3,
       "stocks": [
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-04-10",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 43.65,
-          "rsi": 73.9,
-          "ret_20d": -0.9,
-          "signal": "HOLD",
-          "cv_sharpe": -5.61,
-          "cv_win_rate": 0.22,
           "news": [],
           "chip": {
             "date": "2024-04-10",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -7.68,
-      "avg_rsi": 41.6,
-      "avg_sharpe": -1.25,
+      "avg_ret_20d": -4.55,
+      "avg_rsi": 46.0,
+      "avg_sharpe": 2.88,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": 5.75,
           "cv_win_rate": 0.67,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 14.2,
-          "rsi": 32.7,
-          "ret_20d": -13.9,
-          "signal": "HOLD",
-          "cv_sharpe": -9.51,
-          "cv_win_rate": 0.17,
           "news": [],
           "chip": {}
         }
@@ -860,13 +833,6 @@
       "name": "創見",
       "type": "RSI過熱",
       "detail": "RSI=76.9"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=73.9"
     },
     {
       "sector": "AI伺服器",

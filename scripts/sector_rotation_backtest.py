@@ -63,7 +63,9 @@ def select_stocks_in_sector(
         raise ValueError(f'unknown stock rule: {rule}')
     key = _STOCK_RULE_KEY[rule]
     pool = [s for s in stocks if s.get('sector') == sector]
-    pool.sort(key=lambda s: s.get(key, 0), reverse=True)
+    # docs payload 缺值存成 ''，與數值混排會 TypeError；比照缺值當 0
+    pool.sort(key=lambda s: s.get(key) if isinstance(s.get(key), (int, float)) else 0,
+              reverse=True)
     return pool[:top_k]
 
 

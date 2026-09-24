@@ -137,10 +137,10 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 0.29,
-      "avg_rsi": 50.0,
-      "avg_sharpe": -3.73,
-      "hot_count": 1,
+      "avg_ret_20d": -0.75,
+      "avg_rsi": 43.6,
+      "avg_sharpe": -3.1,
+      "hot_count": 0,
       "buy_count": 1,
       "qualified_count": 1,
       "stocks": [
@@ -227,21 +227,6 @@
           "ret_20d": -4.0,
           "signal": "HOLD",
           "cv_sharpe": 0.0,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-10-08",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 40.1,
-          "rsi": 88.5,
-          "ret_20d": 6.5,
-          "signal": "HOLD",
-          "cv_sharpe": -7.48,
           "cv_win_rate": 0.0,
           "news": [],
           "chip": {
@@ -568,10 +553,10 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 13.97,
-      "avg_rsi": 63.0,
-      "avg_sharpe": -1.42,
-      "hot_count": 1,
+      "avg_ret_20d": 7.1,
+      "avg_rsi": 58.2,
+      "avg_sharpe": -0.3,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
       "stocks": [
@@ -595,18 +580,6 @@
           "ret_20d": 10.7,
           "signal": "HOLD",
           "cv_sharpe": 2.46,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 29.7,
-          "rsi": 72.5,
-          "ret_20d": 27.7,
-          "signal": "HOLD",
-          "cv_sharpe": -3.65,
           "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
@@ -847,25 +820,11 @@
   ],
   "alerts": [
     {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=88.5"
-    },
-    {
       "sector": "封測",
       "id": "6510",
       "name": "精測",
       "type": "RSI過熱",
       "detail": "RSI=70.7"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=72.5"
     },
     {
       "sector": "綠能環保",

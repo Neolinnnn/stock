@@ -1283,9 +1283,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 3.94,
-      "avg_rsi": 56.9,
-      "avg_sharpe": -3.39,
+      "avg_ret_20d": 7.5,
+      "avg_rsi": 70.5,
+      "avg_sharpe": -5.96,
       "stocks": [
         {
           "id": "3552",
@@ -1362,49 +1362,11 @@
           "target_short": 34.7,
           "target_mid": 31.4,
           "target_long": 37.1
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 22.2,
-          "rsi": 29.8,
-          "rsi10": 40.8,
-          "ret_20d": -3.3,
-          "signal": "HOLD",
-          "cv_sharpe": 1.75,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-12",
-              "title": "光學元件廠佳能新增日大型代工客戶訂單 且歐美專案同增",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-12",
-              "title": "國產首季EPS 0.7元 土方之亂緩解遞延營建需求逐步釋出",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-12",
-              "title": "涉勾結詐團！內控、洗錢防制爆重大疏失 台中銀遭金管會重罰3200萬元",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-12",
-            "外資": 29,
-            "投信": -3,
-            "自營": 5,
-            "合計": 31
-          },
-          "target_short": 28.2,
-          "target_mid": 33.3,
-          "target_long": 29.5
         }
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": 7.87,

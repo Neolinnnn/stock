@@ -353,9 +353,9 @@
       "qualified_count": 4
     },
     "記憶體": {
-      "avg_ret_20d": 23.14,
-      "avg_rsi": 60.1,
-      "avg_sharpe": 4.98,
+      "avg_ret_20d": 26.12,
+      "avg_rsi": 60.6,
+      "avg_sharpe": 6.26,
       "stocks": [
         {
           "id": "2408",
@@ -606,48 +606,6 @@
           "target_long": 2208.3,
           "atr14": 118.09,
           "stop_loss": 1463.8,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 54.2,
-          "rsi": 55.9,
-          "rsi10": 46.5,
-          "ret_20d": -3.7,
-          "signal": "HOLD",
-          "cv_sharpe": -6.61,
-          "cv_win_rate": 0.08,
-          "news": [
-            {
-              "date": "2026-05-28",
-              "title": "華新6月再調漲316不銹鋼產品每噸7000-9000元 連續6個月上漲",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-28",
-              "title": "力成自結4月獲利大增183% 每股賺0.95元",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-28",
-              "title": "台塑加碼5億元投資台塑德山廠 擴產電子級異丙醇參與半導體布局",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-28",
-            "外資": 53,
-            "投信": 0,
-            "自營": -1,
-            "合計": 52
-          },
-          "target_short": 57.3,
-          "target_mid": 50.7,
-          "target_long": 59.2,
-          "atr14": 1.67,
-          "stop_loss": 50.9,
           "broker": null,
           "main_force": null
         },
@@ -2083,9 +2041,9 @@
       "qualified_count": 2
     },
     "車用電子": {
-      "avg_ret_20d": 5.45,
-      "avg_rsi": 79.5,
-      "avg_sharpe": -5.36,
+      "avg_ret_20d": 14.1,
+      "avg_rsi": 78.9,
+      "avg_sharpe": -5.66,
       "stocks": [
         {
           "id": "3552",
@@ -2170,51 +2128,9 @@
           "stop_loss": 37.4,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 24.85,
-          "rsi": 80.7,
-          "rsi10": 63.3,
-          "ret_20d": -11.9,
-          "signal": "HOLD",
-          "cv_sharpe": -4.79,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-05-28",
-              "title": "和迅6月下旬轉上櫃 新藥開發及CDMO雙引擎搶攻再生醫療商機",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-28",
-              "title": "遠銀轉攻理財型房貸、財管 明年股利還有進步空間",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-28",
-              "title": "安謀商務長來台親訪通寶 將針對三領域合作",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-28",
-            "外資": 226,
-            "投信": 0,
-            "自營": 7,
-            "合計": 233
-          },
-          "target_short": 27.4,
-          "target_mid": 37.3,
-          "target_long": 31.3,
-          "atr14": 1.43,
-          "stop_loss": 22.0,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 3,
+      "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -3979,13 +3895,6 @@
       "name": "車王電",
       "type": "RSI過熱",
       "detail": "RSI=85.2"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=80.7"
     },
     {
       "sector": "綠能環保",

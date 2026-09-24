@@ -795,9 +795,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 9.99,
-      "avg_rsi": 60.2,
-      "avg_sharpe": -6.61,
+      "avg_ret_20d": -5.0,
+      "avg_rsi": 45.4,
+      "avg_sharpe": -10.89,
       "stocks": [
         {
           "id": "3552",
@@ -826,37 +826,9 @@
             }
           ],
           "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 27.25,
-          "rsi": 75.0,
-          "ret_20d": 25.0,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
-          "news": [
-            {
-              "date": "2026-04-30",
-              "title": "統一超斥資逾20億元將入主台灣LOPIA 震撼超市零售圈",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-04-30",
-              "title": "〈聯發科法說〉AI ASIC爆發！市場規模上看800億美元 明年提前達陣",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-04-30",
-              "title": "FOMC透漏許多關鍵訊息，雖然利率按兵不動",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {}
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -905,10 +877,11 @@
     "AI伺服器",
     "封測",
     "光學",
-    "IC設計",
+    "IC設計"
+  ],
+  "weak_sectors": [
     "車用電子"
   ],
-  "weak_sectors": [],
   "qualified": [
     {
       "sector": "記憶體",
@@ -954,13 +927,6 @@
       "name": "威盛",
       "type": "RSI過熱",
       "detail": "RSI=76.0"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=75.0"
     }
   ],
   "chart_path": "daily_reports/20260430/01_sector_strength.png"

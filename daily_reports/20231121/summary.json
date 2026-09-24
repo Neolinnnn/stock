@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 5.01,
-      "avg_rsi": 70.0,
-      "avg_sharpe": -6.09,
+      "avg_ret_20d": 3.88,
+      "avg_rsi": 70.9,
+      "avg_sharpe": -5.41,
       "hot_count": 2,
       "buy_count": 2,
       "qualified_count": 0,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-11-21",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 47.8,
-          "rsi": 65.1,
-          "ret_20d": 11.7,
-          "signal": "HOLD",
-          "cv_sharpe": -10.17,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {
             "date": "2023-11-21",
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 8.34,
-      "avg_rsi": 78.3,
-      "avg_sharpe": -4.35,
-      "hot_count": 3,
+      "avg_ret_20d": 5.2,
+      "avg_rsi": 79.4,
+      "avg_sharpe": -7.46,
+      "hot_count": 2,
       "buy_count": 0,
-      "qualified_count": 1,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -14.91,
           "cv_win_rate": 0.13,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.8,
-          "rsi": 76.0,
-          "ret_20d": 14.6,
-          "signal": "HOLD",
-          "cv_sharpe": 1.86,
-          "cv_win_rate": 0.67,
           "news": [],
           "chip": {}
         }
@@ -965,13 +938,6 @@
       "name": "車王電",
       "type": "RSI過熱",
       "detail": "RSI=86.3"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=76.0"
     },
     {
       "sector": "綠能環保",

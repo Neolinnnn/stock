@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 4.66,
-      "avg_rsi": 50.8,
-      "avg_sharpe": -0.6,
-      "hot_count": 1,
+      "avg_ret_20d": 2.28,
+      "avg_rsi": 46.0,
+      "avg_sharpe": 3.58,
+      "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 3,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "SELL",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2026-04-02",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 60.9,
-          "rsi": 79.1,
-          "ret_20d": 18.9,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2026-04-02",
@@ -577,9 +562,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 26.19,
-      "avg_rsi": 55.7,
-      "avg_sharpe": -12.34,
+      "avg_ret_20d": 6.05,
+      "avg_rsi": 50.8,
+      "avg_sharpe": -9.73,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2026-04-02",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 19.9,
-          "rsi": 65.4,
-          "ret_20d": 66.5,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2026-04-02",
@@ -659,7 +629,6 @@
   },
   "strong_sectors": [
     "光通訊",
-    "記憶體",
     "車用電子",
     "綠能環保"
   ],
@@ -674,13 +643,6 @@
       "name": "正文",
       "type": "RSI過熱",
       "detail": "RSI=74.4"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=79.1"
     }
   ],
   "chart_path": "daily_reports\\20260402\\01_sector_strength.png"

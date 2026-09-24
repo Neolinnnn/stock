@@ -241,9 +241,9 @@
       "qualified_count": 0
     },
     "記憶體": {
-      "avg_ret_20d": 22.26,
-      "avg_rsi": 64.0,
-      "avg_sharpe": 0.11,
+      "avg_ret_20d": 27.74,
+      "avg_rsi": 69.2,
+      "avg_sharpe": 5.05,
       "stocks": [
         {
           "id": "2408",
@@ -384,39 +384,11 @@
             }
           ],
           "chip": {}
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 56.3,
-          "rsi": 38.0,
-          "ret_20d": -5.1,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
-          "news": [
-            {
-              "date": "2026-05-06",
-              "title": "致新Q2營收拚小增 部分料號開始缺貨 若缺口擴大將漲價",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-06",
-              "title": "北車商場經營權標案爆爭議 微風喊話台鐵暫緩簽約",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-06",
-              "title": "〈達方法說〉看好Q1為營運谷底 AI PC、AI伺服器特規MLCC雙引擎助攻下半年升溫",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {}
         }
       ],
       "hot_count": 3,
       "buy_count": 1,
-      "qualified_count": 2
+      "qualified_count": 5
     },
     "AI伺服器": {
       "avg_ret_20d": 19.1,
@@ -935,9 +907,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 45.88,
-      "avg_rsi": 60.3,
-      "avg_sharpe": -9.25,
+      "avg_ret_20d": 7.9,
+      "avg_rsi": 59.1,
+      "avg_sharpe": -9.73,
       "stocks": [
         {
           "id": "3552",
@@ -976,34 +948,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [
-            {
-              "date": "2026-05-06",
-              "title": "昇貿科技受惠AI需求爆發高毛利錫膏推升獲利東南亞布局帶動年增率成長",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-06",
-              "title": "〈台幣〉外資匯入推升價量 強彈1.17角收31.488元",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-06",
-              "title": "台股四萬看不懂？這些大股票何去何從？",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 26.4,
-          "rsi": 62.7,
-          "ret_20d": 121.8,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [
             {
               "date": "2026-05-06",

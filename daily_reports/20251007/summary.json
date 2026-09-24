@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 36.1,
-      "avg_rsi": 64.1,
-      "avg_sharpe": -1.41,
+      "avg_ret_20d": 42.92,
+      "avg_rsi": 65.8,
+      "avg_sharpe": 3.58,
       "hot_count": 3,
-      "buy_count": 2,
-      "qualified_count": 3,
+      "buy_count": 1,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "SELL",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2025-10-07",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 52.0,
-          "rsi": 54.3,
-          "ret_20d": -4.8,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2025-10-07",
@@ -577,12 +562,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -4.47,
-      "avg_rsi": 51.5,
-      "avg_sharpe": -7.31,
+      "avg_ret_20d": -1.85,
+      "avg_rsi": 46.5,
+      "avg_sharpe": -9.73,
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2025-10-07",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 12.0,
-          "rsi": 61.5,
-          "ret_20d": -9.8,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2025-10-07",
@@ -666,7 +636,6 @@
   ],
   "weak_sectors": [
     "IC設計",
-    "車用電子",
     "綠能環保"
   ],
   "qualified": [

@@ -227,9 +227,9 @@
       "qualified_count": 3
     },
     "記憶體": {
-      "avg_ret_20d": 24.7,
-      "avg_rsi": 61.3,
-      "avg_sharpe": 4.15,
+      "avg_ret_20d": 29.5,
+      "avg_rsi": 66.0,
+      "avg_sharpe": 5.78,
       "stocks": [
         {
           "id": "2408",
@@ -438,48 +438,6 @@
           "target_long": 407.1,
           "atr14": 18.72,
           "stop_loss": 283.6,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 52.9,
-          "rsi": 28.2,
-          "rsi10": 34.0,
-          "ret_20d": -8.8,
-          "signal": "HOLD",
-          "cv_sharpe": -7.3,
-          "cv_win_rate": 0.08,
-          "news": [
-            {
-              "date": "2026-05-27",
-              "title": "程泰集團攜手新代 加速智慧製造與機器人整合布局",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-27",
-              "title": "人口對策新戰略 賴清德宣布18項措施公共支持式育兒 18歲前每月5千元、產假延長至12周",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-27",
-              "title": "〈豐興股東會〉直棒產品爭取車用及高階市場 鋼筋加工廠預計Q3投產",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-27",
-            "外資": 11,
-            "投信": 0,
-            "自營": 0,
-            "合計": 11
-          },
-          "target_short": 57.5,
-          "target_mid": 50.7,
-          "target_long": 58.1,
-          "atr14": 1.65,
-          "stop_loss": 49.6,
           "broker": null,
           "main_force": null
         },
@@ -1747,9 +1705,9 @@
       "qualified_count": 2
     },
     "車用電子": {
-      "avg_ret_20d": 1.37,
-      "avg_rsi": 71.8,
-      "avg_sharpe": -4.57,
+      "avg_ret_20d": 16.1,
+      "avg_rsi": 73.1,
+      "avg_sharpe": -5.04,
       "stocks": [
         {
           "id": "1533",
@@ -1792,51 +1750,9 @@
           "stop_loss": 35.8,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 23.75,
-          "rsi": 70.6,
-          "rsi10": 56.7,
-          "ret_20d": -13.3,
-          "signal": "HOLD",
-          "cv_sharpe": -4.1,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-05-27",
-              "title": "去年台企國內外併購148件創新高！跨國最愛和它「成親」規模佔近6成居冠",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-27",
-              "title": "〈台幣〉熱錢湧入股匯雙漲 連6升收31.42元創逾2周新高",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-27",
-              "title": "日月光推310mm PLP自動化產線 明年上半年投產",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-27",
-            "外資": 64,
-            "投信": 0,
-            "自營": 0,
-            "合計": 64
-          },
-          "target_short": 28.0,
-          "target_mid": 35.6,
-          "target_long": 30.3,
-          "atr14": 1.37,
-          "stop_loss": 21.0,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 2,
+      "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -3104,6 +3020,7 @@
     "封測",
     "光學",
     "IC設計",
+    "車用電子",
     "CoPoS封裝",
     "銅箔/CCL",
     "AI ASIC/IP",
@@ -3297,13 +3214,6 @@
       "name": "車王電",
       "type": "RSI過熱",
       "detail": "RSI=73.1"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=70.6"
     },
     {
       "sector": "CoPoS封裝",

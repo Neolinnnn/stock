@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 3.63,
-      "avg_rsi": 66.9,
-      "avg_sharpe": -5.66,
+      "avg_ret_20d": 2.53,
+      "avg_rsi": 67.2,
+      "avg_sharpe": -5.84,
       "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 0,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-11-15",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 47.15,
-          "rsi": 65.0,
-          "ret_20d": 10.2,
-          "signal": "HOLD",
-          "cv_sharpe": -4.54,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {
             "date": "2023-11-15",
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 6.21,
-      "avg_rsi": 69.5,
-      "avg_sharpe": -4.24,
-      "hot_count": 2,
+      "avg_ret_20d": 1.8,
+      "avg_rsi": 67.7,
+      "avg_sharpe": -7.67,
+      "hot_count": 1,
       "buy_count": 1,
-      "qualified_count": 1,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "BUY",
           "cv_sharpe": -15.33,
           "cv_win_rate": 0.13,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.4,
-          "rsi": 73.0,
-          "ret_20d": 15.0,
-          "signal": "HOLD",
-          "cv_sharpe": 2.6,
-          "cv_win_rate": 0.67,
           "news": [],
           "chip": {}
         }
@@ -813,9 +786,7 @@
   },
   "strong_sectors": [
     "光通訊",
-    "記憶體",
     "IC設計",
-    "車用電子",
     "CoPoS封裝"
   ],
   "weak_sectors": [],
@@ -927,13 +898,6 @@
       "name": "車王電",
       "type": "RSI過熱",
       "detail": "RSI=77.5"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=73.0"
     },
     {
       "sector": "CoPoS封裝",

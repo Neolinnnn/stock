@@ -311,9 +311,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": 42.88,
-      "avg_rsi": 76.0,
-      "avg_sharpe": 3.88,
+      "avg_ret_20d": 42.86,
+      "avg_rsi": 82.8,
+      "avg_sharpe": 5.77,
       "stocks": [
         {
           "id": "2408",
@@ -564,48 +564,6 @@
           "target_long": 2302.4,
           "atr14": 120.73,
           "stop_loss": 1633.5,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 52.3,
-          "rsi": 28.3,
-          "rsi10": 34.3,
-          "ret_20d": NaN,
-          "signal": "HOLD",
-          "cv_sharpe": -9.36,
-          "cv_win_rate": 0.11,
-          "news": [
-            {
-              "date": "2026-06-02",
-              "title": "〈COMPUTEX〉迎廣伺服器接單正向今年營收逐季增 預期2027年很不一樣",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-02",
-              "title": "國泰金高層新人事！投資長劉上旗兼任國泰投信副董 助拓資產管理版圖",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-02",
-              "title": "〈COMPUTEX〉光聖轉投資合聖新產品FAU亮相 最快H2試產、明年量產",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-02",
-            "外資": -51,
-            "投信": 0,
-            "自營": -1,
-            "合計": -52
-          },
-          "target_short": NaN,
-          "target_mid": NaN,
-          "target_long": NaN,
-          "atr14": NaN,
-          "stop_loss": NaN,
           "broker": null,
           "main_force": null
         },
@@ -1789,9 +1747,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 11.88,
-      "avg_rsi": 58.2,
-      "avg_sharpe": -3.87,
+      "avg_ret_20d": 16.1,
+      "avg_rsi": 47.5,
+      "avg_sharpe": -4.0,
       "stocks": [
         {
           "id": "1533",
@@ -1832,48 +1790,6 @@
           "target_long": 50.3,
           "atr14": 1.66,
           "stop_loss": 35.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 28.0,
-          "rsi": 68.9,
-          "rsi10": 66.5,
-          "ret_20d": 7.7,
-          "signal": "HOLD",
-          "cv_sharpe": -3.74,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-02",
-              "title": "〈房產〉土方之亂漸緩  全台4月新住宅開工量現反彈達1.1萬戶",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-02",
-              "title": "海昌生技預計6月下旬上櫃 高階醫材新品帶動第二成長曲線",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-02",
-              "title": "〈COMPUTEX〉台達電首度亮相預製型AI模組化資料中心 建置時間減少60%",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-02",
-            "外資": 256,
-            "投信": 0,
-            "自營": -1,
-            "合計": 255
-          },
-          "target_short": 29.0,
-          "target_mid": 42.0,
-          "target_long": 35.1,
-          "atr14": 1.69,
-          "stop_loss": 24.6,
           "broker": null,
           "main_force": null
         }

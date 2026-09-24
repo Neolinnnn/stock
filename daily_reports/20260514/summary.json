@@ -321,9 +321,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": 38.93,
-      "avg_rsi": 71.2,
-      "avg_sharpe": 5.05,
+      "avg_ret_20d": 47.32,
+      "avg_rsi": 80.6,
+      "avg_sharpe": 5.68,
       "stocks": [
         {
           "id": "2408",
@@ -552,49 +552,11 @@
           "target_short": 1920.3,
           "target_mid": 2573.9,
           "target_long": 2336.6
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 53.1,
-          "rsi": 14.8,
-          "rsi10": 29.2,
-          "ret_20d": -11.4,
-          "signal": "HOLD",
-          "cv_sharpe": 1.3,
-          "cv_win_rate": 0.56,
-          "news": [
-            {
-              "date": "2026-05-14",
-              "title": "福衛八號首顆衛星「齊柏林」7月營運取像 卓揆喊競逐太空願景",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-14",
-              "title": "華碩ProArt攜手蔦屋書店 162吋4K microLED螢幕進駐打造文化場域",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-14",
-              "title": "安力-KY首季仍處產能調整與產品結構優化期 每股虧損0.44元",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-14",
-            "外資": 18,
-            "投信": 0,
-            "自營": -1,
-            "合計": 17
-          },
-          "target_short": 62.3,
-          "target_mid": 51.1,
-          "target_long": 59.2
         }
       ],
       "hot_count": 5,
       "buy_count": 0,
-      "qualified_count": 7
+      "qualified_count": 6
     },
     "AI伺服器": {
       "avg_ret_20d": 10.29,
@@ -1245,9 +1207,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 1.94,
-      "avg_rsi": 52.3,
-      "avg_sharpe": -2.33,
+      "avg_ret_20d": 7.35,
+      "avg_rsi": 66.8,
+      "avg_sharpe": -4.37,
       "stocks": [
         {
           "id": "3552",
@@ -1324,49 +1286,11 @@
           "target_short": 35.2,
           "target_mid": 52.1,
           "target_long": 44.6
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 21.0,
-          "rsi": 23.3,
-          "rsi10": 36.1,
-          "ret_20d": -8.9,
-          "signal": "HOLD",
-          "cv_sharpe": 1.75,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-14",
-              "title": "〈鴻海法說〉Q1三率三升純益499億元季增1成 EPS3.56元創同期高",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-14",
-              "title": "聯電推14奈米eHV FinFET 搶OLED驅動IC商機",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-14",
-              "title": "福衛八號首顆衛星「齊柏林」7月營運取像 卓揆喊競逐太空願景",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-13",
-            "外資": -224,
-            "投信": 0,
-            "自營": -3,
-            "合計": -227
-          },
-          "target_short": 28.5,
-          "target_mid": 31.5,
-          "target_long": 27.4
         }
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "CoPoS封裝": {
       "avg_ret_20d": 12.14,
@@ -1880,6 +1804,7 @@
     "封測",
     "光學",
     "IC設計",
+    "車用電子",
     "CoPoS封裝"
   ],
   "weak_sectors": [],

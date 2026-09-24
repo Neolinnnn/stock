@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 2.89,
-      "avg_rsi": 45.6,
-      "avg_sharpe": -1.84,
-      "hot_count": 1,
+      "avg_ret_20d": 2.55,
+      "avg_rsi": 40.8,
+      "avg_sharpe": 3.58,
+      "hot_count": 0,
       "buy_count": 1,
-      "qualified_count": 2,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2026-03-04",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 51.4,
-          "rsi": 74.2,
-          "ret_20d": 5.0,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2026-03-04",
@@ -577,9 +562,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -8.64,
-      "avg_rsi": 39.2,
-      "avg_sharpe": -10.05,
+      "avg_ret_20d": -15.2,
+      "avg_rsi": 28.1,
+      "avg_sharpe": -9.73,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2026-03-04",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 11.8,
-          "rsi": 61.5,
-          "ret_20d": 4.4,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2026-03-04",
@@ -684,14 +654,6 @@
       "cv_sharpe": 7.26
     }
   ],
-  "alerts": [
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=74.2"
-    }
-  ],
+  "alerts": [],
   "chart_path": "daily_reports\\20260304\\01_sector_strength.png"
 }

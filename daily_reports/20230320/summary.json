@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 2.87,
-      "avg_rsi": 53.8,
-      "avg_sharpe": -4.14,
+      "avg_ret_20d": 5.9,
+      "avg_rsi": 58.0,
+      "avg_sharpe": -4.78,
       "hot_count": 1,
       "buy_count": 0,
       "qualified_count": 0,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-03-20",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 39.6,
-          "rsi": 28.9,
-          "ret_20d": -15.2,
-          "signal": "HOLD",
-          "cv_sharpe": -0.29,
-          "cv_win_rate": 0.33,
           "news": [],
           "chip": {
             "date": "2023-03-20",
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 13.16,
-      "avg_rsi": 58.0,
-      "avg_sharpe": -4.48,
+      "avg_ret_20d": 2.1,
+      "avg_rsi": 52.7,
+      "avg_sharpe": -5.2,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -10.4,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 23.8,
-          "rsi": 68.6,
-          "ret_20d": 35.2,
-          "signal": "HOLD",
-          "cv_sharpe": -3.05,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
         }
@@ -812,9 +785,9 @@
     }
   },
   "strong_sectors": [
+    "記憶體",
     "封測",
     "IC設計",
-    "車用電子",
     "綠能環保",
     "CoPoS封裝"
   ],

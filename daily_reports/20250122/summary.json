@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -4.61,
-      "avg_rsi": 51.0,
-      "avg_sharpe": -6.04,
+      "avg_ret_20d": -5.75,
+      "avg_rsi": 50.5,
+      "avg_sharpe": -5.3,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
@@ -227,21 +227,6 @@
           "ret_20d": -6.2,
           "signal": "HOLD",
           "cv_sharpe": 0.0,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2025-01-22",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 32.3,
-          "rsi": 54.3,
-          "ret_20d": 2.4,
-          "signal": "HOLD",
-          "cv_sharpe": -10.46,
           "cv_win_rate": 0.0,
           "news": [],
           "chip": {
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -2.67,
-      "avg_rsi": 48.2,
-      "avg_sharpe": -0.87,
+      "avg_ret_20d": -3.7,
+      "avg_rsi": 44.2,
+      "avg_sharpe": -2.4,
       "hot_count": 0,
-      "buy_count": 1,
-      "qualified_count": 1,
+      "buy_count": 0,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -0.31,
           "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 17.05,
-          "rsi": 56.0,
-          "ret_20d": -0.6,
-          "signal": "BUY",
-          "cv_sharpe": 2.19,
-          "cv_win_rate": 0.78,
           "news": [],
           "chip": {}
         }
@@ -827,18 +800,10 @@
     "光通訊"
   ],
   "weak_sectors": [
-    "記憶體"
+    "記憶體",
+    "車用電子"
   ],
-  "qualified": [
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "price": 17.05,
-      "rsi": 56.0,
-      "cv_sharpe": 2.19
-    }
-  ],
+  "qualified": [],
   "alerts": [
     {
       "sector": "光通訊",

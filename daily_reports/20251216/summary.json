@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -1.48,
-      "avg_rsi": 60.0,
-      "avg_sharpe": -1.86,
-      "hot_count": 3,
-      "buy_count": 3,
-      "qualified_count": 1,
+      "avg_ret_20d": -3.93,
+      "avg_rsi": 57.8,
+      "avg_sharpe": 3.58,
+      "hot_count": 2,
+      "buy_count": 2,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "BUY",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2025-12-16",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 50.5,
-          "rsi": 73.0,
-          "ret_20d": 13.2,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2025-12-16",
@@ -577,12 +562,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 3.07,
-      "avg_rsi": 54.5,
-      "avg_sharpe": -4.86,
+      "avg_ret_20d": -0.5,
+      "avg_rsi": 50.5,
+      "avg_sharpe": -9.73,
       "hot_count": 0,
-      "buy_count": 2,
-      "qualified_count": 1,
+      "buy_count": 0,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2025-12-16",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 11.85,
-          "rsi": 62.7,
-          "ret_20d": 10.2,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2025-12-16",
@@ -660,10 +630,10 @@
   "strong_sectors": [
     "光通訊",
     "封測",
-    "IC設計",
-    "車用電子"
+    "IC設計"
   ],
   "weak_sectors": [
+    "記憶體",
     "光學"
   ],
   "qualified": [],
@@ -700,13 +670,6 @@
       "sector": "記憶體",
       "id": "2344",
       "name": "華邦電",
-      "type": "RSI過熱",
-      "detail": "RSI=73.0"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
       "type": "RSI過熱",
       "detail": "RSI=73.0"
     },

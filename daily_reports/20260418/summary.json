@@ -105,9 +105,9 @@
       "qualified_count": 0
     },
     "記憶體": {
-      "avg_ret_20d": -16.11,
-      "avg_rsi": 56.9,
-      "avg_sharpe": 0.52,
+      "avg_ret_20d": -22.53,
+      "avg_rsi": 54.5,
+      "avg_sharpe": 3.58,
       "stocks": [
         {
           "id": "2408",
@@ -174,22 +174,11 @@
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
           "news": []
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 62.1,
-          "rsi": 71.4,
-          "ret_20d": 22.5,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
-          "news": []
         }
       ],
-      "hot_count": 2,
+      "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 3
+      "qualified_count": 5
     },
     "AI伺服器": {
       "avg_ret_20d": 6.93,
@@ -397,9 +386,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 13.34,
-      "avg_rsi": 65.8,
-      "avg_sharpe": -8.87,
+      "avg_ret_20d": 12.45,
+      "avg_rsi": 66.7,
+      "avg_sharpe": -9.73,
       "stocks": [
         {
           "id": "3552",
@@ -422,21 +411,10 @@
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
           "news": []
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 23.6,
-          "rsi": 64.1,
-          "ret_20d": 15.1,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
-          "news": []
         }
       ],
       "hot_count": 0,
-      "buy_count": 1,
+      "buy_count": 0,
       "qualified_count": 0
     }
   },
@@ -494,13 +472,6 @@
       "name": "華邦電",
       "type": "RSI過熱",
       "detail": "RSI=84.2"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=71.4"
     },
     {
       "sector": "AI伺服器",

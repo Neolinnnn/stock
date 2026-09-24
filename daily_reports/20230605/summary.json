@@ -137,10 +137,10 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 10.47,
-      "avg_rsi": 76.4,
-      "avg_sharpe": -4.33,
-      "hot_count": 7,
+      "avg_ret_20d": 11.22,
+      "avg_rsi": 77.0,
+      "avg_sharpe": -3.27,
+      "hot_count": 6,
       "buy_count": 0,
       "qualified_count": 0,
       "stocks": [
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-06-05",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 48.5,
-          "rsi": 73.1,
-          "ret_20d": 6.0,
-          "signal": "HOLD",
-          "cv_sharpe": -10.73,
-          "cv_win_rate": 0.11,
           "news": [],
           "chip": {
             "date": "2023-06-05",
@@ -568,12 +553,12 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 2.18,
-      "avg_rsi": 65.4,
-      "avg_sharpe": -2.49,
+      "avg_ret_20d": 5.2,
+      "avg_rsi": 69.1,
+      "avg_sharpe": -4.41,
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 1,
+      "qualified_count": 0,
       "stocks": [
         {
           "id": "3552",
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.82,
           "cv_win_rate": 0.17,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 18.9,
-          "rsi": 58.0,
-          "ret_20d": -3.8,
-          "signal": "HOLD",
-          "cv_sharpe": 1.36,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
         }
@@ -818,6 +791,7 @@
     "封測",
     "光學",
     "IC設計",
+    "車用電子",
     "綠能環保",
     "CoPoS封裝"
   ],
@@ -914,13 +888,6 @@
       "name": "宜鼎",
       "type": "RSI過熱",
       "detail": "RSI=73.0"
-    },
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=73.1"
     },
     {
       "sector": "AI伺服器",

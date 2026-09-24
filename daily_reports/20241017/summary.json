@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -1.24,
-      "avg_rsi": 47.8,
-      "avg_sharpe": -4.29,
+      "avg_ret_20d": -1.87,
+      "avg_rsi": 46.3,
+      "avg_sharpe": -3.14,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1,
@@ -227,21 +227,6 @@
           "ret_20d": -5.6,
           "signal": "HOLD",
           "cv_sharpe": 0.0,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2024-10-17",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 37.75,
-          "rsi": 56.7,
-          "ret_20d": 2.6,
-          "signal": "HOLD",
-          "cv_sharpe": -11.22,
           "cv_win_rate": 0.0,
           "news": [],
           "chip": {
@@ -568,9 +553,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 2.63,
-      "avg_rsi": 48.6,
-      "avg_sharpe": -1.82,
+      "avg_ret_20d": 3.5,
+      "avg_rsi": 54.7,
+      "avg_sharpe": -0.52,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.02,
           "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 23.45,
-          "rsi": 36.6,
-          "ret_20d": 0.9,
-          "signal": "HOLD",
-          "cv_sharpe": -4.4,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
         }
@@ -827,6 +800,7 @@
     "光通訊",
     "AI伺服器",
     "封測",
+    "車用電子",
     "綠能環保"
   ],
   "weak_sectors": [

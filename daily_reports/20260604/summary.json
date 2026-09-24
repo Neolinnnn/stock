@@ -1621,9 +1621,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 12.64,
-      "avg_rsi": 60.0,
-      "avg_sharpe": -4.03,
+      "avg_ret_20d": 13.0,
+      "avg_rsi": 47.7,
+      "avg_sharpe": -4.32,
       "stocks": [
         {
           "id": "1533",
@@ -1666,51 +1666,9 @@
           "stop_loss": 35.1,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 29.65,
-          "rsi": 72.2,
-          "rsi10": 68.7,
-          "ret_20d": 12.3,
-          "signal": "HOLD",
-          "cv_sharpe": -3.74,
-          "cv_win_rate": 0.25,
-          "news": [
-            {
-              "date": "2026-06-04",
-              "title": "深化台捷AI供應鏈！龔明鑫會晤捷克議長韋德齊 與國發會宣布加碼5千萬歐元挺台商插旗",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-04",
-              "title": "仁寶量子技術結合AI 跨足新藥開發領域",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-04",
-              "title": "1拆24！群益臺灣加權正2將分割 6/30最後買進日",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-04",
-            "外資": 453,
-            "投信": 0,
-            "自營": -1,
-            "合計": 452
-          },
-          "target_short": 29.7,
-          "target_mid": 44.5,
-          "target_long": 37.0,
-          "atr14": 1.76,
-          "stop_loss": 26.1,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0
     },
@@ -2913,13 +2871,6 @@
       "name": "玉晶光",
       "type": "RSI過熱",
       "detail": "RSI=85.5"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=72.2"
     },
     {
       "sector": "AI 電源",

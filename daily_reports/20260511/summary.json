@@ -321,9 +321,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": 29.47,
-      "avg_rsi": 74.2,
-      "avg_sharpe": 2.26,
+      "avg_ret_20d": 35.4,
+      "avg_rsi": 79.5,
+      "avg_sharpe": 2.36,
       "stocks": [
         {
           "id": "2408",
@@ -552,49 +552,11 @@
           "target_short": 1676.7,
           "target_mid": 2435.1,
           "target_long": 2180.0
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 56.4,
-          "rsi": 42.3,
-          "rsi10": 43.9,
-          "ret_20d": -6.2,
-          "signal": "HOLD",
-          "cv_sharpe": 1.67,
-          "cv_win_rate": 0.56,
-          "news": [
-            {
-              "date": "2026-05-11",
-              "title": "AI出口+金融獲利雙引擎發威！00878除息行情升溫 淨值衝破28元創高",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-11",
-              "title": "優群維持全年目標營收成長10-15% 毛利率落底後續可望逐步改善",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-11",
-              "title": "國科會通過7件園區審議案共506億元 宏晟科技、兆聯實業分公司進駐",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-11",
-            "外資": -45,
-            "投信": 0,
-            "自營": 0,
-            "合計": -45
-          },
-          "target_short": 62.6,
-          "target_mid": 51.5,
-          "target_long": 62.2
         }
       ],
       "hot_count": 5,
       "buy_count": 0,
-      "qualified_count": 5
+      "qualified_count": 4
     },
     "AI伺服器": {
       "avg_ret_20d": 13.52,
@@ -1359,9 +1321,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 1.3,
-      "avg_rsi": 49.6,
-      "avg_sharpe": -2.55,
+      "avg_ret_20d": 3.75,
+      "avg_rsi": 63.0,
+      "avg_sharpe": -2.78,
       "stocks": [
         {
           "id": "3552",
@@ -1438,44 +1400,6 @@
           "target_short": 34.5,
           "target_mid": 31.4,
           "target_long": 37.1
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 21.65,
-          "rsi": 22.9,
-          "rsi10": 37.6,
-          "ret_20d": -3.6,
-          "signal": "HOLD",
-          "cv_sharpe": -2.09,
-          "cv_win_rate": 0.42,
-          "news": [
-            {
-              "date": "2026-05-11",
-              "title": "AI出口+金融獲利雙引擎發威！00878除息行情升溫 淨值衝破28元創高",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-11",
-              "title": "優群維持全年目標營收成長10-15% 毛利率落底後續可望逐步改善",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-11",
-              "title": "國科會通過7件園區審議案共506億元 宏晟科技、兆聯實業分公司進駐",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-11",
-            "外資": -107,
-            "投信": 0,
-            "自營": -2,
-            "合計": -109
-          },
-          "target_short": 28.2,
-          "target_mid": 32.5,
-          "target_long": 28.8
         }
       ],
       "hot_count": 1,
@@ -2080,6 +2004,7 @@
     "封測",
     "光學",
     "IC設計",
+    "車用電子",
     "CoPoS封裝"
   ],
   "weak_sectors": [],

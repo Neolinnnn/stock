@@ -285,9 +285,9 @@
       "qualified_count": 4
     },
     "記憶體": {
-      "avg_ret_20d": -0.74,
-      "avg_rsi": 54.0,
-      "avg_sharpe": 5.14,
+      "avg_ret_20d": -0.36,
+      "avg_rsi": 55.4,
+      "avg_sharpe": 5.53,
       "stocks": [
         {
           "id": "2408",
@@ -518,44 +518,6 @@
           "main_force": null
         },
         {
-          "id": "3205",
-          "name": "十銓",
-          "price": 46.8,
-          "rsi": 41.4,
-          "rsi10": 39.4,
-          "ret_20d": -4.3,
-          "signal": "HOLD",
-          "ma5": 46.73,
-          "ma10": 47.01,
-          "ma20": 47.7,
-          "ma60": 49.59,
-          "cv_sharpe": 1.59,
-          "cv_win_rate": 0.42,
-          "news": [],
-          "chip": {
-            "date": "2026-09-09",
-            "外資": 4000,
-            "投信": 0,
-            "自營": 2,
-            "合計": 4002,
-            "近5日": 17093,
-            "近5日外資": 17000,
-            "近5日投信": 0,
-            "連買日": 2,
-            "投信連買日": 0,
-            "集中度": 7.5,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 49.4,
-          "target_mid": 49.0,
-          "target_long": 51.1,
-          "atr14": 1.06,
-          "stop_loss": 44.7,
-          "broker": null,
-          "main_force": null
-        },
-        {
           "id": "3260",
           "name": "威剛",
           "price": 414.5,
@@ -672,7 +634,7 @@
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 9
+      "qualified_count": 8
     },
     "AI伺服器": {
       "avg_ret_20d": 1.07,
@@ -1893,9 +1855,9 @@
       "qualified_count": 1
     },
     "車用電子": {
-      "avg_ret_20d": 4.38,
-      "avg_rsi": 47.3,
-      "avg_sharpe": -3.45,
+      "avg_ret_20d": -4.35,
+      "avg_rsi": 30.6,
+      "avg_sharpe": -7.69,
       "stocks": [
         {
           "id": "3552",
@@ -1972,49 +1934,11 @@
           "stop_loss": 29.4,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 49.95,
-          "rsi": 80.6,
-          "rsi10": 71.0,
-          "ret_20d": 21.8,
-          "signal": "HOLD",
-          "ma5": 46.11,
-          "ma10": 44.56,
-          "ma20": 42.36,
-          "ma60": 47.49,
-          "cv_sharpe": 5.03,
-          "cv_win_rate": 0.72,
-          "news": [],
-          "chip": {
-            "date": "2026-09-09",
-            "外資": 115000,
-            "投信": -2000,
-            "自營": 1705,
-            "合計": 114705,
-            "近5日": 31290,
-            "近5日外資": 32585,
-            "近5日投信": -3000,
-            "連買日": 2,
-            "投信連買日": 0,
-            "集中度": 2.1,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 48.1,
-          "target_mid": 42.5,
-          "target_long": 52.6,
-          "atr14": 2.78,
-          "stop_loss": 44.4,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": 19.52,
@@ -3899,7 +3823,7 @@
         },
         {
           "id": "7769",
-          "name": "鴻勤",
+          "name": "鴻勁",
           "price": 6720.0,
           "rsi": 65.2,
           "rsi10": 59.5,
@@ -4031,7 +3955,6 @@
     "光通訊",
     "封測",
     "光學",
-    "車用電子",
     "綠能環保",
     "CoPoS封裝",
     "銅箔/CCL",
@@ -4040,6 +3963,7 @@
     "測試設備"
   ],
   "weak_sectors": [
+    "車用電子",
     "ABF載板"
   ],
   "qualified": [
@@ -4128,13 +4052,6 @@
       "name": "聯發科",
       "type": "RSI過熱",
       "detail": "RSI=70.7"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=80.6"
     },
     {
       "sector": "CoPoS封裝",

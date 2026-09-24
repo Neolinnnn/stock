@@ -1495,9 +1495,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 10.36,
-      "avg_rsi": 68.6,
-      "avg_sharpe": 1.08,
+      "avg_ret_20d": 25.7,
+      "avg_rsi": 77.2,
+      "avg_sharpe": -4.51,
       "stocks": [
         {
           "id": "1533",
@@ -1540,53 +1540,11 @@
           "stop_loss": 35.9,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 22.8,
-          "rsi": 59.9,
-          "rsi10": 50.7,
-          "ret_20d": -5.0,
-          "signal": "HOLD",
-          "cv_sharpe": 6.66,
-          "cv_win_rate": 0.75,
-          "news": [
-            {
-              "date": "2026-05-22",
-              "title": "聚奕投資：凌巨股權交割準備就緒 與日方理性協商中",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-22",
-              "title": "塞港效應大擴散 台驊：近程航線甚至有船公司砍班運價飆3倍",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-22",
-              "title": "台驊總座：台股大漲財富僅聚集3%的人身上 憂台股網路泡沫歷史重演",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-22",
-            "外資": 86,
-            "投信": -1,
-            "自營": -8,
-            "合計": 77
-          },
-          "target_short": 28.7,
-          "target_mid": 34.2,
-          "target_long": 29.4,
-          "atr14": 1.46,
-          "stop_loss": 19.9,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": -16.7,

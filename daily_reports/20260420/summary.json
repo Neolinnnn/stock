@@ -122,9 +122,9 @@
       "qualified_count": 0
     },
     "記憶體": {
-      "avg_ret_20d": -18.41,
-      "avg_rsi": 47.8,
-      "avg_sharpe": 0.12,
+      "avg_ret_20d": -24.42,
+      "avg_rsi": 46.4,
+      "avg_sharpe": 3.58,
       "stocks": [
         {
           "id": "2408",
@@ -215,26 +215,11 @@
             "date": "2026-04-20",
             "合計": 0
           }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 59.2,
-          "rsi": 56.2,
-          "ret_20d": 17.7,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
-          "news": [],
-          "chip": {
-            "date": "2026-04-20",
-            "合計": 0
-          }
         }
       ],
       "hot_count": 0,
       "buy_count": 1,
-      "qualified_count": 3
+      "qualified_count": 5
     },
     "AI伺服器": {
       "avg_ret_20d": 9.88,
@@ -532,9 +517,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 16.63,
-      "avg_rsi": 63.0,
-      "avg_sharpe": -8.87,
+      "avg_ret_20d": 18.7,
+      "avg_rsi": 66.7,
+      "avg_sharpe": -9.73,
       "stocks": [
         {
           "id": "3552",
@@ -565,25 +550,10 @@
             "date": "2026-04-17",
             "合計": 0
           }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 22.15,
-          "rsi": 55.6,
-          "ret_20d": 12.4,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
-          "news": [],
-          "chip": {
-            "date": "2026-04-17",
-            "合計": 0
-          }
         }
       ],
       "hot_count": 1,
-      "buy_count": 1,
+      "buy_count": 0,
       "qualified_count": 0
     },
     "綠能環保": {

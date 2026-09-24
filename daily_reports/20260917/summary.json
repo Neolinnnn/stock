@@ -285,9 +285,9 @@
       "qualified_count": 2
     },
     "記憶體": {
-      "avg_ret_20d": -2.16,
-      "avg_rsi": 42.4,
-      "avg_sharpe": 5.8,
+      "avg_ret_20d": -1.96,
+      "avg_rsi": 41.7,
+      "avg_sharpe": 6.45,
       "stocks": [
         {
           "id": "2408",
@@ -514,44 +514,6 @@
           "target_long": 1614.2,
           "atr14": 70.92,
           "stop_loss": 1118.2,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 46.65,
-          "rsi": 49.2,
-          "rsi10": 43.1,
-          "ret_20d": -3.9,
-          "signal": "HOLD",
-          "ma5": 46.46,
-          "ma10": 46.62,
-          "ma20": 47.1,
-          "ma60": 48.99,
-          "cv_sharpe": -0.1,
-          "cv_win_rate": 0.61,
-          "news": [],
-          "chip": {
-            "date": "2026-09-17",
-            "外資": -1000,
-            "投信": 0,
-            "自營": -556,
-            "合計": -1556,
-            "近5日": 11776,
-            "近5日外資": 12000,
-            "近5日投信": 0,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": 12.2,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 48.5,
-          "target_mid": 48.9,
-          "target_long": 50.8,
-          "atr14": 1.03,
-          "stop_loss": 44.6,
           "broker": null,
           "main_force": null
         },
@@ -1893,9 +1855,9 @@
       "qualified_count": 3
     },
     "車用電子": {
-      "avg_ret_20d": 3.23,
-      "avg_rsi": 51.2,
-      "avg_sharpe": 0.92,
+      "avg_ret_20d": -6.3,
+      "avg_rsi": 44.6,
+      "avg_sharpe": -2.71,
       "stocks": [
         {
           "id": "3552",
@@ -1972,49 +1934,11 @@
           "stop_loss": 29.2,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 49.05,
-          "rsi": 64.5,
-          "rsi10": 62.2,
-          "ret_20d": 22.3,
-          "signal": "HOLD",
-          "ma5": 48.39,
-          "ma10": 47.71,
-          "ma20": 44.92,
-          "ma60": 47.54,
-          "cv_sharpe": 8.18,
-          "cv_win_rate": 0.72,
-          "news": [],
-          "chip": {
-            "date": "2026-09-17",
-            "外資": 103999,
-            "投信": 0,
-            "自營": -18,
-            "合計": 103981,
-            "近5日": -161489,
-            "近5日外資": -163046,
-            "近5日投信": 0,
-            "連買日": 1,
-            "投信連買日": 0,
-            "集中度": -7.7,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 51.7,
-          "target_mid": 41.7,
-          "target_long": 52.5,
-          "atr14": 2.5,
-          "stop_loss": 44.1,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": 1.17,
@@ -3899,7 +3823,7 @@
         },
         {
           "id": "7769",
-          "name": "鴻勤",
+          "name": "鴻勁",
           "price": 6135.0,
           "rsi": 38.1,
           "rsi10": 44.9,
@@ -4031,11 +3955,11 @@
     "光通訊",
     "封測",
     "光學",
-    "車用電子",
     "AI ASIC/IP",
     "AI 散熱"
   ],
   "weak_sectors": [
+    "車用電子",
     "ABF載板",
     "銅箔/CCL",
     "測試設備"

@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": -8.49,
-      "avg_rsi": 54.8,
-      "avg_sharpe": -2.51,
-      "hot_count": 1,
+      "avg_ret_20d": -9.68,
+      "avg_rsi": 51.6,
+      "avg_sharpe": 3.58,
+      "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2026-03-10",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 51.5,
-          "rsi": 74.0,
-          "ret_20d": -1.3,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2026-03-10",
@@ -577,9 +562,9 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": -3.61,
-      "avg_rsi": 49.8,
-      "avg_sharpe": -9.79,
+      "avg_ret_20d": -10.85,
+      "avg_rsi": 40.9,
+      "avg_sharpe": -9.73,
       "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2026-03-10",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 12.7,
-          "rsi": 67.7,
-          "ret_20d": 10.9,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2026-03-10",
@@ -668,13 +638,6 @@
   ],
   "qualified": [],
   "alerts": [
-    {
-      "sector": "記憶體",
-      "id": "3205",
-      "name": "十銓",
-      "type": "RSI過熱",
-      "detail": "RSI=74.0"
-    },
     {
       "sector": "IC設計",
       "id": "4919",

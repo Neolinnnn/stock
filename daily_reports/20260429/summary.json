@@ -137,12 +137,12 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 14.01,
-      "avg_rsi": 59.3,
-      "avg_sharpe": 0.27,
+      "avg_ret_20d": 16.52,
+      "avg_rsi": 62.7,
+      "avg_sharpe": 3.58,
       "hot_count": 1,
-      "buy_count": 4,
-      "qualified_count": 1,
+      "buy_count": 3,
+      "qualified_count": 5,
       "stocks": [
         {
           "id": "2408",
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 2.06,
           "cv_win_rate": 0.4167,
-          "news": [],
-          "chip": {
-            "date": "2026-04-29",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 56.3,
-          "rsi": 38.7,
-          "ret_20d": -1.1,
-          "signal": "SELL",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
           "news": [],
           "chip": {
             "date": "2026-04-29",
@@ -577,10 +562,10 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 11.94,
-      "avg_rsi": 65.4,
-      "avg_sharpe": -8.83,
-      "hot_count": 1,
+      "avg_ret_20d": 6.3,
+      "avg_rsi": 57.3,
+      "avg_sharpe": -9.73,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
       "stocks": [
@@ -608,21 +593,6 @@
           "signal": "HOLD",
           "cv_sharpe": -8.58,
           "cv_win_rate": 0.0833,
-          "news": [],
-          "chip": {
-            "date": "2026-04-29",
-            "合計": 0
-          }
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 28.2,
-          "rsi": 81.4,
-          "ret_20d": 23.1,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
           "news": [],
           "chip": {
             "date": "2026-04-29",
@@ -724,13 +694,6 @@
       "name": "威盛",
       "type": "RSI過熱",
       "detail": "RSI=70.6"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=81.4"
     }
   ],
   "chart_path": "daily_reports/20260429/01_sector_strength.png"

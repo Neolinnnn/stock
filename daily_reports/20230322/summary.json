@@ -137,9 +137,9 @@
       ]
     },
     "記憶體": {
-      "avg_ret_20d": 3.72,
-      "avg_rsi": 57.4,
-      "avg_sharpe": -4.14,
+      "avg_ret_20d": 5.73,
+      "avg_rsi": 60.0,
+      "avg_sharpe": -4.78,
       "hot_count": 1,
       "buy_count": 1,
       "qualified_count": 0,
@@ -228,21 +228,6 @@
           "signal": "HOLD",
           "cv_sharpe": 0.0,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2023-03-22",
-            "合計": 0
-          }
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 42.3,
-          "rsi": 42.1,
-          "ret_20d": -8.2,
-          "signal": "HOLD",
-          "cv_sharpe": -0.29,
-          "cv_win_rate": 0.33,
           "news": [],
           "chip": {
             "date": "2023-03-22",
@@ -568,10 +553,10 @@
       ]
     },
     "車用電子": {
-      "avg_ret_20d": 12.4,
-      "avg_rsi": 62.6,
-      "avg_sharpe": -4.48,
-      "hot_count": 1,
+      "avg_ret_20d": 0.2,
+      "avg_rsi": 57.9,
+      "avg_sharpe": -5.2,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 0,
       "stocks": [
@@ -596,18 +581,6 @@
           "signal": "HOLD",
           "cv_sharpe": -10.4,
           "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {}
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 23.95,
-          "rsi": 72.1,
-          "ret_20d": 36.9,
-          "signal": "HOLD",
-          "cv_sharpe": -3.05,
-          "cv_win_rate": 0.5,
           "news": [],
           "chip": {}
         }
@@ -817,7 +790,6 @@
     "封測",
     "光學",
     "IC設計",
-    "車用電子",
     "綠能環保",
     "CoPoS封裝"
   ],
@@ -858,13 +830,6 @@
       "name": "京元電子",
       "type": "RSI過熱",
       "detail": "RSI=75.4"
-    },
-    {
-      "sector": "車用電子",
-      "id": "2243",
-      "name": "怡利電",
-      "type": "RSI過熱",
-      "detail": "RSI=72.1"
     },
     {
       "sector": "CoPoS封裝",

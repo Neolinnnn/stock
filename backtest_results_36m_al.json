@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-09-24T00:43:26.885633",
+  "generated_at": "2026-09-24T22:44:34.914264",
   "date_range": {
     "start": "20230923",
     "end": "20260924"
   },
-  "total_signals": 431,
-  "signals_after_limit": 165,
-  "qualified_signals": 431,
-  "qualified_after_limit": 165,
+  "total_signals": 405,
+  "signals_after_limit": 161,
+  "qualified_signals": 405,
+  "qualified_after_limit": 161,
   "combinations": {
     "TP15_SL10": {
       "stats": {
-        "total": 150,
-        "wins": 69,
-        "losses": 81,
+        "total": 146,
+        "wins": 67,
+        "losses": 79,
         "open_count": 14,
-        "win_rate": 0.46,
-        "avg_return": 4.1047,
-        "avg_holding_days": 27.1
+        "win_rate": 0.4589,
+        "avg_return": 4.0154,
+        "avg_holding_days": 27.2
       },
       "trades": [
         {
@@ -186,21 +186,6 @@
           "sl": 0.1
         },
         {
-          "result": "WIN",
-          "exit_date": "20231120",
-          "exit_price": 19.15,
-          "return_pct": 18.58,
-          "holding_days": 22,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
           "result": "LOSS",
           "exit_date": "20231107",
           "exit_price": 99.5,
@@ -331,21 +316,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.15,
           "sl": 0.1
@@ -902,36 +872,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250311",
-          "exit_price": 16.1,
-          "return_pct": -5.85,
-          "holding_days": 27,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.15,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250311",
-          "exit_price": 16.1,
-          "return_pct": -4.45,
-          "holding_days": 26,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.15,
           "sl": 0.1
         },
@@ -2498,13 +2438,13 @@
     },
     "TP15_SL12": {
       "stats": {
-        "total": 146,
-        "wins": 73,
-        "losses": 73,
+        "total": 142,
+        "wins": 71,
+        "losses": 71,
         "open_count": 18,
         "win_rate": 0.5,
-        "avg_return": 4.6971,
-        "avg_holding_days": 31.8
+        "avg_return": 4.6468,
+        "avg_holding_days": 31.9
       },
       "trades": [
         {
@@ -2673,21 +2613,6 @@
           "sl": 0.12
         },
         {
-          "result": "WIN",
-          "exit_date": "20231120",
-          "exit_price": 19.15,
-          "return_pct": 18.58,
-          "holding_days": 22,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
           "result": "LOSS",
           "exit_date": "20231107",
           "exit_price": 99.5,
@@ -2818,21 +2743,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.15,
           "sl": 0.12
@@ -3389,36 +3299,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250313",
-          "exit_price": 15.8,
-          "return_pct": -7.6,
-          "holding_days": 29,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.15,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250313",
-          "exit_price": 15.8,
-          "return_pct": -6.23,
-          "holding_days": 28,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.15,
           "sl": 0.12
         },
@@ -4989,13 +4869,13 @@
     },
     "TP15_SL15": {
       "stats": {
-        "total": 140,
-        "wins": 78,
-        "losses": 62,
+        "total": 136,
+        "wins": 76,
+        "losses": 60,
         "open_count": 24,
-        "win_rate": 0.5571,
-        "avg_return": 5.0445,
-        "avg_holding_days": 43.9
+        "win_rate": 0.5588,
+        "avg_return": 5.1451,
+        "avg_holding_days": 44.3
       },
       "trades": [
         {
@@ -5165,21 +5045,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20231120",
-          "exit_price": 19.15,
-          "return_pct": 18.58,
-          "holding_days": 22,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
           "exit_date": "20231123",
           "exit_price": 137.25,
           "return_pct": 21.24,
@@ -5309,21 +5174,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.15,
           "sl": 0.15
@@ -5880,36 +5730,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250328",
-          "exit_price": 14.15,
-          "return_pct": -17.25,
-          "holding_days": 40,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.15,
-          "sl": 0.15
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250328",
-          "exit_price": 14.15,
-          "return_pct": -16.02,
-          "holding_days": 39,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.15,
           "sl": 0.15
         },
@@ -7486,13 +7306,13 @@
     },
     "TP18_SL10": {
       "stats": {
-        "total": 146,
-        "wins": 65,
-        "losses": 81,
+        "total": 142,
+        "wins": 63,
+        "losses": 79,
         "open_count": 18,
-        "win_rate": 0.4452,
-        "avg_return": 3.5407,
-        "avg_holding_days": 28.8
+        "win_rate": 0.4437,
+        "avg_return": 3.3882,
+        "avg_holding_days": 28.9
       },
       "trades": [
         {
@@ -7661,21 +7481,6 @@
           "sl": 0.1
         },
         {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 24.93,
-          "holding_days": 39,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
           "result": "LOSS",
           "exit_date": "20231107",
           "exit_price": 99.5,
@@ -7806,21 +7611,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.18,
           "sl": 0.1
@@ -8377,36 +8167,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250311",
-          "exit_price": 16.1,
-          "return_pct": -5.85,
-          "holding_days": 27,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.18,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250311",
-          "exit_price": 16.1,
-          "return_pct": -4.45,
-          "holding_days": 26,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.18,
           "sl": 0.1
         },
@@ -9977,13 +9737,13 @@
     },
     "TP18_SL12": {
       "stats": {
-        "total": 142,
-        "wins": 66,
-        "losses": 76,
+        "total": 138,
+        "wins": 64,
+        "losses": 74,
         "open_count": 22,
-        "win_rate": 0.4648,
-        "avg_return": 3.9561,
-        "avg_holding_days": 34.0
+        "win_rate": 0.4638,
+        "avg_return": 3.8369,
+        "avg_holding_days": 34.1
       },
       "trades": [
         {
@@ -10152,21 +9912,6 @@
           "sl": 0.12
         },
         {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 24.93,
-          "holding_days": 39,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
           "result": "LOSS",
           "exit_date": "20231107",
           "exit_price": 99.5,
@@ -10297,21 +10042,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.18,
           "sl": 0.12
@@ -10868,36 +10598,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250313",
-          "exit_price": 15.8,
-          "return_pct": -7.6,
-          "holding_days": 29,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.18,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250313",
-          "exit_price": 15.8,
-          "return_pct": -6.23,
-          "holding_days": 28,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.18,
           "sl": 0.12
         },
@@ -12472,13 +12172,13 @@
     },
     "TP18_SL15": {
       "stats": {
-        "total": 135,
-        "wins": 66,
-        "losses": 69,
+        "total": 131,
+        "wins": 64,
+        "losses": 67,
         "open_count": 29,
-        "win_rate": 0.4889,
-        "avg_return": 4.366,
-        "avg_holding_days": 47.1
+        "win_rate": 0.4885,
+        "avg_return": 4.4013,
+        "avg_holding_days": 47.5
       },
       "trades": [
         {
@@ -12648,21 +12348,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 24.93,
-          "holding_days": 39,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
           "exit_date": "20231123",
           "exit_price": 137.25,
           "return_pct": 21.24,
@@ -12792,21 +12477,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.18,
           "sl": 0.15
@@ -13363,36 +13033,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250328",
-          "exit_price": 14.15,
-          "return_pct": -17.25,
-          "holding_days": 40,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.18,
-          "sl": 0.15
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250328",
-          "exit_price": 14.15,
-          "return_pct": -16.02,
-          "holding_days": 39,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.18,
           "sl": 0.15
         },
@@ -14974,12 +14614,12 @@
     },
     "TP20_SL10": {
       "stats": {
-        "total": 145,
-        "wins": 64,
-        "losses": 81,
+        "total": 141,
+        "wins": 62,
+        "losses": 79,
         "open_count": 19,
-        "win_rate": 0.4414,
-        "avg_return": 3.505,
+        "win_rate": 0.4397,
+        "avg_return": 3.3504,
         "avg_holding_days": 30.0
       },
       "trades": [
@@ -15149,21 +14789,6 @@
           "sl": 0.1
         },
         {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 24.93,
-          "holding_days": 39,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
           "result": "LOSS",
           "exit_date": "20231107",
           "exit_price": 99.5,
@@ -15294,21 +14919,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.2,
           "sl": 0.1
@@ -15865,36 +15475,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250311",
-          "exit_price": 16.1,
-          "return_pct": -5.85,
-          "holding_days": 27,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.2,
-          "sl": 0.1
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250311",
-          "exit_price": 16.1,
-          "return_pct": -4.45,
-          "holding_days": 26,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.2,
           "sl": 0.1
         },
@@ -17466,13 +17046,13 @@
     },
     "TP20_SL12": {
       "stats": {
-        "total": 141,
-        "wins": 62,
-        "losses": 79,
+        "total": 137,
+        "wins": 60,
+        "losses": 77,
         "open_count": 23,
-        "win_rate": 0.4397,
-        "avg_return": 3.8277,
-        "avg_holding_days": 35.7
+        "win_rate": 0.438,
+        "avg_return": 3.7038,
+        "avg_holding_days": 35.9
       },
       "trades": [
         {
@@ -17641,21 +17221,6 @@
           "sl": 0.12
         },
         {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 24.93,
-          "holding_days": 39,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
           "result": "LOSS",
           "exit_date": "20231107",
           "exit_price": 99.5,
@@ -17786,21 +17351,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.2,
           "sl": 0.12
@@ -18357,36 +17907,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250313",
-          "exit_price": 15.8,
-          "return_pct": -7.6,
-          "holding_days": 29,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.2,
-          "sl": 0.12
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250313",
-          "exit_price": 15.8,
-          "return_pct": -6.23,
-          "holding_days": 28,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.2,
           "sl": 0.12
         },
@@ -19962,13 +19482,13 @@
     },
     "TP20_SL15": {
       "stats": {
-        "total": 134,
-        "wins": 60,
-        "losses": 74,
+        "total": 130,
+        "wins": 58,
+        "losses": 72,
         "open_count": 30,
-        "win_rate": 0.4478,
-        "avg_return": 4.3735,
-        "avg_holding_days": 49.2
+        "win_rate": 0.4462,
+        "avg_return": 4.4093,
+        "avg_holding_days": 49.6
       },
       "trades": [
         {
@@ -20138,21 +19658,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 24.93,
-          "holding_days": 39,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
           "exit_date": "20231123",
           "exit_price": 137.25,
           "return_pct": 21.24,
@@ -20282,21 +19787,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231213",
-          "exit_price": 20.18,
-          "return_pct": 21.18,
-          "holding_days": 23,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": 0.2,
           "sl": 0.15
@@ -20853,36 +20343,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250328",
-          "exit_price": 14.15,
-          "return_pct": -17.25,
-          "holding_days": 40,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": 0.2,
-          "sl": 0.15
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250328",
-          "exit_price": 14.15,
-          "return_pct": -16.02,
-          "holding_days": 39,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": 0.2,
           "sl": 0.15
         },
@@ -22465,12 +21925,12 @@
     },
     "MA5_MA10": {
       "stats": {
-        "total": 160,
-        "wins": 65,
-        "losses": 95,
+        "total": 156,
+        "wins": 63,
+        "losses": 93,
         "open_count": 4,
-        "win_rate": 0.4062,
-        "avg_return": -0.1219,
+        "win_rate": 0.4038,
+        "avg_return": -0.1849,
         "avg_holding_days": 4.3
       },
       "trades": [
@@ -22641,21 +22101,6 @@
         },
         {
           "result": "WIN",
-          "exit_date": "20231025",
-          "exit_price": 16.7,
-          "return_pct": 3.41,
-          "holding_days": 4,
-          "entry_date": "20231019",
-          "entry_price": 16.15,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20231018",
-          "tp": null,
-          "sl": null
-        },
-        {
-          "result": "WIN",
           "exit_date": "20231023",
           "exit_price": 113.37,
           "return_pct": 0.14,
@@ -22785,21 +22230,6 @@
           "amount": 3000,
           "stock_id": "3450",
           "stock_name": "聯鈞",
-          "signal_date": "20231109",
-          "tp": null,
-          "sl": null
-        },
-        {
-          "result": "WIN",
-          "exit_date": "20231127",
-          "exit_price": 18.27,
-          "return_pct": 9.76,
-          "holding_days": 11,
-          "entry_date": "20231110",
-          "entry_price": 16.65,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
           "signal_date": "20231109",
           "tp": null,
           "sl": null
@@ -23356,36 +22786,6 @@
           "stock_id": "5443",
           "stock_name": "均豪",
           "signal_date": "20241115",
-          "tp": null,
-          "sl": null
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250204",
-          "exit_price": 16.65,
-          "return_pct": -2.63,
-          "holding_days": 3,
-          "entry_date": "20250121",
-          "entry_price": 17.1,
-          "amount": 3000,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250120",
-          "tp": null,
-          "sl": null
-        },
-        {
-          "result": "LOSS",
-          "exit_date": "20250204",
-          "exit_price": 16.65,
-          "return_pct": -1.19,
-          "holding_days": 2,
-          "entry_date": "20250122",
-          "entry_price": 16.85,
-          "amount": 1000.0,
-          "stock_id": "2243",
-          "stock_name": "怡利電",
-          "signal_date": "20250121",
           "tp": null,
           "sl": null
         },

@@ -311,9 +311,9 @@
       "qualified_count": 5
     },
     "記憶體": {
-      "avg_ret_20d": 19.85,
-      "avg_rsi": 46.1,
-      "avg_sharpe": 3.82,
+      "avg_ret_20d": 23.41,
+      "avg_rsi": 43.7,
+      "avg_sharpe": 4.3,
       "stocks": [
         {
           "id": "2408",
@@ -568,48 +568,6 @@
           "main_force": null
         },
         {
-          "id": "3205",
-          "name": "十銓",
-          "price": 55.0,
-          "rsi": 62.7,
-          "rsi10": 47.3,
-          "ret_20d": -5.2,
-          "signal": "HOLD",
-          "cv_sharpe": 0.47,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-21",
-              "title": "南寶看好上半年穩健成長無虞 全年維持營收成長目標",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-21",
-              "title": "台新證又爆庫存顯示異常！金管會揭原因 前案已被罰331萬元",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-21",
-              "title": "汽燃費更名為「養管費」 公路局提醒民眾繳費及費額均維持不變",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-21",
-            "外資": 33,
-            "投信": 0,
-            "自營": 0,
-            "合計": 33
-          },
-          "target_short": 59.9,
-          "target_mid": 50.2,
-          "target_long": 60.4,
-          "atr14": 1.83,
-          "stop_loss": 51.3,
-          "broker": null,
-          "main_force": null
-        },
-        {
           "id": "6770",
           "name": "力積電",
           "price": 59.1,
@@ -654,7 +612,7 @@
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 7
+      "qualified_count": 6
     },
     "AI伺服器": {
       "avg_ret_20d": 2.22,
@@ -1705,9 +1663,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 9.77,
-      "avg_rsi": 71.8,
-      "avg_sharpe": -1.22,
+      "avg_ret_20d": 26.5,
+      "avg_rsi": 94.4,
+      "avg_sharpe": -4.19,
       "stocks": [
         {
           "id": "1533",
@@ -1750,53 +1708,11 @@
           "stop_loss": 37.0,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 22.0,
-          "rsi": 49.1,
-          "rsi10": 45.4,
-          "ret_20d": -7.0,
-          "signal": "HOLD",
-          "cv_sharpe": 1.75,
-          "cv_win_rate": 0.5,
-          "news": [
-            {
-              "date": "2026-05-21",
-              "title": "全聯林敏雄：沒有在看股票 不考慮併購餐飲相關業態",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-21",
-              "title": "台灣首度查緝AI晶片走私 3人涉出口輝達伺服器至中國",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-21",
-              "title": "總統指示加碼！龔明鑫：盤點170萬中小企需求 力拚轉型條例下會期送審",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-05-21",
-            "外資": 255,
-            "投信": 0,
-            "自營": -1,
-            "合計": 254
-          },
-          "target_short": 28.7,
-          "target_mid": 33.0,
-          "target_long": 28.5,
-          "atr14": 1.5,
-          "stop_loss": 19.0,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": -16.79,

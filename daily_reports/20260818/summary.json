@@ -285,9 +285,9 @@
       "qualified_count": 2
     },
     "記憶體": {
-      "avg_ret_20d": 11.31,
-      "avg_rsi": 44.1,
-      "avg_sharpe": 1.83,
+      "avg_ret_20d": 12.83,
+      "avg_rsi": 44.2,
+      "avg_sharpe": 3.24,
       "stocks": [
         {
           "id": "2408",
@@ -514,44 +514,6 @@
           "target_long": 1840.1,
           "atr14": 106.0,
           "stop_loss": 1248.0,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 48.65,
-          "rsi": 43.6,
-          "rsi10": 44.4,
-          "ret_20d": -2.4,
-          "signal": "HOLD",
-          "ma5": 48.78,
-          "ma10": 48.95,
-          "ma20": 48.73,
-          "ma60": 51.3,
-          "cv_sharpe": -10.89,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2026-08-18",
-            "外資": 23000,
-            "投信": 0,
-            "自營": 0,
-            "合計": 23000,
-            "近5日": 71000,
-            "近5日外資": 71000,
-            "近5日投信": 0,
-            "連買日": 5,
-            "投信連買日": 0,
-            "集中度": 35.9,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 50.7,
-          "target_mid": 49.2,
-          "target_long": 53.0,
-          "atr14": 1.21,
-          "stop_loss": 46.2,
           "broker": null,
           "main_force": null
         },
@@ -1893,9 +1855,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": -11.85,
-      "avg_rsi": 33.9,
-      "avg_sharpe": -1.21,
+      "avg_ret_20d": -4.85,
+      "avg_rsi": 35.4,
+      "avg_sharpe": -2.18,
       "stocks": [
         {
           "id": "3552",
@@ -1972,49 +1934,11 @@
           "stop_loss": 29.2,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 39.75,
-          "rsi": 31.0,
-          "rsi10": 33.9,
-          "ret_20d": -25.8,
-          "signal": "HOLD",
-          "ma5": 40.03,
-          "ma10": 40.74,
-          "ma20": 43.59,
-          "ma60": 43.77,
-          "cv_sharpe": 0.73,
-          "cv_win_rate": 0.44,
-          "news": [],
-          "chip": {
-            "date": "2026-08-17",
-            "外資": -121413,
-            "投信": 0,
-            "自營": -1000,
-            "合計": -122413,
-            "近5日": -104711,
-            "近5日外資": -123363,
-            "近5日投信": -1000,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": -8.7,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 52.6,
-          "target_mid": 59.6,
-          "target_long": 52.8,
-          "atr14": 2.92,
-          "stop_loss": 33.9,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 0,
       "buy_count": 0,
-      "qualified_count": 1
+      "qualified_count": 0
     },
     "綠能環保": {
       "avg_ret_20d": 12.68,
@@ -3899,7 +3823,7 @@
         },
         {
           "id": "7769",
-          "name": "鴻勤",
+          "name": "鴻勁",
           "price": 6525.0,
           "rsi": 51.0,
           "rsi10": 52.6,

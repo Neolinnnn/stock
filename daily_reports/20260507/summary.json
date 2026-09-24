@@ -235,8 +235,8 @@
     },
     "記憶體": {
       "avg_ret_20d": 20.4,
-      "avg_rsi": 62.6,
-      "avg_sharpe": -0.11,
+      "avg_rsi": 69.5,
+      "avg_sharpe": 3.88,
       "stocks": [
         {
           "id": "2408",
@@ -392,42 +392,11 @@
           "target_short": 297.0,
           "target_mid": 322.9,
           "target_long": 478.4
-        },
-        {
-          "id": "3205",
-          "name": "十銓",
-          "price": 56.0,
-          "rsi": 27.8,
-          "ret_20d": NaN,
-          "signal": "HOLD",
-          "cv_sharpe": -0.47,
-          "cv_win_rate": 0.3,
-          "news": [
-            {
-              "date": "2026-05-07",
-              "title": "台股超級行情火熱！0050成交值連2日破百億 強壓主動式ETF",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-07",
-              "title": "營收速報  - 宇瞻(8271)4月營收37.40億元年增率高達360.82％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-07",
-              "title": "營收速報  - 榮群(8034)4月營收4,755萬元年增率高達106.45％",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {},
-          "target_short": NaN,
-          "target_mid": NaN,
-          "target_long": NaN
         }
       ],
       "hot_count": 3,
       "buy_count": 0,
-      "qualified_count": 2
+      "qualified_count": 4
     },
     "AI伺服器": {
       "avg_ret_20d": 13.86,
@@ -935,9 +904,9 @@
       "qualified_count": 0
     },
     "車用電子": {
-      "avg_ret_20d": 15.29,
-      "avg_rsi": 60.8,
-      "avg_sharpe": -9.69,
+      "avg_ret_20d": 8.85,
+      "avg_rsi": 60.0,
+      "avg_sharpe": -9.73,
       "stocks": [
         {
           "id": "3552",
@@ -1000,37 +969,6 @@
           "target_short": 34.0,
           "target_mid": 34.9,
           "target_long": 47.5
-        },
-        {
-          "id": "2243",
-          "name": "怡利電",
-          "price": 26.4,
-          "rsi": 62.3,
-          "ret_20d": 28.2,
-          "signal": "HOLD",
-          "cv_sharpe": 5.01,
-          "cv_win_rate": 0.6667,
-          "news": [
-            {
-              "date": "2026-05-07",
-              "title": "AI共振威力更強大、久元⊕、青雲⊕、光寶科⊕、世界⊕",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-07",
-              "title": "宏碁Q1賺7.02億元年增36% EPS 0.23元 小虎隊繳出強勁財報",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-05-07",
-              "title": "權王衝破股票代號！賣壓刷新近月高點，這條「生命線」絕不能破！",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {},
-          "target_short": 28.2,
-          "target_mid": 29.0,
-          "target_long": 44.0
         }
       ],
       "hot_count": 0,
