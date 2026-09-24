@@ -677,7 +677,7 @@
 
   /**
    * 集保大戶三級距的最新一期比例與週變化。
-   * 卡 17（總評）與卡 18（柱狀圖）共用，避免同一份計算寫兩次。
+   * 主力追蹤總評卡與大戶持股卡共用，避免同一份計算寫兩次。
    *
    * 級距分層互斥、不累積；total 為三者相加，即「600 張以上」的累計集中度。
    *
@@ -888,9 +888,9 @@
        <div class="qval ${c}">${v}</div></div>`).join('');
   }
 
-  /** 01 主K線圖：沿用 lightweight-charts，與站內其他頁面一致。 */
+  /** 主K線圖：沿用 lightweight-charts，與站內其他頁面一致。 */
   function cardMainChart(d) {
-    return `<div class="card c12"><h3><span class="no">01</span>主K線圖
+    return `<div class="card c12"><h3><span class="no"></span>主K線圖
       <span class="sub">K + 布林通道 + MA5/10/20/60 + 量</span></h3>
       <div class="chartbox" id="kline"><div class="klegend" id="klegend"></div></div></div>`;
   }
@@ -1004,7 +1004,7 @@
     });
   }
 
-  /** 02 AI 決策核心：彙整後端 summary + 前端衍生風險值。 */
+  /** AI 決策核心：彙整後端 summary + 前端衍生風險值。 */
   function cardDecision(d, sc, rk) {
     const s = Object.fromEntries((d.summary || []).map(x => [x.label, x]));
     const dirTag = x => !x ? '<span class="tag n">—</span>'
@@ -1021,16 +1021,16 @@
       ['壓力區', `<b>${L.resistance || '—'}</b>`],
       ['風險等級', `<span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>`],
     ];
-    return `<div class="card c4"><h3><span class="no">02</span>AI 決策核心
+    return `<div class="card c4"><h3><span class="no"></span>AI 決策核心
       <span class="sub">AI DECISION CORE</span></h3>
       <div class="warn">⚠ ${d.signal?.label || 'AI CAUTION'}</div>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('')}
     </div>`;
   }
 
-  /** 03 多維度評分雷達 */
+  /** 多維度評分雷達 */
   function cardRadar(sc) {
-    return `<div class="card c4"><h3><span class="no">03</span>多維度評分
+    return `<div class="card c4"><h3><span class="no"></span>多維度評分
       <span class="sub">綜合 ${sc.total} / 100</span></h3>
       <canvas id="radar-score"></canvas>
       <div style="text-align:center;margin-top:4px;">
@@ -1039,17 +1039,17 @@
     </div>`;
   }
 
-  /** 04 籌碼熱區圖 */
+  /** 籌碼熱區圖 */
   function cardHeatmap() {
-    return `<div class="card c4"><h3><span class="no">04</span>AI 籌碼熱區圖
+    return `<div class="card c4"><h3><span class="no"></span>AI 籌碼熱區圖
       <span class="sub">近 60 日價量分佈</span></h3>
       <canvas id="heatmap"></canvas>
       <div class="note">橫條長度為該價格區間累計成交量；虛線為現價。</div></div>`;
   }
 
-  /** 05 風險管理雷達 */
+  /** 風險管理雷達 */
   function cardRiskRadar(rk) {
-    return `<div class="card c4"><h3><span class="no">05</span>風險管理雷達</h3>
+    return `<div class="card c4"><h3><span class="no"></span>風險管理雷達</h3>
       <canvas id="radar-risk"></canvas>
       <div class="row"><span class="k">綜合風險指數 <span class="est">(估)</span></span>
         <span class="v"><span class="tag ${rk.level === '高' ? 'r' : rk.level === '中' ? 'y' : 'g'}">${rk.level}</span>
@@ -1057,10 +1057,10 @@
       <div class="note">綜合隔日沖熱度、波動率、出貨壓力與趨勢弱勢四項。</div></div>`;
   }
 
-  /** 06 AI 預測路徑 */
+  /** AI 預測路徑 */
   function cardPrediction(d) {
     const p = d.prediction || {};
-    return `<div class="card c4"><h3><span class="no">06</span>AI 預測路徑
+    return `<div class="card c4"><h3><span class="no"></span>AI 預測路徑
       <span class="sub">後端模型輸出</span></h3>
       ${barRow('上漲', nz(p.up) * 100, '#e74c3c')}
       ${barRow('盤整', nz(p.sideways) * 100, '#f1b143')}
@@ -1072,14 +1072,14 @@
     </div>`;
   }
 
-  /** 07 主力成本結構分布 */
+  /** 主力成本結構分布 */
   function cardCostStruct(vw, cur) {
-    return `<div class="card c4"><h3><span class="no">07</span>主力成本結構分布
+    return `<div class="card c4"><h3><span class="no"></span>主力成本結構分布
       <span class="sub">20 日 VWAP ${fmt(vw, 2)}</span></h3>
       <canvas id="coststruct"></canvas></div>`;
   }
 
-  /** 08 法人行為計量 */
+  /** 法人行為計量 */
   function cardChipFlow(d, sc) {
     const c = d.chip || {}, n = (c.dates || []).length;
     const rows = [];
@@ -1091,7 +1091,7 @@
         自 <b class="${c.dealer[i] >= 0 ? 'up' : 'dn'}">${fmtInt(c.dealer[i])}</b></span></div>`);
     }
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c4"><h3><span class="no">08</span>法人行為計量
+    return `<div class="card c4"><h3><span class="no"></span>法人行為計量
       <span class="sub">外資／投信／自營商（張）</span></h3>
       <canvas id="chipbars"></canvas>
       ${rows.join('')}
@@ -1101,9 +1101,9 @@
         <span class="v ${net5 >= 0 ? 'up' : 'dn'}">${fmtInt(net5)} 張</span></div></div>`;
   }
 
-  /** 09 隔日沖風險分析（全為估算值） */
+  /** 隔日沖風險分析（全為估算值） */
   function cardDaytradeRisk(rk) {
-    return `<div class="card c4"><h3><span class="no">09</span>隔日沖風險分析
+    return `<div class="card c4"><h3><span class="no"></span>隔日沖風險分析
       <span class="sub">估算值</span></h3>
       ${barRow('主力出貨壓力', rk.distribute, '#e74c3c')}
       ${barRow('籌碼換手率', rk.turnover, '#f1b143')}
@@ -1113,9 +1113,9 @@
       <div class="note">⚠ 台股當沖／隔日沖明細無免費資料源，本卡以振幅與量能倍數推估，僅供相對比較。</div></div>`;
   }
 
-  /** 10 AI 多空能量條 */
+  /** AI 多空能量條 */
   function cardEnergy(en) {
-    return `<div class="card c4"><h3><span class="no">10</span>AI 多空能量條
+    return `<div class="card c4"><h3><span class="no"></span>AI 多空能量條
       <span class="sub">近 20 日量能歸屬</span></h3>
       ${barRow('多方量能', en.bull, '#e74c3c')}
       ${barRow('空方量能', en.bear, '#2ecc71')}
@@ -1124,10 +1124,10 @@
       <div class="note">以紅 K／黑 K 當日成交量加總切分。</div></div>`;
   }
 
-  /** 11 健康度綜合評估 */
+  /** 健康度綜合評估 */
   function cardHealth(sc) {
     // 五項同為 0~100 的分數：環形圖比較相近數值的辨識度最差，且五種顏色
-    // 編碼的是「項目身分」而非量值。改橫條後可直接比長短，與卡 09/13 一致。
+    // 編碼的是「項目身分」而非量值。改橫條後可直接比長短，與隔日沖風險、AI 信心維度兩卡一致。
     const items = [
       ['籌碼健康度', sc.chip, '#4ea1f3'],
       ['技術面健康', sc.trend, '#e74c3c'],
@@ -1136,13 +1136,13 @@
       ['動能強度', sc.momentum, '#7c5cff'],
     ];
     const avg = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c4"><h3><span class="no">11</span>健康度綜合評估</h3>
+    return `<div class="card c4"><h3><span class="no"></span>健康度綜合評估</h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="row" style="margin-top:8px;"><span class="k">總評</span>
         <span class="v">${avg >= 70 ? '良好' : avg >= 50 ? '普通' : '偏弱'}（平均 ${avg} 分）</span></div></div>`;
   }
 
-  /** 12 主力動態信號燈 */
+  /** 主力動態信號燈 */
   function cardSignalLight(d, sc, rk) {
     const lights = [
       ['趨勢', sc.trend >= 60 ? 'g' : sc.trend >= 40 ? 'y' : 'r', sc.trend >= 60 ? '偏多延續' : sc.trend >= 40 ? '中性整理' : '偏空修正'],
@@ -1152,7 +1152,7 @@
     ];
     const reds = lights.filter(l => l[1] === 'r').length;
     const cur = reds >= 2 ? ['r', '紅燈（觀望）'] : reds === 1 ? ['y', '黃燈（注意）'] : ['g', '綠燈（可續抱）'];
-    return `<div class="card c4"><h3><span class="no">12</span>AI 主力動態信號燈</h3>
+    return `<div class="card c4"><h3><span class="no"></span>AI 主力動態信號燈</h3>
       ${lights.map(([k, c, t]) =>
         `<div class="row"><span class="k"><i class="dot ${c === 'g' ? '' : c}"></i>${k}</span>
          <span class="v">${t}</span></div>`).join('')}
@@ -1160,7 +1160,7 @@
         <span class="v"><span class="tag ${cur[0]}">${cur[1]}</span></span></div></div>`;
   }
 
-  /** 13 AI 信心維度 */
+  /** AI 信心維度 */
   function cardConfidence(d, sc) {
     const p = d.prediction || {};
     const completeness = (d.ohlcv?.close?.length >= 60 ? 100 : 60);
@@ -1171,13 +1171,13 @@
       ['策略適用度', clamp(sc.total, 0, 100), '#7c5cff'],
     ];
     const conf = Math.round(mean(items.map(i => i[1])));
-    return `<div class="card c4"><h3><span class="no">13</span>AI 信心維度
+    return `<div class="card c4"><h3><span class="no"></span>AI 信心維度
       <span class="sub">AI CONFIDENCE ${conf}%</span></h3>
       ${items.map(([l, v, c]) => barRow(l, v, c)).join('')}
       <div class="note">資料截至 ${last(d.ohlcv?.date) || '—'}</div></div>`;
   }
 
-  /** 14 籌碼異動摘要 */
+  /** 籌碼異動摘要 */
   function cardChipSummary(d, sc) {
     const c = d.chip || {}, n = (c.dates || []).length - 1;
     const rows = [
@@ -1186,7 +1186,7 @@
       ['自營商', c.dealer?.[n]],
       ['三大法人', c.total?.[n]],
     ];
-    return `<div class="card c4"><h3><span class="no">14</span>籌碼異動摘要
+    return `<div class="card c4"><h3><span class="no"></span>籌碼異動摘要
       <span class="sub">${c.dates?.[n] || ''}</span></h3>
       ${rows.map(([k, v]) => `<div class="row"><span class="k">${k}</span>
         <span class="v ${nz(v) >= 0 ? 'up' : 'dn'}">${fmtInt(v)} 張</span></div>`).join('')}
@@ -1195,7 +1195,7 @@
         ${sc.chip >= 55 ? '偏多買盤' : sc.chip <= 45 ? '偏空賣壓' : '中性'}</span></span></div></div>`;
   }
 
-  /** 15 買賣力分佈（法人 vs 散戶，散戶為推估） */
+  /** 買賣力分佈（法人 vs 散戶，散戶為推估） */
   function cardPowerSplit(d, sc) {
     const c = d.chip || {}, o = d.ohlcv;
     // 法人主導度：近 5 日法人淨買賣超絕對值合計 / 同期成交量（張）。
@@ -1205,7 +1205,7 @@
     const instRatio = clamp(vol5 ? net5abs / vol5 * 100 : 0, 0, 100);
     const retailRatio = 100 - instRatio;
     const net5 = sum(tail(c.total, 5));
-    return `<div class="card c4"><h3><span class="no">15</span>買賣力分佈
+    return `<div class="card c4"><h3><span class="no"></span>買賣力分佈
       <span class="sub">法人流向強度（推估）</span></h3>
       <div class="rings">
         ${ringSVG(instRatio, '#e74c3c', '法人主導度')}
@@ -1218,9 +1218,9 @@
         免費資料源無法人買賣總額與散戶明細，故無法計算真實散戶佔比。</div></div>`;
   }
 
-  /** 16 多空強度分佈 */
+  /** 多空強度分佈 */
   function cardStrength(sc, en) {
-    return `<div class="card c4"><h3><span class="no">16</span>多空強度分佈</h3>
+    return `<div class="card c4"><h3><span class="no"></span>多空強度分佈</h3>
       <div class="rings">
         ${ringSVG(en.bull, '#e74c3c', '多方強度')}
         ${ringSVG(en.bear, '#2ecc71', '空方強度')}
@@ -1231,7 +1231,7 @@
   }
 
   /**
-   * 17 主力追蹤總評。
+   * 主力追蹤總評。
    * 註：依專案規範，報告內文應由 Gemini 產生；此處為前端規則模板，
    * 後續可由 gemini_writer.py 預產文字寫回 JSON 再讀取。
    */
@@ -1258,8 +1258,8 @@
          ${ht.rows.map(tierRow).join('')}`
       : `<div class="note" style="border-top:1px solid var(--border);
            margin-top:8px;padding-top:7px;">大戶三級距（1000 張以上／800~1000 張／
-           600~800 張）待集保資料就緒後顯示，來源同卡 18。</div>`;
-    return `<div class="card c4"><h3><span class="no">17</span>主力追蹤總評
+           600~800 張）待集保資料就緒後顯示，來源同「大戶持股分布」卡。</div>`;
+    return `<div class="card c4"><h3><span class="no"></span>主力追蹤總評
       <span class="sub">規則引擎</span></h3>
       <div style="display:flex;align-items:center;gap:10px;">
         <span class="verdict">${verdict}</span>
@@ -1270,14 +1270,14 @@
   }
 
   /**
-   * 18 大戶持股分布（集保股權分散表，週頻）。
+   * 大戶持股分布（集保股權分散表，週頻）。
    * 三個級距分層互斥，追蹤持股比例的週變化：比例上升代表籌碼向大戶集中。
    */
   function cardHolders(d) {
     const hd = d.holders;
     const has = hd && hd.dates && hd.dates.length;
     if (!has) {
-      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
+      return `<div class="card c4"><h3><span class="no"></span>大戶持股分布
         <span class="sub">集保股權分散表</span></h3>
         <div class="note" style="padding:14px 0;">
           尚無資料。此欄位需後端重跑 <code>build_docs.py</code> 取得集保股權分散表
@@ -1289,7 +1289,7 @@
     // 只有一期時算不出期變化，柱狀圖一根柱都沒有，
     // 與其給一張看似故障的空圖，不如直接呈現數值並說明歷史如何累積。
     if (hd.dates.length < 2) {
-      return `<div class="card c4"><h3><span class="no">18</span>大戶持股分布
+      return `<div class="card c4"><h3><span class="no"></span>大戶持股分布
         <span class="sub">集保股權分散表 · ${ht.date}</span></h3>
         ${ht.rows.map(tierRow).join('')}
         <div class="note">累計門檻：600 張以上已涵蓋 800 與 1000 張以上，三者不相加。
@@ -1297,7 +1297,7 @@
           累積到兩期以上才畫得出變化趨勢。</div></div>`;
     }
 
-    return `<div class="card c12"><h3><span class="no">18</span>大戶持股分布
+    return `<div class="card c8"><h3><span class="no"></span>大戶持股分布
       <span class="sub">集保股權分散表 · 週頻 · 截至 ${ht.date}</span></h3>
       <div class="holderwrap">
         <div><canvas id="holders"></canvas></div>
@@ -1310,16 +1310,16 @@
       </div></div>`;
   }
 
-  /** 19 技術指標（MACD + KD(J)），資料不足時整卡不顯示 */
+  /** 技術指標（MACD + KD(J)），資料不足時整卡不顯示 */
   function cardTechChart(d) {
     const ind = d.indicators || {};
     if (!ind.macd_hist && !ind.kd_k) return '';
-    return `<div class="card c12"><h3><span class="no">19</span>技術指標
+    return `<div class="card c12"><h3><span class="no"></span>技術指標
       <span class="sub">MACD + KD(J)</span></h3>
       <canvas id="techchart"></canvas></div>`;
   }
 
-  /** 20 原始資料表（近 10 日） */
+  /** 原始資料表（近 10 日） */
   function cardRawTable(d) {
     const o = d.ohlcv, c = d.chip || {}, n = o.close.length;
     let rows = '';
@@ -1330,7 +1330,7 @@
         <td>${fmtInt(o.volume[i] / 1000)}</td>
         <td class="${nz(c.total?.[i]) >= 0 ? 'up' : 'dn'}">${fmtInt(c.total?.[i])}</td></tr>`;
     }
-    return `<div class="card c12"><h3><span class="no">20</span>原始資料表
+    return `<div class="card c12"><h3><span class="no"></span>原始資料表
       <span class="sub">近 10 個交易日</span></h3>
       <div style="overflow-x:auto;">
         <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:14px;">
@@ -1355,14 +1355,21 @@
 
     renderQuote(d);
 
+    // 排列：K 線與技術指標置頂；三欄時同列卡片高度相近以減少留白
+    // （法人行為計量最高，與風險雷達同列）；總評與大戶持股同列。
     $('grid').innerHTML = [
-      cardMainChart(d), cardDecision(d, sc, rk), cardRadar(sc), cardHeatmap(),
-      cardRiskRadar(rk), cardPrediction(d), cardCostStruct(vw, cur),
-      cardChipFlow(d, sc), cardDaytradeRisk(rk), cardEnergy(en), cardHealth(sc),
+      cardMainChart(d), cardTechChart(d),
+      cardDecision(d, sc, rk), cardRadar(sc), cardHeatmap(),
+      cardRiskRadar(rk), cardChipFlow(d, sc), cardCostStruct(vw, cur),
+      cardPrediction(d), cardDaytradeRisk(rk), cardEnergy(en), cardHealth(sc),
       cardSignalLight(d, sc, rk), cardConfidence(d, sc), cardChipSummary(d, sc),
       cardPowerSplit(d, sc), cardStrength(sc, en), cardVerdict(d, sc, rk, vw),
-      cardHolders(d), cardTechChart(d), cardRawTable(d),
+      cardHolders(d), cardRawTable(d),
     ].join('');
+    // 卡號依實際顯示順序編，缺資料而不顯示的卡不佔號
+    $('grid').querySelectorAll('.no').forEach((el, i) => {
+      el.textContent = String(i + 1).padStart(2, '0');
+    });
 
     hideTip();
     const stEl = $('status');
