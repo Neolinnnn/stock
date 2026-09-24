@@ -273,7 +273,7 @@ def generate_narrative(writer, context_data, date_str):
     """呼叫 Gemini 生成三段週報敘事；任何失敗回傳空字串（前端會隱藏敘事卡）。"""
     extra = ('請輸出四段，第一段標題「本週輪動回顧」描述族群強弱輪動，'
              '第二段標題「本月行動清單追蹤」根據 month_actions 與 month_actions_stats '
-             '說明本月入榜個股的整體表現（上漲檔數、平均漲幅），點名漲幅最大與回落最多者，'
+             '說明本月入榜個股的整體表現（上漲檔數、平均漲幅），點名漲幅最大與回落最多者（ret_pct／max_ret_pct 皆以收盤價計，勿稱盤中），'
              '若 month_actions 為空則說明本月尚無入榜個股，'
              '第三段標題「下週聚焦」點出值得追蹤的族群與個股，'
              '第四段標題「風險提醒」根據 alerts_week 與 rotation_matrix.cooling '
