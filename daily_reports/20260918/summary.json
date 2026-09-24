@@ -1541,9 +1541,9 @@
       "qualified_count": 0
     },
     "IC設計": {
-      "avg_ret_20d": 3.38,
-      "avg_rsi": 65.2,
-      "avg_sharpe": 0.25,
+      "avg_ret_20d": 3.92,
+      "avg_rsi": 64.6,
+      "avg_sharpe": 0.82,
       "stocks": [
         {
           "id": "2454",
@@ -1886,47 +1886,9 @@
           "stop_loss": 124.0,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 8.15,
-          "rsi": 70.7,
-          "rsi10": 56.1,
-          "ret_20d": -1.3,
-          "signal": "HOLD",
-          "ma5": 8.02,
-          "ma10": 8.03,
-          "ma20": 8.09,
-          "ma60": 8.45,
-          "cv_sharpe": -4.86,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {
-            "date": "2026-09-18",
-            "外資": 143000,
-            "投信": 0,
-            "自營": 2000,
-            "合計": 145000,
-            "近5日": 2000,
-            "近5日外資": 1000,
-            "近5日投信": 0,
-            "連買日": 2,
-            "投信連買日": 0,
-            "集中度": 0.1,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 8.3,
-          "target_mid": 9.4,
-          "target_long": 8.8,
-          "atr14": 0.14,
-          "stop_loss": 7.9,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 3,
+      "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 3
     },
@@ -4175,13 +4137,6 @@
       "name": "祥碩",
       "type": "RSI過熱",
       "detail": "RSI=75.3"
-    },
-    {
-      "sector": "IC設計",
-      "id": "3058",
-      "name": "聯陽",
-      "type": "RSI過熱",
-      "detail": "RSI=70.7"
     },
     {
       "sector": "CoPoS封裝",

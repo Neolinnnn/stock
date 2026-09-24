@@ -1695,9 +1695,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 10.7,
-      "avg_rsi": 44.2,
-      "avg_sharpe": -4.56,
+      "avg_ret_20d": 9.81,
+      "avg_rsi": 41.9,
+      "avg_sharpe": -4.24,
       "stocks": [
         {
           "id": "2454",
@@ -2074,48 +2074,6 @@
           "target_long": 166.1,
           "atr14": 6.53,
           "stop_loss": 145.4,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 9.91,
-          "rsi": 64.7,
-          "rsi10": 66.4,
-          "ret_20d": 18.8,
-          "signal": "HOLD",
-          "cv_sharpe": -7.48,
-          "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 中探針(6217)5月營收4.06億元年增率高達51.18％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 華固(2548)5月營收3.16億元年增率高達9203.56％",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-05",
-              "title": "營收速報  - 廣閎科(6693)5月營收2.14億元年增率高達115.16％",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-05",
-            "外資": -868,
-            "投信": 0,
-            "自營": -3,
-            "合計": -871
-          },
-          "target_short": 10.3,
-          "target_mid": 9.4,
-          "target_long": 10.8,
-          "atr14": 0.47,
-          "stop_loss": 9.0,
           "broker": null,
           "main_force": null
         }

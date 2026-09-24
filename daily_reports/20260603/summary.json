@@ -1233,9 +1233,9 @@
       "qualified_count": 2
     },
     "IC設計": {
-      "avg_ret_20d": 26.22,
-      "avg_rsi": 63.9,
-      "avg_sharpe": -4.78,
+      "avg_ret_20d": 26.75,
+      "avg_rsi": 60.4,
+      "avg_sharpe": -4.62,
       "stocks": [
         {
           "id": "2454",
@@ -1572,51 +1572,9 @@
           "stop_loss": 151.8,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 10.15,
-          "rsi": 91.7,
-          "rsi10": 80.4,
-          "ret_20d": 22.0,
-          "signal": "HOLD",
-          "cv_sharpe": -6.06,
-          "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-03",
-              "title": "亞洲創新籌資平台專屬網站正式上線 助力打造台灣成為亞洲那斯達克",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-03",
-              "title": "旅館業Q1平均房價3101元較去年漲1.5% 住用率連3年達5成",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-03",
-              "title": "台灣碳定價寫歷史！首期碳費入帳49.7億240家企業全繳清 護國群山扛22億最「多金」",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-03",
-            "外資": 255,
-            "投信": 0,
-            "自營": -1,
-            "合計": 254
-          },
-          "target_short": 9.7,
-          "target_mid": 9.4,
-          "target_long": 10.9,
-          "atr14": 0.4,
-          "stop_loss": 9.3,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 3,
+      "hot_count": 2,
       "buy_count": 0,
       "qualified_count": 1
     },
@@ -2969,13 +2927,6 @@
       "name": "瑞昱",
       "type": "RSI過熱",
       "detail": "RSI=75.1"
-    },
-    {
-      "sector": "IC設計",
-      "id": "3058",
-      "name": "聯陽",
-      "type": "RSI過熱",
-      "detail": "RSI=91.7"
     },
     {
       "sector": "AI ASIC/IP",

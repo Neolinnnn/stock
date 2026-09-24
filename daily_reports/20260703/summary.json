@@ -1541,9 +1541,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 1.38,
-      "avg_rsi": 54.5,
-      "avg_sharpe": -2.27,
+      "avg_ret_20d": 2.44,
+      "avg_rsi": 52.9,
+      "avg_sharpe": -2.58,
       "stocks": [
         {
           "id": "2454",
@@ -1871,31 +1871,6 @@
           "target_long": 317.8,
           "atr14": 10.41,
           "stop_loss": 163.2,
-          "broker": null,
-          "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 9.64,
-          "rsi": 69.0,
-          "rsi10": 59.5,
-          "ret_20d": -8.2,
-          "signal": "HOLD",
-          "ma5": 9.27,
-          "ma10": 9.31,
-          "ma20": 9.37,
-          "ma60": 8.95,
-          "cv_sharpe": 0.48,
-          "cv_win_rate": 0.33,
-          "news": [],
-          "chip": {},
-          "chip_tier": null,
-          "target_short": 9.8,
-          "target_mid": 10.8,
-          "target_long": 13.5,
-          "atr14": 0.36,
-          "stop_loss": 8.9,
           "broker": null,
           "main_force": null
         }

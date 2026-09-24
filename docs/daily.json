@@ -7,7 +7,7 @@
     "櫃買漲跌幅%": -0.1860982211910242,
     "強勢族群": "AI伺服器, 封測, IC設計, 車用電子, AI ASIC/IP, AI 散熱, 被動元件",
     "弱勢族群": "記憶體, 顯示",
-    "雙條件推薦": 4,
+    "雙條件推薦": 3,
     "掃描涵蓋率": 100,
     "失敗族群": [],
     "部分失敗族群": {
@@ -237,112 +237,6 @@
         "moat": "擁有記憶體與邏輯代工雙軌技術與產能，專注成熟與特殊製程，並積極布局3D AI Foundry、WoW (晶圓堆疊) 及IPD (矽電容) 等先進封裝技術，提升產品附加價值與客戶黏著度。",
         "summary": "力積電2026年第二季營收受惠於記憶體平均售價(ASP)上升及產品組合改善而顯著成長，總營收年增53%。記憶體產品（DRAM加Flash）佔總營收比重超過五成，且DRAM投片價格於7月再調漲45%，預計下半年將對營收及獲利帶來階梯式成長。公司積極轉型為以AI應用為核心的專業晶圓代工廠，3D AI Foundry營收占比從2025年的2%提升至2026年Q2的5.4%，且邏輯代工價格亦同步上調10%至15%。",
         "data_period": "2026Q2",
-        "updated_at": "2026-09-24"
-      }
-    },
-    {
-      "sector": "IC設計",
-      "id": "3058",
-      "name": "聯陽",
-      "price": 8.22,
-      "rsi": 56.9,
-      "cv_sharpe": 1.5,
-      "bias_ma10": 1.2,
-      "sector_strong": true,
-      "trend_analysis": {
-        "code": "3058",
-        "trend_status": "多頭排列",
-        "ma_alignment": "多頭排列 MA5>MA10>MA20",
-        "trend_strength": 75,
-        "ma5": 8.24,
-        "ma10": 8.12,
-        "ma20": 8.11,
-        "ma60": 8.39,
-        "current_price": 8.22,
-        "bias_ma5": -0.22,
-        "bias_ma10": 1.26,
-        "bias_ma20": 1.36,
-        "volume_status": "縮量回調",
-        "volume_ratio_5d": 0.6,
-        "volume_trend": "縮量回調，洗盤特徵明顯（佳）",
-        "support_ma5": false,
-        "support_ma10": true,
-        "buy_signal": "強力買入",
-        "signal_score": 91,
-        "signal_reasons": [
-          "多頭排列，順勢做多",
-          "價格略低於MA5(-0.2%)，回踩買點",
-          "縮量回調，主力洗盤",
-          "MA10支撐有效",
-          "空頭排列，持續下跌",
-          "RSI中性(54.0)，震盪整理中",
-          "強勢族群加持，資金輪動有利"
-        ],
-        "risk_factors": [],
-        "macd_dif": -0.0106,
-        "macd_dea": -0.0522,
-        "macd_bar": 0.0832,
-        "macd_status": "空頭",
-        "macd_signal": "空頭排列，持續下跌",
-        "rsi_6": 57.2,
-        "rsi_12": 54.0,
-        "rsi_24": 48.9,
-        "rsi_status": "中性",
-        "rsi_signal": "RSI中性(54.0)，震盪整理中",
-        "sector_is_strong": true,
-        "kd_k": 67.29,
-        "kd_d": 58.28,
-        "kd_j": 85.3,
-        "kd_k_prev": 68.64,
-        "kd_d_prev": 53.77,
-        "macd_bar_prev": 0.04,
-        "entry_strategy": {
-          "vol_ratio": 0.7,
-          "vol_ok": false,
-          "macd_momentum": false,
-          "passed": false,
-          "grade": "C"
-        }
-      },
-      "product_mix": {
-        "product_lines": [
-          {
-            "name": "Type-C 應用晶片",
-            "share_pct": 43.6,
-            "yoy_growth": -8.7,
-            "trend": "down"
-          },
-          {
-            "name": "儲存產品線",
-            "share_pct": 16.7,
-            "yoy_growth": 21.4,
-            "trend": "up"
-          },
-          {
-            "name": "類比產品",
-            "share_pct": 6.2,
-            "yoy_growth": -30.1,
-            "trend": "down"
-          },
-          {
-            "name": "PC/NB 控制晶片及其他高速傳輸介面IC",
-            "share_pct": 33.5,
-            "yoy_growth": null,
-            "trend": "flat"
-          }
-        ],
-        "regions": [],
-        "customers": [
-          "AMD (USB4 Re-driver)",
-          "Nvidia (AI運算平台EC)",
-          "印度摩托車廠 (車用SoC)",
-          "全球主要NB/PC品牌客戶",
-          "關鍵ODM合作夥伴"
-        ],
-        "biz_model": "無晶圓廠IC設計公司 (Fabless IC Design House)，專注於晶片設計、研發，並委外製造、封測。",
-        "moat": "核心競爭優勢為高速SerDes技術、在PC/NB控制晶片市場的領先市佔率（約40-45%），以及早期佈局AI PC平台與車用市場，並透過良好庫存管理應對DRAM漲價以維持穩定出貨和獲利能力。",
-        "summary": "聯陽半導體2026年上半年營收表現穩健，其中Type-C應用晶片佔總營收43.6%，但年減8.7%；儲存產品線成長強勁，佔16.7%且年增21.4%。公司積極拓展非PC領域，車用SoC已打入印度摩托車廠供應鏈，且嵌入式控制器(EC)已整合至Nvidia的AI運算平台；儘管PC/NB市場面臨挑戰，但公司透過產品組合優化和庫存策略展現營運韌性。",
-        "data_period": "2026 H1",
         "updated_at": "2026-09-24"
       }
     },
@@ -765,9 +659,9 @@
     },
     {
       "sector": "IC設計",
-      "ret20": 3.43,
-      "rsi": 63.0,
-      "buy": 2,
+      "ret20": 3.72,
+      "rsi": 63.7,
+      "buy": 1,
       "hot": 3
     },
     {
@@ -1251,15 +1145,6 @@
       "foreign": 9,
       "trust": -84,
       "dealer": 53
-    },
-    {
-      "id": "3058",
-      "name": "聯陽",
-      "sector": "IC設計",
-      "total": -22,
-      "foreign": -22,
-      "trust": 0,
-      "dealer": 0
     },
     {
       "id": "2451",
@@ -2877,29 +2762,6 @@
       "chipConc": -0.0,
       "chipDualBuy": false,
       "trustDays": 1,
-      "chipTier": null,
-      "news": ""
-    },
-    {
-      "date": "20260924",
-      "sector": "IC設計",
-      "id": "3058",
-      "name": "聯陽",
-      "price": 8.22,
-      "rsi": 56.9,
-      "rsi10": 55.4,
-      "ret20": 0.7,
-      "signal": "BUY",
-      "sharpe": 1.5,
-      "foreign": -22,
-      "trust": 0,
-      "dealer": 0,
-      "chipTotal": -22,
-      "chip5d": 572,
-      "chipDays": 0,
-      "chipConc": 0.0,
-      "chipDualBuy": false,
-      "trustDays": 0,
       "chipTier": null,
       "news": ""
     },
@@ -5072,26 +4934,6 @@
       "signal": "HOLD",
       "atr14": 4.16,
       "stopLoss": 129.2,
-      "mainForceScore": null,
-      "mainForceLabel": null,
-      "top1Broker": null,
-      "top1Lots": null,
-      "top5BuyLots": null,
-      "concentration": null,
-      "brokerNet": null,
-      "topBuyers": [],
-      "topSellers": [],
-      "brokerSource": null,
-      "brokerError": null
-    },
-    {
-      "id": "3058",
-      "name": "聯陽",
-      "sector": "IC設計",
-      "price": 8.22,
-      "signal": "BUY",
-      "atr14": 0.15,
-      "stopLoss": 7.9,
       "mainForceScore": null,
       "mainForceLabel": null,
       "top1Broker": null,

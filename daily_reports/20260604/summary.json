@@ -1275,9 +1275,9 @@
       "qualified_count": 1
     },
     "IC設計": {
-      "avg_ret_20d": 16.24,
-      "avg_rsi": 54.7,
-      "avg_sharpe": -4.09,
+      "avg_ret_20d": 15.15,
+      "avg_rsi": 49.9,
+      "avg_sharpe": -3.83,
       "stocks": [
         {
           "id": "2454",
@@ -1614,51 +1614,9 @@
           "stop_loss": 148.9,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 10.5,
-          "rsi": 93.5,
-          "rsi10": 83.0,
-          "ret_20d": 25.0,
-          "signal": "HOLD",
-          "cv_sharpe": -6.25,
-          "cv_win_rate": 0.17,
-          "news": [
-            {
-              "date": "2026-06-04",
-              "title": "深化台捷AI供應鏈！龔明鑫會晤捷克議長韋德齊 與國發會宣布加碼5千萬歐元挺台商插旗",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-04",
-              "title": "仁寶量子技術結合AI 跨足新藥開發領域",
-              "source": "鉅亨網"
-            },
-            {
-              "date": "2026-06-04",
-              "title": "1拆24！群益臺灣加權正2將分割 6/30最後買進日",
-              "source": "鉅亨網"
-            }
-          ],
-          "chip": {
-            "date": "2026-06-04",
-            "外資": 1259,
-            "投信": 0,
-            "自營": -1,
-            "合計": 1258
-          },
-          "target_short": 10.1,
-          "target_mid": 9.4,
-          "target_long": 11.3,
-          "atr14": 0.45,
-          "stop_loss": 9.6,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 1,
+      "hot_count": 0,
       "buy_count": 0,
       "qualified_count": 1
     },
@@ -2955,13 +2913,6 @@
       "name": "玉晶光",
       "type": "RSI過熱",
       "detail": "RSI=85.5"
-    },
-    {
-      "sector": "IC設計",
-      "id": "3058",
-      "name": "聯陽",
-      "type": "RSI過熱",
-      "detail": "RSI=93.5"
     },
     {
       "sector": "車用電子",

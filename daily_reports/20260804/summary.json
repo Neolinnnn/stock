@@ -1541,9 +1541,9 @@
       "qualified_count": 0
     },
     "IC設計": {
-      "avg_ret_20d": -10.52,
-      "avg_rsi": 54.4,
-      "avg_sharpe": -5.28,
+      "avg_ret_20d": -10.04,
+      "avg_rsi": 56.5,
+      "avg_sharpe": -4.84,
       "stocks": [
         {
           "id": "2454",
@@ -1886,49 +1886,11 @@
           "stop_loss": 138.9,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 8.23,
-          "rsi": 36.4,
-          "rsi10": 35.8,
-          "ret_20d": -14.7,
-          "signal": "HOLD",
-          "ma5": 8.19,
-          "ma10": 8.35,
-          "ma20": 8.68,
-          "ma60": 8.91,
-          "cv_sharpe": -9.23,
-          "cv_win_rate": 0.0,
-          "news": [],
-          "chip": {
-            "date": "2026-08-04",
-            "外資": -65000,
-            "投信": 0,
-            "自營": -5000,
-            "合計": -70000,
-            "近5日": 17400,
-            "近5日外資": 16400,
-            "近5日投信": 0,
-            "連買日": 0,
-            "投信連買日": 0,
-            "集中度": 0.8,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 9.5,
-          "target_mid": 9.5,
-          "target_long": 9.1,
-          "atr14": 0.33,
-          "stop_loss": 7.6,
-          "broker": null,
-          "main_force": null
         }
       ],
       "hot_count": 1,
       "buy_count": 0,
-      "qualified_count": 0
+      "qualified_count": 1
     },
     "車用電子": {
       "avg_ret_20d": -18.59,

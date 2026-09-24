@@ -1541,9 +1541,9 @@
       "qualified_count": 0
     },
     "IC設計": {
-      "avg_ret_20d": 4.01,
-      "avg_rsi": 63.1,
-      "avg_sharpe": -0.25,
+      "avg_ret_20d": 4.29,
+      "avg_rsi": 60.9,
+      "avg_sharpe": -0.02,
       "stocks": [
         {
           "id": "2454",
@@ -1886,47 +1886,9 @@
           "stop_loss": 122.7,
           "broker": null,
           "main_force": null
-        },
-        {
-          "id": "3058",
-          "name": "聯陽",
-          "price": 8.32,
-          "rsi": 82.9,
-          "rsi10": 67.2,
-          "ret_20d": 1.7,
-          "signal": "HOLD",
-          "ma5": 8.08,
-          "ma10": 8.06,
-          "ma20": 8.09,
-          "ma60": 8.44,
-          "cv_sharpe": -2.23,
-          "cv_win_rate": 0.5,
-          "news": [],
-          "chip": {
-            "date": "2026-09-21",
-            "外資": 262,
-            "投信": 0,
-            "自營": 2,
-            "合計": 264,
-            "近5日": 252,
-            "近5日外資": 247,
-            "近5日投信": 0,
-            "連買日": 3,
-            "投信連買日": 0,
-            "集中度": 0.0,
-            "土洋同買": false
-          },
-          "chip_tier": null,
-          "target_short": 8.3,
-          "target_mid": 9.3,
-          "target_long": 9.0,
-          "atr14": 0.15,
-          "stop_loss": 8.0,
-          "broker": null,
-          "main_force": null
         }
       ],
-      "hot_count": 4,
+      "hot_count": 3,
       "buy_count": 0,
       "qualified_count": 3
     },
@@ -4241,13 +4203,6 @@
       "name": "瑞昱",
       "type": "RSI過熱",
       "detail": "RSI=70.8"
-    },
-    {
-      "sector": "IC設計",
-      "id": "3058",
-      "name": "聯陽",
-      "type": "RSI過熱",
-      "detail": "RSI=82.9"
     },
     {
       "sector": "車用電子",
