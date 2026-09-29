@@ -1,8 +1,29 @@
 {
- "date": "20260924",
- "generated_at": "2026-09-24 15:55",
+ "date": "20260929",
+ "generated_at": "2026-09-29 14:16",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "4906",
+   "close": 40.2,
+   "vol_ratio": 2.13,
+   "dist_ma20": 8.96,
+   "ret20": 10.44,
+   "last_date": "2026-09-29",
+   "chip5": 4899686.0,
+   "name": "正文"
+  },
+  {
+   "id": "3014",
+   "close": 143.5,
+   "vol_ratio": 2.11,
+   "dist_ma20": 7.25,
+   "ret20": 9.13,
+   "last_date": "2026-09-29",
+   "chip5": 428753.0,
+   "name": "聯陽"
+  }
+ ],
  "backtest_ref": {
   "n": 183,
   "tp18sl15_win": 0.65,
