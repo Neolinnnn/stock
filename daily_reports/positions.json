@@ -1,5 +1,5 @@
 {
-  "updated": "20260929",
+  "updated": "20260930",
   "open": [
     {
       "id": "3231",
@@ -35,6 +35,30 @@
       "entry_date": "20260929",
       "entry_price": 286.0,
       "high_watermark": 286.0,
+      "days_since_high": 0
+    },
+    {
+      "id": "2330",
+      "name": "台積電",
+      "signal_date": "20260930",
+      "signal_price": 2480.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
+      "days_since_high": 0
+    },
+    {
+      "id": "2455",
+      "name": "全新",
+      "signal_date": "20260930",
+      "signal_price": 552.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
