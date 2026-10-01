@@ -66,11 +66,11 @@
       "name": "金居",
       "signal_date": "20261001",
       "signal_price": 505.0,
-      "status": "pending_entry",
+      "status": "holding",
       "phase": 1,
-      "entry_date": null,
-      "entry_price": null,
-      "high_watermark": null,
+      "entry_date": "20261001",
+      "entry_price": 505.0,
+      "high_watermark": 505.0,
       "days_since_high": 0
     }
   ],
