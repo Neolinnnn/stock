@@ -1000,7 +1000,8 @@ def build_summary(date, market, all_results, chart_path):
                 continue
             _dual_filter_seen.add(r['id'])
             bias_v = round(float(_bias_ma10.loc[r.name]), 1)
-            passes_bias = bias_v <= MAX_BIAS_MA10
+            # 以未四捨五入值比較，與上方 qualified 閘門一致（2.04% 顯示為 2.0% 但未過閘門）
+            passes_bias = bool(_bias_ma10.loc[r.name] <= MAX_BIAS_MA10)
             all_dual_filter.append({
                 'sector': sector, 'id': r['id'], 'name': r['name'],
                 'price': r['price'], 'rsi': round(r['rsi'], 1),

@@ -1389,6 +1389,48 @@ function _actionDecision(sig, kdj, macd){
   return{text:'觀望等待更明確訊號',color:'var(--sub)'};
 }
 
+// ── 雙篩選命中、未進行動清單：操作建議 ──────────────────────────────────────
+// 乖離閘門上限，同 daily_scan.MAX_BIAS_MA10（回測：乖離 2~6% 進場勝率僅 9~10%）
+const _MAX_BIAS_MA10=2;
+// 台股升降單位
+function _twTick(p){return p<10?0.01:p<50?0.05:p<100?0.1:p<500?0.5:p<1000?1:5;}
+// 乖離回到閘門內的最高收盤價。MA10 由現價與乖離回推，與閘門同源；
+// MA10 每日移動，此價只對下一個交易日有效
+function _pullbackPx(price, bias){
+  const ma10=price/(1+bias/100);
+  const raw=ma10*(1+_MAX_BIAS_MA10/100);
+  let px=Math.floor(raw/_twTick(raw)+1e-9)*_twTick(raw);
+  // 乖離四捨五入顯示 2.0%、實際略高於 2% 者 raw≈現價：至少回落一檔
+  if(px>=price) px=price-_twTick(price);
+  return{ma10,px};
+}
+
+function _excludedDecision(d, sig, kdj, macd, failBias, failSector){
+  // Returns {text, color, notes, ma10}
+  const price=Number(d.price);
+  const bias=d.bias_ma10==null?NaN:Number(d.bias_ma10);
+  const notes=[];
+  if(sig!=='—'&&sig!=='強力買入'&&sig!=='買入')
+    notes.push(`趨勢評分僅「${sig}」，回檔後仍需評分回到買入`);
+  if(kdj&&kdj.state==='超買頂部') notes.push('KDJ 超買，短線回檔機率高');
+  if(macd&&(macd.state==='多頭死叉'||macd.state==='空頭'||macd.state==='空頭加速'))
+    notes.push('MACD 轉弱，回檔可能跌破 MA10，屆時需重新確認訊號');
+
+  if(!failBias)
+    return{text:'🌱 族群未轉強：等族群 20 日均漲 > 3% 再評估',color:'var(--sub)',notes,ma10:null};
+  if(!(price>0)||!isFinite(bias))
+    return{text:'觀望：乖離資料不足，無法估算回檔價',color:'var(--sub)',notes,ma10:null};
+  if(failSector) notes.push('族群也需轉強（20 日均漲 > 3%）才會列入');
+
+  const{ma10,px}=_pullbackPx(price,bias);
+  const gapPct=(1-px/price)*100;
+  const gap=gapPct.toFixed(1);
+  const pxTxt=fmt(px,px<50?2:px<500?1:0);
+  if(gapPct<0.5)
+    return{text:`⏰ 臨界：收盤 ≤ ${pxTxt}（僅差 ${gap}%）乖離即回到 2% 內`,color:'var(--green)',notes,ma10};
+  return{text:`⏳ 不追價：等收盤 ≤ ${pxTxt}（需再跌 ${gap}%）、乖離回到 2% 內再進場`,color:'var(--yellow)',notes,ma10};
+}
+
 // ── 指標判斷邏輯 ─────────────────────────────────────────────────────────────
 function _buildKDJudge(I){
   if(!I||!I.kd_k) return null;
@@ -2120,19 +2162,22 @@ function renderDaily(data){
       </summary>
       <div style="font-size:11px;color:var(--sub);margin:6px 0 10px;">
         這些個股符合舊版雙篩選（BUY + CV夏普≥0.3 + CV勝率≥0.4 + 回撤≤20%），
-        但乖離率超過閘門（MA10 +2%）被排除，僅供參考，不建議進場。族群強弱自 2026-09-24 起改為標籤、不再排除。
+        但乖離率超過閘門（MA10 +2%）被排除，不建議追價；各卡附回檔價（收盤回到該價以下、乖離即回到 2% 內）。族群強弱自 2026-09-24 起改為標籤、不再排除。
       </div>
       <div class="action-grid">
         ${dfExcluded.map(d => {
-          const failBias = d.passes_bias === false;
-          const failSector = d.sector_strong === false;
+          // 族群閘門（REQUIRE_STRONG_SECTOR）於 2026-09-24 關閉，之後的排除只剩乖離閘門
+          const failSector = date < '20260924' && d.sector_strong === false;
+          // 非族群閘門擋下者皆為乖離：含四捨五入顯示 2.0%、實際略高於 2% 的臨界值
+          const failBias = d.passes_bias === false || !failSector;
           const reasons2 = [];
-          if (failBias) reasons2.push(`乖離MA10 ${d.bias_ma10 != null ? (d.bias_ma10 >= 0 ? '+' : '') + d.bias_ma10 + '%' : '—'}（超過 2%）`);
+          if (failBias) reasons2.push(`乖離MA10 ${d.bias_ma10 != null ? (d.bias_ma10 >= 0 ? '+' : '') + d.bias_ma10 + '%' : '—'}${d.passes_bias === true ? '（四捨五入前略高於 2%）' : '（超過 2%）'}`);
           if (failSector) reasons2.push('所屬族群非強勢');
           const ta2 = d.trend_analysis || {};
           const sig2 = ta2.buy_signal || '—';
           const score2 = ta2.signal_score != null ? ta2.signal_score : '—';
           const sigColor2 = sig2==='強力買入'?'var(--green)':sig2==='買入'?'#5cb85c':sig2==='持有'?'var(--yellow)':'var(--sub)';
+          const dec2 = _excludedDecision(d, sig2, _kdFromTA(ta2), _macdFromTA(ta2), failBias, failSector);
           return `<div class="action-card" style="border-left:3px solid var(--sub);opacity:.85">
             <div class="ac-head">
               <span class="ac-id" style="cursor:pointer" onclick="goToStock('${escHtml(d.id)}')" title="點擊查看個股分析">${escHtml(d.id)}</span>
@@ -2140,8 +2185,13 @@ function renderDaily(data){
               <span class="ac-sector">${escHtml(d.sector)}</span>
               <span class="ac-sig" style="color:${sigColor2}">${escHtml(sig2)} ${score2!=='—'?score2+'/100':''}</span>
             </div>
+            <div style="font-size:12px;font-weight:600;color:${dec2.color};padding:5px 9px;background:rgba(0,0,0,.2);border-radius:5px;margin-bottom:9px;border-left:2px solid ${dec2.color}" title="回檔價＝今日 MA10 × 1.02（乖離閘門上限），取台股合法檔位；MA10 每日移動，隔日需看新的回檔價。回測：乖離 2~6% 進場勝率僅 9~10%（daily_scan.py MAX_BIAS_MA10）">
+              ${escHtml(dec2.text)}
+              ${dec2.notes.map(n => `<div style="font-size:11px;font-weight:400;color:var(--sub);margin-top:3px">· ${escHtml(n)}</div>`).join('')}
+            </div>
             <div class="ac-prices">
               <div class="ac-price-item"><span class="ac-price-lbl">現價</span><span class="ac-price-val">${fmt(d.price,1)}</span></div>
+              ${dec2.ma10 != null ? `<div class="ac-price-item"><span class="ac-price-lbl">MA10</span><span class="ac-price-val">${fmt(dec2.ma10, dec2.ma10 < 50 ? 2 : 1)}</span></div>` : ''}
               <div class="ac-price-item"><span class="ac-price-lbl">RSI5</span><span class="ac-price-val" style="font-weight:600">${fmt(d.rsi,1)}</span></div>
               <div class="ac-price-item"><span class="ac-price-lbl">CV夏普</span><span class="ac-price-val" style="font-weight:600">${fmt(d.cv_sharpe,2)}</span></div>
             </div>
