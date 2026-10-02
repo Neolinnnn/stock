@@ -1,17 +1,27 @@
 {
- "date": "20261001",
- "generated_at": "2026-10-01 14:42",
+ "date": "20261002",
+ "generated_at": "2026-10-02 11:26",
  "taiex_bull": true,
  "picks": [
   {
-   "id": "2327",
-   "close": 602.0,
-   "vol_ratio": 1.97,
-   "dist_ma20": 8.21,
-   "ret20": 5.99,
-   "last_date": "2026-10-01",
-   "chip5": 3424195.0,
-   "name": "國巨"
+   "id": "2376",
+   "close": 373.5,
+   "vol_ratio": 1.61,
+   "dist_ma20": 4.41,
+   "ret20": 3.32,
+   "last_date": "2026-10-02",
+   "chip5": 3714593.0,
+   "name": "技嘉"
+  },
+  {
+   "id": "5469",
+   "close": 75.9,
+   "vol_ratio": 1.51,
+   "dist_ma20": 4.2,
+   "ret20": 2.99,
+   "last_date": "2026-10-02",
+   "chip5": 713321.0,
+   "name": "瀚宇博"
   }
  ],
  "backtest_ref": {

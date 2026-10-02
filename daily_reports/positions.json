@@ -1,5 +1,5 @@
 {
-  "updated": "20261001",
+  "updated": "20261002",
   "open": [
     {
       "id": "3231",
@@ -71,6 +71,18 @@
       "entry_date": "20261001",
       "entry_price": 505.0,
       "high_watermark": 505.0,
+      "days_since_high": 0
+    },
+    {
+      "id": "3264",
+      "name": "欣銓",
+      "signal_date": "20261002",
+      "signal_price": 245.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
