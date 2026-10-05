@@ -1,27 +1,67 @@
 {
- "date": "20261002",
- "generated_at": "2026-10-02 14:03",
+ "date": "20261005",
+ "generated_at": "2026-10-05 11:27",
  "taiex_bull": true,
  "picks": [
   {
+   "id": "6278",
+   "close": 220.0,
+   "vol_ratio": 2.13,
+   "dist_ma20": 9.99,
+   "ret20": 14.88,
+   "last_date": "2026-10-05",
+   "chip5": 3193383.0,
+   "name": "台表科"
+  },
+  {
+   "id": "3014",
+   "close": 146.5,
+   "vol_ratio": 2.94,
+   "dist_ma20": 7.44,
+   "ret20": 12.26,
+   "last_date": "2026-10-05",
+   "chip5": 1111992.0,
+   "name": "聯陽"
+  },
+  {
    "id": "2376",
-   "close": 373.5,
-   "vol_ratio": 1.61,
-   "dist_ma20": 4.41,
-   "ret20": 3.32,
-   "last_date": "2026-10-02",
-   "chip5": 3714593.0,
+   "close": 388.5,
+   "vol_ratio": 1.94,
+   "dist_ma20": 8.03,
+   "ret20": 10.84,
+   "last_date": "2026-10-05",
+   "chip5": 7032649.0,
    "name": "技嘉"
   },
   {
    "id": "5469",
-   "close": 75.9,
-   "vol_ratio": 1.51,
-   "dist_ma20": 4.2,
-   "ret20": 2.99,
-   "last_date": "2026-10-02",
-   "chip5": 713321.0,
+   "close": 78.4,
+   "vol_ratio": 3.12,
+   "dist_ma20": 7.1,
+   "ret20": 10.11,
+   "last_date": "2026-10-05",
+   "chip5": 317490.0,
    "name": "瀚宇博"
+  },
+  {
+   "id": "2329",
+   "close": 45.0,
+   "vol_ratio": 1.68,
+   "dist_ma20": 3.76,
+   "ret20": 6.51,
+   "last_date": "2026-10-05",
+   "chip5": 1087496.0,
+   "name": "華泰"
+  },
+  {
+   "id": "6664",
+   "close": 385.0,
+   "vol_ratio": 2.54,
+   "dist_ma20": 9.17,
+   "ret20": 6.06,
+   "last_date": "2026-10-05",
+   "chip5": 725575.0,
+   "name": "群翊"
   }
  ],
  "backtest_ref": {
