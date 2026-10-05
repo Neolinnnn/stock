@@ -124,7 +124,7 @@ jobs:
           GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
         run: |
           python scripts/enrich_product_mix.py --qualified
-          # 補齊尚無產銷組合的個股（每次最多 20 支，加速清完待補清單）
+          # 補齊尚無產銷組合、或舊格式（無出處）的個股（每次最多 20 支，加速清完待補清單）
           python scripts/enrich_product_mix.py --missing --limit 20
           # 把剛抓的產銷組合帶進當日 payload（行動清單按鈕）
           python scripts/rebuild_daily_payload.py

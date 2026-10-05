@@ -165,7 +165,11 @@ function narrativeHTML(n, pm){
   const list = arr => (arr||[]).map(x => `<li>${esc(x)}</li>`).join('');
   let mix = '';
   if (pm && pm.product_lines && pm.product_lines.length){
-    mix = `<div class="sec-title">產品組合（enrich_product_mix）</div>
+    // 與主站 _pmSourceHtml 同規則：estimate 與舊格式（無 source_type）標「估計值」
+    const src = ['prospectus','annual_report','investor_conference','financial_report','news'].includes(pm.source_type)
+      ? `<div style="font-size:11px;color:var(--sub)">來源：${esc(pm.source || '')}（${esc(pm.data_period || '')}）</div>`
+      : '<div class="err" style="font-size:11px">⚠ 估計值：非公司揭露數字，僅供參考</div>';
+    mix = `<div class="sec-title">產品組合（enrich_product_mix）</div>${src}
       <table class="mix"><tr><th>產品線</th><th>營收占比</th><th>年增率</th></tr>
       ${pm.product_lines.map(l => `<tr><td>${esc(l.name)}</td><td>${l.share_pct}%</td>
         <td>${l.yoy_growth == null ? '—' : l.yoy_growth + '%'}</td></tr>`).join('')}</table>`;

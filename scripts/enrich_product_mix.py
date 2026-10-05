@@ -25,6 +25,11 @@ DOCS_DIR = ROOT / "docs"
 FUND_DIR = DOCS_DIR / "fundamentals"
 REFRESH_DAYS = 30  # 超過此天數才重新抓取
 
+# 佔比數字的出處類別（對應 PROMPTS["product_mix"] 的來源優先順序）。
+# 除 estimate 外皆為公司揭露的數字；前端對 estimate 與舊格式（無此欄）顯示「估計值」警示。
+SOURCE_TYPES = {"prospectus", "annual_report", "investor_conference",
+                "financial_report", "news", "estimate"}
+
 
 def _load_fund(sid: str) -> dict:
     path = FUND_DIR / f"{sid}.json"
@@ -42,8 +47,8 @@ def _save_fund(sid: str, data: dict) -> None:
 
 
 def _is_stale(pm: dict) -> bool:
-    """product_mix 超過 REFRESH_DAYS 天或不存在則視為過期"""
-    if not pm:
+    """product_mix 不存在、為舊格式（無 source_type），或超過 REFRESH_DAYS 天則視為過期"""
+    if not pm or "source_type" not in pm:
         return True
     updated = pm.get("updated_at", "")
     if not updated:
@@ -53,6 +58,16 @@ def _is_stale(pm: dict) -> bool:
         return (date.today() - dt).days > REFRESH_DAYS
     except Exception:
         return True
+
+
+def _normalize_source(pm: dict) -> None:
+    """
+    就地校正 source_type：不在允許清單內、或自稱揭露數字卻沒附出處者，一律降為 estimate。
+    寧可把真數字標成估計，也不讓估計數字冒充揭露值。
+    """
+    st = pm.get("source_type")
+    if st not in SOURCE_TYPES or (st != "estimate" and not str(pm.get("source") or "").strip()):
+        pm["source_type"] = "estimate"
 
 
 def _parse_json_from_text(text: str) -> dict:
@@ -101,7 +116,6 @@ def enrich_one(sid: str, name: str, writer: GeminiWriter, force: bool = False) -
             context={
                 "data": f"{sid} {name}（台灣上市公司）",
                 "date": today,
-                "extra": "如果搜尋不到足夠資訊，請根據已知的公司類型給出合理估計，並在 summary 中說明資料可信度。",
             },
             use_grounding=True,
         )
@@ -122,11 +136,19 @@ def enrich_one(sid: str, name: str, writer: GeminiWriter, force: bool = False) -
         print(f"  [{sid}] 產銷佔比不合理（和={total}, 缺值={any(s is None for s in shares)}），保留舊值不覆寫")
         return False
 
+    _normalize_source(pm)
+    # 已有公司揭露的數字（含人工校正過的），不讓這次沒搜到來源的估計值蓋掉
+    old_st = existing_pm.get("source_type")
+    if pm["source_type"] == "estimate" and old_st in SOURCE_TYPES - {"estimate"}:
+        print(f"  [{sid}] 本次僅得估計值，保留既有揭露數字（{old_st}）不覆寫")
+        return False
+
     pm["updated_at"] = today
     fund["product_mix"] = pm
     _save_fund(sid, fund)
     lines = pm.get("product_lines", [])
-    print(f"  [{sid}] 完成 — {len(lines)} 條產品線，期間：{pm.get('data_period','')}")
+    print(f"  [{sid}] 完成 — {len(lines)} 條產品線，期間：{pm.get('data_period','')}，"
+          f"來源：{pm['source_type']} {pm.get('source','')}")
     return True
 
 
@@ -159,13 +181,18 @@ def get_sids_from_qualified() -> list[tuple[str, str]]:
 
 
 def get_sids_missing_pm() -> list[tuple[str, str]]:
-    """從 fundamentals 目錄取得尚無 product_mix 的 (sid, name) 清單"""
+    """
+    從 fundamentals 目錄取得尚無 product_mix、或仍是舊格式（無 source_type）的 (sid, name) 清單。
+    舊格式由舊提示詞產生，允許 Gemini 自行估計佔比且未標出處，視同待補，
+    由每日排程的 --missing --limit 分批換成新格式。
+    """
     result = []
     for path in sorted(FUND_DIR.glob("*.json")):
         sid = path.stem
         try:
             d = json.loads(path.read_text(encoding="utf-8"))
-            if not d.get("product_mix"):
+            pm = d.get("product_mix")
+            if not pm or "source_type" not in pm:
                 result.append((sid, d.get("name", sid)))
         except Exception:
             pass
@@ -176,7 +203,7 @@ def main():
     parser = argparse.ArgumentParser(description="產銷組合資料抓取")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--all", action="store_true", help="處理所有 fundamentals 股票")
-    group.add_argument("--missing", action="store_true", help="只處理尚無 product_mix 的股票")
+    group.add_argument("--missing", action="store_true", help="只處理尚無 product_mix 或舊格式（無出處）的股票")
     group.add_argument("--qualified", action="store_true", help="只處理今日 qualified 股票")
     group.add_argument("--sids", nargs="+", metavar="SID", help="指定股票代碼")
     parser.add_argument("--force", action="store_true", help="強制重新抓取（忽略快取時效）")
@@ -197,7 +224,7 @@ def main():
     elif args.missing:
         targets = get_sids_missing_pm()
         if not targets:
-            print("[INFO] 所有 fundamentals 股票已有 product_mix，無需更新")
+            print("[INFO] 所有 fundamentals 股票已有新格式 product_mix，無需更新")
             sys.exit(0)
     elif args.qualified:
         targets = get_sids_from_qualified()
