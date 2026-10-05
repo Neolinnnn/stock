@@ -323,81 +323,58 @@
   "product_mix": {
     "product_lines": [
       {
-        "name": "高效能運算 (High-Performance Computing, HPC)",
+        "name": "高效能運算 (HPC)",
         "share_pct": 66,
         "yoy_growth": null,
         "trend": "up"
       },
       {
-        "name": "智慧型手機 (Smartphone)",
+        "name": "智慧型手機",
         "share_pct": 22,
         "yoy_growth": null,
-        "trend": "down"
+        "trend": "flat"
       },
       {
-        "name": "物聯網 (Internet of Things, IoT)",
+        "name": "物聯網 (IoT)",
         "share_pct": 5,
         "yoy_growth": null,
-        "trend": "up"
+        "trend": "flat"
       },
       {
-        "name": "汽車電子 (Automotive)",
+        "name": "車用電子",
         "share_pct": 4,
         "yoy_growth": null,
-        "trend": "up"
+        "trend": "flat"
       },
       {
-        "name": "數位消費電子 (Digital Consumer Electronics, DCE)",
+        "name": "消費性電子",
         "share_pct": 1,
         "yoy_growth": null,
-        "trend": "up"
+        "trend": "flat"
       },
       {
-        "name": "其他 (Other)",
+        "name": "其他",
         "share_pct": 2,
         "yoy_growth": null,
         "trend": "flat"
       }
     ],
-    "regions": [
-      {
-        "name": "北美 (North America)",
-        "share_pct": 68
-      },
-      {
-        "name": "中國 (China)",
-        "share_pct": 12
-      },
-      {
-        "name": "亞太地區 (Asia Pacific)",
-        "share_pct": 8
-      },
-      {
-        "name": "歐洲、中東及非洲 (EMEA)",
-        "share_pct": 7
-      },
-      {
-        "name": "日本 (Japan)",
-        "share_pct": 5
-      }
-    ],
+    "regions": [],
     "customers": [
       "蘋果 (Apple)",
-      "輝達 (Nvidia)",
-      "超微 (AMD)",
-      "高通 (Qualcomm)",
-      "聯發科 (MediaTek)",
-      "英特爾 (Intel)",
       "博通 (Broadcom)",
-      "Google",
-      "亞馬遜 (Amazon)",
-      "Marvell",
-      "OpenAI"
+      "輝達 (Nvidia)",
+      "聯發科 (MediaTek)",
+      "高通 (Qualcomm)",
+      "超微 (AMD)",
+      "英特爾 (Intel)"
     ],
-    "biz_model": "台積電採純晶圓代工（pure-play foundry）商業模式，專注於為客戶製造其設計的半導體晶片，不自行設計或銷售自有品牌產品，以確保不與客戶競爭。其服務涵蓋製程技術、晶圓產能、良率學習、先進封裝整合、交期可靠性等端到端解決方案，並提供光罩製作、工程支援、測試及設計支援服務。",
-    "moat": "台積電的核心競爭優勢包括領先的先進製程技術（如2奈米、3奈米）、卓越的製造能力與高良率、龐大的產能規模及可靠的交貨能力、完善的設計生態系統（Open Innovation Platform, OIP）以及先進封裝解決方案（3DFabric, CoWoS, SoIC），這些因素共同構建了客戶轉換的高成本和市場進入障礙。其純晶圓代工模式所建立的客戶信任更是其獨特護城河。",
-    "summary": "截至2026年第二季，台積電的營收主要由高效能運算（HPC）平台驅動，佔總營收的66%，顯示AI需求強勁。智慧型手機業務佔22%，而物聯網、汽車電子及數位消費電子則佔較小比例。公司整體營收在2026年第二季年增33.7%（美元計）至402億美元。本報告的產品線營收佔比資料來自台積電2026年第二季法說會公告，具有高度可信度。地區別營收分布因最新法說會資料未明確公布，故採合理估計數值呈現。",
-    "data_period": "2026Q2",
-    "updated_at": "2026-09-30"
+    "biz_model": "台積電採用純晶圓代工商業模式，專注於生產客戶所設計的晶片，本身不設計、生產或銷售自有品牌產品，確保不與客戶競爭，並以「客戶是誰」而非「產品是什麼」來定義商業模式。",
+    "moat": "台積電的核心競爭優勢在於其領先的先進製程技術 (如2奈米、3奈米)，卓越的製造良率、龐大的規模化生產能力，以及其純晶圓代工模式所建立的客戶信任與緊密合作關係。",
+    "summary": "截至2026年第二季，台積電的營收主要來自高效能運算 (HPC) 平台，佔比達66%，且為最強勁的成長動能。智慧型手機業務佔22%。公司持續受惠於AI晶片需求的爆發性增長，先進製程技術如2奈米、3奈米和5奈米持續貢獻主要營收。",
+    "source_type": "investor_conference",
+    "source": "台積電 2026年第二季法人說明會 (2026/07/16)；主要客戶資料參考法人預估與新聞報導。",
+    "data_period": "2026 Q2",
+    "updated_at": "2026-10-05"
   }
 }

@@ -80,41 +80,33 @@
       "product_mix": {
         "product_lines": [
           {
-            "name": "NOR Flash",
-            "share_pct": 48,
-            "yoy_growth": 101,
-            "trend": "up"
-          },
-          {
             "name": "NAND Flash (含eMMC)",
             "share_pct": 43,
             "yoy_growth": 798,
             "trend": "up"
           },
           {
-            "name": "Mask ROM",
-            "share_pct": 6,
-            "yoy_growth": 37,
-            "trend": "flat"
+            "name": "NOR Flash",
+            "share_pct": 48,
+            "yoy_growth": 100,
+            "trend": "up"
           },
           {
-            "name": "晶圓代工與良裸晶粒",
-            "share_pct": 3,
+            "name": "其他（未揭露明細）",
+            "share_pct": 9,
             "yoy_growth": null,
-            "trend": "down"
+            "trend": null
           }
         ],
         "regions": [],
         "customers": [
-          "任天堂 (遊戲卡匣)",
-          "車用電子製造商",
-          "工業控制設備商",
-          "AI伺服器供應鏈",
-          "網通設備商"
+          "Nintendo (任天堂)"
         ],
-        "biz_model": "旺宏採整合元件製造（IDM）模式，涵蓋產品設計、晶圓製造與封裝測試，並以自有品牌（OBM）銷售其非揮發性記憶體產品，同時也提供晶圓代工服務。",
-        "moat": "旺宏的核心競爭優勢在於其全球第二大NOR Flash市佔及全球最大Mask ROM供應商地位，並專注於車用、工控、AI伺服器等高可靠度、高容量、高附加價值的利基型非揮發性記憶體市場。 公司具備自有12吋與8吋晶圓廠及封測產能，並透過55奈米NOR與SLC NAND等差異化製程與產品組合，在高階利基市場與國際大廠區隔競爭。 在NAND市場，受惠於國際大廠退出低容量MLC NAND市場，旺宏取得轉單效益，尤其在eMMC領域展現強勁成長動能。",
-        "summary": "旺宏2026年第二季營運表現強勁，受惠於NAND Flash（特別是eMMC）和NOR Flash的市場需求旺盛及價格上漲，營收及獲利皆創下歷史新高。 NAND Flash營收占比大幅提升至43%，成為主要的成長動能，而NOR Flash仍為營收主力，占比48%。 公司持續以IDM模式深耕利基型記憶體市場，並積極擴充產能以因應未來需求。",
+        "biz_model": "旺宏電子是一家整合元件製造商 (IDM)，擁有自有晶圓廠，提供從IC設計、製造、封裝測試到行銷的一條龍服務，專注於非揮發性記憶體產品。",
+        "moat": "旺宏的核心競爭優勢在於國際大廠逐步退出中低容量MLC NAND市場後形成的結構性獨占優勢，特別是在低容量eMMC領域有望成為全球主要供應商。此外，其在AI伺服器、車用、工控等利基市場提供高可靠度、高容量NOR Flash產品，並開發出全球唯一通過歐洲太空總署 (ESA) 認證的抗輻射記憶體，具備差異化競爭力。公司透過持續的研發投入及先進製程技術佈局，維持在高階非揮發性記憶體市場的領先地位。",
+        "summary": "旺宏2026年第二季的營收結構顯示，NAND Flash（含eMMC）業務成長強勁，佔總營收的43%，年增率高達798%，成為主要的成長動能。NOR Flash業務佔比達48%，年增率為100%，主要受惠於AI伺服器、車用及工控對高容量、高可靠性產品的需求推動，整體營運呈現價量齊揚的趨勢。",
+        "source_type": "investor_conference",
+        "source": "旺宏電子2026年第二季法人說明會簡報與相關新聞報導 (鉅亨網 2026/07/30, 財報狗 2026/10/01)",
         "data_period": "2026 Q2",
         "updated_at": "2026-10-05"
       }
@@ -187,47 +179,33 @@
       "product_mix": {
         "product_lines": [
           {
-            "name": "工控產品 (Industrial Solutions)",
-            "share_pct": 70,
+            "name": "嵌入式解決方案 (Embedded Solutions)",
+            "share_pct": 62.8,
             "yoy_growth": null,
             "trend": "up"
           },
           {
             "name": "消費型產品 (Consumer Products)",
-            "share_pct": 30,
+            "share_pct": 37.2,
             "yoy_growth": null,
-            "trend": "flat"
+            "trend": "down"
           }
         ],
-        "regions": [
-          {
-            "name": "台灣",
-            "share_pct": 28.4
-          },
-          {
-            "name": "美洲",
-            "share_pct": 25
-          },
-          {
-            "name": "歐洲",
-            "share_pct": 20
-          },
-          {
-            "name": "亞洲 (不含台灣) 及其他",
-            "share_pct": 26.6
-          }
-        ],
+        "regions": [],
         "customers": [
-          "歐美醫療相關領導廠商",
+          "美國前兩大醫療相關客戶",
           "歐洲最大自動化公司",
           "美國大型網路通訊公司",
-          "臺灣工業電腦（IPC）業者 (如：研華)"
+          "臺灣工業電腦 (IPC) 業者",
+          "歐美領導廠商 (工控領域)"
         ],
-        "biz_model": "以自有品牌 (OBM) 為主，並積極提供工控市場客製化解決方案 (JDM/ODM) 及平台整合服務。",
-        "moat": "深耕工控市場，產品組合持續優化至高附加價值領域。強韌的供應鏈管理能力與充足的低成本庫存，確保供貨穩定性及議價優勢。自有品牌形象與持續的技術創新，獲得多項國際獎項肯定。財務體質穩健，費用控管得宜。",
-        "summary": "創見在2026年第二季受惠於AI帶動記憶體需求強勁及工控市場深耕有成，營運表現創歷史新高。其業務重心已成功轉型至高毛利的工控解決方案，營收佔比達70%，並透過優化的產品組合，如新一代BiCS8架構3D NAND固態硬碟、記憶卡及嵌入式鏡頭模組，積極搶攻Edge AI商機。公司憑藉自有品牌優勢、彈性供應鏈與穩健財務體質，面對市場挑戰仍能維持競爭力。",
-        "data_period": "2026 Q2 (地區別資料為2025年)",
-        "updated_at": "2026-09-29"
+        "biz_model": "創見以自有品牌「Transcend」行銷全球，並成功轉型為「工控解決方案商」，專注於設計、製造與銷售記憶體及儲存裝置，提供從消費級到工業級的高品質解決方案。公司擁有自有SMT生產線，進行晶圓/晶粒的封裝測試與篩選，實現垂直整合的生產模式。",
+        "moat": "創見的核心競爭優勢包括：雄厚的現金戰備與零負債體質，使其能在記憶體價格低點進行逆週期庫存採購；與上游原廠建立長期供貨合約（LTA），確保供貨穩定性及優先權；擁有全球銷售網絡及自有品牌「Transcend」，產品行銷超過140個國家，並在海外設有子公司；深耕高毛利的工控與嵌入式利基市場，客戶黏著度高且對價格敏感度較低；具備自有SMT生產線，實現垂直整合，確保產品品質與客製化能力；以及精準的庫存管理和優異的費用管控能力。",
+        "summary": "創見（2451）於2025年已成功轉型為以嵌入式解決方案為主的「工控解決方案商」，該產品線佔總營收比例達62.8%並呈現增長趨勢。公司憑藉其全球品牌通路、技術研發實力及穩健的財務體質，積極深耕高附加價值的工控與企業級市場。2026年首季營收與獲利雙創新高，主要受惠於AI需求帶動的記憶體結構性缺貨以及公司在工控市場的穩定供貨與客製化支援能力。",
+        "source_type": "investor_conference",
+        "source": "創見2026-04-08 法說會, 富果直送｜白話投資好文 2026/04/08",
+        "data_period": "2025 全年",
+        "updated_at": "2026-10-05"
       }
     }
   ],
@@ -666,18 +644,18 @@
       "id": "3105",
       "name": "穩懋",
       "sector": "光通訊",
-      "total": 10808,
+      "total": 11576,
       "foreign": 9741,
-      "trust": 255,
+      "trust": 1023,
       "dealer": 812
     },
     {
       "id": "2330",
       "name": "台積電",
       "sector": "AI ASIC/IP",
-      "total": 10700,
+      "total": 10850,
       "foreign": 9770,
-      "trust": 439,
+      "trust": 589,
       "dealer": 491
     },
     {
@@ -798,6 +776,15 @@
       "dealer": 346
     },
     {
+      "id": "8046",
+      "name": "南電",
+      "sector": "ABF載板",
+      "total": 1149,
+      "foreign": 387,
+      "trust": 883,
+      "dealer": -121
+    },
+    {
       "id": "3034",
       "name": "聯詠",
       "sector": "IC設計",
@@ -814,15 +801,6 @@
       "foreign": 724,
       "trust": 246,
       "dealer": -33
-    },
-    {
-      "id": "8046",
-      "name": "南電",
-      "sector": "ABF載板",
-      "total": 931,
-      "foreign": 387,
-      "trust": 665,
-      "dealer": -121
     },
     {
       "id": "2357",
@@ -888,15 +866,6 @@
       "dealer": 94
     },
     {
-      "id": "2360",
-      "name": "致茂",
-      "sector": "測試設備",
-      "total": 677,
-      "foreign": 578,
-      "trust": 167,
-      "dealer": -68
-    },
-    {
       "id": "3680",
       "name": "家登",
       "sector": "CoPoS封裝",
@@ -931,6 +900,15 @@
       "foreign": 2229,
       "trust": -1760,
       "dealer": 25
+    },
+    {
+      "id": "2360",
+      "name": "致茂",
+      "sector": "測試設備",
+      "total": 490,
+      "foreign": 578,
+      "trust": -20,
+      "dealer": -68
     },
     {
       "id": "2451",
@@ -1062,9 +1040,9 @@
       "id": "2345",
       "name": "智邦",
       "sector": "光通訊",
-      "total": 128,
+      "total": 130,
       "foreign": 213,
-      "trust": -191,
+      "trust": -189,
       "dealer": 106
     },
     {
@@ -1257,6 +1235,15 @@
       "dealer": -113
     },
     {
+      "id": "3406",
+      "name": "玉晶光",
+      "sector": "光學",
+      "total": -100,
+      "foreign": -223,
+      "trust": 144,
+      "dealer": -21
+    },
+    {
       "id": "4979",
       "name": "華星光",
       "sector": "光通訊",
@@ -1284,13 +1271,13 @@
       "dealer": -3
     },
     {
-      "id": "3406",
-      "name": "玉晶光",
+      "id": "3008",
+      "name": "大立光",
       "sector": "光學",
-      "total": -153,
-      "foreign": -223,
-      "trust": 91,
-      "dealer": -21
+      "total": -151,
+      "foreign": -319,
+      "trust": 159,
+      "dealer": 9
     },
     {
       "id": "2458",
@@ -1300,15 +1287,6 @@
       "foreign": -316,
       "trust": 276,
       "dealer": -142
-    },
-    {
-      "id": "3008",
-      "name": "大立光",
-      "sector": "光學",
-      "total": -194,
-      "foreign": -319,
-      "trust": 116,
-      "dealer": 9
     },
     {
       "id": "5469",
@@ -1509,6 +1487,15 @@
       "dealer": -162
     },
     {
+      "id": "2492",
+      "name": "華新科",
+      "sector": "被動元件",
+      "total": -5303,
+      "foreign": -8911,
+      "trust": 3126,
+      "dealer": 482
+    },
+    {
       "id": "6147",
       "name": "頎邦",
       "sector": "封測",
@@ -1518,24 +1505,6 @@
       "dealer": -600
     },
     {
-      "id": "2492",
-      "name": "華新科",
-      "sector": "被動元件",
-      "total": -8268,
-      "foreign": -8911,
-      "trust": 161,
-      "dealer": 482
-    },
-    {
-      "id": "3264",
-      "name": "欣銓",
-      "sector": "封測",
-      "total": -8603,
-      "foreign": -3716,
-      "trust": -4703,
-      "dealer": -184
-    },
-    {
       "id": "2327",
       "name": "國巨",
       "sector": "被動元件",
@@ -1543,6 +1512,15 @@
       "foreign": -12366,
       "trust": 3094,
       "dealer": -13
+    },
+    {
+      "id": "3264",
+      "name": "欣銓",
+      "sector": "封測",
+      "total": -10862,
+      "foreign": -3716,
+      "trust": -6962,
+      "dealer": -184
     },
     {
       "id": "6239",
@@ -1631,10 +1609,10 @@
       "signal": "HOLD",
       "sharpe": -1.19,
       "foreign": 9741,
-      "trust": 255,
+      "trust": 1023,
       "dealer": 812,
-      "chipTotal": 10808,
-      "chip5d": 32787,
+      "chipTotal": 11576,
+      "chip5d": 33555,
       "chipDays": 4,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -1723,10 +1701,10 @@
       "signal": "HOLD",
       "sharpe": -4.38,
       "foreign": 213,
-      "trust": -191,
+      "trust": -189,
       "dealer": 106,
-      "chipTotal": 128,
-      "chip5d": -2553,
+      "chipTotal": 130,
+      "chip5d": -2551,
       "chipDays": 1,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -2344,10 +2322,10 @@
       "signal": "HOLD",
       "sharpe": 2.77,
       "foreign": -3716,
-      "trust": -4703,
+      "trust": -6962,
       "dealer": -184,
-      "chipTotal": -8603,
-      "chip5d": -26702,
+      "chipTotal": -10862,
+      "chip5d": -28961,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -2436,10 +2414,10 @@
       "signal": "HOLD",
       "sharpe": -7.23,
       "foreign": -319,
-      "trust": 116,
+      "trust": 159,
       "dealer": 9,
-      "chipTotal": -194,
-      "chip5d": -889,
+      "chipTotal": -151,
+      "chip5d": -846,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -2459,10 +2437,10 @@
       "signal": "HOLD",
       "sharpe": 0.28,
       "foreign": -223,
-      "trust": 91,
+      "trust": 144,
       "dealer": -21,
-      "chipTotal": -153,
-      "chip5d": -765,
+      "chipTotal": -100,
+      "chip5d": -712,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -3149,10 +3127,10 @@
       "signal": "HOLD",
       "sharpe": 4.3,
       "foreign": 387,
-      "trust": 665,
+      "trust": 883,
       "dealer": -121,
-      "chipTotal": 931,
-      "chip5d": 8906,
+      "chipTotal": 1149,
+      "chip5d": 9124,
       "chipDays": 5,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3517,10 +3495,10 @@
       "signal": "HOLD",
       "sharpe": 8.13,
       "foreign": 9770,
-      "trust": 439,
+      "trust": 589,
       "dealer": 491,
-      "chipTotal": 10700,
-      "chip5d": 8513,
+      "chipTotal": 10850,
+      "chip5d": 8663,
       "chipDays": 1,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3862,10 +3840,10 @@
       "signal": "HOLD",
       "sharpe": 3.39,
       "foreign": -8911,
-      "trust": 161,
+      "trust": 3126,
       "dealer": 482,
-      "chipTotal": -8268,
-      "chip5d": 8909,
+      "chipTotal": -5303,
+      "chip5d": 11874,
       "chipDays": 0,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3908,14 +3886,14 @@
       "signal": "HOLD",
       "sharpe": 6.02,
       "foreign": 578,
-      "trust": 167,
+      "trust": -20,
       "dealer": -68,
-      "chipTotal": 677,
-      "chip5d": -504,
+      "chipTotal": 490,
+      "chip5d": -691,
       "chipDays": 2,
       "chipConc": -0.0,
       "chipDualBuy": false,
-      "trustDays": 1,
+      "trustDays": 0,
       "chipTier": null,
       "news": ""
     },
