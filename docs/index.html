@@ -160,6 +160,8 @@
   .pm-modal h2{font-size:16px;font-weight:700;margin-bottom:4px;}
   .pm-modal .pm-meta{font-size:11px;color:var(--sub);margin-bottom:16px;}
   .pm-section{margin-bottom:16px;}
+  .pm-src{font-size:11px;color:var(--sub);margin-bottom:12px;}
+  .pm-src.est{color:var(--yellow);}
   .pm-section h4{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
   .pm-bar-row{margin-bottom:7px;}
   .pm-bar-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:3px;}
@@ -1108,6 +1110,18 @@ function renderFundMargins(d) {
 
 // ── 產銷組合 共用渲染 ──────────────────────────────────────────────────────────
 const _PM_COLORS = ['#4e9af1','#50c878','#9b59b6','#f39c12','#e74c3c','#1abc9c','#e67e22'];
+const _PM_SOURCE_LABEL = {
+  prospectus: '招股書', annual_report: '年報', investor_conference: '法說會',
+  financial_report: '財報附註', news: '新聞引述',
+};
+
+// 佔比出處：estimate 與舊格式（無 source_type）一律標「估計值」
+function _pmSourceHtml(pm) {
+  const label = _PM_SOURCE_LABEL[pm.source_type];
+  if (!label) return '<div class="pm-src est">⚠ 估計值：非公司揭露數字，僅供參考</div>';
+  const period = pm.data_period ? `（${escHtml(pm.data_period)}）` : '';
+  return `<div class="pm-src">來源：${label}｜${escHtml(pm.source || '')}${period}</div>`;
+}
 
 function _renderPMHtml(pm) {
   if (!pm || !pm.product_lines) return '<div style="color:var(--sub);padding:12px">— 尚無產銷組合資料</div>';
@@ -1115,7 +1129,7 @@ function _renderPMHtml(pm) {
   const regions = pm.regions       || [];
   const maxPct  = Math.max(...lines.map(l => l.share_pct || 0), 1);
 
-  let h = '';
+  let h = _pmSourceHtml(pm);
 
   // 產品線
   if (lines.length) {
