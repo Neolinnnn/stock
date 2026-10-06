@@ -510,42 +510,40 @@
       "product_mix": {
         "product_lines": [
           {
-            "name": "晶圓測試 (Wafer Probing)",
-            "share_pct": 70.3,
+            "name": "通訊連線產品",
+            "share_pct": 33.4,
             "yoy_growth": null,
             "trend": "up"
           },
           {
-            "name": "成品測試 (Final Test)",
-            "share_pct": 29.0,
+            "name": "車用產品",
+            "share_pct": 8.2,
             "yoy_growth": null,
-            "trend": "up"
-          }
-        ],
-        "regions": [
-          {
-            "name": "北美 (美系Fabless)",
-            "share_pct": 55.4
+            "trend": "flat"
           },
           {
-            "name": "其他地區 (含歐洲、亞洲IDM及Foundry)",
-            "share_pct": 44.6
+            "name": "其他（未揭露明細）",
+            "share_pct": 58.4,
+            "yoy_growth": null,
+            "trend": null
           }
         ],
+        "regions": [],
         "customers": [
-          "德州儀器 (TI)",
-          "英飛凌 (Infineon)",
-          "瑞薩電子 (Renesas)",
-          "意法半導體 (STMicroelectronics)",
-          "台積電 (TSMC)",
-          "聯發科 (MediaTek)",
-          "北美雲端服務供應商 (CSP) 客戶"
+          "美系Fabless客戶",
+          "龍頭晶圓廠 (如台積電)",
+          "一線IDM廠",
+          "台系晶片龍頭 (如聯發科)",
+          "記憶體廠",
+          "美系網通晶片大廠"
         ],
-        "biz_model": "欣銓科技為半導體IC測試服務廠商，提供晶圓測試 (Wafer Probing) 及成品測試 (Final Test) 服務，定位為第三方純測試服務與高階測試平台。",
-        "moat": "公司在高階測試技術與豐富經驗上具備領先優勢，特別是在AI ASIC、高速運算 (HPC) 及矽光子 (CPO) 測試領域。欣銓與國際主要IDM大廠、台積電等策略客戶建立長期合作關係，客戶黏著度高，並透過全球佈局與多元客戶結構分散市場風險。近期積極擴充產能，高階機台稼動率近滿載，確保其在高階測試市場的競爭力。",
-        "summary": "欣銓科技在2026年上半年受惠於AI ASIC與光通訊測試需求強勁，帶動營收與獲利顯著成長，毛利率突破40%創新高，整體上半年營收年增28.3%。 龍潭新廠與子公司全智科技湖口新廠已於2026年第三季陸續量產，聚焦AI ASIC及矽光子測試業務，預期將為下半年及2027年營運提供強勁動能。 公司成功透過產品組合優化、稼動率提升及部分客戶報價調整，將營運結構轉向高毛利的高階測試市場。",
-        "data_period": "2026 Q2 (截至2026 H1)",
-        "updated_at": "2026-10-02"
+        "biz_model": "專業積體電路測試服務，提供晶圓測試 (CP) 與成品測試 (FT)。",
+        "moat": "欣銓科技的核心競爭優勢在於其高階測試技術能力，尤其在AI ASIC、矽光子(CPO)、Wafer-Level 3D Reflow及光電整合測試領域。 該公司處於資本密集且技術門檻高的產業，並與國際頂級客戶建立了長期合作關係，同時具備全球服務佈局（台灣、中國、韓國、新加坡）的能力。",
+        "summary": "欣銓科技主要提供積體電路測試服務，業務包含晶圓測試與成品測試。 受惠於AI ASIC與光通訊需求強勁，公司2026年第二季營收創歷史新高。 截至2026年第二季，通訊連線產品佔總營收的33.4%，而車用產品佔比為8.2%。 美系無晶圓廠(Fabless)客戶的貢獻比重升至55.4%。 公司正積極擴建龍潭新廠與湖口矽光子廠，以鞏固在高階測試領域的領先地位，並預期下半年營運將逐季成長。",
+        "source_type": "investor_conference",
+        "source": "欣銓科技2026年第二季法說會簡報 (2026/07/24)",
+        "data_period": "2026年第二季 (Q2 2026)",
+        "updated_at": "2026-10-06"
       }
     },
     {
@@ -1032,9 +1030,9 @@
       "id": "2313",
       "name": "華通",
       "sector": "PCB",
-      "total": 20397,
+      "total": 21979,
       "foreign": 18381,
-      "trust": 1703,
+      "trust": 3285,
       "dealer": 313
     },
     {
@@ -1137,6 +1135,15 @@
       "dealer": 385
     },
     {
+      "id": "2383",
+      "name": "台光電",
+      "sector": "銅箔/CCL",
+      "total": 1218,
+      "foreign": 654,
+      "trust": 595,
+      "dealer": -31
+    },
+    {
       "id": "3044",
       "name": "健鼎",
       "sector": "PCB",
@@ -1144,6 +1151,15 @@
       "foreign": 1142,
       "trust": 7,
       "dealer": 38
+    },
+    {
+      "id": "2308",
+      "name": "台達電",
+      "sector": "AI 電源",
+      "total": 1179,
+      "foreign": 644,
+      "trust": 649,
+      "dealer": -114
     },
     {
       "id": "4919",
@@ -1182,15 +1198,6 @@
       "dealer": 133
     },
     {
-      "id": "2383",
-      "name": "台光電",
-      "sector": "銅箔/CCL",
-      "total": 927,
-      "foreign": 654,
-      "trust": 304,
-      "dealer": -31
-    },
-    {
       "id": "2441",
       "name": "超豐",
       "sector": "封測",
@@ -1209,15 +1216,6 @@
       "dealer": 96
     },
     {
-      "id": "2308",
-      "name": "台達電",
-      "sector": "AI 電源",
-      "total": 851,
-      "foreign": 644,
-      "trust": 321,
-      "dealer": -114
-    },
-    {
       "id": "2369",
       "name": "菱生",
       "sector": "封測",
@@ -1225,6 +1223,15 @@
       "foreign": 745,
       "trust": 0,
       "dealer": 13
+    },
+    {
+      "id": "8046",
+      "name": "南電",
+      "sector": "ABF載板",
+      "total": 717,
+      "foreign": 260,
+      "trust": 532,
+      "dealer": -75
     },
     {
       "id": "6271",
@@ -1297,15 +1304,6 @@
       "foreign": 338,
       "trust": 8,
       "dealer": 145
-    },
-    {
-      "id": "8046",
-      "name": "南電",
-      "sector": "ABF載板",
-      "total": 489,
-      "foreign": 260,
-      "trust": 304,
-      "dealer": -75
     },
     {
       "id": "2478",
@@ -1416,6 +1414,15 @@
       "dealer": -26
     },
     {
+      "id": "3406",
+      "name": "玉晶光",
+      "sector": "光學",
+      "total": 122,
+      "foreign": 33,
+      "trust": 72,
+      "dealer": 17
+    },
+    {
       "id": "3443",
       "name": "創意",
       "sector": "AI ASIC/IP",
@@ -1446,9 +1453,9 @@
       "id": "7769",
       "name": "鴻勁",
       "sector": "測試設備",
-      "total": 88,
+      "total": 86,
       "foreign": 53,
-      "trust": 26,
+      "trust": 24,
       "dealer": 9
     },
     {
@@ -1486,15 +1493,6 @@
       "foreign": 70,
       "trust": -15,
       "dealer": -2
-    },
-    {
-      "id": "3406",
-      "name": "玉晶光",
-      "sector": "光學",
-      "total": 43,
-      "foreign": 33,
-      "trust": -7,
-      "dealer": 17
     },
     {
       "id": "2458",
@@ -1689,9 +1687,9 @@
       "id": "2345",
       "name": "智邦",
       "sector": "光通訊",
-      "total": -297,
+      "total": -298,
       "foreign": 31,
-      "trust": -321,
+      "trust": -322,
       "dealer": -7
     },
     {
@@ -1794,13 +1792,13 @@
       "dealer": -177
     },
     {
-      "id": "3264",
-      "name": "欣銓",
-      "sector": "封測",
-      "total": -1109,
-      "foreign": -602,
-      "trust": -817,
-      "dealer": 310
+      "id": "2330",
+      "name": "台積電",
+      "sector": "AI ASIC/IP",
+      "total": -1124,
+      "foreign": -1673,
+      "trust": 154,
+      "dealer": 395
     },
     {
       "id": "8358",
@@ -1810,15 +1808,6 @@
       "foreign": -1157,
       "trust": 77,
       "dealer": -183
-    },
-    {
-      "id": "2330",
-      "name": "台積電",
-      "sector": "AI ASIC/IP",
-      "total": -1300,
-      "foreign": -1673,
-      "trust": -22,
-      "dealer": 395
     },
     {
       "id": "2451",
@@ -1837,6 +1826,15 @@
       "foreign": -702,
       "trust": -683,
       "dealer": -175
+    },
+    {
+      "id": "3264",
+      "name": "欣銓",
+      "sector": "封測",
+      "total": -1712,
+      "foreign": -602,
+      "trust": -1420,
+      "dealer": 310
     },
     {
       "id": "3450",
@@ -1923,9 +1921,9 @@
       "id": "2454",
       "name": "聯發科",
       "sector": "IC設計",
-      "total": -4734,
+      "total": -4746,
       "foreign": -3913,
-      "trust": -852,
+      "trust": -864,
       "dealer": 31
     },
     {
@@ -2116,10 +2114,10 @@
       "signal": "HOLD",
       "sharpe": -4.31,
       "foreign": 31,
-      "trust": -321,
+      "trust": -322,
       "dealer": -7,
-      "chipTotal": -297,
-      "chip5d": -1479,
+      "chipTotal": -298,
+      "chip5d": -1480,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -2737,10 +2735,10 @@
       "signal": "BUY",
       "sharpe": 3.22,
       "foreign": -602,
-      "trust": -817,
+      "trust": -1420,
       "dealer": 310,
-      "chipTotal": -1109,
-      "chip5d": -26649,
+      "chipTotal": -1712,
+      "chip5d": -27252,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -2852,14 +2850,14 @@
       "signal": "HOLD",
       "sharpe": 0.32,
       "foreign": 33,
-      "trust": -7,
+      "trust": 72,
       "dealer": 17,
-      "chipTotal": 43,
-      "chip5d": -595,
+      "chipTotal": 122,
+      "chip5d": -516,
       "chipDays": 1,
       "chipConc": -0.0,
       "chipDualBuy": false,
-      "trustDays": 0,
+      "trustDays": 5,
       "chipTier": null,
       "news": ""
     },
@@ -2875,10 +2873,10 @@
       "signal": "HOLD",
       "sharpe": 5.1,
       "foreign": -3913,
-      "trust": -852,
+      "trust": -864,
       "dealer": 31,
-      "chipTotal": -4734,
-      "chip5d": -5868,
+      "chipTotal": -4746,
+      "chip5d": -5880,
       "chipDays": 0,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -3542,10 +3540,10 @@
       "signal": "HOLD",
       "sharpe": 4.73,
       "foreign": 260,
-      "trust": 304,
+      "trust": 532,
       "dealer": -75,
-      "chipTotal": 489,
-      "chip5d": 8099,
+      "chipTotal": 717,
+      "chip5d": 8327,
       "chipDays": 5,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3611,10 +3609,10 @@
       "signal": "HOLD",
       "sharpe": 5.61,
       "foreign": 654,
-      "trust": 304,
+      "trust": 595,
       "dealer": -31,
-      "chipTotal": 927,
-      "chip5d": 847,
+      "chipTotal": 1218,
+      "chip5d": 1138,
       "chipDays": 3,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3795,10 +3793,10 @@
       "signal": "HOLD",
       "sharpe": 2.15,
       "foreign": 18381,
-      "trust": 1703,
+      "trust": 3285,
       "dealer": 313,
-      "chipTotal": 20397,
-      "chip5d": 31635,
+      "chipTotal": 21979,
+      "chip5d": 33217,
       "chipDays": 3,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -3910,14 +3908,14 @@
       "signal": "HOLD",
       "sharpe": 8.16,
       "foreign": -1673,
-      "trust": -22,
+      "trust": 154,
       "dealer": 395,
-      "chipTotal": -1300,
-      "chip5d": 10355,
+      "chipTotal": -1124,
+      "chip5d": 10531,
       "chipDays": 0,
       "chipConc": 0.0,
       "chipDualBuy": true,
-      "trustDays": 0,
+      "trustDays": 5,
       "chipTier": null,
       "news": ""
     },
@@ -4163,10 +4161,10 @@
       "signal": "HOLD",
       "sharpe": 4.5,
       "foreign": 644,
-      "trust": 321,
+      "trust": 649,
       "dealer": -114,
-      "chipTotal": 851,
-      "chip5d": 8096,
+      "chipTotal": 1179,
+      "chip5d": 8424,
       "chipDays": 2,
       "chipConc": 0.0,
       "chipDualBuy": true,
@@ -4324,10 +4322,10 @@
       "signal": "HOLD",
       "sharpe": 4.04,
       "foreign": 53,
-      "trust": 26,
+      "trust": 24,
       "dealer": 9,
-      "chipTotal": 88,
-      "chip5d": -217,
+      "chipTotal": 86,
+      "chip5d": -219,
       "chipDays": 1,
       "chipConc": -0.0,
       "chipDualBuy": false,
@@ -6660,6 +6658,30 @@
         "id": "3264",
         "name": "欣銓",
         "entryPrice": 245.0,
+        "phase": 1
+      },
+      {
+        "id": "8996",
+        "name": "高力",
+        "entryPrice": 1600.0,
+        "phase": 1
+      },
+      {
+        "id": "2408",
+        "name": "南亞科",
+        "entryPrice": 525.0,
+        "phase": 1
+      },
+      {
+        "id": "2449",
+        "name": "京元電子",
+        "entryPrice": 298.0,
+        "phase": 1
+      },
+      {
+        "id": "2441",
+        "name": "超豐",
+        "entryPrice": 126.5,
         "phase": 1
       }
     ]
