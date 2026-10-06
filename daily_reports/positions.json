@@ -1,5 +1,5 @@
 {
-  "updated": "20261005",
+  "updated": "20261006",
   "open": [
     {
       "id": "3231",
@@ -83,6 +83,54 @@
       "entry_date": "20261002",
       "entry_price": 245.0,
       "high_watermark": 245.0,
+      "days_since_high": 0
+    },
+    {
+      "id": "8996",
+      "name": "高力",
+      "signal_date": "20261006",
+      "signal_price": 1600.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
+      "days_since_high": 0
+    },
+    {
+      "id": "2408",
+      "name": "南亞科",
+      "signal_date": "20261006",
+      "signal_price": 525.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
+      "days_since_high": 0
+    },
+    {
+      "id": "2449",
+      "name": "京元電子",
+      "signal_date": "20261006",
+      "signal_price": 298.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
+      "days_since_high": 0
+    },
+    {
+      "id": "2441",
+      "name": "超豐",
+      "signal_date": "20261006",
+      "signal_price": 126.5,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
