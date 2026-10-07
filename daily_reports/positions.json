@@ -1,5 +1,5 @@
 {
-  "updated": "20261006",
+  "updated": "20261007",
   "open": [
     {
       "id": "3231",
@@ -131,6 +131,18 @@
       "entry_date": "20261006",
       "entry_price": 126.5,
       "high_watermark": 126.5,
+      "days_since_high": 0
+    },
+    {
+      "id": "2344",
+      "name": "華邦電",
+      "signal_date": "20261007",
+      "signal_price": 179.5,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
