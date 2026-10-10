@@ -5,8 +5,9 @@ name: 策略實驗室回測更新
 #   領頭羊突破（backtest_breakout_lab.py → docs/breakout_lab.json）
 #   全追蹤池分年比較（backtest_condition_universe.py → docs/condition_universe.json）
 # 並同步今日掃描「領頭羊突破」區塊的回測數字（breakout_scan.load_backtest_ref）。
-# 排在週六上午：無日掃描、FinMind 額度未被占用（約 430 次呼叫）。
-# backtest_cache 不進版控，每次都是全新抓取；markdown 報告不在此 commit，避免每週累積檔案。
+# 排在週六上午：無日掃描、FinMind 額度未被占用。全部重抓約 430 次呼叫，接近單一 token
+# 每小時上限（600），同一小時內勿連跑兩次（2026-10-11 第二次執行即因額度用盡中止）。
+# markdown 報告不在此 commit，避免每週累積檔案。
 on:
   schedule:
     # 10:17 台灣時間 = 02:17 UTC，週六；避開整點／半點（排程壅塞）
@@ -53,7 +54,10 @@ jobs:
           FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
           FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
         run: |
-          python scripts/backtest_entry_lab.py --refresh
+          # 全部重抓：backtest_cache 有早期誤入版控的舊檔（價格至 2026-09-23），不清掉的話
+          # 未加 --refresh 的腳本會沿用舊價。清空後三支腳本共用同一份新快取，每檔只抓一次
+          rm -rf backtest_cache
+          python scripts/backtest_entry_lab.py
           python scripts/backtest_breakout_lab.py
           python scripts/backtest_condition_universe.py
           PYTHONPATH=scripts python -c "import json, breakout_scan as b; p = b.ROOT / 'docs' / 'breakout.json'; d = json.loads(p.read_text(encoding='utf-8')); d['backtest_ref'] = b.load_backtest_ref(); p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding='utf-8'); print('breakout.json backtest_ref', d['backtest_ref'])"
