@@ -7,6 +7,8 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
+from benchmark import BENCH_ID, Benchmark, excess_stats
+
 # TP / SL 組合
 TP_LIST = [0.15, 0.18, 0.20]
 SL_LIST = [0.10, 0.12, 0.15]
@@ -205,7 +207,8 @@ def simulate_position_ma(
 
 
 def calc_stats(trades: list) -> dict:
-    """計算已出場交易的勝率、平均報酬、平均持有天數。OPEN 不計入。"""
+    """計算已出場交易的勝率、平均報酬、平均持有天數。OPEN 不計入。
+    交易帶 bench_return_pct（0050 同期報酬）時另附超額報酬統計，見 benchmark.excess_stats。"""
     closed = [t for t in trades if t['result'] != 'OPEN']
     wins   = [t for t in closed if t['result'] == 'WIN']
     losses = [t for t in closed if t['result'] == 'LOSS']
@@ -223,6 +226,7 @@ def calc_stats(trades: list) -> dict:
         'win_rate': round(win_rate, 4),
         'avg_return': round(avg_return, 4),
         'avg_holding_days': round(avg_hold, 1),
+        **excess_stats([(t['return_pct'], t.get('bench_return_pct')) for t in closed]),
     }
 
 
@@ -388,10 +392,12 @@ def run_backtest_combo(
     sl: float,
     fixed: bool = False,
     ma_exit: bool = False,
+    bench: Benchmark | None = None,
 ) -> dict:
     """
     執行單一 (TP, SL) 組合的完整回測。fixed=True 用固定停利停損（收盤判斷），否則追蹤止損。
     ma_exit=True 改用均線分批出場（忽略 tp/sl）。
+    bench 有值時，已出場交易附 bench_return_pct（同一進出場日買 0050 的報酬）。
     回傳 {'stats': {...}, 'trades': [...]}
     """
     trades = []
@@ -442,6 +448,8 @@ def run_backtest_combo(
         trade['signal_date'] = signal_date
         trade['tp'] = tp
         trade['sl'] = sl
+        if bench is not None and trade['exit_date']:
+            trade['bench_return_pct'] = bench.ret_pct(entry_date, trade['exit_date'])
         trades.append(trade)
 
     return {'stats': calc_stats(trades), 'trades': trades}
@@ -452,6 +460,7 @@ def run_all_backtests(
     price_data: dict,
     trading_days: list[str],
     fixed: bool = False,
+    bench: Benchmark | None = None,
 ) -> dict:
     """執行全部 9 組 TP×SL 組合，回傳結果字典。"""
     combinations = {}
@@ -459,14 +468,16 @@ def run_all_backtests(
         for sl in SL_LIST:
             key = f"TP{int(tp*100)}_SL{int(sl*100)}"
             print(f"  🔄 回測 {key} ...")
-            result = run_backtest_combo(signals_with_amount, price_data, trading_days, tp, sl, fixed)
+            result = run_backtest_combo(signals_with_amount, price_data, trading_days, tp, sl, fixed,
+                                        bench=bench)
             combinations[key] = result
             s = result['stats']
+            vs = f"  vs 0050 {s['excess_return']:+.1f}pp" if 'excess_return' in s else ''
             print(f"      勝率 {s['win_rate']:.1%}  交易數 {s['total']}  "
-                  f"未實現 {s['open_count']}  avg報酬 {s['avg_return']:+.1f}%")
+                  f"未實現 {s['open_count']}  avg報酬 {s['avg_return']:+.1f}%{vs}")
     print("  🔄 回測 MA5_MA10（跌破MA5賣半、跌破MA10清倉）...")
     combinations['MA5_MA10'] = run_backtest_combo(
-        signals_with_amount, price_data, trading_days, None, None, ma_exit=True)
+        signals_with_amount, price_data, trading_days, None, None, ma_exit=True, bench=bench)
     return combinations
 
 
@@ -535,6 +546,10 @@ def main():
     price_data = fetch_price_data(dl, sorted({s['stock_id'] for s in signals_all}), start_fmt, end_fmt)
     trading_days = get_sorted_trading_days(price_data)
     print(f"  共 {len(trading_days)} 個交易日")
+    # 回測標準：與 0050 同期績效比較（逐筆同進出場日），不併入 price_data 以免混入交易日
+    bench = Benchmark(fetch_price_data(dl, [BENCH_ID], start_fmt, end_fmt).get(BENCH_ID, {}))
+    if not bench.days:
+        print(f"  ⚠️  {BENCH_ID} 股價抓取失敗，本次結果不含 0050 同期比較")
 
     if args.action_list:
         signals_all = signals_qual = filter_bias_ma10(signals_all, price_data)
@@ -550,18 +565,18 @@ def main():
     if args.qualified_only:
         # 只跑雙條件
         print("\n【Step 4】執行 9 組回測（雙條件達標）")
-        combos_qual = run_all_backtests(swa_qual, price_data, trading_days, args.fixed)
+        combos_qual = run_all_backtests(swa_qual, price_data, trading_days, args.fixed, bench)
         combos_all  = None
     elif args.compare:
         # 兩組都跑
         print("\n【Step 4a】執行 9 組回測（全 BUY）")
-        combos_all  = run_all_backtests(swa_all,  price_data, trading_days, args.fixed)
+        combos_all  = run_all_backtests(swa_all,  price_data, trading_days, args.fixed, bench)
         print("\n【Step 4b】執行 9 組回測（雙條件達標）")
-        combos_qual = run_all_backtests(swa_qual, price_data, trading_days, args.fixed)
+        combos_qual = run_all_backtests(swa_qual, price_data, trading_days, args.fixed, bench)
     else:
         # 預設只跑全 BUY
         print("\n【Step 4】執行 9 組回測（全 BUY）")
-        combos_all  = run_all_backtests(swa_all,  price_data, trading_days, args.fixed)
+        combos_all  = run_all_backtests(swa_all,  price_data, trading_days, args.fixed, bench)
         combos_qual = None
 
     # Step 5: 存檔
@@ -569,6 +584,8 @@ def main():
     results = {
         'generated_at': datetime.now().isoformat(),
         'date_range': {'start': args.start, 'end': dt_date.today().strftime('%Y%m%d')},
+        # 0050 整段買進持有，僅供標示大盤背景；勝負以各組合 stats 的逐筆超額報酬為準
+        'benchmark': bench.period(args.start, dt_date.today().strftime('%Y%m%d')),
         'total_signals':         len(signals_all),
         'signals_after_limit':   len(swa_all),
         'qualified_signals':     len(signals_qual),

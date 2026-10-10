@@ -6,8 +6,9 @@
   _al 為只用今日行動清單進場（--action-list）。
 
 安全閥：
-- 任一訊號股抓不到股價即中止。backtest.fetch_price_data 失敗時回空資料，
-  照跑會把「開盤價缺失而被跳過」的殘缺結果發佈上網站（FinMind 額度用完時最常見）。
+- 任一訊號股或 0050（同期比較基準，見 benchmark.py）抓不到股價即中止。
+  backtest.fetch_price_data 失敗時回空資料，照跑會把「開盤價缺失而被跳過」或
+  「缺 0050 比較」的殘缺結果發佈上網站（FinMind 額度用完時最常見）。
 - 18 份全數成功才覆寫，避免新舊結果混雜。
 
 用法：python scripts/backtest_all.py
