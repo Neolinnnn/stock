@@ -6,7 +6,8 @@ name: 策略實驗室回測更新
 #   全追蹤池分年比較（backtest_condition_universe.py → docs/condition_universe.json）
 # 並同步今日掃描「領頭羊突破」區塊的回測數字（breakout_scan.load_backtest_ref）。
 # 排在週六上午：無日掃描、FinMind 額度未被占用。全部重抓約 430 次呼叫，接近單一 token
-# 每小時上限（600），同一小時內勿連跑兩次（2026-10-11 第二次執行即因額度用盡中止）。
+# 每小時上限（600）；股價、籌碼、公司行動皆走 datafeed.finmind_fetch，額度用盡自動換 token
+# （2026-10-11 第二次執行即因只用第一組 token、額度用盡而中止）。
 # markdown 報告不在此 commit，避免每週累積檔案。
 on:
   schedule:

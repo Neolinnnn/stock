@@ -33,11 +33,12 @@ def fake_chip_api(monkeypatch, tmp_path):
     class DL:
         calls = 0
 
-        def taiwan_stock_institutional_investors(self, stock_id, start_date):
-            DL.calls += 1
-            return pd.DataFrame(rows)
+    def fake_fetch(method, **kw):
+        assert method == 'taiwan_stock_institutional_investors' and kw['stock_id'] == '2330'
+        DL.calls += 1
+        return pd.DataFrame(rows)
 
-    monkeypatch.setattr(lab, 'get_dl', lambda: DL())
+    monkeypatch.setattr(lab, 'finmind_fetch', fake_fetch)
     monkeypatch.setattr(lab.time, 'sleep', lambda s: None)
     return DL, tmp_path
 
@@ -63,11 +64,10 @@ def test_fetch_chip_falls_back_to_old_cache_when_refetch_fails(fake_chip_api, mo
     _, cache = fake_chip_api
     (cache / '2330_chip.csv').write_text('date,net\n20260101,7\n', encoding='utf-8')
 
-    class Down:
-        def taiwan_stock_institutional_investors(self, **kw):
-            raise ConnectionError('quota')
+    def down(method, **kw):
+        raise ConnectionError('quota')
 
-    monkeypatch.setattr(lab, 'get_dl', lambda: Down())
+    monkeypatch.setattr(lab, 'finmind_fetch', down)
     df = lab.fetch_chip('2330')
     assert df['net'].tolist() == [7] and df['trust'].isna().all()   # 既有 net 條件不受影響
 
@@ -135,3 +135,23 @@ def test_fetch_ohlcv_leaves_taiex_unadjusted(monkeypatch, tmp_path):
                                               encoding='utf-8')
     monkeypatch.setattr(lab, 'fetch_events', lambda *a: pytest.fail('指數不應查詢公司行動'))
     assert lab.fetch_ohlcv('TAIEX')['close'].tolist() == [1]
+
+
+def test_fetch_ohlcv_cache_miss_uses_finmind_fetch(monkeypatch, tmp_path):
+    monkeypatch.setattr(lab, 'CACHE_DIR', tmp_path)
+    monkeypatch.setattr(lab.time, 'sleep', lambda s: None)
+    calls = []
+
+    def fake_fetch(method, **kw):
+        calls.append((method, kw['stock_id']))
+        return pd.DataFrame({'date': ['2026-10-07', '2026-10-08'], 'stock_id': ['2330', '2330'],
+                             'open': [1, 2], 'max': [3, 4], 'min': [0.5, 1], 'close': [2, 3],
+                             'Trading_Volume': [100, 200]})
+
+    monkeypatch.setattr(lab, 'finmind_fetch', fake_fetch)
+    monkeypatch.setattr(lab, 'fetch_events', lambda *a: [])
+    df = lab.fetch_ohlcv('2330')
+    assert calls == [('taiwan_stock_daily', '2330')]
+    assert list(df.columns) == ['date', 'open', 'high', 'low', 'close', 'volume']
+    assert df['date'].tolist() == ['20261007', '20261008'] and df['high'].tolist() == [3, 4]
+    assert (tmp_path / '2330_ohlcv.csv').exists()          # 寫入快取，後續腳本共用
