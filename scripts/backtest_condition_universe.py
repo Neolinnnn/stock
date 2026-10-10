@@ -125,6 +125,7 @@ def render_md(rows: list[dict], meta: dict) -> str:
         '',
         f"- 追蹤池 {meta['universe']} 檔（有價格資料 {meta['priced']} 檔"
         + (f"；缺：{'、'.join(meta['missing'])}" if meta['missing'] else '') + '）',
+        '- 價格：含息還原價（除權息、減資、分割、面額變更，見 CLAUDE.md「回測價格」）',
         '- 進場：條件成立日次日開盤；同股未出場不重複進場；最長持有 60 日',
         '- 基準：無條件進場（同追蹤池、隨機時點）',
         f"- 0050 同期比較：{'有' if meta['bench'] else '**無資料，標準③未判定**'}",

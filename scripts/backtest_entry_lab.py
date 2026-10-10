@@ -25,6 +25,7 @@ ROOT = Path(__file__).parent.parent
 import pandas as pd
 from benchmark import BENCH_ID, Benchmark, excess_stats
 from datafeed import make_dataloader
+from price_adjust import adjust_df, fetch_events
 from regime_exit_analysis import clean_ohlcv
 
 CACHE_DIR = ROOT / 'backtest_cache'
@@ -44,20 +45,37 @@ def get_dl():
 
 
 def fetch_ohlcv(sid: str, refresh=False) -> pd.DataFrame:
-    """日 K（含成交量），本地快取。"""
+    """日 K（含成交量），回傳含息還原價（見 price_adjust；TAIEX 為指數不還原）。
+    快取存未還原原始價（build_backtest_docs 直接讀它當現價），事件另存 {sid}_events.json。"""
     cf = CACHE_DIR / f'{sid}_ohlcv.csv'
     if cf.exists() and not refresh:
-        return pd.read_csv(cf, dtype={'date': str})
-    dl = get_dl()
-    df = dl.taiwan_stock_daily(stock_id=sid, start_date=FETCH_START)
-    if df is None or df.empty:
-        return pd.DataFrame()
-    df = df.rename(columns={'max': 'high', 'min': 'low', 'Trading_Volume': 'volume'})
-    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
-    out = df[['date', 'open', 'high', 'low', 'close', 'volume']].copy()
-    out.to_csv(cf, index=False)
-    time.sleep(0.3)
-    return out
+        out = pd.read_csv(cf, dtype={'date': str})
+    else:
+        dl = get_dl()
+        df = dl.taiwan_stock_daily(stock_id=sid, start_date=FETCH_START)
+        if df is None or df.empty:
+            return pd.DataFrame()
+        df = df.rename(columns={'max': 'high', 'min': 'low', 'Trading_Volume': 'volume'})
+        df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
+        out = df[['date', 'open', 'high', 'low', 'close', 'volume']].copy()
+        out.to_csv(cf, index=False)
+        time.sleep(0.3)
+    if sid == 'TAIEX' or out.empty:
+        return out
+    return adjust_df(out, load_events(sid, out['date'].iloc[-1], refresh))
+
+
+def load_events(sid: str, asof: str, refresh=False) -> list[dict]:
+    """公司行動事件，快取於 {sid}_events.json；快取的查詢迄日早於價格最後一天時重抓，
+    避免價格快取更新後漏掉新的除權息。"""
+    cf = CACHE_DIR / f'{sid}_events.json'
+    if cf.exists() and not refresh:
+        cached = json.loads(cf.read_text(encoding='utf-8'))
+        if cached['asof'] >= asof:
+            return cached['events']
+    events = fetch_events(sid, FETCH_START, f'{asof[:4]}-{asof[4:6]}-{asof[6:]}')
+    cf.write_text(json.dumps({'asof': asof, 'events': events}), encoding='utf-8')
+    return events
 
 
 CHIP_COLS = ['net', 'foreign', 'trust', 'dealer']

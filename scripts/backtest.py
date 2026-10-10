@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 from benchmark import BENCH_ID, Benchmark, excess_stats
+from price_adjust import adjust_bars, fetch_events
 
 # TP / SL 組合
 TP_LIST = [0.15, 0.18, 0.20]
@@ -303,7 +304,8 @@ def load_buy_signals(reports_dir: str = 'daily_reports',
 
 def filter_bias_ma10(signals: list[dict], price_data: dict, max_bias: float = 2.0) -> list[dict]:
     """行動清單乖離率閘門：訊號日收盤相對 MA10 乖離 ≤ max_bias%（同 daily_scan.MAX_BIAS_MA10）。
-    MA10 資料不足者剔除（與 daily_scan 缺值保守剔除一致）。"""
+    MA10 資料不足者剔除（與 daily_scan 缺值保守剔除一致）。
+    price_data 為還原價；daily_scan 用未還原價，MA10 窗口內遇除權息時乖離會略有差異。"""
     out = []
     for s in signals:
         px = price_data.get(s['stock_id'], {})
@@ -345,10 +347,11 @@ def apply_position_limits(
 def fetch_price_data(dl, stock_ids: list[str],
                      start: str, end: str) -> dict:
     """
-    從 FinMind 批次下載 OHLC，回傳：
+    從 FinMind 批次下載 OHLC，回傳含息還原價（除權息、減資、分割、面額變更，見 price_adjust）：
     {stock_id: {date_str: {'open','high','low','close': float}}}
     start/end 格式：'YYYY-MM-DD'
     FinMind 欄名：max=high, min=low
+    股價或事件表任一抓取失敗即回空資料（backtest_all 據此中止，不發佈半還原的結果）。
     """
     print(f"  📥 下載 OHLC：{start} ~ {end}（{len(stock_ids)} 檔）")
     price_data: dict[str, dict] = {}
@@ -359,7 +362,7 @@ def fetch_price_data(dl, stock_ids: list[str],
                 price_data[sid] = {}
                 continue
             df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y%m%d')
-            price_data[sid] = {
+            bars = {
                 row['date']: {
                     'open' : float(row['open']),
                     'high' : float(row.get('max', row['open'])),
@@ -368,6 +371,7 @@ def fetch_price_data(dl, stock_ids: list[str],
                 }
                 for _, row in df.iterrows()
             }
+            price_data[sid] = adjust_bars(bars, fetch_events(sid, start, end))
         except Exception as e:
             print(f"    ⚠️  {sid} 下載失敗：{e}")
             price_data[sid] = {}

@@ -104,3 +104,34 @@ def test_summarize_adds_0050_excess():
     s = lab.summarize(trades)
     assert (s['n'], s['excess_return'], s['beat_rate']) == (2, 1.0, 0.5)
     assert 'excess_return' not in lab.summarize([{'result': {'ret': 0.1, 'days': 1}}])
+
+
+def test_fetch_ohlcv_adjusts_and_refreshes_stale_events(monkeypatch, tmp_path):
+    monkeypatch.setattr(lab, 'CACHE_DIR', tmp_path)
+    cf = tmp_path / '2327_ohlcv.csv'
+    cf.write_text('date,open,high,low,close,volume\n'
+                  '20250813,540,550,535,546,1000\n20250825,142,145,140,143,4100\n', encoding='utf-8')
+    calls = []
+
+    def fake_events(sid, start, end):
+        calls.append(end)
+        return [{'date': '20250825', 'factor': 0.25, 'shares': True}]
+
+    monkeypatch.setattr(lab, 'fetch_events', fake_events)
+    df = lab.fetch_ohlcv('2327')
+    assert df['close'].tolist() == [136.5, 143.0] and calls == ['2025-08-25']
+    lab.fetch_ohlcv('2327')                       # 事件快取命中，不再查詢
+    assert len(calls) == 1
+    with open(cf, 'a', encoding='utf-8') as f:    # 價格快取延伸到新日期 → 事件快取過期
+        f.write('20250826,143,144,142,144,3000\n')
+    lab.fetch_ohlcv('2327')
+    assert calls == ['2025-08-25', '2025-08-26']
+    assert '546' in cf.read_text(encoding='utf-8')   # 快取仍存原始價
+
+
+def test_fetch_ohlcv_leaves_taiex_unadjusted(monkeypatch, tmp_path):
+    monkeypatch.setattr(lab, 'CACHE_DIR', tmp_path)
+    (tmp_path / 'TAIEX_ohlcv.csv').write_text('date,open,high,low,close,volume\n20250813,1,1,1,1,1\n',
+                                              encoding='utf-8')
+    monkeypatch.setattr(lab, 'fetch_events', lambda *a: pytest.fail('指數不應查詢公司行動'))
+    assert lab.fetch_ohlcv('TAIEX')['close'].tolist() == [1]

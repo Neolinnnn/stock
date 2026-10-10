@@ -233,3 +233,30 @@ def test_run_backtest_combo_attaches_0050_excess():
 def test_calc_stats_without_bench_has_no_excess_fields():
     s = calc_stats([{'result': 'WIN', 'return_pct': 5.0, 'holding_days': 1}])
     assert 'excess_return' not in s
+
+
+import pandas as pd
+
+
+class _FakeDL:
+    def taiwan_stock_daily(self, stock_id, start_date, end_date):
+        return pd.DataFrame({'date': ['2025-08-13', '2025-08-25'], 'open': [540.0, 142.0],
+                             'max': [550.0, 145.0], 'min': [535.0, 140.0], 'close': [546.0, 143.0]})
+
+
+def test_fetch_price_data_returns_adjusted_prices(monkeypatch):
+    import backtest
+    monkeypatch.setattr(backtest, 'fetch_events',
+                        lambda sid, s, e: [{'date': '20250825', 'factor': 0.25, 'shares': True}])
+    px = backtest.fetch_price_data(_FakeDL(), ['2327'], '2025-08-01', '2025-08-31')['2327']
+    assert px['20250813']['close'] == 136.5 and px['20250825']['close'] == 143.0
+
+
+def test_fetch_price_data_event_failure_empties_stock(monkeypatch):
+    # 事件表抓不到 → 該股回空，backtest_all 據此中止，不發佈半還原結果
+    import backtest
+
+    def down(sid, s, e):
+        raise ConnectionError('quota')
+    monkeypatch.setattr(backtest, 'fetch_events', down)
+    assert backtest.fetch_price_data(_FakeDL(), ['2327'], '2025-08-01', '2025-08-31') == {'2327': {}}

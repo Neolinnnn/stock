@@ -168,9 +168,28 @@ Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序
 不拿整段期間 0050 買進持有報酬直接比——策略平均報酬是「每筆持有 N 天」的
 尺度，兩者不可比；整段報酬只在頁面上標示為大盤背景。
 
-- 0050 於 2025-06 一拆四，FinMind 日 K 為未還原價，由 `benchmark.adjust_splits()` 還原
-- 兩邊皆為價格報酬、不含股利（個股回測亦未還原權息），維持同一基礎
+- 策略與 0050 兩邊皆用**含息還原價**，比的是含息總報酬（見下節）
 - 每週回測（`backtest_all.py`）抓不到 0050 即中止不發佈，與個股缺價同一安全閥
+
+### 回測價格：含息還原價（自算）
+
+FinMind 日 K（`TaiwanStockPrice`）為未還原價，分割、減資、除權息都會造成假跳空
+（例：2327 國巨 2025-08 面額變更一拆四，未還原會算成 −73%）。官方還原股價
+`TaiwanStockPriceAdj` 只限 backer／sponsor，本專案為 register 等級，故以免費的公司
+行動表自算向後還原（`scripts/price_adjust.py`）：
+
+| 事件 | 資料表 | 係數 |
+|------|--------|------|
+| 除權息 | `TaiwanStockDividendResult` | `reference_price / before_price` |
+| 減資 | `TaiwanStockCapitalReductionReferencePrice` | `PostReductionReferencePrice / ClosingPriceonTheLastTradingDay` |
+| 分割／反分割 | `TaiwanStockSplitPrice` | `after_price / before_price` |
+| 面額變更 | `TaiwanStockParValueChange` | `after_ref_close / before_close` |
+
+- 事件日之前的價格乘上其後事件係數的連乘積，**最新價不變**；股數改變的事件同步調整成交量
+- 套用範圍：每週回測（`backtest.fetch_price_data`）與實驗室類回測（`backtest_entry_lab.fetch_ohlcv`，
+  含全池、突破系統）。`backtest_cache/*_ohlcv.csv` 仍存原始價，事件另存 `*_events.json`
+- 每日掃描、行動清單等即時訊號仍用未還原價；回測重建行動清單的乖離閘門在除權息附近會略有差異
+- `benchmark.adjust_splits()` 為事件表缺漏時的保底（偵測超出漲跌幅的分割跳空）
 
 ---
 
