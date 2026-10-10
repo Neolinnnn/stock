@@ -37,6 +37,10 @@
 
   .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  /* 網格欄位預設最小寬＝內容寬，內含寬表格時會撐破手機版面；設 0 讓表格在自己的捲動容器內橫捲 */
+  .grid-2>*{min-width:0;}
+  /* 極窄螢幕（≤340px）大盤指數列放不下，允許漲跌幅換行，避免撐出橫捲 */
+  @media(max-width:340px){.idx-row{flex-wrap:wrap;}}
   @media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
   @media(max-width:480px){.grid-4{grid-template-columns:1fr 1fr;}}
 
@@ -1696,10 +1700,10 @@ async function renderLabPage(){
         <div class="card-value up">${pct(winS.win_rate)}</div>
         <div class="card-sub">n=${winS.n}・Wilson下界 ${pct(winS.wilson_lb)}</div></div>
       <div><div class="card-title">平均報酬（基準 ${sgn(base.avg_ret)}）</div>
-        <div class="card-value ${winS.avg_ret>0?'up':'down'}">${sgn(winS.avg_ret)}</div>
+        <div class="card-value ${winS.avg_ret>0?'up':'dn'}">${sgn(winS.avg_ret)}</div>
         <div class="card-sub">獲利因子 ${winS.profit_factor}（基準 ${base.profit_factor}）・vs 0050 ${ppTxt(winS.excess_return)}</div></div>
       <div><div class="card-title">搭配追蹤停損15%</div>
-        <div class="card-value ${winT.avg_ret>0?'up':'down'}">${sgn(winT.avg_ret)}</div>
+        <div class="card-value ${winT.avg_ret>0?'up':'dn'}">${sgn(winT.avg_ret)}</div>
         <div class="card-sub">勝率 ${pct(winT.win_rate)}・PF ${winT.profit_factor}</div></div>
       <div><div class="card-title">Walk-Forward 驗證</div>
         <div class="card-value">${pct(winS.wf_front.win_rate)} → ${pct(winS.wf_back.win_rate)}</div>
@@ -1751,7 +1755,7 @@ async function renderLabPage(){
       <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
       <td>${pct(r.s.wilson_lb)}</td>
       <td class="${r.s.avg_ret>=base.avg_ret?'up':''}">${r.s.avg_ret>0?'+':''}${r.s.avg_ret}%</td>
-      <td class="${r.s.excess_return>0?'up':r.s.excess_return<0?'down':''}">${ppTxt(r.s.excess_return)}</td>
+      <td class="${r.s.excess_return>0?'up':r.s.excess_return<0?'dn':''}">${ppTxt(r.s.excess_return)}</td>
       <td>${r.s.profit_factor}</td>
       <td>${r.s.avg_days}</td>
     </tr>`;
@@ -1770,6 +1774,12 @@ async function renderLabPage(){
       <div style="margin-top:4px;">同時比較 ${rows.length} 個過濾器，難免有幾個純屬運氣好；請以三項回測標準（見方法論）綜合判讀，勿只看勝率。</div>
     </details>`;
   })()}</div>
+
+  <!-- 全追蹤池分年比較 -->
+  <div class="section-title">🌐 全追蹤池逐日回測（2025／2026 分年比較）</div>
+  <div class="card" style="margin-bottom:18px;overflow-x:auto;" id="lab-universe">
+    <div style="color:var(--sub);font-size:12px;">載入 condition_universe.json…</div>
+  </div>
 
   <!-- 領頭羊突破系統 -->
   <div class="section-title">🐏 領頭羊突破系統（第二訊號源・獨立回測）</div>
@@ -1792,6 +1802,71 @@ async function renderLabPage(){
   </div>`;
   el.innerHTML=html;
   _renderLabBreakout();
+  _renderLabUniverse();
+}
+
+// ── 全追蹤池逐日回測（condition_universe.json，scripts/backtest_condition_universe.py）──
+// 上表只在 qualified 清單出現日測過濾器，2025 年樣本稀少；此表把每個條件當獨立訊號在追蹤池逐日檢查。
+let _LAB_UNI=null, _LAB_UNI_EX='TP18SL15';
+window._labUniEx=function(ex){ _LAB_UNI_EX=ex; _renderLabUniverse(); };
+async function _renderLabUniverse(){
+  const el=document.getElementById('lab-universe');
+  if(!el) return;
+  if(!_LAB_UNI){
+    try{ _LAB_UNI=await fetchJSON('./condition_universe.json?v='+Math.floor(Date.now()/3600000)); }
+    catch{ el.innerHTML='<div style="color:var(--sub);font-size:12px;">尚無全追蹤池回測資料</div>'; return; }
+  }
+  const u=_LAB_UNI, ex=_LAB_UNI_EX, isMain=ex==='TP18SL15', years=u.years||['2025','2026'];
+  const pct=v=>v==null?'—':(v*100).toFixed(0)+'%';
+  const ppTxt=v=>v==null?'—':(v>0?'+':'')+v.toFixed(1)+'pp';
+  const base=(u.rows.find(r=>r.id==='BASE')||{})[ex]||{};
+  const yrCell=(s,y)=>{
+    if(!s||!s.n) return '<td style="color:var(--sub)">—</td>';
+    const bw=base[y]&&base[y].win_rate, beat=bw!=null&&s.win_rate>bw;
+    return `<td style="color:${beat?'var(--green)':'var(--sub)'}">${pct(s.win_rate)}<span style="font-size:10px;color:var(--sub)">（${s.n}）</span></td>`;
+  };
+  const vColor=v=>v.startsWith('✅')?'var(--green)':v.startsWith('⚠️')?'var(--yellow)':v==='（基準）'?'var(--blue)':'var(--sub)';
+  const rows=u.rows.filter(r=>r[ex]&&r[ex].all&&r[ex].all.n)
+    .sort((a,b)=>(b[ex].all.wilson_lb||0)-(a[ex].all.wilson_lb||0));
+  const passed=u.rows.filter(r=>(r.verdict||'').startsWith('✅')).length;
+  const btn=(k,label)=>`<button class="period-tab${k===ex?' active':''}" onclick="_labUniEx('${k}')"
+    style="padding:3px 12px;border:1px solid var(--border);border-radius:14px;background:${k===ex?'var(--accent)':'transparent'};color:${k===ex?'#fff':'var(--sub)'};font-size:12px;cursor:pointer;">${label}</button>`;
+  let h=`<div style="font-size:12px;color:var(--sub);line-height:1.8;margin-bottom:8px;">
+      上表只在 qualified 清單出現日測過濾器（2025 年僅數十筆）；此表把每個條件當<b style="color:var(--text)">獨立進場訊號</b>，
+      在追蹤池逐日檢查，${years.join('、')} 各有數百筆樣本。基準＝無條件進場（同池隨機時點）。<br>
+      期間 ${u.start}~${u.end}・追蹤池 ${u.priced}/${u.universe} 檔・價格含息還原・同股未出場不重複進場・產生 ${escHtml(u.generated_at||'')}
+      ${u.benchmark?`・0050 同期買進持有 ${u.benchmark.return_pct>0?'+':''}${u.benchmark.return_pct}%`:''}
+      ${u.bench?'':'・<span style="color:var(--yellow)">無 0050 資料，標準③未判定</span>'}
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px;font-size:12px;">
+      <span style="color:var(--sub)">出場：</span>${btn('TP18SL15','停利18%／停損15%')}${btn('TRAIL15','追蹤停損15%')}
+      <span style="color:var(--sub);margin-left:6px;">通過三項回測標準：<b style="color:${passed?'var(--green)':'var(--text)'}">${passed}</b> 項</span>
+    </div>
+    <table>
+      <tr><th>進場條件</th><th>樣本</th><th>勝率</th><th>Wilson下界</th><th>平均報酬</th><th>獲利因子</th>
+        ${years.map(y=>`<th>${y} 勝率</th>`).join('')}<th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th>${isMain?'<th>判定</th>':''}</tr>`;
+  rows.forEach(r=>{
+    const s=r[ex].all, isBase=r.id==='BASE', few=s.n<(u.min_n||20);
+    const beat=!isBase&&base.all&&s.win_rate>base.all.win_rate;
+    h+=`<tr style="${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
+      <td style="font-weight:${isBase?'700':'400'}">${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}</td>
+      <td>${s.n}</td>
+      <td style="font-weight:700;color:${isBase?'var(--blue)':beat?'var(--green)':'var(--sub)'}">${pct(s.win_rate)}</td>
+      <td>${pct(s.wilson_lb)}</td>
+      <td class="${s.avg_ret>0?'up':'dn'}">${s.avg_ret>0?'+':''}${s.avg_ret}%</td>
+      <td>${s.profit_factor}</td>
+      ${years.map(y=>yrCell(r[ex][y],y)).join('')}
+      <td class="${s.excess_return>0?'up':s.excess_return<0?'dn':''}">${ppTxt(s.excess_return)}</td>
+      ${isMain?`<td style="font-size:11px;color:${vColor(r.verdict||'')}">${escHtml(r.verdict||'')}</td>`:''}
+    </tr>`;
+  });
+  h+=`</table>
+    <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
+      判定依回測標準：① Wilson 95% 下界 &gt; 基準勝率 ② ${years.join('、')} 各自勝過同年基準 ③ vs 0050 超額報酬 &gt; 0；樣本 &lt;${u.min_n||20} 不判定（淡色）。
+      分年勝率綠色＝勝過同年基準。判定以主出場（停利18%／停損15%）計。<br>
+      重跑：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_condition_universe.py</code>
+    </div>`;
+  el.innerHTML=h;
 }
 
 async function _renderLabBreakout(){
@@ -1971,7 +2046,7 @@ function renderDaily(data){
       ${(()=>{
         const row=(lbl,v,c)=>{
           const hasV=v!==''&&v!=null, hasC=c!==''&&c!=null;
-          return `<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">
+          return `<div class="idx-row" style="display:flex;align-items:baseline;gap:0 8px;margin-top:2px;">
             <span style="font-size:11px;color:var(--sub);width:30px;">${lbl}</span>
             <span style="font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;" class="${hasC?signColor(Number(c)):''}">${hasV?Number(v).toLocaleString():'—'}</span>
             <span style="font-size:12px;" class="${hasC?signColor(Number(c)):''}">${hasC?sign(Number(c))+Number(c).toFixed(2)+'%':''}</span>
@@ -2555,7 +2630,7 @@ function renderWeekly(){
     const avg=rets.length?rets.reduce((s,v)=>s+v,0)/rets.length:null;
     html+=`<div class="section-title">📅 本月行動清單與漲幅追蹤</div>
       <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">入榜價＝首次入榜日收盤；漲幅以最新一份日報收盤計算</div>
-      <div class="card">`;
+      <div class="card" style="overflow-x:auto">`;
     if(mActs.length){
       html+=`<div style="font-size:13px;margin-bottom:8px">本月共 <b>${mActs.length}</b> 檔入榜，<b>${up}</b> 檔上漲，平均漲幅 <b class="${signColor(avg)}">${avg!=null?sign(avg)+fmt(avg,2)+'%':'—'}</b></div>
         <table><tr><th>股票</th><th>族群</th><th>首次入榜</th><th>入榜價</th><th>最新價</th><th>漲幅</th><th>入榜後最高</th><th>入榜天數</th></tr>`;
@@ -2577,7 +2652,7 @@ function renderWeekly(){
   // 持倉週記（舊版 weekly.json 無 positions 時隱藏）
   if(wkPos){
     const ent=wkPos.entries||[], ext=wkPos.exits||[], hold=wkPos.holding||[];
-    html+=`<div class="section-title">📒 持倉週記</div><div class="card">`;
+    html+=`<div class="section-title">📒 持倉週記</div><div class="card" style="overflow-x:auto">`;
     html+=`<div style="font-size:13px;line-height:1.9">`;
     html+=`<div><b>本週新進場：</b>${ent.length?ent.map(e=>`${escHtml(e.id)} ${escHtml(e.name)}`).join('、'):'無'}</div>`;
     html+=`<div><b>本週出場：</b>${ext.length?ext.map(x=>`${escHtml(x.id)} ${escHtml(x.name)}（<span class="${signColor(x.return_pct)}">${sign(x.return_pct)}${fmt(x.return_pct,1)}%</span>・${escHtml(x.exit_reason||'')}）`).join('、'):'無'}</div>`;
