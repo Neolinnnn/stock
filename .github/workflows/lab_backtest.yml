@@ -69,11 +69,19 @@ jobs:
             exit 0
           fi
           git commit -m "auto: 策略實驗室回測更新 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          # 只推送上面 add 的結果。腳本也會改寫其他已追蹤檔（backtest_cache/*.csv 雖在
+          # .gitignore，但有早期誤入版控的舊檔），留著會讓 pull --rebase 因 unstaged changes 失敗
+          git checkout -- .
+          pushed=false
           for i in 1 2 3; do
-            git pull --rebase -X ours origin main && git push && break
+            if git pull --rebase -X ours origin main && git push; then pushed=true; break; fi
             echo "Push 失敗，第 ${i} 次重試..."
             sleep $((i * 5))
           done
+          if [ "$pushed" != true ]; then
+            echo "::error::push 連續失敗 3 次，結果未發佈"
+            exit 1
+          fi
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Trigger Pages deploy
