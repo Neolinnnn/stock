@@ -37,6 +37,10 @@
 
   .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  /* 網格欄位預設最小寬＝內容寬，內含寬表格時會撐破手機版面；設 0 讓表格在自己的捲動容器內橫捲 */
+  .grid-2>*{min-width:0;}
+  /* 極窄螢幕（≤340px）大盤指數列放不下，允許漲跌幅換行，避免撐出橫捲 */
+  @media(max-width:340px){.idx-row{flex-wrap:wrap;}}
   @media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
   @media(max-width:480px){.grid-4{grid-template-columns:1fr 1fr;}}
 
@@ -1971,7 +1975,7 @@ function renderDaily(data){
       ${(()=>{
         const row=(lbl,v,c)=>{
           const hasV=v!==''&&v!=null, hasC=c!==''&&c!=null;
-          return `<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px;">
+          return `<div class="idx-row" style="display:flex;align-items:baseline;gap:0 8px;margin-top:2px;">
             <span style="font-size:11px;color:var(--sub);width:30px;">${lbl}</span>
             <span style="font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;" class="${hasC?signColor(Number(c)):''}">${hasV?Number(v).toLocaleString():'—'}</span>
             <span style="font-size:12px;" class="${hasC?signColor(Number(c)):''}">${hasC?sign(Number(c))+Number(c).toFixed(2)+'%':''}</span>
@@ -2555,7 +2559,7 @@ function renderWeekly(){
     const avg=rets.length?rets.reduce((s,v)=>s+v,0)/rets.length:null;
     html+=`<div class="section-title">📅 本月行動清單與漲幅追蹤</div>
       <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;">入榜價＝首次入榜日收盤；漲幅以最新一份日報收盤計算</div>
-      <div class="card">`;
+      <div class="card" style="overflow-x:auto">`;
     if(mActs.length){
       html+=`<div style="font-size:13px;margin-bottom:8px">本月共 <b>${mActs.length}</b> 檔入榜，<b>${up}</b> 檔上漲，平均漲幅 <b class="${signColor(avg)}">${avg!=null?sign(avg)+fmt(avg,2)+'%':'—'}</b></div>
         <table><tr><th>股票</th><th>族群</th><th>首次入榜</th><th>入榜價</th><th>最新價</th><th>漲幅</th><th>入榜後最高</th><th>入榜天數</th></tr>`;
@@ -2577,7 +2581,7 @@ function renderWeekly(){
   // 持倉週記（舊版 weekly.json 無 positions 時隱藏）
   if(wkPos){
     const ent=wkPos.entries||[], ext=wkPos.exits||[], hold=wkPos.holding||[];
-    html+=`<div class="section-title">📒 持倉週記</div><div class="card">`;
+    html+=`<div class="section-title">📒 持倉週記</div><div class="card" style="overflow-x:auto">`;
     html+=`<div style="font-size:13px;line-height:1.9">`;
     html+=`<div><b>本週新進場：</b>${ent.length?ent.map(e=>`${escHtml(e.id)} ${escHtml(e.name)}`).join('、'):'無'}</div>`;
     html+=`<div><b>本週出場：</b>${ext.length?ext.map(x=>`${escHtml(x.id)} ${escHtml(x.name)}（<span class="${signColor(x.return_pct)}">${sign(x.return_pct)}${fmt(x.return_pct,1)}%</span>・${escHtml(x.exit_reason||'')}）`).join('、'):'無'}</div>`;
