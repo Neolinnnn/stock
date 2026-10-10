@@ -3,8 +3,8 @@
 領頭羊突破每日掃描（第二訊號源）
 ================================
 與雙篩選互補的 bottom-up 訊號：抓「自己先動、籌碼同向」的領頭羊。
-條件與回測一致（scripts/backtest_breakout_lab.py，回測 n=183、TP18SL15 勝率 65%、
-追蹤停損15% 平均 +15%、PF 3.2）：
+條件與回測一致（scripts/backtest_breakout_lab.py；回測數字於掃描時從
+docs/breakout_lab.json 讀入 backtest_ref，與策略實驗室同源，重跑回測即自動同步）：
 
   0. TAIEX > MA60   1. 收盤創20日新高   2. 量比 ≥ 1.5
   3. 法人5日淨買超 > 0   4. >MA20、MA20上揚、乖離 ≤ 10%
@@ -27,6 +27,7 @@ PRICE_CACHE = ROOT / 'price_cache'
 VOL_RATIO_MIN = 1.5
 DIST_MA20_MAX = 0.10
 CHIP_DAYS = 5
+BACKTEST_JSON = ROOT / 'docs' / 'breakout_lab.json'
 
 
 def _load_cache(sid: str) -> dict | None:
@@ -94,6 +95,22 @@ def _tech_pass(d: dict) -> dict | None:
     }
 
 
+def load_backtest_ref() -> dict:
+    """從 docs/breakout_lab.json 摘出前端顯示的回測數字（期間、進場筆數、TP18SL15 勝率、
+    追蹤停損15% 平均與 PF）。檔案缺少或格式不符時回空 dict，前端顯示「—」，不中斷每日掃描。"""
+    try:
+        b = json.loads(BACKTEST_JSON.read_text(encoding='utf-8'))
+        tp, tr = b['exits']['TP18SL15'], b['exits']['TRAIL15']
+        start, gen = b['period']['start'], b['generated_at']
+        return {
+            'n': b['period']['signals'], 'tp18sl15_win': tp['win_rate'],
+            'trail15_avg': tr['avg_ret'], 'trail15_pf': tr['profit_factor'],
+            'period': f'{start[:4]}/{start[4:6]}~{gen[:4]}/{gen[5:7]}',
+        }
+    except (OSError, ValueError, KeyError, TypeError) as e:
+        print(f'[breakout_scan] ⚠️ 讀不到回測摘要 {BACKTEST_JSON.name}：{e}')
+        return {}
+
 def main():
     # 股名對照
     names = {}
@@ -131,10 +148,7 @@ def main():
         'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
         'taiex_bull': bull,
         'picks': picks,
-        'backtest_ref': {
-            'n': 183, 'tp18sl15_win': 0.65, 'trail15_avg': 15.05,
-            'trail15_pf': 3.22, 'period': '2025/01~2026/06',
-        },
+        'backtest_ref': load_backtest_ref(),
     }
     (ROOT / 'docs' / 'breakout.json').write_text(
         json.dumps(out, ensure_ascii=False, indent=1), encoding='utf-8')
