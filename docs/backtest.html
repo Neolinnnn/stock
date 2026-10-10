@@ -156,7 +156,7 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
 </main>
 
 <footer>
-  ⚠️ 回測使用雙條件篩選訊號，停利停損以收盤價模擬執行。0050 同期比較以進場日開盤至出場日收盤計，兩邊皆不含股利。<br>
+  ⚠️ 回測使用雙條件篩選訊號，停利停損以收盤價模擬執行。價格為含息還原價（除權息、減資、分割已還原），0050 同期比較亦同。<br>
   未計入手續費、稅金與滑價；過去績效不代表未來結果，僅供研究參考。
 </footer>
 
@@ -408,6 +408,7 @@ function renderTrades(pd){
   document.getElementById('trade-note').innerHTML =
     `依目前所選組合（${esc(combo.label)}）列出；同一檔重複買入分開列示。`
     + (pxDate ? `現價為 ${fmtDate(pxDate)} 收盤。` : '')
+    + `買入成本為含息還原價，之後若有除權息會低於當時實際成交價。`
     + `<br>參考訊號為進場訊號日當天的狀態：<span class="tag tag-mom">動能進場</span>量比≥1.2 或 MACD柱&gt;0且增長；`
     + `<span class="tag tag-dual">雙篩選</span>CV夏普≥0.3 且 CV勝率≥40%；`
     + `<span class="tag tag-al">今日行動清單</span>雙篩選＋乖離MA10≤2%；帶「?」者為訊號日前價格資料不足。`;
