@@ -1672,6 +1672,8 @@ async function renderLabPage(){
   const winS=win.exits.TP18SL15, winT=win.exits.TRAIL15;
   const pct=v=>(v*100).toFixed(0)+'%';
   const sgn=v=>(v>0?'+':'')+v+'%';
+  // 0050 同期超額報酬（百分點）；舊版 entry_lab.json 無此欄 →「—」
+  const ppTxt=v=>v==null?'—':(v>0?'+':'')+v.toFixed(1)+'pp';
   const wf=wfVerdict(winS, base);
   const tierRows=['A(5-7分)','B(3-4分)','C(0-2分)'].map(t=>d.tiers[t]?.TP18SL15).filter(s=>s?.n);
   const monotone=tierRows.every((s,i)=>i===0||(s.win_rate<tierRows[i-1].win_rate&&s.avg_ret<tierRows[i-1].avg_ret));
@@ -1695,7 +1697,7 @@ async function renderLabPage(){
         <div class="card-sub">n=${winS.n}・Wilson下界 ${pct(winS.wilson_lb)}</div></div>
       <div><div class="card-title">平均報酬（基準 ${sgn(base.avg_ret)}）</div>
         <div class="card-value ${winS.avg_ret>0?'up':'down'}">${sgn(winS.avg_ret)}</div>
-        <div class="card-sub">獲利因子 ${winS.profit_factor}（基準 ${base.profit_factor}）</div></div>
+        <div class="card-sub">獲利因子 ${winS.profit_factor}（基準 ${base.profit_factor}）・vs 0050 ${ppTxt(winS.excess_return)}</div></div>
       <div><div class="card-title">搭配追蹤停損15%</div>
         <div class="card-value ${winT.avg_ret>0?'up':'down'}">${sgn(winT.avg_ret)}</div>
         <div class="card-sub">勝率 ${pct(winT.win_rate)}・PF ${winT.profit_factor}</div></div>
@@ -1729,34 +1731,45 @@ async function renderLabPage(){
   html+=`<div style="font-size:11px;color:var(--sub);margin-top:6px;">${monotone?'評分愈高→勝率與報酬愈高，呈單調遞增，評分系統有判別力。':'⚠️ 分層未呈單調遞增，評分系統的判別力存疑。'}</div></div>
 
   <!-- 過濾器全表 -->
-  <div class="section-title">🧪 全部過濾器比較（依勝率排序）</div>
+  <div class="section-title">🧪 全部過濾器比較（依 Wilson 下界排序）</div>
   <div class="card" style="overflow-x:auto;margin-bottom:18px;">
   <table>
-    <tr><th>進場過濾器</th><th>樣本</th><th>勝率</th><th style="min-width:120px">勝率視覺</th><th>Wilson下界</th><th>平均報酬</th><th>獲利因子</th><th>持有天數</th></tr>`;
+    <tr><th>進場過濾器</th><th>樣本</th><th>勝率</th><th style="min-width:120px">勝率視覺</th><th>Wilson下界</th><th>平均報酬</th><th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th><th>獲利因子</th><th>持有天數</th></tr>`;
+  // 依 Wilson 下界排序：小樣本的高勝率（如 1 筆 100%）不會浮到最上面
+  const MIN_N=20;
   const rows=Object.entries(d.filters)
-    .map(([id,r])=>({id,label:r.label,s:r.exits.TP18SL15}))
+    .map(([id,r])=>({id,label:r.label,source:r.source,s:r.exits.TP18SL15}))
     .filter(r=>r.s&&r.s.n>0)
-    .sort((a,b)=>b.s.win_rate-a.s.win_rate);
+    .sort((a,b)=>b.s.wilson_lb-a.s.wilson_lb);
   rows.forEach(r=>{
     const isBase=r.id==='BASE', isWin=r.id==='VOL_OR_MACD';
-    const beat=r.s.win_rate>base.win_rate;
-    html+=`<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}">
-      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'🏆 ':''}${isBase?'📍 ':''}${escHtml(r.label)}</td>
+    const beat=r.s.win_rate>base.win_rate, few=r.s.n<MIN_N;
+    html+=`<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
+      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'🏆 ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}</td>
       <td>${r.s.n}</td>
       <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
       <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
       <td>${pct(r.s.wilson_lb)}</td>
       <td class="${r.s.avg_ret>=base.avg_ret?'up':''}">${r.s.avg_ret>0?'+':''}${r.s.avg_ret}%</td>
+      <td class="${r.s.excess_return>0?'up':r.s.excess_return<0?'down':''}">${ppTxt(r.s.excess_return)}</td>
       <td>${r.s.profit_factor}</td>
       <td>${r.s.avg_days}</td>
     </tr>`;
   });
   html+=`</table>
   <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
-    📍＝現行基準（全部 qualified 訊號）；🏆＝勝出策略。<br>
+    📍＝現行基準（全部 qualified 訊號）；🏆＝勝出策略；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
     意外發現：「強勢族群」「cv_sharpe≥1.0」「多頭排列」等直覺條件反而<b>低於</b>基準——
     族群已強勢時個股常已過熱；動能（量、MACD）才是進場時點的關鍵。
-  </div></div>
+  </div>${(()=>{
+    const src=rows.filter(r=>r.source);
+    if(!src.length) return '';
+    return `<details style="font-size:11px;color:var(--sub);padding:6px 4px 2px;line-height:1.8;">
+      <summary style="cursor:pointer;color:var(--accent);">🌐 外部來源條件出處（${src.length} 項）</summary>
+      ${src.map(r=>`<div><b style="color:var(--text)">${escHtml(r.label)}</b>：${escHtml(r.source)}</div>`).join('')}
+      <div style="margin-top:4px;">同時比較 ${rows.length} 個過濾器，難免有幾個純屬運氣好；請以三項回測標準（見方法論）綜合判讀，勿只看勝率。</div>
+    </details>`;
+  })()}</div>
 
   <!-- 領頭羊突破系統 -->
   <div class="section-title">🐏 領頭羊突破系統（第二訊號源・獨立回測）</div>
@@ -1772,7 +1785,8 @@ async function renderLabPage(){
       ・進場：訊號日<b>次日開盤價</b>（可實際執行，無前視偏差）<br>
       ・出場：TP+18% / SL−15%（收盤判斷）；另測追蹤停損15% 與 MA10跌破<br>
       ・特徵：全部以訊號日收盤後可得資料計算（量比、均線、MACD、KD、法人籌碼、大盤位置）<br>
-      ・驗證：Wilson 95% 信賴下界控制小樣本樂觀偏誤；前後段 walk-forward 檢驗時間穩定性<br>
+      ・回測標準（三項皆過才算有效）：① Wilson 95% 下界勝過基準勝率（控制小樣本樂觀偏誤）② walk-forward 後段仍勝過同期基準 ③ 勝過 0050 同期：每筆以相同進出場日改買 0050，平均超額報酬 &gt; 0<br>
+      ${d.benchmark?`・大盤背景：0050 ${d.benchmark.start}~${d.benchmark.end} 買進持有 ${d.benchmark.return_pct>0?'+':''}${d.benchmark.return_pct}%（與每筆平均報酬尺度不同，僅供參考）<br>`:''}
       ・產生時間：${d.generated_at}・重跑指令：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_entry_lab.py</code>
     </div>
   </div>`;
