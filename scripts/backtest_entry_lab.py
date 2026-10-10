@@ -24,7 +24,7 @@ ROOT = Path(__file__).parent.parent
 
 import pandas as pd
 from benchmark import BENCH_ID, Benchmark, excess_stats
-from datafeed import make_dataloader
+from datafeed import finmind_fetch
 from price_adjust import adjust_df, fetch_events
 from regime_exit_analysis import clean_ohlcv
 
@@ -35,15 +35,6 @@ FETCH_START = '2024-10-01'   # 提前抓供 MA60 + RSI 暖身
 MAX_HOLD_DAYS = 60
 HARD_STOP = -0.20
 
-_DL = None
-
-def get_dl():
-    global _DL
-    if _DL is None:
-        _DL = make_dataloader()
-    return _DL
-
-
 def fetch_ohlcv(sid: str, refresh=False) -> pd.DataFrame:
     """日 K（含成交量），回傳含息還原價（見 price_adjust；TAIEX 為指數不還原）。
     快取存未還原原始價（build_backtest_docs 直接讀它當現價），事件另存 {sid}_events.json。"""
@@ -51,8 +42,8 @@ def fetch_ohlcv(sid: str, refresh=False) -> pd.DataFrame:
     if cf.exists() and not refresh:
         out = pd.read_csv(cf, dtype={'date': str})
     else:
-        dl = get_dl()
-        df = dl.taiwan_stock_daily(stock_id=sid, start_date=FETCH_START)
+        # finmind_fetch：額度用盡自動換 token（全部重抓約 430 次呼叫，單一 token 不一定夠）
+        df = finmind_fetch('taiwan_stock_daily', stock_id=sid, start_date=FETCH_START)
         if df is None or df.empty:
             return pd.DataFrame()
         df = df.rename(columns={'max': 'high', 'min': 'low', 'Trading_Volume': 'volume'})
@@ -90,9 +81,8 @@ def fetch_chip(sid: str, refresh=False) -> pd.DataFrame:
         old = pd.read_csv(cf, dtype={'date': str})
         if set(CHIP_COLS) <= set(old.columns):
             return old
-    dl = get_dl()
     try:
-        df = dl.taiwan_stock_institutional_investors(stock_id=sid, start_date=FETCH_START)
+        df = finmind_fetch('taiwan_stock_institutional_investors', stock_id=sid, start_date=FETCH_START)
     except Exception as e:
         print(f'    {sid} 籌碼下載失敗：{e}')
         df = None
