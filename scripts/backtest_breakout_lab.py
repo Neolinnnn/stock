@@ -32,6 +32,7 @@ from backtest_entry_lab import (
     fetch_ohlcv, fetch_chip, compute_indicators,
     sim_tpsl, sim_trailing, sim_ma5_ma10, get_entry, summarize, wilson_lb,
 )
+from regime_exit_analysis import clean_ohlcv
 
 SIGNAL_START = '20250101'
 VOL_RATIO_MIN = 1.5
@@ -105,7 +106,8 @@ def main():
 
     all_signals, ohlcv_map = [], {}
     for n, sid in enumerate(universe, 1):
-        df = fetch_ohlcv(sid, args.refresh)
+        # 濾掉 0 價缺口列，否則持倉跨過該日會被假停損成 −100%
+        df = clean_ohlcv(fetch_ohlcv(sid, args.refresh))
         if df.empty or len(df) < 80:
             continue
         df = compute_indicators(df)
