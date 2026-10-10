@@ -11,6 +11,16 @@ on:
   schedule:
     # 10:17 台灣時間 = 02:17 UTC，週六；避開整點／半點（排程壅塞）
     - cron: '17 2 * * 6'
+  # 回測程式或本 workflow 合併進 main 即重跑，網站上的實驗室數據才與程式一致
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/backtest_entry_lab.py'
+      - 'scripts/backtest_breakout_lab.py'
+      - 'scripts/backtest_condition_universe.py'
+      - 'scripts/price_adjust.py'
+      - 'scripts/benchmark.py'
+      - '.github/workflows/lab_backtest.yml'
   workflow_dispatch:
 
 # 與日掃描、每週回測同一群組排隊，避免同時 commit／push
