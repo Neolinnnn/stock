@@ -1,0 +1,74 @@
+name: 策略實驗室回測更新
+
+# 首頁「⚗️ 策略實驗室」的三份回測，以最新 FinMind 資料（含息還原價）重跑後部署：
+#   進場過濾器（backtest_entry_lab.py → docs/entry_lab.json）
+#   領頭羊突破（backtest_breakout_lab.py → docs/breakout_lab.json）
+#   全追蹤池分年比較（backtest_condition_universe.py → docs/condition_universe.json）
+# 並同步今日掃描「領頭羊突破」區塊的回測數字（breakout_scan.load_backtest_ref）。
+# 排在週六上午：無日掃描、FinMind 額度未被占用（約 430 次呼叫）。
+# backtest_cache 不進版控，每次都是全新抓取；markdown 報告不在此 commit，避免每週累積檔案。
+on:
+  schedule:
+    # 10:17 台灣時間 = 02:17 UTC，週六；避開整點／半點（排程壅塞）
+    - cron: '17 2 * * 6'
+  workflow_dispatch:
+
+# 與日掃描、每週回測同一群組排隊，避免同時 commit／push
+concurrency:
+  group: daily-scan-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt
+
+      - name: Run lab backtests
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: |
+          python scripts/backtest_entry_lab.py --refresh
+          python scripts/backtest_breakout_lab.py
+          python scripts/backtest_condition_universe.py
+          PYTHONPATH=scripts python -c "import json, breakout_scan as b; p = b.ROOT / 'docs' / 'breakout.json'; d = json.loads(p.read_text(encoding='utf-8')); d['backtest_ref'] = b.load_backtest_ref(); p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding='utf-8'); print('breakout.json backtest_ref', d['backtest_ref'])"
+
+      - name: Commit
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/entry_lab.json docs/breakout_lab.json docs/condition_universe.json docs/breakout.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "auto: 策略實驗室回測更新 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          for i in 1 2 3; do
+            git pull --rebase -X ours origin main && git push && break
+            echo "Push 失敗，第 ${i} 次重試..."
+            sleep $((i * 5))
+          done
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Pages deploy
+        # GITHUB_TOKEN push 不會觸發 deploy_pages.yml，須顯式呼叫
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy_pages.yml --ref main

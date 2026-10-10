@@ -19,9 +19,10 @@ entry_lab 只在 qualified 清單出現的日子測過濾器，而該清單 2025
 不適用：SECTOR、CV1（需 qualified 清單的族群／CV 欄位）
 
 用法：python scripts/backtest_condition_universe.py [--refresh]
-輸出：回測數據/進場條件全池回測_<起>~<迄>.md + console 報告
+輸出：回測數據/進場條件全池回測_<起>~<迄>.md、docs/condition_universe.json（策略實驗室頁）+ console 報告
 """
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -215,7 +216,12 @@ def main():
             'missing': missing, 'bench': bool(bench.days), 'inst_chip': inst_chip}
     dest = ROOT / '回測數據' / f"進場條件全池回測_{days[0]}~{days[-1]}.md"
     dest.write_text(render_md(rows, meta), encoding='utf-8')
-    print(f'\n已輸出 {dest.relative_to(ROOT)}')
+    web = {'generated_at': pd.Timestamp.now().strftime('%Y-%m-%d %H:%M'), **meta,
+           'benchmark': bench.period(days[0], days[-1]), 'min_n': MIN_N, 'years': list(YEARS),
+           'rows': [{**r, 'source': FILTER_SOURCES.get(r['id'])} for r in rows]}
+    (ROOT / 'docs' / 'condition_universe.json').write_text(
+        json.dumps(web, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    print(f'\n已輸出 {dest.relative_to(ROOT)}、docs/condition_universe.json')
 
 
 if __name__ == '__main__':
