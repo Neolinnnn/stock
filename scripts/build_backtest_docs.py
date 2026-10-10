@@ -256,6 +256,7 @@ def _process_period(fname: str, label: str, action_list: bool = False) -> dict |
                 'return_pct':  t.get('return_pct'),
                 'holding_days': t.get('holding_days'),
                 'signal_date': t.get('signal_date'),
+                'bench_return_pct': t.get('bench_return_pct'),
             })
             if t.get('signal_date'):
                 tk = f"{t['stock_id']}_{t['signal_date']}"
@@ -295,6 +296,9 @@ def _process_period(fname: str, label: str, action_list: bool = False) -> dict |
                 # 其他
                 'avg_return':       round(stats['avg_return'], 2),
                 'avg_holding_days': round(stats['avg_holding_days'], 1),
+                # 0050 同期比較（回測標準：超額報酬 > 0）；舊版結果無此欄
+                **{k: stats[k] for k in ('bench_n', 'bench_avg_return', 'excess_return', 'beat_rate')
+                   if k in stats},
             },
             'trades': trades,
         }
@@ -325,6 +329,7 @@ def _process_period(fname: str, label: str, action_list: bool = False) -> dict |
     return {
         'label':       label,
         'date_range':  raw.get('date_range', {}),
+        'benchmark':   raw.get('benchmark'),
         'best_combo':  best_id,
         'combos':      combos_out,
         'open_analysis': open_analysis,

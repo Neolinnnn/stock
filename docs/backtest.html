@@ -128,6 +128,7 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
         <tr><td style="padding:4px 10px;font-weight:600">持倉中</td><td style="padding:4px 10px">尚未達到停利或停損，目前還持有的部位</td></tr>
         <tr><td style="padding:4px 10px;font-weight:600">雙篩訊號</td><td style="padding:4px 10px">同時滿足「族群強勢」和「個股技術買點」兩個條件才進場</td></tr>
         <tr><td style="padding:4px 10px;font-weight:600">追蹤停損</td><td style="padding:4px 10px">停損價格隨著股價上漲而往上調，鎖住利潤</td></tr>
+        <tr><td style="padding:4px 10px;font-weight:600">vs 0050（超額報酬）</td><td style="padding:4px 10px">每筆交易對照「同一天買進、同一天賣出 0050」的報酬，策略報酬減去 0050 報酬後取平均。大於 0 才算勝過 0050；小於 0 代表同樣的錢放 0050 更好</td></tr>
       </table>
     </details>
 
@@ -155,7 +156,7 @@ footer{text-align:center;color:var(--sub);font-size:11px;padding:24px;border-top
 </main>
 
 <footer>
-  ⚠️ 回測使用雙條件篩選訊號，停利停損以收盤價模擬執行。<br>
+  ⚠️ 回測使用雙條件篩選訊號，停利停損以收盤價模擬執行。0050 同期比較以進場日開盤至出場日收盤計，兩邊皆不含股利。<br>
   未計入手續費、稅金與滑價；過去績效不代表未來結果，僅供研究參考。
 </footer>
 
@@ -175,6 +176,8 @@ function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','
 // 報酬率：自帶正負號並依正負上色，不可硬寫 '+' 與綠色
 function fmtRet(v, digits=1){ return (v >= 0 ? '+' : '') + v.toFixed(digits) + '%'; }
 function retColor(v){ return v >= 0 ? 'var(--green)' : 'var(--red)'; }
+// 超額報酬（百分點）：舊版結果無此欄時顯示「—」
+function fmtPP(v){ return v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + 'pp'; }
 
 async function init(){
   try{
@@ -257,6 +260,8 @@ function renderHero(pd){
       </div>
       ${Object.values(pd.combos).every(c => c.stats.avg_return < 0)
         ? `<div style="font-size:12px;color:var(--yellow);margin-bottom:10px">⚠️ 本期間所有組合平均報酬皆為負，此為「虧損最少」的組合，不代表可獲利</div>` : ''}
+      ${s.excess_return != null && s.excess_return <= 0
+        ? `<div style="font-size:12px;color:var(--yellow);margin-bottom:10px">⚠️ 未勝過 0050：同樣的進出場日改買 0050，平均 ${fmtRet(s.bench_avg_return)}，比本組合多 ${(-s.excess_return).toFixed(1)}pp</div>` : ''}
       <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px">
         <div class="hero-stat">
           <div class="val" style="color:${retColor(s.avg_return)}">${fmtRet(s.avg_return)}</div>
@@ -266,7 +271,12 @@ function renderHero(pd){
           <div class="val">${s.avg_holding_days.toFixed(0)} 天</div>
           <div class="lbl">平均持股天數</div>
         </div>
+        <div class="hero-stat" title="每筆交易對照同進出場日買 0050 的報酬">
+          <div class="val" style="color:${s.excess_return == null ? 'var(--sub)' : retColor(s.excess_return)}">${fmtPP(s.excess_return)}</div>
+          <div class="lbl">vs 0050 同期${s.beat_rate != null ? `（${(s.beat_rate*100).toFixed(0)}% 筆勝出）` : ''}</div>
+        </div>
       </div>
+      ${pd.benchmark ? `<div style="font-size:11px;color:var(--sub);margin-bottom:10px">大盤背景：0050 同期間買進持有 ${fmtRet(pd.benchmark.return_pct)}（${fmtDate(pd.benchmark.start)}～${fmtDate(pd.benchmark.end)}）。與上方「每筆平均」尺度不同，勝負以逐筆超額報酬為準。</div>` : ''}
       <div style="display:flex;gap:0;background:#13161d;border-radius:8px;overflow:hidden;font-size:13px">
         <div style="flex:1;padding:10px 14px;border-right:1px solid var(--border)">
           <div style="color:var(--sub);font-size:10px;margin-bottom:4px">✅ 已獲利出場</div>
@@ -292,7 +302,7 @@ function renderComboGrid(pd){
   let html = `<table class="ma10-tbl" style="border:none;">
     <thead><tr>
       <th>組合</th><th>已結算勝率</th><th style="min-width:110px"></th>
-      <th>悲觀勝率</th><th>均報酬</th><th>勝/敗/持倉</th><th>均持倉</th>
+      <th>悲觀勝率</th><th>均報酬</th><th title="逐筆減去同期 0050 報酬後平均">vs 0050</th><th>勝/敗/持倉</th><th>均持倉</th>
     </tr></thead><tbody>`;
   combos.forEach(combo => {
     const s = combo.stats;
@@ -308,6 +318,7 @@ function renderComboGrid(pd){
       <td><div class="win-bar-wrap" style="margin:0;"><div class="win-bar" style="width:${wrS}%"></div></div></td>
       <td style="color:var(--sub);">${wrP}%</td>
       <td style="color:${retColor(s.avg_return)};font-weight:600;">${fmtRet(s.avg_return)}</td>
+      <td style="color:${s.excess_return == null ? 'var(--sub)' : retColor(s.excess_return)};">${fmtPP(s.excess_return)}</td>
       <td style="font-size:12px;">${s.wins}✅ ${s.losses}❌ ${s.open_count}⏳</td>
       <td style="color:var(--sub);">${s.avg_holding_days.toFixed(0)}天</td>
     </tr>`;
@@ -418,18 +429,19 @@ function renderTrades(pd){
         <td class="num">${cur != null ? cur : '—'}</td>
         <td class="num">${t.entry_price}</td>
         <td class="num" style="font-weight:700;color:${pnl == null ? 'var(--sub)' : retColor(pnl)}">${pnl == null ? '—' : fmtRet(pnl)}</td>
+        <td class="num" style="color:var(--sub)">${t.bench_return_pct == null ? '—' : fmtRet(t.bench_return_pct)}</td>
         <td class="num">${fmtDate(t.entry_date)}</td>
         <td class="num">${t.exit_date ? fmtDate(t.exit_date) : '<span style="color:var(--sub)">持有中</span>'}</td>
         <td>${tagCell(tags)}</td>
       </tr>`;
-    }).join('') : `<tr><td colspan="7" style="color:var(--sub);text-align:center;padding:16px;">無交易</td></tr>`;
+    }).join('') : `<tr><td colspan="8" style="color:var(--sub);text-align:center;padding:16px;">無交易</td></tr>`;
     return `<details class="trade-group" open>
       <summary style="color:${g.color}">${g.title}（${rows.length} 筆）</summary>
       <div class="card" style="overflow-x:auto;padding:0;margin-bottom:0;">
         <table class="ma10-tbl" style="border:none;">
           <thead><tr>
             <th>股票名稱</th><th>現價</th><th>買入成本</th><th>${g.pnl}</th>
-            <th>買入日期</th><th>賣出日期</th><th>參考訊號</th>
+            <th title="同一買入／賣出日改買 0050 的報酬；持倉中尚未結算">0050同期</th><th>買入日期</th><th>賣出日期</th><th>參考訊號</th>
           </tr></thead><tbody>${body}</tbody>
         </table></div>
     </details>`;

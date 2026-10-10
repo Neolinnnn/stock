@@ -212,3 +212,24 @@ def test_filter_bias_ma10():
           'C': {f'202601{i:02d}': {'close': 100.0} for i in range(1, 6)}}  # MA10 資料不足剔除
     out = filter_bias_ma10([{'stock_id': k, 'date': '20260111'} for k in 'ABC'], px)
     assert [s['stock_id'] for s in out] == ['A']
+
+
+def test_run_backtest_combo_attaches_0050_excess():
+    from benchmark import Benchmark
+    signals = [{'date': '20260301', 'stock_id': '2330', 'stock_name': '台積電', 'amount': 3000}]
+    price_data = {'2330': {
+        '20260302': {'open': 100.0, 'close': 100.0},
+        '20260303': {'open': 100.0, 'close': 116.0},   # 固定 TP15 收盤觸發 → +16%
+    }}
+    bench = Benchmark({'20260302': {'open': 50.0, 'close': 50.0},
+                       '20260303': {'open': 50.0, 'close': 51.0}})   # 0050 同期 +2%
+    r = run_backtest_combo(signals, price_data, ['20260301', '20260302', '20260303'],
+                           tp=0.15, sl=0.10, fixed=True, bench=bench)
+    assert r['trades'][0]['bench_return_pct'] == 2.0
+    s = r['stats']
+    assert (s['bench_n'], s['bench_avg_return'], s['excess_return'], s['beat_rate']) == (1, 2.0, 14.0, 1.0)
+
+
+def test_calc_stats_without_bench_has_no_excess_fields():
+    s = calc_stats([{'result': 'WIN', 'return_pct': 5.0, 'holding_days': 1}])
+    assert 'excess_return' not in s
