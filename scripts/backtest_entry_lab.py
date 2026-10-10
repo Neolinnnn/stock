@@ -25,6 +25,7 @@ ROOT = Path(__file__).parent.parent
 import pandas as pd
 from benchmark import BENCH_ID, Benchmark, excess_stats
 from datafeed import make_dataloader
+from regime_exit_analysis import clean_ohlcv
 
 CACHE_DIR = ROOT / 'backtest_cache'
 CACHE_DIR.mkdir(exist_ok=True)
@@ -497,7 +498,8 @@ def main():
     ohlcv_map, chip_map = {}, {}
     for sid in sids:
         df = fetch_ohlcv(sid, args.refresh)
-        ohlcv_map[sid] = compute_indicators(df) if not df.empty else df
+        # 濾掉 0 價缺口列，否則持倉跨過該日會被假停損成 −100%
+        ohlcv_map[sid] = compute_indicators(clean_ohlcv(df)) if not df.empty else df
         chip_map[sid] = fetch_chip(sid, args.refresh)
         print(f'  {sid}: {len(ohlcv_map[sid])} 天價格, {len(chip_map[sid])} 天籌碼')
     taiex = fetch_ohlcv('TAIEX', args.refresh)
