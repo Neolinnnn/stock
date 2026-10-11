@@ -1664,6 +1664,10 @@ function wfVerdict(s, base){
   return {label:'無明顯衰減',color:'var(--green)',text:`前後段表現一致（非過擬合）。${ctx}`};
 }
 let _LAB_CACHE=null;
+// 現行使用中的條件（實驗室表格置頂）：過濾器 id → 用途。行動清單的進場規則（build_docs.entry_strategy）改了要同步
+const LAB_CURRENT={VOL_OR_MACD:'行動清單進場確認', BASE:'行動清單訊號源（雙篩選）'};
+const _labCurBadge=t=>`<span class="entry-grade g-A" style="font-size:10px;padding:1px 6px;">現行・${t}</span>`;
+const _labGroupRow=(t,cols)=>`<tr><td colspan="${cols}" style="font-size:11px;font-weight:700;color:var(--sub);background:#13161d;padding:5px 8px;">${t}</td></tr>`;
 async function renderLabPage(){
   const el=document.getElementById('page-lab');
   if(!_LAB_CACHE){
@@ -1686,6 +1690,22 @@ async function renderLabPage(){
   <div style="font-size:12px;color:var(--sub);margin-bottom:14px;">
     回測期間 ${d.period.start} ~ ${d.period.end}・訊號樣本 ${d.period.signals} 筆・進場＝訊號日次日開盤・出場＝TP18/SL15（最長持倉60日）・特徵嚴格使用訊號日當天可得資料（無前視偏差）
   </div>
+
+  <!-- 指標判讀 -->
+  <details class="info-box">
+    <summary>怎麼判讀這些數字（勝率、Wilson 下界、獲利因子、vs 0050）</summary>
+    <table>
+      <tr><th>指標</th><th>意思</th><th>怎麼看</th></tr>
+      <tr><td><b>勝率</b></td><td>已出場交易中賺錢的比例</td><td>單看會被小樣本騙：3 筆全贏也是 100%</td></tr>
+      <tr><td><b>Wilson 下界</b></td><td>依樣本數修正後，勝率的保守估計（95% 信心下限）</td><td>樣本越少扣越多：10 筆贏 7 筆＝勝率 70%、下界 40%；1000 筆贏 700 筆，下界 67%。<b>比條件好壞看這欄</b>，要高於基準勝率才算真的比較好</td></tr>
+      <tr><td><b>平均報酬</b></td><td>每筆交易從進場到出場的平均報酬</td><td>與持有天數一起看；同樣 +7%，持有 10 天比 40 天有效率</td></tr>
+      <tr><td><b>獲利因子（PF）</b></td><td>所有賺錢交易的報酬合計 ÷ 所有賠錢交易的虧損合計（每筆等額投入）</td><td>&gt;1 才有賺；2＝每賠 1 元賺回 2 元；&lt;1＝整體虧損</td></tr>
+      <tr><td><b>vs 0050（pp）</b></td><td>每筆交易改成同一天買、同一天賣 0050 的報酬差，取平均。pp＝百分點</td><td>策略 +7.4%、0050 同期 +5.1% → +2.3pp。<b>&gt;0 才代表比直接買 0050 好</b>；+0.6pp 只是小贏</td></tr>
+      <tr><td><b>Walk-forward／分年</b></td><td>把期間切成前後兩段（或 2025／2026）各算一次</td><td>後段或每一年都要贏同期基準；只有前段好＝可能是過度擬合或已失效</td></tr>
+    </table>
+    <div style="margin-top:8px;">判讀順序：先確認樣本 ≥20 筆（淡色列＝不足），再看三項回測標準：① Wilson 下界 &gt; 基準勝率 ② 前後段／每年都贏同期基準 ③ vs 0050 &gt; 0。
+      三項都過才算「有效」，只過一兩項僅供參考；判定欄「❌ ①Wilson、②2026」＝第 ① 項與 2026 年的第 ② 項沒過。</div>
+  </details>
 
   <!-- 勝出策略 hero -->
   <div class="card" style="margin-bottom:18px;border:1px solid rgba(46,204,113,.4);
@@ -1745,11 +1765,12 @@ async function renderLabPage(){
     .map(([id,r])=>({id,label:r.label,source:r.source,s:r.exits.TP18SL15}))
     .filter(r=>r.s&&r.s.n>0)
     .sort((a,b)=>b.s.wilson_lb-a.s.wilson_lb);
-  rows.forEach(r=>{
-    const isBase=r.id==='BASE', isWin=r.id==='VOL_OR_MACD';
+  // 現行使用中的條件置頂（原本依 Wilson 排序會沉到表中段），其餘照排序；置頂列附原排名
+  const rowHtml=r=>{
+    const isBase=r.id==='BASE', isWin=r.id==='VOL_OR_MACD', cur=LAB_CURRENT[r.id];
     const beat=r.s.win_rate>base.win_rate, few=r.s.n<MIN_N;
-    html+=`<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'🏆 ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}</td>
+    return `<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
+      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'🏆 ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
       <td>${r.s.n}</td>
       <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
       <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
@@ -1759,10 +1780,12 @@ async function renderLabPage(){
       <td>${r.s.profit_factor}</td>
       <td>${r.s.avg_days}</td>
     </tr>`;
-  });
+  };
+  html+=_labGroupRow('▼ 現行使用中',9)+rows.filter(r=>LAB_CURRENT[r.id]).map(rowHtml).join('')
+    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',9)+rows.filter(r=>!LAB_CURRENT[r.id]).map(rowHtml).join('');
   html+=`</table>
   <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
-    📍＝現行基準（全部 qualified 訊號）；🏆＝勝出策略；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
+    📍＝現行基準（全部 qualified 訊號＝雙篩選選出的股票）；🏆＝目前整合進行動清單的進場確認條件；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
     意外發現：「強勢族群」「cv_sharpe≥1.0」「多頭排列」等直覺條件反而<b>低於</b>基準——
     族群已強勢時個股常已過熱；動能（量、MACD）才是進場時點的關鍵。
   </div>${(()=>{
@@ -1845,11 +1868,13 @@ async function _renderLabUniverse(){
     <table>
       <tr><th>進場條件</th><th>樣本</th><th>勝率</th><th>Wilson下界</th><th>平均報酬</th><th>獲利因子</th>
         ${years.map(y=>`<th>${y} 勝率</th>`).join('')}<th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th>${isMain?'<th>判定</th>':''}</tr>`;
-  rows.forEach(r=>{
-    const s=r[ex].all, isBase=r.id==='BASE', few=s.n<(u.min_n||20);
+  // 此表的 BASE 是「隨機進場」而非雙篩選，故只標行動清單進場確認為現行；BASE 一併置頂當對照
+  const curOf=id=>id!=='BASE'&&LAB_CURRENT[id];
+  const rowHtml=r=>{
+    const s=r[ex].all, isBase=r.id==='BASE', few=s.n<(u.min_n||20), cur=curOf(r.id);
     const beat=!isBase&&base.all&&s.win_rate>base.all.win_rate;
-    h+=`<tr style="${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isBase?'700':'400'}">${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}</td>
+    return `<tr style="${isBase?'background:rgba(61,139,253,.07);':''}${cur?'background:rgba(46,204,113,.07);':''}${few?'opacity:.55;':''}">
+      <td style="font-weight:${isBase||cur?'700':'400'}">${isBase?'📍 ':''}${cur?'🏆 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
       <td>${s.n}</td>
       <td style="font-weight:700;color:${isBase?'var(--blue)':beat?'var(--green)':'var(--sub)'}">${pct(s.win_rate)}</td>
       <td>${pct(s.wilson_lb)}</td>
@@ -1859,11 +1884,15 @@ async function _renderLabUniverse(){
       <td class="${s.excess_return>0?'up':s.excess_return<0?'dn':''}">${ppTxt(s.excess_return)}</td>
       ${isMain?`<td style="font-size:11px;color:${vColor(r.verdict||'')}">${escHtml(r.verdict||'')}</td>`:''}
     </tr>`;
-  });
+  };
+  const cols=7+years.length+(isMain?1:0);
+  h+=_labGroupRow('▼ 現行使用中＋比較基準',cols)+rows.filter(r=>curOf(r.id)||r.id==='BASE').map(rowHtml).join('')
+    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',cols)+rows.filter(r=>!(curOf(r.id)||r.id==='BASE')).map(rowHtml).join('');
   h+=`</table>
     <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
       判定依回測標準：① Wilson 95% 下界 &gt; 基準勝率 ② ${years.join('、')} 各自勝過同年基準 ③ vs 0050 超額報酬 &gt; 0；樣本 &lt;${u.min_n||20} 不判定（淡色）。
       分年勝率綠色＝勝過同年基準。判定以主出場（停利18%／停損15%）計。<br>
+      🏆＝目前整合進行動清單的進場確認條件。雙篩選本身需當日族群排名，2025 年歷史僅數十筆，無法在全池逐日回測（見上表 📍）；領頭羊突破見下方獨立區塊。<br>
       重跑：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_condition_universe.py</code>
     </div>`;
   el.innerHTML=h;
@@ -1877,22 +1906,31 @@ async function _renderLabBreakout(){
   catch{ el.innerHTML='<div style="color:var(--sub);font-size:12px;">尚無突破系統回測資料</div>'; return; }
   const tr=b.exits.TRAIL15, tp=b.exits.TP18SL15;
   const pct=v=>(v*100).toFixed(0)+'%';
+  const sgn=v=>(v>0?'+':'')+v+'%';
+  // 0050 同期超額報酬（百分點）；舊版 breakout_lab.json 無此欄 →「—」
+  const vs=v=>v==null?'—':`<span class="${v>0?'up':v<0?'dn':''}">${(v>0?'+':'')+v.toFixed(1)}pp</span>`;
   const rules=b.rules||{};
+  const dualN=_LAB_CACHE&&_LAB_CACHE.period?_LAB_CACHE.period.signals:'—';
+  const wfUp=tp.wf_back.win_rate>=tp.wf_front.win_rate;
   el.innerHTML=`
     <div style="font-size:12px;color:var(--sub);line-height:1.8;margin-bottom:12px;">
       與雙篩選互補的 <b style="color:var(--text)">bottom-up</b> 選股：不看族群排名，直接抓「自己先動」的領頭羊。
       條件：${rules.gate}（市場開關）→ ${rules.breakout} → ${rules.volume} → ${rules.chip} → ${rules.structure}。
-      範圍：${b.period.universe} 檔追蹤池・${b.period.start}起・同股不重複進場。
+      範圍：${b.period.universe} 檔追蹤池・${b.period.start}起・同股不重複進場・價格含息還原。
+      ${b.benchmark?`0050 同期買進持有 ${b.benchmark.return_pct>0?'+':''}${b.benchmark.return_pct}%（大盤背景，與每筆平均報酬尺度不同）。`:''}
     </div>
     <div class="grid-4" style="margin-bottom:10px;">
       <div><div class="card-title">進場筆數</div><div class="card-value">${b.period.signals}</div>
-        <div class="card-sub">獨立樣本（vs 雙篩選 128 筆）</div></div>
-      <div><div class="card-title">TP18/SL15</div><div class="card-value up">${pct(tp.win_rate)}</div>
-        <div class="card-sub">平均 +${tp.avg_ret}%・PF ${tp.profit_factor}</div></div>
-      <div><div class="card-title">追蹤停損15%</div><div class="card-value up">+${tr.avg_ret}%</div>
-        <div class="card-sub">勝率 ${pct(tr.win_rate)}・PF ${tr.profit_factor}・持有 ${tr.avg_days} 天</div></div>
+        <div class="card-sub">獨立樣本（雙篩選 ${dualN} 筆）</div></div>
+      <div><div class="card-title">TP18/SL15</div><div class="card-value ${tp.avg_ret>0?'up':'dn'}">${pct(tp.win_rate)}</div>
+        <div class="card-sub">平均 ${sgn(tp.avg_ret)}・PF ${tp.profit_factor}・vs 0050 ${vs(tp.excess_return)}</div></div>
+      <div><div class="card-title">追蹤停損15%</div><div class="card-value ${tr.avg_ret>0?'up':'dn'}">${sgn(tr.avg_ret)}</div>
+        <div class="card-sub">勝率 ${pct(tr.win_rate)}・PF ${tr.profit_factor}・持有 ${tr.avg_days} 天・vs 0050 ${vs(tr.excess_return)}</div></div>
       <div><div class="card-title">Walk-Forward</div><div class="card-value">${pct(tp.wf_front.win_rate)} → ${pct(tp.wf_back.win_rate)}</div>
-        <div class="card-sub">前段 / 後段（系統在改善）</div></div>
+        <div class="card-sub">前段 / 後段（${wfUp?'後段未失效':'⚠️ 後段轉弱'}）</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--sub);line-height:1.7;margin-bottom:8px;">
+      vs 0050＝每筆以相同進出場日改買 0050 的報酬差平均（百分點）；&gt;0 才代表勝過直接買 0050（回測標準③）。
     </div>
     <div style="font-size:12px;color:var(--sub);line-height:1.7;">
       📌 與雙篩選的關係：雙篩選抓「族群起風後的個股」（訊號穩、但稍晚）；突破系統抓「還沒帶動族群、自己先突破的領頭羊」（訊號早、靠量能+籌碼驗真假）。
