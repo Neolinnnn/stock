@@ -165,6 +165,8 @@ let DATA = null;
 let CUR_PERIOD = '1m';
 let CUR_COMBO = null;
 let CUR_SOURCE = 'all';   // 'all' = 當日全部 BUY；'al' = 只進今日行動清單（backtest.py --action-list）
+// ?src=al：從策略實驗室「現行規則」卡片連進來時直接顯示行動清單回測
+if(new URLSearchParams(location.search).get('src') === 'al') CUR_SOURCE = 'al';
 const SOURCES = {
   all: {file: './backtest_summary.json',    note: '每日掃描中所有 BUY 訊號都進場（含「雙篩選命中、未進今日行動清單」的個股）。'},
   al:  {file: './backtest_summary_al.json', note: '只在個股符合「今日行動清單」規則當天進場：BUY＋雙篩選＋乖離MA10≤2%（族群強弱自 2026-09-24 起只當標籤、不過濾）。歷史清單以現行規則重建，不直接使用存檔清單（各時期定義不同）。'},

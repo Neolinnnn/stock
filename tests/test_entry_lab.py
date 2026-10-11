@@ -155,3 +155,12 @@ def test_fetch_ohlcv_cache_miss_uses_finmind_fetch(monkeypatch, tmp_path):
     assert list(df.columns) == ['date', 'open', 'high', 'low', 'close', 'volume']
     assert df['date'].tolist() == ['20261007', '20261008'] and df['high'].tolist() == [3, 4]
     assert (tmp_path / '2330_ohlcv.csv').exists()          # 寫入快取，後續腳本共用
+
+
+def test_bias_ma10_filter_matches_action_list_gate():
+    """乖離MA10≤2%（daily_scan.MAX_BIAS_MA10）：平盤後收 102 → MA10=100.2、乖離 1.8% 過；收 103 → 2.7% 擋。"""
+    _, fn = lab.FILTERS['BIAS10']
+    f = _features(_ohlcv(last={'close': 102.0}))
+    assert f['dist_ma10'] == pytest.approx(102 / 100.2 - 1) and fn(f, {})
+    assert not fn(_features(_ohlcv(last={'close': 103.0})), {})
+    assert fn(_features(_ohlcv(last={'close': 95.0})), {})   # 跌破 MA10（負乖離）也算貼近、不擋
