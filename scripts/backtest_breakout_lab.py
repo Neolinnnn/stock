@@ -13,6 +13,7 @@
 
 倉位規則：同股有未出場倉位時不重複進場。
 出場：追蹤停損 15%（主）/ TP18SL15、MA5賣半+MA10清倉（對照），硬停損 -20%，最長 60 日。
+0050 同期：每筆以相同進出場日改買 0050，報酬差取平均＝excess_return（回測標準③）。
 
 範圍：84 檔追蹤池（docs/stocks/）、2024-10 起暖身、訊號期 2025-01 ~ 今。
 用法：python scripts/backtest_breakout_lab.py [--refresh]
@@ -29,7 +30,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 import pandas as pd
 
 from backtest_entry_lab import (
-    fetch_ohlcv, fetch_chip, compute_indicators,
+    fetch_ohlcv, fetch_chip, compute_indicators, load_benchmark, picked_trades,
     sim_tpsl, sim_trailing, sim_ma5_ma10, get_entry, summarize, wilson_lb,
 )
 from regime_exit_analysis import clean_ohlcv
@@ -38,6 +39,7 @@ SIGNAL_START = '20250101'
 VOL_RATIO_MIN = 1.5
 DIST_MA20_MAX = 0.10
 CHIP_DAYS = 5
+EXITS = ('TRAIL15', 'TP18SL15', 'MA5HALF')
 
 
 def load_universe() -> list[str]:
@@ -93,6 +95,45 @@ def find_signals(sid: str, df: pd.DataFrame, chip: pd.DataFrame, bull: dict) -> 
     return sigs
 
 
+def build_trades(signals: list[dict], ohlcv_map: dict, bench) -> list[dict]:
+    """訊號 → 實際進場（同股未出場不重複，以追蹤停損15%的出場日為準）。
+    每筆附三種出場結果與同進出場日 0050 報酬（回測標準③，見 benchmark.py）。"""
+    trades = []
+    open_until = {}   # sid -> exit_date（'99999999' = 未結算）
+    for sig in sorted(signals, key=lambda s: s['date']):
+        sid = sig['stock_id']
+        if sid in open_until and sig['date'] < open_until[sid]:
+            continue
+        ohlcv = ohlcv_map[sid]
+        entry_date, entry_price = get_entry(ohlcv, sig['date'])
+        if entry_date is None or not entry_price:
+            continue
+        exits = {'TRAIL15': sim_trailing(ohlcv, entry_date, entry_price, 0.15),
+                 'TP18SL15': sim_tpsl(ohlcv, entry_date, entry_price, 0.18, 0.15),
+                 'MA5HALF': sim_ma5_ma10(ohlcv, entry_date, entry_price)}
+        open_until[sid] = exits['TRAIL15']['exit'] if exits['TRAIL15'] else '99999999'
+        trades.append({
+            'sig': sig, 'entry_date': entry_date, 'entry_price': entry_price, 'exits': exits,
+            'bench': {ex: bench.ret_pct(entry_date, r['exit']) if r else None for ex, r in exits.items()},
+        })
+    return trades
+
+
+def exit_stats(trades: list[dict]) -> tuple[dict, str]:
+    """各出場策略的全期統計（含 vs 0050）與 walk-forward 前後段；回傳 (stats, 分割日)。"""
+    dates = sorted(t['sig']['date'] for t in trades)
+    mid = dates[len(dates) // 2] if dates else ''
+    front = [t for t in trades if t['sig']['date'] <= mid]
+    back = [t for t in trades if t['sig']['date'] > mid]
+    out = {}
+    for ex in EXITS:
+        s = summarize(picked_trades(trades, ex))
+        s['wf_front'] = summarize(picked_trades(front, ex))
+        s['wf_back'] = summarize(picked_trades(back, ex))
+        out[ex] = s
+    return out, mid
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--refresh', action='store_true')
@@ -103,6 +144,7 @@ def main():
 
     taiex = fetch_ohlcv('TAIEX', args.refresh)
     bull = taiex_bull_map(taiex)
+    bench = load_benchmark(args.refresh)
 
     all_signals, ohlcv_map = [], {}
     for n, sid in enumerate(universe, 1):
@@ -121,37 +163,9 @@ def main():
     all_signals.sort(key=lambda s: s['date'])
     print(f'原始訊號 {len(all_signals)} 筆')
 
-    # 同股未出場不重複進場（以追蹤停損15%的出場日為準）
-    trades = []
-    open_until = {}   # sid -> exit_date（'9999' = 未結算）
-    for sig in all_signals:
-        sid = sig['stock_id']
-        if sid in open_until and sig['date'] < open_until[sid]:
-            continue
-        ohlcv = ohlcv_map[sid]
-        entry_date, entry_price = get_entry(ohlcv, sig['date'])
-        if entry_date is None or not entry_price:
-            continue
-        ex_trail = sim_trailing(ohlcv, entry_date, entry_price, 0.15)
-        ex_tpsl = sim_tpsl(ohlcv, entry_date, entry_price, 0.18, 0.15)
-        open_until[sid] = ex_trail['exit'] if ex_trail else '99999999'
-        trades.append({
-            'sig': sig, 'entry_date': entry_date, 'entry_price': entry_price,
-            'exits': {'TRAIL15': ex_trail, 'TP18SL15': ex_tpsl,
-                      'MA5HALF': sim_ma5_ma10(ohlcv, entry_date, entry_price)},
-        })
+    trades = build_trades(all_signals, ohlcv_map, bench)
     print(f'實際進場 {len(trades)} 筆（同股不重複）')
-
-    dates = [t['sig']['date'] for t in trades]
-    mid = sorted(dates)[len(dates) // 2] if dates else ''
-
-    out_exits = {}
-    for ex in ['TRAIL15', 'TP18SL15', 'MA5HALF']:
-        rows = [{'result': t['exits'][ex]} for t in trades]
-        s = summarize(rows)
-        s['wf_front'] = summarize([{'result': t['exits'][ex]} for t in trades if t['sig']['date'] <= mid])
-        s['wf_back'] = summarize([{'result': t['exits'][ex]} for t in trades if t['sig']['date'] > mid])
-        out_exits[ex] = s
+    out_exits, mid = exit_stats(trades)
 
     # 報告
     print('\n════════ 領頭羊突破系統 ════════')
@@ -159,8 +173,9 @@ def main():
         if not s.get('n'):
             continue
         f, b = s['wf_front'], s['wf_back']
+        vs = f"{s['excess_return']:+.2f}pp" if 'excess_return' in s else '—（無 0050 資料）'
         print(f"{ex}: n={s['n']} 勝率={s['win_rate']:.0%} (Wilson下界 {s['wilson_lb']:.0%}) "
-              f"平均={s['avg_ret']}% PF={s['profit_factor']} 持有={s['avg_days']}天")
+              f"平均={s['avg_ret']}% PF={s['profit_factor']} 持有={s['avg_days']}天 vs0050={vs}")
         print(f"  walk-forward: 前段 {f.get('win_rate', 0):.0%}(n={f.get('n', 0)}) / "
               f"後段 {b.get('win_rate', 0):.0%}(n={b.get('n', 0)})")
 
@@ -191,6 +206,8 @@ def main():
         },
         'period': {'start': SIGNAL_START, 'signals': len(trades), 'wf_split': mid,
                    'universe': len(universe)},
+        # 0050 整段買進持有，僅供大盤背景；勝負以各出場的逐筆超額報酬（excess_return）為準
+        'benchmark': bench.period(trades[0]['entry_date'], taiex['date'].max()) if trades else None,
         'exits': out_exits,
         'trades': trade_rows,
     }
