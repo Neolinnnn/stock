@@ -1663,18 +1663,33 @@ function wfVerdict(s, base){
   if(decay>0.10||edgeB<0.05) return {label:'優勢縮小',color:'var(--yellow)',text:`⚠️ 前後段勝率 ${Math.round(f.win_rate*100)}% → ${Math.round(b.win_rate*100)}%（衰退 ${Math.round(decay*100)}pp）；${ctx}`};
   return {label:'無明顯衰減',color:'var(--green)',text:`前後段表現一致（非過擬合）。${ctx}`};
 }
-let _LAB_CACHE=null;
+let _LAB_CACHE=null, _LAB_PROMISE=null;
+// entry_lab.json：策略實驗室與行動清單卡片共用，只抓一次（失敗則下次重試）
+function _loadEntryLab(){
+  if(!_LAB_PROMISE) _LAB_PROMISE=fetchJSON('./entry_lab.json?v='+Math.floor(Date.now()/86400000))
+    .then(d=>(_LAB_CACHE=d)).catch(e=>{ _LAB_PROMISE=null; throw e; });
+  return _LAB_PROMISE;
+}
+// 三項回測標準（CLAUDE.md）：① Wilson 下界 > 基準勝率 ② walk-forward 前後段各自勝過同期基準 ③ vs 0050 > 0
+function labStandards(s, base){
+  const f=s.wf_front||{}, b=s.wf_back||{}, bf=base.wf_front||{}, bb=base.wf_back||{};
+  const fails=[];
+  if(!(s.wilson_lb>base.win_rate)) fails.push('①Wilson');
+  if(!(f.win_rate>bf.win_rate&&b.win_rate>bb.win_rate)) fails.push('②walk-forward');
+  const v3=s.excess_return==null?null:s.excess_return>0;   // 舊版 JSON 無 0050 欄＝未判定
+  if(v3===false) fails.push('③0050');
+  return {pass:!fails.length&&v3===true, fails,
+    label:fails.length?`未通過 ${fails.join('、')}`:v3==null?'①② 通過・0050 未判定':'通過三項回測標準'};
+}
 // 現行使用中的條件（實驗室表格置頂）：過濾器 id → 用途。行動清單的進場規則（build_docs.entry_strategy）改了要同步
 const LAB_CURRENT={VOL_OR_MACD:'行動清單進場確認', BASE:'行動清單訊號源（雙篩選）'};
 const _labCurBadge=t=>`<span class="entry-grade g-A" style="font-size:10px;padding:1px 6px;">現行・${t}</span>`;
 const _labGroupRow=(t,cols)=>`<tr><td colspan="${cols}" style="font-size:11px;font-weight:700;color:var(--sub);background:#13161d;padding:5px 8px;">${t}</td></tr>`;
 async function renderLabPage(){
   const el=document.getElementById('page-lab');
-  if(!_LAB_CACHE){
-    try{ _LAB_CACHE=await fetchJSON('./entry_lab.json?v='+Math.floor(Date.now()/86400000)); }
-    catch{ el.innerHTML='<div class="error-box"><span>⚗️</span>尚無進場策略回測資料</div>'; return; }
-  }
-  const d=_LAB_CACHE;
+  let d;
+  try{ d=await _loadEntryLab(); }
+  catch{ el.innerHTML='<div class="error-box"><span>⚗️</span>尚無進場策略回測資料</div>'; return; }
   const base=d.filters.BASE.exits.TP18SL15;
   const win=d.filters.VOL_OR_MACD;
   const winS=win.exits.TP18SL15, winT=win.exits.TRAIL15;
@@ -1683,6 +1698,7 @@ async function renderLabPage(){
   // 0050 同期超額報酬（百分點）；舊版 entry_lab.json 無此欄 →「—」
   const ppTxt=v=>v==null?'—':(v>0?'+':'')+v.toFixed(1)+'pp';
   const wf=wfVerdict(winS, base);
+  const std=labStandards(winS, base);
   const tierRows=['A(5-7分)','B(3-4分)','C(0-2分)'].map(t=>d.tiers[t]?.TP18SL15).filter(s=>s?.n);
   const monotone=tierRows.every((s,i)=>i===0||(s.win_rate<tierRows[i-1].win_rate&&s.avg_ret<tierRows[i-1].avg_ret));
 
@@ -1707,17 +1723,18 @@ async function renderLabPage(){
       三項都過才算「有效」，只過一兩項僅供參考；判定欄「❌ ①Wilson、②2026」＝第 ① 項與 2026 年的第 ② 項沒過。</div>
   </details>
 
-  <!-- 勝出策略 hero -->
-  <div class="card" style="margin-bottom:18px;border:1px solid rgba(46,204,113,.4);
-    background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(61,139,253,.05));">
+  <!-- 現行進場確認 hero：是否「勝出」依三項回測標準即時判定，不寫死 -->
+  <div class="card" style="margin-bottom:18px;border:1px solid ${std.pass?'rgba(46,204,113,.4)':'rgba(241,177,67,.45)'};
+    background:linear-gradient(135deg,${std.pass?'rgba(46,204,113,.08)':'rgba(241,177,67,.07)'},rgba(61,139,253,.05));">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
-      <span style="font-size:20px;">🏆</span>
+      <span style="font-size:20px;">${std.pass?'🏆':'⚡'}</span>
       <span style="font-size:16px;font-weight:800;">動能確認進場：量比≥1.2 或 MACD柱&gt;0且增長</span>
       <span class="entry-grade g-A">已整合進行動清單</span>
+      <span class="entry-grade ${std.pass?'g-A':'g-B'}" title="① Wilson 下界 &gt; 基準勝率 ② walk-forward 前後段各自勝過同期基準 ③ vs 0050 &gt; 0">${std.label}</span>
     </div>
     <div class="grid-4" style="margin-bottom:8px;">
       <div><div class="card-title">勝率（基準 ${pct(base.win_rate)}）</div>
-        <div class="card-value up">${pct(winS.win_rate)}</div>
+        <div class="card-value ${winS.win_rate>base.win_rate?'up':'dn'}">${pct(winS.win_rate)}</div>
         <div class="card-sub">n=${winS.n}・Wilson下界 ${pct(winS.wilson_lb)}</div></div>
       <div><div class="card-title">平均報酬（基準 ${sgn(base.avg_ret)}）</div>
         <div class="card-value ${winS.avg_ret>0?'up':'dn'}">${sgn(winS.avg_ret)}</div>
@@ -1770,7 +1787,7 @@ async function renderLabPage(){
     const isBase=r.id==='BASE', isWin=r.id==='VOL_OR_MACD', cur=LAB_CURRENT[r.id];
     const beat=r.s.win_rate>base.win_rate, few=r.s.n<MIN_N;
     return `<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'🏆 ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
+      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'⚡ ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
       <td>${r.s.n}</td>
       <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
       <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
@@ -1785,7 +1802,7 @@ async function renderLabPage(){
     +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',9)+rows.filter(r=>!LAB_CURRENT[r.id]).map(rowHtml).join('');
   html+=`</table>
   <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
-    📍＝現行基準（全部 qualified 訊號＝雙篩選選出的股票）；🏆＝目前整合進行動清單的進場確認條件；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
+    📍＝現行基準（全部 qualified 訊號＝雙篩選選出的股票）；⚡＝目前整合進行動清單的進場確認條件（是否通過回測標準見上方卡片）；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
     意外發現：「強勢族群」「cv_sharpe≥1.0」「多頭排列」等直覺條件反而<b>低於</b>基準——
     族群已強勢時個股常已過熱；動能（量、MACD）才是進場時點的關鍵。
   </div>${(()=>{
@@ -1874,7 +1891,7 @@ async function _renderLabUniverse(){
     const s=r[ex].all, isBase=r.id==='BASE', few=s.n<(u.min_n||20), cur=curOf(r.id);
     const beat=!isBase&&base.all&&s.win_rate>base.all.win_rate;
     return `<tr style="${isBase?'background:rgba(61,139,253,.07);':''}${cur?'background:rgba(46,204,113,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isBase||cur?'700':'400'}">${isBase?'📍 ':''}${cur?'🏆 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
+      <td style="font-weight:${isBase||cur?'700':'400'}">${isBase?'📍 ':''}${cur?'⚡ ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
       <td>${s.n}</td>
       <td style="font-weight:700;color:${isBase?'var(--blue)':beat?'var(--green)':'var(--sub)'}">${pct(s.win_rate)}</td>
       <td>${pct(s.wilson_lb)}</td>
@@ -1892,7 +1909,7 @@ async function _renderLabUniverse(){
     <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
       判定依回測標準：① Wilson 95% 下界 &gt; 基準勝率 ② ${years.join('、')} 各自勝過同年基準 ③ vs 0050 超額報酬 &gt; 0；樣本 &lt;${u.min_n||20} 不判定（淡色）。
       分年勝率綠色＝勝過同年基準。判定以主出場（停利18%／停損15%）計。<br>
-      🏆＝目前整合進行動清單的進場確認條件。雙篩選本身需當日族群排名，2025 年歷史僅數十筆，無法在全池逐日回測（見上表 📍）；領頭羊突破見下方獨立區塊。<br>
+      ⚡＝目前整合進行動清單的進場確認條件。雙篩選本身需當日族群排名，2025 年歷史僅數十筆，無法在全池逐日回測（見上表 📍）；領頭羊突破見下方獨立區塊。<br>
       重跑：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_condition_universe.py</code>
     </div>`;
   el.innerHTML=h;
@@ -2161,7 +2178,7 @@ function renderDaily(data){
       const macdV=_macdFromTA(ta);
       const decision=_actionDecision(sig, kdjV, macdV);
 
-      // 動能確認進場策略（entry_lab 回測：量比≥1.2 或 MACD柱>0且增長 → 勝率77% vs 基準66%）
+      // 動能確認進場策略（量比≥1.2 或 MACD柱>0且增長）；回測數字由 _fillEntryBt() 從 entry_lab.json 填入
       const es=ta.entry_strategy||null;
       let gradeBadge='', evidenceHtml='';
       if(es&&es.grade){
@@ -2171,7 +2188,7 @@ function renderDaily(data){
         if(es.vol_ratio!=null)parts.push(`量比 ${es.vol_ratio}${es.vol_ok?' ✓':''}`);
         parts.push(`MACD動能 ${es.macd_momentum?'✓':'✗'}`);
         const verdict=es.passed
-          ?`<span style="color:var(--green);font-weight:600">符合動能進場（回測勝率 77%・平均 +12.4%）</span>`
+          ?`<span style="color:var(--green);font-weight:600">符合動能進場</span><span class="es-bt"></span>`
           :`<span style="color:var(--sub)">未達動能門檻，等量比≥1.2 或 MACD 翻強</span>`;
         evidenceHtml=`<div class="entry-evidence">${parts.join('・')}<br>${verdict}</div>`;
       }
@@ -2464,6 +2481,21 @@ function renderDaily(data){
 
   document.getElementById('page-daily').innerHTML=html;
   _renderBreakoutSection();
+  _fillEntryBt();
+}
+
+// 行動清單「符合動能進場」後附上最新回測（entry_lab.json 的 VOL_OR_MACD × TP18SL15）；載入失敗就不顯示數字
+async function _fillEntryBt(){
+  if(!document.querySelector('.es-bt')) return;
+  let s, base;
+  try{ const d=await _loadEntryLab(); s=d.filters.VOL_OR_MACD.exits.TP18SL15; base=d.filters.BASE.exits.TP18SL15; }
+  catch{ return; }
+  if(!s||!s.n) return;
+  const vs=s.excess_return==null?'':`・vs 0050 ${s.excess_return>0?'+':''}${s.excess_return.toFixed(1)}pp`;
+  const std=labStandards(s, base);
+  const html=`<span style="color:var(--sub)">（回測勝率 ${Math.round(s.win_rate*100)}%・平均 ${s.avg_ret>0?'+':''}${s.avg_ret}%${vs}）</span>`
+    +(!std.fails.length?'':` <span style="color:var(--yellow)" title="${escHtml(std.label)}，詳見策略實驗室">⚠️ 未過回測標準</span>`);
+  document.querySelectorAll('.es-bt').forEach(el=>{ el.innerHTML=html; });
 }
 
 // ── 雙維選股散點象限圖（純 CSS 百分比定位，免繪圖庫、自適應手機寬度） ───────
