@@ -1681,9 +1681,13 @@ function labStandards(s, base){
   return {pass:!fails.length&&v3===true, fails,
     label:fails.length?`未通過 ${fails.join('、')}`:v3==null?'①② 通過・0050 未判定':'通過三項回測標準'};
 }
-// 現行使用中的條件（實驗室表格置頂）：過濾器 id → 用途。行動清單的進場規則（build_docs.entry_strategy）改了要同步
-const LAB_CURRENT={VOL_OR_MACD:'行動清單進場確認', BASE:'行動清單訊號源（雙篩選）'};
-const _labCurBadge=t=>`<span class="entry-grade g-A" style="font-size:10px;padding:1px 6px;">現行・${t}</span>`;
+// 實驗室表格標註（pin＝與 BASE 一起置頂）。現行行動清單＝BUY＋雙篩選＋乖離MA10≤2%（daily_scan.MAX_BIAS_MA10），
+// 動能評級（build_docs.entry_strategy）只是卡片上的參考徽章、不參與篩選；規則改了要同步這裡與 _renderLabCurrent
+const LAB_TAGS={
+  BIAS10:{icon:'📌', text:'現行・行動清單閘門', cls:'g-A', pin:true},
+  VOL_OR_MACD:{icon:'⚡', text:'參考評級・不參與篩選', cls:'g-C', pin:false},
+};
+const _labTagBadge=t=>`<span class="entry-grade ${t.cls}" style="font-size:10px;padding:1px 6px;">${t.text}</span>`;
 const _labGroupRow=(t,cols)=>`<tr><td colspan="${cols}" style="font-size:11px;font-weight:700;color:var(--sub);background:#13161d;padding:5px 8px;">${t}</td></tr>`;
 async function renderLabPage(){
   const el=document.getElementById('page-lab');
@@ -1703,6 +1707,12 @@ async function renderLabPage(){
   const monotone=tierRows.every((s,i)=>i===0||(s.win_rate<tierRows[i-1].win_rate&&s.avg_ret<tierRows[i-1].avg_ret));
 
   let html=`<div class="section-title">⚗️ 進場策略實驗室</div>
+
+  <!-- 現行規則：行動清單實際使用的篩選條件與以現行規則重建的回測 -->
+  <div class="card" style="margin-bottom:18px;border:1px solid rgba(61,139,253,.45);" id="lab-current">
+    <div style="color:var(--sub);font-size:12px;">載入現行規則回測…</div>
+  </div>
+
   <div style="font-size:12px;color:var(--sub);margin-bottom:14px;">
     回測期間 ${d.period.start} ~ ${d.period.end}・訊號樣本 ${d.period.signals} 筆・進場＝訊號日次日開盤・出場＝TP18/SL15（最長持倉60日）・特徵嚴格使用訊號日當天可得資料（無前視偏差）
   </div>
@@ -1723,13 +1733,12 @@ async function renderLabPage(){
       三項都過才算「有效」，只過一兩項僅供參考；判定欄「❌ ①Wilson、②2026」＝第 ① 項與 2026 年的第 ② 項沒過。</div>
   </details>
 
-  <!-- 現行進場確認 hero：是否「勝出」依三項回測標準即時判定，不寫死 -->
-  <div class="card" style="margin-bottom:18px;border:1px solid ${std.pass?'rgba(46,204,113,.4)':'rgba(241,177,67,.45)'};
-    background:linear-gradient(135deg,${std.pass?'rgba(46,204,113,.08)':'rgba(241,177,67,.07)'},rgba(61,139,253,.05));">
+  <!-- 動能評級：行動清單卡片上的參考徽章（⚡ A/B/C），不參與篩選；是否有效依三項回測標準即時判定 -->
+  <div class="card" style="margin-bottom:18px;">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
-      <span style="font-size:20px;">${std.pass?'🏆':'⚡'}</span>
-      <span style="font-size:16px;font-weight:800;">動能確認進場：量比≥1.2 或 MACD柱&gt;0且增長</span>
-      <span class="entry-grade g-A">已整合進行動清單</span>
+      <span style="font-size:20px;">⚡</span>
+      <span style="font-size:16px;font-weight:800;">動能評級：量比≥1.2 或 MACD柱&gt;0且增長</span>
+      ${_labTagBadge(LAB_TAGS.VOL_OR_MACD)}
       <span class="entry-grade ${std.pass?'g-A':'g-B'}" title="① Wilson 下界 &gt; 基準勝率 ② walk-forward 前後段各自勝過同期基準 ③ vs 0050 &gt; 0">${std.label}</span>
     </div>
     <div class="grid-4" style="margin-bottom:8px;">
@@ -1747,8 +1756,8 @@ async function renderLabPage(){
         <div class="card-sub">前段(n=${winS.wf_front.n}) / 後段(n=${winS.wf_back.n})・<b style="color:${wf.color}">${wf.label}</b></div></div>
     </div>
     <div style="font-size:12px;color:var(--sub);line-height:1.7;">
-      📌 解讀：訊號日「當日成交量 ≥ 20日均量的1.2倍」或「MACD 柱由弱轉強」代表資金進駐確認。
-      全期勝率 ${pct(base.win_rate)} → ${pct(winS.win_rate)}、平均報酬 ${sgn(base.avg_ret)} → ${sgn(winS.avg_ret)}。${wf.text}
+      📌 解讀：行動清單卡片上的「⚡ A 雙動能／B 單動能／C 動能不足」就是這個條件，只供參考、不影響是否入選。
+      基準＝歷史行動清單訊號；全期勝率 ${pct(base.win_rate)} → ${pct(winS.win_rate)}、平均報酬 ${sgn(base.avg_ret)} → ${sgn(winS.avg_ret)}。${wf.text}
     </div>
   </div>
 
@@ -1782,12 +1791,13 @@ async function renderLabPage(){
     .map(([id,r])=>({id,label:r.label,source:r.source,s:r.exits.TP18SL15}))
     .filter(r=>r.s&&r.s.n>0)
     .sort((a,b)=>b.s.wilson_lb-a.s.wilson_lb);
-  // 現行使用中的條件置頂（原本依 Wilson 排序會沉到表中段），其餘照排序；置頂列附原排名
+  // 現行規則（📌 行動清單閘門）與基準置頂（依 Wilson 排序會沉到表中段），其餘照排序；有標註者附原排名
+  const pinned=r=>r.id==='BASE'||!!(LAB_TAGS[r.id]&&LAB_TAGS[r.id].pin);
   const rowHtml=r=>{
-    const isBase=r.id==='BASE', isWin=r.id==='VOL_OR_MACD', cur=LAB_CURRENT[r.id];
+    const isBase=r.id==='BASE', tag=LAB_TAGS[r.id], isCur=!!(tag&&tag.pin);
     const beat=r.s.win_rate>base.win_rate, few=r.s.n<MIN_N;
-    return `<tr style="${isWin?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isWin||isBase?'700':'400'}">${isWin?'⚡ ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
+    return `<tr style="${isCur?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
+      <td style="font-weight:${isCur||isBase?'700':'400'}">${tag?tag.icon+' ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${tag?`<br>${_labTagBadge(tag)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
       <td>${r.s.n}</td>
       <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
       <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
@@ -1798,13 +1808,13 @@ async function renderLabPage(){
       <td>${r.s.avg_days}</td>
     </tr>`;
   };
-  html+=_labGroupRow('▼ 現行使用中',9)+rows.filter(r=>LAB_CURRENT[r.id]).map(rowHtml).join('')
-    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',9)+rows.filter(r=>!LAB_CURRENT[r.id]).map(rowHtml).join('');
+  html+=_labGroupRow('▼ 現行規則與基準',9)+rows.filter(pinned).map(rowHtml).join('')
+    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',9)+rows.filter(r=>!pinned(r)).map(rowHtml).join('');
   html+=`</table>
   <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
-    📍＝現行基準（全部 qualified 訊號＝雙篩選選出的股票）；⚡＝目前整合進行動清單的進場確認條件（是否通過回測標準見上方卡片）；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
-    意外發現：「強勢族群」「cv_sharpe≥1.0」「多頭排列」等直覺條件反而<b>低於</b>基準——
-    族群已強勢時個股常已過熱；動能（量、MACD）才是進場時點的關鍵。
+    📍＝歷史行動清單訊號：每日報告當天的行動清單，依<b>當時</b>規則（2026-07-13 起加乖離MA10≤2% 與族群強勢閘門，2026-09-24 起族群改為標籤）；
+    📌＝現行行動清單閘門；⚡＝動能評級（行動清單卡片上的參考徽章，不參與篩選）；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
+    本表在歷史行動清單訊號內再加條件，看「多一道過濾」能否更好；早期（2026-07-13 前）訊號未經乖離閘門，📌 列即為補上現行閘門後的結果。
   </div>${(()=>{
     const src=rows.filter(r=>r.source);
     if(!src.length) return '';
@@ -1831,7 +1841,7 @@ async function renderLabPage(){
   <div class="card" style="margin-bottom:24px;">
     <div style="font-size:13px;font-weight:700;margin-bottom:8px;">🔬 方法論</div>
     <div style="font-size:12px;color:var(--sub);line-height:1.9;">
-      ・訊號來源：每日族群掃描 qualified 清單（RSI5 + CV夏普雙條件），共 ${d.period.signals} 筆<br>
+      ・訊號來源：每日報告的行動清單（qualified），依當時規則（現行＝BUY＋雙篩選＋乖離MA10≤2%，見頁首），共 ${d.period.signals} 筆<br>
       ・進場：訊號日<b>次日開盤價</b>（可實際執行，無前視偏差）<br>
       ・出場：TP+18% / SL−15%（收盤判斷）；另測追蹤停損15% 與 MA10跌破<br>
       ・特徵：全部以訊號日收盤後可得資料計算（量比、均線、MACD、KD、法人籌碼、大盤位置）<br>
@@ -1841,8 +1851,49 @@ async function renderLabPage(){
     </div>
   </div>`;
   el.innerHTML=html;
+  _renderLabCurrent();
   _renderLabBreakout();
   _renderLabUniverse();
+}
+
+// ── 現行規則（daily_scan：BUY＋雙篩選＋乖離MA10≤2%）＋以現行規則重建的行動清單回測 ──
+// 數字來自每週回測 backtest_summary_al.json（backtest.py --action-list）；規則文字改了要與 daily_scan 同步
+async function _renderLabCurrent(){
+  const el=document.getElementById('lab-current');
+  if(!el) return;
+  let a=null;
+  try{ a=await fetchJSON('./backtest_summary_al.json?v='+Math.floor(Date.now()/3600000)); }catch{}
+  const COMBO='TP18_SL15';   // 與實驗室主出場一致；不挑各期最佳組合（事後挑最佳有樂觀偏誤）
+  let stale=false;
+  const rows=['12m','36m'].map(k=>{
+    const p=a&&a.periods&&a.periods[k], s=p&&p.combos&&p.combos[COMBO]&&p.combos[COMBO].stats;
+    if(!s||!s.settled) return '';
+    if(s.excess_return==null) stale=true;
+    const vs=s.excess_return==null?'<span style="color:var(--sub)">待更新</span>'
+      :`<span class="${s.excess_return>0?'up':s.excess_return<0?'dn':''}">${(s.excess_return>0?'+':'')+s.excess_return.toFixed(1)}pp</span>`;
+    return `<tr><td>${escHtml(p.label)}<div style="font-size:10px;color:var(--sub)">${p.date_range.start}~${p.date_range.end}</div></td>
+      <td>${s.settled}<span style="font-size:10px;color:var(--sub)">（持有中 ${s.open_count}）</span></td>
+      <td>${Math.round(s.win_rate_settled*100)}%</td>
+      <td class="${s.avg_return>0?'up':'dn'}">${s.avg_return>0?'+':''}${s.avg_return}%</td>
+      <td>${vs}</td><td>${s.avg_holding_days} 天</td></tr>`;
+  }).join('');
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+      <span style="font-size:20px;">📌</span><span style="font-size:16px;font-weight:800;">現行規則：今日行動清單</span>
+    </div>
+    <table style="margin-bottom:10px;">
+      <tr><td style="white-space:nowrap;font-weight:700;">① 雙篩選</td><td>BUY 訊號＋CV夏普 ≥ 0.3＋CV勝率 ≥ 40%＋CV最大回檔 ≤ 20%</td></tr>
+      <tr><td style="white-space:nowrap;font-weight:700;">② 行動清單閘門</td><td>乖離 MA10 ≤ 2%（現價相對 MA10，避免追高）</td></tr>
+      <tr><td style="white-space:nowrap;color:var(--sub);">只當標籤</td><td style="color:var(--sub);">族群強弱（2026-09-24 起不再過濾）、⚡ 動能評級 A/B/C（見下方）</td></tr>
+    </table>
+    ${rows?`<div style="font-size:12px;color:var(--sub);margin-bottom:6px;">以現行規則重建歷史行動清單的回測（停利18%／停損15%，與實驗室主出場一致）：</div>
+    <div style="overflow-x:auto;"><table>
+      <tr><th>期間</th><th>已結算</th><th>勝率</th><th>平均報酬</th><th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th><th>平均持有</th></tr>${rows}
+    </table></div>`:'<div style="font-size:12px;color:var(--sub);">尚無行動清單回測資料</div>'}
+    <div style="font-size:11px;color:var(--sub);line-height:1.7;margin-top:6px;">
+      歷史報告無 CV最大回檔，重建時未套用此項。${stale?'vs 0050「待更新」＝此回測產生於 0050 比較上線前，下次每週回測（當週最後交易日晚間）後補上。':''}
+      各期停利停損組合與逐筆交易：<a href="backtest.html?src=al" style="color:var(--accent);">策略回測 → 只進今日行動清單</a>
+    </div>`;
 }
 
 // ── 全追蹤池逐日回測（condition_universe.json，scripts/backtest_condition_universe.py）──
@@ -1885,13 +1936,13 @@ async function _renderLabUniverse(){
     <table>
       <tr><th>進場條件</th><th>樣本</th><th>勝率</th><th>Wilson下界</th><th>平均報酬</th><th>獲利因子</th>
         ${years.map(y=>`<th>${y} 勝率</th>`).join('')}<th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th>${isMain?'<th>判定</th>':''}</tr>`;
-  // 此表的 BASE 是「隨機進場」而非雙篩選，故只標行動清單進場確認為現行；BASE 一併置頂當對照
-  const curOf=id=>id!=='BASE'&&LAB_CURRENT[id];
+  // 此表的 BASE 是「隨機進場」；📌 現行閘門與 BASE 置頂對照，⚡ 等參考標註只加徽章不置頂
+  const pinned=r=>r.id==='BASE'||!!(LAB_TAGS[r.id]&&LAB_TAGS[r.id].pin);
   const rowHtml=r=>{
-    const s=r[ex].all, isBase=r.id==='BASE', few=s.n<(u.min_n||20), cur=curOf(r.id);
+    const s=r[ex].all, isBase=r.id==='BASE', few=s.n<(u.min_n||20), tag=LAB_TAGS[r.id], cur=!!(tag&&tag.pin);
     const beat=!isBase&&base.all&&s.win_rate>base.all.win_rate;
     return `<tr style="${isBase?'background:rgba(61,139,253,.07);':''}${cur?'background:rgba(46,204,113,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isBase||cur?'700':'400'}">${isBase?'📍 ':''}${cur?'⚡ ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${cur?`<br>${_labCurBadge(cur)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
+      <td style="font-weight:${isBase||cur?'700':'400'}">${isBase?'📍 ':''}${tag?tag.icon+' ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${tag?`<br>${_labTagBadge(tag)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
       <td>${s.n}</td>
       <td style="font-weight:700;color:${isBase?'var(--blue)':beat?'var(--green)':'var(--sub)'}">${pct(s.win_rate)}</td>
       <td>${pct(s.wilson_lb)}</td>
@@ -1903,13 +1954,14 @@ async function _renderLabUniverse(){
     </tr>`;
   };
   const cols=7+years.length+(isMain?1:0);
-  h+=_labGroupRow('▼ 現行使用中＋比較基準',cols)+rows.filter(r=>curOf(r.id)||r.id==='BASE').map(rowHtml).join('')
-    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',cols)+rows.filter(r=>!(curOf(r.id)||r.id==='BASE')).map(rowHtml).join('');
+  h+=_labGroupRow('▼ 現行閘門＋比較基準',cols)+rows.filter(pinned).map(rowHtml).join('')
+    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',cols)+rows.filter(r=>!pinned(r)).map(rowHtml).join('');
   h+=`</table>
     <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
       判定依回測標準：① Wilson 95% 下界 &gt; 基準勝率 ② ${years.join('、')} 各自勝過同年基準 ③ vs 0050 超額報酬 &gt; 0；樣本 &lt;${u.min_n||20} 不判定（淡色）。
       分年勝率綠色＝勝過同年基準。判定以主出場（停利18%／停損15%）計。<br>
-      ⚡＝目前整合進行動清單的進場確認條件。雙篩選本身需當日族群排名，2025 年歷史僅數十筆，無法在全池逐日回測（見上表 📍）；領頭羊突破見下方獨立區塊。<br>
+      📌＝現行行動清單閘門（此表全池逐日、不含雙篩選，只看閘門本身）；⚡＝動能評級（參考徽章，不參與篩選）。
+      雙篩選需每日掃描的 CV 交叉驗證指標，無法全池逐日重算；以現行規則重建的完整行動清單回測見頁首「📌 現行規則」。領頭羊突破見下方獨立區塊。<br>
       重跑：<code style="background:#13161d;padding:1px 6px;border-radius:4px;">python scripts/backtest_condition_universe.py</code>
     </div>`;
   el.innerHTML=h;

@@ -222,6 +222,8 @@ def build_features(sig, ohlcv: pd.DataFrame, chip: pd.DataFrame, taiex: pd.DataF
     feat['ma_stack'] = bool(c > r['ma5'] > r['ma20'] > r['ma60'])
     feat['above_ma20'] = bool(c > r['ma20'])
     feat['dist_ma20'] = (c - r['ma20']) / r['ma20'] if r['ma20'] else 0
+    # 同 daily_scan.MAX_BIAS_MA10 的乖離定義（現價相對 MA10）；MA10 缺值→NaN→比較為 False，保守剔除
+    feat['dist_ma10'] = (c - r['ma10']) / r['ma10'] if r['ma10'] else 0
     feat['ma20_up'] = bool(r['ma20'] > df.iloc[-6]['ma20']) if len(df) >= 6 else False
     feat['break20'] = bool(c >= df.iloc[-21:-1]['close'].max()) if len(df) >= 21 else False
     feat['rsi14'] = r['rsi14']
@@ -360,13 +362,16 @@ def sim_ma5_ma10(ohlcv, entry_date, entry_price):
 # ── 過濾器定義 ───────────────────────────────────────────────────────────────
 
 FILTERS = {
-    'BASE':        ('基準（全部 qualified）', lambda f, s: True),
+    # 基準＝每日報告當天的行動清單（qualified），依「當時」規則：2026-07-13 起加乖離MA10≤2% 與
+    # 族群強勢閘門，2026-09-24 起族群改為標籤（見 daily_scan.MAX_BIAS_MA10 / REQUIRE_STRONG_SECTOR）
+    'BASE':        ('歷史行動清單訊號（依當時規則）', lambda f, s: True),
     'VOL12':       ('量比≥1.2',              lambda f, s: f['vol_ratio'] >= 1.2),
     'VOL15':       ('量比≥1.5',              lambda f, s: f['vol_ratio'] >= 1.5),
     'MASTACK':     ('多頭排列(C>5>20>60)',   lambda f, s: f['ma_stack']),
     'MA20UP':      ('站上MA20且MA20上揚',    lambda f, s: f['above_ma20'] and f['ma20_up']),
     'NOCHASE':     ('乖離MA20≤8%',           lambda f, s: f['dist_ma20'] <= 0.08),
     'PULLBACK':    ('乖離0~8%（近均線）',    lambda f, s: 0 <= f['dist_ma20'] <= 0.08),
+    'BIAS10':      ('乖離MA10≤2%',           lambda f, s: f['dist_ma10'] <= 0.02),   # 現行行動清單閘門
     'BREAK20':     ('創20日收盤新高',        lambda f, s: f['break20']),
     'MACD':        ('MACD柱>0且增長',        lambda f, s: f['macd_pos'] and f['macd_rising']),
     'KDGOLD':      ('KD金叉(K>D)',           lambda f, s: f['kd_gold']),
