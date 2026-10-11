@@ -509,7 +509,7 @@ def build_daily_payload(summary):
                 d['kd_d_prev'] = kd_d[-2] if len(kd_d) >= 2 else None
             if len(hist) >= 2:
                 d['macd_bar_prev'] = hist[-2]
-            # ── 動能確認進場策略（entry_lab 回測勝出：量比≥1.2 或 MACD柱>0且增長）──
+            # ── 動能確認進場策略（量比≥1.2 或 MACD柱>0且增長；回測見策略實驗室 entry_lab）──
             vols = ohlcv.get('volume', [])
             vol_ratio = None
             if len(vols) >= 20 and vols[-1]:
