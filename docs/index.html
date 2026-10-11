@@ -1780,50 +1780,9 @@ async function renderLabPage(){
   });
   html+=`<div style="font-size:11px;color:var(--sub);margin-top:6px;">${monotone?'評分愈高→勝率與報酬愈高，呈單調遞增，評分系統有判別力。':'⚠️ 分層未呈單調遞增，評分系統的判別力存疑。'}</div></div>
 
-  <!-- 過濾器全表 -->
-  <div class="section-title">🧪 全部過濾器比較（依 Wilson 下界排序）</div>
-  <div class="card" style="overflow-x:auto;margin-bottom:18px;">
-  <table>
-    <tr><th>進場過濾器</th><th>樣本</th><th>勝率</th><th style="min-width:120px">勝率視覺</th><th>Wilson下界</th><th>平均報酬</th><th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th><th>獲利因子</th><th>持有天數</th></tr>`;
-  // 依 Wilson 下界排序：小樣本的高勝率（如 1 筆 100%）不會浮到最上面
-  const MIN_N=20;
-  const rows=Object.entries(d.filters)
-    .map(([id,r])=>({id,label:r.label,source:r.source,s:r.exits.TP18SL15}))
-    .filter(r=>r.s&&r.s.n>0)
-    .sort((a,b)=>b.s.wilson_lb-a.s.wilson_lb);
-  // 現行規則（📌 行動清單閘門）與基準置頂（依 Wilson 排序會沉到表中段），其餘照排序；有標註者附原排名
-  const pinned=r=>r.id==='BASE'||!!(LAB_TAGS[r.id]&&LAB_TAGS[r.id].pin);
-  const rowHtml=r=>{
-    const isBase=r.id==='BASE', tag=LAB_TAGS[r.id], isCur=!!(tag&&tag.pin);
-    const beat=r.s.win_rate>base.win_rate, few=r.s.n<MIN_N;
-    return `<tr style="${isCur?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
-      <td style="font-weight:${isCur||isBase?'700':'400'}">${tag?tag.icon+' ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${tag?`<br>${_labTagBadge(tag)} <span style="font-size:10px;color:var(--sub);font-weight:400;">Wilson 排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
-      <td>${r.s.n}</td>
-      <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
-      <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
-      <td>${pct(r.s.wilson_lb)}</td>
-      <td class="${r.s.avg_ret>=base.avg_ret?'up':''}">${r.s.avg_ret>0?'+':''}${r.s.avg_ret}%</td>
-      <td class="${r.s.excess_return>0?'up':r.s.excess_return<0?'dn':''}">${ppTxt(r.s.excess_return)}</td>
-      <td>${r.s.profit_factor}</td>
-      <td>${r.s.avg_days}</td>
-    </tr>`;
-  };
-  html+=_labGroupRow('▼ 現行規則與基準',9)+rows.filter(pinned).map(rowHtml).join('')
-    +_labGroupRow('▼ 其他候選條件（依 Wilson 下界排序）',9)+rows.filter(r=>!pinned(r)).map(rowHtml).join('');
-  html+=`</table>
-  <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
-    📍＝歷史行動清單訊號：每日報告當天的行動清單，依<b>當時</b>規則（2026-07-13 起加乖離MA10≤2% 與族群強勢閘門，2026-09-24 起族群改為標籤）；
-    📌＝現行行動清單閘門；⚡＝動能評級（行動清單卡片上的參考徽章，不參與篩選）；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
-    本表在歷史行動清單訊號內再加條件，看「多一道過濾」能否更好；早期（2026-07-13 前）訊號未經乖離閘門，📌 列即為補上現行閘門後的結果。
-  </div>${(()=>{
-    const src=rows.filter(r=>r.source);
-    if(!src.length) return '';
-    return `<details style="font-size:11px;color:var(--sub);padding:6px 4px 2px;line-height:1.8;">
-      <summary style="cursor:pointer;color:var(--accent);">🌐 外部來源條件出處（${src.length} 項）</summary>
-      ${src.map(r=>`<div><b style="color:var(--text)">${escHtml(r.label)}</b>：${escHtml(r.source)}</div>`).join('')}
-      <div style="margin-top:4px;">同時比較 ${rows.length} 個過濾器，難免有幾個純屬運氣好；請以三項回測標準（見方法論）綜合判讀，勿只看勝率。</div>
-    </details>`;
-  })()}</div>
+  <!-- 過濾器全表：點欄位標題排序（_renderLabFilters，只重繪此表） -->
+  <div class="section-title">🧪 全部過濾器比較（點欄位標題排序）</div>
+  <div class="card" style="overflow-x:auto;margin-bottom:18px;" id="lab-filters"></div>
 
   <!-- 全追蹤池分年比較 -->
   <div class="section-title">🌐 全追蹤池逐日回測（2025／2026 分年比較）</div>
@@ -1851,9 +1810,81 @@ async function renderLabPage(){
     </div>
   </div>`;
   el.innerHTML=html;
+  _renderLabFilters();
   _renderLabCurrent();
   _renderLabBreakout();
   _renderLabUniverse();
+}
+
+// ── 全部過濾器比較（entry_lab.json × TP18SL15）：點欄位標題依該數值排序，再點一次反向 ──
+// 📌 現行閘門／📍 基準固定置頂作對照；數值缺漏（如舊版無 vs 0050）一律排最後
+const LAB_SORT_COLS={n:'樣本', win_rate:'勝率', wilson_lb:'Wilson下界', avg_ret:'平均報酬',
+  excess_return:'vs 0050', profit_factor:'獲利因子', avg_days:'持有天數'};
+let _LAB_SORT={key:'wilson_lb', dir:-1}, _LAB_HIDE_FEW=false;
+window._labSort=function(k){
+  _LAB_SORT=_LAB_SORT.key===k?{key:k, dir:-_LAB_SORT.dir}:{key:k, dir:-1};
+  _renderLabFilters();
+};
+window._labHideFew=function(v){ _LAB_HIDE_FEW=v; _renderLabFilters(); };
+function _renderLabFilters(){
+  const el=document.getElementById('lab-filters'), d=_LAB_CACHE;
+  if(!el||!d) return;
+  const base=d.filters.BASE.exits.TP18SL15, MIN_N=20, {key, dir}=_LAB_SORT;
+  const pct=v=>(v*100).toFixed(0)+'%';
+  const ppTxt=v=>v==null?'—':(v>0?'+':'')+v.toFixed(1)+'pp';
+  const val=r=>{ const v=r.s[key]; return typeof v==='number'&&isFinite(v)?v:null; };
+  const pinned=r=>r.id==='BASE'||!!(LAB_TAGS[r.id]&&LAB_TAGS[r.id].pin);
+  const all=Object.entries(d.filters)
+    .map(([id,r])=>({id,label:r.label,source:r.source,s:r.exits.TP18SL15}))
+    .filter(r=>r.s&&r.s.n>0)
+    .sort((a,b)=>{
+      const x=val(a), y=val(b);
+      if(x==null||y==null) return (x==null)-(y==null);
+      return dir*(x-y)||(b.s.wilson_lb-a.s.wilson_lb);   // 同值以 Wilson 下界決勝
+    });
+  const rows=_LAB_HIDE_FEW?all.filter(r=>r.s.n>=MIN_N||pinned(r)):all;
+  const col=LAB_SORT_COLS[key], order=dir<0?'大→小':'小→大';
+  const th=(k,label,attr='')=>!k?`<th ${attr}>${label}</th>`
+    :`<th onclick="_labSort('${k}')" ${attr} style="cursor:pointer;white-space:nowrap;${key===k?'color:var(--accent);':''}">${label}${key===k?(dir<0?' ▼':' ▲'):' <span style="opacity:.35">⇅</span>'}</th>`;
+  const rowHtml=r=>{
+    const isBase=r.id==='BASE', tag=LAB_TAGS[r.id], isCur=!!(tag&&tag.pin);
+    const beat=r.s.win_rate>base.win_rate, few=r.s.n<MIN_N;
+    return `<tr style="${isCur?'background:rgba(46,204,113,.07);':''}${isBase?'background:rgba(61,139,253,.07);':''}${few?'opacity:.55;':''}">
+      <td style="font-weight:${isCur||isBase?'700':'400'}">${tag?tag.icon+' ':''}${isBase?'📍 ':''}${r.source?'<span title="'+escHtml(r.source)+'">🌐</span> ':''}${escHtml(r.label)}${few?' <span style="font-size:10px;color:var(--sub)">樣本不足</span>':''}${tag?`<br>${_labTagBadge(tag)} <span style="font-size:10px;color:var(--sub);font-weight:400;">${col}排名 ${rows.indexOf(r)+1}/${rows.length}</span>`:''}</td>
+      <td>${r.s.n}</td>
+      <td style="font-weight:700;color:${beat?'var(--green)':isBase?'var(--blue)':'var(--sub)'}">${pct(r.s.win_rate)}</td>
+      <td><div class="bar-wrap" style="height:12px;"><div class="bar" style="width:${r.s.win_rate*100}%;background:${beat?'var(--green)':'var(--sub)'};opacity:.7;"></div></div></td>
+      <td>${pct(r.s.wilson_lb)}</td>
+      <td class="${r.s.avg_ret>=base.avg_ret?'up':''}">${r.s.avg_ret>0?'+':''}${r.s.avg_ret}%</td>
+      <td class="${r.s.excess_return>0?'up':r.s.excess_return<0?'dn':''}">${ppTxt(r.s.excess_return)}</td>
+      <td>${r.s.profit_factor}</td>
+      <td>${r.s.avg_days}</td>
+    </tr>`;
+  };
+  // 依勝率等未經小樣本修正的欄位排序時，1~2 筆的 100% 會浮到最前面
+  const fewWarn=!_LAB_HIDE_FEW&&key!=='wilson_lb'&&key!=='n'&&rows.some(r=>r.s.n<MIN_N&&!pinned(r));
+  const src=rows.filter(r=>r.source);
+  el.innerHTML=`
+  <div style="display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-bottom:8px;">
+    <span>排序：<b style="color:var(--text)">${col} ${order}</b>（點欄位標題切換，再點一次反向）</span>
+    <label style="cursor:pointer;white-space:nowrap;"><input type="checkbox" ${_LAB_HIDE_FEW?'checked':''} onchange="_labHideFew(this.checked)" style="vertical-align:middle;"> 隱藏樣本 &lt;${MIN_N} 筆</label>
+    ${key!=='wilson_lb'||dir>0?`<a href="javascript:void(0)" onclick="_labSort('wilson_lb')" style="color:var(--accent);white-space:nowrap;">恢復預設（Wilson 下界）</a>`:''}
+  </div>
+  ${fewWarn?`<div style="font-size:11px;color:var(--yellow);margin-bottom:6px;">⚠️ 依${col}排序時，樣本很少的條件容易排到前面（如 1 筆 100%），建議勾選「隱藏樣本 &lt;${MIN_N} 筆」。</div>`:''}
+  <table>
+    <tr>${th(null,'進場過濾器')}${th('n','樣本')}${th('win_rate','勝率')}${th(null,'勝率視覺','style="min-width:120px"')}${th('wilson_lb','Wilson下界')}${th('avg_ret','平均報酬')}${th('excess_return','vs 0050','title="逐筆減去同進出場日 0050 報酬後平均"')}${th('profit_factor','獲利因子')}${th('avg_days','持有天數')}</tr>
+    ${_labGroupRow('▼ 現行規則與基準',9)}${rows.filter(pinned).map(rowHtml).join('')}
+    ${_labGroupRow(`▼ 其他候選條件（依${col} ${order}）`,9)}${rows.filter(r=>!pinned(r)).map(rowHtml).join('')}
+  </table>
+  <div style="font-size:11px;color:var(--sub);padding:8px 4px 2px;line-height:1.7;">
+    📍＝歷史行動清單訊號：每日報告當天的行動清單，依<b>當時</b>規則（2026-07-13 起加乖離MA10≤2% 與族群強勢閘門，2026-09-24 起族群改為標籤）；
+    📌＝現行行動清單閘門；⚡＝動能評級（行動清單卡片上的參考徽章，不參與篩選）；🌐＝論壇／GitHub／文獻分享的條件（出處見下方）；淡色＝樣本 &lt;${MIN_N} 筆，勝率不具參考性。<br>
+    本表在歷史行動清單訊號內再加條件，看「多一道過濾」能否更好；早期（2026-07-13 前）訊號未經乖離閘門，📌 列即為補上現行閘門後的結果。
+  </div>${src.length?`<details style="font-size:11px;color:var(--sub);padding:6px 4px 2px;line-height:1.8;">
+    <summary style="cursor:pointer;color:var(--accent);">🌐 外部來源條件出處（${src.length} 項）</summary>
+    ${src.map(r=>`<div><b style="color:var(--text)">${escHtml(r.label)}</b>：${escHtml(r.source)}</div>`).join('')}
+    <div style="margin-top:4px;">同時比較 ${all.length} 個過濾器，難免有幾個純屬運氣好；請以三項回測標準（見方法論）綜合判讀，勿只看勝率。</div>
+  </details>`:''}`;
 }
 
 // ── 現行規則（daily_scan：BUY＋雙篩選＋乖離MA10≤2%）＋以現行規則重建的行動清單回測 ──
