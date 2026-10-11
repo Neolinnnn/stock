@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-10 19:44",
+ "generated_at": "2026-10-11 07:38",
  "rules": {
   "gate": "TAIEX > MA60",
   "breakout": "收盤創20日新高",
@@ -14,6 +14,12 @@
   "wf_split": "20251002",
   "universe": 104
  },
+ "benchmark": {
+  "id": "0050",
+  "start": "20250107",
+  "end": "20261008",
+  "return_pct": 133.71
+ },
  "exits": {
   "TRAIL15": {
    "n": 245,
@@ -26,6 +32,10 @@
    "avg_days": 42.3,
    "worst": -27.63,
    "best": 194.57,
+   "bench_n": 245,
+   "bench_avg_return": 10.11,
+   "excess_return": 8.16,
+   "beat_rate": 0.4408,
    "wf_front": {
     "n": 138,
     "win_rate": 0.5435,
@@ -36,7 +46,11 @@
     "expectancy": 14.36,
     "avg_days": 47.3,
     "worst": -27.63,
-    "best": 194.57
+    "best": 194.57,
+    "bench_n": 138,
+    "bench_avg_return": 7.88,
+    "excess_return": 6.48,
+    "beat_rate": 0.4493
    },
    "wf_back": {
     "n": 107,
@@ -48,7 +62,11 @@
     "expectancy": 23.32,
     "avg_days": 36.0,
     "worst": -25.12,
-    "best": 165.1
+    "best": 165.1,
+    "bench_n": 107,
+    "bench_avg_return": 12.98,
+    "excess_return": 10.34,
+    "beat_rate": 0.4299
    }
   },
   "TP18SL15": {
@@ -62,6 +80,10 @@
    "avg_days": 30.3,
    "worst": -22.36,
    "best": 29.45,
+   "bench_n": 250,
+   "bench_avg_return": 6.9,
+   "excess_return": 1.07,
+   "beat_rate": 0.604,
    "wf_front": {
     "n": 138,
     "win_rate": 0.5797,
@@ -72,7 +94,11 @@
     "expectancy": 5.19,
     "avg_days": 35.0,
     "worst": -22.36,
-    "best": 28.94
+    "best": 28.94,
+    "bench_n": 138,
+    "bench_avg_return": 5.08,
+    "excess_return": 0.11,
+    "beat_rate": 0.587
    },
    "wf_back": {
     "n": 112,
@@ -84,7 +110,11 @@
     "expectancy": 11.38,
     "avg_days": 24.4,
     "worst": -22.0,
-    "best": 29.45
+    "best": 29.45,
+    "bench_n": 112,
+    "bench_avg_return": 9.14,
+    "excess_return": 2.25,
+    "beat_rate": 0.625
    }
   },
   "MA5HALF": {
@@ -98,6 +128,10 @@
    "avg_days": 8.9,
    "worst": -18.35,
    "best": 83.85,
+   "bench_n": 261,
+   "bench_avg_return": 2.29,
+   "excess_return": 0.39,
+   "beat_rate": 0.364,
    "wf_front": {
     "n": 138,
     "win_rate": 0.4348,
@@ -108,7 +142,11 @@
     "expectancy": 2.34,
     "avg_days": 9.3,
     "worst": -9.21,
-    "best": 78.1
+    "best": 78.1,
+    "bench_n": 138,
+    "bench_avg_return": 1.51,
+    "excess_return": 0.83,
+    "beat_rate": 0.3913
    },
    "wf_back": {
     "n": 123,
@@ -120,7 +158,11 @@
     "expectancy": 3.04,
     "avg_days": 8.5,
     "worst": -18.35,
-    "best": 83.85
+    "best": 83.85,
+    "bench_n": 123,
+    "bench_avg_return": 3.15,
+    "excess_return": -0.11,
+    "beat_rate": 0.3333
    }
   }
  },
