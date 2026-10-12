@@ -1915,7 +1915,7 @@ async function _renderLabCurrent(){
     <table style="margin-bottom:10px;">
       <tr><td style="white-space:nowrap;font-weight:700;">① 雙篩選</td><td>BUY 訊號＋CV夏普 ≥ 0.3＋CV勝率 ≥ 40%＋CV最大回檔 ≤ 20%</td></tr>
       <tr><td style="white-space:nowrap;font-weight:700;">② 行動清單閘門</td><td>乖離 MA10 ≤ 2%（現價相對 MA10，避免追高）</td></tr>
-      <tr><td style="white-space:nowrap;color:var(--sub);">只當標籤</td><td style="color:var(--sub);">族群強弱（2026-09-24 起不再過濾）、⚡ 動能評級 A/B/C（見下方）</td></tr>
+      <tr><td style="white-space:nowrap;color:var(--sub);">只當標籤</td><td style="color:var(--sub);">族群強弱（2026-09-24 起不再過濾）、⚡ 動能評級 A/B/C（見下方）、趨勢評分（強力買入 xx/100）、KDJ／MACD、籌碼分層</td></tr>
     </table>
     ${rows?`<div style="font-size:12px;color:var(--sub);margin-bottom:6px;">以現行規則重建歷史行動清單的回測（停利18%／停損15%，與實驗室主出場一致）：</div>
     <div style="overflow-x:auto;"><table>
@@ -2205,25 +2205,27 @@ function renderDaily(data){
   </div>`:''}
   <details class="info-box" style="margin-bottom:16px;">
     <summary>雙篩選邏輯說明</summary>
-    <div style="margin-top:10px;line-height:2;">三層條件依序過濾，通過才列入推薦，並以第三層加權評分輸出買入建議：</div>
+    <div style="margin-top:10px;line-height:2;">①② 兩關都過才列入「🎯 今日行動清單」；只過 ① 者列於「📋 雙篩選命中、未進今日行動清單」。③ 趨勢評分只附在卡片上，不參與篩選：</div>
     <table>
       <tr><th>篩選層</th><th>條件</th><th>用意</th></tr>
       <tr>
-        <td><b style="color:var(--blue);">第一篩｜族群面</b></td>
-        <td>族群 20日漲幅排名前段 且 RSI5 &gt; 60（族群輪動強勢）</td>
-        <td>只選處於資金輪動期的強勢族群，避免逆勢操作</td>
+        <td><b style="color:var(--blue);">① 雙篩選</b></td>
+        <td>BUY 訊號（MA5 近 5 日上穿 MA20 且交叉日 RSI5 &lt; 65，或多頭延續：MA5 &gt; MA20、RSI5 &lt; 65、收盤站上 MA5）
+          ＋CV夏普 ≥ 0.3＋CV勝率 ≥ 40%＋CV最大回檔 ≤ 20%</td>
+        <td>技術訊號成立，且該股以同一策略做 walk-forward 交叉驗證的績效合格</td>
       </tr>
       <tr>
-        <td><b style="color:var(--green);">第二篩｜個股面</b></td>
-        <td>RSI5 介於 40–65（未過熱）且 20日漲幅 &gt; 3% 且 CV 夏普 &gt; 0.5</td>
-        <td>個股技術健康、尚未超漲，風報比佳（訊號為 BUY）</td>
+        <td><b style="color:var(--green);">② 行動清單閘門</b></td>
+        <td>乖離 MA10 ≤ 2%（(現價 − MA10) ÷ MA10）</td>
+        <td>只進貼近均線者，避免追高</td>
       </tr>
       <tr>
-        <td><b style="color:var(--yellow);">第三篩｜趨勢評分</b></td>
+        <td><b style="color:var(--yellow);">③ 趨勢評分（參考）</b></td>
         <td>MA/MACD/RSI/量能 100分制綜合評分，再以族群強弱與 CV 夏普加權</td>
-        <td>輸出「強力買入／買入／持有／觀望／賣出」五級建議，越高越值得進場</td>
+        <td>輸出「強力買入／買入／持有／觀望／賣出」五級建議，僅供參考、不影響入選</td>
       </tr>
     </table>
+    <div style="margin-top:6px;color:var(--sub);">族群強勢（20 日平均漲幅 &gt; 3%）於 2026-09-24 前另為一道閘門，之後改為標籤、不再排除。</div>
     <div style="margin-top:12px;color:var(--sub);line-height:1.9;">
       <b style="color:var(--text);">評分加權說明：</b><br>
       &nbsp;&nbsp;⬆ 強勢族群（當日掃描列為強勢）：<b style="color:var(--green);">+18 分</b>，資金輪動有利<br>
@@ -2237,11 +2239,18 @@ function renderDaily(data){
     </div>
   </details>`;
 
+  const sectorGateOn = date < '20260924';  // daily_scan.REQUIRE_STRONG_SECTOR 於 2026-09-24 改為 False
   if(qualified&&qualified.length){
     // ── 今日行動清單 ──────────────────────────────────────────────
     window._PM_CACHE = window._PM_CACHE || {};
     qualified.forEach(q=>{ if(q.product_mix) window._PM_CACHE[q.id]=q.product_mix; });
-    html+=`<div class="section-title">🎯 今日行動清單（${qualified.length} 檔）</div><div class="action-grid">`;
+    html+=`<div class="section-title">🎯 今日行動清單（${qualified.length} 檔）</div>
+    <div style="font-size:11px;color:var(--sub);margin:-6px 0 10px;line-height:1.7;">
+      <b style="color:var(--text)">入選條件（須全部符合）</b>：① 雙篩選＝BUY 訊號＋CV夏普≥0.3＋CV勝率≥40%＋CV最大回檔≤20%；
+      ② 乖離 MA10≤2%${sectorGateOn?'；另需所屬族群強勢（20 日平均漲幅＞3%，2026-09-24 起取消）':''}。<br>
+      BUY 訊號＝MA5 近 5 日上穿 MA20（交叉日 RSI5＜65）且仍在其上，或多頭延續（MA5＞MA20、RSI5＜65、收盤站上 MA5）。<br>
+      卡片上的趨勢評分（強力買入 xx/100）、⚡動能評級、族群強弱、KDJ／MACD、籌碼、乖離徽章皆<b>僅供參考，不影響入選</b>。
+    </div><div class="action-grid">`;
     // 籌碼分層排序：加持在前、背離殿後（分層僅顯示參考，不影響入選）
     const _chipTierOf=q=>((stocks||[]).find(s=>s.id===q.id)||{}).chipTier;
     const _chipTierRank={strong:0,weak:2};
@@ -2360,15 +2369,23 @@ function renderDaily(data){
         📋 雙篩選命中、未進今日行動清單（${dfExcluded.length} 檔）
       </summary>
       <div style="font-size:11px;color:var(--sub);margin:6px 0 10px;">
-        這些個股符合舊版雙篩選（BUY + CV夏普≥0.3 + CV勝率≥0.4 + 回撤≤20%），
-        但乖離率超過閘門（MA10 +2%）被排除，僅供參考，不建議進場。族群強弱自 2026-09-24 起改為標籤、不再排除。
+        這些個股通過 ① 雙篩選（BUY 訊號＋CV夏普≥0.3＋CV勝率≥40%＋CV最大回檔≤20%），
+        ${sectorGateOn
+          ?'但未過 ② 乖離 MA10≤2% 或族群強勢閘門而被排除'
+          :'但未過 ② 乖離 MA10≤2%（追高）而被排除'}，僅供參考，不建議進場。族群強弱自 2026-09-24 起改為標籤、不再排除。
       </div>
       <div class="action-grid">
         ${dfExcluded.map(d => {
-          const failBias = d.passes_bias === false;
-          const failSector = d.sector_strong === false;
+          const failSector = sectorGateOn && d.sector_strong === false;
+          // 清單＝雙篩選命中但未入選；排除族群閘門後只剩乖離閘門可擋，故 passes_bias 為 true 仍視為乖離未過
+          // （舊資料的 passes_bias 以四捨五入值判斷，2.04% 會誤標為通過）
+          const failBias = d.passes_bias === false || !failSector;
           const reasons2 = [];
-          if (failBias) reasons2.push(`乖離MA10 ${d.bias_ma10 != null ? (d.bias_ma10 >= 0 ? '+' : '') + d.bias_ma10 + '%' : '—'}（超過 2%）`);
+          if (failBias) {
+            const b = d.bias_ma10;
+            const bTxt = b != null ? (b >= 0 ? '+' : '') + b + '%' : '—';
+            reasons2.push(`乖離MA10 ${bTxt}（${b != null && b <= 2 ? '略超 2%，顯示值已四捨五入' : '超過 2%'}）`);
+          }
           if (failSector) reasons2.push('所屬族群非強勢');
           const ta2 = d.trend_analysis || {};
           const sig2 = ta2.buy_signal || '—';
