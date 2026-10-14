@@ -1,18 +1,23 @@
 name: 台股每日掃描
 
 on:
+  # 主排程不靠 GitHub schedule：它是 best-effort，2026-09～10 實測每天延遲 5～9 小時
+  # （15:23 的 cron 實際 22:00～00:50 才跑）。改由 Apps Script（gas/dispatch.gs）
+  # 於交易日 20:15～20:45 呼叫 workflow_dispatch API（auto=true），dispatch 是即時的。
+  # 不早於 20:00：FinMind 個股法人買賣表官方更新時間為 20:00（日 K 17:30），
+  # fetch_chip_data 拿不到當日資料時會默默沿用前一日，跑太早不會報錯。
   schedule:
-    # GitHub 的 schedule 事件是 best-effort：整點與半點（:00 / :30）是全平台
-    # 最壅塞的時段，事件會被延遲數小時甚至直接丟棄。故一律避開整點/半點。
-    # 主排程：15:23 台灣時間 = 07:23 UTC，週一至週五
-    # （15:00 後 FinMind 三大法人籌碼資料才齊全）
-    - cron: '23 7 * * 1-5'
+    # 備援：外部排程失效（PAT 過期等）時補跑；當日報告已存在則由 check job 跳過。
+    # 22:17 台灣時間 = 14:17 UTC，排在外部排程跑完之後；避開整點/半點（排程壅塞）
+    - cron: '17 14 * * 1-5'
     # 週報不另設排程：當週最後一個交易日（週五休市則提前，見 check job）
     # 的日掃描直接接著跑週報。回測更新另見 weekly_backtest.yml（晚間，避開 FinMind 額度）。
-    # 備援排程：20:13 台灣時間 = 12:13 UTC。主排程被 GitHub 丟棄時補跑；
-    # 當日報告已存在則由 check job 直接跳過，不會重複消耗 Gemini 額度。
-    - cron: '13 12 * * 1-5'
   workflow_dispatch:   # 允許手動觸發
+    inputs:
+      auto:
+        description: '外部排程觸發（休市日跳過）；手動執行請保持未勾選'
+        type: boolean
+        default: false
 
 # 防止同日多次 run 並發衝突。cancel-in-progress 設 false：舊版週五 07:38 的週報
 # 事件曾攔腰砍掉 07:23 的日掃描，且 GitHub 補送積壓的 cron 事件時也會誤殺
@@ -31,7 +36,13 @@ jobs:
       weekly: ${{ steps.decide.outputs.weekly }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # 取分支最新狀態而非事件當下的 commit：備援 run 若排隊等過外部排程那次，
+          # 才看得到它剛 commit 的當日報告，不會整套重跑
+          ref: ${{ github.ref }}
       - id: decide
+        env:
+          AUTO: ${{ github.event.inputs.auto }}
         run: |
           SCHED="${{ github.event.schedule }}"
           # daily_scan.py 以 datetime.now()（runner 為 UTC）命名輸出目錄，
@@ -43,14 +54,18 @@ jobs:
           # 註：GitHub 預設 shell 帶 -e，不可用 `[ ... ] && RUN=false`
           # （判斷為偽時整段 script 會中止）
           # 休市日不掃描（手動觸發除外）：否則會以前一日資料產出重複報告（5/1、6/19 曾發生）
-          if [ -n "$SCHED" ] && [ "$TRADING" = "false" ]; then RUN=false; fi
-          if [ "$SCHED" = '13 12 * * 1-5' ] && [ "$TRADING" = "true" ]; then
-            # 備援：主排程已產出當日報告就跳過；最後交易日另檢查週報，缺則補跑
+          if { [ -n "$SCHED" ] || [ "$AUTO" = "true" ]; } && [ "$TRADING" = "false" ]; then RUN=false; fi
+          if [ -n "$SCHED" ] && [ "$TRADING" = "true" ]; then
+            # 備援：外部排程已產出當日報告就跳過；最後交易日另檢查週報，缺則補跑
             if [ -d "daily_reports/$TODAY" ]; then RUN=false; fi
             if [ "$WEEKLY" = "true" ] && [ ! -d "daily_reports/weekly_$TODAY" ]; then RUN=true; fi
+            # 延遲跨過 UTC 午夜（台灣 08:00）時 TODAY 已是隔日，會拿前一日資料產出隔日報告。
+            # cron 為 14:17 UTC，早於 14 點的備援 run 必是前一日延遲過來的
+            if [ "$(date -u +%-H)" -lt 14 ]; then RUN=false; fi
           fi
           if [ "$RUN" = "false" ]; then WEEKLY=false; fi
-          echo "排程=${SCHED:-手動} 日期=$TODAY 交易日=$TRADING → run=$RUN weekly=$WEEKLY"
+          if [ -n "$SCHED" ]; then SRC="備援排程"; elif [ "$AUTO" = "true" ]; then SRC="外部排程"; else SRC="手動"; fi
+          echo "觸發=$SRC 日期=$TODAY 交易日=$TRADING → run=$RUN weekly=$WEEKLY"
           echo "run=$RUN" >> "$GITHUB_OUTPUT"
           echo "weekly=$WEEKLY" >> "$GITHUB_OUTPUT"
 
