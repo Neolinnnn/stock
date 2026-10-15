@@ -193,6 +193,21 @@ FinMind 日 K（`TaiwanStockPrice`）為未還原價，分割、減資、除權�
 
 ---
 
+## 每日掃描排程
+
+| 觸發 | 時間（台灣） | 行為 |
+|------|-------------|------|
+| Apps Script（`gas/dispatch.gs`）→ `workflow_dispatch`，`auto=true` | 週一～五 20:15～20:45 | 主排程；休市日跳過 |
+| GitHub `schedule`（`17 14 * * 1-5`） | 22:17（實際常延遲數小時） | 備援；當日報告已存在則跳過 |
+| 手動 Run workflow（`auto` 不勾） | 任意 | 一律執行，含休市日 |
+
+- **不以 GitHub schedule 當主排程**：2026-09～10 實測每天延遲 5～9 小時；`workflow_dispatch` 是即時的
+- **不早於 20:00**：FinMind 官方更新時間為日 K 17:30、PER 18:00、個股法人買賣表 20:00。
+  `fetch_chip_data` 拿不到當日法人資料時會默默沿用前一日，跑太早不會報錯
+- 備援 run 若延遲跨過 UTC 午夜，`TODAY` 會變隔日，check job 會直接跳過，不會產出錯日期的報告
+
+---
+
 ## 專案結構
 
 ```
