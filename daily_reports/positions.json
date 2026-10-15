@@ -1,5 +1,5 @@
 {
-  "updated": "20261014",
+  "updated": "20261015",
   "open": [
     {
       "id": "3231",
@@ -98,18 +98,6 @@
       "days_since_high": 0
     },
     {
-      "id": "2408",
-      "name": "南亞科",
-      "signal_date": "20261006",
-      "signal_price": 525.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261006",
-      "entry_price": 525.0,
-      "high_watermark": 525.0,
-      "days_since_high": 0
-    },
-    {
       "id": "2449",
       "name": "京元電子",
       "signal_date": "20261006",
@@ -143,6 +131,18 @@
       "entry_date": "20261008",
       "entry_price": 177.0,
       "high_watermark": 177.0,
+      "days_since_high": 0
+    },
+    {
+      "id": "2379",
+      "name": "瑞昱",
+      "signal_date": "20261015",
+      "signal_price": 764.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
@@ -257,6 +257,22 @@
       "exit_date": "20260728",
       "exit_price": 109.5,
       "return_pct": -19.49,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2408",
+      "name": "南亞科",
+      "signal_date": "20261006",
+      "signal_price": 525.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261006",
+      "entry_price": 525.0,
+      "high_watermark": 525.0,
+      "days_since_high": 0,
+      "exit_date": "20261015",
+      "exit_price": 439.5,
+      "return_pct": -16.29,
       "exit_reason": "SL"
     }
   ]

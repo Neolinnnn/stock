@@ -1,8 +1,29 @@
 {
- "date": "20261014",
- "generated_at": "2026-10-14 12:58",
+ "date": "20261015",
+ "generated_at": "2026-10-15 12:25",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "3535",
+   "close": 94.5,
+   "vol_ratio": 3.58,
+   "dist_ma20": 5.11,
+   "ret20": 14.41,
+   "last_date": "2026-10-15",
+   "chip5": 256885.0,
+   "name": "晶彩科"
+  },
+  {
+   "id": "3034",
+   "close": 565.0,
+   "vol_ratio": 1.73,
+   "dist_ma20": 3.72,
+   "ret20": 1.62,
+   "last_date": "2026-10-15",
+   "chip5": 6129096.0,
+   "name": "聯詠"
+  }
+ ],
  "backtest_ref": {
   "n": 274,
   "tp18sl15_win": 0.648,
