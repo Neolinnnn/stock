@@ -1,5 +1,5 @@
 {
-  "updated": "20261015",
+  "updated": "20261016",
   "open": [
     {
       "id": "3231",
@@ -138,11 +138,11 @@
       "name": "瑞昱",
       "signal_date": "20261015",
       "signal_price": 764.0,
-      "status": "pending_entry",
+      "status": "holding",
       "phase": 1,
-      "entry_date": null,
-      "entry_price": null,
-      "high_watermark": null,
+      "entry_date": "20261016",
+      "entry_price": 778.0,
+      "high_watermark": 778.0,
       "days_since_high": 0
     }
   ],
