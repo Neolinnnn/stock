@@ -1,8 +1,19 @@
 {
- "date": "20261019",
- "generated_at": "2026-10-19 08:51",
+ "date": "20261021",
+ "generated_at": "2026-10-21 11:27",
  "taiex_bull": true,
- "picks": [],
+ "picks": [
+  {
+   "id": "3231",
+   "close": 195.0,
+   "vol_ratio": 1.92,
+   "dist_ma20": 4.92,
+   "ret20": 4.56,
+   "last_date": "2026-10-21",
+   "chip5": 23311749.0,
+   "name": "緯創"
+  }
+ ],
  "backtest_ref": {
   "n": 277,
   "tp18sl15_win": 0.6417,
