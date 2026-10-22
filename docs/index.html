@@ -1889,20 +1889,26 @@ function _renderLabFilters(){
 
 // ── 現行規則（daily_scan：BUY＋雙篩選＋乖離MA10≤2%）＋以現行規則重建的行動清單回測 ──
 // 數字來自每週回測 backtest_summary_al.json（backtest.py --action-list）；規則文字改了要與 daily_scan 同步
+// 每週回測的 12m 為固定停利停損（--fixed）、12m_tr 為追蹤停損；36m 也是追蹤停損，故只列近 12 個月兩種出場。
+// LAB_DATA_FIXED：撤銷歷史報告 CV 回填（scripts/restore_cv_asof.py）的日期；回測迄日早於此日＝修正前的舊結果
+const LAB_DATA_FIXED='20261022';
 async function _renderLabCurrent(){
   const el=document.getElementById('lab-current');
   if(!el) return;
   let a=null;
   try{ a=await fetchJSON('./backtest_summary_al.json?v='+Math.floor(Date.now()/3600000)); }catch{}
   const COMBO='TP18_SL15';   // 與實驗室主出場一致；不挑各期最佳組合（事後挑最佳有樂觀偏誤）
-  let stale=false;
-  const rows=['12m','36m'].map(k=>{
-    const p=a&&a.periods&&a.periods[k], s=p&&p.combos&&p.combos[COMBO]&&p.combos[COMBO].stats;
+  let stale=false, preFix=false;
+  const rows=[['12m','固定停利18%／停損15%'],['12m_tr','追蹤停損15%']].map(([k,exitLbl])=>{
+    const p=a&&a.periods&&a.periods[k], c=p&&p.combos&&p.combos[COMBO], s=c&&c.stats;
     if(!s||!s.settled) return '';
     if(s.excess_return==null) stale=true;
+    // 訊號實際起日（期間起日之後第一筆訊號）
+    const first=(c.trades||[]).map(t=>t.signal_date).filter(Boolean).sort()[0]||p.date_range.start;
+    if(p.date_range.end<LAB_DATA_FIXED) preFix=true;
     const vs=s.excess_return==null?'<span style="color:var(--sub)">待更新</span>'
       :`<span class="${s.excess_return>0?'up':s.excess_return<0?'dn':''}">${(s.excess_return>0?'+':'')+s.excess_return.toFixed(1)}pp</span>`;
-    return `<tr><td>${escHtml(p.label)}<div style="font-size:10px;color:var(--sub)">${p.date_range.start}~${p.date_range.end}</div></td>
+    return `<tr><td>${exitLbl}<div style="font-size:10px;color:var(--sub)">訊號 ${first}~${p.date_range.end}</div></td>
       <td>${s.settled}<span style="font-size:10px;color:var(--sub)">（持有中 ${s.open_count}）</span></td>
       <td>${Math.round(s.win_rate_settled*100)}%</td>
       <td class="${s.avg_return>0?'up':'dn'}">${s.avg_return>0?'+':''}${s.avg_return}%</td>
@@ -1917,9 +1923,10 @@ async function _renderLabCurrent(){
       <tr><td style="white-space:nowrap;font-weight:700;">② 行動清單閘門</td><td>乖離 MA10 ≤ 2%（現價相對 MA10，避免追高）</td></tr>
       <tr><td style="white-space:nowrap;color:var(--sub);">只當標籤</td><td style="color:var(--sub);">族群強弱（2026-09-24 起不再過濾）、⚡ 動能評級 A/B/C（見下方）、趨勢評分（強力買入 xx/100）、KDJ／MACD、籌碼分層</td></tr>
     </table>
-    ${rows?`<div style="font-size:12px;color:var(--sub);margin-bottom:6px;">以現行規則重建歷史行動清單的回測（停利18%／停損15%，與實驗室主出場一致）：</div>
+    ${rows?`<div style="font-size:12px;color:var(--sub);margin-bottom:6px;">以現行規則重建歷史行動清單的回測（近 12 個月；停利／停損組合 18%／15%）：</div>
+    ${preFix?`<div style="font-size:11px;color:var(--yellow);margin-bottom:6px;">⚠️ 此回測產生於歷史資料修正前：2025-04～2026-05 的報告曾被事後回填 CV（前視偏差），數字偏高。下次每週回測（當週最後交易日晚間）會以修正後的資料重跑。</div>`:''}
     <div style="overflow-x:auto;"><table>
-      <tr><th>期間</th><th>已結算</th><th>勝率</th><th>平均報酬</th><th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th><th>平均持有</th></tr>${rows}
+      <tr><th>出場</th><th>已結算</th><th>勝率</th><th>平均報酬</th><th title="逐筆減去同進出場日 0050 報酬後平均">vs 0050</th><th>平均持有</th></tr>${rows}
     </table></div>`:'<div style="font-size:12px;color:var(--sub);">尚無行動清單回測資料</div>'}
     <div style="font-size:11px;color:var(--sub);line-height:1.7;margin-top:6px;">
       歷史報告無 CV最大回檔，重建時未套用此項。${stale?'vs 0050「待更新」＝此回測產生於 0050 比較上線前，下次每週回測（當週最後交易日晚間）後補上。':''}
