@@ -1,5 +1,5 @@
 {
-  "updated": "20261023",
+  "updated": "20261027",
   "open": [
     {
       "id": "3231",
@@ -59,18 +59,6 @@
       "entry_date": "20261001",
       "entry_price": 546.0,
       "high_watermark": 546.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "8358",
-      "name": "金居",
-      "signal_date": "20261001",
-      "signal_price": 505.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261001",
-      "entry_price": 505.0,
-      "high_watermark": 505.0,
       "days_since_high": 0
     },
     {
@@ -273,6 +261,22 @@
       "exit_date": "20261015",
       "exit_price": 439.5,
       "return_pct": -16.29,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "8358",
+      "name": "金居",
+      "signal_date": "20261001",
+      "signal_price": 505.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261001",
+      "entry_price": 505.0,
+      "high_watermark": 505.0,
+      "days_since_high": 0,
+      "exit_date": "20261027",
+      "exit_price": 420.5,
+      "return_pct": -16.73,
       "exit_reason": "SL"
     }
   ]
