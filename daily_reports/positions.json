@@ -1,5 +1,5 @@
 {
-  "updated": "20261027",
+  "updated": "20261028",
   "open": [
     {
       "id": "3231",
@@ -131,6 +131,18 @@
       "entry_date": "20261016",
       "entry_price": 778.0,
       "high_watermark": 778.0,
+      "days_since_high": 0
+    },
+    {
+      "id": "6213",
+      "name": "聯茂",
+      "signal_date": "20261028",
+      "signal_price": 778.0,
+      "status": "pending_entry",
+      "phase": 1,
+      "entry_date": null,
+      "entry_price": null,
+      "high_watermark": null,
       "days_since_high": 0
     }
   ],
