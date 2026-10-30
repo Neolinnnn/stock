@@ -1,5 +1,5 @@
 {
-  "updated": "20261029",
+  "updated": "20261030",
   "open": [
     {
       "id": "3231",
@@ -50,18 +50,6 @@
       "days_since_high": 0
     },
     {
-      "id": "2455",
-      "name": "全新",
-      "signal_date": "20260930",
-      "signal_price": 552.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261001",
-      "entry_price": 546.0,
-      "high_watermark": 546.0,
-      "days_since_high": 0
-    },
-    {
       "id": "3264",
       "name": "欣銓",
       "signal_date": "20261002",
@@ -95,18 +83,6 @@
       "entry_date": "20261006",
       "entry_price": 298.0,
       "high_watermark": 298.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "2441",
-      "name": "超豐",
-      "signal_date": "20261006",
-      "signal_price": 126.5,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261006",
-      "entry_price": 126.5,
-      "high_watermark": 126.5,
       "days_since_high": 0
     },
     {
@@ -289,6 +265,38 @@
       "exit_date": "20261027",
       "exit_price": 420.5,
       "return_pct": -16.73,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2455",
+      "name": "全新",
+      "signal_date": "20260930",
+      "signal_price": 552.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261001",
+      "entry_price": 546.0,
+      "high_watermark": 546.0,
+      "days_since_high": 0,
+      "exit_date": "20261030",
+      "exit_price": 447.0,
+      "return_pct": -18.13,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2441",
+      "name": "超豐",
+      "signal_date": "20261006",
+      "signal_price": 126.5,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261006",
+      "entry_price": 126.5,
+      "high_watermark": 126.5,
+      "days_since_high": 0,
+      "exit_date": "20261030",
+      "exit_price": 106.5,
+      "return_pct": -15.81,
       "exit_reason": "SL"
     }
   ]
