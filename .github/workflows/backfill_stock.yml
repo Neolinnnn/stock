@@ -1,0 +1,93 @@
+name: 單檔歷史補建
+
+# 新加入 daily_scan.SECTORS 的個股，以「截至當日」的資料補進既有每日報告
+# （scripts/backfill_stock.py）。先以同族群參考股逐欄比對，確認重算與當日掃描
+# 完全一致才寫入；比對不符即中止，不 commit。
+on:
+  workflow_dispatch:
+    inputs:
+      stock_id:
+        description: '股票代碼（須已加入 daily_scan.SECTORS，例 6669）'
+        required: true
+        type: string
+      sector:
+        description: '所屬族群（與 SECTORS 的 key 相同，例 AI伺服器）'
+        required: true
+        type: string
+      start:
+        description: '補建起日 YYYYMMDD'
+        required: true
+        type: string
+      end:
+        description: '補建迄日 YYYYMMDD（留空＝最新一份報告）'
+        required: false
+        default: ''
+        type: string
+      verify_with:
+        description: '同族群參考股（空白分隔），重算須與報告逐欄一致才補建'
+        required: true
+        default: '2382 3231'
+        type: string
+
+# 與日掃描、每週回測同一群組排隊，避免同時 commit／push daily_reports
+concurrency:
+  group: daily-scan-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+      FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+      SID: ${{ github.event.inputs.stock_id }}
+      SECTOR: ${{ github.event.inputs.sector }}
+      START: ${{ github.event.inputs.start }}
+      END: ${{ github.event.inputs.end }}
+      REFS: ${{ github.event.inputs.verify_with }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt
+
+      - name: Verify reference stocks
+        run: |
+          for ref in $REFS; do
+            python scripts/backfill_stock.py "$ref" --sector "$SECTOR" \
+              --start "$START" ${END:+--end "$END"} --verify
+          done
+
+      - name: Backfill
+        run: |
+          python scripts/backfill_stock.py "$SID" --sector "$SECTOR" \
+            --start "$START" ${END:+--end "$END"}
+
+      - name: Commit result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add daily_reports/
+          if git diff --cached --quiet; then
+            echo "無新增內容"
+            exit 0
+          fi
+          git commit -m "data: 補建 ${SID} 歷史掃描列 ${START}～${END:-最新}（截至當日資料）"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            echo "Push 失敗，第 ${i} 次重試..."
+            sleep $((i * 5))
+          done

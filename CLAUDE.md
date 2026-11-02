@@ -182,6 +182,8 @@ Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序
   即時期僅 47%。兩者造成的改寫已由 `scripts/restore_cv_asof.py` 撤銷（只還原其後未再被改過的欄位）
 - 可以：當日重跑覆蓋當日報告、以截至當日的資料補建／重建歷史（`backfill_history.analyze_stock_on_date`）、
   更正股票代號或名稱誤植（只改受影響欄位，並在 commit 說明）
+- 新加入追蹤池的個股補進既有報告：`scripts/backfill_stock.py`（Actions「單檔歷史補建」）。
+  規則套**當日生效版本**——改了會影響報告內容的規則（訊號、閘門等），須在其 `RULE_CUTOVERS` 補一列
 
 ### 回測價格：含息還原價（自算）
 
