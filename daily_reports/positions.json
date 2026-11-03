@@ -1,5 +1,5 @@
 {
-  "updated": "20261102",
+  "updated": "20261103",
   "open": [
     {
       "id": "3231",
@@ -50,30 +50,6 @@
       "days_since_high": 0
     },
     {
-      "id": "3264",
-      "name": "欣銓",
-      "signal_date": "20261002",
-      "signal_price": 245.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261002",
-      "entry_price": 245.0,
-      "high_watermark": 245.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "8996",
-      "name": "高力",
-      "signal_date": "20261006",
-      "signal_price": 1600.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261006",
-      "entry_price": 1600.0,
-      "high_watermark": 1600.0,
-      "days_since_high": 0
-    },
-    {
       "id": "2449",
       "name": "京元電子",
       "signal_date": "20261006",
@@ -86,18 +62,6 @@
       "days_since_high": 0
     },
     {
-      "id": "2344",
-      "name": "華邦電",
-      "signal_date": "20261007",
-      "signal_price": 179.5,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261008",
-      "entry_price": 177.0,
-      "high_watermark": 177.0,
-      "days_since_high": 0
-    },
-    {
       "id": "2379",
       "name": "瑞昱",
       "signal_date": "20261015",
@@ -107,18 +71,6 @@
       "entry_date": "20261016",
       "entry_price": 778.0,
       "high_watermark": 778.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "6213",
-      "name": "聯茂",
-      "signal_date": "20261028",
-      "signal_price": 778.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261029",
-      "entry_price": 745.0,
-      "high_watermark": 745.0,
       "days_since_high": 0
     }
   ],
@@ -297,6 +249,70 @@
       "exit_date": "20261030",
       "exit_price": 106.5,
       "return_pct": -15.81,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "3264",
+      "name": "欣銓",
+      "signal_date": "20261002",
+      "signal_price": 245.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261002",
+      "entry_price": 245.0,
+      "high_watermark": 245.0,
+      "days_since_high": 0,
+      "exit_date": "20261103",
+      "exit_price": 195.0,
+      "return_pct": -20.41,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "8996",
+      "name": "高力",
+      "signal_date": "20261006",
+      "signal_price": 1600.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261006",
+      "entry_price": 1600.0,
+      "high_watermark": 1600.0,
+      "days_since_high": 0,
+      "exit_date": "20261103",
+      "exit_price": 1360.0,
+      "return_pct": -15.0,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2344",
+      "name": "華邦電",
+      "signal_date": "20261007",
+      "signal_price": 179.5,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261008",
+      "entry_price": 177.0,
+      "high_watermark": 177.0,
+      "days_since_high": 0,
+      "exit_date": "20261103",
+      "exit_price": 146.0,
+      "return_pct": -17.51,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "6213",
+      "name": "聯茂",
+      "signal_date": "20261028",
+      "signal_price": 778.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261029",
+      "entry_price": 745.0,
+      "high_watermark": 745.0,
+      "days_since_high": 0,
+      "exit_date": "20261103",
+      "exit_price": 600.0,
+      "return_pct": -19.46,
       "exit_reason": "SL"
     }
   ]
