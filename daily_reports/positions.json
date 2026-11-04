@@ -1,5 +1,5 @@
 {
-  "updated": "20261103",
+  "updated": "20261104",
   "open": [
     {
       "id": "3231",
@@ -47,18 +47,6 @@
       "entry_date": "20261001",
       "entry_price": 2510.0,
       "high_watermark": 2510.0,
-      "days_since_high": 0
-    },
-    {
-      "id": "2449",
-      "name": "京元電子",
-      "signal_date": "20261006",
-      "signal_price": 298.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261006",
-      "entry_price": 298.0,
-      "high_watermark": 298.0,
       "days_since_high": 0
     },
     {
@@ -313,6 +301,22 @@
       "exit_date": "20261103",
       "exit_price": 600.0,
       "return_pct": -19.46,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2449",
+      "name": "京元電子",
+      "signal_date": "20261006",
+      "signal_price": 298.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261006",
+      "entry_price": 298.0,
+      "high_watermark": 298.0,
+      "days_since_high": 0,
+      "exit_date": "20261104",
+      "exit_price": 248.5,
+      "return_pct": -16.61,
       "exit_reason": "SL"
     }
   ]
