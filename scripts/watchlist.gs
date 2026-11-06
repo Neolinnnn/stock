@@ -60,6 +60,8 @@ function handleList() {
       added_at,
       price:      t.price      !== undefined ? t.price      : '',
       change_pct: t.change_pct !== undefined ? t.change_pct : '',
+      // 成交值（元），首頁熱力圖以此決定方塊面積；舊版部署沒有此欄，前端會退回等權
+      trade_value: t.trade_value !== undefined ? t.trade_value : '',
       rsi:        s.rsi       || '',
       ret20:      s.ret20     || '',
       signal:     s.signal    || '',
@@ -168,7 +170,9 @@ function fetchTWSE() {
       const change    = parseFloat(changeStr);
       const prev      = (closing !== null && !isNaN(change)) ? closing - change : null;
       const pct       = (prev !== null && prev !== 0) ? +((change / prev) * 100).toFixed(2) : '';
-      map[id] = { name: item.Name || id, price: closing, change_pct: pct };
+      const value     = parseFloat((item.TradeValue || '').replace(/,/g, ''));
+      map[id] = { name: item.Name || id, price: closing, change_pct: pct,
+                  trade_value: isNaN(value) ? '' : value };
     });
     return map;
   } catch { return {}; }

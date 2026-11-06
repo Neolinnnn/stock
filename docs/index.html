@@ -158,6 +158,24 @@
   .btn-add-inline{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer;margin-left:4px;}
   .btn-add-inline:hover{background:var(--accent);color:#fff;}
 
+  /* 自選股熱力圖（首頁）：方塊以絕對定位排版，座標由 squarify() 算出 */
+  .hm-card{margin-bottom:16px;}
+  .hm-head{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-bottom:10px;}
+  .hm-head .card-title{margin:0;}
+  .hm-meta{font-size:11px;color:var(--sub);}
+  .hm-legend{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--sub);margin-left:auto;}
+  .hm-legend i{display:inline-block;width:18px;height:10px;border-radius:2px;}
+  .hm-box{position:relative;width:100%;overflow:hidden;border-radius:6px;background:var(--bg);}
+  .hm-sec{position:absolute;outline:1px solid var(--bg);}
+  .hm-sec-hd{position:absolute;left:0;right:0;top:0;height:16px;padding:0 5px;font-size:11px;line-height:16px;
+    color:var(--sub);background:#10141b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hm-tile{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:#fff;text-align:center;line-height:1.15;overflow:hidden;cursor:pointer;
+    box-shadow:inset 0 0 0 1px rgba(11,14,20,.85);text-shadow:0 1px 2px rgba(0,0,0,.45);}
+  .hm-tile:hover,.hm-tile:focus-visible{box-shadow:inset 0 0 0 2px #fff;outline:none;z-index:2;}
+  .hm-tile b{font-weight:700;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;padding:0 2px;}
+  .hm-tile span{font-variant-numeric:tabular-nums;opacity:.95;}
+
   /* 產銷組合 Modal */
   .pm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;}
   .pm-modal{background:var(--card);border:1px solid var(--border);border-radius:14px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;padding:22px 24px;}
@@ -645,6 +663,204 @@ async function wlRemove(id) {
     else showToast(`移除失敗：${data.error}`);
   } catch { showToast('移除失敗，請重試'); }
 }
+
+// ── 自選股熱力圖（首頁） ──────────────────────────────────────────────────────
+// 依族群分組的 treemap：面積 ∝ √成交值、顏色＝當日漲跌幅（沿用全站綠漲紅跌）。
+// 開根號是因為台積電成交值常是小型股的上百倍，線性面積會把小股壓成看不見的細條；
+// 開根號後仍保留「資金往哪裡流」的大小順序。舊版 Apps Script 未回傳 trade_value 時退回等權。
+// 報價來自 Apps Script（TWSE 最新收盤），與上方「所選日期」無關，故標題列會標明。
+const HM_CLAMP = 5;        // 顏色在 ±5% 封頂
+const HM_SEC_HD = 16;      // 族群標題列高度（px）
+let _hmSectorMap = null;   // id → 族群（stocks_index.json），載入成功才快取
+let _hmWlPromise = null;   // 進行中的自選清單請求，避免同時重複打 Apps Script
+let _hmLastW = 0;
+
+async function _hmLoad(force){
+  const jobs = [];
+  if(!_hmSectorMap){
+    jobs.push(fetchJSON('./stocks_index.json')
+      .then(arr => { _hmSectorMap = new Map(arr.map(s => [s.id, s.sector])); })
+      .catch(() => {}));   // 族群對照失敗不擋畫面，全歸「未分類」
+  }
+  if(force || !WL_DATA){
+    if(!_hmWlPromise){
+      _hmWlPromise = fetchJSON(`${APPS_SCRIPT_URL}?action=list`)
+        .then(d => { WL_DATA = d; })
+        .finally(() => { _hmWlPromise = null; });
+    }
+    jobs.push(_hmWlPromise);
+  }
+  await Promise.all(jobs);
+}
+
+async function _renderWlHeatmap(force=false){
+  const el = document.getElementById('wl-heatmap');
+  if(!el) return;
+  if(!APPS_SCRIPT_URL){ el.remove(); return; }
+  if(force || !WL_DATA){
+    el.innerHTML = _hmHeadHtml('') + '<div class="hm-meta" style="padding:24px 0;text-align:center">載入自選清單中…</div>';
+  }
+  try{
+    await _hmLoad(force);
+  }catch{
+    // await 期間使用者可能已切換日期，renderDaily 會換掉整個容器，須重新查詢
+    const cur = document.getElementById('wl-heatmap');
+    if(cur) cur.innerHTML = _hmHeadHtml('') +
+      '<div class="hm-meta" style="padding:12px 0">自選清單載入失敗，請按 ↻ 重試</div>';
+    return;
+  }
+  _hmDraw();
+}
+
+function _hmColor(p){
+  if(p == null) return '#2a2f3a';
+  const t = Math.sqrt(Math.min(Math.abs(p), HM_CLAMP) / HM_CLAMP); // 開根號讓 ±0.5% 也看得出色差
+  const base = [52, 58, 70], to = p >= 0 ? [30, 170, 90] : [205, 55, 50];
+  return `rgb(${base.map((b, i) => Math.round(b + (to[i] - b) * t)).join(',')})`;
+}
+
+function _hmPct(p){ return p == null ? '—' : `${p > 0 ? '+' : ''}${p.toFixed(2)}%`; }
+
+function _hmHeadHtml(meta){
+  const legend = [-HM_CLAMP, -3, -1, 0, 1, 3, HM_CLAMP]
+    .map(v => `<i style="background:${_hmColor(v)}" title="${_hmPct(v)}"></i>`).join('');
+  return `<div class="hm-head">
+    <div class="card-title">⭐ 自選股熱力圖</div>
+    <span class="hm-meta">${meta}</span>
+    <span class="hm-legend">−${HM_CLAMP}%${legend}+${HM_CLAMP}%</span>
+    <button class="date-nav" onclick="_renderWlHeatmap(true)" title="重新抓取最新報價">↻</button>
+  </div>`;
+}
+
+// Squarified treemap（Bruls et al. 2000）：items 需有正數 w，回傳 [{item,x,y,w,h}]
+function _squarify(items, x, y, w, h){
+  const out = [];
+  const total = items.reduce((t, it) => t + it.w, 0);
+  if(!(total > 0) || w <= 0 || h <= 0) return out;
+  const k = w * h / total;
+  let rest = items.map(it => ({it, a: it.w * k}));
+  // 一列中最差的長寬比；s 為該列貼齊的邊長
+  const worst = (row, s) => {
+    const sum = row.reduce((t, r) => t + r.a, 0);
+    const mx = Math.max(...row.map(r => r.a)), mn = Math.min(...row.map(r => r.a));
+    return Math.max(s * s * mx / (sum * sum), sum * sum / (s * s * mn));
+  };
+  while(rest.length){
+    const s = Math.min(w, h);
+    let n = 1, best = worst(rest.slice(0, 1), s);
+    while(n < rest.length){
+      const next = worst(rest.slice(0, n + 1), s);
+      if(next > best) break;
+      best = next; n++;
+    }
+    const row = rest.slice(0, n);
+    const sum = row.reduce((t, r) => t + r.a, 0);
+    if(w >= h){            // 沿短邊（高）排一欄
+      const cw = sum / h; let cy = y;
+      row.forEach(r => { const rh = r.a / cw; out.push({item: r.it, x, y: cy, w: cw, h: rh}); cy += rh; });
+      x += cw; w -= cw;
+    }else{                 // 沿短邊（寬）排一列
+      const rh = sum / w; let cx = x;
+      row.forEach(r => { const rw = r.a / rh; out.push({item: r.it, x: cx, y, w: rw, h: rh}); cx += rw; });
+      y += rh; h -= rh;
+    }
+    rest = rest.slice(n);
+  }
+  return out;
+}
+
+function _hmTileHtml(r, x, y, w, h){
+  const pct = _hmPct(r.pct);
+  const price = r.price !== '' && r.price != null && isFinite(Number(r.price)) ? Number(r.price).toFixed(2) : '—';
+  const tip = `${r.id} ${r.name}｜${r.sector}\n收盤 ${price}　漲跌 ${pct}`
+    + (r.tv > 0 ? `\n成交值 ${(r.tv / 1e8).toFixed(1)} 億` : '');
+  // 字級依方塊大小縮放：名稱要放得進寬度、兩行字要放得進高度
+  const fs = Math.max(9, Math.min(20, h / 3.2, w / (Math.max(r.name.length, 2) + 1.2)));
+  let inner = '';
+  if(w >= 26 && h >= 16){
+    inner = h >= fs * 2.6
+      ? `<b style="font-size:${fs.toFixed(1)}px">${escHtml(r.name)}</b><span style="font-size:${Math.max(9, fs * 0.8).toFixed(1)}px">${pct}</span>`
+      : `<span style="font-size:${Math.max(9, Math.min(fs, h * 0.6)).toFixed(1)}px">${pct}</span>`;
+  }
+  const id = escHtml(r.id);
+  return `<div class="hm-tile" role="button" tabindex="0" title="${escHtml(tip)}" aria-label="${escHtml(tip)}"
+    style="left:${x.toFixed(2)}px;top:${y.toFixed(2)}px;width:${w.toFixed(2)}px;height:${h.toFixed(2)}px;background:${_hmColor(r.pct)}"
+    onclick="goToStock('${id}')" onkeydown="if(event.key==='Enter')goToStock('${id}')">${inner}</div>`;
+}
+
+function _hmDraw(){
+  const el = document.getElementById('wl-heatmap');
+  if(!el || !WL_DATA) return;
+  const secOf = id => (_hmSectorMap && _hmSectorMap.get(id)) || '未分類';
+  const rows = (WL_DATA.stocks || []).map(s => {
+    const p = s.change_pct === '' || s.change_pct == null ? NaN : Number(s.change_pct);
+    const tv = Number(s.trade_value);
+    return {id: String(s.id), name: s.name || String(s.id), price: s.price,
+            pct: isFinite(p) ? p : null, tv: tv > 0 ? tv : 0, sector: secOf(String(s.id))};
+  });
+
+  if(!rows.length){
+    el.innerHTML = _hmHeadHtml('') + `<div class="hm-meta" style="padding:12px 0">
+      自選清單是空的 — 在下方表格按 ＋，或到「⭐ 自選清單」頁新增</div>`;
+    return;
+  }
+
+  // 面積權重：√成交值；停牌／無成交者給最小面積的六成，仍看得到
+  const roots = rows.filter(r => r.tv > 0).map(r => Math.sqrt(r.tv));
+  const byValue = roots.length > 0;
+  const floor = byValue ? Math.min(...roots) * 0.6 : 1;
+  rows.forEach(r => { r.w = byValue ? (r.tv > 0 ? Math.sqrt(r.tv) : floor) : 1; });
+
+  const groups = new Map();
+  rows.forEach(r => { if(!groups.has(r.sector)) groups.set(r.sector, []); groups.get(r.sector).push(r); });
+  const secs = [...groups].map(([name, items]) => {
+    items.sort((a, b) => b.w - a.w);
+    const valid = items.filter(r => r.pct != null);
+    return {name, items, w: items.reduce((t, r) => t + r.w, 0),
+            pct: valid.length ? valid.reduce((t, r) => t + r.pct, 0) / valid.length : null};
+  }).sort((a, b) => b.w - a.w);
+
+  const missing = rows.filter(r => r.pct == null).length;
+  const upd = WL_DATA.updated_at
+    ? new Date(WL_DATA.updated_at).toLocaleString('zh-TW', {timeZone: 'Asia/Taipei',
+        month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false})
+    : '';
+  const meta = [
+    `${rows.length} 檔`,
+    byValue ? '面積＝√成交值' : '等權（Apps Script 未回傳成交值）',
+    upd ? `報價更新 ${upd}` : '',
+    missing ? `${missing} 檔無報價` : '',
+    CUR_DATE && DATES.length && CUR_DATE !== DATES[0] ? `<span style="color:var(--yellow)">⚠ 顯示最新收盤，非 ${fmtDate(CUR_DATE)}</span>` : '',
+  ].filter(Boolean).join('・');
+
+  el.innerHTML = _hmHeadHtml(meta) + '<div class="hm-box"></div>';
+  const box = el.querySelector('.hm-box');
+  const W = box.clientWidth;
+  if(!W) return;   // 頁面隱藏中量不到寬度；切回首頁時 setPage 會重畫
+  const H = W < 600 ? Math.round(W * 0.95) : Math.round(Math.min(480, Math.max(300, W * 0.42)));
+  box.style.height = H + 'px';
+  _hmLastW = W;
+
+  let html = '';
+  _squarify(secs, 0, 0, W, H).forEach(({item: sec, x, y, w, h}) => {
+    const hd = h > HM_SEC_HD * 2.2 && w > 40 ? HM_SEC_HD : 0;
+    html += `<div class="hm-sec" style="left:${x.toFixed(2)}px;top:${y.toFixed(2)}px;width:${w.toFixed(2)}px;height:${h.toFixed(2)}px">`;
+    if(hd) html += `<div class="hm-sec-hd" title="${escHtml(sec.name)}：${sec.items.length} 檔，平均 ${_hmPct(sec.pct)}">${escHtml(sec.name)} <span style="color:${sec.pct == null ? 'var(--sub)' : sec.pct >= 0 ? 'var(--green)' : 'var(--red)'}">${_hmPct(sec.pct)}</span></div>`;
+    _squarify(sec.items, 0, hd, w, h - hd).forEach(t => { html += _hmTileHtml(t.item, t.x, t.y, t.w, t.h); });
+    html += '</div>';
+  });
+  box.innerHTML = html;
+}
+
+let _hmResizeT = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_hmResizeT);
+  _hmResizeT = setTimeout(() => {
+    const box = document.querySelector('#wl-heatmap .hm-box');
+    // 手機捲動時網址列伸縮也會觸發 resize，寬度沒變就不重畫
+    if(CUR_PAGE === 'daily' && box && box.clientWidth !== _hmLastW) _hmDraw();
+  }, 150);
+});
 
 // ── 輔助函式 ──────────────────────────────────────────────────────────────────
 function fmt(v,d=1){return v===''||v===null||v===undefined?'—':(typeof v==='number'?v.toFixed(d):v);}
@@ -2056,6 +2272,7 @@ function setPage(page){
   });
   document.getElementById('date-picker-wrap').style.display =
     page==='daily' ? '' : 'none';
+  if(page==='daily')     _hmDraw();   // 隱藏時量不到寬度，切回首頁補畫（也帶入自選清單頁的增刪）
   if(page==='weekly')    renderWeekly();
   if(page==='watchlist') loadWatchlist();
   if(page==='stock')     initStockPage();
@@ -2202,6 +2419,7 @@ function renderDaily(data){
     <div class="card"><div class="card-title">強勢族群（前5）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--green)">${top5Strong}</div></div>
     <div class="card"><div class="card-title">弱勢族群（後2）</div><div class="card-value" style="font-size:13px;line-height:1.7;color:var(--red)">${top2Weak||'無'}</div></div>
   </div>
+  <div id="wl-heatmap" class="card hm-card"></div>
   ${marketTempCard(_MKT_TEMP=marketTemp(positions, qualified))}
   ${hybridCard(positions)}
   ${coverage<100?`<div class="card" style="margin-bottom:8px;border-left:3px solid var(--yellow);padding:8px 14px">
@@ -2587,6 +2805,7 @@ function renderDaily(data){
   });
 
   document.getElementById('page-daily').innerHTML=html;
+  _renderWlHeatmap();
   _renderBreakoutSection();
   _fillEntryBt();
 }
