@@ -1,5 +1,5 @@
 {
-  "updated": "20261106",
+  "updated": "20261109",
   "open": [
     {
       "id": "3231",
@@ -11,18 +11,6 @@
       "entry_date": "20260921",
       "entry_price": 186.5,
       "high_watermark": 186.5,
-      "days_since_high": 0
-    },
-    {
-      "id": "2451",
-      "name": "創見",
-      "signal_date": "20260929",
-      "signal_price": 286.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20260929",
-      "entry_price": 286.0,
-      "high_watermark": 286.0,
       "days_since_high": 0
     },
     {
@@ -321,6 +309,22 @@
       "exit_date": "20261105",
       "exit_price": 182.0,
       "return_pct": -20.35,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2451",
+      "name": "創見",
+      "signal_date": "20260929",
+      "signal_price": 286.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20260929",
+      "entry_price": 286.0,
+      "high_watermark": 286.0,
+      "days_since_high": 0,
+      "exit_date": "20261109",
+      "exit_price": 239.0,
+      "return_pct": -16.43,
       "exit_reason": "SL"
     }
   ]
