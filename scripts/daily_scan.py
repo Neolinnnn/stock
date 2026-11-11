@@ -452,10 +452,11 @@ def fetch_news(stock_id, stock_name, days=3):
                 NEWS_STATS['filtered_out'] += 1
         return result
 
-    # 主要：用個股專屬 tag 端點（cnyes 標準做法）
+    # 主要：個股新聞端點（鉅亨網個股頁 www.cnyes.com/twstock/<id>/news 自用）
+    # 舊端點 newslist/category/tw_stock_id/<id> 於 2026-11 起回 404
     try:
-        url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock_id'
-               f'/{stock_id}?limit=10')
+        url = (f'https://api.cnyes.com/media/api/v1/newslist/TWS:{stock_id}:STOCK'
+               f'/symbolNews?limit=10')
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req, timeout=8) as r:
             data = _json.loads(r.read())
@@ -466,13 +467,14 @@ def fetch_news(stock_id, stock_name, days=3):
         if result:
             return _record(result)
     except Exception as e:
-        _news_err(stock_id, 'tag', e)
+        _news_err(stock_id, 'symbolNews', e)
 
     # 備援：關鍵字搜尋
     try:
         import urllib.parse
         q = urllib.parse.quote(f'{stock_id} {stock_name}')
-        url = f'https://api.cnyes.com/media/api/v1/newslist/search?q={q}&limit=10'
+        # 舊端點 newslist/search 已 404；新端點忽略 limit，固定回 20 則
+        url = f'https://api.cnyes.com/media/api/v1/search?q={q}&limit=10'
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req, timeout=8) as r:
             data = _json.loads(r.read())

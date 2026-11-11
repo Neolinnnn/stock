@@ -161,6 +161,87 @@ def test_news_time_is_taipei(monkeypatch):
     assert news and news[0]['datetime'] == '2025-11-11 00:00'
 
 
+def _mock_cnyes(monkeypatch, routes):
+    """依 URL 路徑片段回傳假回應；值為 dict 回 JSON，為 int 拋該 HTTP 錯誤碼。"""
+    import io
+    import json as _json
+    import urllib.error
+    import urllib.request
+    calls = []
+
+    class R:
+        def __init__(self, body): self.body = body
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return self.body
+
+    def fake_urlopen(req, timeout=None):
+        url = req.full_url
+        calls.append(url)
+        for frag, resp in routes.items():
+            if frag in url:
+                if isinstance(resp, int):
+                    raise urllib.error.HTTPError(url, resp, 'Not Found', {},
+                                                 io.BytesIO(b''))
+                return R(_json.dumps(resp).encode())
+        raise AssertionError(f'未預期的 URL：{url}')
+    monkeypatch.setattr(urllib.request, 'urlopen', fake_urlopen)
+    return calls
+
+
+def _news_stats_delta(fn):
+    before = dict(ds['NEWS_STATS'])
+    out = fn()
+    return out, {k: ds['NEWS_STATS'][k] - before[k] for k in before}
+
+
+def test_news_uses_symbol_news_endpoint(monkeypatch):
+    """主端點為 newslist/TWS:<id>:STOCK/symbolNews（舊 tw_stock_id 已 404）。"""
+    import time
+    now = int(time.time())
+    # symbolNews 實際回應欄位：無 media，標題不一定提到該股
+    calls = _mock_cnyes(monkeypatch, {'/symbolNews': {'items': {'data': [
+        {'newsId': 11, 'title': '外資近5日賣超個股', 'publishAt': now - 60,
+         'categoryName': '台股新聞', 'market': []},
+        {'newsId': 12, 'title': '台積電法說會釋利多', 'publishAt': now - 120,
+         'categoryName': '台股新聞', 'market': []},
+    ]}}})
+    news, d = _news_stats_delta(lambda: ds['fetch_news']('2330', '台積電'))
+    assert calls == ['https://api.cnyes.com/media/api/v1/newslist/'
+                     'TWS:2330:STOCK/symbolNews?limit=10']     # 有結果就不打備援
+    assert [n['title'] for n in news] == ['台積電法說會釋利多']
+    assert set(news[0]) == {'date', 'datetime', 'title', 'source', 'url'}
+    assert news[0]['source'] == '鉅亨網'
+    assert news[0]['url'] == 'https://news.cnyes.com/news/id/12'
+    assert d['with_news'] == 1 and d['api_items'] == 2 and d['api_failed'] == 0
+
+
+def test_news_falls_back_to_search_endpoint(monkeypatch):
+    """主端點失敗時改打 /media/api/v1/search，其回應格式同為 items.data。"""
+    import time
+    now = int(time.time())
+    calls = _mock_cnyes(monkeypatch, {
+        '/symbolNews': 404,
+        '/media/api/v1/search?': {'items': {'per_page': 20, 'data': [
+            {'newsId': 21, 'title': '鴻海10月營收創同期新高', 'publishAt': now - 60,
+             'titleWithKwd': '<mark>鴻海</mark>10月營收', 'content': '...'},
+            {'newsId': 22, 'title': '鴻海舊聞', 'publishAt': now - 10 * 86400},
+        ]}},
+    })
+    news, d = _news_stats_delta(lambda: ds['fetch_news']('2317', '鴻海'))
+    assert len(calls) == 2 and calls[1].startswith(
+        'https://api.cnyes.com/media/api/v1/search?q=2317%20')
+    assert [n['url'] for n in news] == ['https://news.cnyes.com/news/id/21']  # 舊聞被時效濾掉
+    assert d['with_news'] == 1 and d['api_failed'] == 0
+
+
+def test_news_both_endpoints_down_counts_api_failed(monkeypatch):
+    _mock_cnyes(monkeypatch, {'/symbolNews': 404, '/media/api/v1/search?': 404})
+    news, d = _news_stats_delta(lambda: ds['fetch_news']('2330', '台積電'))
+    assert news == []
+    assert d['api_failed'] == 1 and d['with_news'] == 0 and d['filtered_out'] == 0
+
+
 def test_scan_cache_fetches_duplicate_stock_once(monkeypatch):
     g = ds['scan_sector'].__globals__
     calls = []
