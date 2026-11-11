@@ -475,8 +475,10 @@ def fetch_chip_data(stock_id, days=5):
             for _, row in day_df.iterrows():
                 zh = _CHIP_MAP.get(str(row.get('name', '')))
                 if zh:
-                    # FinMind 的 buy/sell 單位是股，除 1000 轉為張
-                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0)) // 1000
+                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0))
+            # FinMind 的 buy/sell 單位是股，除 1000 轉為張。先以股累加、最後換成張並向零截斷：逐列 // 1000 會把 -500 股算成 -1 張、+500 股算成 0，偏向賣超
+            for k in ('外資', '投信', '自營'):
+                agg[k] = int(agg[k] / 1000)
             agg['合計'] = agg['外資'] + agg['投信'] + agg['自營']
             daily.append(agg)
 

@@ -92,3 +92,20 @@ def test_coverage_counts_stocks_not_sectors():
 def test_coverage_zero_when_all_failed():
     res = {'A': [{'id': '1', 'name': '1', 'error': 'x'}]}
     assert ds['build_summary']('20261111', {}, res, None)['scan_coverage'] == 0
+
+
+def test_chip_lots_truncate_toward_zero(monkeypatch):
+    import pandas as pd
+    df = pd.DataFrame([
+        # 外資兩列合計 -500+(-400) = -900 股 → 0 張（舊算法逐列 //1000 得 -2）
+        {'date': '2026-11-05', 'name': 'Foreign_Investor', 'buy': 0, 'sell': 500},
+        {'date': '2026-11-05', 'name': 'Foreign_Dealer_Self', 'buy': 0, 'sell': 400},
+        {'date': '2026-11-05', 'name': 'Investment_Trust', 'buy': 2500, 'sell': 0},
+        {'date': '2026-11-05', 'name': 'Dealer_self', 'buy': 0, 'sell': 1500},
+    ])
+    # run_path 回傳的是 globals 副本，須改函式實際使用的 __globals__（否則會真的打 FinMind）
+    monkeypatch.setitem(ds['fetch_chip_data'].__globals__, '_finmind_fetch',
+                        lambda *a, **k: df)
+    c = ds['fetch_chip_data']('2330')
+    # 自營 -1500 股 → -1 張（向零），外資不會因兩列各自取整變成 -2
+    assert (c['外資'], c['投信'], c['自營'], c['合計']) == (0, 2, -1, 1)

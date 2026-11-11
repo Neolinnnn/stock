@@ -301,7 +301,10 @@ def _chip_aggregate(df: 'pd.DataFrame') -> dict:
         for _, r in day.iterrows():
             zh = _MAP.get(str(r.get('name', '')))
             if zh:
-                agg[zh] += (int(r.get('buy', 0)) - int(r.get('sell', 0))) // 1000
+                agg[zh] += int(r.get('buy', 0)) - int(r.get('sell', 0))
+        # 先以股累加、最後換成張並向零截斷：逐列 // 1000 會把 -500 股算成 -1 張、+500 股算成 0，偏向賣超
+        for k in ('外資', '投信', '自營'):
+            agg[k] = int(agg[k] / 1000)
         agg['合計'] = agg['外資'] + agg['投信'] + agg['自營']
         rows.append(agg)
     return {
