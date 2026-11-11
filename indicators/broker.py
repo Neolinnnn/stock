@@ -1,9 +1,14 @@
 """
 TWSE 分點籌碼擷取模組
 
-資料來源：histock.tw 公開頁面（免費、免 token、不需 CAPTCHA）
-URL: https://histock.tw/stock/branch.aspx?no={stock_id}
-顯示前 15 大買超 / 前 15 大賣超分點（含 買張/賣張/淨超/均價）
+資料來源（依序嘗試，第一個有資料者採用；result['source'] 記錄實際來源）：
+  1. 富邦 e-Broker（MoneyDJ）主力進出：
+     https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco_{stock_id}_2.djhtm（近五日）
+  2. histock.tw：https://histock.tw/stock/branch.aspx?no={stock_id}
+兩者皆為公開頁面、免 token，提供前 15 大買超 / 前 15 大賣超分點（張）。
+
+⚠ 2026-11-11 實測：GitHub Actions runner 與雲端沙箱連 histock 皆回 HTTP 403（對方封鎖
+雲端主機來源），故改以富邦為主來源、histock 為備援。不應嘗試繞過封鎖。
 
 主要 API：
     fetch_broker_top15(stock_id) -> dict
@@ -11,15 +16,11 @@ URL: https://histock.tw/stock/branch.aspx?no={stock_id}
             'top_buyers':  [{'name', 'buy', 'sell', 'net', 'avg_price'}, ...],
             'top_sellers': [{'name', 'buy', 'sell', 'net', 'avg_price'}, ...],
             'net_concentration': int,        # top15_buy 張 - top15_sell 張
-            'source': 'histock' | None,
-            'error': str | None,
+            'source': 'fubon' | 'histock' | None,
+            'error': str | None,             # 全數失敗時列出各來源原因
         }
     main_force_score(broker_data) -> dict
         計算主力強度評分（0~100）與標籤
-
-⚠ 2026-11-11 實測：GitHub Actions runner 與雲端沙箱連 histock 皆回 HTTP 403（對方封鎖
-雲端主機來源），全數 fetch_failed，主力分數與籌碼分層因此一律為中性。daily_scan 結束時的
-「分點抓取 N/M 檔成功」會顯示此狀態。需改用其他合法資料來源，不應嘗試繞過封鎖。
 
 設計原則：
 - 失敗時不丟例外，回傳 error 欄位
@@ -46,7 +47,7 @@ except Exception:
     _SSL_CTX.verify_mode = ssl.CERT_NONE
 
 
-def _http_get(url: str, timeout: int = 8) -> str:
+def _http_get(url: str, timeout: int = 8, encoding: str = "utf-8") -> str:
     """抓取頁面；失敗時拋出例外，由呼叫端記錄原因（HTTP 403 與逾時要分得出來）。"""
     req = urllib.request.Request(
         url,
@@ -60,7 +61,7 @@ def _http_get(url: str, timeout: int = 8) -> str:
     )
     with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CTX) as resp:
         raw = resp.read()
-    return raw.decode("utf-8", errors="replace")
+    return raw.decode(encoding, errors="replace")
 
 
 def _to_int(s: str) -> Optional[int]:
@@ -134,6 +135,46 @@ def _parse_histock(html: str) -> tuple[list, list]:
     return buyers[:15], sellers[:15]
 
 
+# 富邦 e-Broker（MoneyDJ）主力進出頁：與 histock 同為前 15 大買超／賣超券商（張）。
+# histock 封鎖雲端來源後改為主來源（GitHub runner 可正常連線，2026-11-11 實測）。
+# 期間：預設頁為近一日，_2 近五日、_3 近十日、_4 近20日、_6 近60日
+FUBON_URL = "https://fubon-ebrokerdj.fbs.com.tw/z/zc/zco/zco_{sid}{suffix}.djhtm"
+_FUBON_PERIOD = {"1": "", "5": "_2", "10": "_3", "20": "_4", "60": "_6"}
+
+
+def _parse_fubon(html: str) -> tuple[list, list]:
+    """
+    解析富邦 zco 頁面。
+
+    每列 10 欄：左 5 為買超（券商 | 買進 | 賣出 | 買超 | 佔成交比重），
+    右 5 為賣超（券商 | 買進 | 賣出 | 賣超 | 佔成交比重）；賣超欄為正數，轉為負的 net。
+    頁面不提供均價，avg_price 為 None。
+    """
+    start = html.find("買超券商")
+    end = html.find("買超或賣超成本")
+    if start < 0:
+        return [], []
+    seg = html[start:end if end > start else len(html)]
+    buyers: list[dict] = []
+    sellers: list[dict] = []
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", seg, re.DOTALL | re.IGNORECASE):
+        cells = re.findall(r"<td[^>]*>(.*?)</td>", tr, re.DOTALL | re.IGNORECASE)
+        clean = [re.sub(r"<[^>]+>", "", c).replace("\xa0", " ").strip() for c in cells]
+        if len(clean) < 10 or "券商" in clean[0]:
+            continue
+        b_name, b_buy, b_sell, b_net = clean[0], _to_int(clean[1]), _to_int(clean[2]), _to_int(clean[3])
+        s_name, s_buy, s_sell, s_net = clean[5], _to_int(clean[6]), _to_int(clean[7]), _to_int(clean[8])
+        if b_name and b_net:
+            buyers.append({"name": b_name, "buy": b_buy or 0, "sell": b_sell or 0,
+                           "net": abs(b_net), "avg_price": None})
+        if s_name and s_net:
+            sellers.append({"name": s_name, "buy": s_buy or 0, "sell": s_sell or 0,
+                            "net": -abs(s_net), "avg_price": None})
+    buyers.sort(key=lambda x: x["net"], reverse=True)
+    sellers.sort(key=lambda x: x["net"])
+    return buyers[:15], sellers[:15]
+
+
 def _safe_float(s: str) -> Optional[float]:
     try:
         return float(re.sub(r"[^\d\.\-]", "", s))
@@ -160,24 +201,34 @@ def fetch_broker_top15(stock_id: str, period: str = "5") -> dict:
         "error": None,
     }
 
-    url = f"https://histock.tw/stock/branch.aspx?no={stock_id}&t={period}"
-    try:
-        html = _http_get(url, timeout=8)
-    except Exception as e:
-        # 保留原因：2026-11 實測 GitHub runner 與雲端沙箱皆失敗，需分得出 403／逾時
-        result["error"] = f"fetch_failed: {type(e).__name__}: {str(e)[:80]}"
-        _CACHE[cache_key] = result
-        return result
+    # 依序嘗試各來源，第一個有資料者採用；全數失敗時 error 列出各來源原因
+    sources = []
+    if period in _FUBON_PERIOD:
+        sources.append(("fubon", FUBON_URL.format(sid=stock_id, suffix=_FUBON_PERIOD[period]),
+                        "cp950", _parse_fubon))
+    sources.append(("histock", f"https://histock.tw/stock/branch.aspx?no={stock_id}&t={period}",
+                    "utf-8", _parse_histock))
+    errors = []
+    buyers = sellers = None
+    for name, url, enc, parse in sources:
+        try:
+            html = _http_get(url, timeout=8, encoding=enc)
+        except Exception as e:
+            errors.append(f"{name} fetch_failed: {type(e).__name__}: {str(e)[:60]}")
+            continue
+        try:
+            b, s_ = parse(html)
+        except Exception as e:
+            errors.append(f"{name} parse_failed: {e}")
+            continue
+        if not b and not s_:
+            errors.append(f"{name} no_data")
+            continue
+        buyers, sellers, result["source"] = b, s_, name
+        break
 
-    try:
-        buyers, sellers = _parse_histock(html)
-    except Exception as e:
-        result["error"] = f"parse_failed: {e}"
-        _CACHE[cache_key] = result
-        return result
-
-    if not buyers and not sellers:
-        result["error"] = "no_data"
+    if buyers is None:
+        result["error"] = "; ".join(errors)
         _CACHE[cache_key] = result
         return result
 
@@ -186,7 +237,6 @@ def fetch_broker_top15(stock_id: str, period: str = "5") -> dict:
     result["net_concentration"] = (
         sum(b["net"] for b in buyers) + sum(s["net"] for s in sellers)
     )
-    result["source"] = "histock"
 
     _CACHE[cache_key] = result
     time.sleep(0.6)  # 禮貌延遲
