@@ -29,6 +29,13 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
+# 以 `python scripts/daily_scan.py` 執行時 sys.path[0] 是 scripts/，repo 根目錄不在其中，
+# `from indicators.xxx import` 會 ModuleNotFoundError。scan_sector 把它當可選模組吞掉，
+# 結果 2026-07-03 起分點、主力分數、籌碼分層全數靜默為 None。放最前面優先於同名外部套件。
+_ROOT = str(Path(__file__).resolve().parent.parent)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
 # 取數統一走 datafeed（FinMind token 輪替 + 價格快取 + yfinance 備援）
 import datafeed
 from datafeed import finmind_fetch as _finmind_fetch
@@ -494,17 +501,31 @@ def fetch_chip_data(stock_id, days=5):
         return {}
 
 
+def chip_concentration(net_lots, vol_shares):
+    """5日籌碼集中度（%）＝法人近5日買賣超 ÷ 近5日總成交量。
+
+    net_lots 為張（fetch_chip_data 的單位），vol_shares 為股（K 棒成交量），
+    先把張換回股再除。成交量缺漏或為 0 時回 None。
+    """
+    if not vol_shares:
+        return None
+    return round(net_lots * 1000 / vol_shares * 100, 1)
+
+
 def scan_sector(sector_name, stocks):
     """掃描單一族群"""
     # 分點爬蟲模組（延遲匯入避免循環依賴與測試時拖慢啟動）
+    # 匯入失敗時照樣降級，但要印出來：曾因路徑問題靜默失效三個多月無人察覺
     try:
         from indicators.broker import fetch_broker_top15, main_force_score
-    except Exception:
+    except Exception as e:
+        print(f"  ⚠ 分點模組載入失敗，本次不抓分點：{e!r}")
         fetch_broker_top15 = None
         main_force_score = None
     try:
         from indicators.chip import chip_tier
-    except Exception:
+    except Exception as e:
+        print(f"  ⚠ 籌碼分層模組載入失敗，本次不分層：{e!r}")
         chip_tier = None
 
     def _scan_one(sid, name):
@@ -534,7 +555,9 @@ def scan_sector(sector_name, stocks):
             r['news'] = fetch_news(sid, name, days=3)
             r['chip'] = fetch_chip_data(sid, days=5)
 
-            # 5日籌碼集中度 = 法人近5日買賣超 / 近5日總成交量（皆為股，可直除）
+            # 5日籌碼集中度 = 法人近5日買賣超 / 近5日總成交量。
+            # 單位不同：chip 為「張」（fetch_chip_data 已 ÷1000），成交量為「股」，須先把
+            # 法人換回股再除。2026-09-21 起漏換，集中度小 1000 倍、全部顯示 0.0。
             # 土洋同買 = 外資與投信近5日皆買超。兩者供籌碼分層顯示用。
             _c = r.get('chip') or {}
             if _c:
@@ -543,8 +566,7 @@ def scan_sector(sector_name, stocks):
                     _vol5 = sum(_v5) if len(_v5) == 5 else None
                 except Exception:
                     _vol5 = None
-                _c['集中度'] = (round(_c.get('近5日', 0) / _vol5 * 100, 1)
-                              if _vol5 else None)
+                _c['集中度'] = chip_concentration(_c.get('近5日', 0), _vol5)
                 _c['土洋同買'] = bool(_c.get('近5日外資', 0) > 0
                                     and _c.get('近5日投信', 0) > 0)
 
