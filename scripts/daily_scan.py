@@ -481,7 +481,9 @@ def fetch_chip_data(stock_id, days=5):
     """
     try:
         end = datetime.now().strftime('%Y-%m-%d')
-        start = (datetime.now() - timedelta(days=days + 5)).strftime('%Y-%m-%d')
+        # 曆日回看要容得下長假：days+5 在春節（休市約 9 個曆日）後只剩 1~2 個交易日，
+        # 「近5日」與連買日會少算。單次請求，多抓幾天不增加呼叫次數
+        start = (datetime.now() - timedelta(days=days * 2 + 10)).strftime('%Y-%m-%d')
         df = _finmind_fetch('taiwan_stock_institutional_investors', stock_id=stock_id, start_date=start, end_date=end)
         if df.empty:
             return {}
