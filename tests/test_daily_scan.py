@@ -159,3 +159,22 @@ def test_news_time_is_taipei(monkeypatch):
     monkeypatch.setitem(ds['fetch_news'].__globals__, 'datetime', FakeDT)
     news = ds['fetch_news']('2330', '台積電', days=3)
     assert news and news[0]['datetime'] == '2025-11-11 00:00'
+
+
+def test_scan_cache_fetches_duplicate_stock_once(monkeypatch):
+    g = ds['scan_sector'].__globals__
+    calls = []
+
+    def fake_analyze(sid, name, hist=None):
+        calls.append(sid)
+        return {'id': sid, 'name': name, 'signal': 'HOLD', 'rsi': 10}
+    monkeypatch.setitem(g, 'analyze_stock', fake_analyze)
+    monkeypatch.setitem(g, '_get_history', lambda sid: None)
+    monkeypatch.setitem(g, 'fetch_price_stats', lambda sid, hist=None: (None,) * 6)
+    monkeypatch.setitem(g, 'fetch_news', lambda *a, **k: [])
+    monkeypatch.setitem(g, 'fetch_chip_data', lambda *a, **k: {})
+    cache = {}
+    a = ds['scan_sector']('封測', {'3711': '日月光投控', '2441': '超豐'}, cache=cache)
+    b = ds['scan_sector']('CoPoS封裝', {'3711': '日月光投控'}, cache=cache)
+    assert sorted(calls) == ['2441', '3711']
+    assert b[0]['id'] == '3711' and b[0] is not a[0]

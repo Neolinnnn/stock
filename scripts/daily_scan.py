@@ -535,8 +535,12 @@ def chip_concentration(net_lots, vol_shares):
     return round(net_lots * 1000 / vol_shares * 100, 1)
 
 
-def scan_sector(sector_name, stocks):
-    """掃描單一族群"""
+def scan_sector(sector_name, stocks, cache=None):
+    """掃描單一族群。
+
+    cache：跨族群共用的 {sid: 結果}。同一檔列在多個族群（3711／2449／6239 同在封測與
+    CoPoS封裝）時只抓一次，不重複消耗 FinMind 額度與分點請求。回傳淺拷貝，各族群互不影響。
+    """
     # 分點爬蟲模組（延遲匯入避免循環依賴與測試時拖慢啟動）
     # 匯入失敗時照樣降級，但要印出來：曾因路徑問題靜默失效三個多月無人察覺
     try:
@@ -553,6 +557,15 @@ def scan_sector(sector_name, stocks):
 
     def _scan_one(sid, name):
         """單檔完整抓取：twstock 抓一次共用，再補新聞/籌碼/分點。"""
+        if cache is not None and sid in cache:
+            return dict(cache[sid])
+        r = _scan_one_uncached(sid, name)
+        if cache is not None and 'error' not in r:
+            cache[sid] = r
+            return dict(r)
+        return r
+
+    def _scan_one_uncached(sid, name):
         try:
             # twstock 抓一次（涵蓋 26 個月），analyze_stock 與 fetch_price_stats 共用
             try:
@@ -777,9 +790,10 @@ def run_daily_scan(allow_stale=False):
 
     # 2. 掃描各族群
     all_results = {}
+    scan_cache = {}
     for sector_name, stocks in SECTORS.items():
         print(f"\n🏭 掃描族群：{sector_name}（{len(stocks)} 檔）...")
-        all_results[sector_name] = scan_sector(sector_name, stocks)
+        all_results[sector_name] = scan_sector(sector_name, stocks, cache=scan_cache)
 
     fresh, fresh_msg = check_freshness(today_iso, all_results)
     print(f"\n🕒 資料新鮮度：{fresh_msg}")
