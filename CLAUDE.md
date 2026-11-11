@@ -211,11 +211,16 @@ FinMind 日 K（`TaiwanStockPrice`）為未還原價，分割、減資、除權�
 |------|-------------|------|
 | Apps Script（`gas/dispatch.gs`）→ `workflow_dispatch`，`auto=true` | 週一～五 20:15～20:45 | 主排程；休市日跳過 |
 | GitHub `schedule`（`17 14 * * 1-5`） | 22:17（實際常延遲數小時） | 備援；當日報告已存在則跳過 |
-| 手動 Run workflow（`auto` 不勾） | 任意 | 一律執行，含休市日 |
+| 手動 Run workflow（`auto` 不勾） | 任意 | 一律執行；資料非當日會中止，休市日補跑須勾 `allow_stale` |
 
 - **不以 GitHub schedule 當主排程**：2026-09～10 實測每天延遲 5～9 小時；`workflow_dispatch` 是即時的
 - **不早於 20:00**：FinMind 官方更新時間為日 K 17:30、PER 18:00、個股法人買賣表 20:00。
   `fetch_chip_data` 拿不到當日法人資料時會默默沿用前一日，跑太早不會報錯
+- **資料新鮮度檢查**（`daily_scan.check_freshness`）：加權指數最新 K 棒非當日即中止；掃完後
+  K 棒或法人資料為當日的個股不足 8 成也中止（`exit 1`，不 commit，備援排程會再試）。
+  個別股票法人資料落後者清空籌碼，不沿用前一日。前例：20261023 與前一日價格完全相同、
+  20261104 有 77/105 檔籌碼停在前一日
+- 外部排程早於 20:00 觸發（`auto=true` 且 UTC 未滿 12 點）時 check job 直接跳過
 - 備援 run 若延遲跨過 UTC 午夜，`TODAY` 會變隔日，check job 會直接跳過，不會產出錯日期的報告
 
 ---

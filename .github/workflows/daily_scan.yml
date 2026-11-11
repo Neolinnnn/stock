@@ -18,6 +18,10 @@ on:
         description: '外部排程觸發（休市日跳過）；手動執行請保持未勾選'
         type: boolean
         default: false
+      allow_stale:
+        description: '資料非當日也照樣產出（休市日手動補跑用）；平常保持未勾選'
+        type: boolean
+        default: false
 
 # 防止同日多次 run 並發衝突。cancel-in-progress 設 false：舊版週五 07:38 的週報
 # 事件曾攔腰砍掉 07:23 的日掃描，且 GitHub 補送積壓的 cron 事件時也會誤殺
@@ -55,6 +59,12 @@ jobs:
           # （判斷為偽時整段 script 會中止）
           # 休市日不掃描（手動觸發除外）：否則會以前一日資料產出重複報告（5/1、6/19 曾發生）
           if { [ -n "$SCHED" ] || [ "$AUTO" = "true" ]; } && [ "$TRADING" = "false" ]; then RUN=false; fi
+          # 外部排程早於台灣 20:00（12:00 UTC）觸發時跳過，交給備援排程：法人表 20:00 才更新，
+          # 2026-10～11 實測有 16:30、17:42 起跑的 dispatch，產出的報告籌碼停在前一日
+          if [ "$AUTO" = "true" ] && [ "$(date -u +%-H)" -lt 12 ]; then
+            echo "::warning::外部排程 $(TZ=Asia/Taipei date +%H:%M) 觸發，早於 20:00，跳過（檢查 Apps Script 觸發器時區）"
+            RUN=false
+          fi
           if [ -n "$SCHED" ] && [ "$TRADING" = "true" ]; then
             # 備援：外部排程已產出當日報告就跳過；最後交易日另檢查週報，缺則補跑
             if [ -d "daily_reports/$TODAY" ]; then RUN=false; fi
@@ -115,7 +125,12 @@ jobs:
           NOTION_DB_ID: ${{ secrets.NOTION_DB_ID }}
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-        run: python scripts/daily_scan.py
+          ALLOW_STALE: ${{ github.event.inputs.allow_stale }}
+        # 資料非當日（跑太早或休市）時 daily_scan 以非 0 結束，整個 job 中止、不 commit，
+        # 備援排程之後會再試；休市日要手動產出請勾 allow_stale
+        run: |
+          if [ "$ALLOW_STALE" = "true" ]; then python scripts/daily_scan.py --allow-stale
+          else python scripts/daily_scan.py; fi
 
       - name: Fundamentals event update (TWSE/TPEx 彙總表比對)
         # 免金鑰、零 FinMind 額度：新月營收直接 append，新一季財報標記強制重抓

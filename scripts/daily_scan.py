@@ -286,6 +286,8 @@ def fetch_market_overview():
                 prev = float(df.iloc[-2]['close']) if len(df) >= 2 else cur
                 overview[key] = cur
                 overview[chg_key] = (cur - prev) / prev * 100 if prev else None
+                if sid == 'TAIEX':
+                    overview['資料日期'] = str(df.iloc[-1]['date'])[:10]
             else:
                 overview[key] = None
                 overview[chg_key] = None
@@ -537,6 +539,10 @@ def scan_sector(sector_name, stocks):
             except Exception:
                 hist = None
             r = analyze_stock(sid, name, hist=hist)
+            try:
+                r['price_date'] = str(hist.date[-1])[:10] if hist is not None else None
+            except Exception:
+                r['price_date'] = None
             # 補算 MA10/MA60（analyze_stock 僅提供 MA5/MA20），供進場閘門與持倉出場追蹤
             try:
                 _p = [x for x in list(hist.price) if x is not None] if hist is not None else []
@@ -670,10 +676,69 @@ def generate_sector_chart(all_results, out_dir):
     return str(path)
 
 
-def run_daily_scan():
-    today = datetime.now().strftime('%Y%m%d')
+# ── 資料新鮮度檢查 ────────────────────────────────────────────────────────────
+# FinMind 官方更新：日 K 17:30、個股法人買賣表 20:00。跑太早或遇休市（颱風假等臨時
+# 休市不在證交所清單內），拿到的是前一交易日資料，卻會以今天日期產出報告：
+#   20261023 與 20261022 收盤價 102/102 檔相同；20261104 有 77/105 檔籌碼停在 11-03。
+# 這些報告是回測訊號來源，且存在後備援排程即跳過，錯誤會永久留下，故寧可中止。
+FRESH_MIN_RATIO = 0.8   # 至少 8 成個股的 K 棒與法人資料須為當日（容許個別停牌）
+
+
+def check_freshness(today_iso, all_results):
+    """檢查掃描結果是否為當日資料。
+
+    Args:
+        today_iso: 當日 YYYY-MM-DD
+        all_results: {族群: [scan 結果]}；結果含 price_date 與 chip.date
+
+    Returns:
+        (ok, 說明文字)。同一檔跨族群只計一次。
+    """
+    seen, price_ok, chip_ok = set(), 0, 0
+    for results in all_results.values():
+        for r in results:
+            if 'error' in r or r['id'] in seen:
+                continue
+            seen.add(r['id'])
+            price_ok += r.get('price_date') == today_iso
+            chip_ok += (r.get('chip') or {}).get('date') == today_iso
+    n = len(seen)
+    if not n:
+        return False, '無任何成功掃描的個股'
+    msg = f'K 棒為當日 {price_ok}/{n} 檔、法人為當日 {chip_ok}/{n} 檔'
+    ok = price_ok >= n * FRESH_MIN_RATIO and chip_ok >= n * FRESH_MIN_RATIO
+    return ok, msg
+
+
+def drop_stale_chips(today_iso, all_results):
+    """法人資料日期早於當日的個股清空籌碼，不沿用前一日（回傳清空檔數）。
+
+    fetch_chip_data 抓不到當日時會回前一日資料，若照用會把昨天的法人買賣超
+    當成今天顯示、計入集中度與籌碼分層。
+    """
+    n = 0
+    for results in all_results.values():
+        for r in results:
+            chip = r.get('chip') or {}
+            if chip and chip.get('date') != today_iso:
+                r['chip'] = {}
+                if r.get('chip_tier') is not None:
+                    r['chip_tier'] = 'neutral'   # 無籌碼資料時 chip_tier() 的回傳值
+                n += 1
+    return n
+
+
+def _abort_stale(msg):
+    print(f"\n❌ 資料非當日，中止且不產出報告：{msg}")
+    print("   跑太早（法人表 20:00 更新）或今日休市；確定要用現有資料產出請加 --allow-stale")
+    sys.exit(1)
+
+
+def run_daily_scan(allow_stale=False):
+    now = datetime.now()
+    today = now.strftime('%Y%m%d')
+    today_iso = now.strftime('%Y-%m-%d')
     out_dir = Path(f'daily_reports/{today}')
-    out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\n{'='*78}")
     print(f"  每日掃描 | {datetime.now():%Y-%m-%d %H:%M}")
@@ -683,12 +748,26 @@ def run_daily_scan():
     # 1. 大盤
     print("📊 抓取大盤數據...")
     market = fetch_market_overview()
+    # 先以加權指數判斷，休市日不必掃完 100 檔才發現（省 FinMind 額度）
+    mkt_date = market.get('資料日期')
+    if mkt_date and mkt_date != today_iso and not allow_stale:
+        _abort_stale(f'加權指數最新 K 棒為 {mkt_date}')
 
     # 2. 掃描各族群
     all_results = {}
     for sector_name, stocks in SECTORS.items():
         print(f"\n🏭 掃描族群：{sector_name}（{len(stocks)} 檔）...")
         all_results[sector_name] = scan_sector(sector_name, stocks)
+
+    fresh, fresh_msg = check_freshness(today_iso, all_results)
+    print(f"\n🕒 資料新鮮度：{fresh_msg}")
+    if not fresh and not allow_stale:
+        _abort_stale(fresh_msg)
+    if not allow_stale:
+        dropped = drop_stale_chips(today_iso, all_results)
+        if dropped:
+            print(f"  ⚠ {dropped} 檔法人資料非當日，已清空不沿用")
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     # 3. 產生圖表
     print("\n📈 產生圖表...")
@@ -1147,4 +1226,4 @@ def summary_to_markdown(s):
 
 
 if __name__ == '__main__':
-    run_daily_scan()
+    run_daily_scan(allow_stale='--allow-stale' in sys.argv[1:])

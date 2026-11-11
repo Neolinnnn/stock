@@ -35,3 +35,39 @@ def test_indicators_importable_from_scan(tmp_path):
     r = subprocess.run([sys.executable, '-c', code], cwd=tmp_path,
                        capture_output=True, text=True, timeout=120)
     assert r.returncode == 0, r.stderr[-800:]
+
+
+def _res(sid, price_date, chip_date):
+    return {'id': sid, 'price_date': price_date,
+            'chip': {'date': chip_date, '合計': 1} if chip_date else {}}
+
+
+def test_freshness_rejects_previous_day_prices():
+    # 20261023 案例：K 棒全停在前一日
+    res = {'A': [_res(str(i), '2026-10-22', '2026-10-22') for i in range(10)]}
+    ok, _ = ds['check_freshness']('2026-10-23', res)
+    assert not ok
+
+
+def test_freshness_rejects_stale_chips():
+    # 20261104 案例：K 棒已更新、法人表尚未（77/105 停在前一日）
+    res = {'A': [_res(str(i), '2026-11-04', '2026-11-04' if i < 3 else '2026-11-03')
+                 for i in range(10)]}
+    ok, msg = ds['check_freshness']('2026-11-04', res)
+    assert not ok and '法人為當日 3/10' in msg
+
+
+def test_freshness_tolerates_few_laggards_and_dedupes():
+    stocks = [_res(str(i), '2026-11-05', '2026-11-05') for i in range(9)]
+    stocks.append(_res('9', '2026-11-04', '2026-11-04'))   # 停牌一檔
+    res = {'A': stocks, 'B': [stocks[0], {'id': 'x', 'error': 'boom'}]}
+    ok, msg = ds['check_freshness']('2026-11-05', res)
+    assert ok and '9/10' in msg
+
+
+def test_drop_stale_chips_only_clears_old_dates():
+    res = {'A': [_res('1', '2026-11-05', '2026-11-05'),
+                 dict(_res('2', '2026-11-05', '2026-11-04'), chip_tier='strong')]}
+    assert ds['drop_stale_chips']('2026-11-05', res) == 1
+    assert res['A'][0]['chip'] and res['A'][1]['chip'] == {}
+    assert res['A'][1]['chip_tier'] == 'neutral'
