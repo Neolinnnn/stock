@@ -178,3 +178,11 @@ def test_scan_cache_fetches_duplicate_stock_once(monkeypatch):
     b = ds['scan_sector']('CoPoS封裝', {'3711': '日月光投控'}, cache=cache)
     assert sorted(calls) == ['2441', '3711']
     assert b[0]['id'] == '3711' and b[0] is not a[0]
+
+
+def test_freshness_ignores_failed_chip_fetch():
+    # 額度用盡：一半個股法人抓取失敗（空值），其餘皆為當日 → 不應中止
+    res = {'A': [_res(str(i), '2026-11-10', '2026-11-10' if i < 5 else None)
+                 for i in range(10)]}
+    ok, msg = ds['check_freshness']('2026-11-10', res)
+    assert ok and '5/5' in msg and '5 檔抓取失敗' in msg

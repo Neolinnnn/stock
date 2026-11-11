@@ -732,19 +732,25 @@ def check_freshness(today_iso, all_results):
     Returns:
         (ok, 說明文字)。同一檔跨族群只計一次。
     """
-    seen, price_ok, chip_ok = set(), 0, 0
+    seen, price_ok, chip_ok, chip_n = set(), 0, 0, 0
     for results in all_results.values():
         for r in results:
             if 'error' in r or r['id'] in seen:
                 continue
             seen.add(r['id'])
             price_ok += r.get('price_date') == today_iso
-            chip_ok += (r.get('chip') or {}).get('date') == today_iso
+            chip_date = (r.get('chip') or {}).get('date')
+            if chip_date:
+                chip_n += 1
+                chip_ok += chip_date == today_iso
     n = len(seen)
     if not n:
         return False, '無任何成功掃描的個股'
-    msg = f'K 棒為當日 {price_ok}/{n} 檔、法人為當日 {chip_ok}/{n} 檔'
-    ok = price_ok >= n * FRESH_MIN_RATIO and chip_ok >= n * FRESH_MIN_RATIO
+    # 法人只計有資料者：抓取失敗（額度用盡等）回空值，與「資料落後」不同，照舊降級為無籌碼；
+    # 日期落後才代表跑太早。全數抓取失敗時此項不判定，由 K 棒日期把關
+    msg = (f'K 棒為當日 {price_ok}/{n} 檔、法人為當日 {chip_ok}/{chip_n} 檔'
+           f'（{n - chip_n} 檔抓取失敗）')
+    ok = price_ok >= n * FRESH_MIN_RATIO and chip_ok >= chip_n * FRESH_MIN_RATIO
     return ok, msg
 
 
