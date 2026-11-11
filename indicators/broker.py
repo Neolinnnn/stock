@@ -42,23 +42,21 @@ except Exception:
     _SSL_CTX.verify_mode = ssl.CERT_NONE
 
 
-def _http_get(url: str, timeout: int = 8) -> Optional[str]:
-    try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
-                ),
-                "Accept-Language": "zh-TW,zh;q=0.9",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CTX) as resp:
-            raw = resp.read()
-        return raw.decode("utf-8", errors="replace")
-    except Exception:
-        return None
+def _http_get(url: str, timeout: int = 8) -> str:
+    """抓取頁面；失敗時拋出例外，由呼叫端記錄原因（HTTP 403 與逾時要分得出來）。"""
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+            ),
+            "Accept-Language": "zh-TW,zh;q=0.9",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=timeout, context=_SSL_CTX) as resp:
+        raw = resp.read()
+    return raw.decode("utf-8", errors="replace")
 
 
 def _to_int(s: str) -> Optional[int]:
@@ -159,9 +157,11 @@ def fetch_broker_top15(stock_id: str, period: str = "5") -> dict:
     }
 
     url = f"https://histock.tw/stock/branch.aspx?no={stock_id}&t={period}"
-    html = _http_get(url, timeout=8)
-    if html is None:
-        result["error"] = "fetch_failed"
+    try:
+        html = _http_get(url, timeout=8)
+    except Exception as e:
+        # 保留原因：2026-11 實測 GitHub runner 與雲端沙箱皆失敗，需分得出 403／逾時
+        result["error"] = f"fetch_failed: {type(e).__name__}: {str(e)[:80]}"
         _CACHE[cache_key] = result
         return result
 

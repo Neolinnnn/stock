@@ -186,3 +186,13 @@ def test_freshness_ignores_failed_chip_fetch():
                  for i in range(10)]}
     ok, msg = ds['check_freshness']('2026-11-10', res)
     assert ok and '5/5' in msg and '5 檔抓取失敗' in msg
+
+
+def test_broker_health_line_reports_total_failure():
+    res = {'A': [{'id': '1', 'broker': {'source': None, 'error': 'fetch_failed: HTTPError: 403'}},
+                 {'id': '2', 'broker': None}],
+           'B': [{'id': '1', 'broker': {'source': None, 'error': 'x'}}]}
+    line = ds['broker_health_line'](res)
+    assert '0/1 檔成功' in line and '403' in line
+    ok = {'A': [{'id': '1', 'broker': {'source': 'histock'}}]}
+    assert ds['broker_health_line'](ok) == '🏦 分點抓取：1/1 檔成功'

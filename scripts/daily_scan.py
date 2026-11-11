@@ -385,6 +385,30 @@ def _title_mentions(title, stock_id, stock_name, all_names):
     return key in title
 
 
+def broker_health_line(all_results):
+    """分點抓取健檢：成功檔數與首見錯誤。分點曾整批失效三個多月無人察覺。"""
+    tried = ok = 0
+    first_err = None
+    seen = set()
+    for results in all_results.values():
+        for r in results:
+            br = r.get('broker')
+            if br is None or r.get('id') in seen:
+                continue
+            seen.add(r.get('id'))
+            tried += 1
+            if br.get('source'):
+                ok += 1
+            elif first_err is None:
+                first_err = br.get('error')
+    if not tried:
+        return '🏦 分點：本次未抓取'
+    line = f'🏦 分點抓取：{ok}/{tried} 檔成功'
+    if ok == 0:
+        line += f'\n   ⚠ 全數失敗（{first_err}）。影響：主力分數與籌碼分層一律為中性'
+    return line
+
+
 def fetch_news(stock_id, stock_name, days=3):
     """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
     import urllib.request, json as _json
@@ -879,6 +903,7 @@ def run_daily_scan(allow_stale=False):
         items = ', '.join(f"{k}({v}檔)" for k, v in partial.items())
         print(f"⚠ 部分失敗族群：{items}")
     print(f"\n{news_health_line()}")
+    print(broker_health_line(all_results))
     print(f"\n✅ 完成（掃描涵蓋率 {coverage}%）")
     print(f"   JSON：{json_path}")
     print(f"   MD：  {md_path}")
