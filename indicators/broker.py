@@ -17,6 +17,10 @@ URL: https://histock.tw/stock/branch.aspx?no={stock_id}
     main_force_score(broker_data) -> dict
         計算主力強度評分（0~100）與標籤
 
+⚠ 2026-11-11 實測：GitHub Actions runner 與雲端沙箱連 histock 皆回 HTTP 403（對方封鎖
+雲端主機來源），全數 fetch_failed，主力分數與籌碼分層因此一律為中性。daily_scan 結束時的
+「分點抓取 N/M 檔成功」會顯示此狀態。需改用其他合法資料來源，不應嘗試繞過封鎖。
+
 設計原則：
 - 失敗時不丟例外，回傳 error 欄位
 - 6 秒 timeout，避免 daily_scan 卡死
