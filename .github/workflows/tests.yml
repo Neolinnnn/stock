@@ -1,0 +1,66 @@
+name: 測試
+
+# 程式或 workflow 變更時跑 pytest。僅分支與 PR：main 上多為 bot 的資料 commit，不必每次跑
+on:
+  push:
+    branches-ignore: [main]
+    paths: ['**.py', 'tests/**', 'requirements.txt', '.github/workflows/**']
+  pull_request:
+    paths: ['**.py', 'tests/**', 'requirements.txt', '.github/workflows/**']
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt pytest -q
+      # 不帶任何 secrets：測試不打外部 API（test_daily_scan 的 import 測試以子行程模擬
+      # `python scripts/daily_scan.py`，確認 indicators 模組在 CI 的執行方式下載得到）
+      - run: python -m pytest -q
+
+  # 暫時性：對本分支在真實 runner 上驗證新鮮度中止與分點抓取，驗證後移除。
+  # 不帶 secrets（無 Notion／Sheets／Gemini token），即使未中止也不會對外寫入，且不 commit
+  e2e-verify:
+    if: github.ref_name == 'claude/busy-dijkstra-yaby0d'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: |
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt -q
+      - name: 分點來源可達（histock，從 GitHub runner）
+        run: |
+          python -c "
+          from indicators.broker import fetch_broker_top15, main_force_score
+          r = fetch_broker_top15('2330')
+          print('source=', r.get('source'), 'error=', r.get('error'), 'buyers=', len(r.get('top_buyers', [])))
+          print(main_force_score(r))
+          "
+      - name: daily_scan 以 CI 方式執行（台灣收盤前應中止、exit 1、不產出報告）
+        run: |
+          echo "UTC $(date -u '+%F %H:%M')"
+          set +e
+          python scripts/daily_scan.py > scan.log 2>&1
+          code=$?
+          set -e
+          grep -v ' INFO ' scan.log | tail -30
+          echo "exit=$code"
+          ls daily_reports | grep "$(date -u +%Y%m%d)" && { echo "::error::產出了報告目錄"; exit 1; } || true
+          if [ "$(date -u +%-H)" -lt 9 ]; then
+            # UTC 09:00（台灣 17:00）前，FinMind 尚無當日 K 棒（17:30 更新），必須中止
+            [ "$code" -ne 0 ] && grep -q '資料非當日，中止' scan.log
+          fi
