@@ -35,8 +35,9 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 AS_OF_ITEM_KEYS = ('trend_analysis', 'product_mix')
 ITEM_LISTS = ('qualified', 'dualFilterExcluded')
 MAX_LAG_DAYS = 4
-# 以前一交易日資料產出的休市日報告（FinMind 該日無任何 K 棒），由同一批 commit 移除
-HOLIDAY_DUPES = {'20260501': '20260430', '20260619': '20260618', '20261023': '20261022'}
+# 以前一交易日資料產出的非交易日報告（週末本機執行、休市日），由 git 移除；值為其複製來源日
+HOLIDAY_DUPES = {'20260418': '20260417', '20260501': '20260430', '20260614': '20260612',
+                 '20260619': '20260618', '20260710': '20260709', '20261023': '20261022'}
 
 
 def _git(*args) -> str:
