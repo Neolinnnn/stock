@@ -10,9 +10,11 @@ on:
     - cron: '43 13 * * 1-5'
   workflow_dispatch:   # 手動觸發不檢查是否為最後交易日
 
-# 與日掃描同一群組排隊，避免兩者同時 commit／push
+# 不與日掃描共用群組：GitHub 每個群組只保留一個 pending run，後到者會把排隊中的取消
+# （cancel-in-progress 只管執行中的），最後交易日日掃描備援 cron 排進來就會擠掉本回測。
+# 同時 push 由 commit step 的 rebase 重試處理；FinMind 額度撞車時 backtest_all 的安全閥會中止不發佈
 concurrency:
-  group: daily-scan-${{ github.ref }}
+  group: weekly-backtest-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:

@@ -26,6 +26,8 @@ on:
 # 防止同日多次 run 並發衝突。cancel-in-progress 設 false：舊版週五 07:38 的週報
 # 事件曾攔腰砍掉 07:23 的日掃描，且 GitHub 補送積壓的 cron 事件時也會誤殺
 # 執行中的 run（2026-08-07 / 08-14 / 08-28 皆發生過），改為排隊等待。
+# 注意 GitHub 每個群組只保留一個 pending run，再有新的進來會取消排隊中的那個；
+# 故每週回測、實驗室回測各用獨立群組，不與本 workflow 共用。
 concurrency:
   group: daily-scan-${{ github.ref }}
   cancel-in-progress: false
