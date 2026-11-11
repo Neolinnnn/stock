@@ -125,3 +125,37 @@ def test_summary_keeps_zero_and_drops_nan():
     assert isinstance(st['2']['atr14'], float) and math.isnan(st['2']['atr14'])
     text = json.dumps(ds['_json_safe'](s))
     assert 'NaN' not in text
+
+
+def test_title_mentions_disambiguates_prefix_collision():
+    names = {'南亞', '南亞科', '台積電', '日月光投控'}
+    m = ds['_title_mentions']
+    assert not m('南亞科DRAM報價大漲', '1303', '南亞', names)
+    assert m('南亞科DRAM報價大漲', '2408', '南亞科', names)
+    assert m('南亞Q3獲利回升', '1303', '南亞', names)
+    assert not m('南亞Q3獲利回升', '2408', '南亞科', names)
+    assert m('日月光先進封裝擴產', '3711', '日月光投控', names)   # 無撞名仍用前 2 字
+    assert m('2330 法說會', '2330', '台積電', names)
+
+
+def test_news_time_is_taipei(monkeypatch):
+    import json as _json
+    ts = 1762790400   # 2025-11-10 16:00 UTC = 2025-11-11 00:00 台灣
+    body = _json.dumps({'items': {'data': [
+        {'publishAt': ts, 'title': '台積電 擴產', 'newsId': 1}]}}).encode()
+
+    class R:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def read(self): return body
+    import urllib.request
+    monkeypatch.setattr(urllib.request, 'urlopen', lambda *a, **k: R())
+    real_dt = ds['datetime']
+
+    class FakeDT(real_dt):
+        @classmethod
+        def now(cls, tz=None):
+            return real_dt.fromtimestamp(ts + 3600, tz)
+    monkeypatch.setitem(ds['fetch_news'].__globals__, 'datetime', FakeDT)
+    news = ds['fetch_news']('2330', '台積電', days=3)
+    assert news and news[0]['datetime'] == '2025-11-11 00:00'

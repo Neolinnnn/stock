@@ -11,7 +11,7 @@ Daily Post-Market Sector Scan
   python strategy_templates/07_daily_scan.py
 """
 import sys, os, json, math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 # 載入主引擎
@@ -363,10 +363,32 @@ def news_health_line():
     return line
 
 
+# 新聞時間一律以台灣時間處理：CI runner 是 UTC，fromtimestamp() 不帶時區會晚 8 小時
+_TPE = timezone(timedelta(hours=8))
+
+
+def _title_mentions(title, stock_id, stock_name, all_names):
+    """標題是否提到目標個股：代號，或名稱前 2 字。
+
+    前 2 字與其他追蹤股撞名時（南亞／南亞科）改比全名，並先把以該字串開頭的
+    其他較長名稱從標題移除，避免「南亞科」的新聞算到「南亞」頭上。
+    """
+    if stock_id in title:
+        return True
+    short = stock_name[:2] if len(stock_name) >= 2 else stock_name
+    others = [n for n in all_names if n != stock_name]
+    key = stock_name if any(n.startswith(short) for n in others) else short
+    for n in others:
+        if len(n) > len(key) and n.startswith(key):
+            title = title.replace(n, '')
+    return key in title
+
+
 def fetch_news(stock_id, stock_name, days=3):
     """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
     import urllib.request, json as _json
-    cutoff = datetime.now() - timedelta(days=days)
+    cutoff = datetime.now(_TPE) - timedelta(days=days)
+    all_names = {n for stocks in SECTORS.values() for n in stocks.values()}
     with _NEWS_LOCK:
         NEWS_STATS['attempted'] += 1
     raw_seen = 0
@@ -375,14 +397,11 @@ def fetch_news(stock_id, stock_name, days=3):
     def _parse_items(items):
         result = []
         for it in items:
-            import datetime as _dt
-            pub_dt = _dt.datetime.fromtimestamp(it.get('publishAt', 0))
+            pub_dt = datetime.fromtimestamp(it.get('publishAt', 0), _TPE)
             if pub_dt < cutoff:
                 continue
             title = it.get('title', '')
-            # 驗證標題確實提到目標股票（代號或名稱前2字）
-            short = stock_name[:2] if len(stock_name) >= 2 else stock_name
-            if stock_id not in title and short not in title:
+            if not _title_mentions(title, stock_id, stock_name, all_names):
                 continue
             result.append({
                 'date': pub_dt.strftime('%Y-%m-%d'),
