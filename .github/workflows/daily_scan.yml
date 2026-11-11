@@ -261,11 +261,20 @@ jobs:
           fi
           git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
+          # 只推送上面 commit 的結果；其他被腳本改寫的已追蹤檔不推，留著會讓 pull --rebase 失敗
+          git checkout -- .
+          # -X theirs：rebase 時 theirs 才是本 job 的 commit（ours 是 main），衝突時保留剛產出的結果
+          pushed=false
           for i in 1 2 3; do
-            git pull --rebase -X ours origin main && git push && break
+            if git pull --rebase -X theirs origin main && git push; then pushed=true; break; fi
+            git rebase --abort 2>/dev/null || true
             echo "Push 失敗，第 ${i} 次重試..."
             sleep $((i * 5))
           done
+          if [ "$pushed" != true ]; then
+            echo "::error::push 連續失敗 3 次，結果未發佈"
+            exit 1
+          fi
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Trigger Pages deploy

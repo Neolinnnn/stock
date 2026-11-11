@@ -79,7 +79,9 @@ jobs:
           git checkout -- .
           pushed=false
           for i in 1 2 3; do
-            if git pull --rebase -X ours origin main && git push; then pushed=true; break; fi
+            # -X theirs：rebase 時 theirs 才是本 job 的 commit（ours 是 main），衝突時保留剛產出的結果
+            if git pull --rebase -X theirs origin main && git push; then pushed=true; break; fi
+            git rebase --abort 2>/dev/null || true
             echo "Push 失敗，第 ${i} 次重試..."
             sleep $((i * 5))
           done
