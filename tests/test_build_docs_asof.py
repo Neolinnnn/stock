@@ -38,3 +38,14 @@ def test_latest_day_still_computes(monkeypatch):
                         lambda *a, **k: called.append(1) or [])
     build_docs.build_daily_payload(SUMMARY)
     assert called
+
+
+def test_stocks_carry_trade_value(monkeypatch):
+    """成交值（熱力圖面積）原樣帶到 docs；舊報告無此欄時為 None，前端退回等權。"""
+    monkeypatch.setattr(build_docs, 'build_signal_flips', lambda *a, **k: [])
+    s = dict(SUMMARY, sectors={'封測': {'stocks': [
+        {'id': '3711', 'name': '日月光投控', 'price': 605, 'trade_value': 2.5e10},
+        {'id': '2441', 'name': '超豐', 'price': 108.5},
+    ]}})
+    tv = {x['id']: x['tv'] for x in build_docs.build_daily_payload(s, frozen=FROZEN)['stocks']}
+    assert tv == {'3711': 2.5e10, '2441': None}
