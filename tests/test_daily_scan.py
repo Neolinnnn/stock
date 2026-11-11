@@ -109,3 +109,19 @@ def test_chip_lots_truncate_toward_zero(monkeypatch):
     c = ds['fetch_chip_data']('2330')
     # 自營 -1500 股 → -1 張（向零），外資不會因兩列各自取整變成 -2
     assert (c['外資'], c['投信'], c['自營'], c['合計']) == (0, 2, -1, 1)
+
+
+def test_summary_keeps_zero_and_drops_nan():
+    import json
+    import math
+    a, b = _row('1'), _row('2')
+    a['ret_20d'] = 0.0                       # 持平是有效值，不是缺值
+    b['ret_20d'] = None                      # 經 DataFrame 變 NaN
+    a['atr14'], b['atr14'] = 3.2, None
+    s = ds['build_summary']('20261111', {}, {'A': [a, b]}, None)
+    st = {x['id']: x for x in s['sectors']['A']['stocks']}
+    assert st['1']['ret_20d'] == 0.0
+    assert st['2']['ret_20d'] is None
+    assert isinstance(st['2']['atr14'], float) and math.isnan(st['2']['atr14'])
+    text = json.dumps(ds['_json_safe'](s))
+    assert 'NaN' not in text

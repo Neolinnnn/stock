@@ -822,7 +822,7 @@ def run_daily_scan(allow_stale=False):
     # 5. 輸出 JSON + Markdown
     json_path = out_dir / 'summary.json'
     with open(json_path, 'w', encoding='utf-8') as f:
-        json.dump(summary, f, ensure_ascii=False, indent=2, default=str)
+        json.dump(_json_safe(summary), f, ensure_ascii=False, indent=2, default=str)
 
     md_path = out_dir / 'summary.md'
     with open(md_path, 'w', encoding='utf-8') as f:
@@ -866,7 +866,8 @@ def run_daily_scan(allow_stale=False):
         docs_dir = Path(__file__).parent.parent / 'docs'
         docs_dir.mkdir(exist_ok=True)
         with open(docs_dir / 'daily.json', 'w', encoding='utf-8') as f:
-            json.dump(build_daily_payload(summary), f, ensure_ascii=False, indent=2, default=str)
+            json.dump(_json_safe(build_daily_payload(summary)), f,
+                      ensure_ascii=False, indent=2, default=str)
         print(f'  docs/daily.json 已更新（build_docs 失敗：{e}）')
 
     print(f"\n{'='*78}\n")
@@ -877,6 +878,21 @@ def _nan_to_none(v):
     if isinstance(v, float) and math.isnan(v):
         return None
     return v
+
+
+def _json_safe(obj):
+    """遞迴把 NaN／inf 換成 None。
+
+    掃描結果經 pandas DataFrame 後缺值變 NaN（atr14、stop_loss、目標價等），
+    json.dump 會寫出非標準 JSON 的 NaN，瀏覽器的 JSON.parse 會整份讀取失敗。
+    """
+    if isinstance(obj, float) and (math.isnan(obj) or math.isinf(obj)):
+        return None
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_json_safe(v) for v in obj]
+    return obj
 
 
 def build_daily_payload(summary):
@@ -1045,8 +1061,11 @@ def build_summary(date, market, all_results, chart_path):
                 {
                     'id': r['id'], 'name': r['name'], 'price': r['price'],
                     'rsi': round(r['rsi'], 1),
-                    'rsi10': round(r['rsi10'], 1) if r.get('rsi10') else None,
-                    'ret_20d': round(r['ret_20d'] * 100, 1) if r.get('ret_20d') else None,
+                    # 經 DataFrame 後缺值為 NaN；0 是有效值，不可用真假值判斷
+                    'rsi10': (round(r['rsi10'], 1)
+                              if _nan_to_none(r.get('rsi10')) is not None else None),
+                    'ret_20d': (round(r['ret_20d'] * 100, 1)
+                                if _nan_to_none(r.get('ret_20d')) is not None else None),
                     'signal': r['signal'],
                     'ma5':  r.get('ma5'),
                     'ma10': r.get('ma10'),

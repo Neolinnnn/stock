@@ -926,7 +926,7 @@ def build_all():
         (date_dirs[0] / 'summary.json').read_text(encoding='utf-8')
     )
     (docs_dir / 'daily.json').write_text(
-        json.dumps(build_daily_payload(latest_summary),
+        json.dumps(_sanitize(build_daily_payload(latest_summary)),
                    ensure_ascii=False, indent=2, default=str),
         encoding='utf-8',
     )

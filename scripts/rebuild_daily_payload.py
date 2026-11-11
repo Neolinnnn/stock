@@ -31,7 +31,7 @@ def main():
         json.dumps(build_docs._sanitize(payload), ensure_ascii=False, separators=(',', ':')),
         encoding='utf-8')
     (ROOT / 'docs' / 'daily.json').write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2, default=str),
+        json.dumps(build_docs._sanitize(payload), ensure_ascii=False, indent=2, default=str),
         encoding='utf-8')
     n_pm = sum(1 for q in payload.get('qualified', []) if q.get('product_mix'))
     print(f'{latest.name} payload 已重建：qualified {len(payload.get("qualified", []))} 檔，'
