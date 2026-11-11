@@ -261,7 +261,8 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git commit -m "auto: 每日掃描 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          # 與報告目錄同用 UTC 日期：備援 run 延遲到台灣隔日清晨時，台灣日期會比報告晚一天
+          git commit -m "auto: 每日掃描 $(date -u '+%Y-%m-%d')"
           # 最多重試 3 次 push（防止並發 reject）
           # 只推送上面 commit 的結果；其他被腳本改寫的已追蹤檔不推，留著會讓 pull --rebase 失敗
           git checkout -- .
