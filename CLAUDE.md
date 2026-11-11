@@ -181,6 +181,9 @@ Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序
 - 前例：`patch_cv_history.py`（已刪除，2026-05-10 `a5f7aaf34`）以事後資料重算 CV 覆寫 262 份歷史報告，
   隔日 `adc7426d6` 又據此把歷史 BUY 降為 HOLD；以現行規則重建的行動清單因此在覆寫期勝率 75%，
   即時期僅 47%。兩者造成的改寫已由 `scripts/restore_cv_asof.py` 撤銷（只還原其後未再被改過的欄位）
+- docs 頁面同理：`docs/YYYYMMDD.json` 的 trend_analysis／product_mix／signalFlips 讀最新個股資料，
+  只在當日重算；歷史日沿用當時的值（`build_docs.build_daily_payload(frozen=...)`）。
+  2026-11 前每天重算全部歷史頁，已由 `scripts/restore_docs_asof.py` 自 git 歷史還原，無當日值者移除
 - 可以：當日重跑覆蓋當日報告、以截至當日的資料補建／重建歷史（`backfill_history.analyze_stock_on_date`）、
   更正股票代號或名稱誤植（只改受影響欄位，並在 commit 說明）
 
