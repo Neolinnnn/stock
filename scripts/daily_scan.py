@@ -681,7 +681,8 @@ def generate_sector_chart(all_results, out_dir):
 # 休市不在證交所清單內），拿到的是前一交易日資料，卻會以今天日期產出報告：
 #   20261023 與 20261022 收盤價 102/102 檔相同；20261104 有 77/105 檔籌碼停在 11-03。
 # 這些報告是回測訊號來源，且存在後備援排程即跳過，錯誤會永久留下，故寧可中止。
-FRESH_MIN_RATIO = 0.8   # 至少 8 成個股的 K 棒與法人資料須為當日（容許個別停牌）
+FRESH_MIN_RATIO = 0.8
+MIN_COVERAGE = 50       # 個股掃描成功率（%）低於此值即中止，不產出殘缺報告   # 至少 8 成個股的 K 棒與法人資料須為當日（容許個別停牌）
 
 
 def check_freshness(today_iso, all_results):
@@ -775,6 +776,10 @@ def run_daily_scan(allow_stale=False):
 
     # 4. 整合摘要
     summary = build_summary(today, market, all_results, chart_path)
+    if summary['scan_coverage'] < MIN_COVERAGE:
+        # 大量失敗（額度耗盡、API 異常）時不產出：殘缺報告一旦 commit，備援排程就會跳過
+        print(f"\n❌ 掃描涵蓋率僅 {summary['scan_coverage']}%（< {MIN_COVERAGE}%），中止且不產出報告")
+        sys.exit(1)
 
     # 4.5 持倉追蹤 + 進場閘門（HYBRID 出場）
     try:
@@ -1122,9 +1127,14 @@ def build_summary(date, market, all_results, chart_path):
                 'type': 'RSI過熱', 'detail': f"RSI={r['rsi']:.1f}"
             })
 
-    total = len(all_results)
-    ok_count = total - len(failed_sectors)
-    scan_coverage = round(ok_count / total * 100) if total else 100
+    # 以個股計（跨族群重複者只計一次）。原本以族群計，一族群只要成功一檔就算數，
+    # 個股大量失敗時仍顯示 100%
+    stock_ok = {}
+    for results in all_results.values():
+        for r in results:
+            stock_ok[r['id']] = stock_ok.get(r['id'], False) or 'error' not in r
+    scan_coverage = (round(sum(stock_ok.values()) / len(stock_ok) * 100)
+                     if stock_ok else 0)
 
     return {
         'date': date,

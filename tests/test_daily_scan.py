@@ -71,3 +71,24 @@ def test_drop_stale_chips_only_clears_old_dates():
     assert ds['drop_stale_chips']('2026-11-05', res) == 1
     assert res['A'][0]['chip'] and res['A'][1]['chip'] == {}
     assert res['A'][1]['chip_tier'] == 'neutral'
+
+
+def _row(sid):
+    return {'id': sid, 'name': sid, 'price': 100.0, 'rsi': 50.0, 'rsi10': 50.0,
+            'ret_20d': 0.01, 'signal': 'HOLD', 'cv_sharpe': 0.1, 'cv_win_rate': 0.3,
+            'cv_max_dd': 0.1, 'ma10': 100.0, 'chip': {}}
+
+
+def test_coverage_counts_stocks_not_sectors():
+    # 每族群都有一檔成功，舊算法（以族群計）會是 100%
+    res = {'A': [_row('1'), {'id': '2', 'name': '2', 'error': 'x'}],
+           'B': [_row('3'), {'id': '4', 'name': '4', 'error': 'x'}],
+           'C': [_row('1')]}   # 跨族群重複只計一次
+    s = ds['build_summary']('20261111', {}, res, None)
+    assert s['scan_coverage'] == 50
+    assert s['partial_sectors'] == {'A': 1, 'B': 1}
+
+
+def test_coverage_zero_when_all_failed():
+    res = {'A': [{'id': '1', 'name': '1', 'error': 'x'}]}
+    assert ds['build_summary']('20261111', {}, res, None)['scan_coverage'] == 0
