@@ -218,6 +218,17 @@
   .sp-row .lbl{color:var(--sub);}
   .sp-row .val{font-weight:600;}
   .up{color:var(--green);}.dn{color:var(--red);}.flat{color:var(--sub);}
+  /* 今日漲跌熱力圖：族群為區塊、個股為方格，顏色深淺 = 漲跌幅（±5% 封頂） */
+  .hm-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;}
+  .hm-sec{background:#13161d;border:1px solid var(--border);border-radius:8px;padding:8px;}
+  .hm-sec-hd{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;margin-bottom:6px;}
+  .hm-tiles{display:flex;flex-wrap:wrap;gap:3px;}
+  .hm-tile{flex:1 1 64px;min-width:64px;border-radius:4px;padding:5px 4px;text-align:center;cursor:pointer;
+    font-size:11px;line-height:1.35;color:#fff;border:none;font-family:inherit;}
+  .hm-tile:focus-visible{outline:2px solid var(--text);outline-offset:1px;}
+  .hm-tile b{display:block;font-size:12px;font-variant-numeric:tabular-nums;}
+  .hm-legend{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--sub);margin-top:8px;flex-wrap:wrap;}
+  .hm-legend i{display:inline-block;width:18px;height:10px;border-radius:2px;}
   #sp-signal-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
   #sp-signal-label{font-size:16px;font-weight:700;}
   #sp-signal-desc{font-size:12px;color:var(--sub);margin-top:3px;}
@@ -2084,6 +2095,85 @@ async function loadDate(dateStr){
   }
   renderDaily(CACHE[dateStr]);
   document.getElementById('loading').style.display='none';
+  fillHeatmap(dateStr, CACHE[dateStr]);
+}
+
+// ── 今日漲跌熱力圖 ────────────────────────────────────────────────────────────
+// 漲跌幅 = 當日收盤 / 前一交易日收盤 − 1，兩者皆取自各自當日的掃描報告（無前視）。
+// 價格為未還原價：除權息日會多算一段跌幅；超過漲跌停（±10%）視為除權／分割等
+// 公司行動造成的假跳空，不上色、不計入族群平均。
+const HM_LIMIT = 10.5;
+function hmColor(c){
+  if(c==null) return '#2a2f3a';
+  const t=Math.min(Math.abs(c)/5,1);            // ±5% 即最深
+  const a=(0.18+0.72*t).toFixed(2);
+  return c>0 ? `rgba(46,204,113,${a})` : c<0 ? `rgba(231,76,60,${a})` : '#3a404c';
+}
+function hmPct(c){ return c==null ? '—' : (c>0?'+':'')+c.toFixed(2)+'%'; }
+
+async function fillHeatmap(dateStr, data){
+  const box = document.getElementById('sector-heatmap');
+  if(!box) return;
+  const prevDate = DATES[DATES.indexOf(dateStr)+1];   // DATES 降冪，+1 = 前一交易日
+  let prev = null;
+  if(prevDate){
+    try{
+      if(!CACHE[prevDate]) CACHE[prevDate] = await fetchJSON(`./${prevDate}.json?v=${Math.floor(Date.now()/86400000)}`);
+      prev = CACHE[prevDate];
+    }catch{}
+  }
+  if(CUR_DATE !== dateStr) return;                    // 等待期間已切換日期，捨棄舊結果
+  if(!prev){
+    box.innerHTML = `<div style="color:var(--sub);font-size:12px;">無前一交易日資料，無法計算漲跌幅</div>`;
+    return;
+  }
+  const prevPx = new Map((prev.stocks||[]).map(s=>[s.id, Number(s.price)]));
+  const chgOf = s => {
+    const p0 = prevPx.get(s.id), p1 = Number(s.price);
+    if(!(p0>0) || !(p1>0)) return null;
+    const c = (p1/p0-1)*100;
+    return Math.abs(c) > HM_LIMIT ? null : c;
+  };
+
+  // 依族群分組（同一檔可出現在多個族群，各自顯示）
+  const groups = new Map();
+  (data.stocks||[]).forEach(s=>{
+    if(!groups.has(s.sector)) groups.set(s.sector, []);
+    groups.get(s.sector).push({...s, chg: chgOf(s)});
+  });
+  const secs = [...groups].map(([sector, list])=>{
+    const v = list.filter(x=>x.chg!=null).map(x=>x.chg);
+    list.sort((a,b)=>(b.chg??-999)-(a.chg??-999));
+    return {sector, list, avg: v.length ? v.reduce((a,b)=>a+b,0)/v.length : null};
+  }).sort((a,b)=>(b.avg??-999)-(a.avg??-999));
+
+  // 漲跌家數以個股去重
+  const uniq = new Map();
+  secs.forEach(g=>g.list.forEach(x=>uniq.set(x.id, x.chg)));
+  const vals=[...uniq.values()];
+  const up=vals.filter(c=>c!=null&&c>0).length, dn=vals.filter(c=>c!=null&&c<0).length,
+        flat=vals.filter(c=>c===0).length, na=vals.filter(c=>c==null).length;
+
+  box.innerHTML = `
+    <div style="font-size:12px;color:var(--sub);margin-bottom:8px;">
+      對比 ${fmtDate(prevDate)} 收盤｜<span class="up">上漲 ${up}</span>／<span class="dn">下跌 ${dn}</span>／平盤 ${flat}${na?`／無資料 ${na}`:''}（共 ${uniq.size} 檔）
+    </div>
+    <div class="hm-wrap">${secs.map(g=>`
+      <div class="hm-sec">
+        <div class="hm-sec-hd"><b>${escHtml(g.sector)}</b>
+          <span class="${g.avg==null?'flat':signColor(g.avg)}" style="font-variant-numeric:tabular-nums;">均 ${hmPct(g.avg)}</span></div>
+        <div class="hm-tiles">${g.list.map(x=>`
+          <button type="button" class="hm-tile" style="background:${hmColor(x.chg)}"
+            title="${escHtml(x.id+' '+x.name)}｜收盤 ${fmt(Number(x.price),2)}｜${x.chg==null?'無前日價或疑似除權／分割，不計':hmPct(x.chg)}"
+            onclick="goToStock('${escHtml(x.id)}')">${escHtml(x.name)}<b>${hmPct(x.chg)}</b></button>`).join('')}
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="hm-legend">
+      <span>−5%</span><i style="background:${hmColor(-5)}"></i><i style="background:${hmColor(-2)}"></i>
+      <i style="background:${hmColor(0)}"></i><i style="background:${hmColor(2)}"></i><i style="background:${hmColor(5)}"></i><span>+5%</span>
+      <span style="margin-left:8px;">族群依等權平均漲跌幅排序；點方格看個股分析。未還原價，除權息日跌幅會偏大</span>
+    </div>`;
 }
 
 function stepDate(dir){
@@ -2500,6 +2590,10 @@ function renderDaily(data){
       }).join('')}
     </div>`;
   }
+
+  // 今日漲跌熱力圖：需要前一交易日收盤價，非同步載入後填入（見 fillHeatmap）
+  html+=`<div class="section-title">今日漲跌熱力圖</div>
+    <div class="card" id="sector-heatmap"><div style="color:var(--sub);font-size:12px;">載入前一交易日價格…</div></div>`;
 
   // 族群強弱表
   html+=`<div class="section-title">族群強弱</div><div class="card" style="overflow-x:auto"><table>
