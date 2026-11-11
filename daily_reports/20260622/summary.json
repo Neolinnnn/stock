@@ -3993,6 +3993,16 @@
         "id": "2455",
         "name": "全新",
         "entry_price": 409.5
+      },
+      {
+        "id": "3535",
+        "name": "晶彩科",
+        "entry_price": 128.5
+      },
+      {
+        "id": "3443",
+        "name": "創意",
+        "entry_price": 4755.0
       }
     ],
     "new_exits": [],
@@ -4028,9 +4038,9 @@
         "signal_price": 134.0,
         "status": "holding",
         "phase": 1,
-        "entry_date": "20260619",
-        "entry_price": 134.0,
-        "high_watermark": 134.0,
+        "entry_date": "20260622",
+        "entry_price": 128.5,
+        "high_watermark": 128.5,
         "days_since_high": 0
       },
       {
@@ -4040,9 +4050,9 @@
         "signal_price": 4860.0,
         "status": "holding",
         "phase": 1,
-        "entry_date": "20260619",
-        "entry_price": 4860.0,
-        "high_watermark": 4860.0,
+        "entry_date": "20260622",
+        "entry_price": 4755.0,
+        "high_watermark": 4755.0,
         "days_since_high": 0
       },
       {
