@@ -345,7 +345,27 @@ def _simple_prediction(summary: list) -> dict:
 
 # ── Daily payload (unchanged) ────────────────────────────────────────────────
 
-def build_daily_payload(summary):
+# 這些欄位讀 docs/stocks/{id}.json 的「最新」K 棒與指標，只對當日成立。
+# 歷史日沿用當時產出的值，否則每天重建會把 2023 年的頁面改成今天的 KD、乖離與進場評級。
+AS_OF_ITEM_KEYS = ('trend_analysis', 'product_mix')
+
+
+def _carry_as_of(items, frozen_items):
+    """把 frozen_items（同日舊 payload）中依 id 對應的 as-of 欄位搬到 items。"""
+    old = {o.get('id'): o for o in (frozen_items or [])}
+    for it in items:
+        prev = old.get(it.get('id')) or {}
+        for k in AS_OF_ITEM_KEYS:
+            if k in prev:
+                it[k] = prev[k]
+
+
+def build_daily_payload(summary, frozen=None):
+    """組出單日 docs payload。
+
+    frozen：同一日已發佈的舊 payload。給定時不重算 as-of 欄位（trend_analysis、
+    product_mix、signalFlips），直接沿用舊值；缺的就留空，不拿今天的資料補。
+    """
     sectors, chips, stocks = [], [], []
     main_force = []
     for sector, data in summary.get('sectors', {}).items():
@@ -542,7 +562,10 @@ def build_daily_payload(summary):
             except Exception:
                 pass
 
-    if _local_analyze and (qualified or dual_filter_excluded):
+    if frozen is not None:
+        _carry_as_of(qualified, frozen.get('qualified'))
+        _carry_as_of(dual_filter_excluded, frozen.get('dualFilterExcluded'))
+    elif _local_analyze and (qualified or dual_filter_excluded):
         docs_dir_path = Path(__file__).resolve().parent.parent / 'docs'
         strong_set = set(summary.get('strong_sectors', []))
         weak_set   = set(summary.get('weak_sectors',   []))
@@ -571,7 +594,8 @@ def build_daily_payload(summary):
         'chips':   sorted(chips, key=lambda x: x['total'], reverse=True),
         'stocks':  stocks,
         'mainForce': main_force_sorted,
-        'signalFlips': build_signal_flips(summary, qualified, stocks),
+        'signalFlips': ((frozen.get('signalFlips') or []) if frozen is not None
+                        else build_signal_flips(summary, qualified, stocks)),
         'positions': _build_positions_payload(summary.get('positions')),
     }
 
@@ -874,10 +898,17 @@ def build_all():
     build_stock_pages(date_dirs, docs_dir)
 
     dates = []
-    for d in date_dirs:
+    for i, d in enumerate(date_dirs):
         summary = json.loads((d / 'summary.json').read_text(encoding='utf-8'))
-        payload = build_daily_payload(summary)
         out = docs_dir / f'{d.name}.json'
+        # 最新一日照算；歷史日若已發佈過，as-of 欄位沿用舊檔（見 AS_OF_ITEM_KEYS）
+        frozen = None
+        if i > 0 and out.exists():
+            try:
+                frozen = json.loads(out.read_text(encoding='utf-8'))
+            except (OSError, json.JSONDecodeError):
+                frozen = None
+        payload = build_daily_payload(summary, frozen=frozen)
         out.write_text(
             json.dumps(_sanitize(payload), ensure_ascii=False, separators=(',', ':')),
             encoding='utf-8',
