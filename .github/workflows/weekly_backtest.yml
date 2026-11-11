@@ -10,9 +10,11 @@ on:
     - cron: '43 13 * * 1-5'
   workflow_dispatch:   # 手動觸發不檢查是否為最後交易日
 
-# 與日掃描同一群組排隊，避免兩者同時 commit／push
+# 不與日掃描共用群組：GitHub 每個群組只保留一個 pending run，後到者會把排隊中的取消
+# （cancel-in-progress 只管執行中的），最後交易日日掃描備援 cron 排進來就會擠掉本回測。
+# 同時 push 由 commit step 的 rebase 重試處理；FinMind 額度撞車時 backtest_all 的安全閥會中止不發佈
 concurrency:
-  group: daily-scan-${{ github.ref }}
+  group: weekly-backtest-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -66,11 +68,20 @@ jobs:
             exit 0
           fi
           git commit -m "auto: 每週回測更新 $(TZ='Asia/Taipei' date '+%Y-%m-%d')"
+          # 只推送上面 commit 的結果；其他被腳本改寫的已追蹤檔不推，留著會讓 pull --rebase 失敗
+          git checkout -- .
+          # -X theirs：rebase 時 theirs 才是本 job 的 commit（ours 是 main），衝突時保留剛產出的結果
+          pushed=false
           for i in 1 2 3; do
-            git pull --rebase -X ours origin main && git push && break
+            if git pull --rebase -X theirs origin main && git push; then pushed=true; break; fi
+            git rebase --abort 2>/dev/null || true
             echo "Push 失敗，第 ${i} 次重試..."
             sleep $((i * 5))
           done
+          if [ "$pushed" != true ]; then
+            echo "::error::push 連續失敗 3 次，結果未發佈"
+            exit 1
+          fi
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Trigger Pages deploy

@@ -1,0 +1,28 @@
+name: 測試
+
+# 程式或 workflow 變更時跑 pytest。僅分支與 PR：main 上多為 bot 的資料 commit，不必每次跑
+on:
+  push:
+    branches-ignore: [main]
+    paths: ['**.py', 'tests/**', 'requirements.txt', '.github/workflows/**']
+  pull_request:
+    paths: ['**.py', 'tests/**', 'requirements.txt', '.github/workflows/**']
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          # ta==0.5.25 (FinMind dep) fails to build with setuptools>=68
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt pytest -q
+      # 不帶任何 secrets：測試不打外部 API（test_daily_scan 的 import 測試以子行程模擬
+      # `python scripts/daily_scan.py`，確認 indicators 模組在 CI 的執行方式下載得到）
+      - run: python -m pytest -q

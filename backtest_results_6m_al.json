@@ -1,51 +1,35 @@
 {
-  "generated_at": "2026-11-06T20:10:01.068179",
+  "generated_at": "2026-11-11T01:38:06.220800",
   "date_range": {
-    "start": "20260506",
-    "end": "20261106"
+    "start": "20260511",
+    "end": "20261111"
   },
   "benchmark": {
     "id": "0050",
-    "start": "20260506",
-    "end": "20261106",
-    "return_pct": -3.11
+    "start": "20260511",
+    "end": "20261110",
+    "return_pct": 3.78
   },
-  "total_signals": 163,
+  "total_signals": 162,
   "signals_after_limit": 134,
-  "qualified_signals": 163,
+  "qualified_signals": 162,
   "qualified_after_limit": 134,
   "combinations": {
     "TP15_SL10": {
       "stats": {
         "total": 128,
-        "wins": 32,
-        "losses": 96,
-        "open_count": 5,
-        "win_rate": 0.25,
-        "avg_return": -4.3957,
+        "wins": 31,
+        "losses": 97,
+        "open_count": 6,
+        "win_rate": 0.2422,
+        "avg_return": -4.618,
         "avg_holding_days": 13.5,
         "bench_n": 128,
-        "bench_avg_return": -3.02,
-        "excess_return": -1.38,
-        "beat_rate": 0.3672
+        "bench_avg_return": -3.07,
+        "excess_return": -1.55,
+        "beat_rate": 0.3594
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260515",
-          "exit_price": 103.78334745762712,
-          "return_pct": 17.03,
-          "holding_days": 4,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.15,
-          "sl": 0.1,
-          "bench_return_pct": -1.29
-        },
         {
           "result": "LOSS",
           "exit_date": "20260519",
@@ -1476,7 +1460,7 @@
           "holding_days": 13,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -1611,6 +1595,22 @@
           "tp": 0.15,
           "sl": 0.1,
           "bench_return_pct": -6.89
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261020",
+          "exit_price": 112.5,
+          "return_pct": -11.42,
+          "holding_days": 8,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": -7.66
         },
         {
           "result": "LOSS",
@@ -2152,40 +2152,39 @@
           "tp": 0.15,
           "sl": 0.1,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.15,
+          "sl": 0.1
         }
       ]
     },
     "TP15_SL12": {
       "stats": {
         "total": 125,
-        "wins": 34,
-        "losses": 91,
-        "open_count": 8,
-        "win_rate": 0.272,
-        "avg_return": -5.2048,
-        "avg_holding_days": 14.2,
+        "wins": 33,
+        "losses": 92,
+        "open_count": 9,
+        "win_rate": 0.264,
+        "avg_return": -5.4418,
+        "avg_holding_days": 14.3,
         "bench_n": 125,
-        "bench_avg_return": -3.78,
-        "excess_return": -1.42,
-        "beat_rate": 0.384
+        "bench_avg_return": -3.83,
+        "excess_return": -1.61,
+        "beat_rate": 0.376
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260515",
-          "exit_price": 103.78334745762712,
-          "return_pct": 17.03,
-          "holding_days": 4,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.15,
-          "sl": 0.12,
-          "bench_return_pct": -1.29
-        },
         {
           "result": "LOSS",
           "exit_date": "20260520",
@@ -3614,7 +3613,7 @@
           "holding_days": 17,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -3749,6 +3748,22 @@
           "tp": 0.15,
           "sl": 0.12,
           "bench_return_pct": -7.66
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261022",
+          "exit_price": 111.0,
+          "return_pct": -12.6,
+          "holding_days": 10,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": -7.96
         },
         {
           "result": "LOSS",
@@ -4289,40 +4304,39 @@
           "tp": 0.15,
           "sl": 0.12,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.15,
+          "sl": 0.12
         }
       ]
     },
     "TP15_SL15": {
       "stats": {
-        "total": 113,
-        "wins": 37,
-        "losses": 76,
-        "open_count": 20,
-        "win_rate": 0.3274,
-        "avg_return": -5.8612,
-        "avg_holding_days": 16.5,
-        "bench_n": 113,
-        "bench_avg_return": -3.67,
-        "excess_return": -2.19,
-        "beat_rate": 0.354
+        "total": 116,
+        "wins": 36,
+        "losses": 80,
+        "open_count": 18,
+        "win_rate": 0.3103,
+        "avg_return": -6.4479,
+        "avg_holding_days": 16.7,
+        "bench_n": 116,
+        "bench_avg_return": -4.04,
+        "excess_return": -2.41,
+        "beat_rate": 0.3362
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260515",
-          "exit_price": 103.78334745762712,
-          "return_pct": 17.03,
-          "holding_days": 4,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.15,
-          "sl": 0.15,
-          "bench_return_pct": -1.29
-        },
         {
           "result": "LOSS",
           "exit_date": "20260527",
@@ -5678,11 +5692,11 @@
           "bench_return_pct": -4.67
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.16,
+          "holding_days": 25,
           "entry_date": "20260930",
           "entry_price": 288.5,
           "amount": 3000,
@@ -5690,7 +5704,8 @@
           "stock_name": "創見",
           "signal_date": "20260929",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -13.38
         },
         {
           "result": "LOSS",
@@ -5748,7 +5763,7 @@
           "holding_days": 21,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -5773,11 +5788,11 @@
           "bench_return_pct": -5.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.59,
+          "holding_days": 22,
           "entry_date": "20261005",
           "entry_price": 290.0,
           "amount": 3000,
@@ -5785,7 +5800,8 @@
           "stock_name": "創見",
           "signal_date": "20261002",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.81
         },
         {
           "result": "LOSS",
@@ -5836,11 +5852,11 @@
           "bench_return_pct": -7.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.73,
+          "holding_days": 21,
           "entry_date": "20261006",
           "entry_price": 290.5,
           "amount": 1000.0,
@@ -5848,7 +5864,8 @@
           "stock_name": "創見",
           "signal_date": "20261005",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.21
         },
         {
           "result": "LOSS",
@@ -5881,6 +5898,22 @@
           "tp": 0.15,
           "sl": 0.15,
           "bench_return_pct": -14.03
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261030",
+          "exit_price": 106.5,
+          "return_pct": -16.14,
+          "holding_days": 14,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -9.64
         },
         {
           "result": "LOSS",
@@ -6414,40 +6447,39 @@
           "tp": 0.15,
           "sl": 0.15,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.15,
+          "sl": 0.15
         }
       ]
     },
     "TP18_SL10": {
       "stats": {
         "total": 128,
-        "wins": 22,
-        "losses": 106,
-        "open_count": 5,
-        "win_rate": 0.1719,
-        "avg_return": -6.1733,
+        "wins": 21,
+        "losses": 107,
+        "open_count": 6,
+        "win_rate": 0.1641,
+        "avg_return": -6.4857,
         "avg_holding_days": 15.0,
         "bench_n": 128,
-        "bench_avg_return": -3.56,
-        "excess_return": -2.61,
-        "beat_rate": 0.2891
+        "bench_avg_return": -3.63,
+        "excess_return": -2.86,
+        "beat_rate": 0.2812
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260522",
-          "exit_price": 114.01550847457627,
-          "return_pct": 28.57,
-          "holding_days": 9,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.18,
-          "sl": 0.1,
-          "bench_return_pct": 0.67
-        },
         {
           "result": "LOSS",
           "exit_date": "20260519",
@@ -7878,7 +7910,7 @@
           "holding_days": 13,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -8013,6 +8045,22 @@
           "tp": 0.18,
           "sl": 0.1,
           "bench_return_pct": -6.89
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261020",
+          "exit_price": 112.5,
+          "return_pct": -11.42,
+          "holding_days": 8,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": -7.66
         },
         {
           "result": "LOSS",
@@ -8554,40 +8602,39 @@
           "tp": 0.18,
           "sl": 0.1,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.18,
+          "sl": 0.1
         }
       ]
     },
     "TP18_SL12": {
       "stats": {
         "total": 125,
-        "wins": 24,
-        "losses": 101,
-        "open_count": 8,
-        "win_rate": 0.192,
-        "avg_return": -7.0954,
+        "wins": 23,
+        "losses": 102,
+        "open_count": 9,
+        "win_rate": 0.184,
+        "avg_return": -7.4248,
         "avg_holding_days": 16.0,
         "bench_n": 125,
-        "bench_avg_return": -4.4,
-        "excess_return": -2.7,
-        "beat_rate": 0.304
+        "bench_avg_return": -4.46,
+        "excess_return": -2.96,
+        "beat_rate": 0.296
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260522",
-          "exit_price": 114.01550847457627,
-          "return_pct": 28.57,
-          "holding_days": 9,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.18,
-          "sl": 0.12,
-          "bench_return_pct": 0.67
-        },
         {
           "result": "LOSS",
           "exit_date": "20260520",
@@ -10016,7 +10063,7 @@
           "holding_days": 17,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -10151,6 +10198,22 @@
           "tp": 0.18,
           "sl": 0.12,
           "bench_return_pct": -7.66
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261022",
+          "exit_price": 111.0,
+          "return_pct": -12.6,
+          "holding_days": 10,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": -7.96
         },
         {
           "result": "LOSS",
@@ -10691,40 +10754,39 @@
           "tp": 0.18,
           "sl": 0.12,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.18,
+          "sl": 0.12
         }
       ]
     },
     "TP18_SL15": {
       "stats": {
-        "total": 113,
-        "wins": 27,
-        "losses": 86,
-        "open_count": 20,
-        "win_rate": 0.2389,
-        "avg_return": -8.0181,
-        "avg_holding_days": 18.7,
-        "bench_n": 113,
-        "bench_avg_return": -4.36,
-        "excess_return": -3.66,
-        "beat_rate": 0.2655
+        "total": 116,
+        "wins": 26,
+        "losses": 90,
+        "open_count": 18,
+        "win_rate": 0.2241,
+        "avg_return": -8.6486,
+        "avg_holding_days": 18.8,
+        "bench_n": 116,
+        "bench_avg_return": -4.73,
+        "excess_return": -3.92,
+        "beat_rate": 0.25
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260522",
-          "exit_price": 114.01550847457627,
-          "return_pct": 28.57,
-          "holding_days": 9,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.18,
-          "sl": 0.15,
-          "bench_return_pct": 0.67
-        },
         {
           "result": "LOSS",
           "exit_date": "20260527",
@@ -12080,11 +12142,11 @@
           "bench_return_pct": -4.67
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.16,
+          "holding_days": 25,
           "entry_date": "20260930",
           "entry_price": 288.5,
           "amount": 3000,
@@ -12092,7 +12154,8 @@
           "stock_name": "創見",
           "signal_date": "20260929",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -13.38
         },
         {
           "result": "LOSS",
@@ -12150,7 +12213,7 @@
           "holding_days": 21,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -12175,11 +12238,11 @@
           "bench_return_pct": -5.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.59,
+          "holding_days": 22,
           "entry_date": "20261005",
           "entry_price": 290.0,
           "amount": 3000,
@@ -12187,7 +12250,8 @@
           "stock_name": "創見",
           "signal_date": "20261002",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.81
         },
         {
           "result": "LOSS",
@@ -12238,11 +12302,11 @@
           "bench_return_pct": -7.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.73,
+          "holding_days": 21,
           "entry_date": "20261006",
           "entry_price": 290.5,
           "amount": 1000.0,
@@ -12250,7 +12314,8 @@
           "stock_name": "創見",
           "signal_date": "20261005",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.21
         },
         {
           "result": "LOSS",
@@ -12283,6 +12348,22 @@
           "tp": 0.18,
           "sl": 0.15,
           "bench_return_pct": -14.03
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261030",
+          "exit_price": 106.5,
+          "return_pct": -16.14,
+          "holding_days": 14,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -9.64
         },
         {
           "result": "LOSS",
@@ -12816,40 +12897,39 @@
           "tp": 0.18,
           "sl": 0.15,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.18,
+          "sl": 0.15
         }
       ]
     },
     "TP20_SL10": {
       "stats": {
         "total": 128,
-        "wins": 20,
-        "losses": 108,
-        "open_count": 5,
-        "win_rate": 0.1562,
-        "avg_return": -6.4754,
+        "wins": 19,
+        "losses": 109,
+        "open_count": 6,
+        "win_rate": 0.1484,
+        "avg_return": -6.7878,
         "avg_holding_days": 15.4,
         "bench_n": 128,
-        "bench_avg_return": -3.68,
-        "excess_return": -2.79,
-        "beat_rate": 0.2734
+        "bench_avg_return": -3.75,
+        "excess_return": -3.04,
+        "beat_rate": 0.2656
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260522",
-          "exit_price": 114.01550847457627,
-          "return_pct": 28.57,
-          "holding_days": 9,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.2,
-          "sl": 0.1,
-          "bench_return_pct": 0.67
-        },
         {
           "result": "LOSS",
           "exit_date": "20260519",
@@ -14280,7 +14360,7 @@
           "holding_days": 13,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -14415,6 +14495,22 @@
           "tp": 0.2,
           "sl": 0.1,
           "bench_return_pct": -6.89
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261020",
+          "exit_price": 112.5,
+          "return_pct": -11.42,
+          "holding_days": 8,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": -7.66
         },
         {
           "result": "LOSS",
@@ -14956,40 +15052,39 @@
           "tp": 0.2,
           "sl": 0.1,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.2,
+          "sl": 0.1
         }
       ]
     },
     "TP20_SL12": {
       "stats": {
         "total": 125,
-        "wins": 22,
-        "losses": 103,
-        "open_count": 8,
-        "win_rate": 0.176,
-        "avg_return": -7.3492,
+        "wins": 21,
+        "losses": 104,
+        "open_count": 9,
+        "win_rate": 0.168,
+        "avg_return": -7.6786,
         "avg_holding_days": 17.1,
         "bench_n": 125,
-        "bench_avg_return": -4.43,
-        "excess_return": -2.92,
-        "beat_rate": 0.288
+        "bench_avg_return": -4.5,
+        "excess_return": -3.18,
+        "beat_rate": 0.28
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260522",
-          "exit_price": 114.01550847457627,
-          "return_pct": 28.57,
-          "holding_days": 9,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.2,
-          "sl": 0.12,
-          "bench_return_pct": 0.67
-        },
         {
           "result": "LOSS",
           "exit_date": "20260520",
@@ -16418,7 +16513,7 @@
           "holding_days": 17,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -16553,6 +16648,22 @@
           "tp": 0.2,
           "sl": 0.12,
           "bench_return_pct": -7.66
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261022",
+          "exit_price": 111.0,
+          "return_pct": -12.6,
+          "holding_days": 10,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": -7.96
         },
         {
           "result": "LOSS",
@@ -17093,40 +17204,39 @@
           "tp": 0.2,
           "sl": 0.12,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.2,
+          "sl": 0.12
         }
       ]
     },
     "TP20_SL15": {
       "stats": {
-        "total": 113,
-        "wins": 25,
-        "losses": 88,
-        "open_count": 20,
-        "win_rate": 0.2212,
-        "avg_return": -8.3818,
-        "avg_holding_days": 20.2,
-        "bench_n": 113,
-        "bench_avg_return": -4.4,
-        "excess_return": -3.98,
-        "beat_rate": 0.2478
+        "total": 116,
+        "wins": 24,
+        "losses": 92,
+        "open_count": 18,
+        "win_rate": 0.2069,
+        "avg_return": -9.0028,
+        "avg_holding_days": 20.3,
+        "bench_n": 116,
+        "bench_avg_return": -4.77,
+        "excess_return": -4.23,
+        "beat_rate": 0.2328
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260522",
-          "exit_price": 114.01550847457627,
-          "return_pct": 28.57,
-          "holding_days": 9,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": 0.2,
-          "sl": 0.15,
-          "bench_return_pct": 0.67
-        },
         {
           "result": "LOSS",
           "exit_date": "20260527",
@@ -18482,11 +18592,11 @@
           "bench_return_pct": -4.67
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.16,
+          "holding_days": 25,
           "entry_date": "20260930",
           "entry_price": 288.5,
           "amount": 3000,
@@ -18494,7 +18604,8 @@
           "stock_name": "創見",
           "signal_date": "20260929",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -13.38
         },
         {
           "result": "LOSS",
@@ -18552,7 +18663,7 @@
           "holding_days": 21,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -18577,11 +18688,11 @@
           "bench_return_pct": -5.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.59,
+          "holding_days": 22,
           "entry_date": "20261005",
           "entry_price": 290.0,
           "amount": 3000,
@@ -18589,7 +18700,8 @@
           "stock_name": "創見",
           "signal_date": "20261002",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.81
         },
         {
           "result": "LOSS",
@@ -18640,11 +18752,11 @@
           "bench_return_pct": -7.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.73,
+          "holding_days": 21,
           "entry_date": "20261006",
           "entry_price": 290.5,
           "amount": 1000.0,
@@ -18652,7 +18764,8 @@
           "stock_name": "創見",
           "signal_date": "20261005",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.21
         },
         {
           "result": "LOSS",
@@ -18685,6 +18798,22 @@
           "tp": 0.2,
           "sl": 0.15,
           "bench_return_pct": -14.03
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261030",
+          "exit_price": 106.5,
+          "return_pct": -16.14,
+          "holding_days": 14,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -9.64
         },
         {
           "result": "LOSS",
@@ -19218,40 +19347,39 @@
           "tp": 0.2,
           "sl": 0.15,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.2,
+          "sl": 0.15
         }
       ]
     },
     "MA5_MA10": {
       "stats": {
         "total": 133,
-        "wins": 44,
-        "losses": 89,
-        "open_count": 0,
-        "win_rate": 0.3308,
-        "avg_return": -1.2084,
-        "avg_holding_days": 3.5,
+        "wins": 43,
+        "losses": 90,
+        "open_count": 1,
+        "win_rate": 0.3233,
+        "avg_return": -1.411,
+        "avg_holding_days": 3.4,
         "bench_n": 133,
-        "bench_avg_return": -0.38,
-        "excess_return": -0.83,
+        "bench_avg_return": -0.46,
+        "excess_return": -0.95,
         "beat_rate": 0.3609
       },
       "trades": [
-        {
-          "result": "WIN",
-          "exit_date": "20260608",
-          "exit_price": 107.68,
-          "return_pct": 21.43,
-          "holding_days": 20,
-          "entry_date": "20260511",
-          "entry_price": 88.67872881355932,
-          "amount": 3000,
-          "stock_id": "2441",
-          "stock_name": "超豐",
-          "signal_date": "20260508",
-          "tp": null,
-          "sl": null,
-          "bench_return_pct": 4.45
-        },
         {
           "result": "LOSS",
           "exit_date": "20260518",
@@ -20684,7 +20812,7 @@
           "holding_days": 2,
           "entry_date": "20261002",
           "entry_price": 124.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2441",
           "stock_name": "超豐",
           "signal_date": "20261001",
@@ -20819,6 +20947,22 @@
           "tp": null,
           "sl": null,
           "bench_return_pct": -6.24
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261016",
+          "exit_price": 120.0,
+          "return_pct": -5.51,
+          "holding_days": 6,
+          "entry_date": "20261007",
+          "entry_price": 127.0,
+          "amount": 1000.0,
+          "stock_id": "2441",
+          "stock_name": "超豐",
+          "signal_date": "20261006",
+          "tp": null,
+          "sl": null,
+          "bench_return_pct": -6.16
         },
         {
           "result": "WIN",
@@ -21363,6 +21507,22 @@
           "tp": null,
           "sl": null,
           "bench_return_pct": -4.01
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": 1,
+          "exit_state": "HOLDING",
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": null,
+          "sl": null
         }
       ]
     }

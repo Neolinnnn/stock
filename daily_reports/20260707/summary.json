@@ -4538,7 +4538,16 @@
     "taiex_ma60": 42555.81,
     "gate_buys": [],
     "new_entries": [],
-    "new_exits": [],
+    "new_exits": [
+      {
+        "id": "3535",
+        "name": "晶彩科",
+        "exit_price": 105.0,
+        "return_pct": -18.29,
+        "exit_reason": "SL",
+        "holding_days": 15
+      }
+    ],
     "holding": [
       {
         "id": "2383",
@@ -4559,9 +4568,9 @@
         "signal_price": 4860.0,
         "status": "holding",
         "phase": 1,
-        "entry_date": "20260619",
-        "entry_price": 4860.0,
-        "high_watermark": 4860.0,
+        "entry_date": "20260622",
+        "entry_price": 4755.0,
+        "high_watermark": 4755.0,
         "days_since_high": 0
       },
       {

@@ -8,10 +8,11 @@ Daily Post-Market Sector Scan
   - daily_reports/YYYYMMDD/*.png         （族群比較圖 / 個股圖表）
 
 用法：
-  python strategy_templates/07_daily_scan.py
+  python scripts/daily_scan.py                 # 資料非當日即中止
+  python scripts/daily_scan.py --allow-stale   # 休市日手動補跑
 """
 import sys, os, json, math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 # 載入主引擎
@@ -28,6 +29,13 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
+
+# 以 `python scripts/daily_scan.py` 執行時 sys.path[0] 是 scripts/，repo 根目錄不在其中，
+# `from indicators.xxx import` 會 ModuleNotFoundError。scan_sector 把它當可選模組吞掉，
+# 結果 2026-07-03 起分點、主力分數、籌碼分層全數靜默為 None。放最前面優先於同名外部套件。
+_ROOT = str(Path(__file__).resolve().parent.parent)
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
 
 # 取數統一走 datafeed（FinMind token 輪替 + 價格快取 + yfinance 備援）
 import datafeed
@@ -279,6 +287,8 @@ def fetch_market_overview():
                 prev = float(df.iloc[-2]['close']) if len(df) >= 2 else cur
                 overview[key] = cur
                 overview[chg_key] = (cur - prev) / prev * 100 if prev else None
+                if sid == 'TAIEX':
+                    overview['資料日期'] = str(df.iloc[-1]['date'])[:10]
             else:
                 overview[key] = None
                 overview[chg_key] = None
@@ -354,10 +364,56 @@ def news_health_line():
     return line
 
 
+# 新聞時間一律以台灣時間處理：CI runner 是 UTC，fromtimestamp() 不帶時區會晚 8 小時
+_TPE = timezone(timedelta(hours=8))
+
+
+def _title_mentions(title, stock_id, stock_name, all_names):
+    """標題是否提到目標個股：代號，或名稱前 2 字。
+
+    前 2 字與其他追蹤股撞名時（南亞／南亞科）改比全名，並先把以該字串開頭的
+    其他較長名稱從標題移除，避免「南亞科」的新聞算到「南亞」頭上。
+    """
+    if stock_id in title:
+        return True
+    short = stock_name[:2] if len(stock_name) >= 2 else stock_name
+    others = [n for n in all_names if n != stock_name]
+    key = stock_name if any(n.startswith(short) for n in others) else short
+    for n in others:
+        if len(n) > len(key) and n.startswith(key):
+            title = title.replace(n, '')
+    return key in title
+
+
+def broker_health_line(all_results):
+    """分點抓取健檢：成功檔數與首見錯誤。分點曾整批失效三個多月無人察覺。"""
+    tried = ok = 0
+    first_err = None
+    seen = set()
+    for results in all_results.values():
+        for r in results:
+            br = r.get('broker')
+            if br is None or r.get('id') in seen:
+                continue
+            seen.add(r.get('id'))
+            tried += 1
+            if br.get('source'):
+                ok += 1
+            elif first_err is None:
+                first_err = br.get('error')
+    if not tried:
+        return '🏦 分點：本次未抓取'
+    line = f'🏦 分點抓取：{ok}/{tried} 檔成功'
+    if ok == 0:
+        line += f'\n   ⚠ 全數失敗（{first_err}）。影響：主力分數與籌碼分層一律為中性'
+    return line
+
+
 def fetch_news(stock_id, stock_name, days=3):
     """抓取個股最新新聞（鉅亨網 API，免費無需 token）"""
     import urllib.request, json as _json
-    cutoff = datetime.now() - timedelta(days=days)
+    cutoff = datetime.now(_TPE) - timedelta(days=days)
+    all_names = {n for stocks in SECTORS.values() for n in stocks.values()}
     with _NEWS_LOCK:
         NEWS_STATS['attempted'] += 1
     raw_seen = 0
@@ -366,14 +422,11 @@ def fetch_news(stock_id, stock_name, days=3):
     def _parse_items(items):
         result = []
         for it in items:
-            import datetime as _dt
-            pub_dt = _dt.datetime.fromtimestamp(it.get('publishAt', 0))
+            pub_dt = datetime.fromtimestamp(it.get('publishAt', 0), _TPE)
             if pub_dt < cutoff:
                 continue
             title = it.get('title', '')
-            # 驗證標題確實提到目標股票（代號或名稱前2字）
-            short = stock_name[:2] if len(stock_name) >= 2 else stock_name
-            if stock_id not in title and short not in title:
+            if not _title_mentions(title, stock_id, stock_name, all_names):
                 continue
             result.append({
                 'date': pub_dt.strftime('%Y-%m-%d'),
@@ -399,10 +452,11 @@ def fetch_news(stock_id, stock_name, days=3):
                 NEWS_STATS['filtered_out'] += 1
         return result
 
-    # 主要：用個股專屬 tag 端點（cnyes 標準做法）
+    # 主要：個股新聞端點（鉅亨網個股頁 www.cnyes.com/twstock/<id>/news 自用）
+    # 舊端點 newslist/category/tw_stock_id/<id> 於 2026-11 起回 404
     try:
-        url = (f'https://api.cnyes.com/media/api/v1/newslist/category/tw_stock_id'
-               f'/{stock_id}?limit=10')
+        url = (f'https://api.cnyes.com/media/api/v1/newslist/TWS:{stock_id}:STOCK'
+               f'/symbolNews?limit=10')
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req, timeout=8) as r:
             data = _json.loads(r.read())
@@ -413,13 +467,14 @@ def fetch_news(stock_id, stock_name, days=3):
         if result:
             return _record(result)
     except Exception as e:
-        _news_err(stock_id, 'tag', e)
+        _news_err(stock_id, 'symbolNews', e)
 
     # 備援：關鍵字搜尋
     try:
         import urllib.parse
         q = urllib.parse.quote(f'{stock_id} {stock_name}')
-        url = f'https://api.cnyes.com/media/api/v1/newslist/search?q={q}&limit=10'
+        # 舊端點 newslist/search 已 404；新端點忽略 limit，固定回 20 則
+        url = f'https://api.cnyes.com/media/api/v1/search?q={q}&limit=10'
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req, timeout=8) as r:
             data = _json.loads(r.read())
@@ -452,7 +507,9 @@ def fetch_chip_data(stock_id, days=5):
     """
     try:
         end = datetime.now().strftime('%Y-%m-%d')
-        start = (datetime.now() - timedelta(days=days + 5)).strftime('%Y-%m-%d')
+        # 曆日回看要容得下長假：days+5 在春節（休市約 9 個曆日）後只剩 1~2 個交易日，
+        # 「近5日」與連買日會少算。單次請求，多抓幾天不增加呼叫次數
+        start = (datetime.now() - timedelta(days=days * 2 + 10)).strftime('%Y-%m-%d')
         df = _finmind_fetch('taiwan_stock_institutional_investors', stock_id=stock_id, start_date=start, end_date=end)
         if df.empty:
             return {}
@@ -466,8 +523,10 @@ def fetch_chip_data(stock_id, days=5):
             for _, row in day_df.iterrows():
                 zh = _CHIP_MAP.get(str(row.get('name', '')))
                 if zh:
-                    # FinMind 的 buy/sell 單位是股，除 1000 轉為張
-                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0)) // 1000
+                    agg[zh] += int(row.get('buy', 0) - row.get('sell', 0))
+            # FinMind 的 buy/sell 單位是股，除 1000 轉為張。先以股累加、最後換成張並向零截斷：逐列 // 1000 會把 -500 股算成 -1 張、+500 股算成 0，偏向賣超
+            for k in ('外資', '投信', '自營'):
+                agg[k] = int(agg[k] / 1000)
             agg['合計'] = agg['外資'] + agg['投信'] + agg['自營']
             daily.append(agg)
 
@@ -494,21 +553,48 @@ def fetch_chip_data(stock_id, days=5):
         return {}
 
 
-def scan_sector(sector_name, stocks):
-    """掃描單一族群"""
+def chip_concentration(net_lots, vol_shares):
+    """5日籌碼集中度（%）＝法人近5日買賣超 ÷ 近5日總成交量。
+
+    net_lots 為張（fetch_chip_data 的單位），vol_shares 為股（K 棒成交量），
+    先把張換回股再除。成交量缺漏或為 0 時回 None。
+    """
+    if not vol_shares:
+        return None
+    return round(net_lots * 1000 / vol_shares * 100, 1)
+
+
+def scan_sector(sector_name, stocks, cache=None):
+    """掃描單一族群。
+
+    cache：跨族群共用的 {sid: 結果}。同一檔列在多個族群（3711／2449／6239 同在封測與
+    CoPoS封裝）時只抓一次，不重複消耗 FinMind 額度與分點請求。回傳淺拷貝，各族群互不影響。
+    """
     # 分點爬蟲模組（延遲匯入避免循環依賴與測試時拖慢啟動）
+    # 匯入失敗時照樣降級，但要印出來：曾因路徑問題靜默失效三個多月無人察覺
     try:
         from indicators.broker import fetch_broker_top15, main_force_score
-    except Exception:
+    except Exception as e:
+        print(f"  ⚠ 分點模組載入失敗，本次不抓分點：{e!r}")
         fetch_broker_top15 = None
         main_force_score = None
     try:
         from indicators.chip import chip_tier
-    except Exception:
+    except Exception as e:
+        print(f"  ⚠ 籌碼分層模組載入失敗，本次不分層：{e!r}")
         chip_tier = None
 
     def _scan_one(sid, name):
         """單檔完整抓取：twstock 抓一次共用，再補新聞/籌碼/分點。"""
+        if cache is not None and sid in cache:
+            return dict(cache[sid])
+        r = _scan_one_uncached(sid, name)
+        if cache is not None and 'error' not in r:
+            cache[sid] = r
+            return dict(r)
+        return r
+
+    def _scan_one_uncached(sid, name):
         try:
             # twstock 抓一次（涵蓋 26 個月），analyze_stock 與 fetch_price_stats 共用
             try:
@@ -516,6 +602,10 @@ def scan_sector(sector_name, stocks):
             except Exception:
                 hist = None
             r = analyze_stock(sid, name, hist=hist)
+            try:
+                r['price_date'] = str(hist.date[-1])[:10] if hist is not None else None
+            except Exception:
+                r['price_date'] = None
             # 補算 MA10/MA60（analyze_stock 僅提供 MA5/MA20），供進場閘門與持倉出場追蹤
             try:
                 _p = [x for x in list(hist.price) if x is not None] if hist is not None else []
@@ -534,7 +624,9 @@ def scan_sector(sector_name, stocks):
             r['news'] = fetch_news(sid, name, days=3)
             r['chip'] = fetch_chip_data(sid, days=5)
 
-            # 5日籌碼集中度 = 法人近5日買賣超 / 近5日總成交量（皆為股，可直除）
+            # 5日籌碼集中度 = 法人近5日買賣超 / 近5日總成交量。
+            # 單位不同：chip 為「張」（fetch_chip_data 已 ÷1000），成交量為「股」，須先把
+            # 法人換回股再除。2026-09-21 起漏換，集中度小 1000 倍、全部顯示 0.0。
             # 土洋同買 = 外資與投信近5日皆買超。兩者供籌碼分層顯示用。
             _c = r.get('chip') or {}
             if _c:
@@ -543,8 +635,7 @@ def scan_sector(sector_name, stocks):
                     _vol5 = sum(_v5) if len(_v5) == 5 else None
                 except Exception:
                     _vol5 = None
-                _c['集中度'] = (round(_c.get('近5日', 0) / _vol5 * 100, 1)
-                              if _vol5 else None)
+                _c['集中度'] = chip_concentration(_c.get('近5日', 0), _vol5)
                 _c['土洋同買'] = bool(_c.get('近5日外資', 0) > 0
                                     and _c.get('近5日投信', 0) > 0)
 
@@ -648,10 +739,76 @@ def generate_sector_chart(all_results, out_dir):
     return str(path)
 
 
-def run_daily_scan():
-    today = datetime.now().strftime('%Y%m%d')
+# ── 資料新鮮度檢查 ────────────────────────────────────────────────────────────
+# FinMind 官方更新：日 K 17:30、個股法人買賣表 20:00。跑太早或遇休市（颱風假等臨時
+# 休市不在證交所清單內），拿到的是前一交易日資料，卻會以今天日期產出報告：
+#   20261023 與 20261022 收盤價 102/102 檔相同；20261104 有 77/105 檔籌碼停在 11-03。
+# 這些報告是回測訊號來源，且存在後備援排程即跳過，錯誤會永久留下，故寧可中止。
+FRESH_MIN_RATIO = 0.8
+MIN_COVERAGE = 50       # 個股掃描成功率（%）低於此值即中止，不產出殘缺報告   # 至少 8 成個股的 K 棒與法人資料須為當日（容許個別停牌）
+
+
+def check_freshness(today_iso, all_results):
+    """檢查掃描結果是否為當日資料。
+
+    Args:
+        today_iso: 當日 YYYY-MM-DD
+        all_results: {族群: [scan 結果]}；結果含 price_date 與 chip.date
+
+    Returns:
+        (ok, 說明文字)。同一檔跨族群只計一次。
+    """
+    seen, price_ok, chip_ok, chip_n = set(), 0, 0, 0
+    for results in all_results.values():
+        for r in results:
+            if 'error' in r or r['id'] in seen:
+                continue
+            seen.add(r['id'])
+            price_ok += r.get('price_date') == today_iso
+            chip_date = (r.get('chip') or {}).get('date')
+            if chip_date:
+                chip_n += 1
+                chip_ok += chip_date == today_iso
+    n = len(seen)
+    if not n:
+        return False, '無任何成功掃描的個股'
+    # 法人只計有資料者：抓取失敗（額度用盡等）回空值，與「資料落後」不同，照舊降級為無籌碼；
+    # 日期落後才代表跑太早。全數抓取失敗時此項不判定，由 K 棒日期把關
+    msg = (f'K 棒為當日 {price_ok}/{n} 檔、法人為當日 {chip_ok}/{chip_n} 檔'
+           f'（{n - chip_n} 檔抓取失敗）')
+    ok = price_ok >= n * FRESH_MIN_RATIO and chip_ok >= chip_n * FRESH_MIN_RATIO
+    return ok, msg
+
+
+def drop_stale_chips(today_iso, all_results):
+    """法人資料日期早於當日的個股清空籌碼，不沿用前一日（回傳清空檔數）。
+
+    fetch_chip_data 抓不到當日時會回前一日資料，若照用會把昨天的法人買賣超
+    當成今天顯示、計入集中度與籌碼分層。
+    """
+    n = 0
+    for results in all_results.values():
+        for r in results:
+            chip = r.get('chip') or {}
+            if chip and chip.get('date') != today_iso:
+                r['chip'] = {}
+                if r.get('chip_tier') is not None:
+                    r['chip_tier'] = 'neutral'   # 無籌碼資料時 chip_tier() 的回傳值
+                n += 1
+    return n
+
+
+def _abort_stale(msg):
+    print(f"\n❌ 資料非當日，中止且不產出報告：{msg}")
+    print("   跑太早（法人表 20:00 更新）或今日休市；確定要用現有資料產出請加 --allow-stale")
+    sys.exit(1)
+
+
+def run_daily_scan(allow_stale=False):
+    now = datetime.now()
+    today = now.strftime('%Y%m%d')
+    today_iso = now.strftime('%Y-%m-%d')
     out_dir = Path(f'daily_reports/{today}')
-    out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\n{'='*78}")
     print(f"  每日掃描 | {datetime.now():%Y-%m-%d %H:%M}")
@@ -661,12 +818,27 @@ def run_daily_scan():
     # 1. 大盤
     print("📊 抓取大盤數據...")
     market = fetch_market_overview()
+    # 先以加權指數判斷，休市日不必掃完 100 檔才發現（省 FinMind 額度）
+    mkt_date = market.get('資料日期')
+    if mkt_date and mkt_date != today_iso and not allow_stale:
+        _abort_stale(f'加權指數最新 K 棒為 {mkt_date}')
 
     # 2. 掃描各族群
     all_results = {}
+    scan_cache = {}
     for sector_name, stocks in SECTORS.items():
         print(f"\n🏭 掃描族群：{sector_name}（{len(stocks)} 檔）...")
-        all_results[sector_name] = scan_sector(sector_name, stocks)
+        all_results[sector_name] = scan_sector(sector_name, stocks, cache=scan_cache)
+
+    fresh, fresh_msg = check_freshness(today_iso, all_results)
+    print(f"\n🕒 資料新鮮度：{fresh_msg}")
+    if not fresh and not allow_stale:
+        _abort_stale(fresh_msg)
+    if not allow_stale:
+        dropped = drop_stale_chips(today_iso, all_results)
+        if dropped:
+            print(f"  ⚠ {dropped} 檔法人資料非當日，已清空不沿用")
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     # 3. 產生圖表
     print("\n📈 產生圖表...")
@@ -674,6 +846,10 @@ def run_daily_scan():
 
     # 4. 整合摘要
     summary = build_summary(today, market, all_results, chart_path)
+    if summary['scan_coverage'] < MIN_COVERAGE:
+        # 大量失敗（額度耗盡、API 異常）時不產出：殘缺報告一旦 commit，備援排程就會跳過
+        print(f"\n❌ 掃描涵蓋率僅 {summary['scan_coverage']}%（< {MIN_COVERAGE}%），中止且不產出報告")
+        sys.exit(1)
 
     # 4.5 持倉追蹤 + 進場閘門（HYBRID 出場）
     try:
@@ -714,7 +890,7 @@ def run_daily_scan():
     # 5. 輸出 JSON + Markdown
     json_path = out_dir / 'summary.json'
     with open(json_path, 'w', encoding='utf-8') as f:
-        json.dump(summary, f, ensure_ascii=False, indent=2, default=str)
+        json.dump(_json_safe(summary), f, ensure_ascii=False, indent=2, default=str)
 
     md_path = out_dir / 'summary.md'
     with open(md_path, 'w', encoding='utf-8') as f:
@@ -729,6 +905,7 @@ def run_daily_scan():
         items = ', '.join(f"{k}({v}檔)" for k, v in partial.items())
         print(f"⚠ 部分失敗族群：{items}")
     print(f"\n{news_health_line()}")
+    print(broker_health_line(all_results))
     print(f"\n✅ 完成（掃描涵蓋率 {coverage}%）")
     print(f"   JSON：{json_path}")
     print(f"   MD：  {md_path}")
@@ -758,7 +935,8 @@ def run_daily_scan():
         docs_dir = Path(__file__).parent.parent / 'docs'
         docs_dir.mkdir(exist_ok=True)
         with open(docs_dir / 'daily.json', 'w', encoding='utf-8') as f:
-            json.dump(build_daily_payload(summary), f, ensure_ascii=False, indent=2, default=str)
+            json.dump(_json_safe(build_daily_payload(summary)), f,
+                      ensure_ascii=False, indent=2, default=str)
         print(f'  docs/daily.json 已更新（build_docs 失敗：{e}）')
 
     print(f"\n{'='*78}\n")
@@ -769,6 +947,21 @@ def _nan_to_none(v):
     if isinstance(v, float) and math.isnan(v):
         return None
     return v
+
+
+def _json_safe(obj):
+    """遞迴把 NaN／inf 換成 None。
+
+    掃描結果經 pandas DataFrame 後缺值變 NaN（atr14、stop_loss、目標價等），
+    json.dump 會寫出非標準 JSON 的 NaN，瀏覽器的 JSON.parse 會整份讀取失敗。
+    """
+    if isinstance(obj, float) and (math.isnan(obj) or math.isinf(obj)):
+        return None
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_json_safe(v) for v in obj]
+    return obj
 
 
 def build_daily_payload(summary):
@@ -937,8 +1130,11 @@ def build_summary(date, market, all_results, chart_path):
                 {
                     'id': r['id'], 'name': r['name'], 'price': r['price'],
                     'rsi': round(r['rsi'], 1),
-                    'rsi10': round(r['rsi10'], 1) if r.get('rsi10') else None,
-                    'ret_20d': round(r['ret_20d'] * 100, 1) if r.get('ret_20d') else None,
+                    # 經 DataFrame 後缺值為 NaN；0 是有效值，不可用真假值判斷
+                    'rsi10': (round(r['rsi10'], 1)
+                              if _nan_to_none(r.get('rsi10')) is not None else None),
+                    'ret_20d': (round(r['ret_20d'] * 100, 1)
+                                if _nan_to_none(r.get('ret_20d')) is not None else None),
                     'signal': r['signal'],
                     'ma5':  r.get('ma5'),
                     'ma10': r.get('ma10'),
@@ -1021,9 +1217,14 @@ def build_summary(date, market, all_results, chart_path):
                 'type': 'RSI過熱', 'detail': f"RSI={r['rsi']:.1f}"
             })
 
-    total = len(all_results)
-    ok_count = total - len(failed_sectors)
-    scan_coverage = round(ok_count / total * 100) if total else 100
+    # 以個股計（跨族群重複者只計一次）。原本以族群計，一族群只要成功一檔就算數，
+    # 個股大量失敗時仍顯示 100%
+    stock_ok = {}
+    for results in all_results.values():
+        for r in results:
+            stock_ok[r['id']] = stock_ok.get(r['id'], False) or 'error' not in r
+    scan_coverage = (round(sum(stock_ok.values()) / len(stock_ok) * 100)
+                     if stock_ok else 0)
 
     return {
         'date': date,
@@ -1125,4 +1326,4 @@ def summary_to_markdown(s):
 
 
 if __name__ == '__main__':
-    run_daily_scan()
+    run_daily_scan(allow_stale='--allow-stale' in sys.argv[1:])

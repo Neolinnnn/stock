@@ -1,11 +1,11 @@
 {
   "week_ending": "2026-10-23",
-  "days_covered": 5,
+  "days_covered": 4,
   "market": {
     "taiex_close": 46041.43,
-    "taiex_week_pct": -4.03,
+    "taiex_week_pct": -2.27,
     "otc_close": 381.69,
-    "otc_week_pct": -7.95,
+    "otc_week_pct": -4.64,
     "taiex_bull": false,
     "taiex_ma60": 46207.09
   },
@@ -239,22 +239,16 @@
   },
   "top_buys": [
     {
-      "stock": "3715 定穎投控",
-      "buy_days": 3,
-      "chip_tier": null,
-      "gate": true
-    },
-    {
       "stock": "2367 燿華",
       "buy_days": 2,
       "chip_tier": null,
       "gate": true
     },
     {
-      "stock": "3231 緯創",
+      "stock": "3715 定穎投控",
       "buy_days": 2,
       "chip_tier": null,
-      "gate": false
+      "gate": true
     },
     {
       "stock": "3535 晶彩科",
@@ -297,6 +291,12 @@
       "buy_days": 1,
       "chip_tier": null,
       "gate": true
+    },
+    {
+      "stock": "3231 緯創",
+      "buy_days": 1,
+      "chip_tier": null,
+      "gate": false
     }
   ],
   "positions_week": {
@@ -810,10 +810,10 @@
       "sector": "PCB",
       "first_date": "20261021",
       "entry_price": 135.0,
-      "days_listed": 3,
+      "days_listed": 2,
       "last_price": 134.5,
       "max_price": 135.0,
-      "last_listed": "20261023",
+      "last_listed": "20261022",
       "ret_pct": -0.37,
       "max_ret_pct": 0.0
     },

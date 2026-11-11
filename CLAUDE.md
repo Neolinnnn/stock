@@ -58,7 +58,8 @@ result = writer.generate(task="daily_summary", context={...})
 ## 使用模型
 
 - **預設模型**：`gemini-2.5-flash`（實在的最新 GA、免費額度、原生 Google Search grounding）
-- **備用模型**：`gemini-2.0-flash`（穩定，高量低成本）
+- **備用模型**：`gemini-2.0-flash`（穩定，高量低成本）——目前程式**未接上**，
+  沒有自動退回此模型；Gemini 失敗時的備援是下節的 Groq
 - Pro 系列需付費，**不使用**
 
 ### Groq 備援
@@ -180,6 +181,9 @@ Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序
 - 前例：`patch_cv_history.py`（已刪除，2026-05-10 `a5f7aaf34`）以事後資料重算 CV 覆寫 262 份歷史報告，
   隔日 `adc7426d6` 又據此把歷史 BUY 降為 HOLD；以現行規則重建的行動清單因此在覆寫期勝率 75%，
   即時期僅 47%。兩者造成的改寫已由 `scripts/restore_cv_asof.py` 撤銷（只還原其後未再被改過的欄位）
+- docs 頁面同理：`docs/YYYYMMDD.json` 的 trend_analysis／product_mix／signalFlips 讀最新個股資料，
+  只在當日重算；歷史日沿用當時的值（`build_docs.build_daily_payload(frozen=...)`）。
+  2026-11 前每天重算全部歷史頁，已由 `scripts/restore_docs_asof.py` 自 git 歷史還原，無當日值者移除
 - 可以：當日重跑覆蓋當日報告、以截至當日的資料補建／重建歷史（`backfill_history.analyze_stock_on_date`）、
   更正股票代號或名稱誤植（只改受影響欄位，並在 commit 說明）
 
@@ -211,11 +215,16 @@ FinMind 日 K（`TaiwanStockPrice`）為未還原價，分割、減資、除權�
 |------|-------------|------|
 | Apps Script（`gas/dispatch.gs`）→ `workflow_dispatch`，`auto=true` | 週一～五 20:15～20:45 | 主排程；休市日跳過 |
 | GitHub `schedule`（`17 14 * * 1-5`） | 22:17（實際常延遲數小時） | 備援；當日報告已存在則跳過 |
-| 手動 Run workflow（`auto` 不勾） | 任意 | 一律執行，含休市日 |
+| 手動 Run workflow（`auto` 不勾） | 任意 | 一律執行；資料非當日會中止，休市日補跑須勾 `allow_stale` |
 
 - **不以 GitHub schedule 當主排程**：2026-09～10 實測每天延遲 5～9 小時；`workflow_dispatch` 是即時的
 - **不早於 20:00**：FinMind 官方更新時間為日 K 17:30、PER 18:00、個股法人買賣表 20:00。
   `fetch_chip_data` 拿不到當日法人資料時會默默沿用前一日，跑太早不會報錯
+- **資料新鮮度檢查**（`daily_scan.check_freshness`）：加權指數最新 K 棒非當日即中止；掃完後
+  K 棒或法人資料為當日的個股不足 8 成也中止（`exit 1`，不 commit，備援排程會再試）。
+  個別股票法人資料落後者清空籌碼，不沿用前一日。前例：20261023 與前一日價格完全相同、
+  20261104 有 77/105 檔籌碼停在前一日
+- 外部排程早於 20:00 觸發（`auto=true` 且 UTC 未滿 12 點）時 check job 直接跳過
 - 備援 run 若延遲跨過 UTC 午夜，`TODAY` 會變隔日，check job 會直接跳過，不會產出錯日期的報告
 
 ---

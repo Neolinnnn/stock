@@ -276,8 +276,30 @@ def call_groq(
                     raise last_error from e
             else:
                 raise last_error from e
+        except OSError as e:
+            # URLError、TimeoutError 等連線層錯誤（HTTPError 已在上面先攔下）。
+            # 正規化為 RuntimeError，call_llm 才會包成「兩邊皆失敗」而不是讓原始例外穿出去
+            raise RuntimeError(f"Groq 連線失敗：{e}") from e
+        except (KeyError, IndexError, TypeError) as e:
+            raise RuntimeError(f"Groq 回應格式非預期：{type(e).__name__} {e}") from e
 
     raise last_error  # type: ignore
+
+
+def _gemini_text(result: dict) -> str:
+    """取出 Gemini 回應的全部文字。
+
+    回應可能拆成多個 part（啟用 grounding 時尤其常見），只取 parts[0] 會截斷內容，
+    JSON 任務因此解析失敗。思考摘要（thought=True）不屬於答案，略過。
+
+    Raises:
+        KeyError / IndexError: 回應無 candidates 或 parts（例如安全阻擋）
+    """
+    parts = result["candidates"][0]["content"]["parts"]
+    text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
+    if not text:
+        raise KeyError("回應不含文字")
+    return text
 
 
 def call_gemini(
@@ -345,7 +367,7 @@ def call_gemini(
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
                 result = json.loads(resp.read().decode("utf-8"))
-                return result["candidates"][0]["content"]["parts"][0]["text"]
+                return _gemini_text(result)
         except urllib.error.HTTPError as e:
             err_body = e.read().decode("utf-8", "replace")
             last_error = RuntimeError(f"Gemini API 錯誤 {e.code}: {err_body}")

@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-06T20:10:01.808798",
+  "generated_at": "2026-11-11T01:38:07.108076",
   "date_range": {
-    "start": "20260206",
-    "end": "20261106"
+    "start": "20260211",
+    "end": "20261111"
   },
   "benchmark": {
     "id": "0050",
-    "start": "20260206",
-    "end": "20261106",
-    "return_pct": 30.34
+    "start": "20260211",
+    "end": "20261110",
+    "return_pct": 32.16
   },
   "total_signals": 178,
   "signals_after_limit": 138,
@@ -20,7 +20,7 @@
         "total": 132,
         "wins": 35,
         "losses": 97,
-        "open_count": 5,
+        "open_count": 6,
         "win_rate": 0.2652,
         "avg_return": -4.0017,
         "avg_holding_days": 12.7,
@@ -2216,6 +2216,21 @@
           "tp": 0.15,
           "sl": 0.1,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.15,
+          "sl": 0.1
         }
       ]
     },
@@ -2224,7 +2239,7 @@
         "total": 129,
         "wins": 42,
         "losses": 87,
-        "open_count": 8,
+        "open_count": 9,
         "win_rate": 0.3256,
         "avg_return": -3.4276,
         "avg_holding_days": 14.7,
@@ -4417,22 +4432,37 @@
           "tp": 0.15,
           "sl": 0.12,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.15,
+          "sl": 0.12
         }
       ]
     },
     "TP15_SL15": {
       "stats": {
-        "total": 117,
+        "total": 120,
         "wins": 45,
-        "losses": 72,
-        "open_count": 20,
-        "win_rate": 0.3846,
-        "avg_return": -3.8246,
-        "avg_holding_days": 16.8,
-        "bench_n": 117,
-        "bench_avg_return": -2.43,
-        "excess_return": -1.4,
-        "beat_rate": 0.3761
+        "losses": 75,
+        "open_count": 18,
+        "win_rate": 0.375,
+        "avg_return": -4.1663,
+        "avg_holding_days": 16.9,
+        "bench_n": 120,
+        "bench_avg_return": -2.74,
+        "excess_return": -1.42,
+        "beat_rate": 0.3667
       },
       "trades": [
         {
@@ -5902,11 +5932,11 @@
           "bench_return_pct": 0.89
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.16,
+          "holding_days": 25,
           "entry_date": "20260930",
           "entry_price": 288.5,
           "amount": 3000,
@@ -5914,7 +5944,8 @@
           "stock_name": "創見",
           "signal_date": "20260929",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -13.38
         },
         {
           "result": "LOSS",
@@ -5981,11 +6012,11 @@
           "bench_return_pct": -5.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.59,
+          "holding_days": 22,
           "entry_date": "20261005",
           "entry_price": 290.0,
           "amount": 3000,
@@ -5993,7 +6024,8 @@
           "stock_name": "創見",
           "signal_date": "20261002",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.81
         },
         {
           "result": "LOSS",
@@ -6044,11 +6076,11 @@
           "bench_return_pct": -7.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.73,
+          "holding_days": 21,
           "entry_date": "20261006",
           "entry_price": 290.5,
           "amount": 1000.0,
@@ -6056,7 +6088,8 @@
           "stock_name": "創見",
           "signal_date": "20261005",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.21
         },
         {
           "result": "LOSS",
@@ -6606,6 +6639,21 @@
           "tp": 0.15,
           "sl": 0.15,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.15,
+          "sl": 0.15
         }
       ]
     },
@@ -6614,7 +6662,7 @@
         "total": 132,
         "wins": 25,
         "losses": 107,
-        "open_count": 5,
+        "open_count": 6,
         "win_rate": 0.1894,
         "avg_return": -5.6952,
         "avg_holding_days": 14.2,
@@ -8810,6 +8858,21 @@
           "tp": 0.18,
           "sl": 0.1,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.18,
+          "sl": 0.1
         }
       ]
     },
@@ -8818,7 +8881,7 @@
         "total": 129,
         "wins": 31,
         "losses": 98,
-        "open_count": 8,
+        "open_count": 9,
         "win_rate": 0.2403,
         "avg_return": -5.4812,
         "avg_holding_days": 16.5,
@@ -11011,22 +11074,37 @@
           "tp": 0.18,
           "sl": 0.12,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.18,
+          "sl": 0.12
         }
       ]
     },
     "TP18_SL15": {
       "stats": {
-        "total": 117,
+        "total": 120,
         "wins": 34,
-        "losses": 83,
-        "open_count": 20,
-        "win_rate": 0.2906,
-        "avg_return": -6.1521,
-        "avg_holding_days": 19.0,
-        "bench_n": 117,
-        "bench_avg_return": -3.1,
-        "excess_return": -3.05,
-        "beat_rate": 0.2821
+        "losses": 86,
+        "open_count": 18,
+        "win_rate": 0.2833,
+        "avg_return": -6.4357,
+        "avg_holding_days": 19.1,
+        "bench_n": 120,
+        "bench_avg_return": -3.4,
+        "excess_return": -3.03,
+        "beat_rate": 0.275
       },
       "trades": [
         {
@@ -12496,11 +12574,11 @@
           "bench_return_pct": 4.2
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.16,
+          "holding_days": 25,
           "entry_date": "20260930",
           "entry_price": 288.5,
           "amount": 3000,
@@ -12508,7 +12586,8 @@
           "stock_name": "創見",
           "signal_date": "20260929",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -13.38
         },
         {
           "result": "LOSS",
@@ -12575,11 +12654,11 @@
           "bench_return_pct": -5.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.59,
+          "holding_days": 22,
           "entry_date": "20261005",
           "entry_price": 290.0,
           "amount": 3000,
@@ -12587,7 +12666,8 @@
           "stock_name": "創見",
           "signal_date": "20261002",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.81
         },
         {
           "result": "LOSS",
@@ -12638,11 +12718,11 @@
           "bench_return_pct": -7.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.73,
+          "holding_days": 21,
           "entry_date": "20261006",
           "entry_price": 290.5,
           "amount": 1000.0,
@@ -12650,7 +12730,8 @@
           "stock_name": "創見",
           "signal_date": "20261005",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.21
         },
         {
           "result": "LOSS",
@@ -13200,6 +13281,21 @@
           "tp": 0.18,
           "sl": 0.15,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.18,
+          "sl": 0.15
         }
       ]
     },
@@ -13208,7 +13304,7 @@
         "total": 132,
         "wins": 23,
         "losses": 109,
-        "open_count": 5,
+        "open_count": 6,
         "win_rate": 0.1742,
         "avg_return": -5.9428,
         "avg_holding_days": 14.5,
@@ -15404,6 +15500,21 @@
           "tp": 0.2,
           "sl": 0.1,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.2,
+          "sl": 0.1
         }
       ]
     },
@@ -15412,7 +15523,7 @@
         "total": 129,
         "wins": 29,
         "losses": 100,
-        "open_count": 8,
+        "open_count": 9,
         "win_rate": 0.2248,
         "avg_return": -5.6806,
         "avg_holding_days": 17.5,
@@ -17605,22 +17716,37 @@
           "tp": 0.2,
           "sl": 0.12,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.2,
+          "sl": 0.12
         }
       ]
     },
     "TP20_SL15": {
       "stats": {
-        "total": 117,
+        "total": 120,
         "wins": 32,
-        "losses": 85,
-        "open_count": 20,
-        "win_rate": 0.2735,
-        "avg_return": -6.4521,
+        "losses": 88,
+        "open_count": 18,
+        "win_rate": 0.2667,
+        "avg_return": -6.7282,
         "avg_holding_days": 20.5,
-        "bench_n": 117,
-        "bench_avg_return": -3.12,
-        "excess_return": -3.33,
-        "beat_rate": 0.265
+        "bench_n": 120,
+        "bench_avg_return": -3.42,
+        "excess_return": -3.3,
+        "beat_rate": 0.2583
       },
       "trades": [
         {
@@ -19090,11 +19216,11 @@
           "bench_return_pct": 4.2
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.16,
+          "holding_days": 25,
           "entry_date": "20260930",
           "entry_price": 288.5,
           "amount": 3000,
@@ -19102,7 +19228,8 @@
           "stock_name": "創見",
           "signal_date": "20260929",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -13.38
         },
         {
           "result": "LOSS",
@@ -19169,11 +19296,11 @@
           "bench_return_pct": -5.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.59,
+          "holding_days": 22,
           "entry_date": "20261005",
           "entry_price": 290.0,
           "amount": 3000,
@@ -19181,7 +19308,8 @@
           "stock_name": "創見",
           "signal_date": "20261002",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.81
         },
         {
           "result": "LOSS",
@@ -19232,11 +19360,11 @@
           "bench_return_pct": -7.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261109",
+          "exit_price": 239.0,
+          "return_pct": -17.73,
+          "holding_days": 21,
           "entry_date": "20261006",
           "entry_price": 290.5,
           "amount": 1000.0,
@@ -19244,7 +19372,8 @@
           "stock_name": "創見",
           "signal_date": "20261005",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.21
         },
         {
           "result": "LOSS",
@@ -19794,6 +19923,21 @@
           "tp": 0.2,
           "sl": 0.15,
           "bench_return_pct": -7.3
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": null,
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": 0.2,
+          "sl": 0.15
         }
       ]
     },
@@ -19802,7 +19946,7 @@
         "total": 137,
         "wins": 43,
         "losses": 94,
-        "open_count": 0,
+        "open_count": 1,
         "win_rate": 0.3139,
         "avg_return": -1.2381,
         "avg_holding_days": 3.5,
@@ -22003,6 +22147,22 @@
           "tp": null,
           "sl": null,
           "bench_return_pct": -4.01
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": 1,
+          "exit_state": "HOLDING",
+          "entry_date": "20261109",
+          "entry_price": 275.5,
+          "amount": 3000,
+          "stock_id": "4967",
+          "stock_name": "十銓",
+          "signal_date": "20261106",
+          "tp": null,
+          "sl": null
         }
       ]
     }

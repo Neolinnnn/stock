@@ -32,8 +32,10 @@ def aggregate_chip(df: pd.DataFrame, days: int = 10) -> pd.DataFrame:
         for _, r in day.iterrows():
             zh = _CHIP_MAP.get(str(r.get("name", "")))
             if zh:
-                # 買賣單位為股，轉換為張（1張=1000股）
-                agg[zh] += (int(r.get("buy", 0)) - int(r.get("sell", 0))) // 1000
+                agg[zh] += int(r.get("buy", 0)) - int(r.get("sell", 0))
+        # 買賣單位為股，轉換為張（1張=1000股）。先以股累加、最後換成張並向零截斷：逐列 // 1000 會把 -500 股算成 -1 張、+500 股算成 0，偏向賣超
+        for k in ("外資", "投信", "自營"):
+            agg[k] = int(agg[k] / 1000)
         agg["合計"] = agg["外資"] + agg["投信"] + agg["自營"]
         rows.append(agg)
 
