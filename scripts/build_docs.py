@@ -402,6 +402,7 @@ def build_daily_payload(summary, frozen=None):
                 'chipDualBuy': chip.get('土洋同買'),
                 'trustDays': chip.get('投信連買日'),
                 'chipTier':  st.get('chip_tier'),
+                'tv':        _nan_to_none(st.get('trade_value')),   # 成交值（元），熱力圖面積；舊報告無此欄
                 'news': ' / '.join(
                     n['title'] for n in st.get('news', [])[:2]
                 ),

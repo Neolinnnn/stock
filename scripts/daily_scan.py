@@ -606,6 +606,12 @@ def scan_sector(sector_name, stocks, cache=None):
                 r['price_date'] = str(hist.date[-1])[:10] if hist is not None else None
             except Exception:
                 r['price_date'] = None
+            # 當日成交值（元）≈ 收盤 × 成交股數，供首頁熱力圖決定方塊面積
+            try:
+                r['trade_value'] = (round(float(hist.price[-1]) * float(hist.volume[-1]))
+                                    if hist is not None and len(hist.volume) else None)
+            except Exception:
+                r['trade_value'] = None
             # 補算 MA10/MA60（analyze_stock 僅提供 MA5/MA20），供進場閘門與持倉出場追蹤
             try:
                 _p = [x for x in list(hist.price) if x is not None] if hist is not None else []
@@ -1152,6 +1158,7 @@ def build_summary(date, market, all_results, chart_path):
                     'stop_loss':    r.get('stop_loss'),
                     'broker':       r.get('broker'),
                     'main_force':   r.get('main_force'),
+                    'trade_value':  _nan_to_none(r.get('trade_value')),
                 }
                 for _, r in df.iterrows()
             ],
