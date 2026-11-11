@@ -58,7 +58,8 @@ result = writer.generate(task="daily_summary", context={...})
 ## 使用模型
 
 - **預設模型**：`gemini-2.5-flash`（實在的最新 GA、免費額度、原生 Google Search grounding）
-- **備用模型**：`gemini-2.0-flash`（穩定，高量低成本）
+- **備用模型**：`gemini-2.0-flash`（穩定，高量低成本）——目前程式**未接上**，
+  沒有自動退回此模型；Gemini 失敗時的備援是下節的 Groq
 - Pro 系列需付費，**不使用**
 
 ### Groq 備援

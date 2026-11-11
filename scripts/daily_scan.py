@@ -8,7 +8,8 @@ Daily Post-Market Sector Scan
   - daily_reports/YYYYMMDD/*.png         （族群比較圖 / 個股圖表）
 
 用法：
-  python strategy_templates/07_daily_scan.py
+  python scripts/daily_scan.py                 # 資料非當日即中止
+  python scripts/daily_scan.py --allow-stale   # 休市日手動補跑
 """
 import sys, os, json, math
 from datetime import datetime, timedelta, timezone
