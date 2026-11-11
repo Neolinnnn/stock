@@ -26,3 +26,56 @@ jobs:
       # 不帶任何 secrets：測試不打外部 API（test_daily_scan 的 import 測試以子行程模擬
       # `python scripts/daily_scan.py`，確認 indicators 模組在 CI 的執行方式下載得到）
       - run: python -m pytest -q
+
+  # 暫時性：在 GitHub runner 上以真實 FinMind 資料跑完整份 daily_scan（模擬 11/10 晚間），
+  # 驗證掃描通過路徑。只帶 FinMind token，不帶 Notion／Sheets／Gemini secrets，不 commit。驗證後移除
+  e2e-full-scan:
+    if: github.ref_name == 'claude/busy-dijkstra-yaby0d'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq faketime fonts-noto-cjk
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt -q
+          pip install -r macro/requirements.txt -q
+      - name: 完整 daily_scan（faketime 2026-11-10 21:30 台灣）
+        env:
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+          FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+        run: |
+          rm -rf daily_reports/20261110
+          set +e
+          faketime '2026-11-10 13:30:00' python scripts/daily_scan.py > scan.log 2>&1
+          code=$?
+          set -e
+          grep -E '資料新鮮度|分點抓取|新聞抓取|涵蓋率|中止|⚠|❌|✅|Traceback|Error' scan.log | grep -v ' INFO ' | tail -40
+          echo "exit=$code"
+          [ "$code" -eq 0 ]
+      - name: 檢查產出內容
+        run: |
+          python - <<'PY'
+          import json, collections
+          s = json.load(open('daily_reports/20261110/summary.json'))
+          sts = [st for x in s['sectors'].values() for st in x['stocks']]
+          src = collections.Counter((st.get('broker') or {}).get('source') for st in sts)
+          tier = collections.Counter(st.get('chip_tier') for st in sts)
+          conc = [st['chip'].get('集中度') for st in sts if st.get('chip')]
+          mf = sum(1 for st in sts if (st.get('main_force') or {}).get('score') is not None)
+          chipd = collections.Counter((st.get('chip') or {}).get('date') for st in sts)
+          print('個股', len(sts), '涵蓋率', s['scan_coverage'], '大盤資料日期', s['market'].get('資料日期'))
+          print('分點來源', dict(src), '主力分數有值', mf)
+          print('籌碼分層', dict(tier))
+          print('集中度非零', sum(1 for c in conc if c), '/', len(conc), '範例', conc[:5])
+          print('法人日期', dict(chipd))
+          print('NaN in file:', 'NaN' in open('daily_reports/20261110/summary.json').read())
+          assert s['scan_coverage'] >= 90
+          assert src.get('fubon', 0) + src.get('histock', 0) > 0, '分點全數失敗'
+          assert any(t is not None for t in tier), 'chip_tier 全為 None'
+          assert sum(1 for c in conc if c) > len(conc) * 0.5, '集中度多為 0'
+          PY
