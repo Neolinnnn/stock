@@ -64,3 +64,50 @@ jobs:
             # UTC 09:00（台灣 17:00）前，FinMind 尚無當日 K 棒（17:30 更新），必須中止
             [ "$code" -ne 0 ] && grep -q '資料非當日，中止' scan.log
           fi
+
+  # 暫時性：移除非交易日報告後重算回測輸出，commit 回本分支，完成後移除此 job
+  regen-backtests:
+    if: github.ref_name == 'claude/busy-dijkstra-yaby0d'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+      FINMIND_TOKEN_1: ${{ secrets.FINMIND_TOKEN_1 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: |
+          pip install "setuptools<68" -q
+          pip install -r requirements.txt -q
+      - name: 以 FinMind 驗證被移除的 6 天皆非交易日
+        run: |
+          python -c "
+          import sys; sys.path.insert(0, 'scripts'); import datafeed
+          df = datafeed.finmind_fetch('taiwan_stock_daily', stock_id='TAIEX', start_date='2026-04-01', end_date='2026-10-31')
+          days = set(df['date'].astype(str))
+          bad = [d for d in ('2026-04-18','2026-05-01','2026-06-14','2026-06-19','2026-07-10','2026-10-23') if d in days]
+          print('TAIEX 交易日數', len(days), '被移除日期中為交易日者', bad)
+          sys.exit(1 if bad else 0)
+          "
+      - name: 重算回測
+        run: |
+          python scripts/backtest_all.py
+          python scripts/build_backtest_docs.py
+          python scripts/sector_rotation_backtest.py
+          python scripts/backtest_ma10.py
+      - name: Commit 回本分支
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backtest_results*.json docs/backtest_summary*.json docs/backtest/
+          git status --short | head -40
+          git diff --cached --quiet && { echo "無變更"; exit 0; }
+          git commit -m "data: 移除非交易日報告後重算回測（CI）"
+          git checkout -- .
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
