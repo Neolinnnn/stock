@@ -226,6 +226,10 @@
   .hm-legend{display:flex;align-items:center;gap:3px;margin-left:auto;font-size:10px;}
   .hm-legend i{display:inline-block;width:16px;height:9px;border-radius:2px;}
   .hm-box{position:relative;width:100%;overflow:hidden;border-radius:6px;background:var(--bg);}
+  .hm-sec{position:absolute;}
+  .hm-sec-hd{position:absolute;left:0;right:0;top:0;padding:0 2px;font-size:12px;font-weight:600;color:var(--text);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hm-sec-hd span{font-weight:400;font-size:11px;margin-left:4px;font-variant-numeric:tabular-nums;}
   .hm-tile{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;
     color:#fff;text-align:center;line-height:1.15;overflow:hidden;cursor:pointer;
     box-shadow:inset 0 0 0 1px var(--bg);text-shadow:0 1px 2px rgba(0,0,0,.5);}
@@ -2103,7 +2107,8 @@ async function loadDate(dateStr){
 }
 
 // ── 今日漲跌熱力圖 ────────────────────────────────────────────────────────────
-// 所有追蹤股合併成一張 treemap（同一檔跨族群只畫一次），面積 ∝ √成交值、顏色 = 漲跌幅。
+// 所有追蹤股合併成一張巢狀 treemap：先依族群切區塊（區塊頂端標族群名與平均漲跌），
+// 區塊內再切個股。同一檔跨族群只畫一次，歸在第一個族群。面積 ∝ √成交值、顏色 = 漲跌幅。
 // 開根號是因為台積電成交值常是小型股的上百倍，線性面積會把小股壓成看不見的細條。
 // 漲跌幅 = 當日收盤 / 前一交易日收盤 − 1，兩者皆取自各自當日的掃描報告（無前視）。
 // 價格為未還原價：除權息日會多算一段跌幅；超過漲跌停（±10%）視為除權／分割等
@@ -2240,7 +2245,26 @@ function _hmDraw(){
   const H = Math.round(Math.max(320, W < 600 ? avail : Math.min(avail, 760)));
   box.style.height = H + 'px';
   _hmLastW = W;
-  box.innerHTML = _squarify(rows, 0, 0, W, H).map(t => _hmTileHtml(t.item, t.x, t.y, t.w, t.h)).join('');
+
+  // 依族群分組：區塊面積 = 成員權重和；族群平均漲跌為等權平均
+  const groups = new Map();
+  rows.forEach(r => { const k = r.sectors[0]; if(!groups.has(k)) groups.set(k, []); groups.get(k).push(r); });
+  const secs = [...groups].map(([name, items]) => {
+    const v = items.filter(r => r.chg != null).map(r => r.chg);
+    return {name, items, w: items.reduce((t, r) => t + r.w, 0),
+            avg: v.length ? v.reduce((a, c) => a + c, 0) / v.length : null};
+  }).sort((a, b) => b.w - a.w);
+
+  const GAP = 3, HD = 18;   // 族群區塊間距、標題列高
+  box.innerHTML = _squarify(secs, 0, 0, W, H).map(({item: sec, x, y, w, h}) => {
+    const sw = w - GAP, sh = h - GAP;                      // 右、下留間距
+    const hd = sh >= HD + 18 && sw >= 30 ? HD : 0;         // 太小的區塊不放標題，整塊給個股
+    const avgCls = sec.avg == null ? 'flat' : signColor(sec.avg);
+    return `<div class="hm-sec" style="left:${x.toFixed(2)}px;top:${y.toFixed(2)}px;width:${sw.toFixed(2)}px;height:${sh.toFixed(2)}px">`
+      + (hd ? `<div class="hm-sec-hd" style="height:${HD}px;line-height:${HD}px" title="${escHtml(sec.name)}：${sec.items.length} 檔，平均 ${_hmPct(sec.avg)}">${escHtml(sec.name)} ›<span class="${avgCls}">${_hmPct(sec.avg)}</span></div>` : '')
+      + _squarify(sec.items, 0, hd, sw, sh - hd).map(t => _hmTileHtml(t.item, t.x, t.y, t.w, t.h)).join('')
+      + '</div>';
+  }).join('');
 }
 
 let _hmResizeT = null;
