@@ -218,7 +218,7 @@
   .sp-row .lbl{color:var(--sub);}
   .sp-row .val{font-weight:600;}
   .up{color:var(--green);}.dn{color:var(--red);}.flat{color:var(--sub);}
-  /* 今日漲跌熱力圖：所有追蹤股一張 treemap，面積 ∝ √成交值、顏色 = 漲跌幅（±5% 封頂）。
+  /* 今日／本週漲跌熱力圖：所有追蹤股一張 treemap，面積 ∝ √成交值、顏色 = 漲跌幅（今日 ±5%、本週 ±20% 封頂）。
      方塊以絕對定位排版，座標由 _squarify() 算出 */
   .hm-card{padding:10px;margin-bottom:16px;}
   .hm-head{display:flex;align-items:center;gap:4px 10px;flex-wrap:wrap;font-size:11px;color:var(--sub);margin-bottom:8px;}
@@ -2115,11 +2115,10 @@ async function loadDate(dateStr){
 // 公司行動造成的假跳空，不上色。成交值（tv）2026-11-11 起才有，舊報告退回等權。
 const HM_LIMIT = 10.5, HM_CLAMP = 5;
 let _HM = null;        // 目前畫的資料 {dateStr, prevDate, rows}，供 resize／切回首頁重畫
-let _hmLastW = 0;
 
-function _hmColor(p){
+function _hmColor(p, clamp){
   if(p == null) return '#2a2f3a';
-  const t = Math.sqrt(Math.min(Math.abs(p), HM_CLAMP) / HM_CLAMP);   // 開根號讓 ±0.5% 也看得出色差
+  const t = Math.sqrt(Math.min(Math.abs(p), clamp) / clamp);   // 開根號讓 ±0.5% 也看得出色差
   const base = [52, 58, 70], to = p >= 0 ? [30, 170, 90] : [205, 55, 50];
   return `rgb(${base.map((b, i) => Math.round(b + (to[i] - b) * t)).join(',')})`;
 }
@@ -2189,11 +2188,11 @@ async function fillHeatmap(dateStr, data){
   _hmDraw();
 }
 
-function _hmTileHtml(r, x, y, w, h){
+function _hmTileHtml(r, x, y, w, h, o){
   const pct = _hmPct(r.chg);
-  const tip = `${r.id} ${r.name}｜${r.sectors.join('、')}\n收盤 ${isFinite(r.price) ? r.price.toFixed(2) : '—'}　漲跌 `
-    + (r.chg == null ? '—（無前日價或疑似除權／分割）' : pct)
-    + (r.tv > 0 ? `\n成交值 約 ${(r.tv / 1e8).toFixed(1)} 億` : '');
+  const tip = `${r.id} ${r.name}｜${r.sectors.join('、')}\n收盤 ${isFinite(r.price) ? r.price.toFixed(2) : '—'}　${o.chgLabel} `
+    + (r.chg == null ? `—（${o.naText}）` : pct)
+    + (r.tv > 0 ? `\n${o.tvLabel} 約 ${(r.tv / 1e8).toFixed(1)} 億` : '');
   // 分級顯示：大格「名稱＋漲跌」；小格只放名稱（顏色即漲跌，數字在提示裡）；再小就留白。
   // 手機一屏 100 檔、平均每格僅約 40px，若硬塞兩行字，√成交值造成的大小差會讓半數方塊變空白
   const nl = Math.max(r.name.length, 2);
@@ -2208,18 +2207,26 @@ function _hmTileHtml(r, x, y, w, h){
   }
   const id = escHtml(r.id);
   return `<div class="hm-tile" role="button" tabindex="0" title="${escHtml(tip)}" aria-label="${escHtml(tip)}"
-    style="left:${x.toFixed(2)}px;top:${y.toFixed(2)}px;width:${w.toFixed(2)}px;height:${h.toFixed(2)}px;background:${_hmColor(r.chg)}"
+    style="left:${x.toFixed(2)}px;top:${y.toFixed(2)}px;width:${w.toFixed(2)}px;height:${h.toFixed(2)}px;background:${_hmColor(r.chg, o.clamp)}"
     onclick="goToStock('${id}')" onkeydown="if(event.key==='Enter')goToStock('${id}')">${inner}</div>`;
 }
 
 function _hmDraw(){
   const el = document.getElementById('sector-heatmap');
   if(!el || !_HM || _HM.dateStr !== CUR_DATE) return;
-  const rows = _HM.rows;
   if(!_HM.prevDate){
     el.innerHTML = `<div class="hm-head"><div class="card-title">今日漲跌熱力圖</div>無前一交易日資料，無法計算漲跌幅</div>`;
     return;
   }
+  _hmRender(el, _HM.rows, {
+    title: '今日漲跌熱力圖', sub: `對比 ${fmtDate(_HM.prevDate)}`, clamp: HM_CLAMP,
+    area: '面積＝√成交值', noArea: '等權（此日報告無成交值）',
+    chgLabel: '漲跌', naText: '無前日價或疑似除權／分割', tvLabel: '成交值'});
+}
+
+// 每日與週報共用的繪製：把 rows（{id,name,price,chg,tv,sectors}）畫成巢狀 treemap 填入卡片 el。
+// o = {title, sub, clamp（顏色封頂 %）, area／noArea（面積說明）, chgLabel／naText／tvLabel（提示文字）}
+function _hmRender(el, rows, o){
   // 面積權重：√成交值；無成交值者給最小面積的六成。整份報告都沒有成交值（舊報告）則等權
   const roots = rows.filter(r => r.tv > 0).map(r => Math.sqrt(r.tv));
   const byValue = roots.length > 0;
@@ -2229,12 +2236,12 @@ function _hmDraw(){
 
   const up = rows.filter(r => r.chg > 0).length, dn = rows.filter(r => r.chg < 0).length,
         flat = rows.filter(r => r.chg === 0).length, na = rows.filter(r => r.chg == null).length;
-  const legend = [-HM_CLAMP, -3, -1, 0, 1, 3, HM_CLAMP]
-    .map(v => `<i style="background:${_hmColor(v)}" title="${_hmPct(v)}"></i>`).join('');
+  const legend = [-1, -.6, -.2, 0, .2, .6, 1].map(k => k * o.clamp)
+    .map(v => `<i style="background:${_hmColor(v, o.clamp)}" title="${_hmPct(v)}"></i>`).join('');
   el.innerHTML = `<div class="hm-head">
-      <div class="card-title">今日漲跌熱力圖</div>
-      <span>對比 ${fmtDate(_HM.prevDate)}・<span class="up">漲 ${up}</span>／<span class="dn">跌 ${dn}</span>／平 ${flat}${na ? `／無 ${na}` : ''}・${byValue ? '面積＝√成交值' : '等權（此日報告無成交值）'}</span>
-      <span class="hm-legend">−${HM_CLAMP}%${legend}+${HM_CLAMP}%</span>
+      <div class="card-title">${o.title}</div>
+      <span>${o.sub}・<span class="up">漲 ${up}</span>／<span class="dn">跌 ${dn}</span>／平 ${flat}${na ? `／無 ${na}` : ''}・${byValue ? o.area : o.noArea}</span>
+      <span class="hm-legend">−${o.clamp}%${legend}+${o.clamp}%</span>
     </div><div class="hm-box"></div>`;
   const box = el.querySelector('.hm-box');
   const W = box.clientWidth;
@@ -2244,7 +2251,7 @@ function _hmDraw(){
   const avail = window.innerHeight - (hdr ? hdr.offsetHeight : 0) - el.querySelector('.hm-head').offsetHeight - 32;
   const H = Math.round(Math.max(320, W < 600 ? avail : Math.min(avail, 760)));
   box.style.height = H + 'px';
-  _hmLastW = W;
+  el._hmW = W;     // 供 resize 判斷寬度是否變動
 
   // 依族群分組：區塊面積 = 成員權重和；族群平均漲跌為等權平均
   const groups = new Map();
@@ -2262,7 +2269,7 @@ function _hmDraw(){
     const avgCls = sec.avg == null ? 'flat' : signColor(sec.avg);
     return `<div class="hm-sec" style="left:${x.toFixed(2)}px;top:${y.toFixed(2)}px;width:${sw.toFixed(2)}px;height:${sh.toFixed(2)}px">`
       + (hd ? `<div class="hm-sec-hd" style="height:${HD}px;line-height:${HD}px" title="${escHtml(sec.name)}：${sec.items.length} 檔，平均 ${_hmPct(sec.avg)}">${escHtml(sec.name)} ›<span class="${avgCls}">${_hmPct(sec.avg)}</span></div>` : '')
-      + _squarify(sec.items, 0, hd, sw, sh - hd).map(t => _hmTileHtml(t.item, t.x, t.y, t.w, t.h)).join('')
+      + _squarify(sec.items, 0, hd, sw, sh - hd).map(t => _hmTileHtml(t.item, t.x, t.y, t.w, t.h, o)).join('')
       + '</div>';
   }).join('');
 }
@@ -2271,11 +2278,69 @@ let _hmResizeT = null;
 window.addEventListener('resize', () => {
   clearTimeout(_hmResizeT);
   _hmResizeT = setTimeout(() => {
-    const box = document.querySelector('#sector-heatmap .hm-box');
     // 手機捲動時網址列伸縮也會觸發 resize，寬度沒變就不重畫
-    if(box && box.clientWidth !== _hmLastW) _hmDraw();
+    [['sector-heatmap', _hmDraw], ['weekly-heatmap', _wkHmDraw]].forEach(([id, draw]) => {
+      const el = document.getElementById(id), box = el && el.querySelector('.hm-box');
+      if(box && box.clientWidth !== el._hmW) draw();
+    });
   }, 150);
 });
+
+// ── 本週漲跌熱力圖（週報分頁）────────────────────────────────────────────────
+// 與今日熱力圖同一套畫法，顏色改為「本週漲跌」＝ 週末收盤 / 上週最後交易日收盤 − 1，
+// 基期與週報「加權指數本週 %」一致（週內各日漲跌複利）。資料取自各交易日當日的 docs 報告。
+// 假跳空的判斷沿用單日規則逐日檢查：週內任一日缺價、或任一日漲跌超過漲跌停，該檔不上色
+// （只比頭尾兩天的話，一週合理漲跌可達 −41%～+61%，擋不住除權／分割）。
+// 面積取週內有成交值各日的平均。顏色 ±20% 封頂：個股單週 ±10% 很常見，沿用 ±5% 會整片飽和。
+const WK_HM_CLAMP = 20;
+let _WHM = null;       // {key（週報日期）, base, end, rows}；rows 為 null 表示價格載入失敗
+
+async function fillWeeklyHeatmap(){
+  const meta = (WEEKLY_DATA && WEEKLY_DATA.meta) || {};
+  const key = meta.date;
+  if(!_WHM || _WHM.key !== key){
+    // 本週交易日：週報日（含）往前 meta.days 份日報；再前一份為基期
+    const i = DATES.findIndex(d => d <= String(key || '').replace(/-/g, ''));
+    const week = i < 0 ? [] : DATES.slice(i, i + (Number(meta.days) || 0)).reverse();   // 由舊到新
+    const base = i < 0 ? undefined : DATES[i + week.length];
+    let rows = null;
+    if(week.length && base){
+      try{
+        const bust = Math.floor(Date.now() / 86400000);
+        const reps = await Promise.all([base, ...week].map(async d =>
+          CACHE[d] || (CACHE[d] = await fetchJSON(`./${d}.json?v=${bust}`))));
+        const maps = reps.map(r => new Map((r.stocks || []).map(s => [s.id, s])));
+        const byId = new Map();
+        (reps[reps.length - 1].stocks || []).forEach(s => {      // 同一檔跨族群只取一次
+          const r = byId.get(s.id);
+          if(r){ if(!r.sectors.includes(s.sector)) r.sectors.push(s.sector); return; }
+          const px = maps.map(m => Number((m.get(s.id) || {}).price));
+          const ok = px.every((p, k) => p > 0 && (k === 0 || Math.abs(p / px[k - 1] - 1) * 100 <= HM_LIMIT));
+          const tvs = maps.slice(1).map(m => Number((m.get(s.id) || {}).tv)).filter(v => v > 0);
+          byId.set(s.id, {id: s.id, name: s.name || s.id, price: Number(s.price),
+            chg: ok ? (px[px.length - 1] / px[0] - 1) * 100 : null,
+            tv: tvs.length ? tvs.reduce((a, c) => a + c, 0) / tvs.length : 0, sectors: [s.sector]});
+        });
+        rows = [...byId.values()];
+      }catch{}
+    }
+    _WHM = {key, base, end: week[week.length - 1], rows};
+  }
+  _wkHmDraw();
+}
+
+function _wkHmDraw(){
+  const el = document.getElementById('weekly-heatmap');
+  if(!el || !_WHM || !WEEKLY_DATA || _WHM.key !== WEEKLY_DATA.meta.date) return;
+  if(!_WHM.rows){
+    el.innerHTML = `<div class="hm-head"><div class="card-title">本週漲跌熱力圖</div>無法載入本週各日價格</div>`;
+    return;
+  }
+  _hmRender(el, _WHM.rows, {
+    title: '本週漲跌熱力圖', sub: `${fmtDate(_WHM.base)} 收盤 → ${fmtDate(_WHM.end)} 收盤`, clamp: WK_HM_CLAMP,
+    area: '面積＝√日均成交值', noArea: '等權（本週報告無成交值）',
+    chgLabel: '本週漲跌', naText: '週內缺價或疑似除權／分割', tvLabel: '日均成交值'});
+}
 
 function stepDate(dir){
   const idx = DATES.indexOf(CUR_DATE);
@@ -2955,9 +3020,8 @@ function renderWeekly(){
       <td>${vsLast}</td>
     </tr>`;
   });
-  html+=`</table>
-    <img src="./weekly_sector_trend.png?v=${Date.now()}" alt="族群趨勢" style="width:100%;margin-top:10px;border-radius:6px" onerror="this.style.display='none'">
-  </div>`;
+  html+=`</table></div>
+    <div class="card hm-card" id="weekly-heatmap" style="margin-top:14px"><div class="hm-head"><div class="card-title">本週漲跌熱力圖</div>載入本週各日價格…</div></div>`;
   // 第三層 · 行動清單：週報 buys join 今日 daily 狀態
   const dailyById={};
   (DAILY_DATA && DAILY_DATA.stocks ? DAILY_DATA.stocks : []).forEach(s=>{dailyById[String(s.id)]=s;});
@@ -3077,6 +3141,7 @@ function renderWeekly(){
     html+=`</div>`;
   }
   el.innerHTML=html;
+  fillWeeklyHeatmap();
 }
 
 // ── 工具 ─────────────────────────────────────────────────────────────────────

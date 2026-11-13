@@ -583,10 +583,6 @@ def run_weekly_summary(as_of=None, upload_notion=True):
         json.dump(build_weekly_payload(summary), f, ensure_ascii=False, indent=2, default=str)
     print('  docs/weekly.json 已更新')
 
-    import shutil
-    shutil.copy(chart_path, docs_dir / 'weekly_sector_trend.png')
-    print('  docs/weekly_sector_trend.png 已更新')
-
     # Notion 上傳
     if upload_notion:
         try:
