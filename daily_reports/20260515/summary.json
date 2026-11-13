@@ -2907,6 +2907,149 @@
           "main_force": null
         }
       ]
+    },
+    "玻纖布": {
+      "avg_ret_20d": -11.65,
+      "avg_rsi": 27.4,
+      "avg_sharpe": 3.9,
+      "stocks": [
+        {
+          "id": "1802",
+          "name": "台玻",
+          "price": 65.0,
+          "rsi": 30.1,
+          "rsi10": 43.7,
+          "ret_20d": -7.0,
+          "signal": "HOLD",
+          "cv_sharpe": 2.04,
+          "cv_win_rate": 0.72,
+          "news": [],
+          "chip": {
+            "date": "2026-05-15",
+            "外資": -8857,
+            "投信": 0,
+            "自營": -1250,
+            "合計": -10107,
+            "近5日": -43880,
+            "近5日外資": -39351,
+            "近5日投信": -7,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -10.8,
+            "土洋同買": false
+          },
+          "target_short": 75.2,
+          "target_mid": null,
+          "target_long": null,
+          "atr14": 4.52,
+          "stop_loss": 56.0,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "1815",
+          "name": "富喬",
+          "price": 102.5,
+          "rsi": 28.8,
+          "rsi10": 39.2,
+          "ret_20d": -11.3,
+          "signal": "HOLD",
+          "cv_sharpe": 7.62,
+          "cv_win_rate": 0.83,
+          "news": [],
+          "chip": {
+            "date": "2026-05-15",
+            "外資": -2902,
+            "投信": 0,
+            "自營": -641,
+            "合計": -3543,
+            "近5日": -15469,
+            "近5日外資": -14058,
+            "近5日投信": -957,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -11.1,
+            "土洋同買": false
+          },
+          "target_short": 122.5,
+          "target_mid": null,
+          "target_long": null,
+          "atr14": 7.13,
+          "stop_loss": 88.2,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "5340",
+          "name": "建榮",
+          "price": 103.0,
+          "rsi": 24.9,
+          "rsi10": 36.9,
+          "ret_20d": -17.6,
+          "signal": "HOLD",
+          "cv_sharpe": -2.29,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-05-15",
+            "外資": -99,
+            "投信": 0,
+            "自營": -17,
+            "合計": -116,
+            "近5日": -1339,
+            "近5日外資": -1277,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -9.5,
+            "土洋同買": false
+          },
+          "target_short": 130.2,
+          "target_mid": null,
+          "target_long": null,
+          "atr14": 7.18,
+          "stop_loss": 88.6,
+          "broker": null,
+          "main_force": null
+        },
+        {
+          "id": "5475",
+          "name": "德宏",
+          "price": 299.0,
+          "rsi": 25.6,
+          "rsi10": 39.4,
+          "ret_20d": -10.7,
+          "signal": "HOLD",
+          "cv_sharpe": 8.23,
+          "cv_win_rate": 0.89,
+          "news": [],
+          "chip": {
+            "date": "2026-05-15",
+            "外資": 416,
+            "投信": 0,
+            "自營": -16,
+            "合計": 400,
+            "近5日": 304,
+            "近5日外資": 52,
+            "近5日投信": 263,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 2.1,
+            "土洋同買": true
+          },
+          "target_short": 408.6,
+          "target_mid": null,
+          "target_long": null,
+          "atr14": 27.32,
+          "stop_loss": 244.4,
+          "broker": null,
+          "main_force": null
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 3,
+      "backfilled": "2026-11-13"
     }
   },
   "strong_sectors": [
@@ -2923,7 +3066,9 @@
     "AI 電源",
     "ABF載板"
   ],
-  "weak_sectors": [],
+  "weak_sectors": [
+    "玻纖布"
+  ],
   "qualified": [],
   "alerts": [
     {

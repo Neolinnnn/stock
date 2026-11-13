@@ -186,6 +186,10 @@ Key 收集規則：依序讀 `<PREFIX>`、`<PREFIX>_1`、`<PREFIX>_2`…，**序
   2026-11 前每天重算全部歷史頁，已由 `scripts/restore_docs_asof.py` 自 git 歷史還原，無當日值者移除
 - 可以：當日重跑覆蓋當日報告、以截至當日的資料補建／重建歷史（`backfill_history.analyze_stock_on_date`）、
   更正股票代號或名稱誤植（只改受影響欄位，並在 commit 說明）
+- 新設族群補進歷史：`python scripts/backfill_sector.py <族群>`。逐日以截至該日的日 K／法人資料補算，
+  只新增該族群區塊（帶 `backfilled` 標記）與強弱勢名單；qualified／dual_filter／alerts／positions
+  是當時實際發佈的內容，不動。補建的 BUY 訊號會被讀 `sectors` 的回測（`backtest.load_buy_signals`）
+  納入——族群是事後挑的，解讀績效時須留意選股偏誤
 
 ### 回測價格：含息還原價（自算）
 

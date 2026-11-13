@@ -782,6 +782,65 @@
           }
         }
       ]
+    },
+    "玻纖布": {
+      "avg_ret_20d": -15.63,
+      "avg_rsi": 24.8,
+      "avg_sharpe": -5.3,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "1802",
+          "name": "台玻",
+          "price": 17.8,
+          "rsi": 11.8,
+          "ret_20d": -11.4,
+          "signal": "HOLD",
+          "cv_sharpe": -2.26,
+          "cv_win_rate": 0.39,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "1815",
+          "name": "富喬",
+          "price": 12.65,
+          "rsi": 32.5,
+          "ret_20d": -11.5,
+          "signal": "HOLD",
+          "cv_sharpe": -6.46,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "5340",
+          "name": "建榮",
+          "price": 45.25,
+          "rsi": 23.2,
+          "ret_20d": -25.5,
+          "signal": "HOLD",
+          "cv_sharpe": -6.7,
+          "cv_win_rate": 0.11,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "5475",
+          "name": "德宏",
+          "price": 12.8,
+          "rsi": 31.8,
+          "ret_20d": -14.1,
+          "signal": "HOLD",
+          "cv_sharpe": -5.8,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {}
+        }
+      ],
+      "backfilled": "2026-11-13"
     }
   },
   "strong_sectors": [
@@ -793,7 +852,8 @@
   ],
   "weak_sectors": [
     "記憶體",
-    "車用電子"
+    "車用電子",
+    "玻纖布"
   ],
   "qualified": [],
   "alerts": [

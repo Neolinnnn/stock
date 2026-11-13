@@ -782,6 +782,65 @@
           }
         }
       ]
+    },
+    "玻纖布": {
+      "avg_ret_20d": -4.72,
+      "avg_rsi": 43.6,
+      "avg_sharpe": -6.04,
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0,
+      "stocks": [
+        {
+          "id": "1802",
+          "name": "台玻",
+          "price": 17.15,
+          "rsi": 42.6,
+          "ret_20d": -4.2,
+          "signal": "HOLD",
+          "cv_sharpe": -7.89,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "1815",
+          "name": "富喬",
+          "price": 19.3,
+          "rsi": 63.0,
+          "ret_20d": -1.3,
+          "signal": "HOLD",
+          "cv_sharpe": -2.72,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "5340",
+          "name": "建榮",
+          "price": 53.9,
+          "rsi": 47.3,
+          "ret_20d": -3.8,
+          "signal": "HOLD",
+          "cv_sharpe": -4.03,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "5475",
+          "name": "德宏",
+          "price": 11.2,
+          "rsi": 21.7,
+          "ret_20d": -9.7,
+          "signal": "HOLD",
+          "cv_sharpe": -9.54,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {}
+        }
+      ],
+      "backfilled": "2026-11-13"
     }
   },
   "strong_sectors": [
@@ -794,7 +853,8 @@
   "weak_sectors": [
     "光通訊",
     "IC設計",
-    "車用電子"
+    "車用電子",
+    "玻纖布"
   ],
   "qualified": [
     {

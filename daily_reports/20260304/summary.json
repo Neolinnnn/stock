@@ -625,10 +625,70 @@
           }
         }
       ]
+    },
+    "玻纖布": {
+      "avg_ret_20d": 25.01,
+      "avg_rsi": 58.8,
+      "avg_sharpe": -2.07,
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 1,
+      "stocks": [
+        {
+          "id": "1802",
+          "name": "台玻",
+          "price": 57.4,
+          "rsi": 51.2,
+          "ret_20d": 15.3,
+          "signal": "BUY",
+          "cv_sharpe": -0.99,
+          "cv_win_rate": 0.39,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "1815",
+          "name": "富喬",
+          "price": 103.5,
+          "rsi": 61.5,
+          "ret_20d": 10.5,
+          "signal": "HOLD",
+          "cv_sharpe": -7.92,
+          "cv_win_rate": 0.13,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "5340",
+          "name": "建榮",
+          "price": 100.5,
+          "rsi": 52.4,
+          "ret_20d": 6.3,
+          "signal": "HOLD",
+          "cv_sharpe": 5.0,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {}
+        },
+        {
+          "id": "5475",
+          "name": "德宏",
+          "price": 173.0,
+          "rsi": 69.9,
+          "ret_20d": 68.0,
+          "signal": "HOLD",
+          "cv_sharpe": -4.38,
+          "cv_win_rate": 0.11,
+          "news": [],
+          "chip": {}
+        }
+      ],
+      "backfilled": "2026-11-13"
     }
   },
   "strong_sectors": [
-    "光通訊"
+    "光通訊",
+    "玻纖布"
   ],
   "weak_sectors": [
     "AI伺服器",
