@@ -1,0 +1,7235 @@
+{
+  "date": "20261116",
+  "timestamp": "2026-11-16T12:57:47.763725",
+  "market": {
+    "加權指數": 41040.08,
+    "漲跌幅": -6.033274779783091,
+    "資料日期": "2026-11-16",
+    "櫃買指數": 319.12,
+    "櫃買漲跌幅": -6.801787330977489
+  },
+  "sectors": {
+    "光通訊": {
+      "avg_ret_20d": -24.57,
+      "avg_rsi": 34.3,
+      "avg_sharpe": 0.39,
+      "stocks": [
+        {
+          "id": "4979",
+          "name": "華星光",
+          "price": 341.5,
+          "rsi": 31.6,
+          "rsi10": 33.7,
+          "ret_20d": -37.0,
+          "signal": "HOLD",
+          "ma5": 374.9,
+          "ma10": 364.6,
+          "ma20": 418.0,
+          "ma60": 524.32,
+          "cv_sharpe": -5.79,
+          "cv_win_rate": 0.22,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 11:06",
+              "title": "盤中速報 - 華星光(4979)股價殺至跌停，跌停價341.5元，成交3,061張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663546"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 680,
+            "投信": -300,
+            "自營": -46,
+            "合計": 334,
+            "近5日": -1276,
+            "近5日外資": 937,
+            "近5日投信": -2114,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -3.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 538.3,
+          "target_mid": 512.2,
+          "target_long": 490.1,
+          "atr14": 35.44,
+          "stop_loss": 270.6,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "永豐金證券",
+                "lots": 473,
+                "pct": 24.0
+              },
+              {
+                "name": "美商高盛",
+                "lots": 360,
+                "pct": 18.2
+              },
+              {
+                "name": "摩根大通",
+                "lots": 230,
+                "pct": 11.7
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 203,
+                "pct": 10.3
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 194,
+                "pct": 9.8
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "元大證券",
+                "lots": -716,
+                "pct": 22.3
+              },
+              {
+                "name": "兆豐證券",
+                "lots": -383,
+                "pct": 11.9
+              },
+              {
+                "name": "統一",
+                "lots": -304,
+                "pct": 9.5
+              },
+              {
+                "name": "福邦證券",
+                "lots": -299,
+                "pct": 9.3
+              },
+              {
+                "name": "國泰證券",
+                "lots": -242,
+                "pct": 7.5
+              }
+            ],
+            "net_concentration": -1232,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 46.9,
+            "label": "籌碼中性",
+            "net_lots": -1232,
+            "top5_buy_lots": 1460,
+            "top1_broker": "永豐金證券",
+            "top1_lots": 473,
+            "concentration": 0.74
+          },
+          "trade_value": 1300290278
+        },
+        {
+          "id": "3450",
+          "name": "聯鈞",
+          "price": 328.5,
+          "rsi": 32.3,
+          "rsi10": 33.6,
+          "ret_20d": -29.7,
+          "signal": "HOLD",
+          "ma5": 357.7,
+          "ma10": 353.35,
+          "ma20": 393.32,
+          "ma60": 492.14,
+          "cv_sharpe": -0.14,
+          "cv_win_rate": 0.28,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 269,
+            "投信": 0,
+            "自營": -27,
+            "合計": 242,
+            "近5日": 921,
+            "近5日外資": 668,
+            "近5日投信": 297,
+            "連買日": 2,
+            "投信連買日": 0,
+            "集中度": 3.7,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 483.7,
+          "target_mid": 492.8,
+          "target_long": 464.7,
+          "atr14": 31.71,
+          "stop_loss": 265.1,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "元大證券",
+                "lots": 695,
+                "pct": 30.4
+              },
+              {
+                "name": "摩根大通",
+                "lots": 312,
+                "pct": 13.6
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 224,
+                "pct": 9.8
+              },
+              {
+                "name": "美商高盛",
+                "lots": 191,
+                "pct": 8.4
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": 163,
+                "pct": 7.1
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "永豐金證券",
+                "lots": -465,
+                "pct": 21.7
+              },
+              {
+                "name": "第一金",
+                "lots": -296,
+                "pct": 13.8
+              },
+              {
+                "name": "富邦證券",
+                "lots": -261,
+                "pct": 12.2
+              },
+              {
+                "name": "華南永昌-竹北",
+                "lots": -251,
+                "pct": 11.7
+              },
+              {
+                "name": "中國信託",
+                "lots": -247,
+                "pct": 11.6
+              }
+            ],
+            "net_concentration": 149,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 52.4,
+            "label": "籌碼中性",
+            "net_lots": 149,
+            "top5_buy_lots": 1585,
+            "top1_broker": "元大證券",
+            "top1_lots": 695,
+            "concentration": 0.693
+          },
+          "trade_value": 1316724250
+        },
+        {
+          "id": "3105",
+          "name": "穩懋",
+          "price": 512.0,
+          "rsi": 50.0,
+          "rsi10": 50.0,
+          "ret_20d": 2.0,
+          "signal": "BUY",
+          "ma5": 520.5,
+          "ma10": 493.7,
+          "ma20": 509.2,
+          "ma60": 488.74,
+          "cv_sharpe": 7.37,
+          "cv_win_rate": 0.75,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:57",
+              "title": "盤中速報 - 穩懋(3105)股價殺至跌停，跌停價512.0元，成交23,907張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663408"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 1068,
+            "投信": 691,
+            "自營": -220,
+            "合計": 1539,
+            "近5日": 6058,
+            "近5日外資": 4050,
+            "近5日投信": 2030,
+            "連買日": 3,
+            "投信連買日": 5,
+            "集中度": 3.7,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 606.2,
+          "target_mid": 768.0,
+          "target_long": 694.7,
+          "atr14": 45.82,
+          "stop_loss": 420.4,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "港商野村",
+                "lots": 3313,
+                "pct": 23.6
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 2034,
+                "pct": 14.5
+              },
+              {
+                "name": "富邦-新店",
+                "lots": 1412,
+                "pct": 10.0
+              },
+              {
+                "name": "元大證券",
+                "lots": 1331,
+                "pct": 9.5
+              },
+              {
+                "name": "永豐金-中正",
+                "lots": 727,
+                "pct": 5.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "美商高盛",
+                "lots": -2632,
+                "pct": 31.8
+              },
+              {
+                "name": "凱基",
+                "lots": -1279,
+                "pct": 15.5
+              },
+              {
+                "name": "元大-新莊",
+                "lots": -698,
+                "pct": 8.4
+              },
+              {
+                "name": "元大-內湖民權",
+                "lots": -678,
+                "pct": 8.2
+              },
+              {
+                "name": "元大-仁愛",
+                "lots": -648,
+                "pct": 7.8
+              }
+            ],
+            "net_concentration": 5788,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 67.8,
+            "label": "主力買盤偏多",
+            "net_lots": 5788,
+            "top5_buy_lots": 8817,
+            "top1_broker": "港商野村",
+            "top1_lots": 3313,
+            "concentration": 0.627
+          },
+          "trade_value": 18821308416
+        },
+        {
+          "id": "8086",
+          "name": "宏捷科",
+          "price": 93.1,
+          "rsi": 32.0,
+          "rsi10": 34.5,
+          "ret_20d": -28.4,
+          "signal": "HOLD",
+          "ma5": 100.1,
+          "ma10": 99.18,
+          "ma20": 111.09,
+          "ma60": 115.63,
+          "cv_sharpe": 1.15,
+          "cv_win_rate": 0.53,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -732,
+            "投信": 0,
+            "自營": -98,
+            "合計": -830,
+            "近5日": 480,
+            "近5日外資": 476,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 137.9,
+          "target_mid": 139.6,
+          "target_long": 127.3,
+          "atr14": 7.82,
+          "stop_loss": 77.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 330155316
+        },
+        {
+          "id": "2455",
+          "name": "全新",
+          "price": 353.0,
+          "rsi": 35.7,
+          "rsi10": 35.4,
+          "ret_20d": -27.0,
+          "signal": "HOLD",
+          "ma5": 375.2,
+          "ma10": 367.15,
+          "ma20": 422.88,
+          "ma60": 480.85,
+          "cv_sharpe": -2.55,
+          "cv_win_rate": 0.25,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 14:02",
+              "title": "全新:本公司國內第二次無擔保轉換公司債行使債券贖回權，申請轉換為普通股最後期限為115年11月19日，為確保本債券持有人權益，特此催告。",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663844"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:56",
+              "title": "盤中速報 - 全新(2455)股價殺至跌停，跌停價353.0元，成交956張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663401"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 342,
+            "投信": -190,
+            "自營": -112,
+            "合計": 40,
+            "近5日": 662,
+            "近5日外資": 214,
+            "近5日投信": 1210,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": 3.2,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 546.3,
+          "target_mid": 475.3,
+          "target_long": 482.9,
+          "atr14": 33.78,
+          "stop_loss": 285.4,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "凱基-站前",
+                "lots": 1409,
+                "pct": 39.5
+              },
+              {
+                "name": "美林",
+                "lots": 366,
+                "pct": 10.3
+              },
+              {
+                "name": "兆豐證券",
+                "lots": 335,
+                "pct": 9.4
+              },
+              {
+                "name": "花旗環球",
+                "lots": 326,
+                "pct": 9.1
+              },
+              {
+                "name": "富邦證券",
+                "lots": 222,
+                "pct": 6.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "元大證券",
+                "lots": -543,
+                "pct": 22.0
+              },
+              {
+                "name": "美商高盛",
+                "lots": -376,
+                "pct": 15.2
+              },
+              {
+                "name": "國泰證券",
+                "lots": -256,
+                "pct": 10.4
+              },
+              {
+                "name": "台新",
+                "lots": -236,
+                "pct": 9.5
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -199,
+                "pct": 8.0
+              }
+            ],
+            "net_concentration": 1094,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 60.3,
+            "label": "主力買盤偏多",
+            "net_lots": 1094,
+            "top5_buy_lots": 2658,
+            "top1_broker": "凱基-站前",
+            "top1_lots": 1409,
+            "concentration": 0.745
+          },
+          "trade_value": 793816163
+        },
+        {
+          "id": "4906",
+          "name": "正文",
+          "price": 31.55,
+          "rsi": 27.4,
+          "rsi10": 32.1,
+          "ret_20d": -22.7,
+          "signal": "HOLD",
+          "ma5": 34.26,
+          "ma10": 34.36,
+          "ma20": 37.77,
+          "ma60": 37.84,
+          "cv_sharpe": 1.35,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -267,
+            "投信": 0,
+            "自營": -152,
+            "合計": -419,
+            "近5日": 1112,
+            "近5日外資": 1268,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 4.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 45.8,
+          "target_mid": 26.8,
+          "target_long": 36.3,
+          "atr14": 2.39,
+          "stop_loss": 26.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 167711629
+        },
+        {
+          "id": "2345",
+          "name": "智邦",
+          "price": 1380.0,
+          "rsi": 30.8,
+          "rsi10": 33.3,
+          "ret_20d": -29.2,
+          "signal": "HOLD",
+          "ma5": 1509.0,
+          "ma10": 1458.5,
+          "ma20": 1634.5,
+          "ma60": 1877.0,
+          "cv_sharpe": 1.34,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:56",
+              "title": "盤中速報 - 智邦(2345)股價殺至跌停，跌停價1370.0元，成交1,701張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663404"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 301,
+            "投信": -30,
+            "自營": 58,
+            "合計": 329,
+            "近5日": -705,
+            "近5日外資": -2629,
+            "近5日投信": 1755,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -2.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2063.2,
+          "target_mid": 2070.0,
+          "target_long": 1896.9,
+          "atr14": 121.5,
+          "stop_loss": 1137.0,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "元大證券",
+                "lots": 892,
+                "pct": 22.6
+              },
+              {
+                "name": "美林",
+                "lots": 473,
+                "pct": 12.0
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 329,
+                "pct": 8.3
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 315,
+                "pct": 8.0
+              },
+              {
+                "name": "花旗環球",
+                "lots": 256,
+                "pct": 6.5
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -1959,
+                "pct": 39.2
+              },
+              {
+                "name": "美商高盛",
+                "lots": -1170,
+                "pct": 23.4
+              },
+              {
+                "name": "摩根大通",
+                "lots": -868,
+                "pct": 17.4
+              },
+              {
+                "name": "凱基-城中",
+                "lots": -500,
+                "pct": 10.0
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -120,
+                "pct": 2.4
+              }
+            ],
+            "net_concentration": -1054,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 41.5,
+            "label": "主力出貨偏多",
+            "net_lots": -1054,
+            "top5_buy_lots": 2265,
+            "top1_broker": "元大證券",
+            "top1_lots": 892,
+            "concentration": 0.574
+          },
+          "trade_value": 5371167000
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 4
+    },
+    "記憶體": {
+      "avg_ret_20d": -19.24,
+      "avg_rsi": 22.6,
+      "avg_sharpe": 2.52,
+      "stocks": [
+        {
+          "id": "2408",
+          "name": "南亞科",
+          "price": 340.0,
+          "rsi": 24.5,
+          "rsi10": 30.5,
+          "ret_20d": -22.6,
+          "signal": "HOLD",
+          "ma5": 374.7,
+          "ma10": 375.75,
+          "ma20": 410.98,
+          "ma60": 476.37,
+          "cv_sharpe": 4.01,
+          "cv_win_rate": 0.61,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:39",
+              "title": "南亞科:本公司受邀參加Macquarie Taiwan Conference 2026",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663843"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:06",
+              "title": "盤中速報 - 南亞科(2408)股價殺至跌停，跌停價339.5元，成交33,435張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663714"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -666,
+            "投信": -1180,
+            "自營": 18,
+            "合計": -1828,
+            "近5日": 9525,
+            "近5日外資": 18865,
+            "近5日投信": -9719,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 3.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 495.0,
+          "target_mid": 510.0,
+          "target_long": 448.1,
+          "atr14": 31.88,
+          "stop_loss": 276.2,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 13275008960
+        },
+        {
+          "id": "2337",
+          "name": "旺宏",
+          "price": 72.0,
+          "rsi": 20.9,
+          "rsi10": 24.6,
+          "ret_20d": -31.1,
+          "signal": "HOLD",
+          "ma5": 78.96,
+          "ma10": 80.91,
+          "ma20": 90.94,
+          "ma60": 110.24,
+          "cv_sharpe": 5.16,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -2687,
+            "投信": 0,
+            "自營": -95,
+            "合計": -2782,
+            "近5日": -9124,
+            "近5日外資": -7719,
+            "近5日投信": 613,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -4.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 113.1,
+          "target_mid": 108.0,
+          "target_long": 96.7,
+          "atr14": 6.17,
+          "stop_loss": 59.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2829644064
+        },
+        {
+          "id": "2344",
+          "name": "華邦電",
+          "price": 113.0,
+          "rsi": 19.4,
+          "rsi10": 26.6,
+          "ret_20d": -27.1,
+          "signal": "HOLD",
+          "ma5": 127.4,
+          "ma10": 130.5,
+          "ma20": 146.03,
+          "ma60": 165.33,
+          "cv_sharpe": 4.62,
+          "cv_win_rate": 0.75,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:04",
+              "title": "盤中速報 - 華邦電(2344)股價殺至跌停，跌停價112.5元，成交48,925張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663703"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 4257,
+            "投信": -3586,
+            "自營": -183,
+            "合計": 488,
+            "近5日": -19479,
+            "近5日外資": -15356,
+            "近5日投信": -3752,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -5.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 181.8,
+          "target_mid": 169.5,
+          "target_long": 152.7,
+          "atr14": 10.61,
+          "stop_loss": 91.8,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "元大證券",
+                "lots": 3740,
+                "pct": 26.8
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 1413,
+                "pct": 10.1
+              },
+              {
+                "name": "國泰證券",
+                "lots": 1304,
+                "pct": 9.3
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 1202,
+                "pct": 8.6
+              },
+              {
+                "name": "大和國泰",
+                "lots": 1146,
+                "pct": 8.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "摩根大通",
+                "lots": -13230,
+                "pct": 32.8
+              },
+              {
+                "name": "港商野村",
+                "lots": -7874,
+                "pct": 19.5
+              },
+              {
+                "name": "美商高盛",
+                "lots": -3325,
+                "pct": 8.2
+              },
+              {
+                "name": "富邦證券",
+                "lots": -2542,
+                "pct": 6.3
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -2484,
+                "pct": 6.2
+              }
+            ],
+            "net_concentration": -26338,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 28.7,
+            "label": "主力大幅出脫",
+            "net_lots": -26338,
+            "top5_buy_lots": 8805,
+            "top1_broker": "元大證券",
+            "top1_lots": 3740,
+            "concentration": 0.63
+          },
+          "trade_value": 6847826668
+        },
+        {
+          "id": "3006",
+          "name": "晶豪科",
+          "price": 216.0,
+          "rsi": 36.1,
+          "rsi10": 39.5,
+          "ret_20d": -5.7,
+          "signal": "HOLD",
+          "ma5": 227.1,
+          "ma10": 225.9,
+          "ma20": 240.03,
+          "ma60": 263.15,
+          "cv_sharpe": 3.87,
+          "cv_win_rate": 0.56,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -318,
+            "投信": 0,
+            "自營": -232,
+            "合計": -550,
+            "近5日": 1786,
+            "近5日外資": 1743,
+            "近5日投信": 386,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.5,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 281.5,
+          "target_mid": 324.0,
+          "target_long": 274.9,
+          "atr14": 18.23,
+          "stop_loss": 179.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1956068352
+        },
+        {
+          "id": "2451",
+          "name": "創見",
+          "price": 212.0,
+          "rsi": 9.2,
+          "rsi10": 17.2,
+          "ret_20d": -21.2,
+          "signal": "HOLD",
+          "ma5": 228.7,
+          "ma10": 242.0,
+          "ma20": 261.18,
+          "ma60": 278.37,
+          "cv_sharpe": 5.03,
+          "cv_win_rate": 0.56,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -309,
+            "投信": -13,
+            "自營": -7,
+            "合計": -329,
+            "近5日": -379,
+            "近5日外資": -382,
+            "近5日投信": 35,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -2.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 309.1,
+          "target_mid": 318.0,
+          "target_long": 276.4,
+          "atr14": 13.41,
+          "stop_loss": 185.2,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 716450820
+        },
+        {
+          "id": "5289",
+          "name": "宜鼎",
+          "price": 866.0,
+          "rsi": 20.7,
+          "rsi10": 25.7,
+          "ret_20d": -22.3,
+          "signal": "HOLD",
+          "ma5": 949.6,
+          "ma10": 957.6,
+          "ma20": 1040.3,
+          "ma60": 1245.1,
+          "cv_sharpe": 1.9,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 33,
+            "投信": -75,
+            "自營": -27,
+            "合計": -69,
+            "近5日": -152,
+            "近5日外資": -45,
+            "近5日投信": -83,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -1.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1228.7,
+          "target_mid": 1299.0,
+          "target_long": 1123.2,
+          "atr14": 68.23,
+          "stop_loss": 729.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1829260460
+        },
+        {
+          "id": "4967",
+          "name": "十銓",
+          "price": 240.0,
+          "rsi": 18.4,
+          "rsi10": 30.8,
+          "ret_20d": -5.7,
+          "signal": "SELL",
+          "ma5": 255.5,
+          "ma10": 259.65,
+          "ma20": 261.98,
+          "ma60": 268.52,
+          "cv_sharpe": -1.22,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -493,
+            "投信": -5,
+            "自營": -13,
+            "合計": -511,
+            "近5日": -542,
+            "近5日外資": -744,
+            "近5日投信": 298,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -2.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 285.0,
+          "target_mid": 360.0,
+          "target_long": 299.5,
+          "atr14": 13.2,
+          "stop_loss": 213.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 668946000
+        },
+        {
+          "id": "3260",
+          "name": "威剛",
+          "price": 278.0,
+          "rsi": 20.7,
+          "rsi10": 25.2,
+          "ret_20d": -20.6,
+          "signal": "HOLD",
+          "ma5": 296.4,
+          "ma10": 302.2,
+          "ma20": 322.8,
+          "ma60": 369.95,
+          "cv_sharpe": -1.67,
+          "cv_win_rate": 0.64,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -637,
+            "投信": -15,
+            "自營": -298,
+            "合計": -950,
+            "近5日": 449,
+            "近5日外資": 485,
+            "近5日投信": 68,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 1.4,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 371.7,
+          "target_mid": 417.0,
+          "target_long": 355.2,
+          "atr14": 18.54,
+          "stop_loss": 240.9,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2068409794
+        },
+        {
+          "id": "6770",
+          "name": "力積電",
+          "price": 53.7,
+          "rsi": 28.4,
+          "rsi10": 32.3,
+          "ret_20d": -18.9,
+          "signal": "HOLD",
+          "ma5": 56.9,
+          "ma10": 56.99,
+          "ma20": 62.06,
+          "ma60": 68.12,
+          "cv_sharpe": 0.08,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -8334,
+            "投信": 7,
+            "自營": -1180,
+            "合計": -9507,
+            "近5日": -64790,
+            "近5日外資": -56437,
+            "近5日投信": -4321,
+            "連買日": 0,
+            "投信連買日": 3,
+            "集中度": -12.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 73.5,
+          "target_mid": 80.6,
+          "target_long": 70.7,
+          "atr14": 3.91,
+          "stop_loss": 45.9,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 3782447568
+        },
+        {
+          "id": "8299",
+          "name": "群聯",
+          "price": 1515.0,
+          "rsi": 27.8,
+          "rsi10": 32.5,
+          "ret_20d": -17.2,
+          "signal": "HOLD",
+          "ma5": 1639.0,
+          "ma10": 1630.5,
+          "ma20": 1775.0,
+          "ma60": 1968.25,
+          "cv_sharpe": 3.38,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 17:33",
+              "title": "群聯:公告本公司本次買回庫藏股金額達新台幣三億元以上",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664193"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 15:18",
+              "title": "群聯:公告本公司本次買回庫藏股金額達新台幣三億元以上",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663931"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 199,
+            "投信": -6,
+            "自營": -34,
+            "合計": 159,
+            "近5日": -274,
+            "近5日外資": -285,
+            "近5日投信": 115,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": -1.3,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2106.7,
+          "target_mid": 2272.5,
+          "target_long": 1962.9,
+          "atr14": 118.38,
+          "stop_loss": 1278.2,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "宏遠證券",
+                "lots": 1367,
+                "pct": 40.5
+              },
+              {
+                "name": "美商高盛",
+                "lots": 608,
+                "pct": 18.0
+              },
+              {
+                "name": "花旗環球",
+                "lots": 258,
+                "pct": 7.6
+              },
+              {
+                "name": "第一金-新竹",
+                "lots": 243,
+                "pct": 7.2
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 211,
+                "pct": 6.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "港商麥格理",
+                "lots": -563,
+                "pct": 19.4
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -506,
+                "pct": 17.5
+              },
+              {
+                "name": "凱基-城中",
+                "lots": -400,
+                "pct": 13.8
+              },
+              {
+                "name": "港商野村",
+                "lots": -386,
+                "pct": 13.3
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -160,
+                "pct": 5.5
+              }
+            ],
+            "net_concentration": 478,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 59.9,
+            "label": "主力買盤偏多",
+            "net_lots": 478,
+            "top5_buy_lots": 2687,
+            "top1_broker": "宏遠證券",
+            "top1_lots": 1367,
+            "concentration": 0.796
+          },
+          "trade_value": 5342753550
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 7
+    },
+    "AI伺服器": {
+      "avg_ret_20d": -17.52,
+      "avg_rsi": 22.5,
+      "avg_sharpe": -2.71,
+      "stocks": [
+        {
+          "id": "2317",
+          "name": "鴻海",
+          "price": 218.5,
+          "rsi": 21.3,
+          "rsi10": 30.6,
+          "ret_20d": -8.8,
+          "signal": "HOLD",
+          "ma5": 236.6,
+          "ma10": 236.7,
+          "ma20": 241.53,
+          "ma60": 246.87,
+          "cv_sharpe": -2.96,
+          "cv_win_rate": 0.28,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 18:40",
+              "title": "鴻海:代重要子公司富士康工業互聯網股份有限公司公告召開2026年第三季度業績說明會",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664261"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 18:40",
+              "title": "鴻海:代重要子公司富士康工業互聯網股份有限公司公告臨時股東會重要決議",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664260"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -28939,
+            "投信": -660,
+            "自營": 1467,
+            "合計": -28132,
+            "近5日": -13827,
+            "近5日外資": -12544,
+            "近5日投信": -3059,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -6.3,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 257.9,
+          "target_mid": 274.5,
+          "target_long": 260.3,
+          "atr14": 9.44,
+          "stop_loss": 199.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 17613545889
+        },
+        {
+          "id": "2382",
+          "name": "廣達",
+          "price": 264.5,
+          "rsi": 9.9,
+          "rsi10": 17.7,
+          "ret_20d": -16.4,
+          "signal": "HOLD",
+          "ma5": 283.2,
+          "ma10": 291.7,
+          "ma20": 306.8,
+          "ma60": 324.78,
+          "cv_sharpe": -3.43,
+          "cv_win_rate": 0.42,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 08:59",
+              "title": "黃仁勳下台 鴻海、<mark>廣達</mark>、國巨、華新科、南亞、台玻",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663260"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 4222,
+            "投信": -4300,
+            "自營": 935,
+            "合計": 857,
+            "近5日": -14303,
+            "近5日外資": -13181,
+            "近5日投信": -2637,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -15.1,
+            "土洋同買": false
+          },
+          "chip_tier": "weak",
+          "target_short": 344.2,
+          "target_mid": 380.0,
+          "target_long": 338.0,
+          "atr14": 11.34,
+          "stop_loss": 241.8,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "花旗環球",
+                "lots": 2353,
+                "pct": 22.2
+              },
+              {
+                "name": "港商野村",
+                "lots": 1978,
+                "pct": 18.6
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": 903,
+                "pct": 8.5
+              },
+              {
+                "name": "摩根大通",
+                "lots": 651,
+                "pct": 6.1
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 649,
+                "pct": 6.1
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -9165,
+                "pct": 29.6
+              },
+              {
+                "name": "美商高盛",
+                "lots": -4271,
+                "pct": 13.8
+              },
+              {
+                "name": "富邦證券",
+                "lots": -3454,
+                "pct": 11.1
+              },
+              {
+                "name": "國泰證券",
+                "lots": -3241,
+                "pct": 10.5
+              },
+              {
+                "name": "美林",
+                "lots": -2818,
+                "pct": 9.1
+              }
+            ],
+            "net_concentration": -20383,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 27.1,
+            "label": "主力大幅出脫",
+            "net_lots": -20383,
+            "top5_buy_lots": 6534,
+            "top1_broker": "花旗環球",
+            "top1_lots": 2353,
+            "concentration": 0.615
+          },
+          "trade_value": 5724375918
+        },
+        {
+          "id": "3231",
+          "name": "緯創",
+          "price": 159.0,
+          "rsi": 25.5,
+          "rsi10": 32.2,
+          "ret_20d": -9.7,
+          "signal": "HOLD",
+          "ma5": 169.1,
+          "ma10": 169.5,
+          "ma20": 178.5,
+          "ma60": 182.45,
+          "cv_sharpe": 0.12,
+          "cv_win_rate": 0.61,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 7466,
+            "投信": -3270,
+            "自營": 332,
+            "合計": 4528,
+            "近5日": -4695,
+            "近5日外資": -2544,
+            "近5日投信": -3366,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -3.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 200.0,
+          "target_mid": 235.7,
+          "target_long": 204.7,
+          "atr14": 8.78,
+          "stop_loss": 141.4,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "凱基-士林",
+                "lots": 3014,
+                "pct": 19.7
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 2351,
+                "pct": 15.3
+              },
+              {
+                "name": "美商高盛",
+                "lots": 2021,
+                "pct": 13.2
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 1647,
+                "pct": 10.8
+              },
+              {
+                "name": "花旗環球",
+                "lots": 1067,
+                "pct": 7.0
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "國票-敦北法人",
+                "lots": -5485,
+                "pct": 22.5
+              },
+              {
+                "name": "美林",
+                "lots": -4232,
+                "pct": 17.4
+              },
+              {
+                "name": "台新",
+                "lots": -3437,
+                "pct": 14.1
+              },
+              {
+                "name": "統一",
+                "lots": -3327,
+                "pct": 13.6
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -2158,
+                "pct": 8.9
+              }
+            ],
+            "net_concentration": -9055,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 28.0,
+            "label": "主力大幅出脫",
+            "net_lots": -9055,
+            "top5_buy_lots": 10100,
+            "top1_broker": "凱基-士林",
+            "top1_lots": 3014,
+            "concentration": 0.659
+          },
+          "trade_value": 5566784457
+        },
+        {
+          "id": "2376",
+          "name": "技嘉",
+          "price": 277.5,
+          "rsi": 13.8,
+          "rsi10": 21.4,
+          "ret_20d": -20.0,
+          "signal": "HOLD",
+          "ma5": 292.1,
+          "ma10": 303.25,
+          "ma20": 327.15,
+          "ma60": 346.69,
+          "cv_sharpe": -2.61,
+          "cv_win_rate": 0.44,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:10",
+              "title": "鉅亨速報 - Factset 最新調查：技嘉(2376-TW)EPS預估上修至36.18元，預估目標價為496元",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663630"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1182,
+            "投信": -884,
+            "自營": 731,
+            "合計": -1335,
+            "近5日": -7868,
+            "近5日外資": -9346,
+            "近5日投信": 23,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -13.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 382.5,
+          "target_mid": 416.2,
+          "target_long": 362.8,
+          "atr14": 14.51,
+          "stop_loss": 248.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 3784641570
+        },
+        {
+          "id": "4938",
+          "name": "和碩",
+          "price": 85.7,
+          "rsi": 12.5,
+          "rsi10": 24.8,
+          "ret_20d": -12.6,
+          "signal": "HOLD",
+          "ma5": 91.88,
+          "ma10": 94.79,
+          "ma20": 99.4,
+          "ma60": 93.98,
+          "cv_sharpe": -6.68,
+          "cv_win_rate": 0.11,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -490,
+            "投信": -28,
+            "自營": 514,
+            "合計": -4,
+            "近5日": -3175,
+            "近5日外資": -7819,
+            "近5日投信": 4761,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.4,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 111.4,
+          "target_mid": 87.1,
+          "target_long": 96.5,
+          "atr14": 4.5,
+          "stop_loss": 76.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 780041229
+        },
+        {
+          "id": "2357",
+          "name": "華碩",
+          "price": 836.0,
+          "rsi": 22.8,
+          "rsi10": 29.7,
+          "ret_20d": -14.3,
+          "signal": "HOLD",
+          "ma5": 878.8,
+          "ma10": 874.6,
+          "ma20": 917.1,
+          "ma60": 948.25,
+          "cv_sharpe": 0.16,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-15",
+              "datetime": "2026-11-15 08:40",
+              "title": "AI伺服器成PC大廠2027年成長動能 <mark>華碩</mark>拚高雙位數增長、技嘉擴產搶市",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6661406"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 74,
+            "投信": -623,
+            "自營": 232,
+            "合計": -317,
+            "近5日": -148,
+            "近5日外資": -246,
+            "近5日投信": -248,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -1.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1017.6,
+          "target_mid": 1042.7,
+          "target_long": 988.5,
+          "atr14": 37.92,
+          "stop_loss": 760.2,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2930665716
+        },
+        {
+          "id": "3665",
+          "name": "貿聯-KY",
+          "price": 1470.0,
+          "rsi": 37.3,
+          "rsi10": 34.1,
+          "ret_20d": -27.0,
+          "signal": "HOLD",
+          "ma5": 1523.0,
+          "ma10": 1497.5,
+          "ma20": 1660.75,
+          "ma60": 2019.5,
+          "cv_sharpe": -2.96,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:11",
+              "title": "鉅亨速報 - Factset 最新調查：貿聯-KY(3665-TW)EPS預估上修至72.51元，預估目標價為3065元",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663631"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:11",
+              "title": "鉅亨速報 - Factset 最新調查：貿聯-KY(3665-TW)EPS預估上修至71.74元，預估目標價為3080元",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663445"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:10",
+              "title": "鉅亨速報 - Factset 最新調查：貿聯-KY(3665-TW)目標價調降至3080元，幅度約6.67%",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663444"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -595,
+            "投信": 1078,
+            "自營": -34,
+            "合計": 449,
+            "近5日": 49,
+            "近5日外資": -1634,
+            "近5日投信": 1731,
+            "連買日": 3,
+            "投信連買日": 3,
+            "集中度": 0.3,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2065.9,
+          "target_mid": 2205.0,
+          "target_long": 2023.6,
+          "atr14": 128.57,
+          "stop_loss": 1212.9,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "元大證券",
+                "lots": 692,
+                "pct": 22.3
+              },
+              {
+                "name": "花旗環球",
+                "lots": 523,
+                "pct": 16.8
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": 433,
+                "pct": 13.9
+              },
+              {
+                "name": "第一金",
+                "lots": 278,
+                "pct": 9.0
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": 191,
+                "pct": 6.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -771,
+                "pct": 22.4
+              },
+              {
+                "name": "大和國泰",
+                "lots": -580,
+                "pct": 16.8
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -552,
+                "pct": 16.0
+              },
+              {
+                "name": "美商高盛",
+                "lots": -495,
+                "pct": 14.4
+              },
+              {
+                "name": "摩根大通",
+                "lots": -324,
+                "pct": 9.4
+              }
+            ],
+            "net_concentration": -344,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 48.1,
+            "label": "籌碼中性",
+            "net_lots": -344,
+            "top5_buy_lots": 2117,
+            "top1_broker": "元大證券",
+            "top1_lots": 692,
+            "concentration": 0.682
+          },
+          "trade_value": 7222961130
+        },
+        {
+          "id": "6278",
+          "name": "台表科",
+          "price": 208.0,
+          "rsi": 36.7,
+          "rsi10": 40.1,
+          "ret_20d": -31.4,
+          "signal": "HOLD",
+          "ma5": 225.1,
+          "ma10": 215.2,
+          "ma20": 248.85,
+          "ma60": 221.85,
+          "cv_sharpe": -3.33,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:35",
+              "title": "盤中速報 - 台表科(6278)股價殺至跌停，跌停價208.0元，成交5,485張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663368"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 877,
+            "投信": 300,
+            "自營": -276,
+            "合計": 901,
+            "近5日": -8440,
+            "近5日外資": -13027,
+            "近5日投信": 4880,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": -10.0,
+            "土洋同買": false
+          },
+          "chip_tier": "weak",
+          "target_short": 327.3,
+          "target_mid": 196.4,
+          "target_long": 243.2,
+          "atr14": 19.17,
+          "stop_loss": 169.7,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "永豐金證券",
+                "lots": 4786,
+                "pct": 42.2
+              },
+              {
+                "name": "群益金鼎",
+                "lots": 1153,
+                "pct": 10.2
+              },
+              {
+                "name": "中國信託",
+                "lots": 1014,
+                "pct": 8.9
+              },
+              {
+                "name": "元大證券",
+                "lots": 873,
+                "pct": 7.7
+              },
+              {
+                "name": "國泰證券",
+                "lots": 607,
+                "pct": 5.4
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "美商高盛",
+                "lots": -4598,
+                "pct": 32.1
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -3675,
+                "pct": 25.6
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -1406,
+                "pct": 9.8
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -1322,
+                "pct": 9.2
+              },
+              {
+                "name": "摩根大通",
+                "lots": -1205,
+                "pct": 8.4
+              }
+            ],
+            "net_concentration": -2989,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 44.6,
+            "label": "主力出貨偏多",
+            "net_lots": -2989,
+            "top5_buy_lots": 8433,
+            "top1_broker": "永豐金證券",
+            "top1_lots": 4786,
+            "concentration": 0.744
+          },
+          "trade_value": 1711721648
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0
+    },
+    "封測": {
+      "avg_ret_20d": -21.01,
+      "avg_rsi": 34.9,
+      "avg_sharpe": -0.06,
+      "stocks": [
+        {
+          "id": "3711",
+          "name": "日月光投控",
+          "price": 550.0,
+          "rsi": 32.9,
+          "rsi10": 36.4,
+          "ret_20d": -18.3,
+          "signal": "HOLD",
+          "ma5": 591.2,
+          "ma10": 585.9,
+          "ma20": 628.45,
+          "ma60": 642.45,
+          "cv_sharpe": 4.89,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 17:47",
+              "title": "日月光投控:代子公司環旭電子(股)公司公告2026年第二次臨時股東會重要決議事項",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664172"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 16:22",
+              "title": "日月光投控:代子公司日月光半導體製造(股)公司公告向EO Technics Co.,ltd取得供營業用之機器設備",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664018"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 14:44",
+              "title": "日月光投控:代子公司矽品精密工業(股)公司公告取得廠務工程",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663919"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -4371,
+            "投信": -1081,
+            "自營": 307,
+            "合計": -5145,
+            "近5日": -6573,
+            "近5日外資": -11300,
+            "近5日投信": 4726,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 728.5,
+          "target_mid": 779.1,
+          "target_long": 743.3,
+          "atr14": 41.99,
+          "stop_loss": 466.0,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 12119588250
+        },
+        {
+          "id": "2449",
+          "name": "京元電子",
+          "price": 192.5,
+          "rsi": 21.1,
+          "rsi10": 27.4,
+          "ret_20d": -29.2,
+          "signal": "HOLD",
+          "ma5": 215.7,
+          "ma10": 222.45,
+          "ma20": 244.78,
+          "ma60": 264.48,
+          "cv_sharpe": 2.02,
+          "cv_win_rate": 0.56,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:23",
+              "title": "盤中速報 - 京元電子(2449)股價殺至跌停，跌停價192.5元，成交8,758張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663331"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -6511,
+            "投信": -356,
+            "自營": -43,
+            "合計": -6910,
+            "近5日": -7295,
+            "近5日外資": -8125,
+            "近5日投信": -1078,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 298.7,
+          "target_mid": 252.4,
+          "target_long": 257.4,
+          "atr14": 16.85,
+          "stop_loss": 158.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 4048036492
+        },
+        {
+          "id": "6510",
+          "name": "精測",
+          "price": 3005.0,
+          "rsi": 52.5,
+          "rsi10": 51.6,
+          "ret_20d": 3.4,
+          "signal": "HOLD",
+          "ma5": 3076.0,
+          "ma10": 2811.0,
+          "ma20": 2922.75,
+          "ma60": 3079.42,
+          "cv_sharpe": 0.32,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 15:49",
+              "title": "精測:本公司受邀參加花旗證券舉辦之「Citi's 2026 Taiwan Corporate Conference」",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664028"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 11:21",
+              "title": "盤中速報 - 精測(6510)股價殺至跌停，跌停價3005.0元，成交876張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663557"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 150,
+            "投信": 0,
+            "自營": 31,
+            "合計": 181,
+            "近5日": 1159,
+            "近5日外資": -9,
+            "近5日投信": 1176,
+            "連買日": 5,
+            "投信連買日": 0,
+            "集中度": 22.5,
+            "土洋同買": false
+          },
+          "chip_tier": "strong",
+          "target_short": 3476.6,
+          "target_mid": 4154.9,
+          "target_long": 3919.9,
+          "atr14": 261.11,
+          "stop_loss": 2482.8,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "國泰證券",
+                "lots": 453,
+                "pct": 34.5
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 294,
+                "pct": 22.4
+              },
+              {
+                "name": "群益金鼎",
+                "lots": 127,
+                "pct": 9.7
+              },
+              {
+                "name": "華南永昌",
+                "lots": 68,
+                "pct": 5.2
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": 66,
+                "pct": 5.0
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "富邦證券",
+                "lots": -103,
+                "pct": 18.4
+              },
+              {
+                "name": "統一",
+                "lots": -87,
+                "pct": 15.6
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -73,
+                "pct": 13.1
+              },
+              {
+                "name": "美商高盛",
+                "lots": -65,
+                "pct": 11.6
+              },
+              {
+                "name": "港商野村",
+                "lots": -37,
+                "pct": 6.6
+              }
+            ],
+            "net_concentration": 755,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 58.5,
+            "label": "主力買盤偏多",
+            "net_lots": 755,
+            "top5_buy_lots": 1008,
+            "top1_broker": "國泰證券",
+            "top1_lots": 453,
+            "concentration": 0.767
+          },
+          "trade_value": 2811390855
+        },
+        {
+          "id": "2441",
+          "name": "超豐",
+          "price": 100.5,
+          "rsi": 34.1,
+          "rsi10": 38.7,
+          "ret_20d": -15.2,
+          "signal": "HOLD",
+          "ma5": 107.9,
+          "ma10": 106.6,
+          "ma20": 110.15,
+          "ma60": 116.48,
+          "cv_sharpe": -0.18,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -372,
+            "投信": 18,
+            "自營": -17,
+            "合計": -371,
+            "近5日": 976,
+            "近5日外資": 513,
+            "近5日投信": 342,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": 5.7,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 121.4,
+          "target_mid": 141.6,
+          "target_long": 127.2,
+          "atr14": 6.68,
+          "stop_loss": 87.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 295085186
+        },
+        {
+          "id": "6257",
+          "name": "矽格",
+          "price": 163.5,
+          "rsi": 28.4,
+          "rsi10": 29.4,
+          "ret_20d": -36.6,
+          "signal": "HOLD",
+          "ma5": 177.0,
+          "ma10": 176.6,
+          "ma20": 204.88,
+          "ma60": 222.41,
+          "cv_sharpe": -2.13,
+          "cv_win_rate": 0.47,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 16:56",
+              "title": "矽格:公告本公司取得廠務工程",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664117"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:09",
+              "title": "盤中速報 - 矽格(6257)股價殺至跌停，跌停價163.5元，成交3,831張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663617"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1068,
+            "投信": 8,
+            "自營": -49,
+            "合計": -1109,
+            "近5日": -2009,
+            "近5日外資": -1989,
+            "近5日投信": -162,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -6.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 268.0,
+          "target_mid": 241.2,
+          "target_long": 226.4,
+          "atr14": 14.61,
+          "stop_loss": 134.3,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 872574321
+        },
+        {
+          "id": "6239",
+          "name": "力成",
+          "price": 226.5,
+          "rsi": 39.7,
+          "rsi10": 40.5,
+          "ret_20d": -16.3,
+          "signal": "HOLD",
+          "ma5": 238.1,
+          "ma10": 231.75,
+          "ma20": 246.78,
+          "ma60": 271.18,
+          "cv_sharpe": 5.19,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:11",
+              "title": "盤中速報 - 力成(6239)股價殺至跌停，跌停價226.5元，成交7,831張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663633"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1778,
+            "投信": -105,
+            "自營": -141,
+            "合計": -2024,
+            "近5日": -649,
+            "近5日外資": -2510,
+            "近5日投信": 1473,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -1.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 285.0,
+          "target_mid": 332.4,
+          "target_long": 298.1,
+          "atr14": 17.19,
+          "stop_loss": 192.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2237411168
+        },
+        {
+          "id": "8150",
+          "name": "南茂",
+          "price": 76.3,
+          "rsi": 34.4,
+          "rsi10": 36.1,
+          "ret_20d": -27.7,
+          "signal": "HOLD",
+          "ma5": 82.62,
+          "ma10": 80.39,
+          "ma20": 89.35,
+          "ma60": 96.41,
+          "cv_sharpe": 1.7,
+          "cv_win_rate": 0.56,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:05",
+              "title": "盤中速報 - 南茂(8150)股價殺至跌停，跌停價76.1元，成交11,794張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663713"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1997,
+            "投信": -10,
+            "自營": -293,
+            "合計": -2300,
+            "近5日": -10034,
+            "近5日外資": -10661,
+            "近5日投信": 452,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -8.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 110.2,
+          "target_mid": 114.4,
+          "target_long": 103.4,
+          "atr14": 6.99,
+          "stop_loss": 62.3,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1047649129
+        },
+        {
+          "id": "6147",
+          "name": "頎邦",
+          "price": 154.5,
+          "rsi": 33.2,
+          "rsi10": 36.1,
+          "ret_20d": -28.0,
+          "signal": "HOLD",
+          "ma5": 167.1,
+          "ma10": 163.85,
+          "ma20": 184.65,
+          "ma60": 193.97,
+          "cv_sharpe": -7.72,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 3421,
+            "投信": -2795,
+            "自營": -273,
+            "合計": 353,
+            "近5日": 9481,
+            "近5日外資": 10496,
+            "近5日投信": -713,
+            "連買日": 3,
+            "投信連買日": 0,
+            "集中度": 8.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 231.4,
+          "target_mid": 200.4,
+          "target_long": 205.8,
+          "atr14": 14.12,
+          "stop_loss": 126.3,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 6066,
+                "pct": 31.2
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 2472,
+                "pct": 12.7
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 2373,
+                "pct": 12.2
+              },
+              {
+                "name": "摩根大通",
+                "lots": 1843,
+                "pct": 9.5
+              },
+              {
+                "name": "元大證券",
+                "lots": 1196,
+                "pct": 6.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "凱基",
+                "lots": -8224,
+                "pct": 40.9
+              },
+              {
+                "name": "美林",
+                "lots": -2999,
+                "pct": 14.9
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": -1773,
+                "pct": 8.8
+              },
+              {
+                "name": "富邦證券",
+                "lots": -1519,
+                "pct": 7.6
+              },
+              {
+                "name": "華南永昌-南京",
+                "lots": -1142,
+                "pct": 5.7
+              }
+            ],
+            "net_concentration": -695,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 50.2,
+            "label": "籌碼中性",
+            "net_lots": -695,
+            "top5_buy_lots": 13950,
+            "top1_broker": "美商高盛",
+            "top1_lots": 6066,
+            "concentration": 0.719
+          },
+          "trade_value": 3000220822
+        },
+        {
+          "id": "3264",
+          "name": "欣銓",
+          "price": 174.0,
+          "rsi": 32.8,
+          "rsi10": 34.1,
+          "ret_20d": -35.1,
+          "signal": "HOLD",
+          "ma5": 188.7,
+          "ma10": 186.0,
+          "ma20": 214.7,
+          "ma60": 230.32,
+          "cv_sharpe": 4.17,
+          "cv_win_rate": 0.78,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:57",
+              "title": "盤中速報 - 欣銓(3264)股價殺至跌停，跌停價174.0元，成交4,851張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663406"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1203,
+            "投信": -1655,
+            "自營": -221,
+            "合計": -3079,
+            "近5日": -6717,
+            "近5日外資": 1159,
+            "近5日投信": -8135,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -11.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 279.4,
+          "target_mid": 261.0,
+          "target_long": 243.4,
+          "atr14": 16.6,
+          "stop_loss": 140.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1551792726
+        },
+        {
+          "id": "2369",
+          "name": "菱生",
+          "price": 24.3,
+          "rsi": 32.6,
+          "rsi10": 35.1,
+          "ret_20d": -18.3,
+          "signal": "HOLD",
+          "ma5": 25.63,
+          "ma10": 25.3,
+          "ma20": 27.06,
+          "ma60": 29.73,
+          "cv_sharpe": -9.12,
+          "cv_win_rate": 0.07,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -312,
+            "投信": 0,
+            "自營": -1,
+            "合計": -313,
+            "近5日": -302,
+            "近5日外資": -363,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -3.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 31.1,
+          "target_mid": 25.5,
+          "target_long": 29.1,
+          "atr14": 1.44,
+          "stop_loss": 21.4,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 48597157
+        },
+        {
+          "id": "2329",
+          "name": "華泰",
+          "price": 34.45,
+          "rsi": 30.3,
+          "rsi10": 32.5,
+          "ret_20d": -19.4,
+          "signal": "HOLD",
+          "ma5": 36.45,
+          "ma10": 36.46,
+          "ma20": 39.16,
+          "ma60": 42.07,
+          "cv_sharpe": -4.53,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -365,
+            "投信": -8,
+            "自營": -13,
+            "合計": -386,
+            "近5日": 238,
+            "近5日外資": 226,
+            "近5日投信": -8,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 45.3,
+          "target_mid": 51.7,
+          "target_long": 45.8,
+          "atr14": 1.91,
+          "stop_loss": 30.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 57788704
+        },
+        {
+          "id": "6271",
+          "name": "同欣電",
+          "price": 202.5,
+          "rsi": 46.6,
+          "rsi10": 46.9,
+          "ret_20d": -11.6,
+          "signal": "BUY",
+          "ma5": 211.2,
+          "ma10": 199.15,
+          "ma20": 207.68,
+          "ma60": 218.07,
+          "cv_sharpe": 4.62,
+          "cv_win_rate": 0.72,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -139,
+            "投信": 443,
+            "自營": -55,
+            "合計": 249,
+            "近5日": 166,
+            "近5日外資": -2872,
+            "近5日投信": 3282,
+            "連買日": 1,
+            "投信連買日": 5,
+            "集中度": 0.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 239.9,
+          "target_mid": 233.0,
+          "target_long": 238.2,
+          "atr14": 14.86,
+          "stop_loss": 172.8,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "中國信託",
+                "lots": 1498,
+                "pct": 20.3
+              },
+              {
+                "name": "元大證券",
+                "lots": 818,
+                "pct": 11.1
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": 809,
+                "pct": 11.0
+              },
+              {
+                "name": "兆豐證券",
+                "lots": 695,
+                "pct": 9.4
+              },
+              {
+                "name": "富邦證券",
+                "lots": 679,
+                "pct": 9.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "美商高盛",
+                "lots": -1744,
+                "pct": 40.3
+              },
+              {
+                "name": "凱基-松山",
+                "lots": -813,
+                "pct": 18.8
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -611,
+                "pct": 14.1
+              },
+              {
+                "name": "美林",
+                "lots": -313,
+                "pct": 7.2
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -155,
+                "pct": 3.6
+              }
+            ],
+            "net_concentration": 3036,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 58.6,
+            "label": "主力買盤偏多",
+            "net_lots": 3036,
+            "top5_buy_lots": 4499,
+            "top1_broker": "中國信託",
+            "top1_lots": 1498,
+            "concentration": 0.611
+          },
+          "trade_value": 809903610
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 7
+    },
+    "光學": {
+      "avg_ret_20d": -23.95,
+      "avg_rsi": 36.8,
+      "avg_sharpe": -3.35,
+      "stocks": [
+        {
+          "id": "3008",
+          "name": "大立光",
+          "price": 4780.0,
+          "rsi": 37.3,
+          "rsi10": 38.2,
+          "ret_20d": -27.6,
+          "signal": "HOLD",
+          "ma5": 5107.0,
+          "ma10": 4942.0,
+          "ma20": 5472.75,
+          "ma60": 6156.58,
+          "cv_sharpe": 0.96,
+          "cv_win_rate": 0.42,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:53",
+              "title": "盤中速報 - 大立光(3008)股價殺至跌停，跌停價4780.0元，成交1,426張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663531"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 82,
+            "投信": -11,
+            "自營": -6,
+            "合計": 65,
+            "近5日": 109,
+            "近5日外資": -34,
+            "近5日投信": -12,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": 0.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 6718.7,
+          "target_mid": 4063.0,
+          "target_long": 5407.7,
+          "atr14": 433.64,
+          "stop_loss": 3912.7,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "摩根大通",
+                "lots": 384,
+                "pct": 25.4
+              },
+              {
+                "name": "元大證券",
+                "lots": 227,
+                "pct": 15.0
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 194,
+                "pct": 12.8
+              },
+              {
+                "name": "富邦證券",
+                "lots": 127,
+                "pct": 8.4
+              },
+              {
+                "name": "港商野村",
+                "lots": 95,
+                "pct": 6.3
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "美商高盛",
+                "lots": -434,
+                "pct": 28.1
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -322,
+                "pct": 20.8
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -179,
+                "pct": 11.6
+              },
+              {
+                "name": "美林",
+                "lots": -144,
+                "pct": 9.3
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -109,
+                "pct": 7.1
+              }
+            ],
+            "net_concentration": -31,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 50.0,
+            "label": "籌碼中性",
+            "net_lots": -31,
+            "top5_buy_lots": 1027,
+            "top1_broker": "摩根大通",
+            "top1_lots": 384,
+            "concentration": 0.678
+          },
+          "trade_value": 8635007860
+        },
+        {
+          "id": "3406",
+          "name": "玉晶光",
+          "price": 889.0,
+          "rsi": 36.2,
+          "rsi10": 40.7,
+          "ret_20d": -20.3,
+          "signal": "HOLD",
+          "ma5": 951.2,
+          "ma10": 914.3,
+          "ma20": 1023.65,
+          "ma60": 969.37,
+          "cv_sharpe": -7.66,
+          "cv_win_rate": 0.47,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:36",
+              "title": "盤中速報 - 玉晶光(3406)股價殺至跌停，跌停價889.0元，成交7,258張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663651"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 2109,
+            "投信": -35,
+            "自營": 64,
+            "合計": 2138,
+            "近5日": 3337,
+            "近5日外資": 2800,
+            "近5日投信": 256,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 8.8,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 1297.3,
+          "target_mid": 755.6,
+          "target_long": 1010.0,
+          "atr14": 95.34,
+          "stop_loss": 698.3,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 615,
+                "pct": 20.5
+              },
+              {
+                "name": "港商野村",
+                "lots": 443,
+                "pct": 14.8
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 398,
+                "pct": 13.3
+              },
+              {
+                "name": "永豐金-信義",
+                "lots": 263,
+                "pct": 8.8
+              },
+              {
+                "name": "美商高盛",
+                "lots": 253,
+                "pct": 8.4
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "宏遠證券",
+                "lots": -433,
+                "pct": 17.6
+              },
+              {
+                "name": "富邦證券",
+                "lots": -309,
+                "pct": 12.5
+              },
+              {
+                "name": "凱基",
+                "lots": -272,
+                "pct": 11.0
+              },
+              {
+                "name": "統一",
+                "lots": -216,
+                "pct": 8.8
+              },
+              {
+                "name": "中國信託",
+                "lots": -186,
+                "pct": 7.5
+              }
+            ],
+            "net_concentration": 534,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 50.3,
+            "label": "籌碼中性",
+            "net_lots": 534,
+            "top5_buy_lots": 1972,
+            "top1_broker": "新加坡商瑞銀",
+            "top1_lots": 615,
+            "concentration": 0.658
+          },
+          "trade_value": 6825665546
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1
+    },
+    "IC設計": {
+      "avg_ret_20d": -18.08,
+      "avg_rsi": 33.4,
+      "avg_sharpe": -5.04,
+      "stocks": [
+        {
+          "id": "2454",
+          "name": "聯發科",
+          "price": 3795.0,
+          "rsi": 45.9,
+          "rsi10": 44.7,
+          "ret_20d": -8.9,
+          "signal": "HOLD",
+          "ma5": 3917.0,
+          "ma10": 3755.0,
+          "ma20": 3921.5,
+          "ma60": 4302.75,
+          "cv_sharpe": -1.71,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:03",
+              "title": "本週3大事件引爆變盤？聯發科、創意領軍9檔AI成長股接棒？",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663272"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -935,
+            "投信": 2,
+            "自營": 56,
+            "合計": -877,
+            "近5日": 2128,
+            "近5日外資": -140,
+            "近5日投信": 2358,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 3.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 4408.1,
+          "target_mid": 3368.5,
+          "target_long": 4202.4,
+          "atr14": 267.28,
+          "stop_loss": 3260.4,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 48393889335
+        },
+        {
+          "id": "3034",
+          "name": "聯詠",
+          "price": 451.0,
+          "rsi": 18.4,
+          "rsi10": 23.0,
+          "ret_20d": -20.2,
+          "signal": "HOLD",
+          "ma5": 469.1,
+          "ma10": 492.55,
+          "ma20": 538.38,
+          "ma60": 540.94,
+          "cv_sharpe": -10.79,
+          "cv_win_rate": 0.11,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 14:46",
+              "title": "聯詠:本公司受邀參加由JP Morgan所舉辦\"JP Morgan APAC Technology, Innovation and Growth Conference\"",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663915"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 292,
+            "投信": -565,
+            "自營": 81,
+            "合計": -192,
+            "近5日": -1273,
+            "近5日外資": -1285,
+            "近5日投信": -271,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -6.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 643.4,
+          "target_mid": 576.7,
+          "target_long": 564.8,
+          "atr14": 24.77,
+          "stop_loss": 401.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1250254082
+        },
+        {
+          "id": "4966",
+          "name": "譜瑞-KY",
+          "price": 395.0,
+          "rsi": 33.9,
+          "rsi10": 30.1,
+          "ret_20d": -26.6,
+          "signal": "HOLD",
+          "ma5": 399.7,
+          "ma10": 410.2,
+          "ma20": 461.2,
+          "ma60": 528.67,
+          "cv_sharpe": -6.87,
+          "cv_win_rate": 0.22,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -73,
+            "投信": 3,
+            "自營": 10,
+            "合計": -60,
+            "近5日": 202,
+            "近5日外資": 157,
+            "近5日投信": 30,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": 7.2,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 574.7,
+          "target_mid": 503.1,
+          "target_long": 496.0,
+          "atr14": 24.27,
+          "stop_loss": 346.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 342713850
+        },
+        {
+          "id": "4919",
+          "name": "新唐",
+          "price": 96.8,
+          "rsi": 34.7,
+          "rsi10": 35.9,
+          "ret_20d": -30.1,
+          "signal": "HOLD",
+          "ma5": 103.26,
+          "ma10": 101.66,
+          "ma20": 117.73,
+          "ma60": 125.23,
+          "cv_sharpe": -2.4,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 38,
+            "投信": -2,
+            "自營": -10,
+            "合計": 26,
+            "近5日": 908,
+            "近5日外資": 1105,
+            "近5日投信": 109,
+            "連買日": 5,
+            "投信連買日": 0,
+            "集中度": 3.7,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 153.3,
+          "target_mid": 117.3,
+          "target_long": 115.8,
+          "atr14": 9.29,
+          "stop_loss": 78.2,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 806,
+                "pct": 32.1
+              },
+              {
+                "name": "摩根大通",
+                "lots": 742,
+                "pct": 29.5
+              },
+              {
+                "name": "花旗環球",
+                "lots": 253,
+                "pct": 10.1
+              },
+              {
+                "name": "港商麥格理",
+                "lots": 123,
+                "pct": 4.9
+              },
+              {
+                "name": "富邦-竹科",
+                "lots": 113,
+                "pct": 4.5
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "凱基-台北",
+                "lots": -499,
+                "pct": 25.3
+              },
+              {
+                "name": "港商野村",
+                "lots": -186,
+                "pct": 9.4
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -175,
+                "pct": 8.9
+              },
+              {
+                "name": "兆豐-大同",
+                "lots": -142,
+                "pct": 7.2
+              },
+              {
+                "name": "凱基",
+                "lots": -123,
+                "pct": 6.2
+              }
+            ],
+            "net_concentration": 542,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 58.6,
+            "label": "主力買盤偏多",
+            "net_lots": 542,
+            "top5_buy_lots": 2037,
+            "top1_broker": "美商高盛",
+            "top1_lots": 806,
+            "concentration": 0.811
+          },
+          "trade_value": 524028639
+        },
+        {
+          "id": "2388",
+          "name": "威盛",
+          "price": 53.2,
+          "rsi": 32.6,
+          "rsi10": 33.1,
+          "ret_20d": -18.8,
+          "signal": "HOLD",
+          "ma5": 55.98,
+          "ma10": 56.24,
+          "ma20": 61.05,
+          "ma60": 68.63,
+          "cv_sharpe": -2.82,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -422,
+            "投信": 0,
+            "自營": 7,
+            "合計": -415,
+            "近5日": 244,
+            "近5日外資": 71,
+            "近5日投信": 98,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 2.3,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 71.8,
+          "target_mid": 79.8,
+          "target_long": 73.9,
+          "atr14": 3.37,
+          "stop_loss": 46.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 113744845
+        },
+        {
+          "id": "2379",
+          "name": "瑞昱",
+          "price": 716.0,
+          "rsi": 34.7,
+          "rsi10": 39.3,
+          "ret_20d": -6.3,
+          "signal": "HOLD",
+          "ma5": 744.2,
+          "ma10": 739.6,
+          "ma20": 762.85,
+          "ma60": 742.85,
+          "cv_sharpe": 1.13,
+          "cv_win_rate": 0.42,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 606,
+            "投信": -613,
+            "自營": 69,
+            "合計": 62,
+            "近5日": 1996,
+            "近5日外資": 2149,
+            "近5日投信": -424,
+            "連買日": 5,
+            "投信連買日": 0,
+            "集中度": 16.2,
+            "土洋同買": false
+          },
+          "chip_tier": "strong",
+          "target_short": 818.9,
+          "target_mid": 608.6,
+          "target_long": 764.5,
+          "atr14": 37.24,
+          "stop_loss": 641.5,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "元大證券",
+                "lots": 1119,
+                "pct": 29.3
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": 774,
+                "pct": 20.2
+              },
+              {
+                "name": "摩根大通",
+                "lots": 485,
+                "pct": 12.7
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 458,
+                "pct": 12.0
+              },
+              {
+                "name": "港商野村",
+                "lots": 226,
+                "pct": 5.9
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -768,
+                "pct": 22.1
+              },
+              {
+                "name": "國泰證券",
+                "lots": -656,
+                "pct": 18.9
+              },
+              {
+                "name": "玉山證券",
+                "lots": -408,
+                "pct": 11.8
+              },
+              {
+                "name": "凱基",
+                "lots": -401,
+                "pct": 11.5
+              },
+              {
+                "name": "美林",
+                "lots": -347,
+                "pct": 10.0
+              }
+            ],
+            "net_concentration": 353,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 56.7,
+            "label": "主力買盤偏多",
+            "net_lots": 353,
+            "top5_buy_lots": 3062,
+            "top1_broker": "元大證券",
+            "top1_lots": 1119,
+            "concentration": 0.801
+          },
+          "trade_value": 1812114376
+        },
+        {
+          "id": "6415",
+          "name": "矽力-KY",
+          "price": 394.0,
+          "rsi": 29.3,
+          "rsi10": 36.9,
+          "ret_20d": -15.5,
+          "signal": "HOLD",
+          "ma5": 435.3,
+          "ma10": 433.5,
+          "ma20": 462.7,
+          "ma60": 442.47,
+          "cv_sharpe": -12.35,
+          "cv_win_rate": 0.0,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:15",
+              "title": "盤中速報 - 矽力-KY(6415)股價殺至跌停，跌停價394.0元，成交2,299張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663310"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -616,
+            "投信": -5,
+            "自營": -57,
+            "合計": -678,
+            "近5日": -81,
+            "近5日外資": -331,
+            "近5日投信": 258,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -0.3,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 540.1,
+          "target_mid": 465.9,
+          "target_long": 499.3,
+          "atr14": 36.51,
+          "stop_loss": 321.0,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1612502524
+        },
+        {
+          "id": "5269",
+          "name": "祥碩",
+          "price": 1090.0,
+          "rsi": 30.4,
+          "rsi10": 30.6,
+          "ret_20d": -27.1,
+          "signal": "HOLD",
+          "ma5": 1140.0,
+          "ma10": 1197.5,
+          "ma20": 1334.5,
+          "ma60": 1410.75,
+          "cv_sharpe": -1.24,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -40,
+            "投信": 2,
+            "自營": -3,
+            "合計": -41,
+            "近5日": -285,
+            "近5日外資": -278,
+            "近5日投信": 18,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -9.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1639.5,
+          "target_mid": 1635.0,
+          "target_long": 1465.9,
+          "atr14": 75.58,
+          "stop_loss": 938.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 463776470
+        },
+        {
+          "id": "2458",
+          "name": "義隆",
+          "price": 116.0,
+          "rsi": 34.9,
+          "rsi10": 33.0,
+          "ret_20d": -14.4,
+          "signal": "HOLD",
+          "ma5": 117.0,
+          "ma10": 117.9,
+          "ma20": 124.15,
+          "ma60": 130.97,
+          "cv_sharpe": -3.93,
+          "cv_win_rate": 0.22,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -90,
+            "投信": 26,
+            "自營": 47,
+            "合計": -17,
+            "近5日": -168,
+            "近5日外資": -442,
+            "近5日投信": 229,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -3.4,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 138.5,
+          "target_mid": 133.2,
+          "target_long": 133.7,
+          "atr14": 4.21,
+          "stop_loss": 107.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 120511356
+        },
+        {
+          "id": "3014",
+          "name": "聯陽",
+          "price": 127.5,
+          "rsi": 39.1,
+          "rsi10": 40.6,
+          "ret_20d": -13.0,
+          "signal": "HOLD",
+          "ma5": 132.1,
+          "ma10": 130.25,
+          "ma20": 136.0,
+          "ma60": 136.18,
+          "cv_sharpe": -9.37,
+          "cv_win_rate": 0.28,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 110,
+            "投信": 27,
+            "自營": 15,
+            "合計": 152,
+            "近5日": -820,
+            "近5日外資": -1385,
+            "近5日投信": 527,
+            "連買日": 2,
+            "投信連買日": 5,
+            "集中度": -9.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 149.8,
+          "target_mid": 134.7,
+          "target_long": 141.2,
+          "atr14": 5.7,
+          "stop_loss": 116.1,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "康和",
+                "lots": 580,
+                "pct": 36.8
+              },
+              {
+                "name": "群益金鼎",
+                "lots": 225,
+                "pct": 14.3
+              },
+              {
+                "name": "花旗環球",
+                "lots": 150,
+                "pct": 9.5
+              },
+              {
+                "name": "元大-桃園",
+                "lots": 110,
+                "pct": 7.0
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 108,
+                "pct": 6.9
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "美商高盛",
+                "lots": -826,
+                "pct": 40.7
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -447,
+                "pct": 22.0
+              },
+              {
+                "name": "玉山證券",
+                "lots": -157,
+                "pct": 7.7
+              },
+              {
+                "name": "國泰證券",
+                "lots": -135,
+                "pct": 6.7
+              },
+              {
+                "name": "元大證券",
+                "lots": -80,
+                "pct": 3.9
+              }
+            ],
+            "net_concentration": -456,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 53.5,
+            "label": "籌碼中性",
+            "net_lots": -456,
+            "top5_buy_lots": 1173,
+            "top1_broker": "康和",
+            "top1_lots": 580,
+            "concentration": 0.745
+          },
+          "trade_value": 166274662
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1
+    },
+    "車用電子": {
+      "avg_ret_20d": -22.35,
+      "avg_rsi": 14.4,
+      "avg_sharpe": -2.45,
+      "stocks": [
+        {
+          "id": "3552",
+          "name": "同致",
+          "price": 30.05,
+          "rsi": 17.5,
+          "rsi10": 19.2,
+          "ret_20d": -25.2,
+          "signal": "HOLD",
+          "ma5": 31.17,
+          "ma10": 32.59,
+          "ma20": 36.1,
+          "ma60": 40.77,
+          "cv_sharpe": -4.21,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -39,
+            "投信": 0,
+            "自營": 0,
+            "合計": -39,
+            "近5日": 6,
+            "近5日外資": 37,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 0.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 43.9,
+          "target_mid": 45.1,
+          "target_long": 35.2,
+          "atr14": 1.54,
+          "stop_loss": 27.0,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 5456780
+        },
+        {
+          "id": "1533",
+          "name": "車王電",
+          "price": 23.1,
+          "rsi": 2.7,
+          "rsi10": 7.1,
+          "ret_20d": -20.8,
+          "signal": "HOLD",
+          "ma5": 24.37,
+          "ma10": 25.08,
+          "ma20": 26.77,
+          "ma60": 29.41,
+          "cv_sharpe": -0.09,
+          "cv_win_rate": 0.44,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -9,
+            "投信": 0,
+            "自營": -2,
+            "合計": -11,
+            "近5日": -80,
+            "近5日外資": -80,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -13.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 30.6,
+          "target_mid": 34.7,
+          "target_long": 30.2,
+          "atr14": 0.75,
+          "stop_loss": 21.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 4155898
+        },
+        {
+          "id": "2497",
+          "name": "怡利電",
+          "price": 34.5,
+          "rsi": 22.9,
+          "rsi10": 22.6,
+          "ret_20d": -21.1,
+          "signal": "HOLD",
+          "ma5": 36.02,
+          "ma10": 37.15,
+          "ma20": 39.81,
+          "ma60": 42.82,
+          "cv_sharpe": -3.05,
+          "cv_win_rate": 0.28,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -43,
+            "投信": 0,
+            "自營": 19,
+            "合計": -24,
+            "近5日": -184,
+            "近5日外資": -152,
+            "近5日投信": -50,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -13.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 46.0,
+          "target_mid": 51.8,
+          "target_long": 45.3,
+          "atr14": 1.4,
+          "stop_loss": 31.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 9120248
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0
+    },
+    "綠能環保": {
+      "avg_ret_20d": -15.37,
+      "avg_rsi": 13.8,
+      "avg_sharpe": 5.88,
+      "stocks": [
+        {
+          "id": "5292",
+          "name": "華懋",
+          "price": 206.5,
+          "rsi": 13.8,
+          "rsi10": 24.7,
+          "ret_20d": -15.4,
+          "signal": "HOLD",
+          "ma5": 216.5,
+          "ma10": 220.6,
+          "ma20": 230.97,
+          "ma60": 226.55,
+          "cv_sharpe": 5.88,
+          "cv_win_rate": 0.83,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -22,
+            "投信": 0,
+            "自營": -4,
+            "合計": -26,
+            "近5日": -111,
+            "近5日外資": -91,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -31.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 255.5,
+          "target_mid": 229.9,
+          "target_long": 241.2,
+          "atr14": 10.66,
+          "stop_loss": 185.2,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 14310450
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1
+    },
+    "CoPoS封裝": {
+      "avg_ret_20d": -27.5,
+      "avg_rsi": 29.4,
+      "avg_sharpe": 2.44,
+      "stocks": [
+        {
+          "id": "6789",
+          "name": "采鈺",
+          "price": 362.5,
+          "rsi": 38.9,
+          "rsi10": 39.4,
+          "ret_20d": -17.6,
+          "signal": "HOLD",
+          "ma5": 383.3,
+          "ma10": 374.35,
+          "ma20": 404.8,
+          "ma60": 441.37,
+          "cv_sharpe": 7.67,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -65,
+            "投信": -14,
+            "自營": -9,
+            "合計": -88,
+            "近5日": 282,
+            "近5日外資": 304,
+            "近5日投信": -26,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 5.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 477.7,
+          "target_mid": 518.1,
+          "target_long": 491.3,
+          "atr14": 25.99,
+          "stop_loss": 310.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 364102975
+        },
+        {
+          "id": "3535",
+          "name": "晶彩科",
+          "price": 69.4,
+          "rsi": 35.0,
+          "rsi10": 36.2,
+          "ret_20d": -26.6,
+          "signal": "HOLD",
+          "ma5": 73.9,
+          "ma10": 72.82,
+          "ma20": 82.12,
+          "ma60": 86.49,
+          "cv_sharpe": 0.75,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:02",
+              "title": "盤中速報 - 晶彩科(3535)股價殺至跌停，跌停價69.3元，成交488張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663695"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -57,
+            "投信": 0,
+            "自營": -30,
+            "合計": -87,
+            "近5日": 126,
+            "近5日外資": 155,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 4.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 104.0,
+          "target_mid": 104.1,
+          "target_long": 98.5,
+          "atr14": 5.43,
+          "stop_loss": 58.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 39412607
+        },
+        {
+          "id": "3680",
+          "name": "家登",
+          "price": 375.5,
+          "rsi": 26.6,
+          "rsi10": 29.1,
+          "ret_20d": -26.8,
+          "signal": "HOLD",
+          "ma5": 406.2,
+          "ma10": 412.85,
+          "ma20": 460.95,
+          "ma60": 501.95,
+          "cv_sharpe": -5.82,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -210,
+            "投信": 0,
+            "自營": -20,
+            "合計": -230,
+            "近5日": -770,
+            "近5日外資": -726,
+            "近5日投信": -39,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -17.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 566.4,
+          "target_mid": 563.2,
+          "target_long": 520.5,
+          "atr14": 27.98,
+          "stop_loss": 319.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 395092839
+        },
+        {
+          "id": "6664",
+          "name": "群翊",
+          "price": 259.0,
+          "rsi": 26.9,
+          "rsi10": 29.0,
+          "ret_20d": -24.9,
+          "signal": "HOLD",
+          "ma5": 280.3,
+          "ma10": 281.55,
+          "ma20": 306.95,
+          "ma60": 339.1,
+          "cv_sharpe": 2.47,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1,
+            "投信": -1,
+            "自營": -1,
+            "合計": -3,
+            "近5日": -54,
+            "近5日外資": 44,
+            "近5日投信": -100,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -4.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 364.3,
+          "target_mid": 332.6,
+          "target_long": 326.3,
+          "atr14": 15.97,
+          "stop_loss": 227.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 82030998
+        },
+        {
+          "id": "2467",
+          "name": "志聖",
+          "price": 277.5,
+          "rsi": 14.0,
+          "rsi10": 17.2,
+          "ret_20d": -45.2,
+          "signal": "HOLD",
+          "ma5": 305.4,
+          "ma10": 323.5,
+          "ma20": 394.75,
+          "ma60": 505.25,
+          "cv_sharpe": 4.82,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 17:15",
+              "title": "志聖:本公司受邀參加Macquarie舉辦之「Taiwan Conference 2026 」，會中就本公司115年第3季之財務報告相關資訊暨營運概況進行說明。",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664092"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 11:49",
+              "title": "盤中速報 - 志聖(2467)股價殺至跌停，跌停價276.5元，成交1,004張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663580"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 144,
+            "投信": -112,
+            "自營": 7,
+            "合計": 39,
+            "近5日": 103,
+            "近5日外資": 666,
+            "近5日投信": -569,
+            "連買日": 3,
+            "投信連買日": 0,
+            "集中度": 1.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 552.5,
+          "target_mid": 416.2,
+          "target_long": 413.4,
+          "atr14": 28.56,
+          "stop_loss": 220.4,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 512,
+                "pct": 29.9
+              },
+              {
+                "name": "美商高盛",
+                "lots": 382,
+                "pct": 22.3
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 263,
+                "pct": 15.4
+              },
+              {
+                "name": "摩根大通",
+                "lots": 113,
+                "pct": 6.6
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": 96,
+                "pct": 5.6
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "港商麥格理",
+                "lots": -457,
+                "pct": 20.0
+              },
+              {
+                "name": "元大證券",
+                "lots": -374,
+                "pct": 16.3
+              },
+              {
+                "name": "凱基",
+                "lots": -335,
+                "pct": 14.6
+              },
+              {
+                "name": "國泰證券",
+                "lots": -206,
+                "pct": 9.0
+              },
+              {
+                "name": "永豐金-新竹",
+                "lots": -172,
+                "pct": 7.5
+              }
+            ],
+            "net_concentration": -579,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 53.1,
+            "label": "籌碼中性",
+            "net_lots": -579,
+            "top5_buy_lots": 1366,
+            "top1_broker": "台灣摩根士丹利",
+            "top1_lots": 512,
+            "concentration": 0.798
+          },
+          "trade_value": 428388405
+        },
+        {
+          "id": "7734",
+          "name": "印能科技",
+          "price": 1620.0,
+          "rsi": 29.1,
+          "rsi10": 30.4,
+          "ret_20d": -33.3,
+          "signal": "HOLD",
+          "ma5": 1764.0,
+          "ma10": 1743.5,
+          "ma20": 2005.75,
+          "ma60": 2508.25,
+          "cv_sharpe": -2.57,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 7,
+            "投信": 0,
+            "自營": -2,
+            "合計": 5,
+            "近5日": -52,
+            "近5日外資": 52,
+            "近5日投信": -106,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -6.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2595.3,
+          "target_mid": 2430.0,
+          "target_long": 2333.5,
+          "atr14": 157.82,
+          "stop_loss": 1304.4,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 57,
+                "pct": 27.5
+              },
+              {
+                "name": "美林",
+                "lots": 38,
+                "pct": 18.4
+              },
+              {
+                "name": "群益金鼎-鳳山",
+                "lots": 32,
+                "pct": 15.5
+              },
+              {
+                "name": "摩根大通",
+                "lots": 16,
+                "pct": 7.7
+              },
+              {
+                "name": "統一-士林",
+                "lots": 15,
+                "pct": 7.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "富邦證券",
+                "lots": -97,
+                "pct": 39.9
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -40,
+                "pct": 16.5
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": -33,
+                "pct": 13.6
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -23,
+                "pct": 9.5
+              },
+              {
+                "name": "國票-安和",
+                "lots": -10,
+                "pct": 4.1
+              }
+            ],
+            "net_concentration": -36,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 53.5,
+            "label": "籌碼中性",
+            "net_lots": -36,
+            "top5_buy_lots": 158,
+            "top1_broker": "美商高盛",
+            "top1_lots": 57,
+            "concentration": 0.763
+          },
+          "trade_value": 154348740
+        },
+        {
+          "id": "5443",
+          "name": "均豪",
+          "price": 79.9,
+          "rsi": 30.0,
+          "rsi10": 32.7,
+          "ret_20d": -23.5,
+          "signal": "HOLD",
+          "ma5": 86.22,
+          "ma10": 85.0,
+          "ma20": 93.09,
+          "ma60": 103.77,
+          "cv_sharpe": -1.47,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -125,
+            "投信": 0,
+            "自營": -32,
+            "合計": -157,
+            "近5日": -490,
+            "近5日外資": -479,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -10.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 111.3,
+          "target_mid": 119.9,
+          "target_long": 110.3,
+          "atr14": 5.69,
+          "stop_loss": 68.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 68891138
+        },
+        {
+          "id": "6640",
+          "name": "均華",
+          "price": 735.0,
+          "rsi": 30.3,
+          "rsi10": 33.1,
+          "ret_20d": -27.6,
+          "signal": "HOLD",
+          "ma5": 800.8,
+          "ma10": 792.4,
+          "ma20": 870.3,
+          "ma60": 1023.98,
+          "cv_sharpe": 8.97,
+          "cv_win_rate": 0.75,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1,
+            "投信": 0,
+            "自營": -10,
+            "合計": -11,
+            "近5日": 10,
+            "近5日外資": 11,
+            "近5日投信": 2,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 1.0,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 1050.2,
+          "target_mid": 1102.5,
+          "target_long": 1033.2,
+          "atr14": 68.68,
+          "stop_loss": 597.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 127270395
+        },
+        {
+          "id": "6187",
+          "name": "萬潤",
+          "price": 858.0,
+          "rsi": 23.2,
+          "rsi10": 28.2,
+          "ret_20d": -38.3,
+          "signal": "HOLD",
+          "ma5": 960.2,
+          "ma10": 971.9,
+          "ma20": 1135.95,
+          "ma60": 1268.4,
+          "cv_sharpe": 2.13,
+          "cv_win_rate": 0.44,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:24",
+              "title": "盤中速報 - 萬潤(6187)股價殺至跌停，跌停價858.0元，成交948張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663335"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -167,
+            "投信": -137,
+            "自營": -37,
+            "合計": -341,
+            "近5日": -781,
+            "近5日外資": -543,
+            "近5日投信": -315,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -6.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1503.7,
+          "target_mid": 1287.0,
+          "target_long": 1261.7,
+          "atr14": 95.74,
+          "stop_loss": 666.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 1381805568
+        },
+        {
+          "id": "3131",
+          "name": "弘塑",
+          "price": 1565.0,
+          "rsi": 33.5,
+          "rsi10": 34.0,
+          "ret_20d": -26.9,
+          "signal": "HOLD",
+          "ma5": 1694.0,
+          "ma10": 1649.5,
+          "ma20": 1844.5,
+          "ma60": 2226.5,
+          "cv_sharpe": -0.23,
+          "cv_win_rate": 0.4,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 18:42",
+              "title": "弘塑:公告本公司買回庫藏股金額累積達新台幣三億元以上",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664262"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -21,
+            "投信": -3,
+            "自營": -3,
+            "合計": -27,
+            "近5日": -169,
+            "近5日外資": -177,
+            "近5日投信": 4,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -13.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2292.6,
+          "target_mid": 2347.5,
+          "target_long": 2191.8,
+          "atr14": 133.3,
+          "stop_loss": 1298.4,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 388282760
+        },
+        {
+          "id": "3583",
+          "name": "辛耘",
+          "price": 453.0,
+          "rsi": 30.9,
+          "rsi10": 31.0,
+          "ret_20d": -30.6,
+          "signal": "HOLD",
+          "ma5": 488.2,
+          "ma10": 481.9,
+          "ma20": 543.1,
+          "ma60": 658.32,
+          "cv_sharpe": 5.39,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:01",
+              "title": "盤中速報 - 辛耘(3583)股價殺至跌停，跌停價453.0元，成交408張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663693"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 26,
+            "投信": 0,
+            "自營": -7,
+            "合計": 19,
+            "近5日": 61,
+            "近5日外資": 261,
+            "近5日投信": -222,
+            "連買日": 4,
+            "投信連買日": 0,
+            "集中度": 1.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 680.9,
+          "target_mid": 679.5,
+          "target_long": 634.8,
+          "atr14": 35.97,
+          "stop_loss": 381.1,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 200,
+                "pct": 33.8
+              },
+              {
+                "name": "摩根大通",
+                "lots": 144,
+                "pct": 24.3
+              },
+              {
+                "name": "美商高盛",
+                "lots": 142,
+                "pct": 24.0
+              },
+              {
+                "name": "元大-復北",
+                "lots": 21,
+                "pct": 3.5
+              },
+              {
+                "name": "花旗環球",
+                "lots": 19,
+                "pct": 3.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "美林",
+                "lots": -247,
+                "pct": 42.5
+              },
+              {
+                "name": "凱基",
+                "lots": -186,
+                "pct": 32.0
+              },
+              {
+                "name": "宏遠證券",
+                "lots": -33,
+                "pct": 5.7
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -29,
+                "pct": 5.0
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -20,
+                "pct": 3.4
+              }
+            ],
+            "net_concentration": 11,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 59.6,
+            "label": "主力買盤偏多",
+            "net_lots": 11,
+            "top5_buy_lots": 526,
+            "top1_broker": "台灣摩根士丹利",
+            "top1_lots": 200,
+            "concentration": 0.889
+          },
+          "trade_value": 215846799
+        },
+        {
+          "id": "3711",
+          "name": "日月光投控",
+          "price": 550.0,
+          "rsi": 32.9,
+          "rsi10": 36.4,
+          "ret_20d": -18.3,
+          "signal": "HOLD",
+          "ma5": 591.2,
+          "ma10": 585.9,
+          "ma20": 628.45,
+          "ma60": 642.45,
+          "cv_sharpe": 4.89,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 17:47",
+              "title": "日月光投控:代子公司環旭電子(股)公司公告2026年第二次臨時股東會重要決議事項",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664172"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 16:22",
+              "title": "日月光投控:代子公司日月光半導體製造(股)公司公告向EO Technics Co.,ltd取得供營業用之機器設備",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664018"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 14:44",
+              "title": "日月光投控:代子公司矽品精密工業(股)公司公告取得廠務工程",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663919"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -4371,
+            "投信": -1081,
+            "自營": 307,
+            "合計": -5145,
+            "近5日": -6573,
+            "近5日外資": -11300,
+            "近5日投信": 4726,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 728.5,
+          "target_mid": 779.1,
+          "target_long": 743.3,
+          "atr14": 41.99,
+          "stop_loss": 466.0,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 12119588250
+        },
+        {
+          "id": "2449",
+          "name": "京元電子",
+          "price": 192.5,
+          "rsi": 21.1,
+          "rsi10": 27.4,
+          "ret_20d": -29.2,
+          "signal": "HOLD",
+          "ma5": 215.7,
+          "ma10": 222.45,
+          "ma20": 244.78,
+          "ma60": 264.48,
+          "cv_sharpe": 2.02,
+          "cv_win_rate": 0.56,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:23",
+              "title": "盤中速報 - 京元電子(2449)股價殺至跌停，跌停價192.5元，成交8,758張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663331"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -6511,
+            "投信": -356,
+            "自營": -43,
+            "合計": -6910,
+            "近5日": -7295,
+            "近5日外資": -8125,
+            "近5日投信": -1078,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 298.7,
+          "target_mid": 252.4,
+          "target_long": 257.4,
+          "atr14": 16.85,
+          "stop_loss": 158.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 4048036492
+        },
+        {
+          "id": "6239",
+          "name": "力成",
+          "price": 226.5,
+          "rsi": 39.7,
+          "rsi10": 40.5,
+          "ret_20d": -16.3,
+          "signal": "HOLD",
+          "ma5": 238.1,
+          "ma10": 231.75,
+          "ma20": 246.78,
+          "ma60": 271.18,
+          "cv_sharpe": 5.19,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:11",
+              "title": "盤中速報 - 力成(6239)股價殺至跌停，跌停價226.5元，成交7,831張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663633"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1778,
+            "投信": -105,
+            "自營": -141,
+            "合計": -2024,
+            "近5日": -649,
+            "近5日外資": -2510,
+            "近5日投信": 1473,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -1.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 285.0,
+          "target_mid": 332.4,
+          "target_long": 298.1,
+          "atr14": 17.19,
+          "stop_loss": 192.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2237411168
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 10
+    },
+    "ABF載板": {
+      "avg_ret_20d": -35.77,
+      "avg_rsi": 23.4,
+      "avg_sharpe": 4.92,
+      "stocks": [
+        {
+          "id": "3037",
+          "name": "欣興",
+          "price": 707.0,
+          "rsi": 24.3,
+          "rsi10": 28.0,
+          "ret_20d": -34.2,
+          "signal": "HOLD",
+          "ma5": 795.2,
+          "ma10": 805.0,
+          "ma20": 934.3,
+          "ma60": 1041.57,
+          "cv_sharpe": -2.1,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:25",
+              "title": "盤中速報 - 欣興(3037)股價殺至跌停，跌停價707.0元，成交8,291張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663340"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -3544,
+            "投信": -1058,
+            "自營": 47,
+            "合計": -4555,
+            "近5日": -8055,
+            "近5日外資": -7328,
+            "近5日投信": -449,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -6.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1221.2,
+          "target_mid": 1060.5,
+          "target_long": 1036.1,
+          "atr14": 79.09,
+          "stop_loss": 548.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 13564649056
+        },
+        {
+          "id": "8046",
+          "name": "南電",
+          "price": 880.0,
+          "rsi": 28.4,
+          "rsi10": 31.2,
+          "ret_20d": -34.6,
+          "signal": "HOLD",
+          "ma5": 982.8,
+          "ma10": 984.4,
+          "ma20": 1133.45,
+          "ma60": 1195.73,
+          "cv_sharpe": 9.64,
+          "cv_win_rate": 1.0,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -98,
+            "投信": -500,
+            "自營": 139,
+            "合計": -459,
+            "近5日": -1021,
+            "近5日外資": -1009,
+            "近5日投信": -148,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -1.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1469.1,
+          "target_mid": 1320.0,
+          "target_long": 1279.4,
+          "atr14": 95.13,
+          "stop_loss": 689.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 5385549840
+        },
+        {
+          "id": "3189",
+          "name": "景碩",
+          "price": 602.0,
+          "rsi": 17.6,
+          "rsi10": 24.8,
+          "ret_20d": -38.5,
+          "signal": "HOLD",
+          "ma5": 684.6,
+          "ma10": 716.5,
+          "ma20": 843.25,
+          "ma60": 881.33,
+          "cv_sharpe": 7.2,
+          "cv_win_rate": 0.78,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 18:17",
+              "title": "景碩:本公司訂購機器設備公告",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664170"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 18:17",
+              "title": "景碩:本公司將收買已發行之限制員工權利新股辦理註銷完成公告",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664169"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:24",
+              "title": "盤中速報 - 景碩(3189)股價殺至跌停，跌停價602.0元，成交2,394張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663336"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 345,
+            "投信": -419,
+            "自營": -272,
+            "合計": -346,
+            "近5日": -5359,
+            "近5日外資": 421,
+            "近5日投信": -7547,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -12.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1125.9,
+          "target_mid": 903.0,
+          "target_long": 899.4,
+          "atr14": 70.45,
+          "stop_loss": 461.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2133597564
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 2
+    },
+    "銅箔/CCL": {
+      "avg_ret_20d": -27.55,
+      "avg_rsi": 33.9,
+      "avg_sharpe": 5.61,
+      "stocks": [
+        {
+          "id": "8358",
+          "name": "金居",
+          "price": 339.0,
+          "rsi": 36.3,
+          "rsi10": 37.5,
+          "ret_20d": -26.5,
+          "signal": "HOLD",
+          "ma5": 367.7,
+          "ma10": 355.1,
+          "ma20": 401.93,
+          "ma60": 463.88,
+          "cv_sharpe": 5.29,
+          "cv_win_rate": 0.72,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 423,
+            "投信": -42,
+            "自營": 54,
+            "合計": 435,
+            "近5日": -940,
+            "近5日外資": 74,
+            "近5日投信": -1137,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -1.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 512.0,
+          "target_mid": 508.5,
+          "target_long": 482.1,
+          "atr14": 34.85,
+          "stop_loss": 269.3,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 963,
+                "pct": 19.1
+              },
+              {
+                "name": "兆豐證券",
+                "lots": 898,
+                "pct": 17.8
+              },
+              {
+                "name": "美商高盛",
+                "lots": 768,
+                "pct": 15.2
+              },
+              {
+                "name": "台新",
+                "lots": 596,
+                "pct": 11.8
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": 420,
+                "pct": 8.3
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "凱基",
+                "lots": -1913,
+                "pct": 25.4
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -1644,
+                "pct": 21.8
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": -1325,
+                "pct": 17.6
+              },
+              {
+                "name": "摩根大通",
+                "lots": -541,
+                "pct": 7.2
+              },
+              {
+                "name": "富邦證券",
+                "lots": -433,
+                "pct": 5.7
+              }
+            ],
+            "net_concentration": -2504,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 40.1,
+            "label": "主力出貨偏多",
+            "net_lots": -2504,
+            "top5_buy_lots": 3645,
+            "top1_broker": "新加坡商瑞銀",
+            "top1_lots": 963,
+            "concentration": 0.724
+          },
+          "trade_value": 3437320671
+        },
+        {
+          "id": "2383",
+          "name": "台光電",
+          "price": 3795.0,
+          "rsi": 30.5,
+          "rsi10": 34.0,
+          "ret_20d": -25.9,
+          "signal": "HOLD",
+          "ma5": 4196.0,
+          "ma10": 4192.0,
+          "ma20": 4569.0,
+          "ma60": 5136.92,
+          "cv_sharpe": 9.52,
+          "cv_win_rate": 0.89,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -170,
+            "投信": -10,
+            "自營": 4,
+            "合計": -176,
+            "近5日": -1376,
+            "近5日外資": -1563,
+            "近5日投信": 427,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -6.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 5457.0,
+          "target_mid": 5692.5,
+          "target_long": 5341.8,
+          "atr14": 371.89,
+          "stop_loss": 3051.2,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 11381857740
+        },
+        {
+          "id": "6213",
+          "name": "聯茂",
+          "price": 480.0,
+          "rsi": 27.6,
+          "rsi10": 31.9,
+          "ret_20d": -39.9,
+          "signal": "HOLD",
+          "ma5": 528.6,
+          "ma10": 543.3,
+          "ma20": 646.75,
+          "ma60": 611.38,
+          "cv_sharpe": 7.95,
+          "cv_win_rate": 0.83,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 12:10",
+              "title": "鉅亨速報 - Factset 最新調查：聯茂(6213-TW)EPS預估上修至23.25元，預估目標價為1055元",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663626"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -849,
+            "投信": 122,
+            "自營": -387,
+            "合計": -1114,
+            "近5日": -11512,
+            "近5日外資": -9849,
+            "近5日投信": 522,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -13.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 876.7,
+          "target_mid": 720.0,
+          "target_long": 712.9,
+          "atr14": 61.64,
+          "stop_loss": 356.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 5332519200
+        },
+        {
+          "id": "2368",
+          "name": "金像電",
+          "price": 927.0,
+          "rsi": 41.3,
+          "rsi10": 42.4,
+          "ret_20d": -22.1,
+          "signal": "HOLD",
+          "ma5": 993.0,
+          "ma10": 947.4,
+          "ma20": 1046.2,
+          "ma60": 1080.12,
+          "cv_sharpe": 3.82,
+          "cv_win_rate": 0.72,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:34",
+              "title": "盤中速報 - 金像電(2368)股價殺至跌停，跌停價927.0元，成交4,226張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663358"
+            },
+            {
+              "date": "2026-11-14",
+              "datetime": "2026-11-14 09:11",
+              "title": "〈熱門股〉金像電前3季EPS逾28元稱霸PCB廠 股價衝鋒周漲26%",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6662405"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1273,
+            "投信": -374,
+            "自營": 29,
+            "合計": -1618,
+            "近5日": -132,
+            "近5日外資": -444,
+            "近5日投信": 465,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -0.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1296.9,
+          "target_mid": 1390.5,
+          "target_long": 1289.5,
+          "atr14": 93.81,
+          "stop_loss": 739.4,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 6110935101
+        },
+        {
+          "id": "6274",
+          "name": "台燿",
+          "price": 877.0,
+          "rsi": 26.4,
+          "rsi10": 28.3,
+          "ret_20d": -46.0,
+          "signal": "HOLD",
+          "ma5": 969.8,
+          "ma10": 992.7,
+          "ma20": 1208.1,
+          "ma60": 1402.12,
+          "cv_sharpe": 4.42,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:23",
+              "title": "盤中速報 - 台燿(6274)股價殺至跌停，跌停價877.0元，成交3,303張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663332"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -267,
+            "投信": -220,
+            "自營": -85,
+            "合計": -572,
+            "近5日": -1903,
+            "近5日外資": 2120,
+            "近5日投信": -3664,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -2.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1705.8,
+          "target_mid": 1315.5,
+          "target_long": 1323.4,
+          "atr14": 108.19,
+          "stop_loss": 660.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 5426168261
+        },
+        {
+          "id": "6672",
+          "name": "騰輝電子-KY",
+          "price": 459.0,
+          "rsi": 32.4,
+          "rsi10": 41.0,
+          "ret_20d": -19.5,
+          "signal": "HOLD",
+          "ma5": 499.0,
+          "ma10": 495.85,
+          "ma20": 530.27,
+          "ma60": 408.85,
+          "cv_sharpe": 2.83,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:16",
+              "title": "盤中速報 - 騰輝電子-KY(6672)股價殺至跌停，跌停價459.0元，成交2,606張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663313"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -233,
+            "投信": 5,
+            "自營": -54,
+            "合計": -282,
+            "近5日": -19,
+            "近5日外資": -52,
+            "近5日投信": 86,
+            "連買日": 0,
+            "投信連買日": 2,
+            "集中度": -0.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 619.1,
+          "target_mid": 448.7,
+          "target_long": 542.0,
+          "atr14": 50.02,
+          "stop_loss": 359.0,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2243308338
+        },
+        {
+          "id": "1303",
+          "name": "南亞",
+          "price": 274.0,
+          "rsi": 42.5,
+          "rsi10": 46.2,
+          "ret_20d": -12.9,
+          "signal": "BUY",
+          "ma5": 294.6,
+          "ma10": 277.2,
+          "ma20": 291.27,
+          "ma60": 259.18,
+          "cv_sharpe": 5.46,
+          "cv_win_rate": 0.44,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:31",
+              "title": "盤中速報 - 南亞(1303)股價殺至跌停，跌停價274.0元，成交56,380張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663476"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -23380,
+            "投信": 358,
+            "自營": 992,
+            "合計": -22030,
+            "近5日": 2928,
+            "近5日外資": -40909,
+            "近5日投信": 41651,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 0.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 336.1,
+          "target_mid": 411.0,
+          "target_long": 369.3,
+          "atr14": 24.46,
+          "stop_loss": 225.1,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "永豐金證券",
+                "lots": 9220,
+                "pct": 19.2
+              },
+              {
+                "name": "富邦證券",
+                "lots": 8257,
+                "pct": 17.2
+              },
+              {
+                "name": "國票-敦北法人",
+                "lots": 7925,
+                "pct": 16.5
+              },
+              {
+                "name": "凱基",
+                "lots": 7618,
+                "pct": 15.9
+              },
+              {
+                "name": "群益金鼎",
+                "lots": 4255,
+                "pct": 8.9
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "永豐金-匯立",
+                "lots": -7016,
+                "pct": 17.5
+              },
+              {
+                "name": "花旗環球",
+                "lots": -6227,
+                "pct": 15.6
+              },
+              {
+                "name": "美商高盛",
+                "lots": -5962,
+                "pct": 14.9
+              },
+              {
+                "name": "摩根大通",
+                "lots": -5854,
+                "pct": 14.6
+              },
+              {
+                "name": "港商野村",
+                "lots": -3370,
+                "pct": 8.4
+              }
+            ],
+            "net_concentration": 7939,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 72.0,
+            "label": "主力強力吸籌",
+            "net_lots": 7939,
+            "top5_buy_lots": 37275,
+            "top1_broker": "永豐金證券",
+            "top1_lots": 9220,
+            "concentration": 0.777
+          },
+          "trade_value": 23683665938
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 1,
+      "qualified_count": 7
+    },
+    "PCB": {
+      "avg_ret_20d": -11.84,
+      "avg_rsi": 46.2,
+      "avg_sharpe": -0.92,
+      "stocks": [
+        {
+          "id": "4958",
+          "name": "臻鼎-KY",
+          "price": 396.0,
+          "rsi": 34.2,
+          "rsi10": 36.7,
+          "ret_20d": -23.7,
+          "signal": "HOLD",
+          "ma5": 431.5,
+          "ma10": 419.85,
+          "ma20": 477.88,
+          "ma60": 493.31,
+          "cv_sharpe": -4.43,
+          "cv_win_rate": 0.33,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:05",
+              "title": "盤中速報 - 臻鼎-KY(4958)股價殺至跌停，跌停價396.0元，成交17,982張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663708"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1037,
+            "投信": -723,
+            "自營": -310,
+            "合計": -2070,
+            "近5日": -1868,
+            "近5日外資": -5328,
+            "近5日投信": 2967,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -1.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 610.3,
+          "target_mid": 555.0,
+          "target_long": 550.0,
+          "atr14": 37.66,
+          "stop_loss": 320.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 8226294516
+        },
+        {
+          "id": "6269",
+          "name": "台郡",
+          "price": 73.5,
+          "rsi": 45.2,
+          "rsi10": 49.2,
+          "ret_20d": -1.5,
+          "signal": "HOLD",
+          "ma5": 77.72,
+          "ma10": 73.19,
+          "ma20": 76.25,
+          "ma60": 69.57,
+          "cv_sharpe": -4.87,
+          "cv_win_rate": 0.25,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 2855,
+            "投信": 0,
+            "自營": -347,
+            "合計": 2508,
+            "近5日": 12623,
+            "近5日外資": 12084,
+            "近5日投信": 0,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": 6.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 89.2,
+          "target_mid": 62.5,
+          "target_long": 82.5,
+          "atr14": 6.06,
+          "stop_loss": 61.4,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 3552,
+                "pct": 24.7
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 2706,
+                "pct": 18.8
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 2589,
+                "pct": 18.0
+              },
+              {
+                "name": "凱基-台北",
+                "lots": 2248,
+                "pct": 15.6
+              },
+              {
+                "name": "美林",
+                "lots": 1044,
+                "pct": 7.3
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "富邦證券",
+                "lots": -2204,
+                "pct": 38.8
+              },
+              {
+                "name": "元大-新莊",
+                "lots": -525,
+                "pct": 9.2
+              },
+              {
+                "name": "凱基-城中",
+                "lots": -484,
+                "pct": 8.5
+              },
+              {
+                "name": "港商野村",
+                "lots": -390,
+                "pct": 6.9
+              },
+              {
+                "name": "第一金-新竹",
+                "lots": -314,
+                "pct": 5.5
+              }
+            ],
+            "net_concentration": 8711,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 75.7,
+            "label": "主力強力吸籌",
+            "net_lots": 8711,
+            "top5_buy_lots": 12139,
+            "top1_broker": "美商高盛",
+            "top1_lots": 3552,
+            "concentration": 0.843
+          },
+          "trade_value": 1922818800
+        },
+        {
+          "id": "2313",
+          "name": "華通",
+          "price": 193.0,
+          "rsi": 50.5,
+          "rsi10": 45.5,
+          "ret_20d": -15.4,
+          "signal": "HOLD",
+          "ma5": 193.9,
+          "ma10": 183.7,
+          "ma20": 205.1,
+          "ma60": 222.38,
+          "cv_sharpe": -1.33,
+          "cv_win_rate": 0.31,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1790,
+            "投信": 683,
+            "自營": -583,
+            "合計": -1690,
+            "近5日": 2911,
+            "近5日外資": 3222,
+            "近5日投信": -379,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": 1.3,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 258.9,
+          "target_mid": 223.6,
+          "target_long": 241.6,
+          "atr14": 16.07,
+          "stop_loss": 160.9,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 4296,
+                "pct": 21.8
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 2624,
+                "pct": 13.3
+              },
+              {
+                "name": "富邦證券",
+                "lots": 1945,
+                "pct": 9.9
+              },
+              {
+                "name": "港商麥格理",
+                "lots": 1813,
+                "pct": 9.2
+              },
+              {
+                "name": "華南永昌",
+                "lots": 1495,
+                "pct": 7.6
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -3988,
+                "pct": 33.5
+              },
+              {
+                "name": "摩根大通",
+                "lots": -2333,
+                "pct": 19.6
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -948,
+                "pct": 8.0
+              },
+              {
+                "name": "兆豐證券",
+                "lots": -882,
+                "pct": 7.4
+              },
+              {
+                "name": "凱基-桃園",
+                "lots": -700,
+                "pct": 5.9
+              }
+            ],
+            "net_concentration": 7803,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 67.1,
+            "label": "主力買盤偏多",
+            "net_lots": 7803,
+            "top5_buy_lots": 12173,
+            "top1_broker": "美商高盛",
+            "top1_lots": 4296,
+            "concentration": 0.618
+          },
+          "trade_value": 12744320557
+        },
+        {
+          "id": "2367",
+          "name": "燿華",
+          "price": 37.25,
+          "rsi": 42.1,
+          "rsi10": 42.1,
+          "ret_20d": -16.6,
+          "signal": "HOLD",
+          "ma5": 38.65,
+          "ma10": 37.41,
+          "ma20": 40.89,
+          "ma60": 42.53,
+          "cv_sharpe": -0.01,
+          "cv_win_rate": 0.44,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1120,
+            "投信": 0,
+            "自營": -80,
+            "合計": -1200,
+            "近5日": 620,
+            "近5日外資": 605,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 1.4,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 49.2,
+          "target_mid": 45.4,
+          "target_long": 42.6,
+          "atr14": 2.85,
+          "stop_loss": 31.6,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 316210929
+        },
+        {
+          "id": "5469",
+          "name": "瀚宇博",
+          "price": 71.7,
+          "rsi": 44.5,
+          "rsi10": 46.2,
+          "ret_20d": -12.2,
+          "signal": "HOLD",
+          "ma5": 75.18,
+          "ma10": 70.39,
+          "ma20": 74.8,
+          "ma60": 74.58,
+          "cv_sharpe": -5.19,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -945,
+            "投信": 0,
+            "自營": 57,
+            "合計": -888,
+            "近5日": 1401,
+            "近5日外資": 1625,
+            "近5日投信": -342,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 6.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 89.7,
+          "target_mid": 74.0,
+          "target_long": 80.2,
+          "atr14": 4.48,
+          "stop_loss": 62.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 224331232
+        },
+        {
+          "id": "3044",
+          "name": "健鼎",
+          "price": 480.0,
+          "rsi": 41.8,
+          "rsi10": 43.6,
+          "ret_20d": -18.1,
+          "signal": "HOLD",
+          "ma5": 508.1,
+          "ma10": 480.85,
+          "ma20": 515.83,
+          "ma60": 516.58,
+          "cv_sharpe": 8.58,
+          "cv_win_rate": 0.89,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 15:13",
+              "title": "健鼎:健鼎受邀參加麥格理證券 2026 Taiwan Conference",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663916"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:30",
+              "title": "盤中速報 - 健鼎(3044)股價殺至跌停，跌停價480.0元，成交4,414張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663756"
+            },
+            {
+              "date": "2026-11-15",
+              "datetime": "2026-11-15 09:49",
+              "title": "〈觀察〉三大台系PCB廠前3季汽車板銷售都突破百億元健鼎仍居冠軍",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6662847"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -10,
+            "投信": 9,
+            "自營": -17,
+            "合計": -18,
+            "近5日": -1752,
+            "近5日外資": -6379,
+            "近5日投信": 4530,
+            "連買日": 0,
+            "投信連買日": 3,
+            "集中度": -5.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 613.9,
+          "target_mid": 610.8,
+          "target_long": 590.2,
+          "atr14": 37.04,
+          "stop_loss": 405.9,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2170509600
+        },
+        {
+          "id": "3715",
+          "name": "定穎投控",
+          "price": 137.5,
+          "rsi": 65.0,
+          "rsi10": 59.1,
+          "ret_20d": 4.6,
+          "signal": "HOLD",
+          "ma5": 134.4,
+          "ma10": 121.02,
+          "ma20": 125.43,
+          "ma60": 124.2,
+          "cv_sharpe": 0.85,
+          "cv_win_rate": 0.56,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -2697,
+            "投信": 0,
+            "自營": -8,
+            "合計": -2705,
+            "近5日": 11340,
+            "近5日外資": 11009,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 9.6,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 150.6,
+          "target_mid": 159.7,
+          "target_long": 151.1,
+          "atr14": 9.88,
+          "stop_loss": 117.7,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 2522,
+                "pct": 15.3
+              },
+              {
+                "name": "美商高盛",
+                "lots": 2389,
+                "pct": 14.5
+              },
+              {
+                "name": "摩根大通",
+                "lots": 2151,
+                "pct": 13.1
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": 1722,
+                "pct": 10.5
+              },
+              {
+                "name": "美林",
+                "lots": 1415,
+                "pct": 8.6
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "兆豐-新竹",
+                "lots": -1193,
+                "pct": 18.5
+              },
+              {
+                "name": "凱基-桃園",
+                "lots": -1005,
+                "pct": 15.6
+              },
+              {
+                "name": "永豐金-敦南",
+                "lots": -626,
+                "pct": 9.7
+              },
+              {
+                "name": "統一",
+                "lots": -518,
+                "pct": 8.0
+              },
+              {
+                "name": "富邦-新竹",
+                "lots": -463,
+                "pct": 7.2
+              }
+            ],
+            "net_concentration": 10006,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 65.5,
+            "label": "主力買盤偏多",
+            "net_lots": 10006,
+            "top5_buy_lots": 10199,
+            "top1_broker": "台灣摩根士丹利",
+            "top1_lots": 2522,
+            "concentration": 0.62
+          },
+          "trade_value": 2796310825
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 2
+    },
+    "AI ASIC/IP": {
+      "avg_ret_20d": -8.49,
+      "avg_rsi": 45.9,
+      "avg_sharpe": -1.64,
+      "stocks": [
+        {
+          "id": "2330",
+          "name": "台積電",
+          "price": 2215.0,
+          "rsi": 34.9,
+          "rsi10": 38.0,
+          "ret_20d": -9.2,
+          "signal": "HOLD",
+          "ma5": 2317.0,
+          "ma10": 2275.0,
+          "ma20": 2337.0,
+          "ma60": 2412.08,
+          "cv_sharpe": -2.45,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:56",
+              "title": "台積電供應鏈迅得3季淨利大增49.72%EPS達6.12元 Q4不看淡",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663530"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 07:10",
+              "title": "輝達介入台灣晶片走私案惹議！員工遭起訴、台積電拒絕協助",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663103"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -8466,
+            "投信": -2303,
+            "自營": 3085,
+            "合計": -7684,
+            "近5日": -6028,
+            "近5日外資": -17182,
+            "近5日投信": 8781,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -3.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2506.2,
+          "target_mid": 2826.2,
+          "target_long": 2717.4,
+          "atr14": 70.54,
+          "stop_loss": 2073.9,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 116519067175
+        },
+        {
+          "id": "3443",
+          "name": "創意",
+          "price": 7750.0,
+          "rsi": 53.3,
+          "rsi10": 52.9,
+          "ret_20d": 1.0,
+          "signal": "HOLD",
+          "ma5": 7855.0,
+          "ma10": 7250.0,
+          "ma20": 7465.0,
+          "ma60": 7049.08,
+          "cv_sharpe": 8.55,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 15:59",
+              "title": "創意:因本公司有價證券於集中交易市場達公佈注意交易資訊標準，故公佈相關財務業務等重大訊息，以利投資人區別瞭解。",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664016"
+            },
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:03",
+              "title": "本週3大事件引爆變盤？聯發科、創意領軍9檔AI成長股接棒？",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663272"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 263,
+            "投信": 27,
+            "自營": 36,
+            "合計": 326,
+            "近5日": 1137,
+            "近5日外資": 276,
+            "近5日投信": 827,
+            "連買日": 3,
+            "投信連買日": 5,
+            "集中度": 8.1,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 8659.2,
+          "target_mid": 6587.5,
+          "target_long": 8396.8,
+          "atr14": 650.42,
+          "stop_loss": 6449.2,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 224,
+                "pct": 14.6
+              },
+              {
+                "name": "港商野村",
+                "lots": 218,
+                "pct": 14.2
+              },
+              {
+                "name": "群益金鼎",
+                "lots": 154,
+                "pct": 10.1
+              },
+              {
+                "name": "大和國泰",
+                "lots": 146,
+                "pct": 9.5
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 132,
+                "pct": 8.6
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "台新-台北",
+                "lots": -299,
+                "pct": 35.4
+              },
+              {
+                "name": "摩根大通",
+                "lots": -166,
+                "pct": 19.6
+              },
+              {
+                "name": "台新-五權西",
+                "lots": -62,
+                "pct": 7.3
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -53,
+                "pct": 6.3
+              },
+              {
+                "name": "富邦-台北",
+                "lots": -44,
+                "pct": 5.2
+              }
+            ],
+            "net_concentration": 685,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 46.4,
+            "label": "籌碼中性",
+            "net_lots": 685,
+            "top5_buy_lots": 874,
+            "top1_broker": "美商高盛",
+            "top1_lots": 224,
+            "concentration": 0.571
+          },
+          "trade_value": 11085762750
+        },
+        {
+          "id": "3661",
+          "name": "世芯-KY",
+          "price": 3660.0,
+          "rsi": 55.6,
+          "rsi10": 53.4,
+          "ret_20d": -1.2,
+          "signal": "HOLD",
+          "ma5": 3685.0,
+          "ma10": 3364.5,
+          "ma20": 3484.25,
+          "ma60": 3737.83,
+          "cv_sharpe": -3.67,
+          "cv_win_rate": 0.22,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 15:55",
+              "title": "世芯-KY:係因本公司有價證券於集中交易市場達公布注意交易資訊標準，故公布相關財務業務等重大訊息，以利投資人區別瞭解",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6664017"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 81,
+            "投信": 213,
+            "自營": -149,
+            "合計": 145,
+            "近5日": 4070,
+            "近5日外資": 3046,
+            "近5日投信": 880,
+            "連買日": 5,
+            "投信連買日": 5,
+            "集中度": 18.3,
+            "土洋同買": true
+          },
+          "chip_tier": "strong",
+          "target_short": 4092.7,
+          "target_mid": 4594.2,
+          "target_long": 4559.4,
+          "atr14": 266.55,
+          "stop_loss": 3126.9,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 1570,
+                "pct": 38.7
+              },
+              {
+                "name": "摩根大通",
+                "lots": 390,
+                "pct": 9.6
+              },
+              {
+                "name": "美商高盛",
+                "lots": 360,
+                "pct": 8.9
+              },
+              {
+                "name": "港商野村",
+                "lots": 288,
+                "pct": 7.1
+              },
+              {
+                "name": "美林",
+                "lots": 269,
+                "pct": 6.6
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "凱基-士林",
+                "lots": -288,
+                "pct": 14.4
+              },
+              {
+                "name": "永豐金-內湖",
+                "lots": -283,
+                "pct": 14.1
+              },
+              {
+                "name": "元大證券",
+                "lots": -259,
+                "pct": 12.9
+              },
+              {
+                "name": "凱基-信義",
+                "lots": -237,
+                "pct": 11.8
+              },
+              {
+                "name": "凱基-城中",
+                "lots": -209,
+                "pct": 10.4
+              }
+            ],
+            "net_concentration": 2054,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 62.7,
+            "label": "主力買盤偏多",
+            "net_lots": 2054,
+            "top5_buy_lots": 2877,
+            "top1_broker": "台灣摩根士丹利",
+            "top1_lots": 1570,
+            "concentration": 0.709
+          },
+          "trade_value": 15062170020
+        },
+        {
+          "id": "3529",
+          "name": "力旺",
+          "price": 2150.0,
+          "rsi": 42.9,
+          "rsi10": 40.6,
+          "ret_20d": -19.0,
+          "signal": "HOLD",
+          "ma5": 2235.0,
+          "ma10": 2142.0,
+          "ma20": 2359.5,
+          "ma60": 2604.75,
+          "cv_sharpe": -11.64,
+          "cv_win_rate": 0.0,
+          "news": [
+            {
+              "date": "2026-11-13",
+              "datetime": "2026-11-13 22:10",
+              "title": "鉅亨速報 - Factset 最新調查：力旺(3529-TW)目標價調降至3415元，幅度約6.25%",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6662158"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -36,
+            "投信": -10,
+            "自營": -50,
+            "合計": -96,
+            "近5日": -372,
+            "近5日外資": -137,
+            "近5日投信": -190,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -6.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2865.7,
+          "target_mid": 2883.5,
+          "target_long": 2844.6,
+          "atr14": 176.49,
+          "stop_loss": 1797.0,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2562432350
+        },
+        {
+          "id": "6643",
+          "name": "M31",
+          "price": 379.0,
+          "rsi": 42.8,
+          "rsi10": 42.3,
+          "ret_20d": -14.1,
+          "signal": "HOLD",
+          "ma5": 392.1,
+          "ma10": 384.3,
+          "ma20": 410.88,
+          "ma60": 436.94,
+          "cv_sharpe": 1.01,
+          "cv_win_rate": 0.5,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -95,
+            "投信": 0,
+            "自營": -2,
+            "合計": -97,
+            "近5日": 158,
+            "近5日外資": 137,
+            "近5日投信": 8,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 6.6,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 474.0,
+          "target_mid": 568.5,
+          "target_long": 519.3,
+          "atr14": 26.76,
+          "stop_loss": 325.5,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 224767087
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 2
+    },
+    "AI 散熱": {
+      "avg_ret_20d": -23.09,
+      "avg_rsi": 31.7,
+      "avg_sharpe": 4.58,
+      "stocks": [
+        {
+          "id": "3017",
+          "name": "奇鋐",
+          "price": 2740.0,
+          "rsi": 44.8,
+          "rsi10": 44.1,
+          "ret_20d": -11.2,
+          "signal": "HOLD",
+          "ma5": 2877.0,
+          "ma10": 2755.5,
+          "ma20": 2975.0,
+          "ma60": 3203.67,
+          "cv_sharpe": 5.22,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:52",
+              "title": "盤中速報 - 奇鋐(3017)股價殺至跌停，跌停價2740.0元，成交2,157張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663529"
+            },
+            {
+              "date": "2026-11-14",
+              "datetime": "2026-11-14 08:20",
+              "title": "〈熱門股〉奇鋐水冷產品展望正面 周漲逾3成收復月線",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6662249"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -847,
+            "投信": 40,
+            "自營": 257,
+            "合計": -550,
+            "近5日": -92,
+            "近5日外資": -2067,
+            "近5日投信": 2222,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -0.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 3543.8,
+          "target_mid": 3744.1,
+          "target_long": 3631.2,
+          "atr14": 233.61,
+          "stop_loss": 2272.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 8930509400
+        },
+        {
+          "id": "3324",
+          "name": "雙鴻",
+          "price": 1030.0,
+          "rsi": 27.4,
+          "rsi10": 32.8,
+          "ret_20d": -27.0,
+          "signal": "HOLD",
+          "ma5": 1175.0,
+          "ma10": 1187.0,
+          "ma20": 1288.25,
+          "ma60": 1339.23,
+          "cv_sharpe": 5.61,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 842,
+            "投信": -21,
+            "自營": -86,
+            "合計": 735,
+            "近5日": -52,
+            "近5日外資": 431,
+            "近5日投信": -332,
+            "連買日": 2,
+            "投信連買日": 0,
+            "集中度": -0.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1545.2,
+          "target_mid": 1513.6,
+          "target_long": 1421.9,
+          "atr14": 112.17,
+          "stop_loss": 805.7,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "港商麥格理",
+                "lots": 481,
+                "pct": 20.0
+              },
+              {
+                "name": "元大證券",
+                "lots": 423,
+                "pct": 17.6
+              },
+              {
+                "name": "富邦-新店",
+                "lots": 299,
+                "pct": 12.4
+              },
+              {
+                "name": "摩根大通",
+                "lots": 285,
+                "pct": 11.9
+              },
+              {
+                "name": "新光",
+                "lots": 267,
+                "pct": 11.1
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "港商野村",
+                "lots": -917,
+                "pct": 31.1
+              },
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -552,
+                "pct": 18.7
+              },
+              {
+                "name": "富邦證券",
+                "lots": -325,
+                "pct": 11.0
+              },
+              {
+                "name": "兆豐-民生",
+                "lots": -249,
+                "pct": 8.5
+              },
+              {
+                "name": "法銀巴黎",
+                "lots": -128,
+                "pct": 4.3
+              }
+            ],
+            "net_concentration": -541,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 48.4,
+            "label": "籌碼中性",
+            "net_lots": -541,
+            "top5_buy_lots": 1755,
+            "top1_broker": "港商麥格理",
+            "top1_lots": 481,
+            "concentration": 0.73
+          },
+          "trade_value": 3609373380
+        },
+        {
+          "id": "3653",
+          "name": "健策",
+          "price": 4815.0,
+          "rsi": 25.9,
+          "rsi10": 32.6,
+          "ret_20d": -28.8,
+          "signal": "HOLD",
+          "ma5": 5556.0,
+          "ma10": 5693.0,
+          "ma20": 6037.5,
+          "ma60": 6055.58,
+          "cv_sharpe": 11.5,
+          "cv_win_rate": 1.0,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 257,
+            "投信": 17,
+            "自營": 9,
+            "合計": 283,
+            "近5日": -366,
+            "近5日外資": -1025,
+            "近5日投信": 536,
+            "連買日": 2,
+            "投信連買日": 1,
+            "集中度": -2.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 7075.5,
+          "target_mid": 5591.8,
+          "target_long": 6155.6,
+          "atr14": 535.27,
+          "stop_loss": 3744.5,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 433,
+                "pct": 19.9
+              },
+              {
+                "name": "摩根大通",
+                "lots": 315,
+                "pct": 14.5
+              },
+              {
+                "name": "元大證券",
+                "lots": 283,
+                "pct": 13.0
+              },
+              {
+                "name": "永豐金證券",
+                "lots": 271,
+                "pct": 12.5
+              },
+              {
+                "name": "國泰證券",
+                "lots": 162,
+                "pct": 7.4
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -1296,
+                "pct": 46.0
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -367,
+                "pct": 13.0
+              },
+              {
+                "name": "美商高盛",
+                "lots": -238,
+                "pct": 8.4
+              },
+              {
+                "name": "美林",
+                "lots": -168,
+                "pct": 6.0
+              },
+              {
+                "name": "港商野村",
+                "lots": -141,
+                "pct": 5.0
+              }
+            ],
+            "net_concentration": -642,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 46.0,
+            "label": "籌碼中性",
+            "net_lots": -642,
+            "top5_buy_lots": 1464,
+            "top1_broker": "台灣摩根士丹利",
+            "top1_lots": 433,
+            "concentration": 0.673
+          },
+          "trade_value": 4742582400
+        },
+        {
+          "id": "8210",
+          "name": "勤誠",
+          "price": 545.0,
+          "rsi": 23.1,
+          "rsi10": 23.3,
+          "ret_20d": -34.6,
+          "signal": "HOLD",
+          "ma5": 583.8,
+          "ma10": 591.6,
+          "ma20": 683.15,
+          "ma60": 836.6,
+          "cv_sharpe": 1.22,
+          "cv_win_rate": 0.67,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:14",
+              "title": "盤中速報 - 勤誠(8210)股價殺至跌停，跌停價540.0元，成交1,323張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663732"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 214,
+            "投信": -1,
+            "自營": -16,
+            "合計": 197,
+            "近5日": -705,
+            "近5日外資": -1365,
+            "近5日投信": 640,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -4.7,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 884.9,
+          "target_mid": 817.5,
+          "target_long": 753.1,
+          "atr14": 40.69,
+          "stop_loss": 463.6,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "統一",
+                "lots": 555,
+                "pct": 56.4
+              },
+              {
+                "name": "兆豐證券",
+                "lots": 79,
+                "pct": 8.0
+              },
+              {
+                "name": "元大證券",
+                "lots": 63,
+                "pct": 6.4
+              },
+              {
+                "name": "統一-新竹",
+                "lots": 53,
+                "pct": 5.4
+              },
+              {
+                "name": "國泰-敦南",
+                "lots": 31,
+                "pct": 3.2
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": -772,
+                "pct": 41.2
+              },
+              {
+                "name": "摩根大通",
+                "lots": -218,
+                "pct": 11.6
+              },
+              {
+                "name": "新加坡商瑞銀",
+                "lots": -168,
+                "pct": 9.0
+              },
+              {
+                "name": "香港上海匯豐",
+                "lots": -120,
+                "pct": 6.4
+              },
+              {
+                "name": "凱基-台北",
+                "lots": -101,
+                "pct": 5.4
+              }
+            ],
+            "net_concentration": -891,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 58.3,
+            "label": "主力買盤偏多",
+            "net_lots": -891,
+            "top5_buy_lots": 781,
+            "top1_broker": "統一",
+            "top1_lots": 555,
+            "concentration": 0.794
+          },
+          "trade_value": 891694665
+        },
+        {
+          "id": "8996",
+          "name": "高力",
+          "price": 1300.0,
+          "rsi": 37.1,
+          "rsi10": 41.6,
+          "ret_20d": -14.5,
+          "signal": "HOLD",
+          "ma5": 1406.0,
+          "ma10": 1357.0,
+          "ma20": 1448.5,
+          "ma60": 1405.75,
+          "cv_sharpe": 12.12,
+          "cv_win_rate": 1.0,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -149,
+            "投信": 127,
+            "自營": -15,
+            "合計": -37,
+            "近5日": 582,
+            "近5日外資": -568,
+            "近5日投信": 1180,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 2.9,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1690.3,
+          "target_mid": 1670.2,
+          "target_long": 1682.2,
+          "atr14": 136.57,
+          "stop_loss": 1026.9,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 2464356700
+        },
+        {
+          "id": "2421",
+          "name": "建準",
+          "price": 127.0,
+          "rsi": 31.8,
+          "rsi10": 33.4,
+          "ret_20d": -22.6,
+          "signal": "HOLD",
+          "ma5": 133.4,
+          "ma10": 133.4,
+          "ma20": 144.6,
+          "ma60": 156.93,
+          "cv_sharpe": -8.16,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -206,
+            "投信": 0,
+            "自營": -29,
+            "合計": -235,
+            "近5日": -904,
+            "近5日外資": -841,
+            "近5日投信": 0,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -13.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 170.4,
+          "target_mid": 180.7,
+          "target_long": 163.6,
+          "atr14": 7.89,
+          "stop_loss": 111.2,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 176736248
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 5
+    },
+    "AI 電源": {
+      "avg_ret_20d": -26.75,
+      "avg_rsi": 24.6,
+      "avg_sharpe": -0.71,
+      "stocks": [
+        {
+          "id": "2308",
+          "name": "台達電",
+          "price": 1120.0,
+          "rsi": 28.9,
+          "rsi10": 30.5,
+          "ret_20d": -31.3,
+          "signal": "HOLD",
+          "ma5": 1234.0,
+          "ma10": 1200.5,
+          "ma20": 1365.0,
+          "ma60": 1659.33,
+          "cv_sharpe": 2.49,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 09:59",
+              "title": "盤中速報 - 台達電(2308)股價殺至跌停，跌停價1120.0元，成交13,184張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663413"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -3244,
+            "投信": -838,
+            "自營": 605,
+            "合計": -3477,
+            "近5日": -8954,
+            "近5日外資": -10206,
+            "近5日投信": 628,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -10.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 1751.3,
+          "target_mid": 1680.0,
+          "target_long": 1604.7,
+          "atr14": 96.95,
+          "stop_loss": 926.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 24156203680
+        },
+        {
+          "id": "2301",
+          "name": "光寶科",
+          "price": 213.0,
+          "rsi": 34.5,
+          "rsi10": 36.2,
+          "ret_20d": -20.5,
+          "signal": "HOLD",
+          "ma5": 229.0,
+          "ma10": 222.6,
+          "ma20": 239.28,
+          "ma60": 271.92,
+          "cv_sharpe": 2.44,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 11:11",
+              "title": "<mark>光寶科</mark>參與electronica 2026電子展",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663547"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -1102,
+            "投信": -1475,
+            "自營": 579,
+            "合計": -1998,
+            "近5日": -6707,
+            "近5日外資": -2551,
+            "近5日投信": -4835,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -7.8,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 279.3,
+          "target_mid": 275.5,
+          "target_long": 269.8,
+          "atr14": 15.13,
+          "stop_loss": 182.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 4143106878
+        },
+        {
+          "id": "6412",
+          "name": "群電",
+          "price": 53.1,
+          "rsi": 10.3,
+          "rsi10": 10.7,
+          "ret_20d": -28.4,
+          "signal": "HOLD",
+          "ma5": 53.96,
+          "ma10": 57.1,
+          "ma20": 64.15,
+          "ma60": 71.77,
+          "cv_sharpe": -7.05,
+          "cv_win_rate": 0.33,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -20,
+            "投信": 9,
+            "自營": -4,
+            "合計": -15,
+            "近5日": -635,
+            "近5日外資": -674,
+            "近5日投信": 34,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": -15.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 80.6,
+          "target_mid": 67.5,
+          "target_long": 66.8,
+          "atr14": 2.16,
+          "stop_loss": 48.8,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 40446217
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 2
+    },
+    "被動元件": {
+      "avg_ret_20d": -35.2,
+      "avg_rsi": 28.4,
+      "avg_sharpe": -2.05,
+      "stocks": [
+        {
+          "id": "2327",
+          "name": "國巨",
+          "price": 374.0,
+          "rsi": 23.7,
+          "rsi10": 28.1,
+          "ret_20d": -34.7,
+          "signal": "HOLD",
+          "ma5": 406.6,
+          "ma10": 412.45,
+          "ma20": 470.45,
+          "ma60": 538.23,
+          "cv_sharpe": -4.31,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 08:59",
+              "title": "黃仁勳下台 鴻海、廣達、<mark>國巨</mark>、華新科、南亞、台玻",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663260"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -3120,
+            "投信": -1025,
+            "自營": 209,
+            "合計": -3936,
+            "近5日": -7101,
+            "近5日外資": 2926,
+            "近5日投信": -10695,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -3.2,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 598.5,
+          "target_mid": 561.0,
+          "target_long": 525.6,
+          "atr14": 35.94,
+          "stop_loss": 302.1,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 16076556056
+        },
+        {
+          "id": "2492",
+          "name": "華新科",
+          "price": 257.5,
+          "rsi": 28.5,
+          "rsi10": 33.7,
+          "ret_20d": -36.5,
+          "signal": "HOLD",
+          "ma5": 278.4,
+          "ma10": 284.85,
+          "ma20": 334.02,
+          "ma60": 326.05,
+          "cv_sharpe": -3.64,
+          "cv_win_rate": 0.28,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 10:51",
+              "title": "盤中速報 - 華新科(2492)股價殺至跌停，跌停價257.5元，成交12,348張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663523"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -5950,
+            "投信": 1,
+            "自營": -181,
+            "合計": -6130,
+            "近5日": -14476,
+            "近5日外資": -8441,
+            "近5日投信": -6922,
+            "連買日": 0,
+            "投信連買日": 1,
+            "集中度": -9.1,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 442.7,
+          "target_mid": 362.8,
+          "target_long": 359.8,
+          "atr14": 30.57,
+          "stop_loss": 196.4,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 3895615272
+        },
+        {
+          "id": "2478",
+          "name": "大毅",
+          "price": 93.2,
+          "rsi": 33.0,
+          "rsi10": 36.3,
+          "ret_20d": -34.4,
+          "signal": "HOLD",
+          "ma5": 100.24,
+          "ma10": 99.31,
+          "ma20": 109.28,
+          "ma60": 119.23,
+          "cv_sharpe": 1.79,
+          "cv_win_rate": 0.5,
+          "news": [
+            {
+              "date": "2026-11-16",
+              "datetime": "2026-11-16 13:08",
+              "title": "盤中速報 - 大毅(2478)股價殺至跌停，跌停價93.2元，成交1,920張",
+              "source": "鉅亨網",
+              "url": "https://news.cnyes.com/news/id/6663724"
+            }
+          ],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -259,
+            "投信": 0,
+            "自營": -66,
+            "合計": -325,
+            "近5日": 247,
+            "近5日外資": 189,
+            "近5日投信": 38,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": 1.4,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 132.9,
+          "target_mid": 133.2,
+          "target_long": 122.8,
+          "atr14": 8.76,
+          "stop_loss": 75.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 211004800
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 1
+    },
+    "測試設備": {
+      "avg_ret_20d": -33.53,
+      "avg_rsi": 26.1,
+      "avg_sharpe": 5.64,
+      "stocks": [
+        {
+          "id": "2360",
+          "name": "致茂",
+          "price": 1260.0,
+          "rsi": 27.4,
+          "rsi10": 27.2,
+          "ret_20d": -37.8,
+          "signal": "HOLD",
+          "ma5": 1352.0,
+          "ma10": 1356.5,
+          "ma20": 1648.25,
+          "ma60": 1996.33,
+          "cv_sharpe": 7.96,
+          "cv_win_rate": 0.83,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 226,
+            "投信": 131,
+            "自營": -50,
+            "合計": 307,
+            "近5日": 482,
+            "近5日外資": 1935,
+            "近5日投信": -922,
+            "連買日": 1,
+            "投信連買日": 1,
+            "集中度": 3.0,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 2283.2,
+          "target_mid": 1890.0,
+          "target_long": 1867.8,
+          "atr14": 130.61,
+          "stop_loss": 998.8,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "台灣摩根士丹利",
+                "lots": 2316,
+                "pct": 50.3
+              },
+              {
+                "name": "永豐金-匯立",
+                "lots": 646,
+                "pct": 14.0
+              },
+              {
+                "name": "港商麥格理",
+                "lots": 331,
+                "pct": 7.2
+              },
+              {
+                "name": "美商高盛",
+                "lots": 284,
+                "pct": 6.2
+              },
+              {
+                "name": "兆豐證券",
+                "lots": 280,
+                "pct": 6.1
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "摩根大通",
+                "lots": -1807,
+                "pct": 42.1
+              },
+              {
+                "name": "元大證券",
+                "lots": -746,
+                "pct": 17.4
+              },
+              {
+                "name": "國票證券",
+                "lots": -276,
+                "pct": 6.4
+              },
+              {
+                "name": "永豐金證券",
+                "lots": -246,
+                "pct": 5.7
+              },
+              {
+                "name": "國泰證券",
+                "lots": -227,
+                "pct": 5.3
+              }
+            ],
+            "net_concentration": 313,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 63.1,
+            "label": "主力買盤偏多",
+            "net_lots": 313,
+            "top5_buy_lots": 3857,
+            "top1_broker": "台灣摩根士丹利",
+            "top1_lots": 2316,
+            "concentration": 0.838
+          },
+          "trade_value": 4636447200
+        },
+        {
+          "id": "7769",
+          "name": "鴻勁",
+          "price": 3695.0,
+          "rsi": 24.8,
+          "rsi10": 29.3,
+          "ret_20d": -29.3,
+          "signal": "HOLD",
+          "ma5": 4088.0,
+          "ma10": 4097.0,
+          "ma20": 4654.75,
+          "ma60": 5619.75,
+          "cv_sharpe": 3.33,
+          "cv_win_rate": 0.67,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": 166,
+            "投信": -37,
+            "自營": -22,
+            "合計": 107,
+            "近5日": -168,
+            "近5日外資": -217,
+            "近5日投信": 82,
+            "連買日": 1,
+            "投信連買日": 0,
+            "集中度": -3.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 5885.5,
+          "target_mid": 5542.5,
+          "target_long": 5315.5,
+          "atr14": 361.49,
+          "stop_loss": 2972.0,
+          "broker": {
+            "top_buyers": [
+              {
+                "name": "美商高盛",
+                "lots": 117,
+                "pct": 19.5
+              },
+              {
+                "name": "元大證券",
+                "lots": 93,
+                "pct": 15.5
+              },
+              {
+                "name": "宏遠證券",
+                "lots": 82,
+                "pct": 13.7
+              },
+              {
+                "name": "中國信託",
+                "lots": 68,
+                "pct": 11.4
+              },
+              {
+                "name": "國泰證券",
+                "lots": 63,
+                "pct": 10.5
+              }
+            ],
+            "top_sellers": [
+              {
+                "name": "永豐金-匯立",
+                "lots": -141,
+                "pct": 23.5
+              },
+              {
+                "name": "港商麥格理",
+                "lots": -121,
+                "pct": 20.2
+              },
+              {
+                "name": "永豐金-萬盛",
+                "lots": -44,
+                "pct": 7.3
+              },
+              {
+                "name": "宏遠-民生",
+                "lots": -42,
+                "pct": 7.0
+              },
+              {
+                "name": "摩根大通",
+                "lots": -37,
+                "pct": 6.2
+              }
+            ],
+            "net_concentration": 0,
+            "source": "fubon",
+            "error": null
+          },
+          "main_force": {
+            "score": 49.6,
+            "label": "籌碼中性",
+            "net_lots": 0,
+            "top5_buy_lots": 423,
+            "top1_broker": "美商高盛",
+            "top1_lots": 117,
+            "concentration": 0.706
+          },
+          "trade_value": 3047469725
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 2
+    },
+    "顯示": {
+      "avg_ret_20d": -10.38,
+      "avg_rsi": 29.3,
+      "avg_sharpe": -7.5,
+      "stocks": [
+        {
+          "id": "8069",
+          "name": "元太",
+          "price": 137.5,
+          "rsi": 34.8,
+          "rsi10": 38.3,
+          "ret_20d": -6.1,
+          "signal": "HOLD",
+          "ma5": 142.1,
+          "ma10": 142.6,
+          "ma20": 148.53,
+          "ma60": 149.62,
+          "cv_sharpe": -3.91,
+          "cv_win_rate": 0.17,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -963,
+            "投信": -22,
+            "自營": 33,
+            "合計": -952,
+            "近5日": -1715,
+            "近5日外資": -1627,
+            "近5日投信": 68,
+            "連買日": 0,
+            "投信連買日": 0,
+            "集中度": -5.5,
+            "土洋同買": false
+          },
+          "chip_tier": "neutral",
+          "target_short": 161.6,
+          "target_mid": 145.0,
+          "target_long": 153.8,
+          "atr14": 7.39,
+          "stop_loss": 122.7,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 809799238
+        },
+        {
+          "id": "6176",
+          "name": "瑞儀",
+          "price": 77.7,
+          "rsi": 23.8,
+          "rsi10": 26.8,
+          "ret_20d": -14.6,
+          "signal": "HOLD",
+          "ma5": 80.12,
+          "ma10": 80.63,
+          "ma20": 84.95,
+          "ma60": 89.28,
+          "cv_sharpe": -11.08,
+          "cv_win_rate": 0.0,
+          "news": [],
+          "chip": {
+            "date": "2026-11-16",
+            "外資": -147,
+            "投信": 7,
+            "自營": 9,
+            "合計": -131,
+            "近5日": 286,
+            "近5日外資": 246,
+            "近5日投信": 24,
+            "連買日": 0,
+            "投信連買日": 5,
+            "集中度": 3.0,
+            "土洋同買": true
+          },
+          "chip_tier": "neutral",
+          "target_short": 94.9,
+          "target_mid": 94.6,
+          "target_long": 90.6,
+          "atr14": 2.64,
+          "stop_loss": 72.4,
+          "broker": null,
+          "main_force": null,
+          "trade_value": 140724801
+        }
+      ],
+      "hot_count": 0,
+      "buy_count": 0,
+      "qualified_count": 0
+    }
+  },
+  "strong_sectors": [],
+  "weak_sectors": [
+    "光通訊",
+    "記憶體",
+    "AI伺服器",
+    "封測",
+    "光學",
+    "IC設計",
+    "車用電子",
+    "綠能環保",
+    "CoPoS封裝",
+    "ABF載板",
+    "銅箔/CCL",
+    "PCB",
+    "AI ASIC/IP",
+    "AI 散熱",
+    "AI 電源",
+    "被動元件",
+    "測試設備",
+    "顯示"
+  ],
+  "qualified": [
+    {
+      "sector": "封測",
+      "id": "6271",
+      "name": "同欣電",
+      "price": 202.5,
+      "rsi": 46.6,
+      "cv_sharpe": 4.62,
+      "bias_ma10": 1.7,
+      "sector_strong": false
+    },
+    {
+      "sector": "銅箔/CCL",
+      "id": "1303",
+      "name": "南亞",
+      "price": 274.0,
+      "rsi": 42.5,
+      "cv_sharpe": 5.46,
+      "bias_ma10": -1.2,
+      "sector_strong": false
+    }
+  ],
+  "dual_filter": [
+    {
+      "sector": "光通訊",
+      "id": "3105",
+      "name": "穩懋",
+      "price": 512.0,
+      "rsi": 50.0,
+      "cv_sharpe": 7.37,
+      "bias_ma10": 3.7,
+      "sector_strong": false,
+      "passes_bias": false,
+      "passes_all": false
+    },
+    {
+      "sector": "封測",
+      "id": "6271",
+      "name": "同欣電",
+      "price": 202.5,
+      "rsi": 46.6,
+      "cv_sharpe": 4.62,
+      "bias_ma10": 1.7,
+      "sector_strong": false,
+      "passes_bias": true,
+      "passes_all": true
+    },
+    {
+      "sector": "銅箔/CCL",
+      "id": "1303",
+      "name": "南亞",
+      "price": 274.0,
+      "rsi": 42.5,
+      "cv_sharpe": 5.46,
+      "bias_ma10": -1.2,
+      "sector_strong": false,
+      "passes_bias": true,
+      "passes_all": true
+    }
+  ],
+  "alerts": [],
+  "chart_path": "daily_reports/20261116/01_sector_strength.png",
+  "failed_sectors": [],
+  "partial_sectors": {},
+  "scan_coverage": 100,
+  "positions": {
+    "taiex_bull": false,
+    "taiex_close": 41040.08,
+    "taiex_ma60": 46134.9,
+    "gate_buys": [],
+    "new_entries": [],
+    "new_exits": [],
+    "holding": [
+      {
+        "id": "3231",
+        "name": "緯創",
+        "signal_date": "20260921",
+        "signal_price": 186.5,
+        "status": "holding",
+        "phase": 1,
+        "entry_date": "20260921",
+        "entry_price": 186.5,
+        "high_watermark": 186.5,
+        "days_since_high": 0
+      },
+      {
+        "id": "2330",
+        "name": "台積電",
+        "signal_date": "20260930",
+        "signal_price": 2480.0,
+        "status": "holding",
+        "phase": 1,
+        "entry_date": "20261001",
+        "entry_price": 2510.0,
+        "high_watermark": 2510.0,
+        "days_since_high": 0
+      },
+      {
+        "id": "2379",
+        "name": "瑞昱",
+        "signal_date": "20261015",
+        "signal_price": 764.0,
+        "status": "holding",
+        "phase": 1,
+        "entry_date": "20261016",
+        "entry_price": 778.0,
+        "high_watermark": 778.0,
+        "days_since_high": 0
+      }
+    ]
+  }
+}
