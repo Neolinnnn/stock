@@ -1,18 +1,6 @@
 {
-  "updated": "20261118",
+  "updated": "20261119",
   "open": [
-    {
-      "id": "2330",
-      "name": "台積電",
-      "signal_date": "20260930",
-      "signal_price": 2480.0,
-      "status": "holding",
-      "phase": 1,
-      "entry_date": "20261001",
-      "entry_price": 2510.0,
-      "high_watermark": 2510.0,
-      "days_since_high": 0
-    },
     {
       "id": "2379",
       "name": "瑞昱",
@@ -329,6 +317,22 @@
       "exit_date": "20261117",
       "exit_price": 157.0,
       "return_pct": -15.82,
+      "exit_reason": "SL"
+    },
+    {
+      "id": "2330",
+      "name": "台積電",
+      "signal_date": "20260930",
+      "signal_price": 2480.0,
+      "status": "holding",
+      "phase": 1,
+      "entry_date": "20261001",
+      "entry_price": 2510.0,
+      "high_watermark": 2510.0,
+      "days_since_high": 0,
+      "exit_date": "20261119",
+      "exit_price": 2100.0,
+      "return_pct": -16.33,
       "exit_reason": "SL"
     }
   ]
