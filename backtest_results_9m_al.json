@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-11-13T20:43:45.175453",
+  "generated_at": "2026-11-20T21:36:48.236886",
   "date_range": {
-    "start": "20260213",
-    "end": "20261113"
+    "start": "20260220",
+    "end": "20261120"
   },
   "benchmark": {
     "id": "0050",
     "start": "20260223",
-    "end": "20261113",
-    "return_pct": 31.45
+    "end": "20261120",
+    "return_pct": 8.3
   },
-  "total_signals": 178,
-  "signals_after_limit": 138,
-  "qualified_signals": 178,
-  "qualified_after_limit": 138,
+  "total_signals": 183,
+  "signals_after_limit": 143,
+  "qualified_signals": 183,
+  "qualified_after_limit": 143,
   "combinations": {
     "TP15_SL10": {
       "stats": {
-        "total": 132,
+        "total": 143,
         "wins": 35,
-        "losses": 97,
-        "open_count": 6,
-        "win_rate": 0.2652,
-        "avg_return": -4.0017,
-        "avg_holding_days": 12.7,
-        "bench_n": 132,
-        "bench_avg_return": -3.08,
-        "excess_return": -0.92,
-        "beat_rate": 0.3788
+        "losses": 108,
+        "open_count": 0,
+        "win_rate": 0.2448,
+        "avg_return": -4.8365,
+        "avg_holding_days": 13.9,
+        "bench_n": 143,
+        "bench_avg_return": -3.83,
+        "excess_return": -1.0,
+        "beat_rate": 0.3846
       },
       "trades": [
         {
@@ -81,11 +81,11 @@
         {
           "result": "WIN",
           "exit_date": "20260317",
-          "exit_price": 122.85677083333333,
+          "exit_price": 120.633118872549,
           "return_pct": 16.51,
           "holding_days": 9,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -113,11 +113,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260309",
-          "exit_price": 100.47395833333333,
+          "exit_price": 98.65542515082956,
           "return_pct": -11.01,
           "holding_days": 2,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -209,11 +209,11 @@
         {
           "result": "WIN",
           "exit_date": "20260506",
-          "exit_price": 108.5,
+          "exit_price": 106.53619909502262,
           "return_pct": 18.06,
           "holding_days": 2,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -239,11 +239,11 @@
           "bench_return_pct": -3.92
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -12.93,
+          "holding_days": 120,
           "entry_date": "20260527",
           "entry_price": 2297.071950342077,
           "amount": 3000,
@@ -251,7 +251,8 @@
           "stock_name": "台積電",
           "signal_date": "20260526",
           "tp": 0.15,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -17.03
         },
         {
           "result": "LOSS",
@@ -286,11 +287,11 @@
           "bench_return_pct": -0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -14.05,
+          "holding_days": 118,
           "entry_date": "20260529",
           "entry_price": 2326.9040535932727,
           "amount": 3000,
@@ -298,7 +299,8 @@
           "stock_name": "台積電",
           "signal_date": "20260528",
           "tp": 0.15,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -17.67
         },
         {
           "result": "LOSS",
@@ -1327,11 +1329,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261103",
-          "exit_price": 146.0,
+          "exit_price": 143.3574660633484,
           "return_pct": -12.31,
           "holding_days": 31,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -1901,11 +1903,11 @@
           "bench_return_pct": -6.75
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.02,
+          "holding_days": 25,
           "entry_date": "20261014",
           "entry_price": 768.0,
           "amount": 3000,
@@ -1913,7 +1915,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261013",
           "tp": 0.15,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -25.27
         },
         {
           "result": "LOSS",
@@ -1980,11 +1983,11 @@
           "bench_return_pct": -3.22
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.7,
+          "holding_days": 23,
           "entry_date": "20261016",
           "entry_price": 774.0,
           "amount": 3000,
@@ -1992,7 +1995,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261015",
           "tp": 0.15,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -22.84
         },
         {
           "result": "LOSS",
@@ -2155,11 +2159,11 @@
           "bench_return_pct": -2.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -14.9,
+          "holding_days": 16,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -2167,7 +2171,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.15,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -22.27
         },
         {
           "result": "LOSS",
@@ -2218,11 +2223,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 240.0,
+          "return_pct": -12.89,
+          "holding_days": 5,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -2230,23 +2235,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.15,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": 0.84
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 177.0,
+          "return_pct": -10.61,
+          "holding_days": 2,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": -4.6
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP15_SL12": {
       "stats": {
-        "total": 129,
+        "total": 143,
         "wins": 42,
-        "losses": 87,
-        "open_count": 9,
-        "win_rate": 0.3256,
-        "avg_return": -3.4276,
-        "avg_holding_days": 14.7,
-        "bench_n": 129,
-        "bench_avg_return": -2.8,
-        "excess_return": -0.62,
-        "beat_rate": 0.4031
+        "losses": 101,
+        "open_count": 0,
+        "win_rate": 0.2937,
+        "avg_return": -4.6131,
+        "avg_holding_days": 16.6,
+        "bench_n": 143,
+        "bench_avg_return": -3.91,
+        "excess_return": -0.71,
+        "beat_rate": 0.4126
       },
       "trades": [
         {
@@ -2300,11 +2386,11 @@
         {
           "result": "WIN",
           "exit_date": "20260317",
-          "exit_price": 122.85677083333333,
+          "exit_price": 120.633118872549,
           "return_pct": 16.51,
           "holding_days": 9,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -2332,11 +2418,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260324",
-          "exit_price": 98.98177083333333,
+          "exit_price": 97.19024556938159,
           "return_pct": -12.33,
           "holding_days": 13,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -2428,11 +2514,11 @@
         {
           "result": "WIN",
           "exit_date": "20260506",
-          "exit_price": 108.5,
+          "exit_price": 106.53619909502262,
           "return_pct": 18.06,
           "holding_days": 2,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -2458,11 +2544,11 @@
           "bench_return_pct": -4.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -12.93,
+          "holding_days": 120,
           "entry_date": "20260527",
           "entry_price": 2297.071950342077,
           "amount": 3000,
@@ -2470,7 +2556,8 @@
           "stock_name": "台積電",
           "signal_date": "20260526",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -17.03
         },
         {
           "result": "LOSS",
@@ -2505,11 +2592,11 @@
           "bench_return_pct": 1.21
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -14.05,
+          "holding_days": 118,
           "entry_date": "20260529",
           "entry_price": 2326.9040535932727,
           "amount": 3000,
@@ -2517,7 +2604,8 @@
           "stock_name": "台積電",
           "signal_date": "20260528",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -17.67
         },
         {
           "result": "LOSS",
@@ -3112,11 +3200,11 @@
           "bench_return_pct": 1.89
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 70,
           "entry_date": "20260807",
           "entry_price": 2382.9753039832285,
           "amount": 3000,
@@ -3124,7 +3212,8 @@
           "stock_name": "台積電",
           "signal_date": "20260806",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -18.64
         },
         {
           "result": "WIN",
@@ -3143,11 +3232,11 @@
           "bench_return_pct": 7.76
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 69,
           "entry_date": "20260810",
           "entry_price": 2382.9753039832285,
           "amount": 1000.0,
@@ -3155,7 +3244,8 @@
           "stock_name": "台積電",
           "signal_date": "20260807",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -18.72
         },
         {
           "result": "LOSS",
@@ -3544,11 +3634,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261103",
-          "exit_price": 146.0,
+          "exit_price": 143.3574660633484,
           "return_pct": -12.31,
           "holding_days": 31,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -4118,11 +4208,11 @@
           "bench_return_pct": -11.28
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.02,
+          "holding_days": 25,
           "entry_date": "20261014",
           "entry_price": 768.0,
           "amount": 3000,
@@ -4130,14 +4220,15 @@
           "stock_name": "瑞昱",
           "signal_date": "20261013",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -25.27
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -13.9,
+          "holding_days": 20,
           "entry_date": "20261015",
           "entry_price": 971.0,
           "amount": 3000,
@@ -4145,7 +4236,8 @@
           "stock_name": "華碩",
           "signal_date": "20261014",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -12.44
         },
         {
           "result": "LOSS",
@@ -4196,11 +4288,11 @@
           "bench_return_pct": -3.22
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.7,
+          "holding_days": 23,
           "entry_date": "20261016",
           "entry_price": 774.0,
           "amount": 3000,
@@ -4208,7 +4300,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261015",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -22.84
         },
         {
           "result": "LOSS",
@@ -4371,11 +4464,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -14.9,
+          "holding_days": 16,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -4383,7 +4476,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -22.27
         },
         {
           "result": "LOSS",
@@ -4434,11 +4528,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 240.0,
+          "return_pct": -12.89,
+          "holding_days": 5,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -4446,23 +4540,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.15,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": 0.84
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 161.0,
+          "return_pct": -18.69,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP15_SL15": {
       "stats": {
-        "total": 120,
+        "total": 138,
         "wins": 45,
-        "losses": 75,
-        "open_count": 18,
-        "win_rate": 0.375,
-        "avg_return": -4.1663,
-        "avg_holding_days": 16.9,
-        "bench_n": 120,
-        "bench_avg_return": -2.74,
-        "excess_return": -1.42,
-        "beat_rate": 0.3667
+        "losses": 93,
+        "open_count": 5,
+        "win_rate": 0.3261,
+        "avg_return": -5.8363,
+        "avg_holding_days": 17.9,
+        "bench_n": 138,
+        "bench_avg_return": -4.24,
+        "excess_return": -1.6,
+        "beat_rate": 0.3841
       },
       "trades": [
         {
@@ -4516,11 +4691,11 @@
         {
           "result": "WIN",
           "exit_date": "20260317",
-          "exit_price": 122.85677083333333,
+          "exit_price": 120.633118872549,
           "return_pct": 16.51,
           "holding_days": 9,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -4548,11 +4723,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260326",
-          "exit_price": 95.5,
+          "exit_price": 93.77149321266967,
           "return_pct": -15.42,
           "holding_days": 15,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -4644,11 +4819,11 @@
         {
           "result": "WIN",
           "exit_date": "20260506",
-          "exit_price": 108.5,
+          "exit_price": 106.53619909502262,
           "return_pct": 18.06,
           "holding_days": 2,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -5296,11 +5471,11 @@
           "bench_return_pct": 10.12
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 210.0,
+          "return_pct": -18.29,
+          "holding_days": 72,
           "entry_date": "20260805",
           "entry_price": 257.0,
           "amount": 3000,
@@ -5308,7 +5483,8 @@
           "stock_name": "鴻海",
           "signal_date": "20260804",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.6
         },
         {
           "result": "WIN",
@@ -5327,11 +5503,11 @@
           "bench_return_pct": 1.89
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 70,
           "entry_date": "20260807",
           "entry_price": 2382.9753039832285,
           "amount": 3000,
@@ -5339,7 +5515,8 @@
           "stock_name": "台積電",
           "signal_date": "20260806",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.64
         },
         {
           "result": "WIN",
@@ -5358,11 +5535,11 @@
           "bench_return_pct": 7.76
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 69,
           "entry_date": "20260810",
           "entry_price": 2382.9753039832285,
           "amount": 1000.0,
@@ -5370,7 +5547,8 @@
           "stock_name": "台積電",
           "signal_date": "20260807",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.72
         },
         {
           "result": "LOSS",
@@ -5759,11 +5937,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261104",
-          "exit_price": 141.5,
+          "exit_price": 138.9389140271493,
           "return_pct": -15.02,
           "holding_days": 32,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -5853,11 +6031,11 @@
           "bench_return_pct": -11.25
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 159.0,
+          "return_pct": -15.43,
+          "holding_days": 34,
           "entry_date": "20260922",
           "entry_price": 188.0,
           "amount": 3000,
@@ -5865,7 +6043,8 @@
           "stock_name": "緯創",
           "signal_date": "20260921",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -14.91
         },
         {
           "result": "LOSS",
@@ -6188,11 +6367,11 @@
           "bench_return_pct": -7.02
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 156.0,
+          "return_pct": -15.22,
+          "holding_days": 27,
           "entry_date": "20261008",
           "entry_price": 184.0,
           "amount": 3000,
@@ -6200,14 +6379,15 @@
           "stock_name": "緯創",
           "signal_date": "20261007",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -21.8
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -15.47,
+          "holding_days": 24,
           "entry_date": "20261008",
           "entry_price": 989.0,
           "amount": 3000,
@@ -6215,7 +6395,8 @@
           "stock_name": "華碩",
           "signal_date": "20261007",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.38
         },
         {
           "result": "LOSS",
@@ -6266,11 +6447,11 @@
           "bench_return_pct": -5.5
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 159.0,
+          "return_pct": -15.43,
+          "holding_days": 23,
           "entry_date": "20261012",
           "entry_price": 188.0,
           "amount": 3000,
@@ -6278,7 +6459,8 @@
           "stock_name": "緯創",
           "signal_date": "20261008",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.54
         },
         {
           "result": "LOSS",
@@ -6297,11 +6479,11 @@
           "bench_return_pct": -11.91
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261117",
+          "exit_price": 157.0,
+          "return_pct": -16.04,
+          "holding_days": 23,
           "entry_date": "20261013",
           "entry_price": 187.0,
           "amount": 1000.0,
@@ -6309,7 +6491,8 @@
           "stock_name": "緯創",
           "signal_date": "20261012",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.48
         },
         {
           "result": "LOSS",
@@ -6343,11 +6526,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 800.0,
+          "return_pct": -17.61,
+          "holding_days": 23,
           "entry_date": "20261015",
           "entry_price": 971.0,
           "amount": 3000,
@@ -6355,7 +6538,8 @@
           "stock_name": "華碩",
           "signal_date": "20261014",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.11
         },
         {
           "result": "LOSS",
@@ -6374,11 +6558,11 @@
           "bench_return_pct": -11.8
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 104.0,
+          "return_pct": -21.21,
+          "holding_days": 24,
           "entry_date": "20261015",
           "entry_price": 132.0,
           "amount": 3000,
@@ -6386,7 +6570,8 @@
           "stock_name": "義隆",
           "signal_date": "20261014",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -23.33
         },
         {
           "result": "LOSS",
@@ -6420,11 +6605,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261117",
+          "exit_price": 826.0,
+          "return_pct": -15.8,
+          "holding_days": 19,
           "entry_date": "20261019",
           "entry_price": 981.0,
           "amount": 3000,
@@ -6432,7 +6617,8 @@
           "stock_name": "華碩",
           "signal_date": "20261016",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -12.52
         },
         {
           "result": "LOSS",
@@ -6483,11 +6669,11 @@
           "bench_return_pct": -6.55
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -15.04,
+          "holding_days": 15,
           "entry_date": "20261022",
           "entry_price": 984.0,
           "amount": 1000.0,
@@ -6495,7 +6681,8 @@
           "stock_name": "華碩",
           "signal_date": "20261021",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -11.47
         },
         {
           "result": "LOSS",
@@ -6641,11 +6828,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 226.5,
+          "return_pct": -17.79,
+          "holding_days": 8,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -6653,23 +6840,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -5.7
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 161.0,
+          "return_pct": -18.69,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP18_SL10": {
       "stats": {
-        "total": 132,
+        "total": 143,
         "wins": 25,
-        "losses": 107,
-        "open_count": 6,
-        "win_rate": 0.1894,
-        "avg_return": -5.6952,
-        "avg_holding_days": 14.2,
-        "bench_n": 132,
-        "bench_avg_return": -3.57,
-        "excess_return": -2.13,
-        "beat_rate": 0.303
+        "losses": 118,
+        "open_count": 0,
+        "win_rate": 0.1748,
+        "avg_return": -6.3997,
+        "avg_holding_days": 15.3,
+        "bench_n": 143,
+        "bench_avg_return": -4.28,
+        "excess_return": -2.12,
+        "beat_rate": 0.3147
       },
       "trades": [
         {
@@ -6723,11 +6991,11 @@
         {
           "result": "WIN",
           "exit_date": "20260318",
-          "exit_price": 127.33333333333333,
+          "exit_price": 125.0286576168929,
           "return_pct": 20.75,
           "holding_days": 10,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -6755,11 +7023,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260309",
-          "exit_price": 100.47395833333333,
+          "exit_price": 98.65542515082956,
           "return_pct": -11.01,
           "holding_days": 2,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -6851,11 +7119,11 @@
         {
           "result": "WIN",
           "exit_date": "20260506",
-          "exit_price": 108.5,
+          "exit_price": 106.53619909502262,
           "return_pct": 18.06,
           "holding_days": 2,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -6881,11 +7149,11 @@
           "bench_return_pct": -3.92
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -12.93,
+          "holding_days": 120,
           "entry_date": "20260527",
           "entry_price": 2297.071950342077,
           "amount": 3000,
@@ -6893,7 +7161,8 @@
           "stock_name": "台積電",
           "signal_date": "20260526",
           "tp": 0.18,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -17.03
         },
         {
           "result": "LOSS",
@@ -6928,11 +7197,11 @@
           "bench_return_pct": -0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -14.05,
+          "holding_days": 118,
           "entry_date": "20260529",
           "entry_price": 2326.9040535932727,
           "amount": 3000,
@@ -6940,7 +7209,8 @@
           "stock_name": "台積電",
           "signal_date": "20260528",
           "tp": 0.18,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -17.67
         },
         {
           "result": "LOSS",
@@ -7969,11 +8239,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261103",
-          "exit_price": 146.0,
+          "exit_price": 143.3574660633484,
           "return_pct": -12.31,
           "holding_days": 31,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -8543,11 +8813,11 @@
           "bench_return_pct": -6.75
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.02,
+          "holding_days": 25,
           "entry_date": "20261014",
           "entry_price": 768.0,
           "amount": 3000,
@@ -8555,7 +8825,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261013",
           "tp": 0.18,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -25.27
         },
         {
           "result": "LOSS",
@@ -8622,11 +8893,11 @@
           "bench_return_pct": -3.22
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.7,
+          "holding_days": 23,
           "entry_date": "20261016",
           "entry_price": 774.0,
           "amount": 3000,
@@ -8634,7 +8905,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261015",
           "tp": 0.18,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -22.84
         },
         {
           "result": "LOSS",
@@ -8797,11 +9069,11 @@
           "bench_return_pct": -2.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -14.9,
+          "holding_days": 16,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -8809,7 +9081,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.18,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -22.27
         },
         {
           "result": "LOSS",
@@ -8860,11 +9133,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 240.0,
+          "return_pct": -12.89,
+          "holding_days": 5,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -8872,23 +9145,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.18,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": 0.84
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 177.0,
+          "return_pct": -10.61,
+          "holding_days": 2,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": -4.6
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP18_SL12": {
       "stats": {
-        "total": 129,
+        "total": 143,
         "wins": 31,
-        "losses": 98,
-        "open_count": 9,
-        "win_rate": 0.2403,
-        "avg_return": -5.4812,
-        "avg_holding_days": 16.5,
-        "bench_n": 129,
-        "bench_avg_return": -3.41,
-        "excess_return": -2.07,
-        "beat_rate": 0.3178
+        "losses": 112,
+        "open_count": 0,
+        "win_rate": 0.2168,
+        "avg_return": -6.4656,
+        "avg_holding_days": 18.2,
+        "bench_n": 143,
+        "bench_avg_return": -4.45,
+        "excess_return": -2.01,
+        "beat_rate": 0.3357
       },
       "trades": [
         {
@@ -8942,11 +9296,11 @@
         {
           "result": "WIN",
           "exit_date": "20260318",
-          "exit_price": 127.33333333333333,
+          "exit_price": 125.0286576168929,
           "return_pct": 20.75,
           "holding_days": 10,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -8974,11 +9328,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260324",
-          "exit_price": 98.98177083333333,
+          "exit_price": 97.19024556938159,
           "return_pct": -12.33,
           "holding_days": 13,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -9070,11 +9424,11 @@
         {
           "result": "WIN",
           "exit_date": "20260506",
-          "exit_price": 108.5,
+          "exit_price": 106.53619909502262,
           "return_pct": 18.06,
           "holding_days": 2,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -9100,11 +9454,11 @@
           "bench_return_pct": -4.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -12.93,
+          "holding_days": 120,
           "entry_date": "20260527",
           "entry_price": 2297.071950342077,
           "amount": 3000,
@@ -9112,7 +9466,8 @@
           "stock_name": "台積電",
           "signal_date": "20260526",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -17.03
         },
         {
           "result": "LOSS",
@@ -9147,11 +9502,11 @@
           "bench_return_pct": 1.21
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -14.05,
+          "holding_days": 118,
           "entry_date": "20260529",
           "entry_price": 2326.9040535932727,
           "amount": 3000,
@@ -9159,7 +9514,8 @@
           "stock_name": "台積電",
           "signal_date": "20260528",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -17.67
         },
         {
           "result": "LOSS",
@@ -9754,11 +10110,11 @@
           "bench_return_pct": 3.34
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 70,
           "entry_date": "20260807",
           "entry_price": 2382.9753039832285,
           "amount": 3000,
@@ -9766,7 +10122,8 @@
           "stock_name": "台積電",
           "signal_date": "20260806",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -18.64
         },
         {
           "result": "LOSS",
@@ -9785,11 +10142,11 @@
           "bench_return_pct": 1.11
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 69,
           "entry_date": "20260810",
           "entry_price": 2382.9753039832285,
           "amount": 1000.0,
@@ -9797,7 +10154,8 @@
           "stock_name": "台積電",
           "signal_date": "20260807",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -18.72
         },
         {
           "result": "LOSS",
@@ -10186,11 +10544,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261103",
-          "exit_price": 146.0,
+          "exit_price": 143.3574660633484,
           "return_pct": -12.31,
           "holding_days": 31,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -10760,11 +11118,11 @@
           "bench_return_pct": -11.28
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.02,
+          "holding_days": 25,
           "entry_date": "20261014",
           "entry_price": 768.0,
           "amount": 3000,
@@ -10772,14 +11130,15 @@
           "stock_name": "瑞昱",
           "signal_date": "20261013",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -25.27
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -13.9,
+          "holding_days": 20,
           "entry_date": "20261015",
           "entry_price": 971.0,
           "amount": 3000,
@@ -10787,7 +11146,8 @@
           "stock_name": "華碩",
           "signal_date": "20261014",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -12.44
         },
         {
           "result": "LOSS",
@@ -10838,11 +11198,11 @@
           "bench_return_pct": -3.22
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.7,
+          "holding_days": 23,
           "entry_date": "20261016",
           "entry_price": 774.0,
           "amount": 3000,
@@ -10850,7 +11210,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261015",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -22.84
         },
         {
           "result": "LOSS",
@@ -11013,11 +11374,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -14.9,
+          "holding_days": 16,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -11025,7 +11386,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -22.27
         },
         {
           "result": "LOSS",
@@ -11076,11 +11438,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 240.0,
+          "return_pct": -12.89,
+          "holding_days": 5,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -11088,23 +11450,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.18,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": 0.84
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 161.0,
+          "return_pct": -18.69,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP18_SL15": {
       "stats": {
-        "total": 120,
+        "total": 138,
         "wins": 34,
-        "losses": 86,
-        "open_count": 18,
-        "win_rate": 0.2833,
-        "avg_return": -6.4357,
-        "avg_holding_days": 19.1,
-        "bench_n": 120,
-        "bench_avg_return": -3.4,
-        "excess_return": -3.03,
-        "beat_rate": 0.275
+        "losses": 104,
+        "open_count": 5,
+        "win_rate": 0.2464,
+        "avg_return": -7.8096,
+        "avg_holding_days": 19.8,
+        "bench_n": 138,
+        "bench_avg_return": -4.81,
+        "excess_return": -3.0,
+        "beat_rate": 0.3043
       },
       "trades": [
         {
@@ -11158,11 +11601,11 @@
         {
           "result": "WIN",
           "exit_date": "20260318",
-          "exit_price": 127.33333333333333,
+          "exit_price": 125.0286576168929,
           "return_pct": 20.75,
           "holding_days": 10,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -11190,11 +11633,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260326",
-          "exit_price": 95.5,
+          "exit_price": 93.77149321266967,
           "return_pct": -15.42,
           "holding_days": 15,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -11286,11 +11729,11 @@
         {
           "result": "WIN",
           "exit_date": "20260506",
-          "exit_price": 108.5,
+          "exit_price": 106.53619909502262,
           "return_pct": 18.06,
           "holding_days": 2,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -11938,11 +12381,11 @@
           "bench_return_pct": 12.63
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 210.0,
+          "return_pct": -18.29,
+          "holding_days": 72,
           "entry_date": "20260805",
           "entry_price": 257.0,
           "amount": 3000,
@@ -11950,7 +12393,8 @@
           "stock_name": "鴻海",
           "signal_date": "20260804",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.6
         },
         {
           "result": "WIN",
@@ -11969,11 +12413,11 @@
           "bench_return_pct": 3.34
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 70,
           "entry_date": "20260807",
           "entry_price": 2382.9753039832285,
           "amount": 3000,
@@ -11981,7 +12425,8 @@
           "stock_name": "台積電",
           "signal_date": "20260806",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.64
         },
         {
           "result": "LOSS",
@@ -12000,11 +12445,11 @@
           "bench_return_pct": 1.11
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 69,
           "entry_date": "20260810",
           "entry_price": 2382.9753039832285,
           "amount": 1000.0,
@@ -12012,7 +12457,8 @@
           "stock_name": "台積電",
           "signal_date": "20260807",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.72
         },
         {
           "result": "LOSS",
@@ -12401,11 +12847,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261104",
-          "exit_price": 141.5,
+          "exit_price": 138.9389140271493,
           "return_pct": -15.02,
           "holding_days": 32,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -12495,11 +12941,11 @@
           "bench_return_pct": -11.25
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 159.0,
+          "return_pct": -15.43,
+          "holding_days": 34,
           "entry_date": "20260922",
           "entry_price": 188.0,
           "amount": 3000,
@@ -12507,7 +12953,8 @@
           "stock_name": "緯創",
           "signal_date": "20260921",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -14.91
         },
         {
           "result": "LOSS",
@@ -12830,11 +13277,11 @@
           "bench_return_pct": -7.02
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 156.0,
+          "return_pct": -15.22,
+          "holding_days": 27,
           "entry_date": "20261008",
           "entry_price": 184.0,
           "amount": 3000,
@@ -12842,14 +13289,15 @@
           "stock_name": "緯創",
           "signal_date": "20261007",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -21.8
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -15.47,
+          "holding_days": 24,
           "entry_date": "20261008",
           "entry_price": 989.0,
           "amount": 3000,
@@ -12857,7 +13305,8 @@
           "stock_name": "華碩",
           "signal_date": "20261007",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.38
         },
         {
           "result": "LOSS",
@@ -12908,11 +13357,11 @@
           "bench_return_pct": -5.5
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 159.0,
+          "return_pct": -15.43,
+          "holding_days": 23,
           "entry_date": "20261012",
           "entry_price": 188.0,
           "amount": 3000,
@@ -12920,7 +13369,8 @@
           "stock_name": "緯創",
           "signal_date": "20261008",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.54
         },
         {
           "result": "LOSS",
@@ -12939,11 +13389,11 @@
           "bench_return_pct": -11.91
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261117",
+          "exit_price": 157.0,
+          "return_pct": -16.04,
+          "holding_days": 23,
           "entry_date": "20261013",
           "entry_price": 187.0,
           "amount": 1000.0,
@@ -12951,7 +13401,8 @@
           "stock_name": "緯創",
           "signal_date": "20261012",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.48
         },
         {
           "result": "LOSS",
@@ -12985,11 +13436,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 800.0,
+          "return_pct": -17.61,
+          "holding_days": 23,
           "entry_date": "20261015",
           "entry_price": 971.0,
           "amount": 3000,
@@ -12997,7 +13448,8 @@
           "stock_name": "華碩",
           "signal_date": "20261014",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.11
         },
         {
           "result": "LOSS",
@@ -13016,11 +13468,11 @@
           "bench_return_pct": -11.8
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 104.0,
+          "return_pct": -21.21,
+          "holding_days": 24,
           "entry_date": "20261015",
           "entry_price": 132.0,
           "amount": 3000,
@@ -13028,7 +13480,8 @@
           "stock_name": "義隆",
           "signal_date": "20261014",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -23.33
         },
         {
           "result": "LOSS",
@@ -13062,11 +13515,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261117",
+          "exit_price": 826.0,
+          "return_pct": -15.8,
+          "holding_days": 19,
           "entry_date": "20261019",
           "entry_price": 981.0,
           "amount": 3000,
@@ -13074,7 +13527,8 @@
           "stock_name": "華碩",
           "signal_date": "20261016",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -12.52
         },
         {
           "result": "LOSS",
@@ -13125,11 +13579,11 @@
           "bench_return_pct": -6.55
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -15.04,
+          "holding_days": 15,
           "entry_date": "20261022",
           "entry_price": 984.0,
           "amount": 1000.0,
@@ -13137,7 +13591,8 @@
           "stock_name": "華碩",
           "signal_date": "20261021",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -11.47
         },
         {
           "result": "LOSS",
@@ -13283,11 +13738,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 226.5,
+          "return_pct": -17.79,
+          "holding_days": 8,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -13295,23 +13750,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -5.7
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 161.0,
+          "return_pct": -18.69,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP20_SL10": {
       "stats": {
-        "total": 132,
+        "total": 143,
         "wins": 23,
-        "losses": 109,
-        "open_count": 6,
-        "win_rate": 0.1742,
-        "avg_return": -5.9428,
-        "avg_holding_days": 14.5,
-        "bench_n": 132,
-        "bench_avg_return": -3.67,
-        "excess_return": -2.27,
-        "beat_rate": 0.2879
+        "losses": 120,
+        "open_count": 0,
+        "win_rate": 0.1608,
+        "avg_return": -6.6283,
+        "avg_holding_days": 15.6,
+        "bench_n": 143,
+        "bench_avg_return": -4.37,
+        "excess_return": -2.25,
+        "beat_rate": 0.3007
       },
       "trades": [
         {
@@ -13365,11 +13901,11 @@
         {
           "result": "WIN",
           "exit_date": "20260318",
-          "exit_price": 127.33333333333333,
+          "exit_price": 125.0286576168929,
           "return_pct": 20.75,
           "holding_days": 10,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -13397,11 +13933,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260309",
-          "exit_price": 100.47395833333333,
+          "exit_price": 98.65542515082956,
           "return_pct": -11.01,
           "holding_days": 2,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -13493,11 +14029,11 @@
         {
           "result": "WIN",
           "exit_date": "20260507",
-          "exit_price": 114.0,
+          "exit_price": 111.9366515837104,
           "return_pct": 24.05,
           "holding_days": 3,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -13523,11 +14059,11 @@
           "bench_return_pct": -3.92
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -12.93,
+          "holding_days": 120,
           "entry_date": "20260527",
           "entry_price": 2297.071950342077,
           "amount": 3000,
@@ -13535,7 +14071,8 @@
           "stock_name": "台積電",
           "signal_date": "20260526",
           "tp": 0.2,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -17.03
         },
         {
           "result": "LOSS",
@@ -13570,11 +14107,11 @@
           "bench_return_pct": -0.1
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -14.05,
+          "holding_days": 118,
           "entry_date": "20260529",
           "entry_price": 2326.9040535932727,
           "amount": 3000,
@@ -13582,7 +14119,8 @@
           "stock_name": "台積電",
           "signal_date": "20260528",
           "tp": 0.2,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -17.67
         },
         {
           "result": "LOSS",
@@ -14611,11 +15149,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261103",
-          "exit_price": 146.0,
+          "exit_price": 143.3574660633484,
           "return_pct": -12.31,
           "holding_days": 31,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -15185,11 +15723,11 @@
           "bench_return_pct": -6.75
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.02,
+          "holding_days": 25,
           "entry_date": "20261014",
           "entry_price": 768.0,
           "amount": 3000,
@@ -15197,7 +15735,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261013",
           "tp": 0.2,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -25.27
         },
         {
           "result": "LOSS",
@@ -15264,11 +15803,11 @@
           "bench_return_pct": -3.22
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.7,
+          "holding_days": 23,
           "entry_date": "20261016",
           "entry_price": 774.0,
           "amount": 3000,
@@ -15276,7 +15815,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261015",
           "tp": 0.2,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -22.84
         },
         {
           "result": "LOSS",
@@ -15439,11 +15979,11 @@
           "bench_return_pct": -2.01
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -14.9,
+          "holding_days": 16,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -15451,7 +15991,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.2,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": -22.27
         },
         {
           "result": "LOSS",
@@ -15502,11 +16043,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 240.0,
+          "return_pct": -12.89,
+          "holding_days": 5,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -15514,23 +16055,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.2,
-          "sl": 0.1
+          "sl": 0.1,
+          "bench_return_pct": 0.84
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 177.0,
+          "return_pct": -10.61,
+          "holding_days": 2,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": -4.6
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP20_SL12": {
       "stats": {
-        "total": 129,
+        "total": 143,
         "wins": 29,
-        "losses": 100,
-        "open_count": 9,
-        "win_rate": 0.2248,
-        "avg_return": -5.6806,
-        "avg_holding_days": 17.5,
-        "bench_n": 129,
-        "bench_avg_return": -3.43,
-        "excess_return": -2.25,
-        "beat_rate": 0.3023
+        "losses": 114,
+        "open_count": 0,
+        "win_rate": 0.2028,
+        "avg_return": -6.6455,
+        "avg_holding_days": 19.1,
+        "bench_n": 143,
+        "bench_avg_return": -4.47,
+        "excess_return": -2.18,
+        "beat_rate": 0.3217
       },
       "trades": [
         {
@@ -15584,11 +16206,11 @@
         {
           "result": "WIN",
           "exit_date": "20260318",
-          "exit_price": 127.33333333333333,
+          "exit_price": 125.0286576168929,
           "return_pct": 20.75,
           "holding_days": 10,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -15616,11 +16238,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260324",
-          "exit_price": 98.98177083333333,
+          "exit_price": 97.19024556938159,
           "return_pct": -12.33,
           "holding_days": 13,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -15712,11 +16334,11 @@
         {
           "result": "WIN",
           "exit_date": "20260507",
-          "exit_price": 114.0,
+          "exit_price": 111.9366515837104,
           "return_pct": 24.05,
           "holding_days": 3,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -15742,11 +16364,11 @@
           "bench_return_pct": -4.54
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -12.93,
+          "holding_days": 120,
           "entry_date": "20260527",
           "entry_price": 2297.071950342077,
           "amount": 3000,
@@ -15754,7 +16376,8 @@
           "stock_name": "台積電",
           "signal_date": "20260526",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -17.03
         },
         {
           "result": "LOSS",
@@ -15789,11 +16412,11 @@
           "bench_return_pct": 1.21
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -14.05,
+          "holding_days": 118,
           "entry_date": "20260529",
           "entry_price": 2326.9040535932727,
           "amount": 3000,
@@ -15801,7 +16424,8 @@
           "stock_name": "台積電",
           "signal_date": "20260528",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -17.67
         },
         {
           "result": "LOSS",
@@ -16396,11 +17020,11 @@
           "bench_return_pct": 3.34
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 70,
           "entry_date": "20260807",
           "entry_price": 2382.9753039832285,
           "amount": 3000,
@@ -16408,7 +17032,8 @@
           "stock_name": "台積電",
           "signal_date": "20260806",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -18.64
         },
         {
           "result": "LOSS",
@@ -16427,11 +17052,11 @@
           "bench_return_pct": 1.11
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 69,
           "entry_date": "20260810",
           "entry_price": 2382.9753039832285,
           "amount": 1000.0,
@@ -16439,7 +17064,8 @@
           "stock_name": "台積電",
           "signal_date": "20260807",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -18.72
         },
         {
           "result": "LOSS",
@@ -16828,11 +17454,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261103",
-          "exit_price": 146.0,
+          "exit_price": 143.3574660633484,
           "return_pct": -12.31,
           "holding_days": 31,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -17402,11 +18028,11 @@
           "bench_return_pct": -11.28
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.02,
+          "holding_days": 25,
           "entry_date": "20261014",
           "entry_price": 768.0,
           "amount": 3000,
@@ -17414,14 +18040,15 @@
           "stock_name": "瑞昱",
           "signal_date": "20261013",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -25.27
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -13.9,
+          "holding_days": 20,
           "entry_date": "20261015",
           "entry_price": 971.0,
           "amount": 3000,
@@ -17429,7 +18056,8 @@
           "stock_name": "華碩",
           "signal_date": "20261014",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -12.44
         },
         {
           "result": "LOSS",
@@ -17480,11 +18108,11 @@
           "bench_return_pct": -3.22
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -13.7,
+          "holding_days": 23,
           "entry_date": "20261016",
           "entry_price": 774.0,
           "amount": 3000,
@@ -17492,7 +18120,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261015",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -22.84
         },
         {
           "result": "LOSS",
@@ -17655,11 +18284,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 668.0,
+          "return_pct": -14.9,
+          "holding_days": 16,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -17667,7 +18296,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": -22.27
         },
         {
           "result": "LOSS",
@@ -17718,11 +18348,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 240.0,
+          "return_pct": -12.89,
+          "holding_days": 5,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -17730,23 +18360,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.2,
-          "sl": 0.12
+          "sl": 0.12,
+          "bench_return_pct": 0.84
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 161.0,
+          "return_pct": -18.69,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "TP20_SL15": {
       "stats": {
-        "total": 120,
+        "total": 138,
         "wins": 32,
-        "losses": 88,
-        "open_count": 18,
-        "win_rate": 0.2667,
-        "avg_return": -6.7282,
-        "avg_holding_days": 20.5,
-        "bench_n": 120,
-        "bench_avg_return": -3.42,
-        "excess_return": -3.3,
-        "beat_rate": 0.2583
+        "losses": 106,
+        "open_count": 5,
+        "win_rate": 0.2319,
+        "avg_return": -8.064,
+        "avg_holding_days": 21.0,
+        "bench_n": 138,
+        "bench_avg_return": -4.83,
+        "excess_return": -3.24,
+        "beat_rate": 0.2899
       },
       "trades": [
         {
@@ -17800,11 +18511,11 @@
         {
           "result": "WIN",
           "exit_date": "20260318",
-          "exit_price": 127.33333333333333,
+          "exit_price": 125.0286576168929,
           "return_pct": 20.75,
           "holding_days": 10,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -17832,11 +18543,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260326",
-          "exit_price": 95.5,
+          "exit_price": 93.77149321266967,
           "return_pct": -15.42,
           "holding_days": 15,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -17928,11 +18639,11 @@
         {
           "result": "WIN",
           "exit_date": "20260507",
-          "exit_price": 114.0,
+          "exit_price": 111.9366515837104,
           "return_pct": 24.05,
           "holding_days": 3,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -18580,11 +19291,11 @@
           "bench_return_pct": 12.63
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 210.0,
+          "return_pct": -18.29,
+          "holding_days": 72,
           "entry_date": "20260805",
           "entry_price": 257.0,
           "amount": 3000,
@@ -18592,7 +19303,8 @@
           "stock_name": "鴻海",
           "signal_date": "20260804",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.6
         },
         {
           "result": "WIN",
@@ -18611,11 +19323,11 @@
           "bench_return_pct": 3.34
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 70,
           "entry_date": "20260807",
           "entry_price": 2382.9753039832285,
           "amount": 3000,
@@ -18623,7 +19335,8 @@
           "stock_name": "台積電",
           "signal_date": "20260806",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.64
         },
         {
           "result": "LOSS",
@@ -18642,11 +19355,11 @@
           "bench_return_pct": 1.11
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 2000.0,
+          "return_pct": -16.07,
+          "holding_days": 69,
           "entry_date": "20260810",
           "entry_price": 2382.9753039832285,
           "amount": 1000.0,
@@ -18654,7 +19367,8 @@
           "stock_name": "台積電",
           "signal_date": "20260807",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.72
         },
         {
           "result": "LOSS",
@@ -19043,11 +19757,11 @@
         {
           "result": "LOSS",
           "exit_date": "20261104",
-          "exit_price": 141.5,
+          "exit_price": 138.9389140271493,
           "return_pct": -15.02,
           "holding_days": 32,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -19137,11 +19851,11 @@
           "bench_return_pct": -11.25
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 159.0,
+          "return_pct": -15.43,
+          "holding_days": 34,
           "entry_date": "20260922",
           "entry_price": 188.0,
           "amount": 3000,
@@ -19149,7 +19863,8 @@
           "stock_name": "緯創",
           "signal_date": "20260921",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -14.91
         },
         {
           "result": "LOSS",
@@ -19472,11 +20187,11 @@
           "bench_return_pct": -7.02
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 156.0,
+          "return_pct": -15.22,
+          "holding_days": 27,
           "entry_date": "20261008",
           "entry_price": 184.0,
           "amount": 3000,
@@ -19484,14 +20199,15 @@
           "stock_name": "緯創",
           "signal_date": "20261007",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -21.8
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -15.47,
+          "holding_days": 24,
           "entry_date": "20261008",
           "entry_price": 989.0,
           "amount": 3000,
@@ -19499,7 +20215,8 @@
           "stock_name": "華碩",
           "signal_date": "20261007",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.38
         },
         {
           "result": "LOSS",
@@ -19550,11 +20267,11 @@
           "bench_return_pct": -5.5
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 159.0,
+          "return_pct": -15.43,
+          "holding_days": 23,
           "entry_date": "20261012",
           "entry_price": 188.0,
           "amount": 3000,
@@ -19562,7 +20279,8 @@
           "stock_name": "緯創",
           "signal_date": "20261008",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -15.54
         },
         {
           "result": "LOSS",
@@ -19581,11 +20299,11 @@
           "bench_return_pct": -11.91
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261117",
+          "exit_price": 157.0,
+          "return_pct": -16.04,
+          "holding_days": 23,
           "entry_date": "20261013",
           "entry_price": 187.0,
           "amount": 1000.0,
@@ -19593,7 +20311,8 @@
           "stock_name": "緯創",
           "signal_date": "20261012",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -16.48
         },
         {
           "result": "LOSS",
@@ -19627,11 +20346,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 800.0,
+          "return_pct": -17.61,
+          "holding_days": 23,
           "entry_date": "20261015",
           "entry_price": 971.0,
           "amount": 3000,
@@ -19639,7 +20358,8 @@
           "stock_name": "華碩",
           "signal_date": "20261014",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -18.11
         },
         {
           "result": "LOSS",
@@ -19658,11 +20378,11 @@
           "bench_return_pct": -11.8
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 104.0,
+          "return_pct": -21.21,
+          "holding_days": 24,
           "entry_date": "20261015",
           "entry_price": 132.0,
           "amount": 3000,
@@ -19670,7 +20390,8 @@
           "stock_name": "義隆",
           "signal_date": "20261014",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -23.33
         },
         {
           "result": "LOSS",
@@ -19704,11 +20425,11 @@
           "sl": 0.15
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261117",
+          "exit_price": 826.0,
+          "return_pct": -15.8,
+          "holding_days": 19,
           "entry_date": "20261019",
           "entry_price": 981.0,
           "amount": 3000,
@@ -19716,7 +20437,8 @@
           "stock_name": "華碩",
           "signal_date": "20261016",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -12.52
         },
         {
           "result": "LOSS",
@@ -19767,11 +20489,11 @@
           "bench_return_pct": -6.55
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261116",
+          "exit_price": 836.0,
+          "return_pct": -15.04,
+          "holding_days": 15,
           "entry_date": "20261022",
           "entry_price": 984.0,
           "amount": 1000.0,
@@ -19779,7 +20501,8 @@
           "stock_name": "華碩",
           "signal_date": "20261021",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -11.47
         },
         {
           "result": "LOSS",
@@ -19925,11 +20648,11 @@
           "bench_return_pct": -7.3
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 226.5,
+          "return_pct": -17.79,
+          "holding_days": 8,
           "entry_date": "20261109",
           "entry_price": 275.5,
           "amount": 3000,
@@ -19937,23 +20660,104 @@
           "stock_name": "十銓",
           "signal_date": "20261106",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -5.7
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 161.0,
+          "return_pct": -18.69,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 206.0,
+          "return_pct": -18.25,
+          "holding_days": 3,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -10.68
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 423.0,
+          "return_pct": -16.9,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 228.5,
+          "return_pct": -17.81,
+          "holding_days": 1,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -5.75
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -18.33,
+          "holding_days": 1,
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -10.21
         }
       ]
     },
     "MA5_MA10": {
       "stats": {
-        "total": 138,
+        "total": 142,
         "wins": 43,
-        "losses": 95,
-        "open_count": 0,
-        "win_rate": 0.3116,
-        "avg_return": -1.2725,
+        "losses": 99,
+        "open_count": 1,
+        "win_rate": 0.3028,
+        "avg_return": -1.606,
         "avg_holding_days": 3.4,
-        "bench_n": 138,
-        "bench_avg_return": -0.4,
-        "excess_return": -0.87,
-        "beat_rate": 0.3623
+        "bench_n": 142,
+        "bench_avg_return": -0.62,
+        "excess_return": -0.99,
+        "beat_rate": 0.3662
       },
       "trades": [
         {
@@ -20007,11 +20811,11 @@
         {
           "result": "WIN",
           "exit_date": "20260306",
-          "exit_price": 109.43,
+          "exit_price": 107.45,
           "return_pct": 3.77,
           "holding_days": 2,
           "entry_date": "20260304",
-          "entry_price": 105.44791666666666,
+          "entry_price": 103.53935708898943,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -20039,11 +20843,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260309",
-          "exit_price": 95.4,
+          "exit_price": 93.67,
           "return_pct": -15.51,
           "holding_days": 2,
           "entry_date": "20260305",
-          "entry_price": 112.90885416666666,
+          "entry_price": 110.86525499622925,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -20135,11 +20939,11 @@
         {
           "result": "WIN",
           "exit_date": "20260520",
-          "exit_price": 117.5,
+          "exit_price": 115.37,
           "return_pct": 27.86,
           "holding_days": 12,
           "entry_date": "20260504",
-          "entry_price": 91.9,
+          "entry_price": 90.23665158371041,
           "amount": 3000,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -21255,11 +22059,11 @@
         {
           "result": "LOSS",
           "exit_date": "20260916",
-          "exit_price": 163.5,
+          "exit_price": 160.54,
           "return_pct": -1.8,
           "holding_days": 2,
           "entry_date": "20260914",
-          "entry_price": 166.5,
+          "entry_price": 163.48642533936652,
           "amount": 1000.0,
           "stock_id": "2344",
           "stock_name": "華邦電",
@@ -22163,6 +22967,86 @@
           "tp": null,
           "sl": null,
           "bench_return_pct": 7.89
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 196.5,
+          "return_pct": -0.76,
+          "holding_days": 2,
+          "entry_date": "20261117",
+          "entry_price": 198.0,
+          "amount": 3000,
+          "stock_id": "6271",
+          "stock_name": "同欣電",
+          "signal_date": "20261116",
+          "tp": null,
+          "sl": null,
+          "bench_return_pct": -4.6
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261119",
+          "exit_price": 249.5,
+          "return_pct": -0.99,
+          "holding_days": 2,
+          "entry_date": "20261117",
+          "entry_price": 252.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261116",
+          "tp": null,
+          "sl": null,
+          "bench_return_pct": -4.6
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 381.0,
+          "return_pct": -25.15,
+          "holding_days": 2,
+          "entry_date": "20261118",
+          "entry_price": 509.0,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261117",
+          "tp": null,
+          "sl": null,
+          "bench_return_pct": -11.76
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261120",
+          "exit_price": 207.0,
+          "return_pct": -25.54,
+          "holding_days": 2,
+          "entry_date": "20261118",
+          "entry_price": 278.0,
+          "amount": 3000,
+          "stock_id": "1303",
+          "stock_name": "南亞",
+          "signal_date": "20261117",
+          "tp": null,
+          "sl": null,
+          "bench_return_pct": -11.76
+        },
+        {
+          "result": "OPEN",
+          "exit_date": null,
+          "exit_price": null,
+          "return_pct": null,
+          "holding_days": 1,
+          "exit_state": "HOLDING",
+          "entry_date": "20261119",
+          "entry_price": 466.5,
+          "amount": 3000,
+          "stock_id": "3105",
+          "stock_name": "穩懋",
+          "signal_date": "20261118",
+          "tp": null,
+          "sl": null
         }
       ]
     }
