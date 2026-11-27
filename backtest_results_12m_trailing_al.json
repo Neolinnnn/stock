@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-20T21:36:52.321406",
+  "generated_at": "2026-11-27T22:24:22.224296",
   "date_range": {
-    "start": "20251120",
-    "end": "20261120"
+    "start": "20251127",
+    "end": "20261127"
   },
   "benchmark": {
     "id": "0050",
-    "start": "20251120",
-    "end": "20261120",
-    "return_pct": 39.99
+    "start": "20251127",
+    "end": "20261127",
+    "return_pct": 52.55
   },
   "total_signals": 188,
   "signals_after_limit": 147,
@@ -21338,17 +21338,17 @@
     },
     "MA5_MA10": {
       "stats": {
-        "total": 146,
+        "total": 147,
         "wins": 44,
-        "losses": 102,
-        "open_count": 1,
-        "win_rate": 0.3014,
-        "avg_return": -1.3586,
+        "losses": 103,
+        "open_count": 0,
+        "win_rate": 0.2993,
+        "avg_return": -1.5017,
         "avg_holding_days": 3.5,
-        "bench_n": 146,
-        "bench_avg_return": -0.47,
-        "excess_return": -0.89,
-        "beat_rate": 0.363
+        "bench_n": 147,
+        "bench_avg_return": -0.52,
+        "excess_return": -0.98,
+        "beat_rate": 0.3605
       },
       "trades": [
         {
@@ -23688,12 +23688,11 @@
           "bench_return_pct": -11.76
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": 1,
-          "exit_state": "HOLDING",
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 362.0,
+          "return_pct": -22.4,
+          "holding_days": 2,
           "entry_date": "20261119",
           "entry_price": 466.5,
           "amount": 3000,
@@ -23701,7 +23700,8 @@
           "stock_name": "穩懋",
           "signal_date": "20261118",
           "tp": null,
-          "sl": null
+          "sl": null,
+          "bench_return_pct": -7.5
         }
       ]
     }

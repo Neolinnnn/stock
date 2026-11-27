@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-11-20T21:36:48.236886",
+  "generated_at": "2026-11-27T22:24:18.584525",
   "date_range": {
-    "start": "20260220",
-    "end": "20261120"
+    "start": "20260227",
+    "end": "20261127"
   },
   "benchmark": {
     "id": "0050",
-    "start": "20260223",
-    "end": "20261120",
-    "return_pct": 8.3
+    "start": "20260302",
+    "end": "20261127",
+    "return_pct": 16.93
   },
-  "total_signals": 183,
+  "total_signals": 182,
   "signals_after_limit": 143,
-  "qualified_signals": 183,
+  "qualified_signals": 182,
   "qualified_after_limit": 143,
   "combinations": {
     "TP15_SL10": {
@@ -22,30 +22,14 @@
         "losses": 108,
         "open_count": 0,
         "win_rate": 0.2448,
-        "avg_return": -4.8365,
-        "avg_holding_days": 13.9,
+        "avg_return": -4.8303,
+        "avg_holding_days": 14.1,
         "bench_n": 143,
-        "bench_avg_return": -3.83,
-        "excess_return": -1.0,
+        "bench_avg_return": -3.79,
+        "excess_return": -1.04,
         "beat_rate": 0.3846
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 233.74714625445898,
-          "return_pct": -12.5,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.15,
-          "sl": 0.1,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -1238,7 +1222,7 @@
           "holding_days": 21,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -1325,6 +1309,22 @@
           "tp": 0.15,
           "sl": 0.1,
           "bench_return_pct": 8.05
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261020",
+          "exit_price": 422.0,
+          "return_pct": -11.62,
+          "holding_days": 23,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.15,
+          "sl": 0.1,
+          "bench_return_pct": 0.89
         },
         {
           "result": "LOSS",
@@ -2327,30 +2327,14 @@
         "losses": 101,
         "open_count": 0,
         "win_rate": 0.2937,
-        "avg_return": -4.6131,
-        "avg_holding_days": 16.6,
+        "avg_return": -4.6187,
+        "avg_holding_days": 16.7,
         "bench_n": 143,
-        "bench_avg_return": -3.91,
-        "excess_return": -0.71,
+        "bench_avg_return": -3.87,
+        "excess_return": -0.75,
         "beat_rate": 0.4126
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 233.74714625445898,
-          "return_pct": -12.5,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.15,
-          "sl": 0.12,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -3543,7 +3527,7 @@
           "holding_days": 23,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -3630,6 +3614,22 @@
           "tp": 0.15,
           "sl": 0.12,
           "bench_return_pct": 8.05
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261022",
+          "exit_price": 414.0,
+          "return_pct": -13.3,
+          "holding_days": 25,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.15,
+          "sl": 0.12,
+          "bench_return_pct": 0.56
         },
         {
           "result": "LOSS",
@@ -4627,35 +4627,19 @@
     },
     "TP15_SL15": {
       "stats": {
-        "total": 138,
+        "total": 139,
         "wins": 45,
-        "losses": 93,
-        "open_count": 5,
-        "win_rate": 0.3261,
-        "avg_return": -5.8363,
-        "avg_holding_days": 17.9,
-        "bench_n": 138,
-        "bench_avg_return": -4.24,
-        "excess_return": -1.6,
-        "beat_rate": 0.3841
+        "losses": 94,
+        "open_count": 4,
+        "win_rate": 0.3237,
+        "avg_return": -5.8653,
+        "avg_holding_days": 18.1,
+        "bench_n": 139,
+        "bench_avg_return": -4.34,
+        "excess_return": -1.53,
+        "beat_rate": 0.3885
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260309",
-          "exit_price": 209.3258026159334,
-          "return_pct": -21.64,
-          "holding_days": 5,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.15,
-          "sl": 0.15,
-          "bench_return_pct": -7.42
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -5846,7 +5830,7 @@
           "holding_days": 24,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -5933,6 +5917,22 @@
           "tp": 0.15,
           "sl": 0.15,
           "bench_return_pct": 8.05
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261104",
+          "exit_price": 399.5,
+          "return_pct": -16.34,
+          "holding_days": 32,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.15,
+          "sl": 0.15,
+          "bench_return_pct": -6.07
         },
         {
           "result": "LOSS",
@@ -6765,11 +6765,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 666.0,
+          "return_pct": -15.16,
+          "holding_days": 17,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -6777,7 +6777,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -19.93
         },
         {
           "result": "LOSS",
@@ -6932,30 +6933,14 @@
         "losses": 118,
         "open_count": 0,
         "win_rate": 0.1748,
-        "avg_return": -6.3997,
-        "avg_holding_days": 15.3,
+        "avg_return": -6.3936,
+        "avg_holding_days": 15.4,
         "bench_n": 143,
-        "bench_avg_return": -4.28,
-        "excess_return": -2.12,
+        "bench_avg_return": -4.24,
+        "excess_return": -2.16,
         "beat_rate": 0.3147
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 233.74714625445898,
-          "return_pct": -12.5,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.18,
-          "sl": 0.1,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -8148,7 +8133,7 @@
           "holding_days": 21,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -8235,6 +8220,22 @@
           "tp": 0.18,
           "sl": 0.1,
           "bench_return_pct": -6.33
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261020",
+          "exit_price": 422.0,
+          "return_pct": -11.62,
+          "holding_days": 23,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.18,
+          "sl": 0.1,
+          "bench_return_pct": 0.89
         },
         {
           "result": "LOSS",
@@ -9237,30 +9238,14 @@
         "losses": 112,
         "open_count": 0,
         "win_rate": 0.2168,
-        "avg_return": -6.4656,
-        "avg_holding_days": 18.2,
+        "avg_return": -6.4712,
+        "avg_holding_days": 18.4,
         "bench_n": 143,
-        "bench_avg_return": -4.45,
-        "excess_return": -2.01,
+        "bench_avg_return": -4.42,
+        "excess_return": -2.05,
         "beat_rate": 0.3357
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 233.74714625445898,
-          "return_pct": -12.5,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.18,
-          "sl": 0.12,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -10453,7 +10438,7 @@
           "holding_days": 23,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -10540,6 +10525,22 @@
           "tp": 0.18,
           "sl": 0.12,
           "bench_return_pct": -6.33
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261022",
+          "exit_price": 414.0,
+          "return_pct": -13.3,
+          "holding_days": 25,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.18,
+          "sl": 0.12,
+          "bench_return_pct": 0.56
         },
         {
           "result": "LOSS",
@@ -11537,35 +11538,19 @@
     },
     "TP18_SL15": {
       "stats": {
-        "total": 138,
+        "total": 139,
         "wins": 34,
-        "losses": 104,
-        "open_count": 5,
-        "win_rate": 0.2464,
-        "avg_return": -7.8096,
-        "avg_holding_days": 19.8,
-        "bench_n": 138,
-        "bench_avg_return": -4.81,
-        "excess_return": -3.0,
-        "beat_rate": 0.3043
+        "losses": 105,
+        "open_count": 4,
+        "win_rate": 0.2446,
+        "avg_return": -7.8244,
+        "avg_holding_days": 20.0,
+        "bench_n": 139,
+        "bench_avg_return": -4.91,
+        "excess_return": -2.92,
+        "beat_rate": 0.3094
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260309",
-          "exit_price": 209.3258026159334,
-          "return_pct": -21.64,
-          "holding_days": 5,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.18,
-          "sl": 0.15,
-          "bench_return_pct": -7.42
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -12756,7 +12741,7 @@
           "holding_days": 24,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -12843,6 +12828,22 @@
           "tp": 0.18,
           "sl": 0.15,
           "bench_return_pct": -6.33
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261104",
+          "exit_price": 399.5,
+          "return_pct": -16.34,
+          "holding_days": 32,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.18,
+          "sl": 0.15,
+          "bench_return_pct": -6.07
         },
         {
           "result": "LOSS",
@@ -13675,11 +13676,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 666.0,
+          "return_pct": -15.16,
+          "holding_days": 17,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -13687,7 +13688,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -19.93
         },
         {
           "result": "LOSS",
@@ -13842,30 +13844,14 @@
         "losses": 120,
         "open_count": 0,
         "win_rate": 0.1608,
-        "avg_return": -6.6283,
-        "avg_holding_days": 15.6,
+        "avg_return": -6.6221,
+        "avg_holding_days": 15.8,
         "bench_n": 143,
-        "bench_avg_return": -4.37,
-        "excess_return": -2.25,
+        "bench_avg_return": -4.33,
+        "excess_return": -2.29,
         "beat_rate": 0.3007
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 233.74714625445898,
-          "return_pct": -12.5,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.2,
-          "sl": 0.1,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -15058,7 +15044,7 @@
           "holding_days": 21,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -15145,6 +15131,22 @@
           "tp": 0.2,
           "sl": 0.1,
           "bench_return_pct": -6.33
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261020",
+          "exit_price": 422.0,
+          "return_pct": -11.62,
+          "holding_days": 23,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.2,
+          "sl": 0.1,
+          "bench_return_pct": 0.89
         },
         {
           "result": "LOSS",
@@ -16147,30 +16149,14 @@
         "losses": 114,
         "open_count": 0,
         "win_rate": 0.2028,
-        "avg_return": -6.6455,
-        "avg_holding_days": 19.1,
+        "avg_return": -6.6511,
+        "avg_holding_days": 19.3,
         "bench_n": 143,
-        "bench_avg_return": -4.47,
-        "excess_return": -2.18,
+        "bench_avg_return": -4.43,
+        "excess_return": -2.22,
         "beat_rate": 0.3217
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 233.74714625445898,
-          "return_pct": -12.5,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.2,
-          "sl": 0.12,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -17363,7 +17349,7 @@
           "holding_days": 23,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -17450,6 +17436,22 @@
           "tp": 0.2,
           "sl": 0.12,
           "bench_return_pct": -6.33
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261022",
+          "exit_price": 414.0,
+          "return_pct": -13.3,
+          "holding_days": 25,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.2,
+          "sl": 0.12,
+          "bench_return_pct": 0.56
         },
         {
           "result": "LOSS",
@@ -18447,35 +18449,19 @@
     },
     "TP20_SL15": {
       "stats": {
-        "total": 138,
+        "total": 139,
         "wins": 32,
-        "losses": 106,
-        "open_count": 5,
-        "win_rate": 0.2319,
-        "avg_return": -8.064,
-        "avg_holding_days": 21.0,
-        "bench_n": 138,
-        "bench_avg_return": -4.83,
-        "excess_return": -3.24,
-        "beat_rate": 0.2899
+        "losses": 107,
+        "open_count": 4,
+        "win_rate": 0.2302,
+        "avg_return": -8.0769,
+        "avg_holding_days": 21.2,
+        "bench_n": 139,
+        "bench_avg_return": -4.93,
+        "excess_return": -3.15,
+        "beat_rate": 0.295
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260309",
-          "exit_price": 209.3258026159334,
-          "return_pct": -21.64,
-          "holding_days": 5,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": 0.2,
-          "sl": 0.15,
-          "bench_return_pct": -7.42
-        },
         {
           "result": "LOSS",
           "exit_date": "20260304",
@@ -19666,7 +19652,7 @@
           "holding_days": 24,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -19753,6 +19739,22 @@
           "tp": 0.2,
           "sl": 0.15,
           "bench_return_pct": -6.33
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20261104",
+          "exit_price": 399.5,
+          "return_pct": -16.34,
+          "holding_days": 32,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": 0.2,
+          "sl": 0.15,
+          "bench_return_pct": -6.07
         },
         {
           "result": "LOSS",
@@ -20585,11 +20587,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 666.0,
+          "return_pct": -15.16,
+          "holding_days": 17,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -20597,7 +20599,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -19.93
         },
         {
           "result": "LOSS",
@@ -20747,35 +20750,19 @@
     },
     "MA5_MA10": {
       "stats": {
-        "total": 142,
+        "total": 143,
         "wins": 43,
-        "losses": 99,
-        "open_count": 1,
-        "win_rate": 0.3028,
-        "avg_return": -1.606,
+        "losses": 100,
+        "open_count": 0,
+        "win_rate": 0.3007,
+        "avg_return": -1.6753,
         "avg_holding_days": 3.4,
-        "bench_n": 142,
-        "bench_avg_return": -0.62,
-        "excess_return": -0.99,
-        "beat_rate": 0.3662
+        "bench_n": 143,
+        "bench_avg_return": -0.63,
+        "excess_return": -1.05,
+        "beat_rate": 0.3636
       },
       "trades": [
-        {
-          "result": "LOSS",
-          "exit_date": "20260304",
-          "exit_price": 237.24,
-          "return_pct": -11.19,
-          "holding_days": 2,
-          "entry_date": "20260302",
-          "entry_price": 267.1395957193817,
-          "amount": 3000,
-          "stock_id": "2408",
-          "stock_name": "南亞科",
-          "signal_date": "20260226",
-          "tp": null,
-          "sl": null,
-          "bench_return_pct": -4.91
-        },
         {
           "result": "LOSS",
           "exit_date": "20260305",
@@ -21968,7 +21955,7 @@
           "holding_days": 2,
           "entry_date": "20260911",
           "entry_price": 498.0,
-          "amount": 1000.0,
+          "amount": 3000,
           "stock_id": "2408",
           "stock_name": "南亞科",
           "signal_date": "20260910",
@@ -22055,6 +22042,22 @@
           "tp": null,
           "sl": null,
           "bench_return_pct": -1.07
+        },
+        {
+          "result": "LOSS",
+          "exit_date": "20260916",
+          "exit_price": 476.0,
+          "return_pct": -0.31,
+          "holding_days": 2,
+          "entry_date": "20260914",
+          "entry_price": 477.5,
+          "amount": 1000.0,
+          "stock_id": "2408",
+          "stock_name": "南亞科",
+          "signal_date": "20260911",
+          "tp": null,
+          "sl": null,
+          "bench_return_pct": 0.56
         },
         {
           "result": "LOSS",
@@ -23033,12 +23036,11 @@
           "bench_return_pct": -11.76
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": 1,
-          "exit_state": "HOLDING",
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 362.0,
+          "return_pct": -22.4,
+          "holding_days": 2,
           "entry_date": "20261119",
           "entry_price": 466.5,
           "amount": 3000,
@@ -23046,7 +23048,8 @@
           "stock_name": "穩懋",
           "signal_date": "20261118",
           "tp": null,
-          "sl": null
+          "sl": null,
+          "bench_return_pct": -7.5
         }
       ]
     }

@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-20T21:36:48.996768",
+  "generated_at": "2026-11-27T22:24:19.278540",
   "date_range": {
-    "start": "20251120",
-    "end": "20261120"
+    "start": "20251127",
+    "end": "20261127"
   },
   "benchmark": {
     "id": "0050",
-    "start": "20251120",
-    "end": "20261120",
-    "return_pct": 39.99
+    "start": "20251127",
+    "end": "20261127",
+    "return_pct": 52.55
   },
   "total_signals": 188,
   "signals_after_limit": 147,
@@ -4755,17 +4755,17 @@
     },
     "TP15_SL15": {
       "stats": {
-        "total": 142,
+        "total": 143,
         "wins": 50,
-        "losses": 92,
-        "open_count": 5,
-        "win_rate": 0.3521,
-        "avg_return": -4.9803,
+        "losses": 93,
+        "open_count": 4,
+        "win_rate": 0.3497,
+        "avg_return": -5.0515,
         "avg_holding_days": 19.6,
-        "bench_n": 142,
-        "bench_avg_return": -2.92,
-        "excess_return": -2.06,
-        "beat_rate": 0.3803
+        "bench_n": 143,
+        "bench_avg_return": -3.04,
+        "excess_return": -2.01,
+        "beat_rate": 0.3846
       },
       "trades": [
         {
@@ -6957,11 +6957,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 666.0,
+          "return_pct": -15.16,
+          "holding_days": 17,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -6969,7 +6969,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.15,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -19.93
         },
         {
           "result": "LOSS",
@@ -11857,17 +11858,17 @@
     },
     "TP18_SL15": {
       "stats": {
-        "total": 142,
+        "total": 143,
         "wins": 39,
-        "losses": 103,
-        "open_count": 5,
-        "win_rate": 0.2746,
-        "avg_return": -6.7414,
+        "losses": 104,
+        "open_count": 4,
+        "win_rate": 0.2727,
+        "avg_return": -6.8003,
         "avg_holding_days": 21.9,
-        "bench_n": 142,
-        "bench_avg_return": -2.96,
-        "excess_return": -3.78,
-        "beat_rate": 0.3028
+        "bench_n": 143,
+        "bench_avg_return": -3.08,
+        "excess_return": -3.72,
+        "beat_rate": 0.3077
       },
       "trades": [
         {
@@ -14059,11 +14060,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 666.0,
+          "return_pct": -15.16,
+          "holding_days": 17,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -14071,7 +14072,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.18,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -19.93
         },
         {
           "result": "LOSS",
@@ -18959,17 +18961,17 @@
     },
     "TP20_SL15": {
       "stats": {
-        "total": 142,
+        "total": 143,
         "wins": 37,
-        "losses": 105,
-        "open_count": 5,
-        "win_rate": 0.2606,
-        "avg_return": -6.8991,
-        "avg_holding_days": 23.5,
-        "bench_n": 142,
-        "bench_avg_return": -2.55,
-        "excess_return": -4.35,
-        "beat_rate": 0.2887
+        "losses": 106,
+        "open_count": 4,
+        "win_rate": 0.2587,
+        "avg_return": -6.9569,
+        "avg_holding_days": 23.4,
+        "bench_n": 143,
+        "bench_avg_return": -2.67,
+        "excess_return": -4.29,
+        "beat_rate": 0.2937
       },
       "trades": [
         {
@@ -21161,11 +21163,11 @@
           "bench_return_pct": -6.07
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": null,
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 666.0,
+          "return_pct": -15.16,
+          "holding_days": 17,
           "entry_date": "20261029",
           "entry_price": 785.0,
           "amount": 3000,
@@ -21173,7 +21175,8 @@
           "stock_name": "瑞昱",
           "signal_date": "20261028",
           "tp": 0.2,
-          "sl": 0.15
+          "sl": 0.15,
+          "bench_return_pct": -19.93
         },
         {
           "result": "LOSS",
@@ -21323,17 +21326,17 @@
     },
     "MA5_MA10": {
       "stats": {
-        "total": 146,
+        "total": 147,
         "wins": 44,
-        "losses": 102,
-        "open_count": 1,
-        "win_rate": 0.3014,
-        "avg_return": -1.3586,
+        "losses": 103,
+        "open_count": 0,
+        "win_rate": 0.2993,
+        "avg_return": -1.5017,
         "avg_holding_days": 3.5,
-        "bench_n": 146,
-        "bench_avg_return": -0.47,
-        "excess_return": -0.89,
-        "beat_rate": 0.363
+        "bench_n": 147,
+        "bench_avg_return": -0.52,
+        "excess_return": -0.98,
+        "beat_rate": 0.3605
       },
       "trades": [
         {
@@ -23673,12 +23676,11 @@
           "bench_return_pct": -11.76
         },
         {
-          "result": "OPEN",
-          "exit_date": null,
-          "exit_price": null,
-          "return_pct": null,
-          "holding_days": 1,
-          "exit_state": "HOLDING",
+          "result": "LOSS",
+          "exit_date": "20261123",
+          "exit_price": 362.0,
+          "return_pct": -22.4,
+          "holding_days": 2,
           "entry_date": "20261119",
           "entry_price": 466.5,
           "amount": 3000,
@@ -23686,7 +23688,8 @@
           "stock_name": "穩懋",
           "signal_date": "20261118",
           "tp": null,
-          "sl": null
+          "sl": null,
+          "bench_return_pct": -7.5
         }
       ]
     }
