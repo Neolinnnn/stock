@@ -1,0 +1,379 @@
+{
+  "week_ending": "2026-11-27",
+  "days_covered": 5,
+  "market": {
+    "taiex_close": 39308.08,
+    "taiex_week_pct": 9.09,
+    "otc_close": 285.77,
+    "otc_week_pct": 8.53,
+    "taiex_bull": false,
+    "taiex_ma60": 45136.23
+  },
+  "sector_changes": [
+    {
+      "sector": "PCB",
+      "change": 17.06,
+      "level": -7.08,
+      "prev_change": -20.6
+    },
+    {
+      "sector": "光學",
+      "change": 13.52,
+      "level": -28.38,
+      "prev_change": -17.89
+    },
+    {
+      "sector": "AI 電源",
+      "change": 13.26,
+      "level": -19.21,
+      "prev_change": -10.73
+    },
+    {
+      "sector": "銅箔/CCL",
+      "change": 12.31,
+      "level": -27.35,
+      "prev_change": -19.45
+    },
+    {
+      "sector": "綠能環保",
+      "change": 11.1,
+      "level": -13.24,
+      "prev_change": -8.62
+    },
+    {
+      "sector": "AI伺服器",
+      "change": 10.71,
+      "level": -14.18,
+      "prev_change": -11.02
+    },
+    {
+      "sector": "AI 散熱",
+      "change": 10.46,
+      "level": -26.23,
+      "prev_change": -16.8
+    },
+    {
+      "sector": "測試設備",
+      "change": 10.35,
+      "level": -38.66,
+      "prev_change": -15.24
+    },
+    {
+      "sector": "ABF載板",
+      "change": 10.03,
+      "level": -39.37,
+      "prev_change": -16.8
+    },
+    {
+      "sector": "封測",
+      "change": 8.76,
+      "level": -21.82,
+      "prev_change": -15.89
+    },
+    {
+      "sector": "CoPoS封裝",
+      "change": 8.21,
+      "level": -27.95,
+      "prev_change": -14.34
+    },
+    {
+      "sector": "光通訊",
+      "change": 7.08,
+      "level": -25.82,
+      "prev_change": -14.32
+    },
+    {
+      "sector": "被動元件",
+      "change": 6.93,
+      "level": -33.69,
+      "prev_change": -12.24
+    },
+    {
+      "sector": "IC設計",
+      "change": 5.9,
+      "level": -19.19,
+      "prev_change": -11.13
+    },
+    {
+      "sector": "車用電子",
+      "change": 4.6,
+      "level": -22.93,
+      "prev_change": -9.38
+    },
+    {
+      "sector": "顯示",
+      "change": 3.62,
+      "level": -15.76,
+      "prev_change": -9.55
+    },
+    {
+      "sector": "AI ASIC/IP",
+      "change": 1.44,
+      "level": -17.56,
+      "prev_change": -16.41
+    },
+    {
+      "sector": "記憶體",
+      "change": -0.87,
+      "level": -25.83,
+      "prev_change": -12.85
+    }
+  ],
+  "rotation_matrix": {
+    "leading": [],
+    "turning": [
+      {
+        "sector": "PCB",
+        "change": 17.06,
+        "level": -7.08,
+        "prev_change": -20.6
+      },
+      {
+        "sector": "光學",
+        "change": 13.52,
+        "level": -28.38,
+        "prev_change": -17.89
+      },
+      {
+        "sector": "AI 電源",
+        "change": 13.26,
+        "level": -19.21,
+        "prev_change": -10.73
+      },
+      {
+        "sector": "銅箔/CCL",
+        "change": 12.31,
+        "level": -27.35,
+        "prev_change": -19.45
+      },
+      {
+        "sector": "綠能環保",
+        "change": 11.1,
+        "level": -13.24,
+        "prev_change": -8.62
+      },
+      {
+        "sector": "AI伺服器",
+        "change": 10.71,
+        "level": -14.18,
+        "prev_change": -11.02
+      },
+      {
+        "sector": "AI 散熱",
+        "change": 10.46,
+        "level": -26.23,
+        "prev_change": -16.8
+      },
+      {
+        "sector": "測試設備",
+        "change": 10.35,
+        "level": -38.66,
+        "prev_change": -15.24
+      },
+      {
+        "sector": "ABF載板",
+        "change": 10.03,
+        "level": -39.37,
+        "prev_change": -16.8
+      },
+      {
+        "sector": "封測",
+        "change": 8.76,
+        "level": -21.82,
+        "prev_change": -15.89
+      },
+      {
+        "sector": "CoPoS封裝",
+        "change": 8.21,
+        "level": -27.95,
+        "prev_change": -14.34
+      },
+      {
+        "sector": "光通訊",
+        "change": 7.08,
+        "level": -25.82,
+        "prev_change": -14.32
+      },
+      {
+        "sector": "被動元件",
+        "change": 6.93,
+        "level": -33.69,
+        "prev_change": -12.24
+      },
+      {
+        "sector": "IC設計",
+        "change": 5.9,
+        "level": -19.19,
+        "prev_change": -11.13
+      },
+      {
+        "sector": "車用電子",
+        "change": 4.6,
+        "level": -22.93,
+        "prev_change": -9.38
+      },
+      {
+        "sector": "顯示",
+        "change": 3.62,
+        "level": -15.76,
+        "prev_change": -9.55
+      },
+      {
+        "sector": "AI ASIC/IP",
+        "change": 1.44,
+        "level": -17.56,
+        "prev_change": -16.41
+      }
+    ],
+    "cooling": [],
+    "weak": [
+      {
+        "sector": "記憶體",
+        "change": -0.87,
+        "level": -25.83,
+        "prev_change": -12.85
+      }
+    ],
+    "v_turn": [
+      {
+        "sector": "PCB",
+        "change": 17.06,
+        "level": -7.08,
+        "prev_change": -20.6
+      },
+      {
+        "sector": "銅箔/CCL",
+        "change": 12.31,
+        "level": -27.35,
+        "prev_change": -19.45
+      },
+      {
+        "sector": "光學",
+        "change": 13.52,
+        "level": -28.38,
+        "prev_change": -17.89
+      }
+    ]
+  },
+  "top_buys": [
+    {
+      "stock": "2345 智邦",
+      "buy_days": 1,
+      "chip_tier": "neutral",
+      "gate": false
+    },
+    {
+      "stock": "2451 創見",
+      "buy_days": 1,
+      "chip_tier": "neutral",
+      "gate": false
+    },
+    {
+      "stock": "3665 貿聯-KY",
+      "buy_days": 1,
+      "chip_tier": "neutral",
+      "gate": false
+    }
+  ],
+  "positions_week": {
+    "entries": [],
+    "exits": [],
+    "holding": [
+      {
+        "id": "2379",
+        "name": "瑞昱",
+        "entry_price": 778.0,
+        "price": 755.0,
+        "pnl_pct": -2.96,
+        "phase": 1,
+        "days_since_high": 0
+      }
+    ]
+  },
+  "alerts_week": [
+    {
+      "id": "2451",
+      "name": "創見",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=76.4"
+    },
+    {
+      "id": "2345",
+      "name": "智邦",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=71.3"
+    },
+    {
+      "id": "3665",
+      "name": "貿聯-KY",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=75.3"
+    },
+    {
+      "id": "2379",
+      "name": "瑞昱",
+      "type": "RSI過熱",
+      "days": 1,
+      "detail": "RSI=70.5"
+    }
+  ],
+  "month_actions": [
+    {
+      "id": "4967",
+      "name": "十銓",
+      "sector": "記憶體",
+      "first_date": "20261106",
+      "entry_price": 268.0,
+      "days_listed": 1,
+      "last_price": 235.0,
+      "max_price": 268.0,
+      "last_listed": "20261106",
+      "ret_pct": -12.31,
+      "max_ret_pct": 0.0
+    },
+    {
+      "id": "1303",
+      "name": "南亞",
+      "sector": "銅箔/CCL",
+      "first_date": "20261116",
+      "entry_price": 274.0,
+      "days_listed": 2,
+      "last_price": 241.0,
+      "max_price": 274.0,
+      "last_listed": "20261117",
+      "ret_pct": -12.04,
+      "max_ret_pct": 0.0
+    },
+    {
+      "id": "6271",
+      "name": "同欣電",
+      "sector": "封測",
+      "first_date": "20261116",
+      "entry_price": 202.5,
+      "days_listed": 1,
+      "last_price": 185.5,
+      "max_price": 202.5,
+      "last_listed": "20261116",
+      "ret_pct": -8.4,
+      "max_ret_pct": 0.0
+    },
+    {
+      "id": "3105",
+      "name": "穩懋",
+      "sector": "光通訊",
+      "first_date": "20261117",
+      "entry_price": 481.0,
+      "days_listed": 2,
+      "last_price": 444.5,
+      "max_price": 481.0,
+      "last_listed": "20261118",
+      "ret_pct": -7.59,
+      "max_ret_pct": 0.0
+    }
+  ],
+  "chart_path": "daily_reports/weekly_20261127/01_weekly_sector_trend.png",
+  "narrative": "### 本週輪動回顧\n大盤與櫃買指數本週強勢反彈逾8%。PCB、光學、AI電源、銅箔/CCL等族群呈現V型反轉，領漲市場，漲幅皆超過12%。AI伺服器、散熱、測試設備及ABF載板等AI相關供應鏈也表現活躍，顯示資金重回科技類股。然而，記憶體族群相對疲弱，本週逆勢下跌且動能減緩。\n\n### 本月行動清單追蹤\n本月行動清單共納入4檔個股，整體表現不佳，無個股上漲，平均報酬率為-10.09%。其中，記憶體族群的十銓（4967）以-12.31%的回落幅度最大。銅箔/CCL族群的南亞（1303）也下跌-12.04%，顯示本月入榜個股尚未能維持上漲動能，整體操作需審慎評估。\n\n### 下週聚焦\n下週可持續關注本週強勢反彈且呈現V型反轉的PCB、光學、AI電源及銅箔/CCL等族群。AI伺服器、散熱、CoPoS封裝等AI供應鏈仍具備動能。個股方面，有買盤訊號的智邦(2345)、創見(2451)、貿聯-KY(3665)及近期轉強的瑞昱(2379)值得納入追蹤清單。\n\n### 風險提醒\n本週多檔個股RSI過熱，包括創見(2451)、智邦(2345)、貿聯-KY(3665)及瑞昱(2379)，操作上須留意短線追高風險及可能的回檔壓力。同時，記憶體族群持續疲軟，動能減緩；AI ASIC/IP與顯示族群也呈現減速，建議避免過度追高或謹慎佈局。"
+}
