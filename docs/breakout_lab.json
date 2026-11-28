@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21 10:00",
+ "generated_at": "2026-11-28 10:36",
  "rules": {
   "gate": "TAIEX > MA60",
   "breakout": "收盤創20日新高",
@@ -17,25 +17,25 @@
  "benchmark": {
   "id": "0050",
   "start": "20250107",
-  "end": "20261120",
-  "return_pct": 71.7
+  "end": "20261127",
+  "return_pct": 87.86
  },
  "exits": {
   "TRAIL15": {
-   "n": 280,
-   "win_rate": 0.5214,
-   "wilson_lb": 0.463,
-   "avg_ret": 15.01,
-   "median_ret": 2.16,
-   "profit_factor": 3.47,
-   "expectancy": 15.01,
+   "n": 281,
+   "win_rate": 0.5196,
+   "wilson_lb": 0.4613,
+   "avg_ret": 14.92,
+   "median_ret": 1.93,
+   "profit_factor": 3.45,
+   "expectancy": 14.92,
    "avg_days": 39.9,
    "worst": -27.63,
    "best": 194.57,
-   "bench_n": 280,
-   "bench_avg_return": 8.03,
-   "excess_return": 6.98,
-   "beat_rate": 0.425,
+   "bench_n": 281,
+   "bench_avg_return": 7.92,
+   "excess_return": 6.99,
+   "beat_rate": 0.427,
    "wf_front": {
     "n": 141,
     "win_rate": 0.539,
@@ -53,20 +53,20 @@
     "beat_rate": 0.4468
    },
    "wf_back": {
-    "n": 139,
-    "win_rate": 0.5036,
-    "wilson_lb": 0.4215,
-    "avg_ret": 15.97,
+    "n": 140,
+    "win_rate": 0.5,
+    "wilson_lb": 0.4183,
+    "avg_ret": 15.77,
     "median_ret": 0.79,
-    "profit_factor": 3.67,
-    "expectancy": 15.97,
+    "profit_factor": 3.62,
+    "expectancy": 15.77,
     "avg_days": 32.7,
     "worst": -26.91,
     "best": 165.1,
-    "bench_n": 139,
-    "bench_avg_return": 8.28,
-    "excess_return": 7.69,
-    "beat_rate": 0.4029
+    "bench_n": 140,
+    "bench_avg_return": 8.06,
+    "excess_return": 7.71,
+    "beat_rate": 0.4071
    }
   },
   "TP18SL15": {
@@ -3354,10 +3354,10 @@
    "entry_price": 745.0,
    "vol_ratio": 1.75,
    "chip5": 7231421.0,
-   "ret_pct": null,
-   "exit_date": null,
-   "days": null,
-   "why": "OPEN"
+   "ret_pct": -11.41,
+   "exit_date": "20261123",
+   "days": 37,
+   "why": "TRAIL"
   },
   {
    "stock_id": "8299",
